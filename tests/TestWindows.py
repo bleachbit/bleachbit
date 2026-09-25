@@ -139,6 +139,8 @@ class WindowsSystemPathsTestCase(common.BleachbitTestCase):
 if bleachbit.IS_WINDOWS:
     import pywintypes
     import win32api
+    import win32con
+    import win32gui
     import win32service
     import winreg
     from win32com.shell import shell
@@ -789,7 +791,10 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_splash_thread_reuses_cached_class_atom(self):
         """_register_window_class skips RegisterClass when cached."""
         splash = SplashThread()
-        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', None))
+        # Restore rather than clear: the class stays registered in this
+        # process, so a later real splash needs its atom back.
+        previous = SplashThread._class_atom
+        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', previous))
         SplashThread._class_atom = 9876
         with mock.patch('bleachbit.Windows.win32gui.RegisterClass') as mock_register:
             atom = splash._register_window_class(mock.Mock())
@@ -799,7 +804,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_splash_thread_recovers_when_class_exists(self):
         """_register_window_class handles ERROR_CLASS_ALREADY_EXISTS."""
         splash = SplashThread()
-        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', None))
+        previous = SplashThread._class_atom
+        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', previous))
         SplashThread._class_atom = None
         wnd_class = mock.Mock()
         wnd_class.hInstance = mock.sentinel.instance
@@ -1373,6 +1379,46 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         repeat = SplashThread()
         repeat.start()
         repeat.join()
+
+    def test_splash_thread_start_runs_sent_messages(self):
+        """start() runs messages sent to its thread while it waits"""
+        received = []
+
+        def wnd_proc(hwnd, msg, wparam, lparam):
+            # pylint: disable-next=possibly-used-before-assignment
+            if msg == win32con.WM_USER:
+                received.append(wparam)
+                return 0
+            # pylint: disable-next=possibly-used-before-assignment
+            return win32gui.DefWindowProc(hwnd, msg, wparam, lparam)
+
+        wnd_class = win32gui.WNDCLASS()
+        wnd_class.lpszClassName = 'BleachBitSplashWaitTest'
+        wnd_class.lpfnWndProc = wnd_proc
+        wnd_class.hInstance = win32api.GetModuleHandle(None)
+        atom = win32gui.RegisterClass(wnd_class)
+        hwnd = win32gui.CreateWindowEx(
+            0, atom, '', 0, 0, 0, 0, 0, win32con.HWND_MESSAGE, 0,
+            wnd_class.hInstance, None)
+
+        def send_from_splash_thread(_self, _splash_hwnd):
+            # Stands in for GDK's keyboard hook, which the splash's ALT keys
+            # wait on. A sent message, unlike keys, needs no input desktop.
+            win32gui.SendMessageTimeout(hwnd, win32con.WM_USER, 1, 0,
+                                        win32con.SMTO_NORMAL, 2000)
+            return True
+
+        splash_thread = SplashThread()
+        try:
+            with mock.patch.object(SplashThread, '_force_set_foreground_window',
+                                   send_from_splash_thread):
+                splash_thread.start()
+            received_during_start = list(received)
+        finally:
+            splash_thread.join()
+            win32gui.DestroyWindow(hwnd)
+            win32gui.UnregisterClass(atom, wnd_class.hInstance)
+        self.assertEqual(received_during_start, [1])
 
     def test_splash_screen_window_pos(self):
         """Unit test for calculate_window_position()"""

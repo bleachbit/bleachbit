@@ -11,14 +11,13 @@ import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, Language, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiInfoBar import InfoBarMixin
-from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import (clear_clipboard, detect_dark_background, get_font_size_from_name,
@@ -49,6 +48,8 @@ MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
 # Ensure GTK is available for this GUI module
 require_gtk()
 
+bleachbit.log_startup_time('GuiWindow imported')
+
 
 def _iter_rows(model, parent=None):
     """Yield the tree iter of each row under parent, or of each top-level row"""
@@ -68,12 +69,18 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _style_provider_dark = None
     _error_tag_color = None
     _showed_startup_messages = False
+    _scroll_pending = False
+    _scroll_again = False
+    _register_generation = 0
+    _app_menu_generation = None
     recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        bleachbit.log_startup_time('window created')
 
         self._show_splash_screen()
+        bleachbit.log_startup_time('splash checked')
 
         self._auto_exit = auto_exit
         self._gui_cleaner_cleanup_pending = None
@@ -148,6 +155,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self._font_css_provider = None
         if options.has_option("window_font_size"):
             self.set_font_size(absolute_size=options.get("window_font_size"))
+        bleachbit.log_startup_time('window init done')
 
     def populate_window(self):
         """Create the main application window"""
@@ -172,10 +180,12 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         if appicon_path and os.path.exists(appicon_path):
             self.set_icon_from_file(appicon_path)
+        bleachbit.log_startup_time('icon set')
 
         # add headerbar
         self.headerbar = self.create_headerbar()
         self.set_titlebar(self.headerbar)
+        bleachbit.log_startup_time('headerbar built')
 
         # split main window twice
         hbox = Gtk.Box(homogeneous=False)
@@ -239,10 +249,12 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         vbox.add(self.status_bar)
         # setup drag&drop
         self.setup_drag_n_drop()
+        bleachbit.log_startup_time('widgets built')
         # done
         self.show_all()
         self.progressbar.hide()
         self.infobar.hide()
+        bleachbit.log_startup_time('window shown')
 
     def _update_error_tag_color(self, *_args):
         """Ensure error messages stay high contrast in current theme"""
@@ -479,6 +491,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         super().destroy()
 
     def get_preferences_dialog(self):
+        # Keep the dialog and its minidom/cookie deps off the startup path.
+        from bleachbit.GuiPreferences import PreferencesDialog  # pylint: disable=import-outside-toplevel
         return PreferencesDialog(
             self,
             self.cb_refresh_operations,
@@ -571,9 +585,29 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
         if scroll:
-            GLib.idle_add(lambda: self.textbuffer is not None and
-                          self.textview.scroll_mark_onscreen(
-                              self.textbuffer.get_insert()))
+            self._queue_scroll()
+
+    def _queue_scroll(self):
+        """Scroll the log to the end from the idle loop"""
+        if self._scroll_pending:
+            self._scroll_again = True
+            return
+        self._scroll_pending = True
+        GLib.idle_add(self._scroll_to_end)
+
+    def _scroll_to_end(self):
+        """Scroll the log to the insert mark"""
+        # While text keeps arriving, keep one scroll queued behind
+        # whatever appends next, as one idle per line used to. Set the
+        # flags first so a failed scroll cannot leave them stuck.
+        again = self._scroll_again
+        self._scroll_again = False
+        self._scroll_pending = again
+        if again:
+            GLib.idle_add(self._scroll_to_end)
+        if self.textbuffer is not None:
+            self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
+        return False
 
     def update_log_level(self):
         """This gets called when the log level might have changed via the preferences."""
@@ -631,6 +665,13 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.preview_button.set_sensitive(is_sensitive)
         self.run_button.set_sensitive(is_sensitive)
         self.stop_button.set_sensitive(not is_sensitive)
+
+    def run_button_get_sensitive(self):
+        """Return whether commands are enabled
+
+        set_sensitive() leaves the window itself sensitive, so ask the button.
+        """
+        return self.run_button.get_sensitive()
 
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
@@ -733,9 +774,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self.progressbar.set_text("")
             self.progressbar.set_fraction(1)
             self.progressbar.set_text(done_msg)
-        if self.textbuffer is not None:
-            self.textview.scroll_mark_onscreen(
-                self.textbuffer.get_insert())
+        # No scroll here: append_text() has queued one, and scrolling
+        # before GTK lays out the new text makes it do that twice.
         self.set_sensitive(True)
 
         # Close the program after cleaning is completed.
@@ -777,6 +817,11 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Callback to refresh the list of cleaners and header bar labels"""
         if getattr(self, '_destroyed', False) or self.in_destruction():
             return False
+        bleachbit.log_startup_time('refresh started')
+        # Only the newest registration may advance. A refresh can arrive
+        # mid-way, e.g. from Preferences, and two would both fill backends.
+        self._register_generation += 1
+        generation = self._register_generation
         # In case language changed, update the header bar labels.
         self.update_headerbar_labels()
         # Is this the first time in this session?
@@ -792,27 +837,50 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             else:
                 self.recognized_cleanerml = True
         # reload cleaners from disk
-        self.view.expand_all()
         self.progressbar.show()
         rc = register_cleaners(self.update_progress_bar,
                                self.cb_register_cleaners_done,
                                allow_local=allow_local)
-        GLib.idle_add(rc.__next__)
+
+        def pump():
+            if generation != self._register_generation:
+                rc.close()
+                return False
+            return next(rc)
+
+        GLib.idle_add(pump)
         return False
 
     def cb_register_cleaners_done(self):
         """Called from register_cleaners()"""
+        bleachbit.log_startup_time('cleaners registered')
         self.progressbar.hide()
         # update tree view
         self.tree_store.refresh_rows()
         # expand tree view
         self.view.expand_all()
+        bleachbit.log_startup_time('tree filled')
 
         if self._showed_startup_messages:
             # remove from idle loop (see GObject.idle_add)
             return False
+        self._showed_startup_messages = True
+        # Let the tree paint first: the checks can block on antivirus or a
+        # domain controller. Not PRIORITY_LOW, where --exit queues quit().
+        GLib.idle_add(self._show_startup_messages)
+        return False
 
-        startup_msgs = get_startup_messages(self._auto_exit)
+    def _show_startup_messages(self):
+        """Show startup messages once the cleaner tree is on screen"""
+        if self.textbuffer is None:
+            # window was destroyed before this callback ran
+            return False
+        try:
+            startup_msgs = get_startup_messages(self._auto_exit)
+        except Exception:
+            # must not also skip the update check below
+            logger.exception('Error getting startup messages')
+            startup_msgs = []
         for (msg, is_error) in startup_msgs:
             self.append_text(msg + '\n', 'error' if is_error else None)
 
@@ -823,7 +891,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 options.get("check_online_updates"):
             self.check_online_updates()
 
-        self._showed_startup_messages = True
+        bleachbit.log_startup_time('startup messages done')
         return False
 
     def cb_run_option(self, widget, really_delete, cleaner_id, option_id):
@@ -1124,7 +1192,6 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         if app_menu_path:
             icon = Gio.ThemedIcon(name="open-menu-symbolic")
             image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
-            self._reload_app_menu(app_menu_path)
             self.menu_button.add(image)
             hbar.pack_end(self.menu_button)
         else:
@@ -1147,6 +1214,11 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         whatever language was active the one time it was originally
         loaded unless it is explicitly reloaded like this.
         """
+        # Keyed on setup_translation() runs rather than the language code:
+        # a rerun with the same code can still change the C locale.
+        generation = Language.translation_generation
+        if generation == self._app_menu_generation:
+            return
         if app_menu_path is None:
             app_menu_path = bleachbit.get_share_path('app-menu.ui')
         if not app_menu_path:
@@ -1154,6 +1226,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         builder = Gtk.Builder()
         builder.add_from_file(app_menu_path)
         self.menu_button.set_menu_model(builder.get_object('app-menu'))
+        self._app_menu_generation = generation
 
     def on_configure_event(self, _widget, _event):
         (x, y) = self.get_position()
@@ -1216,6 +1289,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         The event is triggered when the window is first shown.
         It is not emitted when the window is moved or unminimized.
         """
+        # "show" is RUN_FIRST, so the window is already realized and mapped
+        bleachbit.log_startup_time('show handler')
         if IS_WINDOWS and Windows.splash_thread.is_alive():
             Windows.splash_thread.join(0)
 
@@ -1255,9 +1330,32 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Check for orphaned wipe files and offer to delete them.
 
         These files are created by wipe_path() to fill empty disk space."""
-        orphaned_files = detect_orphaned_wipe_files()
-        if not orphaned_files:
-            return
+        # Scan off the main loop: a sleeping drive can block it for seconds.
+        # Read the option here, since Options.get_list() takes no lock.
+        shred_drives = options.get_list('shred_drives')
+
+        def _worker():
+            try:
+                orphaned_files = detect_orphaned_wipe_files(shred_drives)
+            except Exception:
+                logger.exception('Error detecting orphaned wipe files')
+                return
+            if orphaned_files:
+                GLib.idle_add(self._prompt_orphaned_wipe_files, orphaned_files)
+
+        threading.Thread(target=_worker, daemon=True).start()
+        return False
+
+    def _prompt_orphaned_wipe_files(self, orphaned_files):
+        """Ask whether to preview orphaned wipe files, on the main thread"""
+        if self.textbuffer is None:
+            # window was destroyed while the scan was running
+            return False
+        if not self.run_button_get_sensitive():
+            # an operation is running, and shred_paths() would replace it
+            logger.debug(
+                'skipping orphaned wipe file prompt: operation running')
+            return False
 
         # TRANSLATORS: This message is shown when orphaned temporary files
         # from an interrupted disk wipe operation are detected.
@@ -1274,6 +1372,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         if resp == Gtk.ResponseType.YES:
             self.shred_paths(orphaned_files)
+        return False
 
     @threaded
     def check_online_updates(self):

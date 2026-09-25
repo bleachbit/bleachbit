@@ -1275,6 +1275,19 @@ PrefersNonDefaultGPU=false""")
             self.assertNotIn(symlink_path, paths)
 
 
+class UnreadableVFS(ListVFS):
+    """ListVFS where listing one directory is denied"""
+
+    def __init__(self, paths, unreadable):
+        super().__init__(paths)
+        self._unreadable = unreadable
+
+    def listdir(self, path):
+        if path.rstrip('/') == self._unreadable:
+            raise PermissionError(13, 'Permission denied', path)
+        return super().listdir(path)
+
+
 class LocalizationsTestCase(common.BleachbitTestCase):
 
     """Test case for localizations in Unix module"""
@@ -1369,6 +1382,31 @@ class LocalizationsTestCase(common.BleachbitTestCase):
                 self._path_matches_recognized(neg_path, recognized),
                 f'Path should NOT be matched by localizations.xml: {neg_path}'
             )
+
+    def test_localization_paths_unreadable_dir(self):
+        """A directory that cannot be listed is skipped, not fatal
+
+        /usr/share/empty.sshd is mode 0711, so a regular user cannot list it.
+        """
+        data_file = os.path.join(os.path.dirname(
+            __file__), 'localization_paths_positive.txt')
+        with open(data_file, 'r', encoding='utf-8') as f:
+            test_paths = [line.strip() for line in f if line.strip()
+                          and not line.strip().startswith('#')]
+
+        expected = self._get_recognized_paths(ListVFS(test_paths))
+        vfs = UnreadableVFS(test_paths + ['/usr/share/empty.sshd/'],
+                            '/usr/share/empty.sshd')
+        self.assertEqual(self._get_recognized_paths(vfs), expected)
+
+    def test_localization_filter_unreadable_dir(self):
+        """A filtered directory that cannot be listed yields nothing"""
+        vfs = UnreadableVFS(['/usr/share/locale/de/', '/usr/share/locale/fr/'],
+                            '/usr/share/locale')
+        locales = Locales(vfs=vfs)
+        locales.add_xml(parseString(
+            '<path location="/usr/share/locale/" filter="*" />').firstChild)
+        self.assertEqual(list(locales.localization_paths(['en'])), [])
 
 
 @common.skipIfWindows

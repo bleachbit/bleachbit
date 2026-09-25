@@ -11,6 +11,7 @@ Enumerate and terminate processes
 import signal
 import glob
 import subprocess
+import time
 from collections import namedtuple
 import os
 
@@ -18,11 +19,22 @@ from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 
 ProcessInfo = namedtuple('ProcessInfo', ['pid', 'name', 'same_user'])
 
-try:
-    import psutil
-    _has_psutil = True
-except ImportError:
-    _has_psutil = False
+# Resolved on first use, not at import
+_psutil = None
+_has_psutil = None
+
+
+def _import_psutil():
+    """Return the psutil module, or None when it is not installed"""
+    global _psutil, _has_psutil  # pylint: disable=global-statement
+    if _has_psutil is None:
+        try:
+            import psutil  # pylint: disable=import-outside-toplevel
+        except ImportError:
+            _psutil, _has_psutil = None, False
+        else:
+            _psutil, _has_psutil = psutil, True
+    return _psutil
 
 
 def enumerate_processes():
@@ -31,11 +43,11 @@ def enumerate_processes():
     'same_user' is True if the process owner matches the current (real) user.
     On Unix with sudo, compares against the non-root user.
     """
-    if _has_psutil and IS_POSIX:
+    if _import_psutil() and IS_POSIX:
         yield from _enumerate_psutil_posix()
         return
     # Windows should always have psutil.
-    if _has_psutil and IS_WINDOWS:
+    if _import_psutil() and IS_WINDOWS:
         yield from _enumerate_psutil_windows()
         return
     if IS_LINUX:
@@ -50,6 +62,7 @@ def enumerate_processes():
 def _enumerate_psutil_posix():
     """Enumerate processes with psutils on POSIX"""
     from bleachbit.General import get_real_uid
+    psutil = _import_psutil()
     target_uid = get_real_uid()
     for proc in psutil.process_iter(['name', 'exe', 'uids', 'cmdline']):
         try:
@@ -77,7 +90,7 @@ def _enumerate_psutil_posix():
 
 def _enumerate_psutil_windows():
     """Enumerate processes with psutils on Windows"""
-
+    psutil = _import_psutil()
     current_user = psutil.Process().username().lower()
     for proc in psutil.process_iter(['name', 'username', 'cmdline']):
         try:
@@ -170,12 +183,41 @@ def _enumerate_ps_aux():
         yield ProcessInfo(int(parts[1]), parts[10].strip(), parts[0] == current_user)
 
 
+class ProcessCache:
+
+    """Cached way to determine whether a process is running"""
+
+    def __init__(self, max_age_seconds=10):
+        self.max_age_seconds = max_age_seconds
+        self.last_scan_time = None
+        self.processes = ()
+
+    def invalidate(self):
+        """Drop the cache so the next get() rescans"""
+        self.last_scan_time = None
+        self.processes = ()
+
+    def get(self):
+        """Return the process list, rescanning when stale.
+
+        The scan expires so an application started mid-run is still noticed.
+        """
+        if self.last_scan_time is None or \
+                (time.time() - self.last_scan_time) > self.max_age_seconds:
+            self.processes = tuple(enumerate_processes())
+            self.last_scan_time = time.time()
+        return self.processes
+
+
+process_cache = ProcessCache()
+
+
 def is_process_running(exename, require_same_user):
     """Check whether exename is running"""
     ci = IS_WINDOWS  # case-insensitive on Windows
     if ci:
         exename = exename.lower()
-    for proc in enumerate_processes():
+    for proc in process_cache.get():
         name = proc.name.lower() if ci else proc.name
         if name == exename and (not require_same_user or proc.same_user):
             return True
@@ -188,6 +230,7 @@ def terminate_process(exename, require_same_user):
     if ci:
         exename = exename.lower()
     terminated = []
+    # Not the cache: a stale PID may since have been recycled
     for proc in enumerate_processes():
         name = proc.name.lower() if ci else proc.name
         if name == exename and (not require_same_user or proc.same_user):
@@ -195,10 +238,12 @@ def terminate_process(exename, require_same_user):
                 continue
             try:
                 if IS_WINDOWS:
-                    psutil.Process(proc.pid).kill()
+                    _import_psutil().Process(proc.pid).kill()
                 else:
                     os.kill(proc.pid, signal.SIGTERM)
                 terminated.append(proc.pid)
             except (ProcessLookupError, PermissionError, OSError):
                 continue
+    if terminated:
+        process_cache.invalidate()
     return terminated

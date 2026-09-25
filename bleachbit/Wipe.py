@@ -33,6 +33,10 @@ if IS_POSIX:
 
 logger = logging.getLogger(__name__)
 
+# Same buffer size as WindowsWipe.py.
+WRITE_BUF_SIZE = 512 * 1024     # 512 kilobytes
+ZERO_FILL_BUFFER = bytes(WRITE_BUF_SIZE)
+
 FILENAME_CHARS = string.ascii_lowercase + \
     string.digits + '_.-+~!@#$%^&()=[]{},'
 if bleachbit.FS_CASE_SENSITIVE:
@@ -87,10 +91,12 @@ def __valid_random_filename(filename):
     return True
 
 
-def detect_orphaned_wipe_files():
+def detect_orphaned_wipe_files(shred_drives=None):
     """Detect orphaned temporary files from interrupted wipe_path operations.
 
     These files are created by wipe_path() to fill free disk space with zeros.
+
+    Pass shred_drives from a worker thread: Options.get_list() is not locked.
 
     Detection criteria:
     - Located in directories from options shred_drives
@@ -102,10 +108,11 @@ def detect_orphaned_wipe_files():
     Returns:
         list: Paths to detected orphaned wipe files
     """
-    from bleachbit.Options import options
     orphaned_files = []
 
-    shred_drives = options.get_list('shred_drives')
+    if shred_drives is None:
+        from bleachbit.Options import options
+        shred_drives = options.get_list('shred_drives')
     if not shred_drives:
         return orphaned_files
 
@@ -128,7 +135,7 @@ def detect_orphaned_wipe_files():
                 try:
                     with open(entry.path, 'rb') as f:
                         sample = f.read(4096)
-                        if sample and all(b == 0 for b in sample):
+                        if sample and not sample.strip(b'\0'):
                             orphaned_files.append(entry.path)
                 except (IOError, OSError) as e:
                     logger.debug('Could not read file %s: %s', entry.path, e)
@@ -213,10 +220,10 @@ def wipe_write(path):
             raise
     f = os.fdopen(fd, 'wb')
     try:
-        blanks = b'\0' * 4096
+        blanks = memoryview(ZERO_FILL_BUFFER)
         while size > 0:
-            f.write(blanks)
-            size -= 4096
+            f.write(blanks[:min(size, WRITE_BUF_SIZE)])
+            size -= WRITE_BUF_SIZE
         f.flush()  # flush to OS buffer
         os.fsync(f.fileno())  # force write to disk
     except BaseException:

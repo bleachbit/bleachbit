@@ -86,10 +86,10 @@ def get_build_settings():
 
     Presets:
       fast       - enable quick mode for PR builds
-                   * skip UPX, strip, and recompression
+                   * skip UPX, strip, and the library.zip repack
                    * set faster compression for .zip and NSIS
       regular    - default build
-                   * enables strip and 7-Zip library recompression
+                   * enables strip and the stored library.zip repack
                    * set maximum compression for .zip and NSIS
       max-effort - enable Deadpool mode for release builds
                    * build English-only installer
@@ -120,7 +120,7 @@ def get_build_settings():
         # recompress zips with advzip
         'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)),
         'strip': not is_fast and bool(STRIP_EXE),  # strip executables
-        'recompress_lib': not is_fast,  # recompress library.zip
+        'recompress_lib': not is_fast,  # prune and repack library.zip
     }
 
 
@@ -139,7 +139,7 @@ def recompress_with_advzip(zip_path):
                 zip_path, f'{file_size_diff:,}', f'{file_size_old:,}', f'{file_size_new:,}', t1 - t0)
 
 
-def archive(infile, outfile, settings, use_advzip=False):
+def archive(infile, outfile, settings, use_advzip=False, store=False):
     """Create an archive from a file
 
     This uses 7-Zip to create a .zip archive with the request
@@ -147,6 +147,8 @@ def archive(infile, outfile, settings, use_advzip=False):
 
     If use_advzip is enabled, then advzip recompresses the .zip
     file, which is not needed for the zipped installer.
+
+    If store is enabled, the files are not compressed.
     """
     assert_exist(infile)
     delete_file(outfile, warn_if_exists=True)
@@ -158,7 +160,9 @@ def archive(infile, outfile, settings, use_advzip=False):
     # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
     sz_opts = ['-tzip', '-mm=Deflate', '-mfb=258',
                '-mpass=7', '-bso0', '-bsp0']  # best compression
-    if settings['fast']:
+    if store:
+        sz_opts = ['-tzip', '-mm=Copy', '-bso0', '-bsp0']
+    elif settings['fast']:
         # fast compression
         sz_opts = ['-tzip', '-mx=1', '-bso0', '-bsp0']
     cmd = [SZ_EXE, 'a'] + sz_opts + [outfile, infile]
@@ -476,7 +480,7 @@ def build_py2exe():
 
     options = {
         'bundle_files': 3,  # All files copied to dist directory
-        'compressed': 1,     # Create compressed archive
+        'compressed': 0,     # Stored, so imports skip inflate
         'optimize': 2,       # Extra optimization (like python -OO)
         'includes': ['gi'],
         'packages': ['charset_normalizer', 'encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
@@ -931,14 +935,13 @@ def delete_linux_only():
             os.remove(fn)
 
 
-@count_size_improvement
-def recompress_library(settings):
-    """Recompress library.zip to reduce size"""
+def repack_library(settings):
+    """Prune library.zip and repack it stored, so imports skip inflate"""
     if not os.path.exists(SZ_EXE):
         logger.warning('%s does not exist', SZ_EXE)
         return
 
-    logger.info('Recompressing library.zip with 7-Zip')
+    logger.info('Repacking library.zip with 7-Zip')
 
     # extract library.zip
     if not os.path.exists('dist\\library'):
@@ -964,16 +967,17 @@ def recompress_library(settings):
     # remove empty directories
     remove_empty_dirs('dist\\library')
 
-    # recompress library.zip
+    # repack library.zip
     os.chdir('dist\\library')
-    archive('.', '..\\library.zip', settings, use_advzip=True)
+    archive('.', '..\\library.zip', settings, store=True)
     os.chdir('..\\..')
     file_size_new = os.path.getsize('dist\\library.zip')
-    file_size_diff = file_size_old - file_size_new
-    logger.info('Recompression of library.dll reduced size by %s from %s to %s',
-                f'{file_size_diff:,}', f'{file_size_old:,}', f'{file_size_new:,}')
+    logger.info('library.zip changed size by %s from %s to %s',
+                f'{file_size_new - file_size_old:+,}', f'{file_size_old:,}', f'{file_size_new:,}')
     shutil.rmtree('dist\\library', ignore_errors=True)
     assert_exist('dist\\library.zip')
+    # Nothing else runs the exe after library.zip is rewritten
+    assert_execute_console()
 
 
 def shrink(settings):
@@ -992,7 +996,7 @@ def shrink(settings):
     delete_linux_only()
 
     if settings['recompress_lib']:
-        recompress_library(settings)
+        repack_library(settings)
 
     # so calculate the size of the folder, as it is a goal to shrink it.
     logger.info('Final size of the dist folder: %s',

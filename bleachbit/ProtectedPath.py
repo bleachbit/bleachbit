@@ -27,7 +27,6 @@ accidentally delete important system or application files.
 
 import logging
 import os
-import xml.dom.minidom
 
 import bleachbit
 from bleachbit import FileUtilities, FS_CASE_SENSITIVE
@@ -77,6 +76,9 @@ def load_protected_paths(force_reload=False):
         return []
 
     protected_paths = []
+
+    # Keep minidom off the startup path: this is the only place it is needed.
+    import xml.dom.minidom  # pylint: disable=import-outside-toplevel
 
     try:
         with open(xml_path, 'rb') as f:

@@ -329,13 +329,11 @@ class CleanerML:
                 "ignoring '%s' action from untrusted cleaner '%s'",
                 command, self.cleaner.id or '?')
             return
-        provider = None
-        for actionplugin in ActionProvider.plugins:
-            if actionplugin.action_key == command:
-                provider = actionplugin(
-                    _ETActionElementAdapter(action_node), self.vars)
-        if provider is None:
+        actionplugin = ActionProvider.plugins_by_key.get(command)
+        if actionplugin is None:
             raise RuntimeError(f"Invalid command '{command}'")
+        provider = actionplugin(
+            _ETActionElementAdapter(action_node), self.vars)
         self.cleaner.add_action(self.option_id, provider)
 
     def handle_localizations(self, localization_nodes):

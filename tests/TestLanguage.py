@@ -364,6 +364,13 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
             os.environ['LANGUAGE'] = self._language_env_backup
         super().tearDown()
 
+    def test_setup_translation_bumps_generation(self):
+        """Each setup_translation() call bumps translation_generation"""
+        from bleachbit import Language as _language_module
+        before = _language_module.translation_generation
+        setup_translation()
+        self.assertEqual(_language_module.translation_generation, before + 1)
+
     @common.skipIfWindows
     def test_setup_translation_sets_language_env_on_posix(self):
         """Regression test: GLib's g_get_language_names(), used

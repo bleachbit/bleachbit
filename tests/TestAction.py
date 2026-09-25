@@ -134,6 +134,28 @@ class ActionTestCase(common.BleachbitTestCase):
                 self.assertTrue(dir_is_empty(
                     filename), f'directory not empty after walk.all: {filename}')
 
+    def test_plugins_by_key_matches_plugin_scan(self):
+        """plugins_by_key agrees with a linear scan of the plugins"""
+        keys = {p.action_key for p in ActionProvider.plugins
+                if getattr(p, 'action_key', None) is not None}
+        self.assertTrue(keys)
+        for key in keys:
+            expected = None
+            for plugin in ActionProvider.plugins:
+                if getattr(plugin, 'action_key', None) == key:
+                    # no break: the old scan let the last match win
+                    expected = plugin
+            self.assertIs(
+                ActionProvider.plugins_by_key.get(key), expected, key)
+
+    def test_plugins_by_key_indexes_late_registration(self):
+        """A provider defined after bleachbit.Action is imported is indexed"""
+        class LateRegisteredAction(ActionProvider):
+            action_key = 'test.late.registration'
+
+        self.assertIs(ActionProvider.plugins_by_key.get('test.late.registration'),
+                      LateRegisteredAction)
+
     def test_delete(self):
         """Unit test for class Delete"""
         paths = ['~']

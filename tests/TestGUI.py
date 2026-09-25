@@ -25,7 +25,7 @@ from tests.common import pytest
 import bleachbit
 from bleachbit.Cleaner import Cleaner, backends
 from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
-from bleachbit.Language import get_supported_language_code_name_dict
+from bleachbit.Language import get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
@@ -659,6 +659,40 @@ class GUITestCase(common.BleachbitTestCase):
         file_to_clean = self.mkstemp(prefix="somefile", dir=dirname)
         self.assertExists(file_to_clean)
         return file_to_clean
+
+    def test_orphaned_wipe_prompt_waits_for_idle(self):
+        """The orphaned wipe prompt is skipped while an operation runs"""
+        gui = self.get_window()
+        with mock.patch('bleachbit.GuiBasic.message_dialog') as dialog:
+            gui.set_sensitive(False)
+            self.addCleanup(gui.set_sensitive, True)
+            self.assertFalse(
+                gui._prompt_orphaned_wipe_files(['/does/not/exist']))
+            dialog.assert_not_called()
+
+            gui.set_sensitive(True)
+            gui._prompt_orphaned_wipe_files(['/does/not/exist'])
+            dialog.assert_called_once()
+
+    def test_app_menu_reloads_only_after_setup_translation(self):
+        """The app menu is rebuilt only after setup_translation() runs again"""
+        gui = self.get_window()
+        menu = gui.menu_button.get_menu_model()
+        gui.update_headerbar_labels()
+        self.assertIs(gui.menu_button.get_menu_model(), menu)
+        setup_translation()
+        gui.update_headerbar_labels()
+        self.assertIsNot(gui.menu_button.get_menu_model(), menu)
+
+    def test_refresh_supersedes_running_registration(self):
+        """A new refresh stops the registration still running"""
+        gui = self.get_window()
+        with mock.patch.object(gui.tree_store, 'refresh_rows',
+                               wraps=gui.tree_store.refresh_rows) as refresh_rows:
+            gui.cb_refresh_operations()
+            gui.cb_refresh_operations()
+            self.refresh_gui()
+        refresh_rows.assert_called_once_with()
 
     def test_run_operations(self):
         gui = self.get_window()

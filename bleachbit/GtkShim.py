@@ -94,7 +94,7 @@ from pathlib import PureWindowsPath
 from html import escape as esc
 from traceback import format_exc
 
-from bleachbit import bleachbit_exe_path, IS_MAC, IS_POSIX, IS_WINDOWS
+from bleachbit import bleachbit_exe_path, log_startup_time, IS_MAC, IS_POSIX, IS_WINDOWS
 
 HELP_URL = 'https://link.bleachbit.org/get-help'
 PYGOBJECT_URL = 'https://link.bleachbit.org/pygobject-lib-bin-error'
@@ -393,6 +393,7 @@ def _import_gtk_libraries():
             except Exception as e:
                 return False, f'Display check failed: {e}'
 
+    log_startup_time('GTK imported')
     return True, None
 
 

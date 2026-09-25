@@ -87,8 +87,13 @@ class PluginMount(type):
     def __init__(cls, _name, _bases, _attrs):
         if not hasattr(cls, 'plugins'):
             cls.plugins = []
+            cls.plugins_by_key = {}
         else:
             cls.plugins.append(cls)
+            # Indexed here, not on demand: Cleaner and tests register later.
+            action_key = getattr(cls, 'action_key', None)
+            if action_key is not None:
+                cls.plugins_by_key[action_key] = cls
 
 
 class ActionProvider(metaclass=PluginMount):
