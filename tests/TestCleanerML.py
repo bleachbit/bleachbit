@@ -434,6 +434,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
     def test_running_process_names(self):
         """Cleaners notice their application by its Linux process name"""
         cases = (
+            ('android_studio', 'studio'),
             ('rhythmbox', 'rhythmbox'),
         )
         self.addCleanup(process_cache.invalidate)
