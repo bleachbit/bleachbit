@@ -13,6 +13,7 @@ import os
 import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from tests import common
 from tests.common import pytest
@@ -23,7 +24,8 @@ from bleachbit.GtkShim import Gdk, Gtk, is_gtk_available
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GuiUtil import (clear_clipboard, flush_gtk_events,
-                                   get_clipboard_paths, get_font_size_from_name)
+                                   get_clipboard_paths, get_font_size_from_name,
+                                   notify)
 
 CLIPBOARD_TIMEOUT_SECONDS = 5
 CLIPBOARD_SLEEP_SECONDS = 0.05
@@ -304,3 +306,20 @@ class GUIUtilFontTestCase(common.BleachbitTestCase):
         for font_name in tests:
             self.assertIsNone(get_font_size_from_name(font_name),
                               f"Font name '{font_name}' should return None")
+
+
+@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
+class GUIUtilNotifyTestCase(common.BleachbitTestCase):
+    """Test case for notify()"""
+
+    def test_notify_plyer_only_on_windows(self):
+        """Outside Windows, notify() does not use an installed plyer"""
+        with mock.patch('bleachbit.GuiUtil.IS_WINDOWS', False), \
+                mock.patch('bleachbit.GuiUtil.IS_MAC', False), \
+                mock.patch('importlib.util.find_spec', return_value=object()), \
+                mock.patch('bleachbit.GuiUtil.notify_plyer') as mock_plyer, \
+                mock.patch('bleachbit.GuiUtil.notify_gi') as mock_gi:
+            # pylint: disable-next=possibly-used-before-assignment
+            notify('test')
+        mock_plyer.assert_not_called()
+        mock_gi.assert_called_once_with('test')
