@@ -118,6 +118,22 @@ class UpdateTestCase(common.BleachbitTestCase):
             updates = check_updates(True, False, None, None)
             self.assertEqual(updates, [('2', 'https://secure.example')])
 
+    def test_check_updates_winapp2_download_fails(self):
+        """A failed winapp2.ini download still returns the update"""
+        xml_text = ('<updates><stable ver="9.9">https://999</stable>'
+                    '<winapp2 url="https://example.invalid/winapp2.ini" '
+                    f'sha512="{"a" * 128}"/></updates>')
+        with patch('bleachbit.Update.fetch_url') as mock_fetch, \
+                patch('bleachbit.Network.fetch_url',
+                      return_value=Mock(status_code=503)):
+            resp = Mock()
+            resp.status_code = 200
+            resp.text = xml_text
+            resp.content = xml_text.encode()
+            mock_fetch.return_value = resp
+            self.assertEqual(check_updates(True, True, print, None),
+                             [('9.9', 'https://999')])
+
     def test_check_updates_real_network(self):
         """Unit test for function check_updates() using real network"""
         for update in check_updates(True, False, None, None):
