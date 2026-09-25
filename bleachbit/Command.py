@@ -107,8 +107,10 @@ class Delete:
                 if not e.winerror == 32:
                     raise
 
+                # Like delete(), use the \\?\ path so long paths work
                 # pylint: disable-next=possibly-used-before-assignment
-                bleachbit.Windows.delete_locked_file(self.path)
+                bleachbit.Windows.delete_locked_file(
+                    FileUtilities.extended_path(self.path))
 
                 # delete() also shreds when the global option is on
                 from bleachbit.Options import options

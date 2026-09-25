@@ -94,9 +94,29 @@ class CommandTestCase(common.BleachbitTestCase):
                 warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter('always')
             ret = next(Delete(path).execute(really_delete=True))
-        fake_bleachbit.Windows.delete_locked_file.assert_called_once_with(path)
+        fake_bleachbit.Windows.delete_locked_file.assert_called_once_with(
+            FileUtilities.extended_path(path))
         self.assertEqual(ret['label'], _('Mark for deletion'))
         self.assertIn(UserWarning, [w.category for w in caught])
+
+    def test_Delete_locked_extended_path(self):
+        """A locked file is flagged for deletion by the same extended
+        path that delete() uses, so a long path is found"""
+        path = self.write_file('test_Delete_locked_extended', b'foo')
+        if IS_WINDOWS:
+            locked = PermissionError(errno.EACCES, 'locked', path)
+            locked.winerror = 32
+        else:
+            # pylint: disable-next=possibly-used-before-assignment
+            locked = WindowsError(32, 'locked')
+        with mock.patch('bleachbit.FileUtilities.delete', side_effect=locked), \
+                mock.patch('bleachbit.FileUtilities.extended_path',
+                           side_effect=lambda p: '\\\\?\\' + p), \
+                mock.patch.object(bleachbit.Command, 'bleachbit', mock.Mock(),
+                                  create=True) as fake_bleachbit:
+            next(Delete(path).execute(really_delete=True))
+        fake_bleachbit.Windows.delete_locked_file.assert_called_once_with(
+            '\\\\?\\' + path)
 
     def test_Function(self):
         """Unit test for Function"""
