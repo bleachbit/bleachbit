@@ -17,6 +17,7 @@ LibreWolf 150.0.1-1 installed by .deb from its official repository uses
   <description>Web browser</description>
   <running type="exe" os="unix">librewolf</running>
   <running type="exe" os="unix">librewolf-bin</running>
+  <running type="exe" os="windows" same_user="true">librewolf.exe</running>
   <running type="pathname">~/.librewolf/*.default/lock</running>
   <running type="pathname">~/.librewolf/*.default/lock</running>
   <var name="base">
