@@ -101,6 +101,7 @@ class TreeDisplayModel:
                     'cleaner': model[parent][0],
                     'option': model[path][0],
                 }
+                row = Gtk.TreeRowReference.new(model, model.get_path(i))
                 confirmed, remember_choice = GuiBasic.warning_confirm_dialog(
                     parent_window, option_name, warning)
                 if not confirmed:
@@ -108,14 +109,22 @@ class TreeDisplayModel:
                     return
                 if remember_choice:
                     options.remember_warning_preference(warning_key)
+                if not row.valid():
+                    # A refresh rebuilt the tree during the dialog
+                    return
+                path = row.get_path()
         model[path][1] = value
         model[path][4] = ""
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
         is_toggled_on = not model[path][1]  # Is the new state enabled?
+        # A refresh can rebuild the tree during the warning dialog
+        row = Gtk.TreeRowReference.new(model, Gtk.TreePath(path))
         self.set_cleaner(path, model, parent_window, is_toggled_on)
-        i = model.get_iter(path)
+        if not row.valid():
+            return
+        i = model.get_iter(row.get_path())
         parent = model.iter_parent(i)
         if parent and is_toggled_on:
             # If child is enabled, then also enable the parent.
@@ -134,6 +143,8 @@ class TreeDisplayModel:
         child = model.iter_children(i)
         while child:
             self.set_cleaner(child, model, parent_window, is_toggled_on)
+            if not row.valid():
+                return
             child = model.iter_next(child)
         # If the parent was just enabled but all children were blocked
         # by expert mode, leave the parent unchecked.
