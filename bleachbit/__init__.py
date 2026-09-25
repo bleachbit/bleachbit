@@ -26,10 +26,8 @@ if sys.version_info < (3, 8, 0):
     sys.stderr.write('BleachBit requires Python version 3.8 or later\n')
     sys.exit(1)
 
-if hasattr(sys, 'frozen'):
-    stdout_encoding = 'utf-8'
-else:
-    stdout_encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
+# The frozen Windows GUI has no real stdout
+stdout_encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
 
 logger = Log.init_log()
 
