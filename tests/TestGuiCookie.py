@@ -8,6 +8,9 @@
 Test case for module GuiCookie
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import json
 import os
 import types
@@ -16,6 +19,8 @@ from unittest import mock
 
 from tests import common
 
+import bleachbit
+from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME
 from bleachbit.GtkShim import is_gtk_available
 
 HAVE_GTK = is_gtk_available()
@@ -64,3 +69,23 @@ class GuiCookieTestCase(common.BleachbitTestCase):
                 None, None, 'https://docs.bleachbit.org/')
         self.assertTrue(handled)
         open_url.assert_called_once()
+
+    def test_unreadable_keep_list(self):
+        """A corrupt keep list leaves the page usable, and a save replaces it"""
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.addCleanup(lambda: os.path.exists(
+            keep_path) and os.remove(keep_path))
+        self.write_file(keep_path, text='["a.example",]')
+
+        with mock.patch('bleachbit.GuiCookie.threading.Thread'), \
+                self.assertLogs('bleachbit.GuiCookie', level='ERROR'):
+            pane = CookieManagerPane()
+        self.assertEqual(pane.saved_domains, set())
+
+        pane._finish_populate(['b.example'])
+        pane.on_select_all_clicked(None)
+        with open(keep_path, encoding='utf-8') as f:
+            self.assertEqual(json.load(f), ['b.example'])
+        pane.destroy()

@@ -97,7 +97,21 @@ class CookieManagerPane(Gtk.Box):
 
         self.keep_list_path = os.path.join(
             bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
-        self.saved_domains = load_keep_list()
+        try:
+            self.saved_domains = load_keep_list()
+        except (OSError, ValueError) as exc:
+            # Start empty, so the next save replaces the unreadable file.
+            logger.error("Failed to load cookie keep list %s: %s",
+                         self.keep_list_path, exc)
+            self.saved_domains = set()
+            # TRANSLATORS: Shown in the manage cookies dialog when the saved
+            # list is damaged or cannot be opened.
+            error_label = Gtk.Label(label=_(
+                "The list of cookies to keep cannot be read, so cookies are "
+                "not cleaned. Changing the selection saves a new list."))
+            error_label.set_line_wrap(True)
+            error_label.set_xalign(0)
+            self.pack_start(error_label, False, False, 0)
         self._is_loading = False
 
         # Create cookie list store: checkbox, domain
