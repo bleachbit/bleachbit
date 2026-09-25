@@ -272,6 +272,20 @@ auto_hide = True
             o.cancel_pending_flush()
         os.remove(bleachbit.options_file)
 
+    def test_installer_language_english(self):
+        """English from the installer keeps language auto-detection"""
+        if os.path.exists(bleachbit.options_file):
+            os.remove(bleachbit.options_file)
+        with mock.patch('bleachbit.Options.IS_WINDOWS', True), \
+                mock.patch('bleachbit.Options.get_installer_language_code',
+                           return_value='en'):
+            o = bleachbit.Options.Options()
+        try:
+            self.assertTrue(o.get('auto_detect_lang'))
+            self.assertFalse(o.has_option('forced_language'))
+        finally:
+            o.cancel_pending_flush()
+
     def test_open_config_write_refuses_symlink(self):
         """The config write must not follow a symlink to another file"""
         filename = self.write_file('cfg_target', b'keepme')

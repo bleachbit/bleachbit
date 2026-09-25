@@ -359,7 +359,9 @@ class Options:
         if not IS_WINDOWS:
             return
         lang_code = get_installer_language_code()
-        if not lang_code:
+        # English is the installer's fallback for languages it lacks and
+        # the only choice in the English-only build.
+        if not lang_code or lang_code == 'en':
             return
         logger.debug('Using language %s from the installer.', lang_code)
         self.set('forced_language', lang_code)
