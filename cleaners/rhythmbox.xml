@@ -10,6 +10,7 @@ later.  See the COPYING file in the top-level directory.
 -->
 <cleaner id="rhythmbox" os="linux">
   <label>Rhythmbox</label>
+  <running type="exe" same_user="true">rhythmbox</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
@@ -19,6 +20,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="history">
     <label>Database</label>
     <description>Delete the database, which contains information such as play count and last played</description>
+    <warning>This option deletes ratings, internet radio stations, and podcast subscriptions.</warning>
     <action command="delete" search="file" path="$XDG_DATA_HOME/rhythmbox/rhythmdb.xml"/>
   </option>
 </cleaner>
