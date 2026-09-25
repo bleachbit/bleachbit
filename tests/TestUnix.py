@@ -654,6 +654,18 @@ PrefersNonDefaultGPU=false""")
         for neg in negative_cases:
             self.assertFalse(regex.match(neg))
 
+    @common.skipIfWindows
+    def test_journald_clean_mock(self):
+        """journald_clean() parses journalctl's 1024-based sizes"""
+        output = '\n'.join((
+            'Vacuuming done, freed 0B of archived journals from /run/log/journal.',
+            'Vacuuming done, freed 128.0K of archived journals from /var/log/journal/123abc.',
+            'Vacuuming done, freed 8.0M of archived journals from /var/log/journal/456def.',
+        ))
+        with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
+            self.assertEqual(journald_clean(), 128 * 1024 + 8 * 1024 ** 2)
+
     def test_get_purgeable_locales(self):
         """Unit test for method get_purgeable_locales()"""
         # 'en' implies 'en_US'
