@@ -224,6 +224,12 @@ def is_process_running(exename, require_same_user):
     return False
 
 
+def is_pid_running(pid, require_same_user):
+    """Check whether a process with this PID is running"""
+    return any(proc.pid == pid and (not require_same_user or proc.same_user)
+               for proc in process_cache.get())
+
+
 def terminate_process(exename, require_same_user):
     """Terminate processes matching exename. Returns list of affected PIDs."""
     ci = IS_WINDOWS
