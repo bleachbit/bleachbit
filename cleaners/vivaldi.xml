@@ -40,9 +40,12 @@ Only the Default profile is cleaned.
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Cache"/>
     <action command="delete" search="walk.all" path="$$profile$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <!-- specific to OS or packaging -->
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/vivaldi/"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/Vivaldi/" os="macos"/>
     <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/mesa_shader_cache_db"/>
     <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/mesa_shader_cache"/>
     <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/vivaldi"/>
