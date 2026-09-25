@@ -18,7 +18,7 @@ from unittest import mock
 # first party imports
 import bleachbit
 from tests import common
-from bleachbit import Cleaner
+from bleachbit import Cleaner, Command
 from bleachbit.General import os_match
 from bleachbit.CleanerML import (
     CleanerML,
@@ -588,3 +588,14 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                     if cleaner_id != 'vivaldi':
                         self.assertIn(nel, self._bundled_option_paths(
                             cleaner_id, 'history', 'linux'))
+
+    def test_ie_history_keeps_feature_control(self):
+        """IE history leaves the Internet Feature Control settings alone"""
+        cleaner = self._bundled_cleaner('internet_explorer', 'win32')
+        with mock.patch('bleachbit.Action.IS_WINDOWS', True):
+            keys = [cmd.keyname for cmd in cleaner.get_commands('history')
+                    if isinstance(cmd, Command.Winreg)]
+        self.assertIn(
+            r'HKCU\Software\Microsoft\Internet Explorer\TypedURLs', keys)
+        self.assertNotIn(
+            r'HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl', keys)
