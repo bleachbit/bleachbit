@@ -957,6 +957,8 @@ PrefersNonDefaultGPU=false""")
         mock_getsizedir.reset_mock()
         self.assertEqual(dnf_clean(), 25 * 1024 ** 2)
         self.assertEqual(mock_getsizedir.call_count, 1)
+        # Fail instead of waiting when another dnf holds the lock
+        self.assertIn('--setopt=exit_on_lock=True', mock_run.call_args[0][0])
 
         mock_run.return_value = (
             0, 'Removed 12 files, 3 directories '
@@ -1035,6 +1037,7 @@ PrefersNonDefaultGPU=false""")
         mock_run.return_value = (0, 'Nothing to do.', 'stderr')
         bytes_freed = dnf_autoremove()
         self.assertEqual(bytes_freed, 0)
+        self.assertIn('--setopt=exit_on_lock=True', mock_run.call_args[0][0])
 
         mock_run.return_value = (
             0, 'Remove  112 Packages\nFreed space: 299 M\n', 'stderr')
