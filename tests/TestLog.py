@@ -63,3 +63,14 @@ class LogTestCase(common.BleachbitTestCase):
         self.assertEqual(mode, 0o700)
         with open(debug_log_path, encoding='utf-8') as f:
             self.assertIn('previous content', f.read())
+
+    def test_init_log_debug_log_unwritable(self):
+        """A --debug-log path that cannot be opened is skipped"""
+        for debug_log_path in (os.path.join(self.tempdir, 'missing', 'debug.log'),
+                               self.tempdir):
+            with mock.patch.object(sys, 'argv', ['bleachbit', '--debug-log', debug_log_path]):
+                logger = init_log()
+            new_handlers = [h for h in logger.handlers
+                            if h not in self.saved_handlers]
+            self.assertFalse(any(isinstance(h, logging.FileHandler)
+                                 for h in new_handlers))
