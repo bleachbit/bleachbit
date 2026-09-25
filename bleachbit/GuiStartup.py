@@ -85,6 +85,10 @@ def _get_posix_permission_issues(fstat, options_file):
         if os.geteuid() == 0:
             lines.append('File owner does not match current user '
                          '(root can access regardless)')
+        elif fstat.st_uid == os.geteuid():
+            # e.g. sudo -u or su to another account, which owns its config
+            lines.append('File owner does not match current user '
+                         '(but matches the effective user)')
         else:
             has_error = True
             lines.append('File owner does not match current user')
