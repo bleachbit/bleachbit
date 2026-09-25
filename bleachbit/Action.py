@@ -473,10 +473,7 @@ class Cookie(FileActionProvider):
         for path in self.get_paths():
             def delete_func(p=path):
                 # perform deletion; return value is ignored by Command.Function for file paths
-                try:
-                    CookieMod.delete_cookies(p, keep_list, really_delete=True)
-                except Exception as e:
-                    logger.warning('Cookie cleaning failed on %s: %s', p, e)
+                CookieMod.delete_cookies(p, keep_list, really_delete=True)
                 return 0
 
             def preview_func(p=path):

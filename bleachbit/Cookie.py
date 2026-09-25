@@ -256,25 +256,14 @@ def delete_cookies(path, keep_list, really_delete=False):
                     conn.close()
                     if shred_enabled:
                         _delete_auxiliary_journal_files(path, True)
-                    try:
-                        FileUtilities.delete(path, shred_enabled)
-                        return {
-                            "total_deleted": deleted_count,
-                            "total_kept": 0,
-                            "skipped": False,
-                            "whole_file_deleted": True,
-                            "file_size_reduction": original_size,
-                        }
-                    except OSError as e:
-                        logger.error(
-                            "Failed to delete cookie database %s: %s", path, e)
-                        return {
-                            "total_deleted": 0,
-                            "total_kept": 0,
-                            "skipped": True,
-                            "whole_file_deleted": False,
-                            "file_size_reduction": 0,
-                        }
+                    FileUtilities.delete(path, shred_enabled)
+                    return {
+                        "total_deleted": deleted_count,
+                        "total_kept": 0,
+                        "skipped": False,
+                        "whole_file_deleted": True,
+                        "file_size_reduction": original_size,
+                    }
 
                 # Perform actual deletion: delete anything NOT matching keep predicate
                 cursor.execute(delete_query, tuple(params))
@@ -338,6 +327,8 @@ def delete_cookies(path, keep_list, really_delete=False):
             }
 
     except sqlite3.Error as e:
+        if really_delete:
+            raise
         logger.error("SQLite error processing %s: %s", path, e)
         return {
             "total_deleted": 0,

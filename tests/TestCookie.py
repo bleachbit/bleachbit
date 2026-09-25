@@ -500,14 +500,52 @@ class CookieTestCase(common.BleachbitTestCase):
         self.assertFalse(result['whole_file_deleted'])
         self.assertGreaterEqual(result['file_size_reduction'], 0)
 
-    def _make_cookie_action(self):
+    def test_delete_cookies_raises_sqlite_error_when_cleaning(self):
+        """A SQLite error while cleaning propagates instead of being skipped"""
+        path = self._create_chrome_cookies_db()
+        conn = sqlite3.connect(path)
+        try:
+            conn.execute("CREATE TRIGGER no_delete BEFORE DELETE ON cookies "
+                         "BEGIN SELECT RAISE(ABORT, 'refused'); END")
+            conn.commit()
+        finally:
+            conn.close()
+
+        with self.assertRaises(sqlite3.Error):
+            Cookie.delete_cookies(path, {'google.com'}, really_delete=True)
+
+        conn = sqlite3.connect(path)
+        try:
+            count = conn.execute('SELECT COUNT(*) FROM cookies').fetchone()[0]
+        finally:
+            conn.close()
+        self.assertEqual(count, 3)
+
+    def test_cookie_action_raises_on_failure(self):
+        """A failed cookie clean reaches the Worker as an error"""
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, json.dumps(['example.com']), mode='w')
+        path = os.path.join(self.tempdir, 'unknown_table.db')
+        execute_sqlite3(path, 'CREATE TABLE something_else (id INTEGER)')
+
+        cmds = list(self._make_cookie_action(path).get_commands())
+        self.assertEqual(len(cmds), 1)
+        with self.assertRaises(ValueError):
+            list(cmds[0].execute(really_delete=True))
+        self.assertExists(path)
+
+    def _make_cookie_action(self, path=None):
         """Create a Cookie action instance with a mock XML element."""
+        if path is None:
+            path = os.path.join(self.tempdir, 'nonexistent')
         elem = mock.MagicMock()
         elem.getAttribute.return_value = ''
         elem.getAttribute.side_effect = lambda name: {
             'command': 'cookie',
             'search': 'file',
-            'path': os.path.join(self.tempdir, 'nonexistent'),
+            'path': path,
         }.get(name, '')
         return CookieAction(elem)
 
