@@ -11,6 +11,10 @@ later.  See the COPYING file in the top-level directory.
 <cleaner id="dnf" os="linux">
   <label>DNF</label>
   <description>Package manager</description>
+  <running type="exe" same_user="false">dnf</running>
+  <running type="exe" same_user="false">dnf4</running>
+  <running type="exe" same_user="false">dnf5</running>
+  <running type="exe" same_user="false">yum</running>
   <option id="clean_all">
     <label translate="false">clean all</label>
     <description>Delete the cache</description>

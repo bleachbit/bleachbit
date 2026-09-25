@@ -26,6 +26,7 @@ from bleachbit.CleanerML import (
     list_cleanerml_files,
     load_cleaners,
     pot_fragment)
+from bleachbit.Process import ProcessInfo
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -90,6 +91,15 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual(
             [r'C:\Windows\Sysnative', r'C:\Windows\SysWOW64'],
             variables['WindowsSystem'])
+
+    @common.skipUnlessLinux
+    def test_dnf_running(self):
+        """The DNF cleaner notices a running dnf"""
+        cleaner = CleanerML('cleaners/dnf.xml').get_cleaner()
+        for name in ('dnf', 'dnf5', 'yum'):
+            procs = (ProcessInfo(1234, name, False),)
+            with mock.patch('bleachbit.Process.process_cache.get', return_value=procs):
+                self.assertTrue(cleaner.is_process_running(), name)
 
     def test_list_cleanerml_files(self):
         """Unit test for list_cleanerml_files()"""
