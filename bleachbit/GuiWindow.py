@@ -483,8 +483,12 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         else:
             self.destroy()
 
+    def _delete_confirmation_required(self):
+        """Return True unless expert mode turned the confirmation off"""
+        return options.get("delete_confirmation") or not options.get('expert_mode')
+
     def _confirm_delete(self, mention_preview, shred_settings=False):
-        if options.get("delete_confirmation") or not options.get('expert_mode'):
+        if self._delete_confirmation_required():
             return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
         return True
 
@@ -536,7 +540,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         operations = {'_gui': ['files']}
 
         # If no confirmation is requested, skip the preview.
-        if options.get("delete_confirmation"):
+        if self._delete_confirmation_required():
             self.preview_or_run_operations(False, operations)
             preview = self.worker
             # Set the pending flag before the confirmation dialog because

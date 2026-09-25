@@ -614,6 +614,20 @@ class GUITestCase(common.BleachbitTestCase):
             options.set('delete_confirmation', False)
             backends.pop('_gui', None)
 
+    def test_shred_paths_confirms_without_expert_mode(self):
+        """Shredding asks first unless expert mode turned that off"""
+        gui = self.get_window()
+        options.set('delete_confirmation', False)
+        options.set('expert_mode', False)
+        self.addCleanup(backends.pop, '_gui', None)
+        with mock.patch.object(gui, 'worker', None, create=True), \
+                mock.patch.object(gui, 'preview_or_run_operations') as start, \
+                mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog',
+                           return_value=False) as dialog:
+            self.assertFalse(gui.shred_paths([self.tempdir]))
+        dialog.assert_called_once()
+        start.assert_called_once_with(False, {'_gui': ['files']})
+
     def test_shred_paths_clears_clipboard_mock(self):
         """Test that shred_paths with should_clear_clipboard=True clears the clipboard"""
         test_file = self.write_file('shred-me-via-clipboard')
