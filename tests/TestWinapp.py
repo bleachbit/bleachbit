@@ -21,7 +21,7 @@ from tests.common import pytest
 
 from tests import common
 import bleachbit
-from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, load_cleaners, section2option
+from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, load_cleaners, section2option, winapp_expand_vars
 from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import IS_WINDOWS, logger
 from bleachbit.FileUtilities import extended_path_undo
@@ -199,6 +199,23 @@ class WinappTestCase(common.BleachbitTestCase):
             msg = (f'detectos({req}, {mock_ver})=={actual_return}'
                    f' instead of {expected_return}')
             self.assertEqual(expected_return, actual_return, msg)
+
+    def test_winapp_expand_vars_programfiles(self):
+        """%ProgramFiles% adds a path only when %ProgramW6432% differs"""
+        tests = (
+            # 32-bit process on 64-bit Windows
+            (r'C:\Program Files (x86)',
+             [r'C:\Program Files (x86)\Foo', r'C:\Program Files\Foo']),
+            # 64-bit process
+            (r'C:\Program Files', [r'C:\Program Files\Foo']),
+        )
+        for program_files, expected in tests:
+            def expandvars(path, program_files=program_files):
+                return path.replace('%ProgramFiles%', program_files).replace(
+                    '%ProgramW6432%', r'C:\Program Files')
+            with mock.patch('os.path.expandvars', side_effect=expandvars):
+                self.assertEqual(
+                    expected, winapp_expand_vars(r'%ProgramFiles%\Foo'))
 
     @common.skipUnlessWindows
     def test_detect_file(self):
