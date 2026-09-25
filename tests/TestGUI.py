@@ -627,6 +627,20 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertEqual([], glib_warnings)
 
+    def test_shred_instance_shreds_its_paths_once(self):
+        """A shred instance runs on its own and shreds its paths only once"""
+        from bleachbit.GuiApplication import Bleachbit
+        paths = [os.path.join(self.tempdir, 'shred-once')]
+        with mock.patch('bleachbit.GuiApplication.GUI') as gui_cls:
+            gui_cls.shred_paths.return_value = False
+            app = Bleachbit(uac=False, shred_paths=paths, auto_exit=False)
+            self.assertTrue(app.get_flags() & Gio.ApplicationFlags.NON_UNIQUE)
+            app.do_activate()
+            app.do_activate()
+            self.refresh_gui()
+        gui_cls.shred_paths.assert_called_once_with(
+            gui_cls.return_value, paths)
+
     def _setup_new_cleaner(self, gui):
         def _create_cleaner_file_in_directory(dirname):
             cleaner_content = ('<?xml version="1.0" encoding="UTF-8"?>'
