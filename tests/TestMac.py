@@ -406,6 +406,20 @@ class MacTestCase(common.BleachbitTestCase):
         self.assertFalse(os.path.exists(path))
 
     @common.skipUnlessMac
+    def test_delete_safari_cookies_no_cookies(self):
+        """A file without cookies previews and cleans as nothing to do."""
+        path = self._create_binarycookies_file([])
+
+        for really_delete in (False, True):
+            with self.subTest(really_delete=really_delete):
+                res = delete_safari_cookies(
+                    path, {'github.com'}, really_delete=really_delete)
+                self.assertEqual(res['total_deleted'], 0)
+                self.assertFalse(res['whole_file_deleted'])
+                self.assertEqual(res['file_size_reduction'], 0)
+        self.assertTrue(os.path.exists(path))
+
+    @common.skipUnlessMac
     def test_delete_safari_cookies_empty_keep_list_raises(self):
         """Empty keep list raises ValueError."""
         rec1 = self._make_cookie_record('lists.webkit.org')

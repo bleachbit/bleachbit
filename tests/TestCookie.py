@@ -511,15 +511,18 @@ class CookieTestCase(common.BleachbitTestCase):
         # Create empty Chrome database
         path = self._create_chrome_cookies_db([])
 
-        # Test deletion with keep list
-        result = Cookie.delete_cookies(
-            path, {'example.com'}, really_delete=True)
+        # Preview must not promise the whole file when nothing is deleted
+        for really_delete in (False, True):
+            with self.subTest(really_delete=really_delete):
+                result = Cookie.delete_cookies(
+                    path, {'example.com'}, really_delete=really_delete)
 
-        self.assertEqual(result['total_deleted'], 0)
-        self.assertEqual(result['total_kept'], 0)
-        self.assertFalse(result['skipped'])
-        self.assertFalse(result['whole_file_deleted'])
-        self.assertGreaterEqual(result['file_size_reduction'], 0)
+                self.assertEqual(result['total_deleted'], 0)
+                self.assertEqual(result['total_kept'], 0)
+                self.assertFalse(result['skipped'])
+                self.assertFalse(result['whole_file_deleted'])
+                self.assertEqual(result['file_size_reduction'], 0)
+        self.assertExists(path)
 
     def test_delete_cookies_raises_sqlite_error_when_cleaning(self):
         """A SQLite error while cleaning propagates instead of being skipped"""

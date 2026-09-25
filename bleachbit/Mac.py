@@ -588,7 +588,7 @@ def _filter_safari_cookie_records(pages, keep_domains):
 def _preview_safari_cookie_deletion(deleted_count, kept_count, total_before,
                                     original_size):
     """Build a preview result dict without modifying the file."""
-    if kept_count == 0:
+    if kept_count == 0 and deleted_count > 0:
         return _cookie_result(
             total_deleted=deleted_count,
             total_kept=0,
