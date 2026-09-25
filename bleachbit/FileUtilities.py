@@ -1166,9 +1166,9 @@ def same_partition(dir1, dir2):
     """Are both directories on the same partition?"""
     if IS_WINDOWS:
         try:
-            return free_space(dir1) == free_space(dir2)
+            # st_dev is the volume serial number
+            return os.stat(dir1).st_dev == os.stat(dir2).st_dev
         except OSError as e:
-            # psutil.disk_usage() raises OSError (with .winerror on Windows).
             # 5 = access denied: Microsoft Office 2010 Starter Edition has a
             #     virtual drive that gives access denied.
             #     https://bugs.launchpad.net/bleachbit/+bug/1372179
@@ -1178,10 +1178,15 @@ def same_partition(dir1, dir2):
             if getattr(e, 'winerror', None) in (5, 1326):
                 return dir1[0] == dir2[0]
             raise
+    if os.stat(dir1).st_dev == os.stat(dir2).st_dev:
+        return True
+    # Subvolumes of one btrfs file system have their own device numbers
+    # but share its blocks, and free blocks can change between the calls.
     # pylint: disable=no-member
     stat1 = os.statvfs(dir1)
     stat2 = os.statvfs(dir2)
-    return stat1[stat.ST_DEV] == stat2[stat.ST_DEV]
+    return stat1.f_blocks == stat2.f_blocks and \
+        abs(stat1.f_bfree - stat2.f_bfree) <= stat1.f_blocks // 1000
 
 
 def truncate_f(f):
