@@ -400,3 +400,20 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         self.assertEqual(os.listdir(output_dir), [])
         self.assertTrue(progress_kwargs[-1]['is_done'])
         self.assertIn('No space left on device', progress_kwargs[-1]['error'])
+
+    def test_make_files_thread_abort_deletes(self):
+        """Abort stops the generation, and the files are still deleted"""
+        output_dir = self.mkdtemp()
+        abort_event = threading.Event()
+
+        def fake_generate_2600(*_args, should_stop, generated_file_names, **_kwargs):
+            for _i in range(3):
+                generated_file_names.append(self.mkstemp(dir=output_dir))
+            abort_event.set()
+            self.assertTrue(should_stop(generated_file_names, 0))
+
+        with patch('bleachbit.GuiChaff.generate_2600', side_effect=fake_generate_2600):
+            # pylint: disable-next=possibly-used-before-assignment
+            make_files_thread(STOP_MODE_FILE_COUNT, 10, 0, output_dir, True,
+                              lambda *_args, **_kwargs: None, abort_event)
+        self.assertEqual(os.listdir(output_dir), [])
