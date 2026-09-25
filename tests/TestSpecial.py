@@ -782,6 +782,16 @@ INSERT INTO "meta" VALUES('version','20');"""
         self.assertTrue(_sqlite_uri('/' + filename).startswith('file:////'))
         self.assertTrue(Special.sqlite_table_exists('/' + filename, 'foo'))
 
+    @common.skipUnlessLinux
+    def test_sqlite_table_exists_undecodable_path(self):
+        """A path with bytes that are not valid UTF-8 still opens"""
+        dirname = os.path.join(os.fsencode(self.tempdir), b'caf\xe9')
+        os.mkdir(dirname)
+        filename = os.fsdecode(os.path.join(dirname, b'test.sqlite'))
+        FileUtilities.execute_sqlite3(filename, 'CREATE TABLE foo(id int)')
+        self.assertTrue(Special.sqlite_table_exists(filename, 'foo'))
+        self.assertTrue(Special._sqlite_is_valid_database(filename))
+
     def test_sqlite_table_exists(self):
         """Unit test for sqlite_table_exists()"""
         # Create test files with different filenames
