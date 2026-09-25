@@ -159,7 +159,7 @@ class HandleGtkImportErrorTestCase(unittest.TestCase):
     def test_unknown_error_includes_traceback_in_html(self):
         """Unknown errors must produce HTML with traceback section."""
         with mock.patch('bleachbit.GtkShim._show_windows_error_dialog') as m, \
-                mock.patch('sys.frozen', True, create=True), \
+                mock.patch('sys.frozen', 'windows_exe', create=True), \
                 mock.patch('sys.executable', r'C:\Users\user\Apps\BleachBit\bleachbit.exe'):
             try:
                 raise RuntimeError('something broke')
@@ -169,6 +169,16 @@ class HandleGtkImportErrorTestCase(unittest.TestCase):
             _title, html = m.call_args[0]
             self.assertIn('Traceback', html)
             self.assertIn('System information', html)
+
+    def test_no_dialog_in_console_build(self):
+        """Only the windowed build shows the blocking dialog"""
+        for frozen, expected in (('console_exe', False), ('windows_exe', True)):
+            with mock.patch('bleachbit.GtkShim.IS_WINDOWS', True), \
+                    mock.patch('bleachbit.GtkShim._build_error_html', return_value=''), \
+                    mock.patch('bleachbit.GtkShim._show_windows_error_dialog') as m, \
+                    mock.patch('sys.frozen', frozen, create=True):
+                _handle_gtk_import_error(ValueError('test'))
+            self.assertEqual(m.called, expected, frozen)
 
 
 class FixArgTestCase(unittest.TestCase):

@@ -260,11 +260,15 @@ def _show_windows_error_dialog(title, html_content):
 
 
 def _handle_gtk_import_error(error):
-    """On Windows, show a helpful error dialog when GTK import fails."""
+    """On Windows, report a failed GTK import."""
     if not IS_WINDOWS:
         return
 
     logger.error('GTK not available: %s\n%s', error, format_exc())
+    # Only the windowed build lacks a console to show the error, and a
+    # modal dialog would block scripted command-line runs.
+    if getattr(sys, 'frozen', None) != 'windows_exe':
+        return
     html_content = _build_error_html(
         error, traceback_text=format_exc())
     _show_windows_error_dialog('BleachBit', html_content)
