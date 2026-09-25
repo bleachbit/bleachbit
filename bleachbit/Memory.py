@@ -468,20 +468,29 @@ def wipe_memory():
             raise RuntimeError(f"wipe_memory: Command {cmd} not found")
     # cache the file because 'swapoff' changes it
     proc_swaps = get_proc_swaps()
-    devices = disable_swap_linux()
-    yield True  # process GTK+ idle loop
-    # TRANSLATORS: The variable is a device like /dev/sda2
-    logger.debug(_("Detected these swap devices: %s"), str(devices))
-    wipe_swap_linux(devices, proc_swaps)
-    yield True
-    # Prefer a separate systemd scope so that systemd's unit-level OOM
-    # policy cannot kill the parent when the child is OOM-killed. Fall back
-    # to a plain fork where systemd-run is unavailable.
-    rc = _run_memory_child_systemd_scope()
-    if rc is None:
-        rc = _run_memory_child_fork()
-    if rc not in (0, 9):
-        logger.warning(
-            _("The child memory-wiping process returned code %d."), rc)
+    # Turn swap back on also after an error, a partial swapoff or an abort
+    try:
+        devices = disable_swap_linux()
+        yield True  # process GTK+ idle loop
+        # TRANSLATORS: The variable is a device like /dev/sda2
+        logger.debug(_("Detected these swap devices: %s"), str(devices))
+        wipe_swap_linux(devices, proc_swaps)
+        yield True
+        # Prefer a separate systemd scope so that systemd's unit-level OOM
+        # policy cannot kill the parent when the child is OOM-killed. Fall back
+        # to a plain fork where systemd-run is unavailable.
+        rc = _run_memory_child_systemd_scope()
+        if rc is None:
+            rc = _run_memory_child_fork()
+        if rc not in (0, 9):
+            logger.warning(
+                _("The child memory-wiping process returned code %d."), rc)
+    except BaseException:
+        # Keep the original error if swapon fails too
+        try:
+            enable_swap_linux()
+        except Exception as e:
+            logger.error('Error when re-enabling swap: %s', e)
+        raise
     enable_swap_linux()
     yield 0  # how much disk space was recovered
