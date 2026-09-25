@@ -152,7 +152,13 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the sync data (including web apps) and sign out of the browser</description>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data Backup/"/>
-    <action command="json" search="file" path="$$base$$/Local State" address="profile"/>
+    <!-- "profile" in Local State lists every profile, so clear only the account fields -->
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/gaia_given_name"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/gaia_id"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/gaia_name"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/hosted_domain"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/is_consented_primary_account"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/user_name"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="account_info"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="google_services"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="sync"/>

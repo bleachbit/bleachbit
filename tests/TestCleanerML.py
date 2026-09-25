@@ -9,6 +9,7 @@ Test cases for module CleanerML
 """
 
 # standard imports
+import json
 import os
 import shutil
 import sys
@@ -59,11 +60,15 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         # really delete
         self.run_all(xmlcleaner, True)
 
-    def _bundled_option_paths(self, cleaner_id, option_id, platform=sys.platform):
-        """Return the paths an option of a bundled cleaner would touch"""
+    def _bundled_cleaner(self, cleaner_id, platform=sys.platform):
+        """Load a bundled cleaner as if running on platform"""
         with mock.patch('bleachbit.CleanerML.general_os_match',
                         lambda os_str, _platform: os_match(os_str, platform)):
-            cleaner = CleanerML(f'cleaners/{cleaner_id}.xml').get_cleaner()
+            return CleanerML(f'cleaners/{cleaner_id}.xml').get_cleaner()
+
+    def _bundled_option_paths(self, cleaner_id, option_id, platform=sys.platform):
+        """Return the paths an option of a bundled cleaner would touch"""
+        cleaner = self._bundled_cleaner(cleaner_id, platform)
         return [cmd.path for cmd in cleaner.get_commands(option_id)]
 
     def test_boolstr_to_bool(self):
@@ -531,3 +536,29 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                         cleaner_id, 'site_data', 'linux')
                     self.assertIn(local_storage, paths)
                     self.assertNotIn(state, paths)
+
+    @common.skipIfWindows
+    def test_chrome_sync_keeps_profile_list(self):
+        """Signing out of Chrome keeps every profile in Local State"""
+        config = self.mkdtemp(prefix='bleachbit-chrome-sync')
+        local_state = os.path.join(config, 'google-chrome', 'Local State')
+        os.makedirs(os.path.dirname(local_state))
+        info_cache = {
+            'Default': {'name': 'Personal', 'user_name': 'me@example.com',
+                        'is_consented_primary_account': True},
+            'Profile 1': {'name': 'Work'},
+        }
+        self.write_file(local_state, text=json.dumps(
+            {'profile': {'info_cache': info_cache, 'last_used': 'Profile 1'}}))
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            cleaner = self._bundled_cleaner('google_chrome', 'linux')
+            for cmd in cleaner.get_commands('sync'):
+                if cmd.path == local_state:
+                    list(cmd.execute(True))
+        with open(local_state, encoding='utf-8') as f:
+            profile = json.load(f)['profile']
+        self.assertEqual(['Default', 'Profile 1'],
+                         sorted(profile['info_cache']))
+        self.assertEqual('Profile 1', profile['last_used'])
+        self.assertEqual({'name': 'Personal'},
+                         profile['info_cache']['Default'])
