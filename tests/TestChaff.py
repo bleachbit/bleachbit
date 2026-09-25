@@ -144,6 +144,16 @@ class ChaffTestCase(common.BleachbitTestCase):
         msg = _generate_email(subject_model, model, number_of_sentences=2)
         self.assertEqual(msg['Subject'], '')
 
+    def test_random_datetime_time_of_day(self):
+        """The Sent time must vary and read like Outlook's, without zero padding"""
+        from bleachbit.Chaff import _get_random_datetime
+
+        dates = [_get_random_datetime() for _i in range(100)]
+        times = {date.split(', ')[-1].split(' ', 1)[1] for date in dates}
+        self.assertGreater(len(times), 1)
+        for date in dates:
+            self.assertRegex(date, r' [A-Z][a-z]+ [1-9]\d?, \d{4} [1-9]\d?:')
+
     @mock.patch('bleachbit.Chaff._load_model')
     def test_generate_2600_write_error(self, _mock_load_model):
         """The caller's list must name every file, including one whose write failed"""
