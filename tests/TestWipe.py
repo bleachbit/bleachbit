@@ -58,7 +58,7 @@ class WipeTestCase(common.BleachbitTestCase):
             self.assertEqual(orphaned, [])
 
             # Test 2: Create a file that matches criteria
-            # Must start with 'empty_', >100 chars, no extension, contain null bytes
+            # Must start with 'empty_', >100 chars, contain null bytes
             long_suffix = 'a' * 120
             orphan_name = 'empty_' + long_suffix
             orphan_path = os.path.join(self.tempdir, orphan_name)
@@ -69,13 +69,16 @@ class WipeTestCase(common.BleachbitTestCase):
             self.assertEqual(len(orphaned), 1)
             self.assertEqual(orphaned[0], orphan_path)
 
-            # Test 3: File with extension should NOT be detected
-            with_ext_path = os.path.join(self.tempdir, orphan_name + '.txt')
-            with open(with_ext_path, 'wb') as f:
+            # Test 3: A dot is allowed, since the random suffix of a real
+            # wipe file usually contains one
+            with_dot_path = os.path.join(
+                self.tempdir, 'empty_' + 'a' * 60 + '.' + 'a' * 60)
+            with open(with_dot_path, 'wb') as f:
                 f.write(b'\x00' * 1000)
 
             orphaned = detect_orphaned_wipe_files()
-            self.assertEqual(len(orphaned), 1)  # Still just the original
+            self.assertEqual(sorted(orphaned),
+                             sorted([orphan_path, with_dot_path]))
 
             # Test 4: Short filename should NOT be detected
             short_name = 'empty_short'
@@ -84,7 +87,7 @@ class WipeTestCase(common.BleachbitTestCase):
                 f.write(b'\x00' * 1000)
 
             orphaned = detect_orphaned_wipe_files()
-            self.assertEqual(len(orphaned), 1)  # Still just the original
+            self.assertEqual(len(orphaned), 2)  # Still just the two above
 
             # Test 5: File without null bytes should NOT be detected
             no_null_path = os.path.join(self.tempdir, 'empty_' + 'b' * 120)
@@ -92,7 +95,7 @@ class WipeTestCase(common.BleachbitTestCase):
                 f.write(b'x' * 1000)
 
             orphaned = detect_orphaned_wipe_files()
-            self.assertEqual(len(orphaned), 1)  # Still just the original
+            self.assertEqual(len(orphaned), 2)  # Still just the two above
 
         finally:
             # Restore original shred_drives

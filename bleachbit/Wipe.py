@@ -104,8 +104,9 @@ def detect_orphaned_wipe_files(shred_drives=None):
     - Located in directories from options shred_drives
     - Filename starts with 'empty_'
     - Filename has >100 characters (due to random suffix)
-    - No file extension
     - Contains only null bytes when sampled
+
+    A dot does not rule a file out: the random suffix often contains one.
 
     Returns:
         list: Paths to detected orphaned wipe files
@@ -126,12 +127,10 @@ def detect_orphaned_wipe_files(shred_drives=None):
                 if not entry.is_file():
                     continue
                 filename = entry.name
-                # Check criteria: starts with 'empty_', >100 chars, no extension
+                # Check criteria: starts with 'empty_', >100 chars
                 if not filename.startswith('empty_'):
                     continue
                 if len(filename) <= 100:
-                    continue
-                if '.' in filename:
                     continue
                 # Read a small sample to check for null bytes
                 try:
