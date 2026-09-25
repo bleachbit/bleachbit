@@ -864,24 +864,42 @@ INSERT INTO "meta" VALUES('version','20');"""
                 Special.sqlite_table_exists(non_existing, 'cookies'))
 
     def test_sqlite_table_exists_other_operational_error(self):
-        """sqlite_table_exists returns False for OperationalError other
-        than SQLITE_CANTOPEN (e.g. SQLITE_BUSY)."""
+        """sqlite_table_exists raises OperationalError other than
+        SQLITE_CANTOPEN (e.g. SQLITE_BUSY) instead of reporting a
+        missing table."""
         filename = os.path.join(
             self.tempdir, 'test_other_op_error.sqlite')
         sql = "CREATE TABLE foo(id int)"
         FileUtilities.execute_sqlite3(filename, sql)
         self.assertExists(filename)
 
-        # SQLITE_BUSY (5) — should still return False, not raise
+        # SQLITE_BUSY (5)
         busy_exc = sqlite3.OperationalError('database is locked')
         busy_exc.sqlite_errorcode = 5
 
         with mock.patch('sqlite3.connect',
                         side_effect=busy_exc):
-            self.assertFalse(
-                Special.sqlite_table_exists(filename, 'foo'))
+            with self.assertRaises(sqlite3.OperationalError):
+                Special.sqlite_table_exists(filename, 'foo')
 
         os.unlink(filename)
+
+    def test_sqlite_locked(self):
+        """A database locked by another connection is reported as locked"""
+        filename = os.path.join(self.tempdir, 'locked.sqlite')
+        FileUtilities.execute_sqlite3(filename, 'CREATE TABLE foo(id int)')
+        holder = sqlite3.connect(filename, isolation_level=None)
+        try:
+            holder.execute('PRAGMA locking_mode=EXCLUSIVE')
+            holder.execute('BEGIN EXCLUSIVE')
+            with self.assertRaisesRegex(sqlite3.OperationalError,
+                                        'database is locked'):
+                Special.sqlite_table_exists(filename, 'foo')
+            with self.assertRaisesRegex(sqlite3.OperationalError,
+                                        'database is locked'):
+                Special._sqlite_is_valid_database(filename)
+        finally:
+            holder.close()
 
     def test_sqlite_is_valid_database(self):
         """Unit test for _sqlite_is_valid_database()"""
