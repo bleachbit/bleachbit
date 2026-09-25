@@ -25,9 +25,9 @@ later.  See the COPYING file in the top-level directory.
     <label>Cookies</label>
     <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.txt"/>
-    <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite"/>
+    <action command="cookie" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite"/>
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite-journal"/>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/epiphany/cookies.sqlite"/>
+    <action command="cookie" search="file" path="$XDG_CONFIG_HOME/epiphany/cookies.sqlite"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
