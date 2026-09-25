@@ -70,7 +70,9 @@ def _sqlite_uri(pathname, mode=None):
     abs_path = os.path.abspath(pathname)
     if IS_WINDOWS:
         abs_path = abs_path.replace('\\', '/')
-    quoted = quote(abs_path, safe='/:')
+    # quote() encodes a str as UTF-8, which may not be the filesystem
+    # encoding and fails on undecodable (surrogate-escaped) bytes.
+    quoted = quote(os.fsencode(abs_path), safe='/:')
     if quoted.startswith('//'):
         # An empty authority keeps SQLite from reading the server of a UNC
         # path as the URI authority, which it rejects.
