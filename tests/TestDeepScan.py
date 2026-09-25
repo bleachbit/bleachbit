@@ -156,6 +156,25 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertNotIn(keep_file, paths)
         self.assertIn(search_file, paths)
 
+    def test_scan_yields_each_file_once(self):
+        """Overlapping searches and nested tops yield a file only once"""
+        top = self.mkdtemp()
+        subdir = self.mkdir(os.path.join(top, 'sub'))
+        filename = self.write_file(os.path.join(subdir, 'foo.bbtestbak'))
+        searches = {
+            top: [
+                Search(command='delete', regex=r'\.bbtestbak$'),
+                Search(command='delete', regex=r'^foo\.'),
+            ],
+            subdir: [Search(command='delete', regex=r'\.bbtestbak$')],
+        }
+        paths = [
+            cmd.path
+            for cmd in DeepScan(searches).scan()
+            if cmd is not True
+        ]
+        self.assertEqual(paths, [filename])
+
     @common.skipUnlessWindows
     def test_scan_does_not_follow_junction(self):
         """DeepScan must not descend into a junction"""
