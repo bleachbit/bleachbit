@@ -25,6 +25,7 @@ from bleachbit.Memory import (
     disable_swap_linux,
     enable_swap_linux,
     get_proc_swaps,
+    get_swap_label,
     get_swap_size_linux,
     get_swap_uuid,
     make_self_oom_target_linux,
@@ -230,6 +231,20 @@ Swapouts:                              20258188.
             self.skipTest('blkid not found')
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
 
+    @common.skipIfWindows
+    def test_get_swap_label(self):
+        """Test for get_swap_label() with mocks"""
+        blkid = General.resolve_exe('blkid')
+        with mock.patch('bleachbit.Memory.General.run_external',
+                        return_value=(0, 'my swap\n', '')) as mock_run:
+            self.assertEqual(get_swap_label('/dev/sda5'), 'my swap')
+            self.assertEqual(mock_run.call_args.args[0], [
+                blkid, '-o', 'value', '-s', 'LABEL', '/dev/sda5'])
+        # No label
+        with mock.patch('bleachbit.Memory.General.run_external',
+                        return_value=(2, '', '')):
+            self.assertIsNone(get_swap_label('/dev/sda5'))
+
     def test_parse_swapoff(self):
         """Test for method parse_swapoff"""
         tests = (
@@ -355,6 +370,18 @@ Swapouts:                              20258188.
                             args = mock_run.call_args[0][0]
                             self.assertIn('-U', args)
                             self.assertIn('abc-123', args)
+
+        # Label preservation, for LABEL= in /etc/fstab
+        with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0):
+            with mock.patch('bleachbit.Memory.get_swap_size_linux', return_value=1024 ** 2):
+                with mock.patch('bleachbit.Memory.get_swap_uuid', return_value='abc-123'):
+                    with mock.patch('bleachbit.Memory.get_swap_label', return_value='swap'):
+                        with mock.patch('bleachbit.Memory.wipe_write'):
+                            with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
+                                wipe_swap_linux(['/dev/sda1'], '')
+                                args = mock_run.call_args[0][0]
+                                self.assertEqual(
+                                    args[args.index('-L') + 1], 'swap')
 
         # mkswap failure
         with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0):

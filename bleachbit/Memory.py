@@ -360,6 +360,14 @@ def get_swap_uuid(device):
     return uuid
 
 
+def get_swap_label(device):
+    """Find the label for the swap device, or None"""
+    args = [General.resolve_exe('blkid'),
+            '-o', 'value', '-s', 'LABEL', device]
+    (_rc, stdout, _stderr) = General.run_external(args)
+    return stdout.rstrip('\n') or None
+
+
 def physical_free_darwin(run_vmstat=None):
     def parse_line(k, v):
         return k, int(v.strip(" ."))
@@ -473,6 +481,7 @@ def wipe_swap_linux(devices, proc_swaps):
                 f'swap device {device} is larger ({actual_size_bytes})'
                 f' than expected ({safety_limit_bytes})')
         uuid = get_swap_uuid(device)
+        label = get_swap_label(device)
         # overwrite with zeros without truncating the device
         wipe_write(device).close()
         # reinitialize
@@ -482,6 +491,9 @@ def wipe_swap_linux(devices, proc_swaps):
         if uuid:
             args.append("-U")
             args.append(uuid)
+        if label:
+            args.append("-L")
+            args.append(label)
         (rc, _stdout, stderr) = General.run_external(args)
         if 0 != rc:
             raise RuntimeError(stderr.replace("\n", ""))
