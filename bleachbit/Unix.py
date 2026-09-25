@@ -219,6 +219,9 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
         execs = list(exec_parts)
         wineprefix = None
         del execs[0]
+        if execs and execs[0].startswith('-'):
+            # env options like -u VAR: keep it rather than guess the command
+            return False
         while execs and execs[0].find("=") >= 0:
             (name, value) = execs[0].split("=", 1)
             if name == 'WINEPREFIX':
