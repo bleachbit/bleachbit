@@ -18,6 +18,7 @@ Version: 2023-02-223
 !ifdef LANG_ENGLISH
 	LangString ALREADY_INSTALLED ${LANG_ENGLISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ENGLISH} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_ENGLISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_ENGLISH} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_ENGLISH} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_ENGLISH} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -72,6 +73,7 @@ Version: 2023-02-223
 !ifdef LANG_ALBANIAN
 	LangString ALREADY_INSTALLED ${LANG_ALBANIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ALBANIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_ALBANIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_ALBANIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_ALBANIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_ALBANIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -126,6 +128,7 @@ Version: 2023-02-223
 !ifdef LANG_ARABIC
 	LangString ALREADY_INSTALLED ${LANG_ARABIC} "${prodname} مثبّت بالفعل.$\r$\nانقر على 'موافق' لإلغاء تثبيت الإصدار القديم قبل التحديث، أو انقر على 'إلغاء' لإيقاف التحديث."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ARABIC} "زُر موقع ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_ARABIC} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_ARABIC} "إعداد ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_ARABIC} "الخطوة التالية هي بناء الذاكرة المؤقتة للخطوط، خلال هذا العملية ستظهر نافذة لوحة تحكم سوداء."
 	LangString MULTIPRINT2 ${LANG_ARABIC} "تنتهى العملية غالبًا في نحو دقيقة، لكن أحيانًا قد تستغرق حتى عشر دقائق."
@@ -180,6 +183,7 @@ Version: 2023-02-223
 !ifdef LANG_ASTURIAN
 	LangString ALREADY_INSTALLED ${LANG_ASTURIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ASTURIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_ASTURIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_ASTURIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_ASTURIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_ASTURIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -234,6 +238,7 @@ Version: 2023-02-223
 !ifdef LANG_BASQUE
 	LangString ALREADY_INSTALLED ${LANG_BASQUE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BASQUE} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_BASQUE} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_BASQUE} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_BASQUE} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_BASQUE} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -288,6 +293,7 @@ Version: 2023-02-223
 !ifdef LANG_BELARUSIAN
 	LangString ALREADY_INSTALLED ${LANG_BELARUSIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BELARUSIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_BELARUSIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_BELARUSIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_BELARUSIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_BELARUSIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -342,6 +348,7 @@ Version: 2023-02-223
 !ifdef LANG_BOSNIAN
 	LangString ALREADY_INSTALLED ${LANG_BOSNIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BOSNIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_BOSNIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_BOSNIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_BOSNIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_BOSNIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -396,6 +403,7 @@ Version: 2023-02-223
 !ifdef LANG_BULGARIAN
 	LangString ALREADY_INSTALLED ${LANG_BULGARIAN} "Приложението ${prodname} вече е инсталирано.$\r$\nИзберете „Добре“, за да бъде премахнато предното изание преди обновяване или „Отказ“ за спиране на обновяването."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BULGARIAN} "Посетета страницата на ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_BULGARIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_BULGARIAN} "Инсталиране на ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_BULGARIAN} "Следващата стъпка е обработване на шрифтовете, по време на която може да се покаже прозореца на командния ред."
 	LangString MULTIPRINT2 ${LANG_BULGARIAN} "Обикновено свършва за минута, но може да отнеме до десет."
@@ -450,6 +458,7 @@ Version: 2023-02-223
 !ifdef LANG_CATALAN
 	LangString ALREADY_INSTALLED ${LANG_CATALAN} "El ${prodname} ja està instal·lat.$\r$\nFeu clic a «D'acord» per desinstal·lar la versió antiga abans d'actualitzar o feu clic a «Cancel·la» per cancel·lar l'actualització."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CATALAN} "Visita el lloc web del ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_CATALAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_CATALAN} "Instal·lació del ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_CATALAN} "El següent pas és construir la memòria cau de fonts, durant la qual pot aparèixer una finestra de consola."
 	LangString MULTIPRINT2 ${LANG_CATALAN} "Normalment acaba en un minut, però de vegades triga fins a deu minuts."
@@ -504,6 +513,7 @@ Version: 2023-02-223
 !ifdef LANG_CROATIAN
 	LangString ALREADY_INSTALLED ${LANG_CROATIAN} "${prodname} je već instaliran.$\r$\nKliknite „U redu” za deinstalaciju stare verzije prije nadogradnje ili „Odustani” za prekid nadogradnje."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CROATIAN} "Posjetite web-stranicu programa ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_CROATIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_CROATIAN} "Postavljanje programa ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_CROATIAN} "Sljedeći je korak izrada predmemorije fontova; tijekom toga može se pojaviti crni prozor konzole."
 	LangString MULTIPRINT2 ${LANG_CROATIAN} "Obično završava za jednu minutu, ali ponekad može potrajati do deset minuta."
@@ -558,6 +568,7 @@ Version: 2023-02-223
 !ifdef LANG_CZECH
 	LangString ALREADY_INSTALLED ${LANG_CZECH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CZECH} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_CZECH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_CZECH} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_CZECH} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_CZECH} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -612,6 +623,7 @@ Version: 2023-02-223
 !ifdef LANG_DANISH
 	LangString ALREADY_INSTALLED ${LANG_DANISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_DANISH} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_DANISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_DANISH} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_DANISH} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_DANISH} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -666,6 +678,7 @@ Version: 2023-02-223
 !ifdef LANG_DUTCH
 	LangString ALREADY_INSTALLED ${LANG_DUTCH} "${prodname} is al geïnstalleerd.$\r$\nKlik op 'OK' om de oude versie te verwijderen voordat u een upgrade uitvoert, of klik op 'Annuleren' om de upgrade af te breken."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_DUTCH} "Bezoek de website van ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_DUTCH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_DUTCH} "Installatie van ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_DUTCH} "De volgende stap is het bouwen van de lettertypecache. Hierbij kan een zwart consolevenster verschijnen."
 	LangString MULTIPRINT2 ${LANG_DUTCH} "Het eindigt meestal in één minuut, maar soms duurt het wel tien minuten."
@@ -720,6 +733,7 @@ Version: 2023-02-223
 !ifdef LANG_ESTONIAN
 	LangString ALREADY_INSTALLED ${LANG_ESTONIAN} "${prodname} on juba paigaldatud.$\r$\nVana versiooni eemaldamiseks enne paigaldust klõpsa „OK/Sobib“ või uuenduse katkestamiseks klõpsa „Katkesta“."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ESTONIAN} "Vaata veebisaiti - ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_ESTONIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_ESTONIAN} "Paigaldus ja seadistus - ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_ESTONIAN} "Järgmises sammus luuakse kirjatüüpide vahemälu, mille käigus võib korraks avaneda must konsooliaken."
 	LangString MULTIPRINT2 ${LANG_ESTONIAN} "Tavaliselt on kestus ühe minuti jagu, kuid mõnel juhul võib kuluda kuni kümme minutit."
@@ -774,6 +788,7 @@ Version: 2023-02-223
 !ifdef LANG_FINNISH
 	LangString ALREADY_INSTALLED ${LANG_FINNISH} "${prodname} on jo asennettu.$\r$\nNapsauta 'Hyvä on' poistaaksesi vanhan version ennen päivittämistä tai napsauta 'Peru' keskeyttääksesi päivityksen."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FINNISH} "Vieraile ${prodname}in verkkosivustolla"
+	LangString BLEACHBIT_RUNNING ${LANG_FINNISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_FINNISH} "${prodname} ${VERSION} -määritys"
 	LangString MULTIPRINT1 ${LANG_FINNISH} "Seuraava vaihe on fonttivälimuistin rakentaminen, jonka aikana saattaa tulla näkyviin musta konsoli-ikkuna."
 	LangString MULTIPRINT2 ${LANG_FINNISH} "Se valmistuu yleensä minuutissa, mutta toisinaan voi kestää jopa kymmenen minuuttia."
@@ -828,6 +843,7 @@ Version: 2023-02-223
 !ifdef LANG_FRENCH
 	LangString ALREADY_INSTALLED ${LANG_FRENCH} "${prodname} est déjà installé.$\r$\nCliquez sur 'OK' pour désinstaller l’ancienne version avant la mise à niveau, ou cliquez sur 'Annuler' pour annuler la mise à niveau."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FRENCH} "Visiter le site web ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_FRENCH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_FRENCH} "${prodname} ${VERSION} Configuration"
 	LangString MULTIPRINT1 ${LANG_FRENCH} "L’étape suivante est la construction du cache des polices, pendant laquelle une fenêtre de console noire peut apparaître."
 	LangString MULTIPRINT2 ${LANG_FRENCH} "Cela se termine généralement en une minute, mais parfois cela prend jusqu’à dix minutes."
@@ -882,6 +898,7 @@ Version: 2023-02-223
 !ifdef LANG_GALICIAN
 	LangString ALREADY_INSTALLED ${LANG_GALICIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GALICIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_GALICIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_GALICIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_GALICIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_GALICIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -936,6 +953,7 @@ Version: 2023-02-223
 !ifdef LANG_GERMAN
 	LangString ALREADY_INSTALLED ${LANG_GERMAN} "${prodname} ist bereits installiert.$\r$\nKlicken Sie auf »OK«, um die alte Version vor dem Upgrade zu deinstallieren, oder klicken Sie auf »Abbrechen«, um das Upgrade abzubrechen."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GERMAN} "Besuchen Sie die Webseite von ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_GERMAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_GERMAN} "Einrichtung von ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_GERMAN} "Der nächste Schritt ist das Erstellen des Schriftarten-Caches. Dabei kann ein schwarzes Konsolenfenster erscheinen."
 	LangString MULTIPRINT2 ${LANG_GERMAN} "Normalerweise dauert es nur eine Minute, aber manchmal kann es bis zu zehn Minuten dauern."
@@ -990,6 +1008,7 @@ Version: 2023-02-223
 !ifdef LANG_GREEK
 	LangString ALREADY_INSTALLED ${LANG_GREEK} "Το ${prodname} είναι ήδη εγκατεστημένο.$\r$\nΠατήστε «OK» για απεγκατάσταση της παλιάς έκδοσης πριν από την αναβάθμιση ή «Cancel» για ακύρωση της αναβάθμισης."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GREEK} "Επισκεφθείτε τον ιστότοπο του ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_GREEK} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_GREEK} "Εγκατάσταση ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_GREEK} "Το επόμενο βήμα είναι η δημιουργία της προσωρινής μνήμης γραμματοσειρών, κατά την οποία μπορεί να εμφανιστεί ένα μαύρο παράθυρο κονσόλας."
 	LangString MULTIPRINT2 ${LANG_GREEK} "Συνήθως ολοκληρώνεται σε ένα λεπτό, αλλά μερικές φορές διαρκεί έως και δέκα λεπτά."
@@ -1044,6 +1063,7 @@ Version: 2023-02-223
 !ifdef LANG_HEBREW
 	LangString ALREADY_INSTALLED ${LANG_HEBREW} "${prodname} כבר מותקן.$\r$\nלחיצה על ‚אישור’ תסיר את הגרסה הישנה לפני השדרוג, לחלופין, לחיצה על ‚ביטול’ תבטל את השדרוג."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_HEBREW} "ביקור באתר ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_HEBREW} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_HEBREW} "התקנת ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_HEBREW} "השלב הבא הוא בניית מטמון הגופנים, שבמהלכו עלול להופיע חלון מסוף שחור."
 	LangString MULTIPRINT2 ${LANG_HEBREW} "זה בדרך כלל מסתיים תוך דקה, אבל לפעמים זה יכול לקחת גם עד עשר דקות."
@@ -1098,6 +1118,7 @@ Version: 2023-02-223
 !ifdef LANG_HUNGARIAN
 	LangString ALREADY_INSTALLED ${LANG_HUNGARIAN} "A(z) ${prodname} már telepítve van.$\r$\nKattintson az „OK” gombra a régi verzió eltávolításához a frissítés előtt, vagy a frissítés megszakításához kattintson a „Mégse” gombra."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_HUNGARIAN} "A(z) ${prodname} weboldalának meglátogatása"
+	LangString BLEACHBIT_RUNNING ${LANG_HUNGARIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_HUNGARIAN} "${prodname} ${VERSION} telepítő"
 	LangString MULTIPRINT1 ${LANG_HUNGARIAN} "A következő lépés a betűkészlet-gyorsítótár létrehozása, amelynek során egy fekete konzolablak jelenhet meg."
 	LangString MULTIPRINT2 ${LANG_HUNGARIAN} "Ez általában egy percen belül befejeződik, de néha akár tíz percig is eltarthat."
@@ -1152,6 +1173,7 @@ Version: 2023-02-223
 !ifdef LANG_INDONESIAN
 	LangString ALREADY_INSTALLED ${LANG_INDONESIAN} "${prodname} sudah terinstal.$\r$\nKlik 'OK' untuk menghapus instalasi versi lama sebelum meningkatkan versi, atau klik 'Batal' untuk membatalkan peningkatan versi."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_INDONESIAN} "Kunjungi situs web ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_INDONESIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_INDONESIAN} "Penyiapan ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_INDONESIAN} "Langkah berikutnya adalah membangun cache font, di mana jendela konsol hitam mungkin muncul."
 	LangString MULTIPRINT2 ${LANG_INDONESIAN} "Biasanya selesai dalam satu menit, tetapi terkadang memakan waktu hingga sepuluh menit."
@@ -1206,6 +1228,7 @@ Version: 2023-02-223
 !ifdef LANG_ITALIAN
 	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato. $\r$\nSeleziona 'OK' per disinstallare la vecchia versione prima dell'aggiornamento o seleziona 'Annulla' per interrompere l'aggiornamento."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ITALIAN} "Visita il sito web di ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_ITALIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_ITALIAN} "Installazione di ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_ITALIAN} "Il passaggio successivo è la creazione della cache dei caratteri, durante il quale potrebbe apparire una finestra nera della console."
 	LangString MULTIPRINT2 ${LANG_ITALIAN} "Di solito termina in un minuto, ma a volte ci vogliono fino a dieci minuti."
@@ -1260,6 +1283,7 @@ Version: 2023-02-223
 !ifdef LANG_JAPANESE
 	LangString ALREADY_INSTALLED ${LANG_JAPANESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_JAPANESE} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_JAPANESE} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_JAPANESE} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_JAPANESE} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_JAPANESE} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -1314,6 +1338,7 @@ Version: 2023-02-223
 !ifdef LANG_KOREAN
 	LangString ALREADY_INSTALLED ${LANG_KOREAN} "${prodname}이(가) 이미 설치되어 있습니다.$\r$\n업그레이드하기 전에 이전 버전을 제거하려면 '확인'을 클릭하고, 업그레이드를 중단하려면 '취소'를 클릭하세요."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_KOREAN} "${prodname} 웹사이트 방문"
+	LangString BLEACHBIT_RUNNING ${LANG_KOREAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_KOREAN} "${prodname} ${VERSION} 설정"
 	LangString MULTIPRINT1 ${LANG_KOREAN} "다음 단계는 글꼴 캐시를 구축하는 것이며, 이 과정에서 검은색 콘솔 창이 나타날 수 있습니다."
 	LangString MULTIPRINT2 ${LANG_KOREAN} "보통 1분 안에 끝나지만 때로는 최대 10분이 걸리기도 합니다."
@@ -1368,6 +1393,7 @@ Version: 2023-02-223
 !ifdef LANG_LATVIAN
 	LangString ALREADY_INSTALLED ${LANG_LATVIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_LATVIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_LATVIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_LATVIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_LATVIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_LATVIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -1422,6 +1448,7 @@ Version: 2023-02-223
 !ifdef LANG_LITHUANIAN
 	LangString ALREADY_INSTALLED ${LANG_LITHUANIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_LITHUANIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_LITHUANIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_LITHUANIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_LITHUANIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_LITHUANIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -1476,6 +1503,7 @@ Version: 2023-02-223
 !ifdef LANG_MALAY
 	LangString ALREADY_INSTALLED ${LANG_MALAY} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_MALAY} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_MALAY} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_MALAY} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_MALAY} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_MALAY} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -1530,6 +1558,7 @@ Version: 2023-02-223
 !ifdef LANG_NORWEGIAN
 	LangString ALREADY_INSTALLED ${LANG_NORWEGIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_NORWEGIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_NORWEGIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_NORWEGIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_NORWEGIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_NORWEGIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -1584,6 +1613,7 @@ Version: 2023-02-223
 !ifdef LANG_POLISH
 	LangString ALREADY_INSTALLED ${LANG_POLISH} "${prodname} jest już zainstalowany.$\r$\nKliknij 'OK', aby odinstalować starszą wersję przed aktualizacją, albo kliknij $\"Anuluj' aby przerwać aktualizację."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_POLISH} "Odwiedź stronę ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_POLISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_POLISH} "Instalator ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_POLISH} "Następnym krokiem jest zbudowanie pamięci podręcznej czcionek, podczas której może pojawić się czarne okno konsoli."
 	LangString MULTIPRINT2 ${LANG_POLISH} "Zwykle kończy się w ciągu jednej minuty, ale czasami zajmuje to do dziesięciu minut."
@@ -1638,6 +1668,7 @@ Version: 2023-02-223
 !ifdef LANG_PORTUGUESE
 	LangString ALREADY_INSTALLED ${LANG_PORTUGUESE} "${prodname} já está instalado.$\r$\nClique $\"OK$\" para desinstalar a versão antiga antes de atualizar, ou clique $\"Cancelar$\" para cancelar a atualização."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PORTUGUESE} "Visitar site do ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_PORTUGUESE} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_PORTUGUESE} "Instalação do ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_PORTUGUESE} "O próximo passo é criar o cache de fontes, uma janela preta do console pode aparecer durante este processo."
 	LangString MULTIPRINT2 ${LANG_PORTUGUESE} "Isto geralmente leva cerca de um minuto, mas as vezes pode levar até 10 minutos."
@@ -1692,6 +1723,7 @@ Version: 2023-02-223
 !ifdef LANG_PORTUGUESEBR
 	LangString ALREADY_INSTALLED ${LANG_PORTUGUESEBR} "${prodname} já está instalado.$\r$\nClique $\"OK$\" para desinstalar a versão antiga antes de atualizar, ou clique $\"Cancelar$\" para cancelar a atualização."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PORTUGUESEBR} "Visitar site do ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_PORTUGUESEBR} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_PORTUGUESEBR} "Instalação do ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_PORTUGUESEBR} "O próximo passo é criar o cache de fontes, uma janela preta do console pode aparecer durante este processo."
 	LangString MULTIPRINT2 ${LANG_PORTUGUESEBR} "Isto geralmente leva cerca de um minuto, mas as vezes pode levar até 10 minutos."
@@ -1746,6 +1778,7 @@ Version: 2023-02-223
 !ifdef LANG_ROMANIAN
 	LangString ALREADY_INSTALLED ${LANG_ROMANIAN} "${prodname} este deja instalat.$\r$\nFaceți clic pe „OK” pentru a dezinstala versiunea veche înainte de actualizare sau faceți clic pe „Anulare” pentru a anula actualizarea."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ROMANIAN} "Vizitați site-ul web al ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_ROMANIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_ROMANIAN} "Configurare ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_ROMANIAN} "Următorul pas este crearea cache-ului de fonturi, în timpul căruia este posibil să apară o fereastră neagră a consolei."
 	LangString MULTIPRINT2 ${LANG_ROMANIAN} "De obicei, durează un minut, dar uneori poate dura până la zece minute."
@@ -1800,6 +1833,7 @@ Version: 2023-02-223
 !ifdef LANG_RUSSIAN
 	LangString ALREADY_INSTALLED ${LANG_RUSSIAN} "Приложение ${prodname} уже установлено.$\r$\nНажмите «ОК», чтобы удалить старую версию перед обновлением, или нажмите «Отменить», чтобы отменить обновление."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_RUSSIAN} "Посетите веб-сайт ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_RUSSIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_RUSSIAN} "Установить ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_RUSSIAN} "Следующим шагом является создание кэша шрифтов, в ходе которого может появиться чёрное окно консоли."
 	LangString MULTIPRINT2 ${LANG_RUSSIAN} "Обычно это длится не более минуты, но иногда может потребоваться больше времени."
@@ -1854,6 +1888,7 @@ Version: 2023-02-223
 !ifdef LANG_SERBIAN
 	LangString ALREADY_INSTALLED ${LANG_SERBIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SERBIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_SERBIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_SERBIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_SERBIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_SERBIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -1908,6 +1943,7 @@ Version: 2023-02-223
 !ifdef LANG_SIMPCHINESE
 	LangString ALREADY_INSTALLED ${LANG_SIMPCHINESE} "${prodname} 已安装。$\r$\n单击“好”在升级前卸载旧版本，或单击“取消”终止升级。"
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SIMPCHINESE} "访问 ${prodname} 网站"
+	LangString BLEACHBIT_RUNNING ${LANG_SIMPCHINESE} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_SIMPCHINESE} "${prodname} ${VERSION} 安装包"
 	LangString MULTIPRINT1 ${LANG_SIMPCHINESE} "下一步是构建字体缓存，在此期间可能看到黑色的控制台窗口。"
 	LangString MULTIPRINT2 ${LANG_SIMPCHINESE} "通常在一分钟内完成，但有时会最多花十分钟。"
@@ -1962,6 +1998,7 @@ Version: 2023-02-223
 !ifdef LANG_SLOVAK
 	LangString ALREADY_INSTALLED ${LANG_SLOVAK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SLOVAK} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_SLOVAK} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_SLOVAK} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_SLOVAK} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_SLOVAK} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -2016,6 +2053,7 @@ Version: 2023-02-223
 !ifdef LANG_SLOVENIAN
 	LangString ALREADY_INSTALLED ${LANG_SLOVENIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SLOVENIAN} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_SLOVENIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_SLOVENIAN} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_SLOVENIAN} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_SLOVENIAN} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -2070,6 +2108,7 @@ Version: 2023-02-223
 !ifdef LANG_SPANISH
 	LangString ALREADY_INSTALLED ${LANG_SPANISH} "${prodname} ya está instalado.$\r$\nPulse en ‘Aceptar’ para desinstalar la versión anterior antes de mejorar, o pulse ‘Cancelar’ para interrumpir la instalación."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SPANISH} "Visite el sitio web ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_SPANISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_SPANISH} "Configurar ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_SPANISH} "Es siguiente paso está creando el caché de tipografías, durante los cueles puede aparecer una ventana de consola en blanco."
 	LangString MULTIPRINT2 ${LANG_SPANISH} "Usualmente finaliza en un minuto, pero a veces toma hasta diez minutos."
@@ -2124,6 +2163,7 @@ Version: 2023-02-223
 !ifdef LANG_SWEDISH
 	LangString ALREADY_INSTALLED ${LANG_SWEDISH} "${prodname} är redan installerat.$\r$\nKlicka på 'OK' för att avinstallera den gamla versionen innan du uppgraderar, eller klicka på 'Avbryt' för att avbryta uppgraderingen."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SWEDISH} "Besök webbplatsen för ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_SWEDISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_SWEDISH} "Installationsprogram för ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_SWEDISH} "Nästa steg är att bygga teckensnittscachen. Under tiden kan ett svart konsolfönster visas."
 	LangString MULTIPRINT2 ${LANG_SWEDISH} "Det brukar ta en minut, men ibland tar det upp till tio minuter."
@@ -2178,6 +2218,7 @@ Version: 2023-02-223
 !ifdef LANG_THAI
 	LangString ALREADY_INSTALLED ${LANG_THAI} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_THAI} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_THAI} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_THAI} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_THAI} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_THAI} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -2232,6 +2273,7 @@ Version: 2023-02-223
 !ifdef LANG_TRADCHINESE
 	LangString ALREADY_INSTALLED ${LANG_TRADCHINESE} "${prodname} 已安裝。$\r$\n點擊「確定」在升級前卸載舊版本，或點擊「取消」終止升級。"
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TRADCHINESE} "訪問 ${prodname} 網站"
+	LangString BLEACHBIT_RUNNING ${LANG_TRADCHINESE} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_TRADCHINESE} "${prodname} ${VERSION} 安裝包"
 	LangString MULTIPRINT1 ${LANG_TRADCHINESE} "下一步是構建字體緩存，在此期間可能出現黑色的控制台視窗。"
 	LangString MULTIPRINT2 ${LANG_TRADCHINESE} "通常會在一分鐘內完成，但有時會最多花十分鐘。"
@@ -2286,6 +2328,7 @@ Version: 2023-02-223
 !ifdef LANG_TURKISH
 	LangString ALREADY_INSTALLED ${LANG_TURKISH} "${prodname} zaten kuruludur.$\r$\nYükseltmeden önce eski sürümü kaldırmak için 'Tamam'a ya da yükseltmeden vazgeçmek için 'İptal Et'e tıkla."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TURKISH} "${prodname} web sitesine git"
+	LangString BLEACHBIT_RUNNING ${LANG_TURKISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_TURKISH} "${prodname} ${VERSION} Kurulumu"
 	LangString MULTIPRINT1 ${LANG_TURKISH} "Sonraki adım yazı tipi önbelleği inşasıdır, sürerken siyah pencere belirebilir."
 	LangString MULTIPRINT2 ${LANG_TURKISH} "Genellikle bir dakikada biter, ancak bazen on dakikaya dek sürebilir."
@@ -2340,6 +2383,7 @@ Version: 2023-02-223
 !ifdef LANG_UKRAINIAN
 	LangString ALREADY_INSTALLED ${LANG_UKRAINIAN} "${prodname} уже встановлено.$\r$\nНатисніть «Гаразд», щоби видалити стару версію перед оновленням, або «Скасувати», аби перервати процес оновлення."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_UKRAINIAN} "Відвідати вебсайт ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_UKRAINIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_UKRAINIAN} "Встановити ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_UKRAINIAN} "Наступним кроком є створення кешу шрифтів, під час якого може з’явитися чорне вікно консолі."
 	LangString MULTIPRINT2 ${LANG_UKRAINIAN} "Зазвичай це займає одну хвилину, але іноді може тривати до десяти хвилин."
@@ -2394,6 +2438,7 @@ Version: 2023-02-223
 !ifdef LANG_UZBEK
 	LangString ALREADY_INSTALLED ${LANG_UZBEK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_UZBEK} "Visit the ${prodname} website"
+	LangString BLEACHBIT_RUNNING ${LANG_UZBEK} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_UZBEK} "${prodname} ${VERSION} Setup"
 	LangString MULTIPRINT1 ${LANG_UZBEK} "The next step is building the font cache, during which a black console window may appear."
 	LangString MULTIPRINT2 ${LANG_UZBEK} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -2448,6 +2493,7 @@ Version: 2023-02-223
 !ifdef LANG_VIETNAMESE
 	LangString ALREADY_INSTALLED ${LANG_VIETNAMESE} "${prodname} đã được cài đặt trên thiết bị này.$\r$\nNhấn $\"OK$\" để gỡ phiên bản cũ hơn trước khi cài đặt phiên bản mới. Nhấn $\"Cancel$\" để hủy việc nâng cấp."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_VIETNAMESE} "Vào trang web của ${prodname}"
+	LangString BLEACHBIT_RUNNING ${LANG_VIETNAMESE} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
 	LangString INSTALLER_CAPTION ${LANG_VIETNAMESE} "Phiên cài đặt của ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_VIETNAMESE} "Bước tiếp theo là dựng cache cho phông chữ, trong quá trình này, một cửa sổ màu đen có thể xuất hiện."
 	LangString MULTIPRINT2 ${LANG_VIETNAMESE} "Nó thường sẽ hoàn thành trong vòng một phút, nhưng nó cũng có thể sẽ hoàn thành trong khoảng 10 phút."
