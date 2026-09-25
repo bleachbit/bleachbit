@@ -618,3 +618,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         """Debian's Firefox ESR is detected as a running Firefox"""
         self.assertTrue(self._bundled_cleaner_detects(
             'firefox', 'linux', 'firefox-esr'))
+
+    def test_librewolf_running_windows(self):
+        """LibreWolf is detected as running on Windows"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'librewolf', 'win32', 'librewolf.exe'))
