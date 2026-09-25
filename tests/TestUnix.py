@@ -525,6 +525,18 @@ PrefersNonDefaultGPU=false""")
         self.assertFalse(result)
 
     @mock.patch('bleachbit.FileUtilities.exe_exists')
+    def test_desktop_env_options(self, mock_exe_exists):
+        """env options are not taken for a missing command"""
+        mock_exe_exists.side_effect = lambda exe: exe == 'env'
+        for exec_val in ('env -u GTK_IM_MODULE firefox %u',
+                         'env -i PATH=/usr/bin firefox',
+                         'env -C /opt/app ./run'):
+            fake_config = FakeConfig({"Desktop Entry": {"Exec": exec_val}})
+            result = _is_broken_xdg_desktop_application(
+                fake_config, "foo.desktop")
+            self.assertFalse(result, exec_val)
+
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
     def test_desktop_missing_wine(self, mock_exe_exists):
         """Unit test for .desktop file without Wine installed"""
         mock_exe_exists.side_effect = [
