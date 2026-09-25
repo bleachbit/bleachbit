@@ -220,7 +220,8 @@ def generate_emails(number_of_emails,
                     number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON,
                     on_progress=None,
                     should_stop=None,
-                    *_kwargs):
+                    *_kwargs,
+                    generated_file_names=None):
     logger.debug('Loading two email models')
     subject_model_path = os.path.join(
         models_dir, 'clinton_subject_model.json.bz2')
@@ -229,15 +230,17 @@ def generate_emails(number_of_emails,
     subject_model = load_subject_model(subject_model_path)
     content_model = load_content_model(content_model_path)
     logger.debug('Generating %s emails', f'{number_of_emails:,}')
-    generated_file_names = []
+    if generated_file_names is None:
+        generated_file_names = []
     cumulative_size = 0
     for i in range(1, number_of_emails + 1):
         with tempfile.NamedTemporaryFile(mode='w+', prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
+            # Before writing, so the caller can delete it if the write fails
+            generated_file_names.append(email_output_file.name)
             email_generator = email.generator.Generator(email_output_file)
             msg = _generate_email(
                 subject_model, content_model, number_of_sentences=number_of_sentences)
             email_generator.write(msg.as_string())
-            generated_file_names.append(email_output_file.name)
             cumulative_size += email_output_file.tell()
         if on_progress:
             on_progress(1.0 * i / number_of_emails,
@@ -264,18 +267,21 @@ def generate_2600(file_count,
                   output_dir,
                   model_dir=DEFAULT_MODELS_DIR,
                   on_progress=None,
-                  should_stop=None):
+                  should_stop=None,
+                  generated_file_names=None):
     logger.debug('Loading 2600 model')
     model_path = os.path.join(model_dir, '2600_model.json.bz2')
     model = _load_model(model_path)
     logger.debug('Generating %s files', f'{file_count:,}')
-    generated_file_names = []
+    if generated_file_names is None:
+        generated_file_names = []
     cumulative_size = 0
     for i in range(1, file_count + 1):
         with tempfile.NamedTemporaryFile(mode='w+', encoding='utf-8', prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
+            # Before writing, so the caller can delete it if the write fails
+            generated_file_names.append(output_file.name)
             txt = _generate_2600_file(model)
             output_file.write(txt)
-            generated_file_names.append(output_file.name)
             cumulative_size += output_file.tell()
         if on_progress:
             on_progress(1.0 * i / file_count,
