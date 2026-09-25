@@ -304,7 +304,7 @@ def delete_cookies(path, keep_list, really_delete=False):
                 memory_estimate = None
             else:
                 # Preview mode or nothing to delete
-                if delete_whole_file:
+                if delete_whole_file and deleted_count > 0:
                     # No cookies being kept: entire file would be deleted
                     size_reduction = original_size
                     estimation_method = 'whole_file'
