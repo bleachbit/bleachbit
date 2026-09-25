@@ -729,6 +729,18 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertEqual(
             ['wuauserv', 'cryptsvc', 'bits', 'msiserver', 'appidsvc'], started)
 
+    def test_delete_updates_pending_service(self):
+        """A pending service skips SoftwareDistribution instead of raising"""
+        stop_pending = (0x20, 3, 0, 0, 0, 0, 0)
+        with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=True), \
+                mock.patch('bleachbit.Windows.win32serviceutil.QueryServiceStatus',
+                           return_value=stop_pending), \
+                mock.patch('bleachbit.Windows.run_net_service_command') as mock_net:
+            with self.assertLogs('bleachbit.Windows', level='WARNING'):
+                commands = list(delete_updates())
+        mock_net.assert_not_called()
+        self.assertFalse(any(isinstance(cmd, Function) for cmd in commands))
+
     def test_get_running_dependent_services(self):
         """Unit test for get_running_dependent_services()"""
         # Many services depend on RPC, which is always running
