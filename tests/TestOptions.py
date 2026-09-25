@@ -310,6 +310,23 @@ auto_hide = True
         _test_is_corrupt("[bleachbit]\nshred=['True']\n", True)
         os.remove(bleachbit.options_file)
 
+    def test_get_invalid_value(self):
+        """A corrupt value must not raise before the GUI can reset the file"""
+        self._write_private_options_file(
+            '[bleachbit]\ndark_mode = Tru\nwindow_x = left\n')
+        o = bleachbit.Options.Options()
+        try:
+            with self.assertLogs('bleachbit.Options',
+                                 level='WARNING') as log_context:
+                self.assertTrue(o.get('dark_mode'))
+                self.assertIsNone(o.get('window_x'))
+                # some options are read once per file, so warn only once
+                self.assertTrue(o.get('dark_mode'))
+            self.assertEqual(len(log_context.output), 2)
+            self.assertTrue(o.is_corrupt())
+        finally:
+            o.cancel_pending_flush()
+
     def test_duplicate_key_keeps_later_sections(self):
         """A duplicate key must not stop the read before the keep list"""
         self._write_private_options_file('''[bleachbit]

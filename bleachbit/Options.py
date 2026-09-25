@@ -259,6 +259,8 @@ class Options:
         # Cache of get_paths() results, keyed by section. The keep list is read
         # once per file during a scan, so recomputing it every time is costly.
         self._paths_cache = {}
+        # Invalid values already logged, as some are read once per file
+        self._invalid_logged = set()
         self.old_version = None  # Store previous version in memory
         self._dirty = False
         self._closed = False
@@ -473,11 +475,18 @@ class Options:
         if section == 'hashpath' and len(option) > 1 and option[1] == ':':
             option = option[0] + option[2:]
         if self.config.has_option(section, option):
-            if option in boolean_keys:
-                return self.config.getboolean(section, option)
-            if option in int_keys:
-                return self.config.getint(section, option)
-            return self.config.get(section, option)
+            try:
+                if option in boolean_keys:
+                    return self.config.getboolean(section, option)
+                if option in int_keys:
+                    return self.config.getint(section, option)
+                return self.config.get(section, option)
+            except ValueError:
+                # The GUI resets a corrupt file only after reading some options
+                if override_key not in self._invalid_logged:
+                    self._invalid_logged.add(override_key)
+                    logger.warning(
+                        'Ignoring invalid value of option %s', option)
 
         if section == 'bleachbit':
             default = _get_default_value(option)
@@ -633,6 +642,7 @@ class Options:
             self.__cancel_flush_timer()
             self._dirty = False
             self._paths_cache.clear()
+            self._invalid_logged.clear()
             # Reading configuration merges with existing data,
             # so clear it first.
             for section in self.config.sections():
