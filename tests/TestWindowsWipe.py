@@ -295,6 +295,30 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertEqual(moved, 16)
         self.assertNotExists(tmp_path)
 
+    def test_wipe_extent_by_defrag_existing_name(self):
+        """wipe_extent_by_defrag() does not reuse a file or link at its path"""
+        existing = self.write_file('zero_fill_file', b'keepme')
+        target = self.write_file('zero_fill_target', b'')
+        link = os.path.join(self.tempdir, 'zero_fill_link')
+        self._create_win_file_symlink(target, link)
+        os.remove(target)
+
+        for path in (existing, link):
+            with self.subTest(path=path), \
+                    mock.patch('bleachbit.WindowsWipe.get_volume_bitmap',
+                               return_value=(bytes(2), 16)), \
+                    mock.patch('bleachbit.WindowsWipe.move_file'):
+                # pylint: disable-next=possibly-used-before-assignment
+                with self.assertRaises(pywintypes.error) as cm:
+                    wipe_extent_by_defrag(None, 0, 0, 4096, 16, path)
+                # ERROR_FILE_EXISTS
+                self.assertEqual(cm.exception.winerror, 80)
+
+        with open(existing, 'rb') as f:
+            self.assertEqual(f.read(), b'keepme')
+        # The dangling link was not followed to create its target
+        self.assertNotExists(target)
+
     def test_file_wipe_basic(self):
         """Basic unit test for file_wipe"""
         # pylint: disable-next=possibly-used-before-assignment

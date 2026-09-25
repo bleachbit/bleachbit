@@ -105,7 +105,8 @@ from win32file import (CreateFile, CreateFileW,
 from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
                        FILE_SHARE_DELETE,
                        FILE_SHARE_READ, FILE_SHARE_WRITE,
-                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
+                       OPEN_EXISTING, CREATE_ALWAYS, CREATE_NEW,
+                       FILE_FLAG_BACKUP_SEMANTICS,
                        DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
 from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_GET_VOLUME_BITMAP,
@@ -131,10 +132,11 @@ from bleachbit.FileUtilities import extended_path, extended_path_undo
 
 # Constants.
 VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
+FILE_FLAG_OPEN_REPARSE_POINT = 0x00200000
 SIMULATE_CONCURRENCY = False     # remove this test function when QA complete
 # drive_letter_safety = "E"       # protection to only use removable drives
 # don't use C: or D:, but E: and beyond OK.
-TMP_FILE_NAME = "bbtemp.dat"
+TMP_FILE_NAME = "bbtemp{}.dat"  # a random part is filled in per wipe
 SPIKE_FILE_NAME = "bbspike"     # cluster number will be appended
 WRITE_BUF_SIZE = 512 * 1024     # 512 kilobytes
 ZERO_FILL_BUFFER = bytearray(WRITE_BUF_SIZE)
@@ -1099,10 +1101,12 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                                   cluster_size, total_clusters,
                                   tmp_file_path)
         return True
-    # Put the zero-fill file in place.
+    # Put the zero-fill file in place. Never open an existing file or
+    # follow a link that happens to have the name.
     file_handle = CreateFile(tmp_file_path, GENERIC_READ | GENERIC_WRITE,
-                             0, None, CREATE_ALWAYS,
-                             FILE_ATTRIBUTE_HIDDEN, None)
+                             0, None, CREATE_NEW,
+                             FILE_ATTRIBUTE_HIDDEN |
+                             FILE_FLAG_OPEN_REPARSE_POINT, None)
     # In a compressed folder the file is compressed too, and NTFS stores
     # compressed zeros without any clusters to move.
     if GetFileAttributesW(tmp_file_path) & FILE_ATTRIBUTE_COMPRESSED:
@@ -1143,6 +1147,8 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                 # Break into smaller pieces and do what we can.
                 logger.debug("!! Move encountered an error: %s !!", e)
                 CloseHandle(file_handle)
+                # The smaller pieces create it again
+                DeleteFile(tmp_file_path)
                 if lcn_start >= lcn_end:
                     return False
                 for split_s, split_e in split_extent(lcn_start, lcn_end):
@@ -1270,7 +1276,8 @@ def file_wipe(file_name):
         # logger.debug("Attempting defrag file wipe.")
         # Put the temp file in the same folder as the target wipe file.
         # Should be able to write this path if user can write the wipe file.
-        tmp_file_path = os.path.dirname(file_name) + os.sep + TMP_FILE_NAME
+        tmp_file_path = (os.path.dirname(file_name) + os.sep +
+                         TMP_FILE_NAME.format(os.urandom(8).hex()))
         if is_special:
             orig_extents = choose_if_bridged(volume_handle,
                                              volume_info.total_clusters,
