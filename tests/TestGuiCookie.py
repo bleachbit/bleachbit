@@ -100,3 +100,22 @@ class GuiCookieTestCase(common.BleachbitTestCase):
             for column in pane.treeview.get_columns():
                 self.assertEqual(column.get_sort_column_id(), -1)
         pane.destroy()
+
+    def test_discovery_failure_finishes_loading(self):
+        """Any error during cookie discovery still ends the loading state"""
+        class SyncThread:
+            def __init__(self, target=None, daemon=None):
+                self.target = target
+                self.daemon = daemon
+
+            def start(self):
+                self.target()
+
+        with mock.patch('bleachbit.GuiCookie.threading.Thread', SyncThread), \
+                mock.patch('bleachbit.GuiCookie.list_unique_cookies',
+                           side_effect=ModuleNotFoundError('sqlite3')), \
+                mock.patch('bleachbit.GuiCookie.GLib.idle_add') as idle_add, \
+                self.assertLogs('bleachbit.GuiCookie', level='ERROR'):
+            pane = CookieManagerPane()
+        idle_add.assert_called_once_with(pane._finish_populate, [])
+        pane.destroy()

@@ -314,7 +314,8 @@ class CookieManagerPane(Gtk.Box):
             discovered = []
             try:
                 discovered = list_unique_cookies()
-            except (OSError, RuntimeError, ValueError) as exc:  # pragma: no cover - defensive logging
+            except Exception as exc:  # pragma: no cover - defensive logging
+                # Anything else would leave the page loading forever.
                 logger.error("Failed to enumerate cookies: %s", exc)
             duration = time.monotonic() - start
             if duration >= COOKIE_DISCOVERY_WARN_THRESHOLD:
