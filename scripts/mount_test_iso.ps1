@@ -17,7 +17,7 @@ $archiveUrl = 'https://download.bleachbit.org/test/test.iso.7z'
 $expectedHash = '71f284d46636bc11d2d02dcf1da4a87003e30056db59cc696f040163bfa28ffb'
 
 $archive = "$env:TEMP\bleachbit_test.iso.7z"
-curl.exe -fsSL -o $archive $archiveUrl
+curl.exe -fsSL --retry 3 --retry-connrefused -o $archive $archiveUrl
 if ($LASTEXITCODE -ne 0) { throw "download failed with exit code $LASTEXITCODE" }
 
 tar -xf $archive -C $env:TEMP
