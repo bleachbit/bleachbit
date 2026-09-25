@@ -315,6 +315,10 @@ def delete_chrome_history(path):
         ids_str = ",".join([str(id0) for id0 in ids_int])
         where = f"where id not in ({ids_str})"
     cmds = __shred_sqlite_char_columns('urls', cols, where, path)
+    if cmds:  # the urls table exists
+        # Reset the visit statistics of the bookmarked URLs kept above, as
+        # for Firefox. last_visit_time is NOT NULL.
+        cmds += "update urls set visit_count=0, typed_count=0, last_visit_time=0;"
     cmds += __shred_sqlite_char_columns('visits', path=path)
     # Google Chrome 79 no longer has lower_term in keyword_search_terms
     cols = ('term',)
