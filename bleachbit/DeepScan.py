@@ -124,8 +124,9 @@ class DeepScan:
 
         for (top, searches) in self.searches.items():
             # This skips top-level directories that are in the keep list
-            # to reduce unnecessary work.
-            if whitelisted(top):
+            # to reduce unnecessary work. The root is only protected from
+            # deletion, and the walk below prunes /proc, /sys and /run.
+            if top != '/' and whitelisted(top):
                 continue
             compiled_searches = [CompiledSearch(s) for s in searches]
             for (dirpath, dirnames, filenames) in normalized_walk(top):
