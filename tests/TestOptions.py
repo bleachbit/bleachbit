@@ -240,6 +240,47 @@ auto_hide = True
         o.close()
         self.assertEqual(set(old_keep_list), set(o.get_whitelist_paths()))
 
+    def test_paths_keep_surrounding_whitespace(self):
+        """Keep list and custom paths come back unchanged after a restart"""
+        self._write_private_options_file('[bleachbit]\n')
+        data = os.path.abspath('/data')
+        keep_list = [('folder', data + '/Photos '), ('file', data + '/b.txt\t'),
+                     ('folder', data + '/plain'), ('file', data + '/cr\rpath'),
+                     ('folder', data + '/nl\n  path')]
+        custom = [('folder', data + '/old\u00a0')]
+        o = bleachbit.Options.Options()
+        try:
+            o.set_whitelist_paths(keep_list)
+            o.set_custom_paths(custom)
+            o.commit()
+        finally:
+            o.close()
+        o2 = bleachbit.Options.Options()
+        try:
+            self.assertEqual(o2.get_whitelist_paths(), keep_list)
+            self.assertEqual(o2.get_custom_paths(), custom)
+        finally:
+            o2.close()
+
+    def test_paths_ignore_relative(self):
+        """A relative path, quoted or not, is ignored: the GUI never
+        writes one, and a legacy value starting with a quote is one"""
+        data = os.path.abspath('/data')
+        self._write_private_options_file(
+            '[bleachbit]\n[whitelist/paths]\n'
+            '0_type = file\n0_path = " foo"\n'
+            '1_type = file\n1_path = "foo"\n'
+            '2_type = file\n2_path = "\\tfoo"\n'
+            '3_type = file\n3_path = foo\n'
+            f'4_type = folder\n4_path = {data}\n')
+        o = bleachbit.Options.Options()
+        try:
+            with self.assertLogs('bleachbit.Options', level='WARNING') as logs:
+                self.assertEqual(o.get_whitelist_paths(), [('folder', data)])
+        finally:
+            o.close()
+        self.assertEqual(len(logs.output), 4)
+
     def test_init_configuration(self):
         """Test for init_configuration()"""
         if os.path.exists(bleachbit.options_file):
