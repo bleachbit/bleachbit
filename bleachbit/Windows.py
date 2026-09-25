@@ -820,8 +820,10 @@ def elevate_privileges(uac):
     except pywintypes.error as e:
         if 1223 == e.winerror:
             logger.debug('user denied the UAC dialog')
-            return False
-        raise
+        else:
+            # e.g., a policy that denies elevation, or Appinfo disabled
+            logger.warning('failed to elevate privileges: %s', e)
+        return False
 
     logger.debug('ShellExecuteEx=%s', rc)
 
