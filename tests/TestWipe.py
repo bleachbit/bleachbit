@@ -11,6 +11,7 @@ Test case for module Wipe
 import errno
 import itertools
 import os
+import stat
 import tempfile
 import unittest
 from contextlib import ExitStack
@@ -128,6 +129,17 @@ class WipeTestCase(common.BleachbitTestCase):
         with mock.patch('bleachbit.Wipe.os.fdopen', side_effect=fdopen_spy):
             wipe_write(filename).close()
         self.assertEqual(sizes, [len(original)])
+
+    def test_wipe_write_block_device(self):
+        """wipe_write() fills a block device, for which getsize() is 0"""
+        size = 1024 * 1024 + 1234
+        filename = self.write_file('fake_block_device', b'\xaa' * size)
+        blockdev = mock.Mock(st_mode=stat.S_IFBLK | 0o660)
+        with mock.patch('bleachbit.FileUtilities.getsize', return_value=0), \
+                mock.patch('bleachbit.Wipe.os.fstat', return_value=blockdev):
+            wipe_write(filename).close()
+        with open(filename, 'rb') as f:
+            self.assertEqual(f.read(), b'\x00' * size)
 
     @common.skipIfWindows
     def test_wipe_write_refuses_symlink(self):
