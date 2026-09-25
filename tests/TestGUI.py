@@ -668,6 +668,23 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertEqual([], glib_warnings)
 
+    def test_shred_settings_leaves_exit_to_quit(self):
+        """Shred settings and quit exits through quit() even with exit_done"""
+        gui = self.get_window()
+        options.set('exit_done', True)
+        gui.start_time = None
+        self.addCleanup(setattr, gui, '_quit_after_worker', False)
+        self.addCleanup(backends.pop, '_gui', None)
+        worker = mock.Mock()
+        with mock.patch.object(gui, 'worker', worker, create=True), \
+                mock.patch.object(gui, 'preview_or_run_operations'), \
+                mock.patch.object(gui, '_confirm_delete', return_value=True), \
+                mock.patch('bleachbit.GuiWindow.sys.exit') as mock_exit:
+            self.assertTrue(gui.shred_paths([self.tempdir],
+                                            shred_settings=True))
+            gui.worker_done(worker, True)
+        mock_exit.assert_not_called()
+
     def test_worker_setup_error_restores_ui(self):
         """An error before the worker starts leaves the buttons usable"""
         gui = self.get_window()
