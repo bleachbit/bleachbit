@@ -462,3 +462,26 @@ class WorkerTestCase(common.BleachbitTestCase):
         self.assertEqual(worker.total_special, 0)
         self.assertEqual(worker.total_errors, 0)
         self.assertEqual(worker.total_deleted, 2)
+
+    def test_abort(self):
+        """Abort stops before the next option and skips the deep scan"""
+        filename1 = self.mkstemp(prefix='bleachbit-test-worker')
+        filename2 = self.mkstemp(prefix='bleachbit-test-worker')
+        deep_dir = self.mkdtemp(prefix='bleachbit-test-worker')
+        bak = self.write_file(os.path.join(deep_dir, 'x.bak'))
+        backends['test'] = TestCleaner.actions_to_cleaner([
+            f'<action command="delete" search="deep" regex="\\.bak$" path="{deep_dir}"/>',
+            f'<action command="delete" search="file" path="{filename1}"/>',
+            f'<action command="delete" search="file" path="{filename2}"/>'])
+        self.addCleanup(backends.pop, 'test', None)
+        ui = CLI.CliCallback(quiet=True)
+        worker = Worker(ui, True, {'test': ['option1', 'option2', 'option3']})
+        # Abort as the first file is deleted, after the deep search is queued
+        with mock.patch.object(ui, 'append_text',
+                               side_effect=lambda *_args: worker.abort()):
+            list(worker.run())
+        self.assertTrue(worker.deepscans)
+        self.assertNotExists(filename1)
+        self.assertExists(filename2)
+        self.assertExists(bak)
+        self.assertEqual(worker.total_deleted, 1)
