@@ -206,8 +206,10 @@ def check_exist(path, msg=None):
 def assert_module(module):
     """Check if a module is available"""
     try:
-        importlib.util.find_spec(module)
+        spec = importlib.util.find_spec(module)
     except ImportError:
+        spec = None
+    if spec is None:
         logger.error('Failed to import %s', module)
         logger.error('Process aborted because of error!')
         sys.exit(1)
