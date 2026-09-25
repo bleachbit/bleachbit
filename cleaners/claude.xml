@@ -43,7 +43,8 @@ later.  See the COPYING file in the top-level directory.
     <description translators="Description for deleting Claude Code sessions">Delete the conversation history</description>
     <warning>You would lose resume, continue, and rewind for past sessions</warning>
     <action command="delete" search="file" path="~/.claude/history.jsonl"/>
-    <action command="delete" search="walk.all" path="~/.claude/projects/"/>
+    <!-- projects/*/memory holds the auto-memory notes, not history -->
+    <action command="delete" search="walk.all" path="~/.claude/projects/" nwholeregex="[/\\]projects[/\\][^/\\]+[/\\]memory([/\\]|$)"/>
     <action command="delete" search="walk.all" path="~/.claude/sessions/"/>
     <action command="delete" search="walk.all" path="~/.claude/session-env/"/>
   </option>
