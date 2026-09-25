@@ -498,6 +498,9 @@ def is_unregistered_mime(mimetype):
     registered or unknown, conservatively returns False."""
     try:
         from bleachbit.GtkShim import Gio
+        # GtkShim gives None, not ImportError, without a display or PyGObject
+        if Gio is None:
+            return False
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:
