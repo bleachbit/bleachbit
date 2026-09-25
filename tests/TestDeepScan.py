@@ -246,6 +246,11 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ('/home/username/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/venv',
              '__init__.py'),
             ('/home/username/.pyenv/versions/3.12.7/lib/python3.12/venv', '__init__.py'),
+            ('/home/username/miniconda3/lib/python3.12/venv', '__init__.py'),
+            ('/home/username/miniconda3/envs/foo/lib/python3.11/venv/scripts/common',
+             'activate'),
+            ('/home/username/src/cpython/Lib/venv', '__init__.py'),
+            (r'C:\Users\charlie\scoop\apps\python\3.12.4\Lib\venv', '__init__.py'),
             # pipx-managed venvs (managed by pipx, like npm cache)
             ('/home/username/.local/share/pipx/venvs/duplicity', 'pyvenv.cfg'),
             # typeshed stubs bundled with editor extensions
@@ -287,6 +292,8 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         matched = [
             ('/home/genisys/t800/.venv/yolo-v666', 'pyvenv.cfg'),
             ('/home/stark/jarvis/venv/yolo14', 'pyvenv.cfg'),
+            ('/home/stark/jarvis/venv/lib/python3.12/site-packages/numpy',
+             '__init__.py'),
             (r'C:\Users\esnowden\Documents\nsa\prism\venv', 'pyvenv.cfg'),
         ]
         if IS_WINDOWS:
