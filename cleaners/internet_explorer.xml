@@ -51,7 +51,6 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CLR_v4.0\UsageLogs\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CryptnetUrlCache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\navigationHistory\"/>
-    <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Recovery\PendingDelete"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Ext\Stats"/>
   </option>
