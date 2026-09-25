@@ -625,8 +625,14 @@ class System(Cleaner):
         if IS_WINDOWS and 'recycle_bin' == option_id:
             # This method allows shredding
             recycled_any = False
+            kept_any = False
             for path in Windows.get_recycle_bin():
                 recycled_any = True
+                # whitelisted() also spares temp roots, which the bin may hold
+                # pylint: disable-next=protected-access
+                temp_root = FileUtilities._windows_preserved_temp_dir(path)
+                if FileUtilities.whitelisted(path) and not temp_root:
+                    kept_any = True
                 yield Command.Delete(path)
 
             # Windows 10 refreshes the recycle bin icon when the user
@@ -644,7 +650,8 @@ class System(Cleaner):
                 yield 0
             # Using the Function Command prevents emptying the recycle bin
             # when in preview mode.
-            if recycled_any:
+            # SHEmptyRecycleBin(NULL) would take the kept items with it
+            if recycled_any and not kept_any:
                 yield Command.Function(None, empty_recycle_bin_func, _('Empty the recycle bin'))
 
         # DNS cache
