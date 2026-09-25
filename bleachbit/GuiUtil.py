@@ -357,6 +357,7 @@ def notify_plyer(msg):
 def threaded(func):
     """Decoration to create a threaded function"""
     def wrapper(*args):
-        thread = threading.Thread(target=func, args=args)
+        # Daemon, so a hung network request cannot hold up the exit
+        thread = threading.Thread(target=func, args=args, daemon=True)
         thread.start()
     return wrapper
