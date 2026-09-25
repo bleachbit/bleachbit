@@ -188,8 +188,32 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 nwholeregex = action.get('nwholeregex')
                 break
         self.assertIsNotNone(wholeregex)
-        self.assertIsNotNone(nwholeregex)
         return CompiledSearch(Search(command='delete', wholeregex=wholeregex, nwholeregex=nwholeregex))
+
+    def test_angular_matches_only_cache_dir(self):
+        """.angular option should match the cache folder but not config files."""
+        cs = self._get_compiled_search('angular')
+        matched = [
+            ('/home/u/proj/.angular/cache/19.0.0/babel-webpack', 'x.json'),
+            (r'C:\Users\u\proj\.angular\cache', 'x.json'),
+        ]
+        excluded = [
+            ('/home/u', '.angular-config.json'),
+            ('/home/u/.config/angular', '.angular-config.json'),
+            ('/home/u/proj', '.angular.json'),
+            ('/home/u/proj', '.angular-cli.json'),
+            (r'C:\Users\u', '.angular-config.json'),
+        ]
+        for dirpath, filename in matched:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNotNone(
+                    cs.match(dirpath, filename),
+                    f"Should match {dirpath}/{filename}")
+        for dirpath, filename in excluded:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNone(
+                    cs.match(dirpath, filename),
+                    f"Should exclude {dirpath}/{filename}")
 
     def test_node_modules_excludes_dot_dirs(self):
         """node_modules option should exclude system/cache/editor directories."""
