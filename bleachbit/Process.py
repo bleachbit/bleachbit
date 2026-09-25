@@ -122,7 +122,8 @@ def _enumerate_proc_fs():
         pid = int(base)
         name = None
         try:
-            target = os.path.realpath(filename)
+            # realpath() no longer raises on EACCES in Python 3.13+
+            target = os.readlink(filename)
             # Google Chrome 74 on Ubuntu 19.04 showed up as
             # /opt/google/chrome/chrome (deleted)
             name = os.path.basename(target).replace(' (deleted)', '')
