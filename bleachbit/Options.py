@@ -150,6 +150,16 @@ def protected_path_warning_key(pathname):
     return _PROTECTED_PATH_PREFIX + digest
 
 
+def _free_bad_path(path):
+    """Return the first of path.bad, path.bad.1, ... that does not exist"""
+    bad_file = path + '.bad'
+    counter = 0
+    while os.path.lexists(bad_file):
+        counter += 1
+        bad_file = f'{path}.bad.{counter}'
+    return bad_file
+
+
 def _open_config_write(path):
     """Open the config file for writing without following a final symlink."""
     return open_for_overwrite(
@@ -245,7 +255,9 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = configparser.RawConfigParser(delimiters='=')
+        # Not strict, so a duplicate key does not drop the rest of the file
+        self.config = configparser.RawConfigParser(
+            delimiters='=', strict=False)
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
@@ -255,6 +267,7 @@ class Options:
         self._paths_cache = {}
         self.old_version = None  # Store previous version in memory
         self._dirty = False
+        self._keep_file = False
         self._closed = False
         self._flush_generation = 0
         self._flush_lock = threading.RLock()
@@ -311,6 +324,9 @@ class Options:
     def __flush_locked(self, force=False):
         """Write configuration to disk while holding the flush lock."""
         if not force and not self._dirty:
+            return
+        if self._keep_file:
+            # restore() could not move an unreadable file out of the way
             return
         if not self.purged:
             self.__purge()
@@ -630,6 +646,7 @@ class Options:
         with self._flush_lock:
             self.__cancel_flush_timer()
             self._dirty = False
+            self._keep_file = False
             self._paths_cache.clear()
             # Reading configuration merges with existing data,
             # so clear it first.
@@ -642,6 +659,18 @@ class Options:
                 if not bleachbit.options_file.startswith('/tmp'):
                     logger.debug("Configuration file does not exist yet: %s",
                                  bleachbit.options_file)
+            except configparser.MissingSectionHeaderError:
+                # Nothing was read, so keep the next write from replacing it
+                bad_file = _free_bad_path(bleachbit.options_file)
+                logger.exception("Error reading application's configuration, "
+                                 "moving it to %s", bad_file)
+                try:
+                    os.replace(bleachbit.options_file, bad_file)
+                except OSError:
+                    logger.exception(
+                        "Error moving configuration to %s, not saving changes",
+                        bad_file)
+                    self._keep_file = True
             except Exception:
                 logger.exception("Error reading application's configuration")
             if not self.config.has_section("bleachbit"):
