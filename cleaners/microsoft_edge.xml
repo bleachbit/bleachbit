@@ -56,6 +56,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
@@ -88,6 +89,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
     <action command="delete" search="file" path="$$profile$$/Reporting and NEL-journal"/>
     <action command="delete" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Reporting and NEL-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Reporting and NEL"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
@@ -165,6 +168,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Network Action Predictor"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Reporting and NEL"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/MediaDeviceSalts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
