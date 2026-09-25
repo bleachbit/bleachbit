@@ -519,6 +519,10 @@ def is_broken_xdg_desktop(pathname):
         logger.info(
             "is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'", pathname)
         return True
+    # Hidden=true hides a system entry, so it may omit the other keys
+    if config.has_option('Desktop Entry', 'Hidden') and \
+            config.get('Desktop Entry', 'Hidden').strip().lower() == 'true':
+        return False
     if not config.has_option('Desktop Entry', 'Type'):
         logger.info(
             "is_broken_xdg_menu: missing required option 'Type': '%s'", pathname)

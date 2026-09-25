@@ -581,6 +581,19 @@ PrefersNonDefaultGPU=false""")
                 self.assertTrue(result, f"Failed case: {description}")
             os.unlink(tf.name)
 
+    def test_desktop_hidden_override(self):
+        """Hidden=true entries override a system entry and are not broken"""
+        test_cases = (
+            "[Desktop Entry]\nHidden=true\n",
+            "[Desktop Entry]\nType=Application\nName=Test\nHidden=true\n",
+        )
+        for content in test_cases:
+            filename = self.write_file('hidden.desktop', text=content)
+            self.assertFalse(is_broken_xdg_desktop(filename), content)
+        filename = self.write_file(
+            'hidden.desktop', text="[Desktop Entry]\nHidden=false\n")
+        self.assertTrue(is_broken_xdg_desktop(filename))
+
     @common.skipIfWindows
     def test_journald_clean(self):
         if not exe_exists(General.resolve_exe('journalctl')):
