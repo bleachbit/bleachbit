@@ -356,6 +356,62 @@ Swapouts:                              20258188.
         self._assert_wipe_memory_happy_path(
             scope_return=0, fork_return=None, fork_called=False)
 
+    @common.skipUnlessLinux
+    def test_wipe_memory_reenables_swap(self):
+        """wipe_memory() turns swap back on after an error or an abort"""
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s), \
+                mock.patch('bleachbit.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Memory.get_proc_swaps', return_value=''):
+            # swapoff fails partway
+            with mock.patch('bleachbit.Memory.disable_swap_linux',
+                            side_effect=RuntimeError('swapoff failed')), \
+                    mock.patch('bleachbit.Memory.enable_swap_linux') as mock_enable:
+                self.assertRaisesRegex(
+                    RuntimeError, 'swapoff failed', next, wipe_memory())
+                mock_enable.assert_called_once()
+
+            with mock.patch('bleachbit.Memory.disable_swap_linux',
+                            return_value=['/dev/sda1']):
+                # Wiping fails, for example on the size limit
+                with mock.patch('bleachbit.Memory.wipe_swap_linux',
+                                side_effect=RuntimeError('too large')), \
+                        mock.patch('bleachbit.Memory.enable_swap_linux') as mock_enable:
+                    gen = wipe_memory()
+                    self.assertTrue(next(gen))
+                    self.assertRaisesRegex(
+                        RuntimeError, 'too large', next, gen)
+                    mock_enable.assert_called_once()
+
+                # The user aborts at either yield
+                for n_yields in (1, 2):
+                    with mock.patch('bleachbit.Memory.wipe_swap_linux'), \
+                            mock.patch('bleachbit.Memory.enable_swap_linux') as mock_enable:
+                        gen = wipe_memory()
+                        for _i in range(n_yields):
+                            self.assertTrue(next(gen))
+                        mock_enable.assert_not_called()
+                        gen.close()
+                        mock_enable.assert_called_once()
+
+                # swapon fails too, which must not hide the error or abort
+                swapon_failed = RuntimeError('swapon failed')
+                with mock.patch('bleachbit.Memory.wipe_swap_linux',
+                                side_effect=RuntimeError('too large')), \
+                        mock.patch('bleachbit.Memory.enable_swap_linux',
+                                   side_effect=swapon_failed), \
+                        self.assertLogs('bleachbit.Memory', level='ERROR'):
+                    gen = wipe_memory()
+                    self.assertTrue(next(gen))
+                    self.assertRaisesRegex(
+                        RuntimeError, 'too large', next, gen)
+                with mock.patch('bleachbit.Memory.wipe_swap_linux'), \
+                        mock.patch('bleachbit.Memory.enable_swap_linux',
+                                   side_effect=swapon_failed), \
+                        self.assertLogs('bleachbit.Memory', level='ERROR'):
+                    gen = wipe_memory()
+                    self.assertTrue(next(gen))
+                    gen.close()
+
     @common.skipIfWindows
     def test_memory_child_script(self):
         """Test for _memory_child_script()"""
