@@ -616,7 +616,7 @@ class Process(ActionProvider):
                 (rc, stdout, stderr) = General.run_external(args, wait=self.wait)
             except Exception as e:
                 raise RuntimeError(
-                    f'Exception in external command\nCommand: {args}\nError: {str(e)}') from e
+                    f'Exception in external command\nCommand: {self.cmd}\nError: {str(e)}') from e
             if self.wait and 0 != rc:
                 logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
                                args, rc, stdout, stderr)

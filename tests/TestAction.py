@@ -24,7 +24,7 @@ from xml.sax.saxutils import quoteattr
 
 # first party imports
 from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, FS_CASE_SENSITIVE, logger
-from bleachbit.Action import ActionProvider, ChromeOrphanedFrameworkVersions, Command, Delete, has_glob, expand_multi_var
+from bleachbit.Action import ActionProvider, ChromeOrphanedFrameworkVersions, Command, Delete, Process, has_glob, expand_multi_var
 from bleachbit.CleanerML import CleanerML
 from tests import common
 from tests.TestFileUtilities import ini_helper
@@ -340,6 +340,17 @@ class ActionTestCase(common.BleachbitTestCase):
         action_str = f'<action command="process" wait="true" cmd="{cmd}" />'
         self._test_action_str(action_str)
         self.assertNotExists(fn)
+
+    def test_process_unbalanced_quote(self):
+        """A command line that cannot be split raises RuntimeError"""
+        action_node = parseString(
+            '<action command="process" cmd="foo &quot;bar" />').childNodes[0]
+        cmd = next(Process(action_node).get_commands())
+        with mock.patch('bleachbit.Action.General.run_external') as mock_run:
+            with self.assertRaises(RuntimeError) as context:
+                cmd.func()
+        mock_run.assert_not_called()
+        self.assertIn('No closing quotation', str(context.exception))
 
     def test_process_unicode_stderr(self):
         """
