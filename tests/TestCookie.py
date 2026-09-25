@@ -565,6 +565,11 @@ class CookieTestCase(common.BleachbitTestCase):
         }.get(name, '')
         return CookieAction(elem)
 
+    def _assert_cookie_action_skipped(self, action):
+        """An unreadable keep list logs an error and yields no commands"""
+        with self.assertLogs('bleachbit.Action', level='ERROR'):
+            self.assertEqual(list(action.get_commands()), [])
+
     def test_load_keep_list_file_not_found(self):
         """FileNotFoundError should return empty set (no keep list configured)"""
         # Ensure the file doesn't exist
@@ -586,6 +591,14 @@ class CookieTestCase(common.BleachbitTestCase):
         result = load_keep_list()
         self.assertEqual(result, {'example.com', 'example.org'})
 
+    def test_load_keep_list_bom(self):
+        """A keep list saved with a UTF-8 BOM still loads"""
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, '\ufeff["example.com"]'.encode('utf-8'))
+        self.assertEqual(load_keep_list(), {'example.com'})
+
     def test_load_keep_list_json_decode_error(self):
         """Corrupted JSON should raise JSONDecodeError, not return empty set"""
         action = self._make_cookie_action()
@@ -595,8 +608,7 @@ class CookieTestCase(common.BleachbitTestCase):
         self.write_file(keep_path, '{invalid json', mode='w')
         with self.assertRaises(json.JSONDecodeError):
             load_keep_list()
-        with self.assertRaises(json.JSONDecodeError):
-            list(action.get_commands())
+        self._assert_cookie_action_skipped(action)
 
     def test_load_keep_list_unicode_decode_error(self):
         """UnicodeDecodeError should propagate, not return empty set"""
@@ -609,8 +621,7 @@ class CookieTestCase(common.BleachbitTestCase):
             f.write(b'\x80\x81\x82')
         with self.assertRaises(UnicodeDecodeError):
             load_keep_list()
-        with self.assertRaises(UnicodeDecodeError):
-            list(action.get_commands())
+        self._assert_cookie_action_skipped(action)
 
     def test_load_keep_list_permission_error(self):
         """PermissionError (a subtype of OSError) should propagate"""
@@ -628,8 +639,7 @@ class CookieTestCase(common.BleachbitTestCase):
         with mock.patch('builtins.open', _mock_open):
             with self.assertRaises(PermissionError):
                 load_keep_list()
-            with self.assertRaises(PermissionError):
-                list(action.get_commands())
+            self._assert_cookie_action_skipped(action)
 
     @common.skipIfWindows
     def test_load_keep_list_chmod(self):
@@ -643,8 +653,7 @@ class CookieTestCase(common.BleachbitTestCase):
         os.chmod(keep_path, 0o200)  # write-only
         with self.assertRaises(PermissionError):
             load_keep_list()
-        with self.assertRaises(PermissionError):
-            list(action.get_commands())
+        self._assert_cookie_action_skipped(action)
         os.chmod(keep_path, 0o600)  # restore read permission
 
 
