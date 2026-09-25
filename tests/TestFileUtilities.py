@@ -1964,6 +1964,37 @@ State=AAAA/wA...
                 self.assertEqual(same_partition(home, drive),
                                  home_drive == this_drive)
 
+    def test_same_partition_device(self):
+        """same_partition() compares devices, not only sizes or free space"""
+        devices = {'/a': 1, '/b': 2, '/c': 3, '/d': 4}
+        blocks = {'/a': (1000, 500), '/b': (1000, 400), '/c': (1000, 500),
+                  '/d': (1000, 499)}
+
+        def fake_stat(path):
+            return unittest.mock.Mock(st_dev=devices[path])
+
+        def fake_statvfs(path):
+            f_blocks, f_bfree = blocks[path]
+            return unittest.mock.Mock(f_blocks=f_blocks, f_bfree=f_bfree)
+
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', False), \
+                unittest.mock.patch('os.stat', side_effect=fake_stat), \
+                unittest.mock.patch('os.statvfs', side_effect=fake_statvfs, create=True):
+            self.assertTrue(same_partition('/a', '/a'))
+            # different file systems of the same size
+            self.assertFalse(same_partition('/a', '/b'))
+            # btrfs subvolumes of one file system
+            self.assertTrue(same_partition('/a', '/c'))
+            # and one whose free space changed between the calls
+            self.assertTrue(same_partition('/a', '/d'))
+
+        # Free space on C: changes between the two lookups
+        changing_free_space = unittest.mock.Mock(side_effect=[1000, 996])
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', True), \
+                unittest.mock.patch('bleachbit.FileUtilities.free_space', changing_free_space), \
+                unittest.mock.patch('os.stat', return_value=unittest.mock.Mock(st_dev=7)):
+            self.assertTrue(same_partition('C:\\Temp', 'C:\\'))
+
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""
         self.assertEqual(uris_to_paths(['']), [])
