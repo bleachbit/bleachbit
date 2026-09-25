@@ -39,7 +39,7 @@ import threading
 # local application imports
 import bleachbit
 from bleachbit import General, IS_POSIX, IS_WINDOWS
-from bleachbit.FileUtilities import open_for_overwrite
+from bleachbit.FileUtilities import _open_nofollow_fd, open_for_overwrite
 from bleachbit.Language import get_text as _
 
 # third-party imports
@@ -268,10 +268,15 @@ def init_configuration(*, log=True):
         if log:
             logger.debug('Deleting configuration: %s', bleachbit.options_file)
         os.remove(bleachbit.options_file)
-    with _open_config_write(bleachbit.options_file) as f_ini:
+    # Exclusive: whatever took the name since the remove is refused, not
+    # truncated and given to the user
+    with open(bleachbit.options_file, 'x', encoding='utf-8-sig',
+              errors='surrogateescape', opener=_open_nofollow_fd) as f_ini:
         f_ini.write('[bleachbit]\n')
         if IS_WINDOWS and bleachbit.portable_mode:
             f_ini.write('[Portable]\n')
+        if General.sudo_mode():
+            General.chownself(bleachbit.options_file, f_ini.fileno())
     for section in options.config.sections():
         options.config.remove_section(section)
     options.restore()

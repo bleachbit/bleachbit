@@ -292,6 +292,36 @@ auto_hide = True
         bleachbit.Options.init_configuration()
         self.assertExists(bleachbit.options_file)
 
+    def test_init_configuration_chown_under_sudo(self):
+        """init_configuration() must give the new file back to the sudo user"""
+        with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chownself:
+            bleachbit.Options.init_configuration()
+        mock_chownself.assert_any_call(bleachbit.options_file, mock.ANY)
+
+    def test_init_configuration_refuses_raced_in_file(self):
+        """A file that takes the name after the remove is left alone"""
+        filename = self._write_private_options_file('[bleachbit]\n')
+        victim = os.path.join(self.mkdtemp(), 'victim')
+        with open(victim, 'w', encoding='utf-8') as handle:
+            handle.write('victim\n')
+        real_remove = os.remove
+
+        def remove_then_link(path):
+            real_remove(path)
+            if path == filename:
+                os.link(victim, path)
+
+        with mock.patch('bleachbit.Options.os.remove',
+                        side_effect=remove_then_link), \
+                mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chownself:
+            with self.assertRaises(FileExistsError):
+                bleachbit.Options.init_configuration()
+        mock_chownself.assert_not_called()
+        with open(victim, 'r', encoding='utf-8') as handle:
+            self.assertEqual(handle.read(), 'victim\n')
+
     def test_open_config_write_refuses_symlink(self):
         """The config write must not follow a symlink to another file"""
         filename = self.write_file('cfg_target', b'keepme')
