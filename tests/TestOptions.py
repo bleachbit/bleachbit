@@ -238,6 +238,26 @@ auto_hide = True
         o.close()
         self.assertEqual(set(old_keep_list), set(o.get_whitelist_paths()))
 
+    def test_paths_keep_surrounding_whitespace(self):
+        """Keep list and custom paths come back unchanged after a restart"""
+        self._write_private_options_file('[bleachbit]\n')
+        keep_list = [('folder', '/data/Photos '), ('file', '/data/b.txt\t'),
+                     ('file', '"/data/quoted"'), ('folder', '/data/plain')]
+        custom = [('folder', '/data/old\u00a0')]
+        o = bleachbit.Options.Options()
+        try:
+            o.set_whitelist_paths(keep_list)
+            o.set_custom_paths(custom)
+            o.commit()
+        finally:
+            o.close()
+        o2 = bleachbit.Options.Options()
+        try:
+            self.assertEqual(o2.get_whitelist_paths(), keep_list)
+            self.assertEqual(o2.get_custom_paths(), custom)
+        finally:
+            o2.close()
+
     def test_init_configuration(self):
         """Test for init_configuration()"""
         if os.path.exists(bleachbit.options_file):
