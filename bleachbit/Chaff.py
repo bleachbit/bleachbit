@@ -8,6 +8,7 @@ import bz2
 from datetime import datetime
 import email.generator
 from email.mime.text import MIMEText
+import hashlib
 import json
 import logging
 import os
@@ -187,6 +188,15 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
     return message
 
 
+def _is_model_valid(fn, basename):
+    """Check that the model file exists and matches its SHA-512"""
+    try:
+        with open(fn, 'rb') as f:
+            return hashlib.sha512(f.read()).hexdigest() == MODEL_SHA512[basename]
+    except OSError:
+        return False
+
+
 def download_models(models_dir=DEFAULT_MODELS_DIR,
                     on_error=None):
     """Download models
@@ -198,9 +208,11 @@ def download_models(models_dir=DEFAULT_MODELS_DIR,
     from bleachbit.Network import download_url_to_fn
     for basename in (MODEL_BASENAMES):
         fn = os.path.join(models_dir, basename)
-        if os.path.exists(fn):
+        if _is_model_valid(fn, basename):
             logger.debug('File %s already exists', fn)
             continue
+        if os.path.exists(fn):
+            logger.warning('Downloading %s again because it is corrupt', fn)
         this_file_success = False
         for url_template in URL_TEMPLATES:
             url = url_template % basename
@@ -298,6 +310,6 @@ def have_models():
     Used to check whether download is needed."""
     for basename in (MODEL_BASENAMES):
         fn = os.path.join(DEFAULT_MODELS_DIR, basename)
-        if not os.path.exists(fn):
+        if not _is_model_valid(fn, basename):
             return False
     return True
