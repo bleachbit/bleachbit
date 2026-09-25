@@ -405,11 +405,34 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
         with mock.patch('bleachbit.Language.get_active_language_code',
                         return_value='it_IT'), \
                 mock.patch('locale.setlocale'), \
+                mock.patch('gettext.find', return_value='bleachbit.mo'), \
                 mock.patch('gettext.translation'), \
                 mock.patch('bleachbit.Unix.find_best_locale',
                            return_value='it_IT'):
             setup_translation()
         self.assertEqual(os.environ.get('LANGUAGE'), 'it_IT')
+
+    @common.skipIfWindows
+    def test_setup_translation_regional_variant(self):
+        """zh_HK uses the shipped zh_TW catalog"""
+        locale_dir = os.path.join(self.tempdir, 'locale')
+        mo_dir = os.path.join(locale_dir, 'zh_TW', 'LC_MESSAGES')
+        os.makedirs(mo_dir)
+        with open(os.path.join(mo_dir, 'bleachbit.mo'), 'wb'):
+            pass
+        with mock.patch('bleachbit.locale_dir', locale_dir), \
+                mock.patch('bleachbit.Language.get_active_language_code',
+                           return_value='zh_HK'), \
+                mock.patch('locale.setlocale'), \
+                mock.patch('locale.bindtextdomain', create=True), \
+                mock.patch('locale.textdomain', create=True), \
+                mock.patch('gettext.translation') as mock_translation, \
+                mock.patch('bleachbit.Unix.find_best_locale',
+                           return_value='zh_HK'):
+            setup_translation()
+        self.assertEqual(mock_translation.call_args.kwargs['languages'],
+                         ['zh_TW'])
+        self.assertEqual(os.environ.get('LANGUAGE'), 'zh_TW')
 
     @common.skipUnlessLinux
     def test_setup_translation_captures_locale_before_setlocale(self):
