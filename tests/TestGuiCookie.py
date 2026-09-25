@@ -55,3 +55,12 @@ class GuiCookieTestCase(common.BleachbitTestCase):
         with open(filename, encoding='utf-8') as f:
             self.assertEqual(json.load(f), ['a.example', 'b.example'])
         self.assertEqual(pane.saved_domains, {'a.example', 'b.example'})
+
+    def test_activate_link_stops_default_handler(self):
+        """The 'Learn more' link must not also be opened by GTK"""
+        with mock.patch('bleachbit.GuiCookie.open_url') as open_url:
+            # pylint: disable-next=possibly-used-before-assignment
+            handled = CookieManagerPane.on_activate_link(
+                None, None, 'https://docs.bleachbit.org/')
+        self.assertTrue(handled)
+        open_url.assert_called_once()
