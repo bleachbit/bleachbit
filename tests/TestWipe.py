@@ -115,6 +115,20 @@ class WipeTestCase(common.BleachbitTestCase):
         self.assertEqual(contents, b'\x00' * len(contents))
         self.assertGreaterEqual(len(contents), len(original))
 
+    def test_wipe_write_keeps_size_at_open(self):
+        """wipe_write() must not truncate the file before overwriting it"""
+        original = b'abcdefghij' * 12345
+        filename = self.write_file('wipe_write_in_place', original)
+        sizes = []
+        real_fdopen = os.fdopen
+
+        def fdopen_spy(fd, *args, **kwargs):
+            sizes.append(os.fstat(fd).st_size)
+            return real_fdopen(fd, *args, **kwargs)
+        with mock.patch('bleachbit.Wipe.os.fdopen', side_effect=fdopen_spy):
+            wipe_write(filename).close()
+        self.assertEqual(sizes, [len(original)])
+
     @common.skipIfWindows
     def test_wipe_write_refuses_symlink(self):
         """wipe_write() must not follow a symlink to overwrite its target"""

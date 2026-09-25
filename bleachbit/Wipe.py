@@ -207,7 +207,8 @@ def wipe_write(path):
     Return the open file handle; the caller must close it."""
     from bleachbit.FileUtilities import getsize, _open_nofollow_fd
     size = getsize(path)
-    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
+    # O_TRUNC would free the blocks before any zeros land on them
+    flags = os.O_WRONLY
     try:
         fd = _open_nofollow_fd(path, flags)
     except OSError as e:
