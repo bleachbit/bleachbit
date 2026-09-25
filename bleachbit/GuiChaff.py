@@ -459,10 +459,14 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
                               Gtk.MessageType.ERROR)
             return
 
+        # Made before any download so closing the dialog can cancel it
+        self._abort_event = threading.Event()
         from bleachbit.Chaff import have_models
         if not have_models():
             # Download models first, then proceed to file generation
             def on_download_complete(success):
+                if self._abort_event.is_set():
+                    return
                 if success:
                     self._start_file_generation(
                         stop_mode, stop_value, inspiration, output_dir, delete_when_finished)
@@ -479,7 +483,6 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
     def _start_file_generation(self, stop_mode, stop_value, inspiration,
                                output_dir, delete_when_finished):
         """Start generating files after download is complete."""
-        self._abort_event = threading.Event()
 
         def _on_progress(fraction, msg, is_done, error=None):
             """Update progress bar from GLib main loop"""
