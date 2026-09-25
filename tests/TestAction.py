@@ -254,6 +254,20 @@ class ActionTestCase(common.BleachbitTestCase):
         mock_windows.expand_windows_system_vars.assert_called_once_with(
             r'%WindowsSystem%\foo.log')
 
+    def test_duplicate_var_paths(self):
+        """Var values that expand to the same path are listed once"""
+        action_node = parseString(
+            '<action command="delete" search="file" path="$$base$$/foo"/>').childNodes[0]
+        config_dir = os.path.expanduser('~/.config')
+        with common.set_temporary_env('XDG_CONFIG_HOME', config_dir):
+            action = Delete(action_node, {
+                'base': ['$XDG_CONFIG_HOME/app', '~/.config/app', '~/snap/app']})
+        expected = [os.path.expanduser(p)
+                    for p in ('~/.config/app/foo', '~/snap/app/foo')]
+        if IS_WINDOWS:
+            expected = [os.path.normpath(p) for p in expected]
+        self.assertEqual(expected, action.paths)
+
     def test_has_glob(self):
         """Unit test for function has_glob()"""
         tests = ((r'c:\windows\*.log', True),
