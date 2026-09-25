@@ -27,7 +27,7 @@ from bleachbit.CleanerML import (
     load_cleaners,
     pot_fragment)
 from bleachbit.General import os_match as general_os_match
-from bleachbit.Process import ProcessInfo
+from bleachbit.Process import ProcessInfo, process_cache
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -513,6 +513,21 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         linux = self._load_real_cleaner_as('teamviewer.xml', 'linux')
         self.assertEqual(sorted(linux.options), [])
         self.assertEqual(linux.actions, [])
+
+    @common.skipUnlessLinux
+    def test_running_process_names(self):
+        """Cleaners notice their application by its Linux process name"""
+        cases = (
+            ('rhythmbox', 'rhythmbox'),
+        )
+        self.addCleanup(process_cache.invalidate)
+        for cleaner_id, exe_name in cases:
+            with self.subTest(cleaner_id=cleaner_id, exe_name=exe_name):
+                cleaner = CleanerML(f'cleaners/{cleaner_id}.xml').get_cleaner()
+                process_cache.invalidate()
+                with mock.patch('bleachbit.Process.enumerate_processes',
+                                return_value=[ProcessInfo(1234, exe_name, True)]):
+                    self.assertTrue(cleaner.is_process_running())
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
