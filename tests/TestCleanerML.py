@@ -70,7 +70,9 @@ class CleanerMLTestCase(common.BleachbitTestCase):
     def _bundled_option_paths(self, cleaner_id, option_id, platform=sys.platform):
         """Return the paths an option of a bundled cleaner would touch"""
         cleaner = self._bundled_cleaner(cleaner_id, platform)
-        return [cmd.path for cmd in cleaner.get_commands(option_id)]
+        # glob values end in a separator, so a path can hold '//'
+        return [os.path.normpath(cmd.path)
+                for cmd in cleaner.get_commands(option_id)]
 
     def _bundled_cleaner_detects(self, cleaner_id, platform, exename):
         """Return whether a bundled cleaner treats exename as its app running"""
@@ -631,3 +633,20 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             with self.subTest(platform=platform, exename=exename):
                 self.assertTrue(self._bundled_cleaner_detects(
                     'zen', platform, exename))
+
+    @common.skipIfWindows
+    def test_chromium_brave_every_profile(self):
+        """Chromium and Brave clean profiles other than Default"""
+        config = self.mkdtemp(prefix='bleachbit-chromium-profiles')
+        bases = {
+            'brave': 'BraveSoftware/Brave-Browser',
+            'chromium': 'chromium',
+        }
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            for cleaner_id, base in bases.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    history = os.path.join(
+                        config, base, 'Profile 1', 'History')
+                    common.touch_file(history)
+                    self.assertIn(history, self._bundled_option_paths(
+                        cleaner_id, 'history', 'linux'))
