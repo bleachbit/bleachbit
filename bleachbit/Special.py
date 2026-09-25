@@ -505,12 +505,10 @@ def delete_mozilla_favicons(path):
     # duplication. This is because the first usage of bookmarks
     # is for refining further queries to favicons db and if we
     # first extract the bookmarks as a Python list and give them
-    # to the query we could cause an error in execute_sqlite3 since
-    # it splits the cmds string by ';' and bookmarked url could
-    # contain a ';'. Also if we have a Python list with urls we
-    # need to pay attention to escaping JavaScript strings in some
-    # bookmarks and probably other things. So the safer way for now
-    # is to not compose a query with Python list of extracted urls.
+    # to the query we need to pay attention to escaping JavaScript
+    # strings in some bookmarks and probably other things. So the
+    # safer way for now is to not compose a query with Python list
+    # of extracted urls.
 
     def row_factory(_cursor, row):
         return row[0]

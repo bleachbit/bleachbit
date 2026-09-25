@@ -855,6 +855,21 @@ def exe_exists(pathname):
     return exists_in_path(pathname)
 
 
+def _split_sqlite3(cmds):
+    """Split SQL commands on ';', except inside a literal such as a path"""
+    # In FreeBSD, sqlite3 is a separate package
+    import sqlite3
+    statement = ''
+    for part in cmds.split(';'):
+        statement += part + ';'
+        if sqlite3.complete_statement(statement):
+            yield statement
+            statement = ''
+    if statement:
+        # Let SQLite report the incomplete statement
+        yield statement
+
+
 def execute_sqlite3(path, cmds):
     """Execute SQL commands on SQLite database
 
@@ -899,7 +914,7 @@ def execute_sqlite3(path, cmds):
             if conn.execute('PRAGMA secure_delete').fetchone()[0] != 1:
                 raise RuntimeError(f'could not enable secure_delete on {path}')
 
-        for cmd in cmds.split(';'):
+        for cmd in _split_sqlite3(cmds):
             try:
                 conn.execute(cmd)
             except sqlite3.OperationalError as exc:

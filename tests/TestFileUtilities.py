@@ -1403,6 +1403,26 @@ State=AAAA/wA...
         os.unlink(db_path)
         self.assertNotExists(db_path)
 
+    def test_execute_sqlite3_semicolon_in_literal(self):
+        """execute_sqlite3() keeps a ';' inside a literal, such as a path"""
+        db_path = self.mkstemp(suffix='.sqlite')
+        attach_path = os.path.join(self.tempdir, 'a;b.sqlite')
+
+        execute_sqlite3(
+            db_path,
+            "CREATE TABLE test (name TEXT);"
+            "INSERT INTO test (name) VALUES ('x;y');"
+            f"ATTACH DATABASE '{attach_path}' AS other;"
+            "CREATE TABLE other.test (name TEXT)")
+
+        with contextlib.closing(sqlite3.connect(db_path)) as conn:
+            rows = conn.execute('SELECT name FROM test').fetchall()
+        self.assertEqual(rows, [('x;y',)])
+        self.assertExists(attach_path)
+
+        with self.assertRaises(sqlite3.OperationalError):
+            execute_sqlite3(db_path, "INSERT INTO test (name) VALUES ('x")
+
     def test_execute_sqlite3_open_error_translation(self):
         """Unit test for execute_sqlite3() open-error translation
 
