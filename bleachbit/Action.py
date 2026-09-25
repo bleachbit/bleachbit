@@ -135,6 +135,8 @@ class FileActionProvider(ActionProvider):
         assert (isinstance(self.nwholeregex, (str, type(None))))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
+        if self.object_type not in ('', 'f', 'd'):
+            raise RuntimeError(f"Invalid type='{self.object_type}'")
         self._set_paths(action_element.getAttribute('path'), path_vars)
         self.ds = None
         if 'deep' == self.search:
