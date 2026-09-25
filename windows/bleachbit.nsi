@@ -460,8 +460,13 @@ Function .onInit
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
      "UninstallString"
 
-  ; If not already installed, skip uninstallation
-  StrCmp $R0 "" new_install
+  ; If not already installed, skip uninstallation. The outer instance handles
+  ; per-user installations, since HKCU in the elevated one can be the admin's
+  ${If} $IsInnerInstance = 0
+    StrCmp "$R0$PerUserUninstallString" "" new_install
+  ${Else}
+    StrCmp $R0 "" new_install
+  ${EndIf}
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
     "$(ALREADY_INSTALLED)" \
@@ -471,29 +476,18 @@ Function .onInit
   Abort
 
   uninstall_old:
-  ; If installing in silent mode, also uninstall in silent mode
-  Var /GLOBAL uninstaller_cmd
-  StrCpy $uninstaller_cmd '$R0 _?=$INSTDIR'
-  IfSilent 0 +2
-  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
-  ; Files in use get deleted at the next reboot, taking the new ones with them
-  close_bleachbit:
-  Call FindRunningBleachBit
-  ${If} $0 != ""
-    MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "$(^FileError_NoIgnore)" /SD IDCANCEL IDRETRY close_bleachbit
-    Abort
+  ${If} $R0 != ""
+    StrCpy $R1 $PerMachineInstallationFolder
+    ; BleachBit 2.2 and older did not record InstallLocation
+    ${IfThen} $R1 == "" ${|} StrCpy $R1 $INSTDIR ${|}
+    Call UninstallOld
   ${EndIf}
-  ClearErrors
-  ExecWait $uninstaller_cmd ; Actually run the uninstaller
-  ; Catch files still in use, e.g. by another user's BleachBit. Errors mean
-  ; the uninstaller failed or was cancelled and queued nothing
-  ${IfNot} ${Errors}
-    ${If} ${FileExists} "$INSTDIR\${prodname}.exe"
-    ${OrIf} ${FileExists} "$INSTDIR\${prodname}_console.exe"
-      MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(MUI_UNTEXT_FINISH_INFO_REBOOT)" /SD IDNO IDNO +2
-      Reboot
-      Abort
-    ${EndIf}
+  ; A per-user installation is registered under HKCU instead
+  ${If} $PerUserUninstallString != ""
+  ${AndIf} $IsInnerInstance = 0
+    StrCpy $R0 $PerUserUninstallString
+    StrCpy $R1 $PerUserInstallationFolder
+    Call UninstallOld
   ${EndIf}
 
   new_install:
@@ -508,8 +502,37 @@ Function .onInit
 FunctionEnd
 
 
-; Set $0 to the path of a BleachBit exe running from $INSTDIR, or to "" if
-; there is none. Clobbers $1-$7.
+; Run the old uninstaller command $R0 on the installation in $R1
+Function UninstallOld
+  ; If installing in silent mode, also uninstall in silent mode
+  Var /GLOBAL uninstaller_cmd
+  StrCpy $uninstaller_cmd '$R0 _?=$R1'
+  IfSilent 0 +2
+  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
+  ; Files in use get deleted at the next reboot, taking the new ones with them
+  close_bleachbit:
+  Call FindRunningBleachBit
+  ${If} $0 != ""
+    MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "$(^FileError_NoIgnore)" /SD IDCANCEL IDRETRY close_bleachbit
+    Abort
+  ${EndIf}
+  ClearErrors
+  ExecWait $uninstaller_cmd ; Actually run the uninstaller
+  ; Catch files still in use, e.g. by another user's BleachBit. Errors mean
+  ; the uninstaller failed or was cancelled and queued nothing
+  ${IfNot} ${Errors}
+    ${If} ${FileExists} "$R1\${prodname}.exe"
+    ${OrIf} ${FileExists} "$R1\${prodname}_console.exe"
+      MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(MUI_UNTEXT_FINISH_INFO_REBOOT)" /SD IDNO IDNO +2
+      Reboot
+      Abort
+    ${EndIf}
+  ${EndIf}
+FunctionEnd
+
+
+; Set $0 to the path of a BleachBit exe running from the folder in $R1, or to
+; "" if there is none. Clobbers $1-$7.
 Function FindRunningBleachBit
   StrCpy $0 ""
   System::Alloc 16384 ; room for 4096 process IDs
@@ -526,8 +549,8 @@ Function FindRunningBleachBit
         System::Call 'kernel32::QueryFullProcessImageName(p r5, i 0, t .r6, *i ${NSIS_MAX_STRLEN}) i .r7'
         System::Call 'kernel32::CloseHandle(p r5)'
         ${If} $7 <> 0
-          ${If} $6 == "$INSTDIR\${prodname}.exe"
-          ${OrIf} $6 == "$INSTDIR\${prodname}_console.exe"
+          ${If} $6 == "$R1\${prodname}.exe"
+          ${OrIf} $6 == "$R1\${prodname}_console.exe"
             StrCpy $0 $6
             ${ExitFor}
           ${EndIf}
