@@ -71,6 +71,11 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             values = xmlc.vars.get(var_name, [])
             self.assertEqual(len(values), len(set(values)), var_name)
 
+    def _bundled_option_paths(self, cleaner_id, option_id, platform=sys.platform):
+        """Return the paths an option of a bundled cleaner would touch"""
+        cleaner = self._load_real_cleaner_as(f'{cleaner_id}.xml', platform)
+        return [cmd.path for cmd in cleaner.get_commands(option_id)]
+
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""
         tests = [('True', True),
@@ -770,3 +775,17 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             for result in cmd.execute(False):
                 self.assertEqual(0, result['n_deleted'])
         self.assertExists(test_log_path)
+
+    @common.skipIfWindows
+    def test_safari_cookies_skip_other_apps(self):
+        """Safari cookies leave other apps' jars in ~/Library/HTTPStorages"""
+        home = self.mkdtemp(prefix='bleachbit-safari-home')
+        storages = os.path.join(home, 'Library', 'HTTPStorages')
+        safari_jar = os.path.join(storages, 'com.apple.Safari.binarycookies')
+        other_jar = os.path.join(storages, 'us.zoom.xos.binarycookies')
+        common.touch_file(safari_jar)
+        common.touch_file(other_jar)
+        with common.set_temporary_env('HOME', home):
+            paths = self._bundled_option_paths('safari', 'cookies', 'darwin')
+        self.assertIn(safari_jar, paths)
+        self.assertNotIn(other_jar, paths)
