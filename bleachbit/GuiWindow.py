@@ -73,6 +73,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _scroll_again = False
     _register_generation = 0
     _app_menu_generation = None
+    _worker_run = None
+    _worker_source = None
     recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
@@ -532,6 +534,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # If no confirmation is requested, skip the preview.
         if options.get("delete_confirmation"):
             self.preview_or_run_operations(False, operations)
+            preview = self.worker
             # Set the pending flag before the confirmation dialog because
             # the dialog runs a nested GTK main loop in which the preview
             # worker may finish and call worker_done().  If the flag is set
@@ -541,6 +544,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             if not self._confirm_delete(False, shred_settings):
                 # User dis-confirmed the deletion.
                 return False
+            if self.worker is preview and self._worker_source is not None:
+                # It would write to the delete log and call worker_done()
+                self._stop_worker()
             # User confirmed.  If the preview already finished during the
             # confirmation dialog, worker_done() removed _gui from backends.
             # Re-create it so the real delete worker can use it.
@@ -754,11 +760,32 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             logger.exception('Error in Worker()')
         else:
             self.start_time = time.time()
-            worker = self.worker.run()
-            GLib.idle_add(worker.__next__)
+            self._worker_run = self.worker.run()
+            self._worker_source = GLib.idle_add(self._step_worker,
+                                                self._worker_run)
+
+    def _step_worker(self, worker_run):
+        """Run the worker up to its next yield"""
+        try:
+            return next(worker_run)
+        except Exception:
+            # PyGObject drops the source after printing the error
+            if worker_run is self._worker_run:
+                self._worker_source = None
+            raise
+
+    def _stop_worker(self):
+        """Stop the running worker without letting it finish"""
+        if self._worker_source is None:
+            return
+        GLib.source_remove(self._worker_source)
+        self._worker_source = None
+        self._worker_run.close()
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
+        if worker is self.worker:
+            self._worker_source = None
         # Remove the temporary _gui cleaner used for shred-paths and
         # wipe-empty-space operations, so it does not leak into the tree
         # view on the next refresh. For confirmed deletes, keep it through

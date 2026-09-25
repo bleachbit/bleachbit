@@ -573,6 +573,47 @@ class GUITestCase(common.BleachbitTestCase):
             options.set('delete_confirmation', False)
             backends.pop('_gui', None)
 
+    def test_failed_worker_is_not_left_running(self):
+        """A worker that raises is not treated as still running"""
+        gui = self.get_window()
+        self.addCleanup(gui.set_sensitive, True)
+
+        def failing_run(_worker):
+            yield True
+            raise RuntimeError('worker failed')
+
+        with mock.patch('bleachbit.Worker.Worker.run', failing_run), \
+                common.capture_glib_exceptions() as glib_errors:
+            gui.preview_or_run_operations(False, {'system': ['tmp']})
+            self.refresh_gui()
+        self.assertEqual([RuntimeError], [error[0] for error in glib_errors])
+        self.assertIsNone(gui._worker_source)
+
+    def test_shred_paths_confirm_stops_running_preview(self):
+        """Confirming a shred stops the preview that is still running"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-shred-confirm')
+        for i in range(20):
+            self.write_file(os.path.join(dirname, f'file{i}'))
+        gui = self.get_window()
+        options.set('delete_confirmation', True)
+        self.refresh_gui()
+
+        try:
+            # Confirm before the preview gets a single idle step
+            with mock.patch.object(gui, '_confirm_delete', return_value=True), \
+                    mock.patch.object(gui, 'worker_done',
+                                      wraps=gui.worker_done) as worker_done:
+                gui.shred_paths([dirname])
+                self.assertTrue(self.wait_until(
+                    lambda: worker_done.called and gui.run_button_get_sensitive()))
+
+            self.assertEqual(
+                [True], [call.args[1] for call in worker_done.call_args_list])
+            self.assertNotExists(dirname)
+        finally:
+            options.set('delete_confirmation', False)
+            backends.pop('_gui', None)
+
     def test_shred_paths_clears_clipboard_mock(self):
         """Test that shred_paths with should_clear_clipboard=True clears the clipboard"""
         test_file = self.write_file('shred-me-via-clipboard')
