@@ -170,7 +170,9 @@ class FileActionProvider(ActionProvider):
                     # and for display.  Do not convert an empty path, or it will become
                     # the current directory (.).
                     path3 = os.path.normpath(path3)
-                self.paths.append(path3)
+                # $XDG_CONFIG_HOME/foo and ~/.config/foo are usually the same
+                if path3 not in self.paths:
+                    self.paths.append(path3)
 
     @classmethod
     def invalidate_cache(cls):
