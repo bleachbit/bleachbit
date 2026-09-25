@@ -914,9 +914,10 @@ class GUITestCase(common.BleachbitTestCase):
     def test_update_found_mid_operation(self):
         """An update found mid-operation leaves Preview/Clean disabled"""
         class SyncThread:
-            def __init__(self, target=None, args=()):
+            def __init__(self, target=None, args=(), daemon=None):
                 self.target = target
                 self.args = args
+                self.daemon = daemon
 
             def start(self):
                 self.target(*self.args)
