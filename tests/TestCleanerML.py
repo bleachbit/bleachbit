@@ -721,3 +721,27 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                     common.touch_file(entry)
                     self.assertIn(entry, self._bundled_option_paths(
                         'microsoft_edge', 'cache', 'linux'))
+
+    @common.skipIfWindows
+    def test_thunderbird_epiphany_cookie_keep_list(self):
+        """Thunderbird and Epiphany cookies go through the keep list"""
+        home = self.mkdtemp(prefix='bleachbit-cookie-keep')
+        config = os.path.join(home, '.config')
+        databases = {
+            'epiphany': os.path.join(config, 'epiphany', 'cookies.sqlite'),
+            'thunderbird': os.path.join(
+                home, '.thunderbird', 'abcd1234.default', 'cookies.sqlite'),
+        }
+        for path in databases.values():
+            common.touch_file(path)
+        with common.set_temporary_env('HOME', home), \
+                common.set_temporary_env('XDG_CONFIG_HOME', config), \
+                mock.patch('bleachbit.Action.load_keep_list',
+                           return_value={'example.com'}):
+            for cleaner_id, path in databases.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    cleaner = self._bundled_cleaner(cleaner_id, 'linux')
+                    commands = [cmd for cmd in cleaner.get_commands('cookies')
+                                if os.path.normpath(cmd.path) == path]
+                    self.assertEqual(1, len(commands))
+                    self.assertIsInstance(commands[0], Command.Function)
