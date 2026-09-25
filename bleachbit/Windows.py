@@ -601,10 +601,16 @@ def delete_updates():
         if os.path.exists(path1):
             yield Command.Delete(path1)
 
+    # Services the stop commands really stopped, so none in preview
+    stopped_services = []
+
     # Closure to bind service/start into a zero-arg callback for Command.Function
     def make_run_service(service, start):
         def run_wu_service():
-            return run_net_service_command(service, start)
+            ret = run_net_service_command(service, start)
+            if not start:
+                stopped_services.append(service)
+            return ret
         return run_wu_service
 
     all_services = ('wuauserv', 'cryptsvc', 'bits', 'msiserver')
@@ -612,32 +618,48 @@ def delete_updates():
     for service in all_services:
         if is_service_running(service):
             restart_services.append(service)
+    # Stopping a service also stops the ones that depend on it
+    for service in list(restart_services):
+        for dependent in get_running_dependent_services(service):
+            if dependent not in restart_services:
+                restart_services.append(dependent)
     services_stopped = False
     sdist_dir = os.path.expandvars(r'%windir%\SoftwareDistribution')
     if not os.path.exists(sdist_dir):
         return
 
-    for path2 in FileUtilities.children_in_directory(sdist_dir, True):
-        # If we find any files, stop services.
+    try:
+        for path2 in FileUtilities.children_in_directory(sdist_dir, True):
+            # If we find any files, stop services.
+            if not services_stopped:
+                services_stopped = True
+                for service in restart_services:
+                    # TRANSLATORS: Message in log file when stopping a Windows service.
+                    # The placeholder is the code name of the service.
+                    label = _("stop Windows service %(service)s") % {
+                        'service': service}
+                    yield Command.Function(None, make_run_service(service, False), label)
+            yield Command.Delete(path2)
+        yield Command.Delete(sdist_dir)
+
         if not services_stopped:
-            services_stopped = True
-            for service in restart_services:
-                # TRANSLATORS: Message in log file when stopping a Windows service.
-                # The placeholder is the code name of the service.
-                label = _("stop Windows service %(service)s") % {
-                    'service': service}
-                yield Command.Function(None, make_run_service(service, False), label)
-        yield Command.Delete(path2)
-    yield Command.Delete(sdist_dir)
+            return
 
-    if not services_stopped:
-        return
-
-    for service in restart_services:
-        # TRANSLATORS: Message in log file when starting a Windows service.
-        # The placeholder is the code name of the service.
-        label = _("start Windows service %(service)s") % {'service': service}
-        yield Command.Function(None, make_run_service(service, True), label)
+        for service in restart_services:
+            # TRANSLATORS: Message in log file when starting a Windows service.
+            # The placeholder is the code name of the service.
+            label = _("start Windows service %(service)s") % {
+                'service': service}
+            yield Command.Function(None, make_run_service(service, True), label)
+    except BaseException:
+        # An abort closes this generator before the start commands run,
+        # and starting a running service again is a no-op
+        for service in stopped_services:
+            try:
+                run_net_service_command(service, True)
+            except RuntimeError as e:
+                logger.error(e)
+        raise
 
 
 def is_service_running(service):
@@ -652,6 +674,25 @@ def is_service_running(service):
         raise RuntimeError(
             f'Unexpected service status code: {service_status_code}')
     return service_status_code == 4  # running
+
+
+def get_running_dependent_services(service):
+    """Return the running services that depend on this one, in start order"""
+    # pylint: disable-next=possibly-used-before-assignment
+    hscm = win32service.OpenSCManager(
+        None, None, win32service.SC_MANAGER_CONNECT)
+    try:
+        hs = win32service.OpenService(
+            hscm, service, win32service.SERVICE_ENUMERATE_DEPENDENTS)
+        try:
+            dependents = win32service.EnumDependentServices(
+                hs, win32service.SERVICE_ACTIVE)
+        finally:
+            win32service.CloseServiceHandle(hs)
+    finally:
+        win32service.CloseServiceHandle(hscm)
+    # EnumDependentServices lists them in stop order
+    return [name for name, _display_name, _status in reversed(dependents)]
 
 
 def run_net_service_command(service, start):
