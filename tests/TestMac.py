@@ -11,6 +11,7 @@ Test case for module Mac
 import errno
 import glob
 import os
+import plistlib
 import struct
 import subprocess
 from unittest import mock
@@ -344,7 +345,8 @@ class MacTestCase(common.BleachbitTestCase):
         domains = list_safari_cookies(path)
         self.assertEqual(domains, ['sub.domain.org', 'webkit.org'])
 
-        pages = _read_safari_cookie_records(path)
+        pages, trailer = _read_safari_cookie_records(path)
+        self.assertEqual(trailer, b'')
         self.assertEqual(len(pages), 1)
         self.assertEqual(len(pages[0]['records']), 2)
         self.assertEqual(pages[0]['records'][0][0], 'webkit.org')
@@ -352,7 +354,7 @@ class MacTestCase(common.BleachbitTestCase):
 
         # Test writing via _write_safari_cookie_records
         write_path = os.path.join(self.tempdir, 'rewritten.binarycookies')
-        _write_safari_cookie_records(write_path, pages)
+        _write_safari_cookie_records(write_path, pages, trailer)
         self.assertEqual(list_safari_cookies(write_path),
                          ['sub.domain.org', 'webkit.org'])
 
@@ -418,6 +420,57 @@ class MacTestCase(common.BleachbitTestCase):
                 self.assertFalse(res['whole_file_deleted'])
                 self.assertEqual(res['file_size_reduction'], 0)
         self.assertTrue(os.path.exists(path))
+
+    @common.skipUnlessMac
+    def test_delete_safari_cookies_keeps_trailer(self):
+        """A rewrite keeps the footer and metadata and updates the checksum"""
+        metadata = plistlib.dumps({'NSHTTPCookieAcceptPolicy': 2},
+                                  fmt=plistlib.FMT_BINARY)
+        footer = b'\x07\x17\x20\x05' + \
+            struct.pack('>I', len(metadata)) + metadata
+        pages = [
+            {'records': [('github.com', self._make_cookie_record('github.com')),
+                         ('webkit.org', self._make_cookie_record('webkit.org'))]},
+            {'records': [('webkit.org', self._make_cookie_record('webkit.org'))]},
+        ]
+        path = self.mkstemp(suffix='.binarycookies')
+        with open(path, 'wb') as f:
+            # The serializer fills in the checksum
+            f.write(_serialize_safari_cookie_records(
+                pages, b'\0' * 4 + footer))
+
+        res = delete_safari_cookies(path, {'github.com'}, really_delete=True)
+        self.assertEqual(res['total_kept'], 1)
+        self.assertEqual(list_safari_cookies(path), ['github.com'])
+
+        with open(path, 'rb') as f:
+            data = f.read()
+        # The page left empty is dropped
+        self.assertEqual(struct.unpack_from('>I', data, 4)[0], 1)
+        page_size = struct.unpack_from('>I', data, 8)[0]
+        page = data[12:12 + page_size]
+        checksum = sum(page[i] for i in range(0, len(page), 4))
+        self.assertEqual(data[12 + page_size:],
+                         struct.pack('>I', checksum) + footer)
+
+    @common.skipUnlessMac
+    def test_delete_safari_cookies_refuses_unknown_trailer(self):
+        """A trailer whose checksum does not match is left alone"""
+        path = self._create_binarycookies_file([
+            ('github.com', self._make_cookie_record('github.com')),
+            ('webkit.org', self._make_cookie_record('webkit.org')),
+        ])
+        with open(path, 'ab') as f:
+            f.write(b'\xff\xff\xff\xff\x07\x17\x20\x05')
+        with open(path, 'rb') as f:
+            original = f.read()
+
+        with self.assertLogs('bleachbit.Mac', level='ERROR'):
+            res = delete_safari_cookies(
+                path, {'github.com'}, really_delete=True)
+        self.assertTrue(res['skipped'])
+        with open(path, 'rb') as f:
+            self.assertEqual(f.read(), original)
 
     @common.skipUnlessMac
     def test_delete_safari_cookies_empty_keep_list_raises(self):
