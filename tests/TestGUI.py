@@ -325,6 +325,32 @@ class GUITestCase(common.BleachbitTestCase):
                 options.set('auto_detect_lang', True)
                 options.set('forced_language', '')
 
+    def test_preferences_undecodable_path(self):
+        """Paths that are not valid UTF-8 reach GTK only sanitized"""
+        saved = os.path.join(self.tempdir, 'caf\udce9')
+        added = os.path.join(self.tempdir, 'na\udcefve')
+        options.set_list('shred_drives', [saved])
+        pref = self.app.get_preferences_dialog()
+        try:
+            page = pref.page_stack.get_child_by_name('drives')
+            with mock.patch('bleachbit.GuiBasic.browse_folder', return_value=added):
+                self.find_widget(page, Gtk.Button, 'Add').clicked()
+            self.assertEqual(options.get_list('shred_drives'), [saved, added])
+            treeview = self.find_widget(page, Gtk.TreeView)
+            treeview.get_selection().select_path(Gtk.TreePath(0))
+            self.find_widget(page, Gtk.Button, 'Remove').clicked()
+            self.assertEqual(options.get_list('shred_drives'), [added])
+
+            options.set('expert_mode', True)
+            with mock.patch('bleachbit.ProtectedPath.check_protected_path',
+                            return_value={'case_sensitive': True}), \
+                    mock.patch('bleachbit.ProtectedPath.calculate_impact',
+                               return_value={'file_count': 0, 'size_human': '0B'}), \
+                    mock.patch.object(Gtk.Dialog, 'run', return_value=Gtk.ResponseType.OK):
+                self.assertTrue(pref._check_protected_path(saved))
+        finally:
+            pref.dialog.destroy()
+
     def test_preferences_cookies_page(self):
         """Opens the preferences dialog and navigates to cookies page"""
         pref = self.app.get_preferences_dialog()

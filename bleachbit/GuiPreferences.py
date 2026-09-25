@@ -598,7 +598,7 @@ class PreferencesDialog(InfoBarMixin):
             pathname = GuiBasic.browse_folder(
                 self.parent, title, multiple=False, stock_button=Gtk.STOCK_ADD)
             if pathname:
-                liststore.append([pathname])
+                liststore.append([sanitize_surrogates(pathname)])
                 pathnames.append(pathname)
                 options.set_list('shred_drives', pathnames)
 
@@ -609,9 +609,10 @@ class PreferencesDialog(InfoBarMixin):
             if _iter is None:
                 # nothing selected
                 return
-            pathname = model[_iter][0]
+            # The row shows a sanitized path, so remove by position
+            row_index = model.get_path(_iter).get_indices()[0]
             liststore.remove(_iter)
-            pathnames.remove(pathname)
+            pathnames.pop(row_index)
             options.set_list('shred_drives', pathnames)
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
@@ -642,7 +643,7 @@ class PreferencesDialog(InfoBarMixin):
 
         pathnames = sorted(options.get_list('shred_drives') or [])
         for pathname in pathnames:
-            liststore.append([pathname])
+            liststore.append([sanitize_surrogates(pathname)])
         treeview = Gtk.TreeView.new_with_model(liststore)
         crt = Gtk.CellRendererText()
         tvc = Gtk.TreeViewColumn(None, crt, text=0)
@@ -801,7 +802,8 @@ class PreferencesDialog(InfoBarMixin):
         impact = ProtectedPath.calculate_impact(pathname)
 
         # Generate warning message
-        warning_msg = ProtectedPath.get_warning_message(pathname, impact)
+        warning_msg = ProtectedPath.get_warning_message(
+            sanitize_surrogates(pathname), impact)
 
         # Show warning dialog
         confirmed, remember = GuiBasic.warning_confirm_dialog(
