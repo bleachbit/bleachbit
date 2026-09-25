@@ -175,6 +175,25 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         ]
         self.assertEqual(paths, [filename])
 
+    @common.skipIfWindows
+    def test_scan_root(self):
+        """DeepScan walks the root, which is only protected from deletion"""
+        walked = []
+
+        def fake_walk(top, **_kwargs):
+            walked.append(top)
+            yield top, [], ['foo.bbtestbak']
+
+        searches = {'/': [Search(command='delete', regex=r'\.bbtestbak$')]}
+        with mock.patch('bleachbit.DeepScan.normalized_walk', fake_walk):
+            paths = [
+                cmd.path
+                for cmd in DeepScan(searches).scan()
+                if cmd is not True
+            ]
+        self.assertEqual(walked, ['/'])
+        self.assertEqual(paths, ['/foo.bbtestbak'])
+
     @common.skipUnlessWindows
     def test_scan_does_not_follow_junction(self):
         """DeepScan must not descend into a junction"""
