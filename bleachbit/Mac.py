@@ -13,6 +13,8 @@ import logging
 import os
 import platform
 import plistlib
+import re
+import shlex
 import subprocess
 import xml.parsers.expat
 from pathlib import Path
@@ -92,10 +94,33 @@ def _get_apple_locale_via_defaults():
     unaffected by whatever session/TCC context differs between those
     two launch paths, and is tried first.
     """
+    # defaults is a signed Apple binary launched as a child of
+    # BleachBit's own (unsigned/ad-hoc-signed) bundled Python -- same
+    # DYLD_LIBRARY_PATH inheritance issue already found and fixed for
+    # osascript (notify_macos(), delete_with_admin_privileges()):
+    # inheriting DYLD_LIBRARY_PATH (set by the bundled Python to find
+    # its own packaged libraries) or any other DYLD_* variable trips
+    # the kernel's code-signing check (cs_invalid_page) inside a
+    # strictly-signed system binary, killing it with SIGKILL.
+    # Reproduced against a real /Applications/BleachBit.app on a Mac
+    # mini M1 (Apple Silicon), confirmed via a full crash report
+    # (parentProc: BleachBit, termination: CODESIGNING/Invalid Page)
+    # and, isolated from BleachBit entirely, by hand:
+    # `DYLD_LIBRARY_PATH=<app>/Contents/Frameworks/lib defaults read -g
+    # AppleLocale` alone reliably kills the process (exit 137) on this
+    # same machine, while the identical command with no DYLD_* set
+    # succeeds normally. Reproduced on both macOS Tahoe 26.6.2 and
+    # macOS 27.0 on this machine -- never observed on a Mac mini M4
+    # with the identical app bundle. Give defaults a clean environment
+    # instead of silently inheriting BleachBit's, same as the other
+    # two call sites.
+    clean_env = {k: v for k, v in os.environ.items()
+                 if not k.startswith('DYLD_')}
     try:
         result = subprocess.run(
             ['defaults', 'read', '-g', 'AppleLocale'],
-            capture_output=True, text=True, timeout=2, check=False)
+            capture_output=True, text=True, timeout=2, check=False,
+            env=clean_env)
     except (OSError, ValueError, subprocess.SubprocessError) as e:
         # SubprocessError covers TimeoutExpired, which is not an OSError.
         logger.debug('failed to read AppleLocale: %s', e)
@@ -163,9 +188,29 @@ def notify_macos(msg):
 
     script = 'display notification "{}" with title "{}"'.format(
         _escape(msg), _escape(APP_NAME))
+    # osascript is a signed Apple binary launched as a child of
+    # BleachBit's own (unsigned/ad-hoc-signed) bundled Python -- same
+    # issue as delete_with_admin_privileges() above: inheriting
+    # DYLD_LIBRARY_PATH (set by the bundled Python to find its own
+    # packaged libraries) or any other DYLD_* variable trips the
+    # kernel's code-signing check (cs_invalid_page) inside a
+    # strictly-signed system binary, killing it with SIGKILL.
+    # Reproduced against a real /Applications/BleachBit.app on a Mac
+    # mini M1 (Apple Silicon, no Rosetta translation involved),
+    # confirmed via the unified system log and crash reports
+    # (parentProc: BleachBit, termination: CODESIGNING/Invalid Page).
+    # Intermittent -- not observed on a Mac mini M4 with the identical
+    # app bundle, likely a dyld-internal timing/race rather than
+    # anything specific to either machine's files -- but confirmed
+    # repeatable across multiple runs and reinstalls on the M1. Give
+    # osascript a clean environment instead of silently inheriting
+    # BleachBit's, same as the elevated-delete path.
+    clean_env = {k: v for k, v in os.environ.items()
+                 if not k.startswith('DYLD_')}
     try:
         subprocess.run(['osascript', '-e', script],
-                       capture_output=True, timeout=5, check=False)
+                       capture_output=True, timeout=5, check=False,
+                       env=clean_env)
     except (OSError, subprocess.SubprocessError) as e:
         logger.debug('osascript notification failed: %s', e)
 
@@ -712,3 +757,113 @@ def delete_safari_cookies(path, keep_list, really_delete=False):
     return _apply_safari_cookie_deletion(
         path, new_pages, kept_count, deleted_count,
         original_size, shred_enabled)
+
+
+# Deliberately narrow: this only ever allows deleting things inside an
+# orphaned app-version folder matching this exact structure (e.g. what
+# orphaned_framework_versions() in Unix.py finds under a browser's
+# .app bundle). BleachBit's general-purpose protected-path list
+# (bleachbit.ProtectedPath) is designed as a safety net for ordinary,
+# unprivileged deletion -- it does not cover macOS system paths like
+# /System or /Library at all (confirmed by hand: check_protected_path
+# returned None for '/System'), so it is not a safe gate on its own
+# for a function that deletes with root privileges via `rm -rf`. A
+# structural allowlist that this function can only ever touch paths
+# of this one specific shape is a much stronger guarantee than trying
+# to enumerate everything that must be refused.
+_ELEVATED_DELETE_ALLOWED_PATH_RE = re.compile(
+    r'^(/Applications/[^/]+\.app/Contents/Frameworks/'
+    r'[^/]+\.framework/Versions/[^/]+)(/.*)?$')
+
+
+def elevated_delete_paths_eligible(paths):
+    """Return whether every path in paths matches
+    _ELEVATED_DELETE_ALLOWED_PATH_RE, i.e. whether
+    delete_with_admin_privileges() would actually accept them.
+
+    Lets a caller (e.g. the GUI) decide whether to offer the
+    elevated-retry prompt at all, instead of only finding out it was
+    never going to work after the user has already said yes.
+    """
+    if not paths:
+        return True
+    return all(
+        path and _ELEVATED_DELETE_ALLOWED_PATH_RE.match(path)
+        for path in paths)
+
+
+def delete_with_admin_privileges(paths):
+    """Delete the given files/directories using macOS's native
+    per-action privilege-elevation prompt (osascript's 'do shell
+    script ... with administrator privileges'), the same mechanism
+    apps such as OnyX use, instead of requiring the whole application
+    to be launched as root.
+
+    Refuses to proceed unless every path matches
+    _ELEVATED_DELETE_ALLOWED_PATH_RE -- see the comment above it for
+    why BleachBit's general-purpose protected-path list is not a safe
+    enough gate here on its own.
+
+    Returns True if the deletion succeeded, False if any path was
+    rejected, the user canceled the privilege prompt (osascript exits
+    non-zero with 'User canceled.' / '(-128)' in stderr), or the
+    deletion itself failed for any other reason.
+    """
+    if not paths:
+        return True
+
+    # A single orphaned version folder can contain hundreds of
+    # individual files, each reported as its own failed path -- rm -rf
+    # on every one of those individually (rather than once on the
+    # shared parent folder) risks building a shell command longer than
+    # the operating system allows for a single process invocation.
+    # Collapse to the unique '.../Versions/<version>' root(s) instead;
+    # rm -rf on the folder itself removes everything inside in one
+    # shot, and doubles as the same allowlist check as before.
+    version_dirs = set()
+    for path in paths:
+        match = _ELEVATED_DELETE_ALLOWED_PATH_RE.match(path) if path else None
+        if not match:
+            logger.error(
+                'refusing elevated delete of path outside the allowed '
+                'orphaned-app-version pattern: %r', path)
+            return False
+        version_dirs.add(match.group(1))
+
+    shell_cmd = 'rm -rf -- ' + \
+        ' '.join(shlex.quote(p) for p in sorted(version_dirs))
+    # Escape for embedding inside an AppleScript double-quoted string
+    # literal -- a separate escaping step from shlex.quote's
+    # shell-level escaping above, since the whole shell_cmd string is
+    # itself embedded inside an outer AppleScript string.
+    applescript_cmd = shell_cmd.replace('\\', '\\\\').replace('"', '\\"')
+    script = 'do shell script "%s" with administrator privileges' % applescript_cmd
+
+    # osascript is a signed Apple binary launched as a child of
+    # BleachBit's own (unsigned/ad-hoc-signed) bundled Python. If it
+    # inherits DYLD_LIBRARY_PATH (set by the bundled Python to find its
+    # own packaged libraries) or any other DYLD_* variable, the
+    # dynamic linker's attempt to honor it inside a strictly-signed
+    # system binary trips the kernel's code-signing check
+    # (cs_invalid_page), which kills the process with SIGKILL before
+    # it produces any output -- reproduced against a real
+    # /Applications/BleachBit.app launched from Finder (returncode -9,
+    # empty stdout/stderr). Give osascript a clean environment instead
+    # of silently inheriting BleachBit's.
+    clean_env = {k: v for k, v in os.environ.items()
+                 if not k.startswith('DYLD_')}
+
+    try:
+        result = subprocess.run(
+            ['osascript', '-e', script],
+            capture_output=True, text=True, timeout=120, check=False,
+            env=clean_env)
+    except (OSError, ValueError, subprocess.SubprocessError) as e:
+        logger.debug('failed to run osascript for elevated delete: %s', e)
+        return False
+
+    if result.returncode != 0:
+        logger.debug('elevated delete failed or was canceled: %s',
+                     result.stderr.strip())
+        return False
+    return True
