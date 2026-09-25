@@ -102,10 +102,14 @@ def init_log():
                 fd = os.open(debug_log_path,
                              os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
                 os.close(fd)
-            file_handler = logging.FileHandler(debug_log_path)
+            file_handler = logging.FileHandler(
+                debug_log_path, encoding='utf-8')
         except OSError as e:
             logger.error('Cannot open debug log: %s', e)
             return logger
+        # Keep lines with undecodable paths. FileHandler takes no errors
+        # argument before Python 3.9.
+        file_handler.stream.reconfigure(errors='backslashreplace')
         # Always use DEBUG level for log file.
         file_handler.setLevel(logging.DEBUG)
         # removed: %(name)s

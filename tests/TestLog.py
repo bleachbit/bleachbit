@@ -74,3 +74,14 @@ class LogTestCase(common.BleachbitTestCase):
                             if h not in self.saved_handlers]
             self.assertFalse(any(isinstance(h, logging.FileHandler)
                                  for h in new_handlers))
+
+    def test_init_log_debug_log_undecodable_path(self):
+        """A line with an undecodable path reaches the debug log"""
+        debug_log_path = os.path.join(self.tempdir, 'debug.log')
+        with mock.patch.object(sys, 'argv', ['bleachbit', '--debug-log', debug_log_path]):
+            logger = init_log()
+        logger.info('path: %s', 'caf\udce9 \u4e2d')
+        for handler in logger.handlers:
+            handler.flush()
+        with open(debug_log_path, encoding='utf-8') as f:
+            self.assertIn('path: caf\\udce9 \u4e2d', f.read())
