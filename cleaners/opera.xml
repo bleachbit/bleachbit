@@ -168,7 +168,6 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
     <action command="delete" search="walk.all" path="$$profile$$/Session Storage"/>
     <!-- Before Opera 15 -->
     <action command="delete" search="walk.all" path="%AppData%\Opera\Opera*\pstorage\"/>
