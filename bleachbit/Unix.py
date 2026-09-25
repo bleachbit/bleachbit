@@ -665,7 +665,7 @@ def wine_to_linux_path(wineprefix, windows_pathname):
     return os.path.join(wineprefix, windows_pathname)
 
 
-def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line_regexes=None):
+def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line_regexes=None, hformat='si'):
     """Runs a specified command and returns how much space was (reportedly) freed.
     The subprocess shouldn't need any user input and the user should have the
     necessary rights.
@@ -685,7 +685,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
     for line in output.split('\n'):
         m = freed_space_regex.match(line)
         if m is not None:
-            freed_space += FileUtilities.human_to_bytes(m.group(1))
+            freed_space += FileUtilities.human_to_bytes(m.group(1), hformat)
         for error_re in error_line_regexes:
             if error_re.search(line):
                 raise RuntimeError('Invalid output from %s: %s' % (cmd, line))
@@ -696,7 +696,8 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
 def journald_clean():
     """Clean the system journals"""
     try:
-        return run_cleaner_cmd(General.resolve_exe('journalctl'), ['--vacuum-size=1'], JOURNALD_REGEX)
+        # journalctl prints 1024-based sizes such as 128.0K and 8.0M
+        return run_cleaner_cmd(General.resolve_exe('journalctl'), ['--vacuum-size=1'], JOURNALD_REGEX, hformat='du')
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
