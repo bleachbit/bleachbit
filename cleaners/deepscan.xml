@@ -77,12 +77,12 @@ Be careful not to match files such as ~/.htpasswd
 https://github.com/bleachbit/bleachbit/issues/683
 
 -->
-    <action command="delete" search="deep" regex="^.*\.sw[nop]$"/>
+    <action command="delete" search="deep" regex="^.*\.sw[nop]$" skip_open="true"/>
   </option>
   <option id="vim_swap_root">
     <label>VIM swap files across system</label>
     <description>Delete the backup files</description>
     <warning>This option is slow.</warning>
-    <action command="delete" search="deep" regex="^.*\.sw[nop]$" path="/" os="linux"/>
+    <action command="delete" search="deep" regex="^.*\.sw[nop]$" path="/" os="linux" skip_open="true"/>
   </option>
 </cleaner>
