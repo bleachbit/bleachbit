@@ -26,6 +26,7 @@ Store and retrieve user preferences
 import atexit
 import configparser
 import errno
+import hashlib
 import logging
 import os
 import re
@@ -47,6 +48,9 @@ FLUSH_DELAY_SECS = 15.0  # decimal seconds
 
 # Matches a Windows drive-letter key that lost its colon to ConfigParser
 _HASHPATH_DRIVE_RE = re.compile(r'^[a-z]\\')
+
+_PROTECTED_PATH_PREFIX = 'protected_path:'
+_SHA256_HEX_RE = re.compile(r'[0-9a-f]{64}')
 
 OPTION_DEFAULTS = {
     'auto_hide': {'value': True},
@@ -131,6 +135,16 @@ def path_to_option(pathname):
         # ConfigParser treats colons in a special way
         pathname = pathname[0] + pathname[2:]
     return pathname
+
+
+def protected_path_warning_key(pathname):
+    """Return the [warnings] key that remembers a protected path
+
+    Hashed, since an INI key cannot hold '=' or a line break.
+    """
+    digest = hashlib.sha256(
+        pathname.encode('utf-8', 'surrogatepass')).hexdigest()
+    return _PROTECTED_PATH_PREFIX + digest
 
 
 def _open_config_write(path):
@@ -335,6 +349,19 @@ class Options:
                 migrated_option = f'{option}:{suffix}'
                 if not self.config.has_option(section, migrated_option):
                     self.config.set(section, migrated_option, warning_value)
+                self.config.remove_option(section, option)
+                migrated = True
+            # Protected paths used to be stored raw instead of hashed
+            for option in tuple(self.config.options(section)):
+                if not option.startswith(_PROTECTED_PATH_PREFIX):
+                    continue
+                pathname = option[len(_PROTECTED_PATH_PREFIX):]
+                if _SHA256_HEX_RE.fullmatch(pathname):
+                    continue
+                hashed_option = protected_path_warning_key(pathname)
+                if not self.config.has_option(section, hashed_option):
+                    self.config.set(section, hashed_option,
+                                    self.config.get(section, option))
                 self.config.remove_option(section, option)
                 migrated = True
             if migrated:
@@ -611,7 +638,13 @@ class Options:
 
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""
-        self.set(path_to_option(pathname), hashvalue, 'hashpath')
+        option = path_to_option(pathname)
+        if '=' in option:
+            # ConfigParser cannot write its delimiter in a key
+            logger.warning("Cannot remember the hash of a path containing '=': %s",
+                           pathname)
+            return
+        self.set(option, hashvalue, 'hashpath')
 
     def set_list(self, key, values):
         """Set a value which is a list data type"""
