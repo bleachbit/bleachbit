@@ -73,6 +73,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _scroll_again = False
     _register_generation = 0
     _app_menu_generation = None
+    _quit_after_worker = False
     _refresh_pending = False
     _worker_run = None
     _worker_source = None
@@ -568,6 +569,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # continue with deletion.
         self.preview_or_run_operations(True, operations)
         if shred_settings:
+            # Exiting in worker_done() would skip the caller's config rebuild
+            self._quit_after_worker = True
             return True
 
         if self._auto_exit:
@@ -831,7 +834,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # if the option is selected under preference.
 
         if really_delete:
-            if options.get("exit_done"):
+            if options.get("exit_done") and not self._quit_after_worker:
                 sys.exit()
 
         # notification for long-running process
