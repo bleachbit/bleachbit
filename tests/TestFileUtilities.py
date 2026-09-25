@@ -84,6 +84,7 @@ from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_LINUX, IS_POSIX,
 if IS_WINDOWS:
     from bleachbit import Windows
     # pylint: disable=import-error
+    import pywintypes
     import win32api
     import win32com.shell
     import win32con
@@ -2597,6 +2598,75 @@ State=AAAA/wA...
                 self.assert_is_whitelisted(temp_root + '\\')
                 self.assertFalse(whitelisted(temp_root + r'\bleachbit.tmp'))
                 self.assertFalse(whitelisted(temp_root + r'\subdir'))
+
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_aliases(self):
+        """Keep list matches the Sysnative and 8.3 spellings of a kept path"""
+        windir = os.path.expandvars('%windir%')
+        options.set_whitelist_paths(
+            [('folder', os.path.join(windir, 'System32', 'LogFiles'))])
+        self.assert_is_whitelisted(
+            os.path.join(windir, 'Sysnative', 'LogFiles', 'foo.log'))
+        self.assertFalse(whitelisted(
+            os.path.join(windir, 'SysWOW64', 'LogFiles', 'foo.log')))
+
+        # pylint: disable=c-extension-no-member
+        long_dir = win32api.GetLongPathName(
+            self.mkdir(os.path.join(self.mkdtemp(), 'long directory name')))
+        short_dir = win32api.GetShortPathName(long_dir)
+        if short_dir == long_dir:
+            self.skipTest('8.3 names are disabled on this volume')
+        short_file = self.write_file(os.path.join(short_dir, 'foo.log'))
+        options.set_whitelist_paths([('folder', long_dir)])
+        self.assert_is_whitelisted(short_dir)
+        self.assert_is_whitelisted(short_file)
+
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_spelling_cache(self):
+        """Windows is asked for a long name once per directory and entry"""
+        temp = r'C:\Users\JOHNSM~1\AppData\Local\Temp'
+        keep_file = r'C:\Users\JOHNSM~1\Desktop\NEWFOL~1\keep.txt'
+        created = []
+
+        def long_name(path):
+            if 'newfol~1' in path.lower() and not created:
+                # pylint: disable-next=c-extension-no-member,possibly-used-before-assignment
+                raise pywintypes.error(2, 'GetLongPathName', 'not found')
+            return path.replace('JOHNSM~1', 'John Smith').replace(
+                'NEWFOL~1', 'New folder')
+
+        caches = (
+            unittest.mock.patch.dict(
+                'bleachbit.FileUtilities._long_dir_names', clear=True),
+            unittest.mock.patch.dict(
+                'bleachbit.FileUtilities._keep_list_cache',
+                {'entries': (), 'spellings': {}}, clear=True))
+        for cache in caches:
+            cache.start()
+            self.addCleanup(cache.stop)
+        options.set_whitelist_paths(
+            [('folder', temp + r'\keep'), ('file', keep_file)])
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.win32file.GetLongPathName',
+                side_effect=long_name) as mock_long:
+            for i in range(50):
+                self.assertTrue(whitelisted(fr'{temp}\keep\file{i}.txt'))
+                self.assertFalse(whitelisted(fr'{temp}\other\file{i}.txt'))
+            temp_calls = [call.args[0] for call in mock_long.call_args_list
+                          if 'appdata' in call.args[0].lower()]
+            self.assertEqual(3, len(temp_calls), temp_calls)
+            # the entry for a folder not created yet is spelled again later
+            long_keep_file = r'C:\Users\John Smith\Desktop\New folder\keep.txt'
+            self.assertFalse(whitelisted(long_keep_file))
+            created.append(True)
+            self.assertTrue(whitelisted(long_keep_file))
+            # the next run asks again, for the entry and the directory
+            from bleachbit.FileUtilities import clear_path_spellings
+            clear_path_spellings()
+            self.assertTrue(whitelisted(fr'{temp}\keep\file0.txt'))
+            temp_calls = [call.args[0] for call in mock_long.call_args_list
+                          if 'appdata' in call.args[0].lower()]
+            self.assertEqual(5, len(temp_calls), temp_calls)
 
     @common.skipIfWindows
     def test_whitelisted_posix_symlink(self):

@@ -1593,6 +1593,90 @@ def _windows_preserved_temp_dir(path):
     return False
 
 
+_WINDIR_SYSNATIVE = os.path.expandvars(r'%windir%\sysnative').lower()
+_WINDIR_SYSTEM32 = os.path.expandvars(r'%windir%\system32').lower()
+# Long names of 8.3 directories, so a walk asks Windows once per directory
+_long_dir_names = {}
+# The keep list as spelled last, with the spelling of each settled entry
+_keep_list_cache = {'entries': (), 'spellings': {}}
+
+
+def _windows_long_path(path):
+    """Return the long name of an 8.3 path, or None when it has none yet"""
+    try:
+        return win32file.GetLongPathName(path)
+    except pywinerror:
+        # e.g. the path does not exist
+        return None
+
+
+def _windows_spelling(path):
+    """Spell a Windows path the way the folder picker does
+
+    %TEMP% is often an 8.3 short path, and the 32-bit build reaches the
+    native System32 through Sysnative. The second value is False when a
+    short name has no long name yet, e.g. because the path does not exist.
+    """
+    path = os.path.normpath(path)
+    settled = True
+    if '~' in path:
+        dirname, basename = os.path.split(path)
+        if '~' in dirname:
+            long_dir = _long_dir_names.get(dirname)
+            if long_dir is None:
+                long_dir = _windows_long_path(dirname)
+                if long_dir is None:
+                    settled = False
+                else:
+                    if len(_long_dir_names) >= 1000:
+                        _long_dir_names.clear()
+                    _long_dir_names[dirname] = long_dir
+            if long_dir is not None:
+                path = os.path.join(long_dir, basename)
+        if '~' in basename:
+            long_path = _windows_long_path(path)
+            if long_path is None:
+                settled = False
+            else:
+                path = long_path
+    if (path.lower() == _WINDIR_SYSNATIVE
+            or path_startswith(path, _WINDIR_SYSNATIVE, case_sensitive=False)):
+        path = _WINDIR_SYSTEM32 + path[len(_WINDIR_SYSNATIVE):]
+    return path, settled
+
+
+def _windows_keep_list(keep_paths):
+    """Return the keep list with each path spelled by _windows_spelling()
+
+    Spelled once per keep list, since it is read for every file. An entry
+    that is not settled is spelled again next time.
+    """
+    entries = tuple(keep_paths)
+    if entries != _keep_list_cache['entries']:
+        _keep_list_cache['entries'] = entries
+        _keep_list_cache['spellings'] = {}
+    spellings = _keep_list_cache['spellings']
+    keep_list = []
+    for kind, path in entries:
+        spelling = spellings.get(path)
+        if spelling is None:
+            spelling, settled = _windows_spelling(path)
+            if settled:
+                spellings[path] = spelling
+        keep_list.append((kind, spelling))
+    return keep_list
+
+
+def clear_path_spellings():
+    """Forget the spellings cached for the last run
+
+    An 8.3 name can be reused by another folder between two runs.
+    """
+    _long_dir_names.clear()
+    _keep_list_cache['entries'] = ()
+    _keep_list_cache['spellings'] = {}
+
+
 def whitelisted_windows(path):
     """Check whether this Windows path is whitelisted"""
     if not isinstance(path, str):
@@ -1600,19 +1684,23 @@ def whitelisted_windows(path):
     if _windows_preserved_temp_dir(path):
         return True
     from bleachbit.Options import options
-    for pathname in options.get_whitelist_paths():
+    keep_paths = options.get_whitelist_paths()
+    if not keep_paths:
+        return False
+    path = _windows_spelling(path)[0]
+    for kind, keep_path in _windows_keep_list(keep_paths):
         # Windows is case insensitive
-        if (pathname[0] == 'file'
-                and path_equal(path, pathname[1], case_sensitive=False)):
+        if (kind == 'file'
+                and path_equal(path, keep_path, case_sensitive=False)):
             return True
-        if pathname[0] == 'folder':
-            if path_equal(path, pathname[1], case_sensitive=False):
+        if kind == 'folder':
+            if path_equal(path, keep_path, case_sensitive=False):
                 return True
-            if path_startswith(path, pathname[1], case_sensitive=False):
+            if path_startswith(path, keep_path, case_sensitive=False):
                 return True
             # Simple drive letter like C:\ matches everything below
-            if (len(pathname[1]) == 3
-                    and path.lower().startswith(pathname[1].lower())):
+            if (len(keep_path) == 3
+                    and path.lower().startswith(keep_path.lower())):
                 return True
     return False
 
