@@ -456,6 +456,10 @@ def is_trusted_cleaner(pathname):
 
 def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     """Scan for CleanerML and load them"""
+    if IS_POSIX:
+        from bleachbit import Unix
+        # handle_localizations() adds to this tree on every load
+        Unix.locales = Unix.Locales()
     cleanerml_files = list(list_cleanerml_files(system_only=not allow_local))
     cleanerml_files.sort()
     if not cleanerml_files:

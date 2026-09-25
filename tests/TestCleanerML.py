@@ -138,6 +138,29 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
 
+    @common.skipUnlessLinux
+    def test_load_cleaners_twice_localizations(self):
+        """Reloading cleaners does not add the localization rules again"""
+        from bleachbit import Unix
+        tempdir = self.mkdtemp(prefix='bleachbit-cleanerml-loc')
+        os.makedirs(os.path.join(tempdir, 'share', 'locale', 'fr'))
+        cleaners_dir = os.path.join(tempdir, 'cleaners')
+        os.mkdir(cleaners_dir)
+        self.write_file(os.path.join(cleaners_dir, 'loc.xml'), text=(
+            '<cleaner id="loctest" os="linux"><label>x</label><localizations>'
+            f'<path location="{tempdir}/share"><path location="locale" filter="*"/></path>'
+            '</localizations></cleaner>'))
+        with mock.patch.object(bleachbit, 'personal_cleaners_dir', cleaners_dir), \
+                mock.patch.object(bleachbit, 'local_cleaners_dir', None), \
+                mock.patch.object(bleachbit, 'system_cleaners_dir', None), \
+                mock.patch.object(Unix, 'locales', Unix.Locales()), \
+                mock.patch.dict(Cleaner.backends):
+            list(load_cleaners())
+            list(load_cleaners())
+            paths = list(Unix.locales.localization_paths(['en']))
+        self.assertEqual(
+            paths, [os.path.join(tempdir, 'share', 'locale', 'fr')])
+
     def test_untrusted_process_action(self):
         """A process action is ignored for an untrusted cleaner"""
         xml_str = (
