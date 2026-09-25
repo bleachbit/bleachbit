@@ -134,7 +134,7 @@ class CookieManagerPane(Gtk.Box):
         # TRANSLATORS: Column header in the manage cookies dialog.
         # 'Host' is a noun meaning the website hostname (domain name) of the cookie.
         column_domain = Gtk.TreeViewColumn(_("Host"), renderer_text, text=1)
-        column_domain.set_sort_column_id(1)
+        # Not sortable: a TreeModelFilter cannot sort, and rows are added sorted.
         column_domain.set_resizable(True)
         column_domain.set_expand(True)
         self.treeview.append_column(column_domain)

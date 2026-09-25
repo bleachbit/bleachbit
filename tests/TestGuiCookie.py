@@ -25,6 +25,7 @@ from bleachbit.GtkShim import is_gtk_available
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
+    from bleachbit.GtkShim import Gtk
     from bleachbit.GuiCookie import CookieManagerPane
 
 
@@ -88,4 +89,14 @@ class GuiCookieTestCase(common.BleachbitTestCase):
         pane.on_select_all_clicked(None)
         with open(keep_path, encoding='utf-8') as f:
             self.assertEqual(json.load(f), ['b.example'])
+        pane.destroy()
+
+    def test_columns_do_not_sort_filter_model(self):
+        """A sortable column needs a sortable model, which a filter is not"""
+        with mock.patch('bleachbit.GuiCookie.threading.Thread'):
+            pane = CookieManagerPane()
+        # pylint: disable-next=possibly-used-before-assignment
+        if not isinstance(pane.treeview.get_model(), Gtk.TreeSortable):
+            for column in pane.treeview.get_columns():
+                self.assertEqual(column.get_sort_column_id(), -1)
         pane.destroy()
