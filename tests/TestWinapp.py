@@ -756,6 +756,61 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         self.assertGreaterEqual(len(steps), 3)
         self.assertEqual(len(cleaner.actions), 3)
 
+    def test_load_cleaners_merges_system_file(self):
+        """The system winapp2.ini adds to the personal one, not replaces it"""
+        personal = self.write_file(
+            'winapp2-personal.ini',
+            text='[NewApp *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-new.tmp\n'
+            '[SharedApp *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-personal.tmp\n')
+        system = self.write_file(
+            'winapp2-system.ini',
+            text='[OldApp *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-old.tmp\n'
+            '[SharedApp *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-system.tmp\n')
+
+        with mock.patch('bleachbit.Winapp.list_winapp_files',
+                        return_value=[personal, system]), \
+                mock.patch.dict('bleachbit.Cleaner.backends'):
+            list(load_cleaners())
+            cleaner = bleachbit.Cleaner.backends['winapp2_applications']
+
+        self.assertEqual(['newapp', 'oldapp', 'sharedapp'],
+                         [o for (o, _name) in cleaner.get_options()])
+        # the personal file wins for a section in both
+        self.assertEqual(['bleachbit-test-new.tmp', 'bleachbit-test-old.tmp',
+                          'bleachbit-test-personal.tmp'],
+                         sorted(os.path.basename(a.paths[0])
+                                for (_o, a) in cleaner.actions))
+
+    def test_load_cleaners_keeps_option_ids_across_files(self):
+        """A section in both winapp2.ini files keeps its option id"""
+        personal = self.write_file(
+            'winapp2-personal-ids.ini',
+            text='[Notepad++ *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-personal.tmp\n')
+        system = self.write_file(
+            'winapp2-system-ids.ini',
+            text='[Notepad *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-notepad.tmp\n'
+            '[Notepad++ *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-system.tmp\n')
+
+        with mock.patch('bleachbit.Winapp.list_winapp_files',
+                        return_value=[personal, system]), \
+                mock.patch.dict('bleachbit.Cleaner.backends'):
+            list(load_cleaners())
+            cleaner = bleachbit.Cleaner.backends['winapp2_applications']
+
+        self.assertEqual([('notepad', 'Notepad++'), ('notepad_2', 'Notepad')],
+                         list(cleaner.get_options()))
+        self.assertEqual([('notepad', 'bleachbit-test-personal.tmp'),
+                          ('notepad_2', 'bleachbit-test-notepad.tmp')],
+                         sorted((o, os.path.basename(a.paths[0]))
+                                for (o, a) in cleaner.actions))
+
     def test_filekey_recurse_rejects_excessive_wildcards(self):
         """A FileKey RECURSE pattern with too many wildcards is rejected (ReDoS defense)"""
         self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-redos')

@@ -206,11 +206,15 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname, cb_progress=_noop_progress, load_now=True):
+    def __init__(self, pathname, cb_progress=_noop_progress, load_now=True,
+                 option_ids=None):
         """Create cleaners from a Winapp2.ini-style file
 
         Pass load_now=False to drive load_sections() yourself, which lets a
         GUI caller keep painting between sections.
+
+        Pass the option_ids of a file loaded earlier to keep the option IDs
+        of its sections, so the cleaners of both can be merged by ID.
         """
 
         self.cleaners = {}
@@ -229,7 +233,7 @@ class Winapp:
         self.re_excludekey = re.compile(r'^excludekey(\d+)?$')
         # An app's sections repeat Detect keys; cache the probes for this load
         self._detect_cache = {}
-        self.option_ids = self._assign_option_ids()
+        self.option_ids = self._assign_option_ids(option_ids or {})
         if not load_now:
             return
         for _dummy in self.load_sections(cb_progress):
@@ -263,18 +267,22 @@ class Winapp:
                         parser.set(section, option, value)
         return parser
 
-    def _assign_option_ids(self):
-        """Map each section to an option ID that is unique in its cleaner
+    def _assign_option_ids(self, option_ids):
+        """Map each (cleaner ID, section) to an option ID unique in its cleaner
 
         Undetected sections count too, so IDs ignore what is installed.
+        A section already in option_ids keeps its ID.
         """
-        option_ids = {}
-        taken = set()
+        option_ids = dict(option_ids)
+        taken = {(lid, option_id)
+                 for ((lid, _section), option_id) in option_ids.items()}
         for section in self.parser.sections():
             langsecref = self._langsecref(section)
             if langsecref is None:
                 continue
             lid = _langsecref_to_cleanerid(langsecref)
+            if (lid, section) in option_ids:
+                continue
             base_id = option_id = section2option(section)
             suffix = 2
             while (lid, option_id) in taken:
@@ -282,7 +290,7 @@ class Winapp:
                 option_id = f'{base_id}_{suffix}'
                 suffix += 1
             taken.add((lid, option_id))
-            option_ids[section] = option_id
+            option_ids[(lid, section)] = option_id
         return option_ids
 
     def _langsecref(self, section):
@@ -459,7 +467,7 @@ class Winapp:
             return
         # find the BleachBit internal cleaner ID
         lid = self.section_to_cleanerid(langsecref_num)
-        option_id = self.option_ids[section]
+        option_id = self.option_ids[(lid, section)]
         option_name = section.replace('*', '').strip()
         self.cleaners[lid].add_option(option_id, option_name, '')
         for option in section_options:
@@ -608,12 +616,30 @@ def list_winapp_files():
         yield fname
 
 
+def _merge_cleaner(cleaner, other):
+    """Add to cleaner the options of other that it does not have yet"""
+    added = set(other.options) - set(cleaner.options)
+    for option_id in added:
+        (name, description) = other.options[option_id]
+        cleaner.add_option(option_id, name, description)
+        warning = other.get_warning(option_id)
+        if warning:
+            cleaner.set_warning(option_id, warning)
+    for (option_id, action) in other.actions:
+        if option_id in added:
+            cleaner.add_action(option_id, action)
+
+
 def load_cleaners(cb_progress=_noop_progress):
     """Scan for winapp2.ini files and load them"""
     cb_progress(0.0)
+    loaded = {}
+    option_ids = {}
     for pathname in list_winapp_files():
         try:
-            inicleaner = Winapp(pathname, load_now=False)
+            inicleaner = Winapp(
+                pathname, load_now=False, option_ids=option_ids)
+            option_ids = inicleaner.option_ids
             yield True
             yield from inicleaner.load_sections(cb_progress)
         except Exception:
@@ -621,5 +647,10 @@ def load_cleaners(cb_progress=_noop_progress):
                 "Error reading winapp2.ini cleaner '%s'", pathname)
         else:
             for cleaner in inicleaner.get_cleaners():
-                Cleaner.backends[cleaner.id] = cleaner
+                if cleaner.id in loaded:
+                    # The personal file comes first, so its entries win
+                    _merge_cleaner(loaded[cleaner.id], cleaner)
+                else:
+                    loaded[cleaner.id] = cleaner
+                    Cleaner.backends[cleaner.id] = cleaner
         yield True
