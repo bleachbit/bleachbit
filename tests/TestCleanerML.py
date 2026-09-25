@@ -435,6 +435,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         """Cleaners notice their application by its Linux process name"""
         cases = (
             ('android_studio', 'studio'),
+            ('apt', 'apt'),
+            ('apt', 'aptitude'),
             ('rhythmbox', 'rhythmbox'),
             ('slack', 'slack'),
             ('transmission', 'transmission-gtk'),
