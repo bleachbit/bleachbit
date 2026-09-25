@@ -266,6 +266,13 @@ auto_hide = True
         bleachbit.Options.init_configuration()
         self.assertExists(bleachbit.options_file)
 
+    def test_init_configuration_chown_under_sudo(self):
+        """init_configuration() must give the new file back to the sudo user"""
+        with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chownself:
+            bleachbit.Options.init_configuration()
+        mock_chownself.assert_any_call(bleachbit.options_file)
+
     def test_open_config_write_refuses_symlink(self):
         """The config write must not follow a symlink to another file"""
         filename = self.write_file('cfg_target', b'keepme')

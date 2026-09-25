@@ -236,6 +236,8 @@ def init_configuration(*, log=True):
         f_ini.write('[bleachbit]\n')
         if IS_WINDOWS and bleachbit.portable_mode:
             f_ini.write('[Portable]\n')
+    if General.sudo_mode():
+        General.chownself(bleachbit.options_file)
     for section in options.config.sections():
         options.config.remove_section(section)
     options.restore()
