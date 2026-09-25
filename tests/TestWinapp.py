@@ -655,6 +655,18 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                     'winapp2-excludekey')
                 self.assertTrue(actions['Delete'][0].nwholeregex)
 
+    def test_excludekey_reg_trailing_backslash(self):
+        """A REG ExcludeKey ending in a backslash still excludes the key"""
+        actions = self._build_actions(
+            'RegKey1=HKCU\\Software\\BleachBit\\Foo\n'
+            'RegKey2=HKCU\\Software\\BleachBit\\Foo\\Keep\n'
+            'ExcludeKey1=REG|HKCU\\Software\\BleachBit\\Foo\\Keep\\\n',
+            'winapp2-regexclude')
+        self.assertEqual(['HKCU\\Software\\BleachBit\\Foo'],
+                         [a.keyname for a in actions['Winreg']])
+        self.assertEqual(['HKCU\\Software\\BleachBit\\Foo\\Keep'],
+                         actions['Winreg'][0].excludekeys)
+
     def test_action_keeps_xml_special_characters(self):
         """XML-special characters in keys reach the providers unchanged"""
         actions = self._build_actions(
