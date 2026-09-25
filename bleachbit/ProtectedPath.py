@@ -123,6 +123,10 @@ def load_protected_paths(force_reload=False):
 
             # Expand the path (possibly into multiple entries)
             for expanded_path in expand_path_entries(raw_path):
+                drive, tail = os.path.splitdrive(expanded_path)
+                if drive and not tail:
+                    # %systemdrive% gives 'C:', which is not absolute
+                    expanded_path = drive + os.sep
                 protected_paths.append({
                     'path': expanded_path,
                     'depth': depth,
@@ -197,7 +201,8 @@ def check_protected_path(user_path):
 
         # Check if user path is a parent of protected path
         # (user wants to delete a folder that contains protected items)
-        if path_startswith(protected_cmp, user_cmp,
+        # A root like D:\ keeps its separator after normalization
+        if path_startswith(protected_cmp, user_cmp.rstrip(os.sep),
                            case_sensitive=case_sensitive):
             return ppath
 
