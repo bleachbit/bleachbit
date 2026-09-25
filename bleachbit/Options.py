@@ -325,14 +325,16 @@ class Options:
                 General.makedirs(bleachbit.options_dir)
             _write_config_file(self.config, bleachbit.options_file)
         except (OSError, IOError, PermissionError) as e:
-            if e.errno == errno.ENOSPC:
+            # Log instead of raising so a failed save never blocks quitting
+            if e.errno in (errno.ENOSPC, errno.EDQUOT):
                 logger.error(
                     _("Disk was full when writing configuration to file: %s"), bleachbit.options_file)
             elif e.errno == errno.EACCES:
                 logger.error(
                     _("Permission denied when writing configuration to file: %s"), bleachbit.options_file)
             else:
-                raise
+                logger.error("Error writing configuration to file %s: %s",
+                             bleachbit.options_file, e)
         else:
             self._dirty = False
 
