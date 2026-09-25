@@ -1075,7 +1075,7 @@ def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
     # Now: Done in NSIS file!
     opts = '' if settings['fast'] else '/V3 /DCompressor'
     if settings['upx']:
-        opts += ' /Dpackhdr'
+        opts += f' /Dpackhdr /DUPX_TAG={settings["upx_tag"]}'
     nsis(opts, exe_name_multilang, nsi_path, settings)
 
     # The English-only installer is controlled by the build_english setting,

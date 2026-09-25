@@ -59,10 +59,12 @@
   ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
   ;!pragma warning disable 6040
 
+; windows/setup.py passes UPX_TAG for UPX builds
+!define /ifndef UPX_TAG ""
 !ifdef NoTranslations
-  OutFile "${prodname}-${VERSION}-setup-English.exe"
+  OutFile "${prodname}-${VERSION}-setup-English${UPX_TAG}.exe"
 !else
-  OutFile "${prodname}-${VERSION}-setup.exe"
+  OutFile "${prodname}-${VERSION}-setup${UPX_TAG}.exe"
 !endif
 
 ; Unicode requires NSIS version 3 or later
