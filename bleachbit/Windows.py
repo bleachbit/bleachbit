@@ -615,14 +615,20 @@ def delete_updates():
 
     all_services = ('wuauserv', 'cryptsvc', 'bits', 'msiserver')
     restart_services = []
-    for service in all_services:
-        if is_service_running(service):
-            restart_services.append(service)
-    # Stopping a service also stops the ones that depend on it
-    for service in list(restart_services):
-        for dependent in get_running_dependent_services(service):
-            if dependent not in restart_services:
-                restart_services.append(dependent)
+    try:
+        for service in all_services:
+            if is_service_running(service):
+                restart_services.append(service)
+        # Stopping a service also stops the ones that depend on it
+        for service in list(restart_services):
+            for dependent in get_running_dependent_services(service):
+                if dependent not in restart_services:
+                    restart_services.append(dependent)
+    # pylint: disable-next=possibly-used-before-assignment
+    except (RuntimeError, pywintypes.error) as e:
+        # Leave the services alone, but let the other options run
+        logger.warning('Not cleaning SoftwareDistribution: %s', e)
+        return
     services_stopped = False
     sdist_dir = os.path.expandvars(r'%windir%\SoftwareDistribution')
     if not os.path.exists(sdist_dir):
