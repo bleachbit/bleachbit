@@ -224,6 +224,10 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ('/home/morpheus/.npm/_npx/15b07286cbcc3329/node_modules',
              '.package-lock.json'),
             ('/home/smith/.cache/typescript/5.9/node_modules', '.package-lock.json'),
+            # root's home when running as root, on Linux and macOS
+            ('/root/.nvm/versions/node/v20.11.0/lib/node_modules/npm', 'index.js'),
+            ('/root/.vscode-server/bin/abc/node_modules/foo', 'index.js'),
+            ('/var/root/.nvm/versions/node/v20.11.0/lib/node_modules/npm', 'index.js'),
             (r'C:\Users\glados\.windsurf\extensions\ms-python.python-2026.4.0-universal\out\client\node_modules', 'unicode.js'),
             (r'C:\Users\glados\.cursor\projects\empty-window\canvases\node_modules', 'cursor.js'),
             (r'C:\Users\glados\AppData\Local\Programs\myapp\node_modules', 'file.js'),
@@ -253,6 +257,7 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             (r'C:\Users\esnowden\Documents\nsa\prism\node_modules\crypto-js', 'aes.js'),
             (r'C:\Users\chunkylover53\Documents\work-from-home\node_modules\click-button-automator\node_modules\is-buffer', 'index.js'),
             ('/home/chunkylover53/Downloads/donut-radar/node_modules/react-dom', 'bar.js'),
+            ('/root/projects/app/node_modules/react', 'index.js'),
         ]
         for dirpath, filename in matched:
             with self.subTest(dirpath=dirpath, filename=filename):
@@ -275,6 +280,8 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
              'activate'),
             ('/home/username/src/cpython/Lib/venv', '__init__.py'),
             (r'C:\Users\charlie\scoop\apps\python\3.12.4\Lib\venv', '__init__.py'),
+            # tool-managed venvs in root's home
+            ('/root/.local/share/uv/tools/ruff/.venv', 'pyvenv.cfg'),
             # pipx-managed venvs (managed by pipx, like npm cache)
             ('/home/username/.local/share/pipx/venvs/duplicity', 'pyvenv.cfg'),
             # typeshed stubs bundled with editor extensions
@@ -316,6 +323,7 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         matched = [
             ('/home/genisys/t800/.venv/yolo-v666', 'pyvenv.cfg'),
             ('/home/stark/jarvis/venv/yolo14', 'pyvenv.cfg'),
+            ('/root/projects/app/.venv', 'pyvenv.cfg'),
             ('/home/stark/jarvis/venv/lib/python3.12/site-packages/numpy',
              '__init__.py'),
             (r'C:\Users\esnowden\Documents\nsa\prism\venv', 'pyvenv.cfg'),
