@@ -736,6 +736,8 @@ PrefersNonDefaultGPU=false""")
             '/var/log/dmesg.0',
             '/var/log/dmesg.1.gz',
             '/var/log/foo.gz',
+            '/var/log/foo.log-2023060112',
+            '/var/log/foo.log.1.lz4',
             '/var/log/foo.old',
             '/var/log/foo/bar.0',
             '/var/log/foo/bar.gz',
@@ -749,12 +751,18 @@ PrefersNonDefaultGPU=false""")
             '/var/log/samba/log.smbd-20250126.gz',
             '/var/log/syslog.1',
             '/var/log/syslog.2.xz',
+            '/var/log/syslog.2.zst',
+            '/var/log/Xorg.0.log.old',
             '/var/log/cups/access_log.9'
 
         ]
         expected_keep = [
+            '/var/log/ceph/ceph-osd.0.log',
             '/var/log/dmesg',
+            '/var/log/journal/abc/user-1968200001.journal',
+            '/var/log/mariadb-10.11/error.log',
             '/var/log/packages/foo.0',
+            '/var/log/php8.1-fpm.log',
             '/var/log/removed_packages/foo.0',
             '/var/log/removed_scripts/foo.0',
             '/var/log/samba/log.192.168.0.1',
@@ -762,7 +770,8 @@ PrefersNonDefaultGPU=false""")
             '/var/log/scripts/foo.0',
             '/var/log/syslog',
             '/var/log/sysstat/sar24',
-            '/var/log/whitelisted/foo.0'
+            '/var/log/whitelisted/foo.0',
+            '/var/log/Xorg.0.log'
         ]
         mock_cid.return_value = iter(expected_delete + expected_keep)
         result = list(rotated_logs())

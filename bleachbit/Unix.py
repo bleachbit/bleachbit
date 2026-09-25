@@ -561,7 +561,9 @@ def rotated_logs():
     """
     keep_lists = [re.compile(r'/var/log/(removed_)?(packages|scripts)'),
                   re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')]
-    positive_re = re.compile(r'(\.(\d+|bz2|gz|xz|old)|\-\d{8}?)')
+    # Anchored so live logs like Xorg.0.log and php8.1-fpm.log are kept
+    positive_re = re.compile(
+        r'(\.(\d+|bz2|gz|lz4|xz|zst|old)|-\d{8}(\d{2})?)$')
 
     for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
         if bleachbit.FileUtilities.whitelisted(path):
