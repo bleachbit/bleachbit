@@ -100,6 +100,14 @@ class CLITestCase(common.BleachbitTestCase):
             self.assertIsInstance(o, dict)
             self.assertEqual(o, expected)
 
+        # Unknown cleaners and options are skipped with a warning
+        with self.assertLogs('bleachbit.CLI', level='WARNING') as log_context:
+            o = args_to_operations(
+                ['adobe_reader.bogus', 'adobe_reader.mru', 'no_such_cleaner.cache'],
+                False, False)
+        self.assertEqual(o, {'adobe_reader': ['mru']})
+        self.assertEqual(len(log_context.output), 2)
+
         # Test failure on wildcard
         with self.assertRaises(SystemExit) as cm:
             args_to_operations(
@@ -141,9 +149,10 @@ class CLITestCase(common.BleachbitTestCase):
         # These texts are required in the log file.
         file_required_texts = [
             'DEBUG - Debug log file initialized',
-            'ERROR - Failed to clean',
-            'KeyError',
-            'doesnot'
+            # the unknown cleaner, then no operations left
+            'WARNING - ',
+            'doesnot.exist',
+            'ERROR - ',
         ]
 
         # These texts are forbidden in stderr.
@@ -166,14 +175,13 @@ class CLITestCase(common.BleachbitTestCase):
                         '--debug'] + f'--debug-log{delimiter}{log_path}'.split(delimiter)
                 (rc, _stdout, stderr) = run_external(
                     args, stdout=None, timeout=RUN_EXTERNAL_TIMEOUT)
-                self.assertEqual(0, rc, f"rc={rc}, stderr={stderr}")
+                self.assertEqual(1, rc, f"rc={rc}, stderr={stderr}")
                 self.assertExists(log_path)
                 with open(log_path, 'r', encoding='utf-8') as log_file:
                     log_content = log_file.read()
 
-                self.assertEqual(1, stderr.count('Traceback'))
-                self.assertEqual(1, log_content.count(
-                    'Traceback'), log_content)
+                self.assertNotIn('Traceback', stderr)
+                self.assertNotIn('Traceback', log_content)
 
                 for stderr_forbidden_text in stderror_forbidden_texts:
                     self.assertNotIn(stderr_forbidden_text, stderr,

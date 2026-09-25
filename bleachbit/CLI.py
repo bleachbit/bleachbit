@@ -177,6 +177,9 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
             continue
         # backwards compatibility
         option_id = fix_deprecated(cleaner_id, option_id)
+        if cleaner_id not in backends or option_id not in backends[cleaner_id].options:
+            logger.warning(not_valid_cleaner_msg, arg)
+            continue
         # add the specified option
         if cleaner_id not in operations:
             # initialize list of options for this cleaner
