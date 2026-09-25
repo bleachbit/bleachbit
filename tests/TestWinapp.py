@@ -919,6 +919,35 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
 
+    def test_colliding_section_names(self):
+        """Sections that normalize to the same option id stay separate"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-optionid')
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            for i, section in enumerate(('Notepad *', 'Notepad++ *')):
+                ini.write(f'[{section}]\nLangSecRef=3021\nWarning=warning{i}\n'
+                          f'FileKey1=%Temp%|bleachbit-test-{i}.tmp\n')
+
+        cleaner = next(Winapp(self.ini_fn).get_cleaners())
+        self.assertEqual([('notepad', 'Notepad'), ('notepad_2', 'Notepad++')],
+                         list(cleaner.get_options()))
+        for i, option_id in enumerate(('notepad', 'notepad_2')):
+            self.assertEqual(f'warning{i}', cleaner.get_warning(option_id))
+            actions = [a for (o, a) in cleaner.actions if o == option_id]
+            self.assertEqual(1, len(actions))
+            self.assertTrue(
+                actions[0].paths[0].endswith(f'bleachbit-test-{i}.tmp'))
+
+        # the id stays the same when the other section is not detected
+        missing = os.path.join(self.tempdir, 'does_not_exist')
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            ini.write(f'[Notepad *]\nLangSecRef=3021\nDetectFile={missing}\n'
+                      'FileKey1=%Temp%|bleachbit-test-0.tmp\n'
+                      '[Notepad++ *]\nLangSecRef=3021\n'
+                      'FileKey1=%Temp%|bleachbit-test-1.tmp\n')
+        cleaner = next(Winapp(self.ini_fn).get_cleaners())
+        self.assertEqual([('notepad_2', 'Notepad++')],
+                         list(cleaner.get_options()))
+
     def test_fnmatch_translate(self):
         """Test that fnmatch_translate strips the end anchor and matches patterns"""
         regex = fnmatch_translate('*.log')
