@@ -2142,6 +2142,27 @@ State=AAAA/wA...
                 self.assertFalse(whitelisted(temp_root + r'\bleachbit.tmp'))
                 self.assertFalse(whitelisted(temp_root + r'\subdir'))
 
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_aliases(self):
+        """Keep list matches the Sysnative and 8.3 spellings of a kept path"""
+        windir = os.path.expandvars('%windir%')
+        options.set_whitelist_paths(
+            [('folder', os.path.join(windir, 'System32', 'LogFiles'))])
+        self.assert_is_whitelisted(
+            os.path.join(windir, 'Sysnative', 'LogFiles', 'foo.log'))
+        self.assertFalse(whitelisted(
+            os.path.join(windir, 'SysWOW64', 'LogFiles', 'foo.log')))
+
+        # pylint: disable=c-extension-no-member
+        long_dir = win32api.GetLongPathName(self.mkdir('long directory name'))
+        short_dir = win32api.GetShortPathName(long_dir)
+        if short_dir == long_dir:
+            self.skipTest('8.3 names are disabled on this volume')
+        short_file = self.write_file(os.path.join(short_dir, 'foo.log'))
+        options.set_whitelist_paths([('folder', long_dir)])
+        self.assert_is_whitelisted(short_dir)
+        self.assert_is_whitelisted(short_file)
+
     @common.skipIfWindows
     def test_whitelisted_posix_symlink(self):
         """Symlink test for whitelisted_posix()"""
