@@ -896,6 +896,21 @@ State=AAAA/wA...
                 options.set('shred', shred)
                 json_helper(self, clean_json)
 
+    def test_clean_json_wildcard(self):
+        """A '*' segment in the clean_json() target matches every key"""
+        options.set('shred', False)
+        data = {'p': {'a': {'k': 1, 'n': 'A'}, 'b': {'n': 'B'}, 'c': 3},
+                'k': 2}
+        filename = self.write_file('clean_json_wildcard',
+                                   text=json.dumps(data))
+        clean_json(filename, 'p/*/k')
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual({'p': {'a': {'n': 'A'}, 'b': {'n': 'B'}, 'c': 3},
+                              'k': 2}, json.load(f))
+        clean_json(filename, 'p/*')
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual({'p': {}, 'k': 2}, json.load(f))
+
     def test_clean_ini_refuses_symlink(self):
         """clean_ini() must not write through a symlink to another file
 

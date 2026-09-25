@@ -144,7 +144,16 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the sync data (including web apps) and sign out of the browser</description>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
     <!-- Sync Data Backup not seen in Chromium 65 -->
-    <action command="json" search="file" path="$$base$$/Local State" address="profile"/>
+    <!-- "profile" in Local State lists every profile, so clear only the account fields of each -->
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/*/gaia_given_name"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/*/gaia_id"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/*/gaia_name"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/*/gaia_picture_file_name"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/*/hosted_domain"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/*/is_consented_primary_account"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/*/last_downloaded_gaia_picture_url_with_size"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/*/user_name"/>
+    <action command="delete" search="file" path="$$profile$$/Edge Profile Picture.png"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="account_info"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="google_services"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="sync"/>

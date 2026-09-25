@@ -9,6 +9,7 @@ Test cases for module CleanerML
 """
 
 # standard imports
+import json
 import os
 import shutil
 import sys
@@ -845,3 +846,57 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                         cleaner_id, 'site_data', 'linux')
                     self.assertIn(local_storage, paths)
                     self.assertNotIn(state, paths)
+
+    @common.skipIfWindows
+    def test_chromium_sync_keeps_profile_list(self):
+        """Signing out keeps every profile in Local State but no account"""
+        config = self.mkdtemp(prefix='bleachbit-chromium-sync')
+        browsers = {
+            'brave': ('BraveSoftware/Brave-Browser', None),
+            'chromium': ('chromium', 'Google Profile Picture.png'),
+            'google_chrome': ('google-chrome', 'Google Profile Picture.png'),
+            'helium': ('net.imput.helium', 'Google Profile Picture.png'),
+            'microsoft_edge': ('microsoft-edge', 'Edge Profile Picture.png'),
+        }
+        account = {
+            'gaia_given_name': 'Me', 'gaia_id': '123', 'gaia_name': 'Me Me',
+            'gaia_picture_file_name': 'Google Profile Picture.png',
+            'hosted_domain': 'example.com',
+            'is_consented_primary_account': True,
+            'last_downloaded_gaia_picture_url_with_size': 'https://x/s256',
+            'user_name': 'me@example.com',
+        }
+        for cleaner_id, (folder, picture) in browsers.items():
+            with self.subTest(cleaner_id=cleaner_id):
+                base = os.path.join(config, folder)
+                local_state = os.path.join(base, 'Local State')
+                os.makedirs(base)
+                # Brave never downloads the account photo
+                fields = {k: v for k, v in account.items()
+                          if picture or 'picture' not in k}
+                info_cache = {
+                    'Default': {'name': 'Personal', **fields},
+                    'Profile 1': {'name': 'Work', **fields},
+                }
+                self.write_file(local_state, text=json.dumps(
+                    {'profile': {'info_cache': info_cache,
+                                 'last_used': 'Profile 1'}}))
+                if picture:
+                    common.touch_file(os.path.join(base, 'Default', picture))
+                with common.set_temporary_env('XDG_CONFIG_HOME', config):
+                    cleaner = self._load_real_cleaner_as(
+                        f'{cleaner_id}.xml', 'linux')
+                    paths = []
+                    for cmd in cleaner.get_commands('sync'):
+                        paths.append(os.path.normpath(cmd.path))
+                        if paths[-1] == local_state:
+                            list(cmd.execute(True))
+                with open(local_state, encoding='utf-8') as f:
+                    profile = json.load(f)['profile']
+                self.assertEqual('Profile 1', profile['last_used'])
+                self.assertEqual({'Default': {'name': 'Personal'},
+                                  'Profile 1': {'name': 'Work'}},
+                                 profile['info_cache'])
+                if picture:
+                    self.assertIn(os.path.join(base, 'Default', picture),
+                                  paths)
