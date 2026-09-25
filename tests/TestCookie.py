@@ -53,6 +53,8 @@ DOMAIN_MATCHING_CASES = (
      'Leading dots in keep list should match subdomains'),
     ('.example.com', 'fooexample.com', False,
      'Canonical registrable domain mismatch'),
+    ('a_b.com', 'x.axb.com', False,
+     'Underscore is not a wildcard'),
 )
 
 
@@ -449,6 +451,25 @@ class CookieTestCase(common.BleachbitTestCase):
                 else:
                     self.assertEqual(result['total_kept'], 0, reason)
                     self.assertEqual(result['total_deleted'], 1)
+
+    def test_delete_cookies_long_keep_list(self):
+        """A keep list longer than SQLite's expression depth limit works"""
+        path = self._create_chrome_cookies_db()
+        keep_list = {f'd{i}.example' for i in range(1000)} | {'google.com'}
+        for really_delete in (False, True):
+            with self.subTest(really_delete=really_delete):
+                result = Cookie.delete_cookies(
+                    path, keep_list, really_delete=really_delete)
+                self.assertFalse(result['skipped'])
+                self.assertEqual(result['total_kept'], 1)
+                self.assertEqual(result['total_deleted'], 2)
+
+        conn = sqlite3.connect(path)
+        try:
+            hosts = conn.execute('SELECT host_key FROM cookies').fetchall()
+        finally:
+            conn.close()
+        self.assertEqual(hosts, [('google.com',)])
 
     def test_preview_cookies_deletion_no_keeplist(self):
         """Test previewing cookie deletion with no keep list"""
