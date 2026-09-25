@@ -11,6 +11,7 @@ Test case for Common
 
 # standard imports
 import os
+import subprocess
 import tempfile
 
 # first party imports
@@ -148,6 +149,18 @@ class CommonTestCase(common.BleachbitTestCase):
         self.assertExists(self.tempdir)
         self.assertTrue(os.path.samefile(
             options_dir, os.path.commonpath((options_dir, self.tempdir))))
+
+    def test_testall_import_leaves_bleachbit_unloaded(self):
+        """TestAll sets the options dir before bleachbit is imported"""
+        import sys
+        # An early import would pin the real config dir before main() sets it
+        code = 'import sys, tests.TestAll; print("bleachbit" in sys.modules)'
+        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        proc = subprocess.run([sys.executable, '-c', code],
+                              capture_output=True, text=True, timeout=60,
+                              check=False, cwd=root)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(proc.stdout.strip(), 'False', proc.stderr)
 
     def test_get_put_env(self):
         """Unit test for get_env() and put_env()"""
