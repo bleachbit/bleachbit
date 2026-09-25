@@ -24,6 +24,7 @@ Test case for module Chaff
 
 from unittest import mock
 import errno
+import hashlib
 import os
 from tempfile import mkdtemp
 from shutil import rmtree
@@ -166,11 +167,23 @@ class ChaffTestCase(common.BleachbitTestCase):
                 f.write(b'')
             return True
         mock_download.side_effect = fake_download
-        download_models()
-        rc = have_models()
-        self.assertTrue(
-            rc, "have_models() should return True when models are present")
-        self.assertIsInstance(rc, bool)
+        empty_sha512 = dict.fromkeys(
+            MODEL_BASENAMES, hashlib.sha512(b'').hexdigest())
+        with mock.patch.dict(MODEL_SHA512, empty_sha512):
+            download_models()
+            rc = have_models()
+            self.assertTrue(
+                rc, "have_models() should return True when models are present")
+            self.assertIsInstance(rc, bool)
+            corrupt_fn = os.path.join(DEFAULT_MODELS_DIR, MODEL_BASENAMES[0])
+            self.write_file(corrupt_fn, b'corrupt')
+            self.assertFalse(
+                have_models(), "have_models() should return False when a model is corrupt")
+            mock_download.reset_mock()
+            download_models()
+            mock_download.assert_called_once()
+            self.assertEqual(mock_download.call_args.args[1], corrupt_fn)
+            self.assertTrue(have_models())
         for basename in MODEL_BASENAMES:
             fn = os.path.join(DEFAULT_MODELS_DIR, basename)
             self.assertExists(fn)
