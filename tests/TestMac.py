@@ -415,6 +415,35 @@ class MacTestCase(common.BleachbitTestCase):
             delete_safari_cookies(path, set(), really_delete=False)
 
     @common.skipUnlessMac
+    def test_delete_safari_cookies_raises_when_delete_fails(self):
+        """A failed whole-file delete propagates instead of being skipped"""
+        rec1 = self._make_cookie_record('build.webkit.org')
+        path = self._create_binarycookies_file([('build.webkit.org', rec1)])
+
+        error = OSError(errno.EACCES, 'Permission denied', path)
+        with mock.patch('bleachbit.FileUtilities.delete', side_effect=error):
+            with self.assertRaises(OSError):
+                delete_safari_cookies(path, {'other.org'}, really_delete=True)
+        self.assertExists(path)
+
+    @common.skipUnlessMac
+    def test_delete_safari_cookies_raises_when_rewrite_fails(self):
+        """A failed rewrite propagates and leaves the file unchanged"""
+        path = self._create_binarycookies_file([
+            ('github.com', self._make_cookie_record('github.com')),
+            ('webkit.org', self._make_cookie_record('webkit.org')),
+        ])
+        with open(path, 'rb') as f:
+            original = f.read()
+
+        error = OSError(errno.EACCES, 'Permission denied', path)
+        with mock.patch('os.replace', side_effect=error):
+            with self.assertRaises(OSError):
+                delete_safari_cookies(path, {'github.com'}, really_delete=True)
+        with open(path, 'rb') as f:
+            self.assertEqual(f.read(), original)
+
+    @common.skipUnlessMac
     def test_cookie_module_delegates_safari(self):
         """bleachbit.Cookie delegator functions invoke Mac Safari implementations."""
         from bleachbit import Cookie
