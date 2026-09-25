@@ -729,6 +729,19 @@ class GUITestCase(common.BleachbitTestCase):
             gui._prompt_orphaned_wipe_files(['/does/not/exist'])
             dialog.assert_called_once()
 
+    def test_update_check_leaves_running_operation_alone(self):
+        """Finding an update does not re-enable the buttons mid-operation"""
+        gui = self.get_window()
+        gui.set_sensitive(False)
+        self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(gui.update_button.hide)
+        with mock.patch('bleachbit.Update.check_updates',
+                        return_value=[('99.0', 'https://example.invalid/')]):
+            gui.check_online_updates()
+            self.assertTrue(self.wait_until(gui.update_button.get_visible))
+        self.assertFalse(gui.run_button_get_sensitive())
+        self.assertTrue(gui.stop_button.get_sensitive())
+
     def test_app_menu_reloads_only_after_setup_translation(self):
         """The app menu is rebuilt only after setup_translation() runs again"""
         gui = self.get_window()
