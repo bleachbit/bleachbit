@@ -267,6 +267,21 @@ class GeneralTestCase(common.BleachbitTestCase):
             chownself('/home/user/file')
             mock_chown.assert_called_once()
 
+    def test_chownself_root_home_from_passwd(self):
+        """chownself() refuses the home of root from passwd, as on macOS"""
+        if not IS_POSIX:
+            self.skipTest('POSIX-only behavior')
+        for pw_dir, path, chowned in (
+                ('/var/root', '/var/root/.config/bleachbit', False),
+                ('/var/root', '/var/rootlookalike/file', True),
+                ('/', '/home/user/file', True)):
+            with self.subTest(pw_dir=pw_dir, path=path), \
+                    mock.patch.object(General, 'get_real_uid', return_value=1000), \
+                    mock.patch('pwd.getpwuid', return_value=mock.Mock(pw_dir=pw_dir)), \
+                    mock.patch.object(os, 'chown') as mock_chown:
+                chownself(path)
+                self.assertEqual(mock_chown.called, chowned)
+
     @also_with_sudo
     def test_get_real_username(self):
         """Test for get_real_username()"""
@@ -627,3 +642,12 @@ class GeneralTestCase(common.BleachbitTestCase):
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assertIsInstance(sudo_mode(), bool)
+
+    @common.skipIfWindows
+    def test_sudo_mode_follows_sudo_uid(self):
+        """sudo_mode() is True on any POSIX system when SUDO_UID is set"""
+        with mock.patch.dict(os.environ, {'SUDO_UID': str(os.getuid())}):
+            self.assertTrue(sudo_mode())
+        with mock.patch.dict(os.environ):
+            os.environ.pop('SUDO_UID', None)
+            self.assertFalse(sudo_mode())
