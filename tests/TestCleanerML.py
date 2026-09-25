@@ -507,3 +507,27 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         with common.set_temporary_env('XDG_CACHE_HOME', cache_home):
             self.assertIn(entry, self._bundled_option_paths(
                 'vivaldi', 'cache', 'linux'))
+
+    @common.skipIfWindows
+    def test_site_data_keeps_extension_state(self):
+        """Chromium-based site data leaves the extension StateStore alone"""
+        config = self.mkdtemp(prefix='bleachbit-extension-state')
+        profiles = {
+            'brave': 'BraveSoftware/Brave-Browser/Default',
+            'chromium': 'chromium/Default',
+            'microsoft_edge': 'microsoft-edge/Default',
+            'opera': 'opera',
+        }
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            for cleaner_id, profile in profiles.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    local_storage = os.path.join(
+                        config, profile, 'Local Storage', '000003.log')
+                    state = os.path.join(
+                        config, profile, 'Extension State', '000003.log')
+                    common.touch_file(local_storage)
+                    common.touch_file(state)
+                    paths = self._bundled_option_paths(
+                        cleaner_id, 'site_data', 'linux')
+                    self.assertIn(local_storage, paths)
+                    self.assertNotIn(state, paths)
