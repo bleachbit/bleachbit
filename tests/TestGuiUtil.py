@@ -190,6 +190,28 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
                     Clipboard(), [Target(target_name)]))
 
     @common.skipIfWindows
+    def test_get_clipboard_paths_text_skips_relative_paths(self):
+        """Skip plain-text lines that are not absolute paths"""
+        text = '\n'.join(['Downloads', '../..', self.paths[0]])
+
+        class Target:
+            """Stand-in for the text/plain Gdk.Atom"""
+
+            def name(self):
+                """Return the target name"""
+                return 'text/plain'
+
+        class Clipboard:
+            """Mock clipboard for testing"""
+
+            def wait_for_text(self):
+                """Return relative and absolute paths as plain text"""
+                return text
+
+        self.assertEqual([self.paths[0]],
+                         get_clipboard_paths(Clipboard(), [Target()]))
+
+    @common.skipIfWindows
     def test_get_clipboard_paths_unusable_target_name(self):
         """Fall back to a fresh atom when a target's name cannot be decoded.
 
