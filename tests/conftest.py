@@ -28,6 +28,8 @@ logging.raiseExceptions = False
 
 _worker = os.environ.get('PYTEST_XDIST_WORKER')
 _options_dir = os.environ.get('BLEACHBIT_TEST_OPTIONS_DIR')
+# Only a directory made here is removed at exit, never one the caller set
+_created_dir = None
 # The controller sets the env var before spawning workers, so every worker
 # inherits it. Without keying on the worker id they would all share one
 # config dir and race on the same bleachbit.ini.
@@ -37,7 +39,7 @@ if _worker:
     # contain a worker id such as gw1.
     if (not _options_dir
             or not os.path.basename(_options_dir).startswith(_prefix)):
-        _options_dir = tempfile.mkdtemp(
+        _options_dir = _created_dir = tempfile.mkdtemp(
             prefix=_prefix, dir=_options_dir or None)
         os.environ['BLEACHBIT_TEST_OPTIONS_DIR'] = _options_dir
     # Give each worker a private temporary directory so that tests
@@ -47,14 +49,15 @@ if _worker:
         os.environ[_env_var] = _options_dir
     tempfile.tempdir = _options_dir
 elif not _options_dir:
-    _options_dir = tempfile.mkdtemp(prefix='bleachbit-test-master-')
+    _options_dir = _created_dir = tempfile.mkdtemp(
+        prefix='bleachbit-test-master-')
     os.environ['BLEACHBIT_TEST_OPTIONS_DIR'] = _options_dir
 
 
 def _remove_options_dir():
     """Remove the temporary directory created for this process."""
-    if _options_dir and os.path.isdir(_options_dir):
-        shutil.rmtree(_options_dir, ignore_errors=True)
+    if _created_dir and os.path.isdir(_created_dir):
+        shutil.rmtree(_created_dir, ignore_errors=True)
 
 
 # The interpreter exits without a session when pytest is interrupted or

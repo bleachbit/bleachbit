@@ -191,6 +191,14 @@ class CommonTestCase(common.BleachbitTestCase):
         self.assertNotEqual(controller_dir, worker_dir)
         self.assertExists(other_worker_dir)
 
+    def test_conftest_keeps_preset_options_dir(self):
+        """conftest does not remove an options dir the caller set"""
+        preset_dir = os.path.join(self.tempdir, 'preset')
+        preset_file = os.path.join(preset_dir, 'bleachbit.ini')
+        common.touch_file(preset_file)
+        self.assertEqual(preset_dir, self._run_conftest(preset_dir))
+        self.assertExists(preset_file)
+
     def test_get_put_env(self):
         """Unit test for get_env() and put_env()"""
         self.assertIsNone(common.get_env('PUTENV_TEST'))
