@@ -24,6 +24,7 @@ import sys
 import tempfile
 import time
 import unittest.mock
+import urllib.parse
 import warnings
 
 # third-party import
@@ -1989,6 +1990,15 @@ State=AAAA/wA...
         self.assertEqual(uris_to_paths(['file:']), [])
         self.assertEqual(uris_to_paths(['file://']), [])
         self.assertEqual(uris_to_paths(['file:///']), [os.path.normpath('/')])
+
+    @common.skipIfWindows
+    def test_uris_to_paths_undecodable(self):
+        """A file URI for a name that is not valid UTF-8 gives the name on disk"""
+        path = os.path.join(os.fsencode(self.tempdir), b'caf\xe9.txt')
+        uri = 'file://' + urllib.parse.quote(path)
+        # url2pathname() before Python 3.14
+        with unittest.mock.patch('urllib.request.url2pathname', urllib.parse.unquote):
+            self.assertEqual(uris_to_paths([uri]), [os.fsdecode(path)])
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""

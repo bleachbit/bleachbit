@@ -1207,7 +1207,13 @@ def uris_to_paths(file_uris):
             continue
         parsed_uri = urllib.parse.urlparse(file_uri)
         if parsed_uri.scheme == 'file':
-            file_path = url2pathname(parsed_uri.path)
+            if IS_POSIX:
+                # Before Python 3.14, url2pathname() decodes as UTF-8 and
+                # replaces the bytes of a name that is not valid UTF-8.
+                file_path = os.fsdecode(
+                    urllib.parse.unquote_to_bytes(parsed_uri.path))
+            else:
+                file_path = url2pathname(parsed_uri.path)
             if len(file_path) > 2 and file_path[2] == ':':
                 # remove front slash for Windows-style path
                 file_path = file_path[1:]
