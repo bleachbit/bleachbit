@@ -40,7 +40,7 @@ later.  See the COPYING file in the top-level directory.
     <label translate="false">venv</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
-    <action command="delete" search="deep" wholeregex="[/\\]\.?venv[/\\]" nwholeregex="[\\/]AppData[\\/]|[\\/]home[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]|[\\/]Users[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]|[\\/]pipx[\\/]venvs[\\/]"/>
+    <action command="delete" search="deep" wholeregex="[/\\]\.?venv[/\\]" nwholeregex="[\\/]AppData[\\/]|[\\/]home[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]|[\\/]Users[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]|[\\/]pipx[\\/]venvs[\\/]|[\\/]Lib[\\/]venv[\\/]|[\\/]lib(64)?[\\/](python|pypy)[0-9.]+t?[\\/]venv[\\/]"/>
   </option>
   <option id="pycache">
     <label translate="false">__pycache__</label>
