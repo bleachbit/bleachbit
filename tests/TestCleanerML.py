@@ -60,6 +60,16 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         # really delete
         self.run_all(xmlcleaner, True)
 
+    def test_android_studio_macos_vars(self):
+        """On macOS, the macos and unix values must not repeat a path"""
+        with mock.patch(
+                'bleachbit.CleanerML.general_os_match',
+                lambda os_str, _platform: general_os_match(os_str, 'darwin')):
+            xmlc = CleanerML('cleaners/android_studio.xml')
+        for var_name in ('gradle_home', 'android_home', 'as_cache', 'as_logs'):
+            values = xmlc.vars.get(var_name, [])
+            self.assertEqual(len(values), len(set(values)), var_name)
+
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""
         tests = [('True', True),
@@ -119,6 +129,25 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 procs = (ProcessInfo(1234, name, False),)
                 with mock.patch('bleachbit.Process.process_cache.get', return_value=procs):
                     self.assertTrue(cleaner.is_process_running(), (path, name))
+
+    @common.skipUnlessLinux
+    def test_geary_paths_listed_once(self):
+        """Geary lists each path once under the default XDG directories"""
+        env = {'HOME': self.tempdir,
+               'XDG_CACHE_HOME': os.path.join(self.tempdir, '.cache'),
+               'XDG_DATA_HOME': os.path.join(self.tempdir, '.local', 'share')}
+        common.touch_file(os.path.join(
+            env['XDG_CACHE_HOME'], 'geary', 'a.bin'))
+        common.touch_file(os.path.join(
+            env['XDG_DATA_HOME'], 'geary', 'acct', 'attachments', 'x.bin'))
+        with mock.patch.dict(os.environ, env):
+            cleaner = CleanerML('cleaners/geary.xml').get_cleaner()
+        for option_id in ('cache', 'attachments'):
+            with self.subTest(option_id=option_id):
+                paths = [path for oid, action in cleaner.actions
+                         if oid == option_id for path in action.get_paths()]
+                self.assertTrue(paths)
+                self.assertEqual(len(paths), len(set(paths)))
 
     def test_list_cleanerml_files(self):
         """Unit test for list_cleanerml_files()"""
