@@ -701,3 +701,11 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         """LibreWolf is detected as running on Windows"""
         self.assertTrue(self._bundled_cleaner_detects(
             'librewolf', 'win32', 'librewolf.exe'))
+
+    def test_zen_running(self):
+        """Zen is detected under the names its builds run as"""
+        for platform, exename in (('linux', 'zen'), ('linux', 'zen-bin'),
+                                  ('darwin', 'zen'), ('win32', 'zen.exe')):
+            with self.subTest(platform=platform, exename=exename):
+                self.assertTrue(self._bundled_cleaner_detects(
+                    'zen', platform, exename))
