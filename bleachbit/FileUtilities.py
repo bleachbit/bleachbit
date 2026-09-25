@@ -24,6 +24,7 @@ import re
 import stat
 import subprocess
 import time
+import unicodedata
 import urllib.parse
 from pathlib import Path
 
@@ -1229,6 +1230,18 @@ def _is_system_critical_posix(path):
     return False
 
 
+def _posix_keep_list_spelling(path):
+    """Spell a POSIX path the same way on both sides of the keep list check.
+
+    Cleaner paths can carry '//' or a trailing '/' from variables, and on
+    macOS deep scan recomposes names the file chooser returns decomposed.
+    """
+    path = os.path.normpath(path)
+    if IS_MAC:
+        path = unicodedata.normalize('NFC', path)
+    return path
+
+
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     """Check whether this POSIX path is whitelisted"""
     if _is_system_critical_posix(path):
@@ -1243,12 +1256,11 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
             return True
         # resolve symlink
         return whitelisted_posix(os.path.realpath(path), False, _followed_link=True)
-    # Cleaner paths can carry '//' or a trailing '/' from variables
-    path = os.path.normpath(path)
+    path = _posix_keep_list_spelling(path)
     for (keep_type, keep_path) in keep_paths:
         # normpath('') is '.', but an empty folder entry matches everything
         if keep_path:
-            keep_path = os.path.normpath(keep_path)
+            keep_path = _posix_keep_list_spelling(keep_path)
         if keep_type == 'file':
             if path_equal(path, keep_path):
                 return True
