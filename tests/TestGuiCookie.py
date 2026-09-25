@@ -74,3 +74,12 @@ class GuiCookieTestCase(common.BleachbitTestCase):
             # Overwriting an existing file should not chown again
             self.assertTrue(CookieManagerPane.save_changes(pane))
             mock_chown.assert_not_called()
+
+    def test_activate_link_stops_default_handler(self):
+        """The 'Learn more' link must not also be opened by GTK"""
+        with mock.patch('bleachbit.GuiCookie.open_url') as open_url:
+            # pylint: disable-next=possibly-used-before-assignment
+            handled = CookieManagerPane.on_activate_link(
+                None, None, 'https://docs.bleachbit.org/')
+        self.assertTrue(handled)
+        open_url.assert_called_once()
