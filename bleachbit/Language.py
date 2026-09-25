@@ -519,8 +519,17 @@ def setup_translation():
     logger.debug("user_locale: %s, locale_dir: %s", user_locale, locale_dir)
     assert isinstance(user_locale, str)
     assert isinstance(locale_dir, str), f"locale_dir: {locale_dir}"
+    text_domain = 'bleachbit'
+    # gettext falls back only to the bare language, so zh_HK would miss the
+    # shipped zh_TW. English is the source language and has no catalog.
+    translation_locale = user_locale
+    loc = LocaleCode(user_locale)
+    if not loc.is_special and loc.language != 'en' and \
+            not gettext.find(text_domain, locale_dir, [user_locale]):
+        translation_locale = find_supported_language_code(
+            user_locale, get_supported_language_codes()) or user_locale
     if IS_WINDOWS and user_locale:
-        os.environ['LANG'] = user_locale
+        os.environ['LANG'] = translation_locale
     elif IS_POSIX and user_locale:
         # GLib's own g_get_language_names() (used by Gtk.Builder to
         # translate .ui files like the hamburger menu) reads LANGUAGE
@@ -549,11 +558,10 @@ def setup_translation():
         # started later with 'Fatal Python error:
         # config_get_locale_encoding: ... nl_langinfo(CODESET) failed'
         # when this was tried with LANG/LC_ALL instead.
-        os.environ['LANGUAGE'] = user_locale
-    text_domain = 'bleachbit'
+        os.environ['LANGUAGE'] = translation_locale
     try:
         t = gettext.translation(
-            domain=text_domain, localedir=locale_dir, languages=[user_locale], fallback=True)
+            domain=text_domain, localedir=locale_dir, languages=[translation_locale], fallback=True)
     except FileNotFoundError as e:
         logger.error(
             "Error in setup_translation() with language code %s: %s", user_locale, e)
