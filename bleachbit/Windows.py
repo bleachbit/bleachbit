@@ -524,20 +524,21 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
             return False
 
     (hive, parent_sub_key) = split_registry_key(parent_key)
-    hkey = None
     try:
         hkey = winreg.OpenKey(hive, parent_sub_key)
+    except PermissionError as e:
+        raise OSError(
+            errno.EACCES,
+            "Access denied in delete_registry_key()", parent_key) from e
     # WindowsError is a real builtin; this file only runs on Windows.
     # pylint: disable-next=undefined-variable
     except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
             return False
+        raise
     if not really_delete:
         return True
-    if not hkey:
-        # key not found
-        return False
     keys_size = winreg.QueryInfoKey(hkey)[0]
     child_keys = [
         parent_key + '\\' + winreg.EnumKey(hkey, i) for i in range(keys_size)
