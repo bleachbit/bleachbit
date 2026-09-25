@@ -681,6 +681,18 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         return_value = delete_registry_key('HKCU\\' + key, True)
         self.assertFalse(return_value)
 
+    def test_delete_registry_key_access_denied(self):
+        """Access denied opening the key is reported in preview and clean"""
+        denied = PermissionError(13, 'Access is denied', None, 5)
+        with mock.patch('bleachbit.Windows.winreg.OpenKey', side_effect=denied):
+            for really_delete in (False, True):
+                with self.subTest(really_delete=really_delete):
+                    with self.assertRaises(OSError) as cm:
+                        delete_registry_key(
+                            'HKCU\\Software\\BleachBit\\Denied', really_delete)
+                    self.assertEqual('Access denied in delete_registry_key()',
+                                     cm.exception.strerror)
+
     def test_delete_updates(self):
         """Unit test for delete_updates
 
