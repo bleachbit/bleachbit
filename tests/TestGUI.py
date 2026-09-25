@@ -731,6 +731,22 @@ class GUITestCase(common.BleachbitTestCase):
             self.assertEqual(gui.stop_button.get_label(), '[Abort]')
         gui.update_headerbar_labels()
 
+    def test_configure_keeps_normal_size(self):
+        """A maximized or fullscreen size must not replace the saved size"""
+        gui = self.get_window()
+        options.set('window_width', 800)
+        options.set('window_height', 600)
+        for state in (Gdk.WindowState.MAXIMIZED, Gdk.WindowState.FULLSCREEN):
+            with self.subTest(state=state):
+                gui.on_window_state_event(
+                    gui, types.SimpleNamespace(new_window_state=state))
+                with mock.patch.object(gui, 'get_size', return_value=(1920, 1080)):
+                    gui.on_configure_event(gui, None)
+                self.assertEqual(options.get('window_width'), 800)
+                self.assertEqual(options.get('window_height'), 600)
+        gui.on_window_state_event(
+            gui, types.SimpleNamespace(new_window_state=Gdk.WindowState(0)))
+
     def test_refresh_supersedes_running_registration(self):
         """A new refresh stops the registration still running"""
         gui = self.get_window()

@@ -1237,6 +1237,11 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                     self.move(g.x, g.y)
                     return True
 
+        # Keep the normal geometry for when the window is restored.
+        # on_window_state_event() keeps these two up to date.
+        if options.get("window_maximized") or options.get("window_fullscreen"):
+            return False
+
         # save window position and size
         options.set("window_x", x)
         options.set("window_y", y)
