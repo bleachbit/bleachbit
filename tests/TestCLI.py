@@ -464,6 +464,42 @@ class CLITestCase(common.BleachbitTestCase):
                 process_cmd_line()
             self.assertEqual(cm.exception.code, 1)
 
+    def test_process_cmd_line_wipe_empty_space_missing_path(self):
+        """Unit test for process_cmd_line() --wipe-empty-space, missing path"""
+        missing = os.path.join(self.tempdir, 'does-not-exist')
+        with patch('bleachbit.Wipe.wipe_path') as mock_wipe_path:
+            with patch('sys.argv', ['bleachbit', '--wipe-empty-space', missing]):
+                with self.assertRaises(SystemExit) as cm:
+                    process_cmd_line()
+                self.assertEqual(cm.exception.code, 1)
+        mock_wipe_path.assert_not_called()
+
+    def test_process_cmd_line_preview_failed(self):
+        """Unit test for process_cmd_line() --preview when the run fails"""
+        with patch('bleachbit.CLI.preview_or_clean', return_value=False):
+            with patch('sys.argv', ['bleachbit', '--preview', 'system.tmp']):
+                with self.assertRaises(SystemExit) as cm:
+                    process_cmd_line()
+                self.assertEqual(cm.exception.code, 1)
+
+    def test_preview_or_clean_status(self):
+        """preview_or_clean() returns False when the run fails"""
+        def fake_run():
+            yield False
+
+        def failing_run():
+            yield True
+            raise KeyError('test')
+
+        with patch('bleachbit.Worker.Worker') as mock_worker:
+            mock_worker.return_value.run.side_effect = fake_run
+            self.assertTrue(preview_or_clean(
+                {'test': ['option1']}, False, quiet=True))
+            mock_worker.return_value.run.side_effect = failing_run
+            with self.assertLogs('bleachbit.CLI', level='ERROR'):
+                self.assertFalse(preview_or_clean(
+                    {'test': ['option1']}, False, quiet=True))
+
     def test_process_cmd_line_preview_no_operations(self):
         """Unit test for process_cmd_line() --preview with no operations"""
         with patch('sys.argv', ['bleachbit', '--preview']):

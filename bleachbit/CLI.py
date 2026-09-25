@@ -12,6 +12,7 @@ import contextlib
 import errno
 import logging
 import optparse
+import os
 import signal
 import sys
 
@@ -108,7 +109,7 @@ def list_cleaners():
 
 
 def preview_or_clean(operations, really_clean, quiet=False):
-    """Preview deletes and other changes"""
+    """Preview deletes and other changes, and return False on failure"""
     cb = CliCallback(quiet)
     worker = Worker.Worker(cb, really_clean, operations).run()
     try:
@@ -122,6 +123,8 @@ def preview_or_clean(operations, really_clean, quiet=False):
         raise
     except Exception:
         logger.exception('Failed to clean')
+        return False
+    return True
 
 
 def args_to_operations_list(preset, all_but_warning):
@@ -426,6 +429,12 @@ There is NO WARRANTY, to the extent permitted by law.
         for wipe_path in args:
             # TRANSLATORS: Shows activity in the CLI, and %s is the path to the directory.
             logger.info(_("Wipe empty space in %s"), wipe_path)
+            # wipe_path() only logs this, so check here to set the exit status
+            if not os.path.isdir(wipe_path):
+                logger.error(
+                    _("Path to wipe must be an existing directory: %s"), wipe_path)
+                had_error = True
+                continue
             import bleachbit.Wipe
             try:
                 with _interrupt_on_termination():
@@ -451,8 +460,7 @@ There is NO WARRANTY, to the extent permitted by law.
                 _("--overwrite is intended only for use with --clean"))
         Options.options.set_override('shred', True)
     if options.clean or options.preview:
-        preview_or_clean(operations, options.clean)
-        sys.exit(0)
+        sys.exit(0 if preview_or_clean(operations, options.clean) else 1)
     if options.gui:
         from bleachbit.Bootstrap import check_wayland_and_root
         if check_wayland_and_root():
@@ -468,8 +476,7 @@ There is NO WARRANTY, to the extent permitted by law.
         # create a temporary cleaner object
         backends['_gui'] = create_simple_cleaner(args)
         operations = {'_gui': ['files']}
-        preview_or_clean(operations, True)
-        sys.exit(0)
+        sys.exit(0 if preview_or_clean(operations, True) else 1)
     if options.sysinfo:
         print(SystemInformation.get_system_information())
         sys.exit(0)
