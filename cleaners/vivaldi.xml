@@ -8,7 +8,6 @@ This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
 
 Tested with Vivaldi 6.x on Windows 10/11, Linux and macOS.
-Only the Default profile is cleaned.
 
 -->
 <cleaner id="vivaldi">
@@ -26,10 +25,14 @@ Only the Default profile is cleaned.
   </var>
   <var name="profile">
     <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data\Default</value>
+    <value search="glob" os="windows">%LOCALAPPDATA%\Vivaldi\User Data\Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/vivaldi/Profile *</value>
     <value os="linux">~/.config/vivaldi/Default</value>
     <value os="linux" search="glob">~/snap/vivaldi/[0-9]*/.config/vivaldi/Default</value>
+    <value search="glob" os="linux">~/snap/vivaldi/[0-9]*/.config/vivaldi/Profile *</value>
     <value os="macos">$HOME/Library/Application Support/Vivaldi/Default</value>
+    <value search="glob" os="macos">$HOME/Library/Application Support/Vivaldi/Profile *</value>
   </var>
   <option id="cache">
     <label>Cache</label>
