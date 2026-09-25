@@ -11,7 +11,8 @@ later.  See the COPYING file in the top-level directory.
 <cleaner id="transmission" os="linux">
   <label>Transmission</label>
   <description>File transfer client</description>
-  <running type="exe" same_user="true">transmission</running>
+  <running type="exe" same_user="true">transmission-gtk</running>
+  <running type="exe" same_user="true">transmission-qt</running>
   <option id="blocklists">
     <label translators="Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations">Blocklists</label>
     <description>Delete the files</description>

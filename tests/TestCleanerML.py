@@ -437,6 +437,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             ('android_studio', 'studio'),
             ('rhythmbox', 'rhythmbox'),
             ('slack', 'slack'),
+            ('transmission', 'transmission-gtk'),
+            ('transmission', 'transmission-qt'),
         )
         self.addCleanup(process_cache.invalidate)
         for cleaner_id, exe_name in cases:
