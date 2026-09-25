@@ -11,6 +11,7 @@ Test case for module WindowsWipe
 
 # standard library
 import os
+import struct
 import sys
 import time
 import unittest
@@ -179,6 +180,24 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         else:
             print(
                 "skipping large-file extent check: volume appears WOF-compressed (Compact OS)")
+
+    def test_get_extents_many_runs(self):
+        """get_extents() reads more runs than fit in a 2 MB buffer"""
+        run_count = 200000
+        runs = b''.join(struct.pack('qq', (i + 1) * 8, 1000 + i * 8)
+                        for i in range(run_count))
+
+        def device_io_control(_handle, _code, _input, out_size):
+            if out_size < 16 + len(runs):
+                # pylint: disable-next=possibly-used-before-assignment
+                raise pywintypes.error(234, 'DeviceIoControl',
+                                       'More data is available.')
+            return struct.pack('IIq', run_count, 0, 0) + runs
+
+        with mock.patch('bleachbit.WindowsWipe.DeviceIoControl',
+                        side_effect=device_io_control):
+            extents = get_extents(None)
+        self.assertEqual(len(extents), run_count)
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""

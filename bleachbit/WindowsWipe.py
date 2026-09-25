@@ -703,12 +703,11 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
     # Assemble input structure and query Windows for retrieval pointers.
     # The input structure is the number 0 as a signed 64 bit integer.
     input_struct = struct.pack('q', 0)
-    # 4K, 32K, 256K, 2M step ups in buffer size, until call succeeds.
+    # 4K, 32K, 256K and so on step ups in buffer size, until call succeeds.
     # Compressed/encrypted/sparse files tend to have more chopped up extents.
-    buf_retry_sizes = [4 * 1024, 32 * 1024, 256 * 1024, 2 * 1024**2]
+    retrieval_pointers_buf_size = 4 * 1024
 
-    rp_struct = None
-    for retrieval_pointers_buf_size in buf_retry_sizes:
+    while True:
         try:
             rp_struct = DeviceIoControl(file_handle,
                                         FSCTL_GET_RETRIEVAL_POINTERS,
@@ -724,18 +723,14 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
                 # (122, 'DeviceIoControl',
                 # 'The data area passed to a system call is too small.')
                 # (234, 'DeviceIoControl', 'More data is available.')
-                pass
+                retrieval_pointers_buf_size *= 8
             else:
                 logger.error("Unhandled error code %d in get_extents for file '%s': %s",
                              err_code, filename, str(err_info))
                 raise
         else:
-            # Call succeeded, break out from for loop.
+            # Call succeeded, break out from while loop.
             break
-
-    if rp_struct is None:
-        raise RuntimeError(
-            f"Failed to get retrieval pointers for file '{filename}'")
 
     # At this point we have a FSCTL_GET_RETRIEVAL_POINTERS (rp) structure.
     # Process content of the first part of structure.
