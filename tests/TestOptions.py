@@ -417,6 +417,23 @@ expert_mode = True
             # forced commit() failure above never clears dirty/cancels the timer
             o.cancel_pending_flush()
 
+    def test_error_other_write_errors(self):
+        """Test that other write errors are logged instead of raised"""
+        o = bleachbit.Options.Options()
+        try:
+            for err in (errno.EROFS, errno.EPERM, errno.EDQUOT, errno.EIO):
+                with self.subTest(errno=errno.errorcode[err]):
+                    with mock.patch('builtins.open',
+                                    side_effect=OSError(err, os.strerror(err))):
+                        with self.assertLogs(level='ERROR') as log_context:
+                            o.set('test_key', str(err))
+                            o.commit()
+                    self.assertIn(bleachbit.options_file,
+                                  log_context.output[0])
+                    self.assertTrue(o._dirty)
+        finally:
+            o.cancel_pending_flush()
+
     def test_failed_write_keeps_old_file(self):
         """A write that fails part way must leave the old file whole"""
         filename = self._write_private_options_file('''[bleachbit]
