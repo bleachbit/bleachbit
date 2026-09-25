@@ -743,6 +743,92 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual(2, show_infobar.call_count)
         self.assertExists(test_file)
 
+    def test_shred_paths_refused_after_reload_during_confirmation(self):
+        """A reload started during the confirmation stops the shred"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-shred-reload')
+        self.write_file(os.path.join(dirname, 'file'))
+        gui = self.get_window()
+        options.set('delete_confirmation', True)
+        self.refresh_gui()
+
+        def fake_confirm_delete(*_args, **_kwargs):
+            # The preview finishes, then e.g. a winapp2 download lands
+            self.assertTrue(self.wait_until(gui.run_button_get_sensitive))
+            gui.cb_refresh_operations()
+            return True
+
+        try:
+            with mock.patch.object(gui, '_confirm_delete',
+                                   side_effect=fake_confirm_delete), \
+                    mock.patch.object(gui, 'show_infobar') as show_infobar:
+                gui.shred_paths([dirname])
+                show_infobar.assert_called_once()
+                self.assertTrue(self.wait_until(gui.run_button_get_sensitive))
+            self.assertExists(dirname)
+            self.assertNotIn('_gui', backends)
+        finally:
+            options.set('delete_confirmation', False)
+            backends.pop('_gui', None)
+
+    def test_shred_paths_leaves_shred_started_during_confirmation(self):
+        """A shred started during another's confirmation runs to the end"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-shred-outer')
+        self.write_file(os.path.join(dirname, 'file'))
+        other = self.mkdtemp(prefix='bleachbit-test-shred-inner')
+        for i in range(20):
+            self.write_file(os.path.join(other, f'file{i}'))
+        gui = self.get_window()
+        options.set('delete_confirmation', True)
+        self.refresh_gui()
+        confirmations = []
+
+        def fake_confirm_delete(*_args, **_kwargs):
+            confirmations.append(True)
+            if len(confirmations) == 1:
+                # e.g. the orphaned wipe file prompt, once the preview is done
+                self.assertTrue(self.wait_until(gui.run_button_get_sensitive))
+                gui.shred_paths([other])
+            return True
+
+        try:
+            with mock.patch.object(gui, '_confirm_delete',
+                                   side_effect=fake_confirm_delete), \
+                    mock.patch.object(gui, 'show_infobar') as show_infobar, \
+                    mock.patch.object(gui, 'worker_done',
+                                      wraps=gui.worker_done) as worker_done:
+                gui.shred_paths([dirname])
+                show_infobar.assert_called_once()
+                self.assertTrue(self.wait_until(gui.run_button_get_sensitive))
+
+            self.assertEqual(
+                [False, True], [call.args[1] for call in worker_done.call_args_list])
+            self.assertNotExists(other)
+            self.assertExists(dirname)
+        finally:
+            options.set('delete_confirmation', False)
+            backends.pop('_gui', None)
+
+    def test_delete_refused_after_reload_during_confirmation(self):
+        """Clean does not start while a reload begun in its dialog runs"""
+        gui = self.get_window()
+        self._setup_new_cleaner(gui)
+
+        def fake_confirm_delete(*_args, **_kwargs):
+            gui.cb_refresh_operations()
+            return True
+
+        with mock.patch.object(gui, '_confirm_delete',
+                               side_effect=fake_confirm_delete), \
+                mock.patch.object(gui, 'show_infobar') as show_infobar, \
+                mock.patch.object(gui, 'preview_or_run_operations') as start:
+            gui.cb_run_option(None, True, self._NEW_CLEANER_ID,
+                              self._NEW_OPTION_ID)
+            gui.run_operations(None)
+            self.refresh_gui()
+        start.assert_not_called()
+        self.assertEqual(2, show_infobar.call_count)
+        self.assertTrue(gui.run_button_get_sensitive())
+
     def test_shred_instance_shreds_its_paths_once(self):
         """A shred instance runs on its own and shreds its paths only once"""
         from bleachbit.GuiApplication import Bleachbit

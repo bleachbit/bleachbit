@@ -556,6 +556,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             if self.worker is preview and self._worker_source is not None:
                 # It would write to the delete log and call worker_done()
                 self._stop_worker()
+            elif self.refuse_if_busy():
+                # A reload or another shred started during the dialog
+                return False
             # User confirmed.  If the preview already finished during the
             # confirmation dialog, worker_done() removed _gui from backends.
             # Re-create it so the real delete worker can use it.
@@ -691,7 +694,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         return self.run_button.get_sensitive()
 
     def refuse_if_busy(self):
-        """Tell the user and return True if an operation is running"""
+        """Tell the user and return True if an operation is running
+
+        Call it after the confirmation dialog: a reload can start during it.
+        """
         if self.run_button_get_sensitive():
             return False
         self.show_infobar(
@@ -707,7 +713,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # Disable delete confirmation message.
         # if the option is selected under preference.
 
-        if self._confirm_delete(True):
+        if self._confirm_delete(True) and not self.refuse_if_busy():
             self.preview_or_run_operations(True)
 
     def _filter_operations_for_expert_mode(self, operations, really_delete):
@@ -972,7 +978,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             return
 
         # delete
-        if self._confirm_delete(False):
+        if self._confirm_delete(False) and not self.refuse_if_busy():
             self.preview_or_run_operations(True, operations)
             return
 
