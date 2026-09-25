@@ -14,6 +14,8 @@ Test case for module Options
 
 import errno
 import os
+import stat
+import subprocess
 import sys
 import threading
 from unittest import mock
@@ -364,6 +366,154 @@ auto_hide = True
         finally:
             # forced commit() failure above never clears dirty/cancels the timer
             o.cancel_pending_flush()
+
+    def test_failed_write_keeps_old_file(self):
+        """A write that fails part way must leave the old file whole"""
+        filename = self._write_private_options_file('''[bleachbit]
+[whitelist/paths]
+0_type = folder
+0_path = /home/keep
+''')
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            old_contents = handle.read()
+
+        def write_then_fail(fileobj, *_args, **_kwargs):
+            fileobj.write('[bleachbit]\n')
+            raise OSError(errno.ENOSPC, 'No space left on device')
+
+        o = bleachbit.Options.Options()
+        try:
+            with mock.patch.object(o.config, 'write', side_effect=write_then_fail):
+                with self.assertLogs(level='ERROR'):
+                    o.commit()
+        finally:
+            o.cancel_pending_flush()
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            self.assertEqual(handle.read(), old_contents)
+        self.assertEqual(
+            [name for name in os.listdir(self.tempdir) if name.endswith('.tmp')], [])
+
+    @common.skipIfWindows
+    def test_new_file_not_published_when_chown_fails(self):
+        """Under sudo a new file that cannot be given to the user is not
+        moved into place, since the user could not read it afterwards"""
+        filename = os.path.join(self.mkdtemp(), 'bleachbit.ini')
+        config = bleachbit.Options.configparser.RawConfigParser()
+        config.add_section('bleachbit')
+        with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself',
+                           return_value=False) as mock_chownself:
+            with self.assertRaises(OSError):
+                bleachbit.Options._write_config_file(config, filename)
+        self.assertNotExists(filename)
+        self.assertEqual(os.listdir(os.path.dirname(filename)), [])
+        mock_chownself.assert_called_once()
+        self.assertIsInstance(mock_chownself.call_args[0][1], int)
+        with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself', return_value=True):
+            bleachbit.Options._write_config_file(config, filename)
+        self.assertExists(filename)
+
+    @common.skipIfWindows
+    def test_swapped_temp_file_keeps_link_target(self):
+        """Swapping the temporary file for a link leaves its target alone"""
+        filename = self._write_private_options_file('')
+        victim = os.path.join(self.mkdtemp(), 'victim')
+        real_mkstemp = bleachbit.Options.tempfile.mkstemp
+
+        def swap_for_link(temp_path):
+            os.remove(temp_path)
+            os.symlink(victim, temp_path)
+            swapped.append(temp_path)
+
+        def mkstemp_then_swap(*args, **kwargs):
+            fd, temp_path = real_mkstemp(*args, **kwargs)
+            swap_for_link(temp_path)
+            return fd, temp_path
+
+        # before the file is opened, and before its mode and owner are set
+        for when in ('mkstemp', 'write'):
+            with self.subTest(when=when):
+                swapped = []
+                with open(filename, 'w', encoding='utf-8') as handle:
+                    handle.write('[bleachbit]\n')
+                os.chmod(filename, 0o600)
+                with open(victim, 'w', encoding='utf-8') as handle:
+                    handle.write('victim\n')
+                os.chmod(victim, 0o700)
+                o = bleachbit.Options.Options()
+                def write_then_swap(fileobj, *args,
+                                    _real_write=o.config.write, **kwargs):
+                    _real_write(fileobj, *args, **kwargs)
+                    prefix = os.path.basename(filename) + '.'
+                    for name in os.listdir(self.tempdir):
+                        if name.startswith(prefix) and name.endswith('.tmp'):
+                            swap_for_link(os.path.join(self.tempdir, name))
+
+                if when == 'mkstemp':
+                    patcher = mock.patch('bleachbit.Options.tempfile.mkstemp',
+                                         side_effect=mkstemp_then_swap)
+                else:
+                    patcher = mock.patch.object(o.config, 'write',
+                                                side_effect=write_then_swap)
+                try:
+                    with patcher:
+                        o.commit()
+                finally:
+                    o.close()
+                    if os.path.islink(filename):
+                        os.remove(filename)
+                self.assertEqual(len(swapped), 1)
+                self.assertEqual(stat.S_IMODE(os.stat(victim).st_mode), 0o700)
+                with open(victim, 'r', encoding='utf-8') as handle:
+                    self.assertEqual(handle.read(), 'victim\n')
+
+    def test_write_in_place_when_move_is_denied(self):
+        """A writable file is saved in place when it cannot be replaced"""
+        filename = self._write_private_options_file('[bleachbit]\n')
+        denied = PermissionError(errno.EACCES, os.strerror(errno.EACCES))
+        busy = OSError(errno.EBUSY, os.strerror(errno.EBUSY))
+        for target, error in (('tempfile.mkstemp', denied),
+                              ('os.replace', denied), ('os.replace', busy)):
+            value = f'{target} {error.errno}'
+            with self.subTest(value=value):
+                o = bleachbit.Options.Options()
+                try:
+                    o.set('test_key', value)
+                    with mock.patch(target, side_effect=error):
+                        o.commit()
+                    self.assertFalse(o._dirty)
+                finally:
+                    o.close()
+                with open(filename, 'r', encoding='utf-8-sig') as handle:
+                    self.assertIn(f'test_key = {value}', handle.read())
+        self.assertEqual(
+            [name for name in os.listdir(self.tempdir) if name.endswith('.tmp')], [])
+
+    @common.skipUnlessWindows
+    def test_unopenable_file_is_kept_on_windows(self):
+        """A file the user cannot open is left alone instead of replaced"""
+        contents = '[bleachbit]\nkept = 1\n'
+        filename = self._write_private_options_file(contents)
+        user = os.environ['USERNAME']
+        subprocess.run(['icacls', filename, '/deny', f'{user}:(F)'],
+                       check=True, capture_output=True)
+        self.addCleanup(subprocess.run,
+                        ['icacls', filename, '/remove:d', user],
+                        check=False, capture_output=True)
+        o = bleachbit.Options.Options()
+        try:
+            o.set('test_key', 'lost')
+            with self.assertLogs(level='ERROR') as log_context:
+                o.commit()
+            self.assertIn('Permission denied', log_context.output[0])
+            self.assertTrue(o._dirty)
+        finally:
+            o.cancel_pending_flush()
+        subprocess.run(['icacls', filename, '/remove:d', user],
+                       check=True, capture_output=True)
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            self.assertEqual(handle.read(), contents)
 
     def test_error_permission(self):
         """Test graceful degradation with permission errors"""

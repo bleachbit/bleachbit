@@ -25,16 +25,19 @@ Store and retrieve user preferences
 # standard library imports
 import atexit
 import configparser
+import contextlib
 import errno
 import hashlib
 import logging
 import os
 import re
+import stat
+import tempfile
 import threading
 
 # local application imports
 import bleachbit
-from bleachbit import General, IS_WINDOWS
+from bleachbit import General, IS_POSIX, IS_WINDOWS
 from bleachbit.FileUtilities import open_for_overwrite
 from bleachbit.Language import get_text as _
 
@@ -153,6 +156,76 @@ def _open_config_write(path):
         path, encoding='utf-8-sig', errors='surrogateescape')
 
 
+def _replace_config_file(config, path, exists):
+    """Write config to a temporary file, then move it over path
+
+    Returns False instead of moving when the file exists on Windows: the
+    replacement would take the writer's owner, and an elevated save would
+    lock the user out of a folder with an OWNER RIGHTS ACL.
+    """
+    fd, temp_path = tempfile.mkstemp(
+        prefix=os.path.basename(path) + '.', suffix='.tmp',
+        dir=os.path.dirname(path))
+    try:
+        # Use the descriptor, the name can be swapped for a link meanwhile
+        try:
+            f = open(fd, 'w', encoding='utf-8-sig', errors='surrogateescape')
+        except BaseException:
+            os.close(fd)
+            raise
+        with f:
+            config.write(f)
+            f.flush()
+            if exists and IS_POSIX:
+                # keep the old file's mode and, as root, its owner
+                old_stat = os.lstat(path)
+                if stat.S_ISLNK(old_stat.st_mode):
+                    raise OSError(
+                        errno.ELOOP, 'refusing to replace a link', path)
+                os.fchmod(fd, stat.S_IMODE(old_stat.st_mode))
+                if os.geteuid() == 0:
+                    os.fchown(fd, old_stat.st_uid, old_stat.st_gid)
+            elif not exists and General.sudo_mode() and \
+                    not General.chownself(temp_path, fd):
+                # Published root-owned and private, the user could not
+                # read it back; the old file (or none) is better
+                raise OSError(errno.EPERM, 'cannot give the file to the user',
+                              path)
+            os.fsync(f.fileno())
+        if exists and IS_WINDOWS:
+            return False
+        os.replace(temp_path, path)
+        return True
+    finally:
+        with contextlib.suppress(OSError):
+            os.unlink(temp_path)
+
+
+def _write_config_file(config, path):
+    """Write config to path
+
+    Via a temporary file, so a failed write leaves the old file whole. An
+    existing file on Windows is then written in place, which keeps its owner.
+    """
+    if os.path.islink(path):
+        raise OSError(errno.EACCES, 'refusing to replace a link', path)
+    exists = os.path.exists(path)
+    # Replacing needs no write access to the file, so respect a read-only one
+    if exists and not os.access(path, os.W_OK):
+        raise PermissionError(errno.EACCES, os.strerror(errno.EACCES), path)
+    try:
+        replaced = _replace_config_file(config, path, exists)
+    except OSError as e:
+        # Blocked by a read-only directory, or by a bind mount on the file
+        if not exists or not (
+                isinstance(e, PermissionError) or e.errno == errno.EBUSY):
+            raise
+        replaced = False
+    if not replaced:
+        with _open_config_write(path) as f:
+            config.write(f)
+
+
 def init_configuration(*, log=True):
     """Initialize an empty configuration, if necessary"""
     if not os.path.exists(bleachbit.options_dir):
@@ -250,11 +323,7 @@ class Options:
         try:
             if not os.path.exists(bleachbit.options_dir):
                 General.makedirs(bleachbit.options_dir)
-            mkfile = not os.path.exists(bleachbit.options_file)
-            with _open_config_write(bleachbit.options_file) as _file:
-                self.config.write(_file)
-            if mkfile and General.sudo_mode():
-                General.chownself(bleachbit.options_file)
+            _write_config_file(self.config, bleachbit.options_file)
         except (OSError, IOError, PermissionError) as e:
             if e.errno == errno.ENOSPC:
                 logger.error(

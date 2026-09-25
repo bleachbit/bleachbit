@@ -228,6 +228,20 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertIsInstance(uid, int)
         self.assertGreaterEqual(uid, 0)
 
+    @common.skipIfWindows
+    def test_chownself_fd(self):
+        """With a descriptor the open file is chowned, and a failure is
+        reported instead of only logged"""
+        with mock.patch.object(General, 'get_real_uid', return_value=1000), \
+                mock.patch.object(os, 'chown') as mock_chown, \
+                mock.patch.object(os, 'fchown') as mock_fchown:
+            self.assertTrue(chownself('/tmp/x', 7))
+        mock_chown.assert_not_called()
+        mock_fchown.assert_called_once_with(7, 1000, -1)
+        with mock.patch.object(General, 'get_real_uid', return_value=1000), \
+                mock.patch.object(os, 'fchown', side_effect=OSError(1, 'nope')):
+            self.assertFalse(chownself('/tmp/x', 7))
+
     def test_chownself_root_guard(self):
         """chownself() must refuse /root and its descendants, including
         via a non-canonical path spelling that a raw substring check

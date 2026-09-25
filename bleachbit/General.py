@@ -173,24 +173,31 @@ class WindowsError(Exception):
         return 'this is a dummy class for non-Windows systems'
 
 
-def chownself(path):
+def chownself(path, fd=None):
     """Set path owner to real self when running in sudo.
     If sudo creates a path and the owner isn't changed, the
-    owner may not be able to access the path."""
+    owner may not be able to access the path. With fd, the file it is
+    open as, not what the name points at by now. Returns whether the
+    owner is right afterwards."""
     if not IS_POSIX:
-        return
+        return True
     uid = get_real_uid()
     logger.debug('chown(%s, uid=%s)', path, uid)
     normalized_path = os.path.normpath(os.path.abspath(path))
     if normalized_path == '/root' or path_startswith(normalized_path, '/root'):
         logger.info('chown for path /root aborted')
-        return
+        return True
     try:
-        # follow_symlinks=False (lchown) so a symlink planted at this path
-        # cannot redirect the ownership change to its target.
-        os.chown(path, uid, -1, follow_symlinks=False)
+        if fd is not None:
+            os.fchown(fd, uid, -1)
+        else:
+            # follow_symlinks=False (lchown) so a symlink planted at this
+            # path cannot redirect the ownership change to its target.
+            os.chown(path, uid, -1, follow_symlinks=False)
     except Exception:
         logger.exception('Error in chown() under chownself()')
+        return False
+    return True
 
 
 def gc_collect():
