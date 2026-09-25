@@ -28,6 +28,7 @@ import configparser
 import contextlib
 import errno
 import hashlib
+import json
 import logging
 import os
 import re
@@ -138,6 +139,28 @@ def path_to_option(pathname):
         # ConfigParser treats colons in a special way
         pathname = pathname[0] + pathname[2:]
     return pathname
+
+
+def _quote_path(path):
+    """Quote a path that would not come back unchanged as a plain value
+
+    ConfigParser strips whitespace from both ends of a value and the
+    indentation of its continuation lines. An absolute path never starts
+    with a quotation mark, so the quoting is unambiguous.
+    """
+    if path != path.strip() or '\n' in path or '\r' in path:
+        return json.dumps(path)
+    return path
+
+
+def _unquote_path(value):
+    """Reverse _quote_path()"""
+    if value.startswith('"'):
+        try:
+            return json.loads(value)
+        except ValueError:
+            pass
+    return value
 
 
 def protected_path_warning_key(pathname):
@@ -529,7 +552,7 @@ class Options:
         if not self.config.has_section(section):
             return None
         return [
-            self.config.get(section, opt)
+            _unquote_path(self.config.get(section, opt))
             for opt in sorted(self.config.options(section), key=_option_index)
         ]
 
@@ -549,7 +572,13 @@ class Options:
         values = []
         for opt in sorted(set(myoptions), key=_option_index):
             p_type = self.config.get(section, opt + '_type')
-            p_path = self.config.get(section, opt + '_path')
+            p_path = _unquote_path(self.config.get(section, opt + '_path'))
+            if not os.path.isabs(p_path):
+                # The GUI only writes absolute paths; a hand-edited one
+                # could also be a legacy value starting with a quote
+                logger.warning('Ignoring relative path in [%s]: %r',
+                               section, p_path)
+                continue
             values.append((p_type, p_path))
         self._paths_cache[section] = values
         return list(values)
@@ -763,7 +792,8 @@ class Options:
                 self.config.remove_section(section)
             self.config.add_section(section)
             for counter, value in enumerate(values):
-                self.config.set(section, str(counter), value)
+                # The shred drives are paths too
+                self.config.set(section, str(counter), _quote_path(value))
             self.__schedule_flush()
 
     def __set_paths(self, section, values):
@@ -781,7 +811,8 @@ class Options:
             for counter, (path_type, path) in enumerate(values):
                 assert path_type in ('file', 'folder')
                 self.config.set(section, str(counter) + '_type', path_type)
-                self.config.set(section, str(counter) + '_path', path)
+                self.config.set(section, str(counter) + '_path',
+                                _quote_path(path))
             self._paths_cache.pop(section, None)
             self.__schedule_flush()
 

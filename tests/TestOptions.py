@@ -240,6 +240,50 @@ auto_hide = True
         o.close()
         self.assertEqual(set(old_keep_list), set(o.get_whitelist_paths()))
 
+    def test_paths_keep_surrounding_whitespace(self):
+        """Keep list and custom paths come back unchanged after a restart"""
+        self._write_private_options_file('[bleachbit]\n')
+        data = os.path.abspath('/data')
+        keep_list = [('folder', data + '/Photos '), ('file', data + '/b.txt\t'),
+                     ('folder', data + '/plain'), ('file', data + '/cr\rpath'),
+                     ('folder', data + '/nl\n  path')]
+        custom = [('folder', data + '/old\u00a0')]
+        drives = [data + '/drive ', data + '/cr\rdrive', data + '/plain']
+        o = bleachbit.Options.Options()
+        try:
+            o.set_whitelist_paths(keep_list)
+            o.set_custom_paths(custom)
+            o.set_list('shred_drives', drives)
+            o.commit()
+        finally:
+            o.close()
+        o2 = bleachbit.Options.Options()
+        try:
+            self.assertEqual(o2.get_whitelist_paths(), keep_list)
+            self.assertEqual(o2.get_custom_paths(), custom)
+            self.assertEqual(o2.get_list('shred_drives'), drives)
+        finally:
+            o2.close()
+
+    def test_paths_ignore_relative(self):
+        """A relative path, quoted or not, is ignored: the GUI never
+        writes one, and a legacy value starting with a quote is one"""
+        data = os.path.abspath('/data')
+        self._write_private_options_file(
+            '[bleachbit]\n[whitelist/paths]\n'
+            '0_type = file\n0_path = " foo"\n'
+            '1_type = file\n1_path = "foo"\n'
+            '2_type = file\n2_path = "\\tfoo"\n'
+            '3_type = file\n3_path = foo\n'
+            f'4_type = folder\n4_path = {data}\n')
+        o = bleachbit.Options.Options()
+        try:
+            with self.assertLogs('bleachbit.Options', level='WARNING') as logs:
+                self.assertEqual(o.get_whitelist_paths(), [('folder', data)])
+        finally:
+            o.close()
+        self.assertEqual(len(logs.output), 4)
+
     def test_init_configuration(self):
         """Test for init_configuration()"""
         if os.path.exists(bleachbit.options_file):
@@ -287,18 +331,19 @@ auto_hide = True
 
     def test_duplicate_key_keeps_later_sections(self):
         """A duplicate key must not stop the read before the keep list"""
-        self._write_private_options_file('''[bleachbit]
+        keep_path = os.path.abspath('/home/keep')
+        self._write_private_options_file(f'''[bleachbit]
 expert_mode = False
 expert_mode = True
 [whitelist/paths]
 0_type = folder
-0_path = /home/keep
+0_path = {keep_path}
 ''')
         o = bleachbit.Options.Options()
         try:
             self.assertTrue(o.get('expert_mode'))
             self.assertEqual(o.get_whitelist_paths(),
-                             [('folder', '/home/keep')])
+                             [('folder', keep_path)])
         finally:
             o.cancel_pending_flush()
 
@@ -667,14 +712,15 @@ protected_path = /tmp = True
 
     def test_protected_path_warning_keys(self):
         """Test paths that cannot be INI keys and raw keys from older files"""
-        filename = self._write_private_options_file('''[bleachbit]
+        keep_path = os.path.abspath('/home/keep')
+        filename = self._write_private_options_file(f'''[bleachbit]
 [warnings]
 protected_path = /srv/old=1 = True
 protected_path:/srv/raw = True
 protected_path:/srv/other=2 = True
 [whitelist/paths]
 0_type = folder
-0_path = /home/keep
+0_path = {keep_path}
 ''')
         cleaner_xml = self.write_file('a=b.xml')
         o = bleachbit.Options.Options()
@@ -696,7 +742,7 @@ protected_path:/srv/other=2 = True
                 self.assertTrue(o2.get_warning_preference(
                     protected_path_warning_key(path)), path)
             self.assertEqual(o2.get_whitelist_paths(),
-                             [('folder', '/home/keep')])
+                             [('folder', keep_path)])
         finally:
             o2.close()
 
