@@ -85,6 +85,18 @@ def section2option(s):
     return ret
 
 
+def _split_sections(lines):
+    """Group lines so that each group after the first starts at a header"""
+    chunk = []
+    for line in lines:
+        if line.startswith('[') and chunk:
+            yield chunk
+            chunk = []
+        chunk.append(line)
+    if chunk:
+        yield chunk
+
+
 def _noop_progress(_fraction):
     """Default progress callback used when one is not provided."""
     return None
@@ -199,7 +211,10 @@ class Winapp:
         self.errors = 0
         self.parser = configparser.RawConfigParser()
         encoding = detect_encoding(pathname) or 'utf_8_sig'
-        self.parser.read(pathname, encoding=encoding)
+        try:
+            self.parser.read(pathname, encoding=encoding)
+        except configparser.Error:
+            self.parser = self._read_by_section(pathname, encoding)
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         self.re_excludekey = re.compile(r'^excludekey\d+$')
@@ -209,6 +224,34 @@ class Winapp:
             return
         for _dummy in self.load_sections(cb_progress):
             pass
+
+    def _read_by_section(self, pathname, encoding):
+        """Parse each section on its own, skipping the ones that fail
+
+        Used when a duplicate or a stray line fails the whole-file parse.
+        """
+        parser = configparser.RawConfigParser()
+        with open(pathname, encoding=encoding) as ini:
+            for chunk in _split_sections(ini):
+                chunk_parser = configparser.RawConfigParser()
+                try:
+                    chunk_parser.read_file(chunk, chunk[0].strip())
+                except configparser.Error as e:
+                    self.errors += 1
+                    logger.error('skipping section in %s: %s', pathname, e)
+                    continue
+                for section in chunk_parser.sections():
+                    if parser.has_section(section):
+                        # Merging could pair one entry's Detect with the
+                        # other's FileKeys, so keep the first
+                        self.errors += 1
+                        logger.error('skipping duplicate section %s in %s',
+                                     section, pathname)
+                        continue
+                    parser.add_section(section)
+                    for option, value in chunk_parser.items(section):
+                        parser.set(section, option, value)
+        return parser
 
     def load_sections(self, cb_progress=_noop_progress):
         """Parse each section, yielding so a GUI caller can keep painting"""
