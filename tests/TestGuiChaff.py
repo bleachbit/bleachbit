@@ -244,6 +244,26 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         mock_make_files.assert_not_called()
 
     @patch('bleachbit.GuiChaff.make_files_thread')
+    @patch('bleachbit.Chaff.download_models')
+    @patch('bleachbit.Chaff.have_models')
+    def test_close_during_download(self, mock_have_models, mock_download_models, mock_make_files):
+        """Closing the dialog during the download must not make files afterwards"""
+        mock_have_models.return_value = False
+        release = threading.Event()
+        mock_download_models.side_effect = lambda **_kwargs: release.wait(10)
+
+        self.dialog.choose_folder_button.set_filename(self.tempdir)
+        self.dialog.make_button.clicked()
+        self.dialog._on_delete_event(self.dialog, None)
+        release.set()
+        # Let the worker finish, then run the idle callback it queues
+        self.refresh_gui(0.1)
+        self.refresh_gui()
+
+        mock_download_models.assert_called_once()
+        mock_make_files.assert_not_called()
+
+    @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.have_models')
     def test_make_files_models_exist(self, mock_have_models, mock_make_files):
         """Test making files when models already exist"""
