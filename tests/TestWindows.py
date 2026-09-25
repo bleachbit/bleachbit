@@ -788,6 +788,16 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertEqual(1, parameters.split().count('--gui'))
         self.assertIn('--exit', parameters)
 
+    def test_elevate_privileges_error(self):
+        """A failed UAC elevation continues without elevation"""
+        for winerror in (1223, 5, 1062):
+            error = pywintypes.error(winerror, 'ShellExecuteEx', 'error')
+            with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False), \
+                    mock.patch('bleachbit.Windows.path_on_network', return_value=False), \
+                    mock.patch('bleachbit.Windows.get_sid_token_48', return_value='ABCDEFGH'), \
+                    mock.patch('bleachbit.Windows.shell.ShellExecuteEx', side_effect=error):
+                self.assertFalse(elevate_privileges(True), winerror)
+
     def test_splash_thread_reuses_cached_class_atom(self):
         """_register_window_class skips RegisterClass when cached."""
         splash = SplashThread()
