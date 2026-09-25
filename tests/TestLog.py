@@ -14,7 +14,7 @@ import stat
 import sys
 from unittest import mock
 
-from bleachbit.Log import init_log
+from bleachbit.Log import DelayLog, init_log
 from tests import common
 
 
@@ -85,3 +85,11 @@ class LogTestCase(common.BleachbitTestCase):
             handler.flush()
         with open(debug_log_path, encoding='utf-8') as f:
             self.assertIn('path: caf\\udce9 \u4e2d', f.read())
+
+    def test_delay_log_read_once(self):
+        """DelayLog keeps nothing written after the GUI has read it"""
+        delay_log = DelayLog()
+        delay_log.write('early\n')
+        self.assertEqual(list(delay_log.read()), ['early\n'])
+        delay_log.write('late\n')
+        self.assertEqual(delay_log.queue, [])

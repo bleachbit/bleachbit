@@ -44,12 +44,18 @@ class DelayLog:
     def __init__(self):
         self.queue = []
         self.msg = ''
+        self.drained = False
 
     def read(self):
         yield from self.queue
         self.queue = []
+        # The GUI reads once and then shows log records itself, but the
+        # console handler keeps writing here.
+        self.drained = True
 
     def write(self, msg):
+        if self.drained:
+            return
         self.msg += msg
         if self.msg and self.msg[-1] == '\n':
             self.queue.append(self.msg)
