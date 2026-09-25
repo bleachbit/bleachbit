@@ -410,7 +410,8 @@ class Winapp:
                     # REG exclusion: extract the registry path
                     parts = excludekey_val.split('|')
                     if len(parts) >= 2:
-                        reg_excludekeys.append(parts[1])
+                        # allow a trailing backslash, as FILE and PATH do
+                        reg_excludekeys.append(parts[1].rstrip('\\'))
                 else:
                     file_excludekeys.append(nwholeregex)
         # there are two ways to specify sections: langsecref= and section=
