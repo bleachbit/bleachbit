@@ -19,7 +19,7 @@ import bleachbit
 from bleachbit import General
 from bleachbit.Constant import URL_COOKIE_MGR
 from bleachbit.Cookie import list_unique_cookies, load_keep_list, COOKIE_KEEP_LIST_FILENAME
-from bleachbit.FileUtilities import open_for_overwrite
+from bleachbit.FileUtilities import _open_nofollow_fd, open_for_overwrite
 from bleachbit.GuiBasic import open_url
 from bleachbit.Language import get_text as _, nget_text as _n
 
@@ -47,6 +47,14 @@ class _CookieFilter:
         if self.selected_only:
             return bool(model[tree_iter][0])
         return True
+
+
+def _open_keep_list(path, create):
+    """Open the keep list for writing, exclusively when creating it"""
+    if create:
+        # A hard link raced in is refused, not truncated and given to the user
+        return open(path, 'x', encoding='utf-8', opener=_open_nofollow_fd)
+    return open_for_overwrite(path, encoding='utf-8')
 
 
 def _mark_destroyed(pane):
@@ -199,10 +207,10 @@ class CookieManagerPane(Gtk.Box):
 
         try:
             mkfile = not os.path.exists(self.keep_list_path)
-            with open_for_overwrite(self.keep_list_path, encoding="utf-8") as f:
+            with _open_keep_list(self.keep_list_path, mkfile) as f:
                 json.dump(keep_list, f, indent=2)
-            if mkfile and General.sudo_mode():
-                General.chownself(self.keep_list_path)
+                if mkfile and General.sudo_mode():
+                    General.chownself(self.keep_list_path, f.fileno())
             self.saved_domains = set(keep_list)
             return True
         except OSError as exc:

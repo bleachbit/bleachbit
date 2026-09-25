@@ -34,7 +34,7 @@ import threading
 import xml.parsers.expat
 
 import bleachbit
-from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
+from bleachbit import IS_POSIX, IS_WINDOWS
 from bleachbit.PathUtils import path_startswith
 
 logger = logging.getLogger(__name__)
@@ -173,6 +173,20 @@ class WindowsError(Exception):
         return 'this is a dummy class for non-Windows systems'
 
 
+def _root_homes():
+    """Return /root and the home of root from passwd (/var/root on macOS)"""
+    homes = {'/root'}
+    import pwd
+    try:
+        home = pwd.getpwuid(0).pw_dir
+    except KeyError:
+        return homes
+    if home and os.path.normpath(home) != '/':
+        homes.add(os.path.normpath(home))
+        homes.add(os.path.realpath(home))
+    return homes
+
+
 def chownself(path, fd=None):
     """Set path owner to real self when running in sudo.
     If sudo creates a path and the owner isn't changed, the
@@ -184,9 +198,11 @@ def chownself(path, fd=None):
     uid = get_real_uid()
     logger.debug('chown(%s, uid=%s)', path, uid)
     normalized_path = os.path.normpath(os.path.abspath(path))
-    if normalized_path == '/root' or path_startswith(normalized_path, '/root'):
-        logger.info('chown for path /root aborted')
-        return True
+    for home in _root_homes():
+        if normalized_path == home or path_startswith(normalized_path, home):
+            logger.info('chown for path %s aborted, it is in the home of root',
+                        path)
+            return True
     try:
         if fd is not None:
             os.fchown(fd, uid, -1)
@@ -345,7 +361,17 @@ def makedirs(path):
     else:
         os.mkdir(path, 0o700)
     if sudo_mode():
-        chownself(path)
+        # Through a descriptor: the user owns the parent and could swap the
+        # new folder for a hard link to a file of root
+        try:
+            fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        except OSError:
+            logger.exception('Error in chown() under makedirs()')
+            return
+        try:
+            chownself(path, fd)
+        finally:
+            os.close(fd)
 
 
 # Operating system tokens recognized in the os attribute.
@@ -590,7 +616,7 @@ def shell_split(cmd):
 
 def sudo_mode():
     """Return whether running in sudo mode"""
-    if not IS_LINUX:
+    if not IS_POSIX:
         return False
 
     # if 'root' == os.getenv('USER'):

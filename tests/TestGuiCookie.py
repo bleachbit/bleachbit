@@ -77,11 +77,32 @@ class GuiCookieTestCase(common.BleachbitTestCase):
         with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
                 mock.patch('bleachbit.General.chownself') as mock_chown:
             self.assertTrue(CookieManagerPane.save_changes(pane))
-            mock_chown.assert_called_once_with(filename)
+            mock_chown.assert_called_once_with(filename, mock.ANY)
+            self.assertIsInstance(mock_chown.call_args[0][1], int)
             mock_chown.reset_mock()
             # Overwriting an existing file should not chown again
             self.assertTrue(CookieManagerPane.save_changes(pane))
             mock_chown.assert_not_called()
+
+    @common.skipIfWindows
+    def test_save_changes_refuses_raced_in_file(self):
+        """A keep list that appears after the existence check is left alone"""
+        dirname = self.mkdtemp()
+        victim = os.path.join(dirname, 'victim.json')
+        with open(victim, 'w', encoding='utf-8') as f:
+            f.write('["victim.example"]')
+        filename = os.path.join(dirname, 'cookie_keep_list.json')
+        os.link(victim, filename)
+        pane = self._fake_pane(filename, ['evil.example'])
+        real_exists = os.path.exists
+        with mock.patch('bleachbit.GuiCookie.os.path.exists',
+                        side_effect=lambda p: p != filename and real_exists(p)), \
+                mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chown:
+            self.assertFalse(CookieManagerPane.save_changes(pane))
+        mock_chown.assert_not_called()
+        with open(victim, encoding='utf-8') as f:
+            self.assertEqual(json.load(f), ['victim.example'])
 
     def test_activate_link_stops_default_handler(self):
         """The 'Learn more' link must not also be opened by GTK"""
