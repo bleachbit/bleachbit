@@ -686,3 +686,25 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 'google_chrome', 'vacuum', 'linux')
         self.assertIn(favicons, paths)
         self.assertNotIn(journal, paths)
+
+    @common.skipIfWindows
+    def test_vivaldi_opera_paths_once(self):
+        """Vivaldi and snap Opera list each file once"""
+        home = self.mkdtemp(prefix='bleachbit-duplicate-paths')
+        config = os.path.join(home, '.config')
+        vivaldi_history = os.path.join(config, 'vivaldi', 'Default', 'History')
+        opera_history = os.path.join(
+            home, 'snap', 'opera', '420', '.config', 'opera', 'History')
+        common.touch_file(vivaldi_history)
+        common.touch_file(opera_history)
+        os.symlink('420', os.path.join(home, 'snap', 'opera', 'current'))
+        # Bootstrap points XDG_CONFIG_HOME at ~/.config when it is unset
+        with common.set_temporary_env('HOME', home), \
+                common.set_temporary_env('XDG_CONFIG_HOME', config):
+            vivaldi_paths = self._bundled_option_paths(
+                'vivaldi', 'history', 'linux')
+            opera_paths = self._bundled_option_paths(
+                'opera', 'history', 'linux')
+        self.assertEqual(1, vivaldi_paths.count(vivaldi_history))
+        opera_real = [os.path.realpath(path) for path in opera_paths]
+        self.assertEqual(1, opera_real.count(os.path.realpath(opera_history)))
