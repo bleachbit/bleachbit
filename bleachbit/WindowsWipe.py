@@ -122,7 +122,8 @@ from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       FILE_FLAG_RANDOM_ACCESS,
                       FILE_FLAG_NO_BUFFERING,
                       FILE_FLAG_WRITE_THROUGH,
-                      COMPRESSION_FORMAT_DEFAULT)
+                      COMPRESSION_FORMAT_DEFAULT,
+                      COMPRESSION_FORMAT_NONE)
 
 # local import
 from bleachbit import IS_WINDOWS
@@ -1102,6 +1103,11 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
     file_handle = CreateFile(tmp_file_path, GENERIC_READ | GENERIC_WRITE,
                              0, None, CREATE_ALWAYS,
                              FILE_ATTRIBUTE_HIDDEN, None)
+    # In a compressed folder the file is compressed too, and NTFS stores
+    # compressed zeros without any clusters to move.
+    if GetFileAttributesW(tmp_file_path) & FILE_ATTRIBUTE_COMPRESSED:
+        DeviceIoControl(file_handle, FSCTL_SET_COMPRESSION,
+                        struct.pack('H', COMPRESSION_FORMAT_NONE), None)
     write_zero_fill(file_handle, write_length)
     new_extents = get_extents(file_handle)
 

@@ -47,6 +47,7 @@ if bleachbit.IS_WINDOWS:
         wipe_file_direct,
         extents_a_minus_b,
         poll_clusters_freed,
+        wipe_extent_by_defrag,
         GENERIC_READ,
         GENERIC_WRITE
     )
@@ -269,6 +270,30 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                            side_effect=[(0, 1), (1, 0)]):
             # pylint: disable-next=possibly-used-before-assignment
             self.assertTrue(poll_clusters_freed(None, 8, [(0, 0)]))
+
+    def test_wipe_extent_by_defrag_compressed_folder(self):
+        """The zero-fill file gets clusters to move in a compressed folder"""
+        folder = self.mkdir('compressed_folder')
+        from bleachbit.General import run_external
+        (rc, _, _) = run_external(['compact', '/c', folder])
+        if rc != 0:
+            self.skipTest('folder compression is not supported')
+        volume_info = get_volume_information(volume_from_file(folder))
+        cluster_size = (volume_info.sectors_per_cluster *
+                        volume_info.bytes_per_sector)
+        tmp_path = os.path.join(folder, 'zero_fill')
+
+        # Clusters 0-15 look free and the moves are only recorded, so
+        # nothing on the volume is overwritten.
+        with mock.patch('bleachbit.WindowsWipe.get_volume_bitmap',
+                        return_value=(bytes(2), 16)), \
+                mock.patch('bleachbit.WindowsWipe.move_file') as mock_move:
+            # pylint: disable-next=possibly-used-before-assignment
+            wipe_extent_by_defrag(None, 0, 15, cluster_size, 16, tmp_path)
+
+        moved = sum(call.args[4] for call in mock_move.call_args_list)
+        self.assertEqual(moved, 16)
+        self.assertNotExists(tmp_path)
 
     def test_file_wipe_basic(self):
         """Basic unit test for file_wipe"""
