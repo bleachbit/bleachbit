@@ -547,3 +547,20 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.run_all(xmlc, True)
         self.assertNotExists(test_log_path_a)
         self.assertNotExists(test_log_path_b)
+
+    def test_vuze_program_files(self):
+        """Vuze actions under Program Files stay in the Vuze folder"""
+        roots = (r'C:\Program Files (x86)', r'C:\Program Files')
+        env = {'ProgramFiles': roots[0], 'ProgramW6432': roots[1]}
+        with mock.patch('bleachbit.CleanerML.IS_WINDOWS', True), \
+                mock.patch.dict(os.environ, env):
+            cleaner = self._load_real_cleaner_as('vuze.xml', 'win32')
+        vuze_dirs = tuple(root + '\\Vuze\\' for root in roots)
+        checked = 0
+        for _option_id, action in cleaner.actions:
+            # the POSIX localizations placeholder has no paths
+            for path in getattr(action, 'paths', ()):
+                if path.startswith(roots):
+                    self.assertTrue(path.startswith(vuze_dirs), path)
+                    checked += 1
+        self.assertGreater(checked, 0)
