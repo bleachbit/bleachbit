@@ -1050,7 +1050,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             if info == 80:
                 uris = data.get_uris()
                 paths = FileUtilities.uris_to_paths(uris)
-                self.shred_paths(paths)
+                # uris_to_paths() logs the URIs it skipped
+                if paths:
+                    self.shred_paths(paths)
             # GtkTextView installs its own ::drag-data-received handler that
             # calls gtk_drag_finish(FALSE) when the view is not editable. On
             # Wayland that tears down the data offer in addition to the

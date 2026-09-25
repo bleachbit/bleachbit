@@ -710,6 +710,22 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertTrue(gui.run_button_get_sensitive())
         self.assertFalse(gui.stop_button.get_sensitive())
 
+    def test_drop_without_file_uris_shreds_nothing(self):
+        """Dropping only links or other non-file URIs starts no shred"""
+        gui = self.get_window()
+        with mock.patch.object(gui, 'drag_dest_set'), \
+                mock.patch.object(gui, 'connect') as connect, \
+                mock.patch.object(gui.textview, 'drag_dest_set'), \
+                mock.patch.object(gui.textview, 'connect'):
+            gui.setup_drag_n_drop()
+        handler = next(call.args[1] for call in connect.call_args_list
+                       if call.args[0] == 'drag_data_received')
+        data = mock.Mock()
+        data.get_uris.return_value = ['https://example.com/', 'trash:///a']
+        with mock.patch.object(gui, 'shred_paths') as shred_paths:
+            handler(mock.Mock(), None, 0, 0, data, 80, 0)
+        shred_paths.assert_not_called()
+
     def test_shred_and_wipe_refused_while_busy(self):
         """Shredding and wiping do not start while an operation runs"""
         test_file = self.write_file('shred-while-busy')
