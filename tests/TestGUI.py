@@ -990,6 +990,38 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertFalse(model[parent_iter][1],
                          "Parent should remain unchecked when all children are blocked by expert mode")
 
+    def test_parent_unchecked_when_child_blocked_or_cancelled(self):
+        """A warning option that stays off leaves its cleaner unchecked"""
+
+        def blocked_warning(_option_id):
+            return "This option requires expert mode."
+
+        # Blocked without expert mode, then cancelled in the dialog
+        for expert_mode, answer in ((False, None), (True, (False, False))):
+            with self.subTest(expert_mode=expert_mode):
+                model = Gtk.TreeStore(
+                    GObject.TYPE_STRING,   # 0: name
+                    GObject.TYPE_BOOLEAN,  # 1: active
+                    GObject.TYPE_PYOBJECT,  # 2: id
+                    GObject.TYPE_STRING,   # 3: size
+                    GObject.TYPE_STRING,   # 4: icon
+                )
+                parent_iter = model.append(
+                    None, ("TestCleaner", False, "test_cleaner", "", ""))
+                model.append(
+                    parent_iter, ("Option1", False, "option1", "", ""))
+                # pylint: disable-next=possibly-used-before-assignment
+                tdm = TreeDisplayModel()
+                with mock.patch('bleachbit.GuiTreeModels.backends',
+                                {"test_cleaner": mock.Mock(get_warning=blocked_warning)}), \
+                        mock.patch('bleachbit.GuiTreeModels.options') as mock_options, \
+                        mock.patch('bleachbit.GuiBasic.warning_confirm_dialog',
+                                   return_value=answer):
+                    mock_options.get.return_value = expert_mode
+                    mock_options.get_warning_preference.return_value = False
+                    tdm.col1_toggled_cb(None, "0:0", model, None)
+                self.assertFalse(model[parent_iter][1])
+
     def test_toggle_ignored_when_tree_rebuilt_during_warning(self):
         """A toggle confirmed after the tree was rebuilt changes no row"""
         model = Gtk.TreeStore(
