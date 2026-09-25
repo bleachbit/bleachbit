@@ -226,7 +226,9 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = configparser.RawConfigParser(delimiters='=')
+        # Not strict, so a duplicate key does not drop the rest of the file
+        self.config = configparser.RawConfigParser(
+            delimiters='=', strict=False)
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
@@ -617,6 +619,16 @@ class Options:
                 if not bleachbit.options_file.startswith('/tmp'):
                     logger.debug("Configuration file does not exist yet: %s",
                                  bleachbit.options_file)
+            except configparser.MissingSectionHeaderError:
+                # Nothing was read, so keep the next write from replacing it
+                bad_file = bleachbit.options_file + '.bad'
+                logger.exception("Error reading application's configuration, "
+                                 "moving it to %s", bad_file)
+                try:
+                    os.replace(bleachbit.options_file, bad_file)
+                except OSError:
+                    logger.exception(
+                        "Error moving configuration to %s", bad_file)
             except Exception:
                 logger.exception("Error reading application's configuration")
             if not self.config.has_section("bleachbit"):

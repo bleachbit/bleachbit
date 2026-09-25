@@ -283,6 +283,38 @@ auto_hide = True
         _test_is_corrupt("[bleachbit]\nshred=['True']\n", True)
         os.remove(bleachbit.options_file)
 
+    def test_duplicate_key_keeps_later_sections(self):
+        """A duplicate key must not stop the read before the keep list"""
+        self._write_private_options_file('''[bleachbit]
+expert_mode = False
+expert_mode = True
+[whitelist/paths]
+0_type = folder
+0_path = /home/keep
+''')
+        o = bleachbit.Options.Options()
+        try:
+            self.assertTrue(o.get('expert_mode'))
+            self.assertEqual(o.get_whitelist_paths(),
+                             [('folder', '/home/keep')])
+        finally:
+            o.cancel_pending_flush()
+
+    def test_unreadable_file_is_moved_aside(self):
+        """A file with no section header must not be overwritten"""
+        filename = self._write_private_options_file('')
+        contents = '[bleachbit]\nshred = True\n'.encode('utf-16')
+        with open(filename, 'wb') as handle:
+            handle.write(contents)
+        with self.assertLogs('bleachbit.Options', level='ERROR'):
+            o = bleachbit.Options.Options()
+        try:
+            o.commit()
+        finally:
+            o.close()
+        with open(filename + '.bad', 'rb') as handle:
+            self.assertEqual(handle.read(), contents)
+
     def test_purge(self):
         """Test purging"""
         # By default ConfigParser stores keys (the filenames) as lowercase.

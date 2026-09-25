@@ -192,6 +192,8 @@ class Bleachbit(Gtk.Application):
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
+            if os.path.exists(bleachbit.options_file + '.bad'):
+                paths.append(bleachbit.options_file + '.bad')
             # left behind if a save was interrupted
             for f in glob.glob(glob.escape(bleachbit.options_file) + '.*.tmp'):
                 paths.append(f)
