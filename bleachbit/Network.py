@@ -93,7 +93,8 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
     try:
         response = fetch_url(url, max_retries=max_retries,
                              backoff_factor=backoff_factor, timeout=timeout)
-    except RequestException as exc:
+    # requests raises a plain OSError for a missing CA bundle
+    except (RequestException, OSError) as exc:
         # For retryable errors (like 503), use a simplified error message
         if HAVE_REQUESTS and isinstance(exc, requests.exceptions.RetryError):
             msg2 = 'Server temporarily unavailable (retries exceeded)'
@@ -114,9 +115,14 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
             msg2 = f"SHA-512 mismatch: expected {expected_sha512}, got {hash_actual}"
             do_error(msg2)
             return False
-    General.makedirs(os.path.dirname(fn))
-    with open_for_overwrite(fn, 'wb') as f:
-        f.write(response.content)
+    try:
+        General.makedirs(os.path.dirname(fn))
+        with open_for_overwrite(fn, 'wb') as f:
+            f.write(response.content)
+    except OSError as exc:
+        logger.exception(msg)
+        do_error(f'{type(exc).__name__}: {exc}')
+        return False
     return True
 
 

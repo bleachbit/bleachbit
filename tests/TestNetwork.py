@@ -9,6 +9,7 @@ Test case for module Network
 """
 
 # standard imports
+import errno
 import http.server
 import ipaddress
 import logging
@@ -164,13 +165,37 @@ class NetworkTestCase(common.BleachbitTestCase):
         fake_response = Mock()
         fake_response.status_code = 200
         fake_response.content = b'attacker payload'
+        on_error = Mock()
+        # The link is simulated, so delete() would remove the real file
         with patch('bleachbit.Network.fetch_url', return_value=fake_response), \
                 patch('bleachbit.FileUtilities.os.path.islink',
-                      side_effect=lambda p: p == filename):
-            with self.assertRaises(OSError):
-                download_url_to_fn('https://example.invalid/x', filename)
+                      side_effect=lambda p: p == filename), \
+                patch('bleachbit.Network.delete'):
+            self.assertFalse(download_url_to_fn(
+                'https://example.invalid/x', filename, on_error=on_error))
+        on_error.assert_called_once()
         with open(filename, encoding='utf-8') as f:
             self.assertEqual(f.read(), 'keepme')
+
+    def test_download_url_to_fn_write_error(self):
+        """A failed write returns False and leaves no partial file"""
+        fn = os.path.join(self.tempdir, 'partial')
+        fake_response = Mock()
+        fake_response.status_code = 200
+        fake_response.content = b'complete'
+        on_error = Mock()
+
+        def disk_full(path, mode):
+            with open(path, mode) as f:
+                f.write(b'part')
+            raise OSError(errno.ENOSPC, 'No space left on device')
+
+        with patch('bleachbit.Network.fetch_url', return_value=fake_response), \
+                patch('bleachbit.Network.open_for_overwrite', side_effect=disk_full):
+            self.assertFalse(download_url_to_fn(
+                'https://example.invalid/x', fn, on_error=on_error))
+        on_error.assert_called_once()
+        self.assertNotExists(fn)
 
     def test_get_gtk_version(self):
         """Unit test for get_gtk_version()"""
