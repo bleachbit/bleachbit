@@ -15,6 +15,7 @@ import sys
 import time
 import unittest
 from contextlib import suppress
+from unittest import mock
 
 import bleachbit
 
@@ -45,6 +46,7 @@ if bleachbit.IS_WINDOWS:
         file_wipe,
         wipe_file_direct,
         extents_a_minus_b,
+        poll_clusters_freed,
         GENERIC_READ,
         GENERIC_WRITE
     )
@@ -256,6 +258,17 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with open(tmp_path, 'rb') as f:
             data = f.read()
             self.assertEqual(data, b'\x00' * write_length)
+
+    def test_poll_clusters_freed_sleep(self):
+        """poll_clusters_freed() waits between checks with a valid Sleep"""
+        # Allocated on the first check and free on the second, so the real
+        # win32api.Sleep runs once.
+        with mock.patch('bleachbit.WindowsWipe.get_volume_bitmap',
+                        return_value=(b'\xff', 8)), \
+                mock.patch('bleachbit.WindowsWipe.check_extents',
+                           side_effect=[(0, 1), (1, 0)]):
+            # pylint: disable-next=possibly-used-before-assignment
+            self.assertTrue(poll_clusters_freed(None, 8, [(0, 0)]))
 
     def test_file_wipe_basic(self):
         """Basic unit test for file_wipe"""
