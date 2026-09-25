@@ -1281,6 +1281,29 @@ def _windows_preserved_temp_dir(path):
     return False
 
 
+_WINDIR_SYSNATIVE = os.path.expandvars(r'%windir%\sysnative').lower()
+_WINDIR_SYSTEM32 = os.path.expandvars(r'%windir%\system32').lower()
+
+
+def _windows_keep_list_spelling(path):
+    """Spell a Windows path the way the folder picker does.
+
+    %TEMP% is often an 8.3 short path, and the 32-bit build reaches the
+    native System32 through Sysnative.
+    """
+    path = os.path.normpath(path)
+    if '~' in path:
+        try:
+            path = win32file.GetLongPathName(path)
+        except pywinerror:
+            # e.g. the path does not exist, so keep it as given
+            pass
+    if (path.lower() == _WINDIR_SYSNATIVE
+            or path_startswith(path, _WINDIR_SYSNATIVE, case_sensitive=False)):
+        path = _WINDIR_SYSTEM32 + path[len(_WINDIR_SYSNATIVE):]
+    return path
+
+
 def whitelisted_windows(path):
     """Check whether this Windows path is whitelisted"""
     if not isinstance(path, str):
@@ -1288,19 +1311,24 @@ def whitelisted_windows(path):
     if _windows_preserved_temp_dir(path):
         return True
     from bleachbit.Options import options
-    for pathname in options.get_whitelist_paths():
+    keep_paths = options.get_whitelist_paths()
+    if not keep_paths:
+        return False
+    path = _windows_keep_list_spelling(path)
+    for pathname in keep_paths:
+        keep_path = _windows_keep_list_spelling(pathname[1])
         # Windows is case insensitive
         if (pathname[0] == 'file'
-                and path_equal(path, pathname[1], case_sensitive=False)):
+                and path_equal(path, keep_path, case_sensitive=False)):
             return True
         if pathname[0] == 'folder':
-            if path_equal(path, pathname[1], case_sensitive=False):
+            if path_equal(path, keep_path, case_sensitive=False):
                 return True
-            if path_startswith(path, pathname[1], case_sensitive=False):
+            if path_startswith(path, keep_path, case_sensitive=False):
                 return True
             # Simple drive letter like C:\ matches everything below
-            if (len(pathname[1]) == 3
-                    and path.lower().startswith(pathname[1].lower())):
+            if (len(keep_path) == 3
+                    and path.lower().startswith(keep_path.lower())):
                 return True
     return False
 
