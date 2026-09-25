@@ -365,6 +365,51 @@ auto_hide = True
             # forced commit() failure above never clears dirty/cancels the timer
             o.cancel_pending_flush()
 
+    def test_failed_write_keeps_old_file(self):
+        """A write that fails part way must leave the old file whole"""
+        filename = self._write_private_options_file('''[bleachbit]
+[whitelist/paths]
+0_type = folder
+0_path = /home/keep
+''')
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            old_contents = handle.read()
+
+        def write_then_fail(fileobj, *_args, **_kwargs):
+            fileobj.write('[bleachbit]\n')
+            raise OSError(errno.ENOSPC, 'No space left on device')
+
+        o = bleachbit.Options.Options()
+        try:
+            with mock.patch.object(o.config, 'write', side_effect=write_then_fail):
+                with self.assertLogs(level='ERROR'):
+                    o.commit()
+        finally:
+            o.cancel_pending_flush()
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            self.assertEqual(handle.read(), old_contents)
+        self.assertEqual(
+            [name for name in os.listdir(self.tempdir) if name.endswith('.tmp')], [])
+
+    def test_write_in_place_when_move_is_denied(self):
+        """A writable file is saved in place when it cannot be replaced"""
+        filename = self._write_private_options_file('[bleachbit]\n')
+        denied = PermissionError(errno.EACCES, os.strerror(errno.EACCES))
+        for target in ('tempfile.mkstemp', 'os.replace'):
+            with self.subTest(target=target):
+                o = bleachbit.Options.Options()
+                try:
+                    o.set('test_key', target)
+                    with mock.patch(target, side_effect=denied):
+                        o.commit()
+                    self.assertFalse(o._dirty)
+                finally:
+                    o.close()
+                with open(filename, 'r', encoding='utf-8-sig') as handle:
+                    self.assertIn(f'test_key = {target}', handle.read())
+        self.assertEqual(
+            [name for name in os.listdir(self.tempdir) if name.endswith('.tmp')], [])
+
     def test_error_permission(self):
         """Test graceful degradation with permission errors"""
         permission_error = PermissionError('Permission denied')
