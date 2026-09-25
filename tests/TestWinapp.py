@@ -729,6 +729,37 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         winapp = Winapp(self.ini_fn)
         self.assertEqual(winapp.errors, 1)
 
+    def test_bad_section_keeps_rest_of_file(self):
+        """A malformed section is skipped, not the whole file"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-badsection')
+        good = ('[Good App *]\nLangSecRef=3021\n'
+                'FileKey1=%Temp%|bleachbit-test-good.tmp\n')
+        tests = (
+            # duplicate section: the first one wins
+            '[Good App *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-dup.tmp\n',
+            # duplicate key
+            '[Bad App *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-a.tmp\n'
+            'FileKey1=%Temp%|bleachbit-test-b.tmp\n',
+            # line without a delimiter
+            '[Bad App *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-a.tmp\n'
+            'not an option\n',
+        )
+        for bad in tests:
+            with self.subTest(bad=bad):
+                with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+                    ini.write(good + bad)
+                winapp = Winapp(self.ini_fn)
+                self.assertEqual(winapp.errors, 1)
+                cleaner = next(winapp.get_cleaners())
+                self.assertEqual(['good_app'],
+                                 [o for (o, _name) in cleaner.get_options()])
+                paths = [p for (_o, a) in cleaner.actions for p in a.paths]
+                self.assertEqual(1, len(paths))
+                self.assertTrue(paths[0].endswith('bleachbit-test-good.tmp'))
+
     @common.skipIfWindows
     def test_list_winapp_files_skips_world_writable(self):
         """A world-writable winapp2.ini is ignored, like CleanerML XML"""
