@@ -990,6 +990,52 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertFalse(model[parent_iter][1],
                          "Parent should remain unchecked when all children are blocked by expert mode")
 
+    def test_toggle_ignored_when_tree_rebuilt_during_warning(self):
+        """A toggle confirmed after the tree was rebuilt changes no row"""
+        model = Gtk.TreeStore(
+            GObject.TYPE_STRING,   # 0: name
+            GObject.TYPE_BOOLEAN,  # 1: active
+            GObject.TYPE_PYOBJECT,  # 2: id
+            GObject.TYPE_STRING,   # 3: size
+            GObject.TYPE_STRING,   # 4: icon
+        )
+
+        def fill(cleaners):
+            model.clear()
+            for cleaner_id, option_ids in cleaners:
+                parent_iter = model.append(
+                    None, (cleaner_id, False, cleaner_id, "", ""))
+                for option_id in option_ids:
+                    model.append(
+                        parent_iter, (option_id, False, option_id, "", ""))
+
+        fill([("aaa", ["a1"]), ("warned", ["plain", "risky"])])
+
+        def rebuild_and_confirm(*_args):
+            # New rows now sort before the clicked one
+            fill([("aaa", ["a1"]), ("added", ["x1", "x2"]),
+                  ("warned", ["plain", "risky"])])
+            return True, False
+
+        def warning(option_id):
+            return "Be careful." if option_id == "risky" else None
+
+        # pylint: disable-next=possibly-used-before-assignment
+        tdm = TreeDisplayModel()
+        with mock.patch('bleachbit.GuiTreeModels.backends',
+                        {"warned": mock.Mock(get_warning=warning)}), \
+                mock.patch('bleachbit.GuiTreeModels.options') as mock_options, \
+                mock.patch('bleachbit.GuiBasic.warning_confirm_dialog',
+                           side_effect=rebuild_and_confirm):
+            mock_options.get.return_value = True  # expert_mode on
+            mock_options.get_warning_preference.return_value = False
+            tdm.col1_toggled_cb(None, "1:1", model, None)
+
+        checked = [row[2] for row in model if row[1]]
+        checked += [child[2] for row in model
+                    for child in row.iterchildren() if child[1]]
+        self.assertEqual([], checked)
+
     def test_on_quit_commits_pending_options(self):
         """Regression test: quitting via on_quit() (Ctrl+Q/Ctrl+W, and
         Cmd+Q on macOS) must flush pending option changes to disk, the
