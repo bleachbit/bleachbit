@@ -1119,13 +1119,18 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                              0, None, CREATE_NEW,
                              FILE_ATTRIBUTE_HIDDEN |
                              FILE_FLAG_OPEN_REPARSE_POINT, None)
-    # In a compressed folder the file is compressed too, and NTFS stores
-    # compressed zeros without any clusters to move.
-    if GetFileAttributesW(tmp_file_path) & FILE_ATTRIBUTE_COMPRESSED:
-        DeviceIoControl(file_handle, FSCTL_SET_COMPRESSION,
-                        struct.pack('H', COMPRESSION_FORMAT_NONE), None)
-    write_zero_fill(file_handle, write_length)
-    new_extents = get_extents(file_handle)
+    try:
+        # In a compressed folder the file is compressed too, and NTFS stores
+        # compressed zeros without any clusters to move.
+        if GetFileAttributesW(tmp_file_path) & FILE_ATTRIBUTE_COMPRESSED:
+            DeviceIoControl(file_handle, FSCTL_SET_COMPRESSION,
+                            struct.pack('H', COMPRESSION_FORMAT_NONE), None)
+        write_zero_fill(file_handle, write_length)
+        new_extents = get_extents(file_handle)
+    except BaseException:
+        # clean_up() cannot delete the file while it is open
+        CloseHandle(file_handle)
+        raise
 
     # We know the original extent was contiguous.
     # The new zero-fill file may not be contiguous, so it requires a

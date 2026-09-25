@@ -48,6 +48,7 @@ if bleachbit.IS_WINDOWS:
         extents_a_minus_b,
         poll_clusters_freed,
         wipe_extent_by_defrag,
+        clean_up,
         GENERIC_READ,
         GENERIC_WRITE
     )
@@ -333,6 +334,24 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertEqual(f.read(), b'keepme')
         # The dangling link was not followed to create its target
         self.assertNotExists(target)
+
+    def test_wipe_extent_by_defrag_error(self):
+        """A failed zero-fill does not leave the temp file behind"""
+        tmp_path = os.path.join(self.tempdir, 'zero_fill_error')
+        # pylint: disable-next=possibly-used-before-assignment
+        disk_full = pywintypes.error(112, 'WriteFile', 'disk full')
+        with mock.patch('bleachbit.WindowsWipe.get_volume_bitmap',
+                        return_value=(bytes(2), 16)), \
+                mock.patch('bleachbit.WindowsWipe.write_zero_fill',
+                           side_effect=disk_full):
+            with self.assertRaises(pywintypes.error):
+                try:
+                    wipe_extent_by_defrag(None, 0, 0, 4096, 16, tmp_path)
+                finally:
+                    # As file_wipe() does
+                    # pylint: disable-next=possibly-used-before-assignment
+                    clean_up(None, None, tmp_path)
+        self.assertNotExists(tmp_path)
 
     def test_file_wipe_basic(self):
         """Basic unit test for file_wipe"""
