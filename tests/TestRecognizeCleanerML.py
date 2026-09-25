@@ -9,12 +9,15 @@ Test case for RecognizeCleanerML
 """
 
 import os
+import unittest
 from unittest import mock
 
 import bleachbit
 from tests import common
+from bleachbit.GtkShim import is_gtk_available
 from bleachbit.Options import options, path_to_option
-from bleachbit.RecognizeCleanerML import hashdigest, RecognizeCleanerML
+from bleachbit.RecognizeCleanerML import (NEW, cleaner_change_dialog, hashdigest,
+                                          RecognizeCleanerML)
 
 
 class RecognizeCleanerMLTestCase(common.BleachbitTestCase):
@@ -49,3 +52,34 @@ class RecognizeCleanerMLTestCase(common.BleachbitTestCase):
         finally:
             if os.path.exists(cleaner_file):
                 os.remove(cleaner_file)
+
+    @unittest.skipUnless(is_gtk_available(), 'requires GTK+ module and a display environment')
+    def test_cleaner_change_dialog_remove_error(self):
+        """The dialog closes whether or not deleting a file works"""
+
+        class TickedStore(list):
+            """ListStore with every row ticked for deletion"""
+
+            def append(self, row):
+                super().append([True, row[1]])
+
+        # Portable mode lists a file twice, so the second delete misses it
+        changes = [['a.xml', NEW, ''], ['a.xml', NEW, '']]
+        for remove_error in (FileNotFoundError, PermissionError):
+            fake_gtk = mock.MagicMock()
+            dialog = fake_gtk.Dialog.return_value
+            dialog.run.return_value = fake_gtk.ResponseType.ACCEPT
+            fake_gtk.ListStore.return_value = TickedStore()
+            with mock.patch('bleachbit.GtkShim.Gtk', fake_gtk, create=True), \
+                    mock.patch('bleachbit.GtkShim.GObject', mock.MagicMock(), create=True), \
+                    mock.patch('bleachbit.GuiUtil.load_icon_or_fallback'), \
+                    mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog',
+                               return_value=True), \
+                    mock.patch('bleachbit.RecognizeCleanerML.os.remove',
+                               side_effect=[None, remove_error]):
+                if remove_error is FileNotFoundError:
+                    cleaner_change_dialog(changes, None)
+                else:
+                    with self.assertRaises(PermissionError):
+                        cleaner_change_dialog(changes, None)
+            dialog.destroy.assert_called_once()

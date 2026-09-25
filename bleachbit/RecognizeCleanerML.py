@@ -89,27 +89,36 @@ def cleaner_change_dialog(changes, parent):
 
     # run dialog
     dialog.show_all()
-    while True:
-        if Gtk.ResponseType.ACCEPT != dialog.run():
-            sys.exit(0)
-        delete = []
-        for row in liststore:
-            b = row[0]
-            path = row[1]
-            if b:
-                delete.append(path)
-        if not delete:
-            # no files selected to delete
+    # A delete that fails propagates, so the caller skips the local
+    # cleaners; close the dialog either way.
+    try:
+        while True:
+            if Gtk.ResponseType.ACCEPT != dialog.run():
+                sys.exit(0)
+            delete = []
+            for row in liststore:
+                b = row[0]
+                path = row[1]
+                if b:
+                    delete.append(path)
+            if not delete:
+                # no files selected to delete
+                break
+            from . import GuiBasic
+            if not GuiBasic.delete_confirmation_dialog(parent, mention_preview=False):
+                # confirmation not accepted, so do not delete files
+                continue
+            for path in delete:
+                logger.info("deleting unrecognized CleanerML '%s'", path)
+                try:
+                    os.remove(path)
+                except FileNotFoundError:
+                    # Deleted by hand, or listed twice when the personal and
+                    # local cleaner directories are the same (portable)
+                    pass
             break
-        from . import GuiBasic
-        if not GuiBasic.delete_confirmation_dialog(parent, mention_preview=False):
-            # confirmation not accepted, so do not delete files
-            continue
-        for path in delete:
-            logger.info("deleting unrecognized CleanerML '%s'", path)
-            os.remove(path)
-        break
-    dialog.destroy()
+    finally:
+        dialog.destroy()
 
 
 def hashdigest(string):
