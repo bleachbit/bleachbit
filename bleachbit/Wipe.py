@@ -392,12 +392,17 @@ def wipe_path(pathname, idle=False):
             tempfile.TMP_MAX = min(tmp_max_orig, 20)
         try:
             while True:
+                suffix = __random_string(maxlen)
+                # Windows drops a trailing dot from the name it creates, so
+                # f.name would not match the file and delete() would miss it
+                if not __valid_random_filename(suffix):
+                    continue
                 try:
                     # The temporary file outlives the retry loop and is deleted at exit.
                     # pylint: disable-next=consider-using-with
                     f = tempfile.NamedTemporaryFile(
                         dir=pathname,
-                        suffix=__random_string(maxlen),
+                        suffix=suffix,
                         delete=False,
                         prefix="empty_"
                     )

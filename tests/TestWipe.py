@@ -467,6 +467,27 @@ class WipeTestCase(common.BleachbitTestCase):
         self.assertEqual(len(first_suffix), 185)
         self.assertEqual(len(second_suffix), 180)
 
+    def test_wipe_path_suffix_without_trailing_dot_on_windows(self):
+        """On Windows the temporary file name never ends in a dot
+
+        Windows drops the dot from the name it creates, so deleting
+        f.name afterwards would miss the file.
+        """
+        mock_file = self._make_mock_file()
+        mock_file.write.side_effect = IOError(errno.EFBIG, 'File too large')
+        ntf_mock = mock.Mock(return_value=mock_file)
+        suffixes = iter(['a' * 184 + '.', 'b' * 185])
+        with self._wipe_path_common_mocks() as stack:
+            stack.enter_context(mock.patch('bleachbit.Wipe.IS_WINDOWS', True))
+            stack.enter_context(mock.patch.object(
+                Wipe, '__random_string',
+                side_effect=lambda _length: next(suffixes)))
+            stack.enter_context(mock.patch(
+                'bleachbit.Wipe.tempfile.NamedTemporaryFile', ntf_mock))
+            list(wipe_path(self.tempdir))
+        ntf_mock.assert_called_once()
+        self.assertEqual(ntf_mock.call_args[1]['suffix'], 'b' * 185)
+
     def test_wipe_path_write_enospc(self):
         """Write loop handles ENOSPC by reducing block size"""
         mock_file = self._make_mock_file()
