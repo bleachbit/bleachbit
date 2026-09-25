@@ -41,6 +41,7 @@ from bleachbit.Windows import (
     delete_registry_key,
     delete_registry_value,
     delete_updates,
+    get_running_dependent_services,
     is_service_running,
     run_net_service_command,
     detect_registry_key,
@@ -697,6 +698,44 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             counter += 1
             self.assertIsInstance(cmd, (Delete, Function))
         logger.debug('delete_updates() returned %s commands', f'{counter:,}')
+
+    def test_delete_updates_closed_early(self):
+        """Closing delete_updates() early restarts the services it stopped"""
+        sdist_dir = os.path.expandvars(r'%windir%\SoftwareDistribution')
+        sdist_file = os.path.join(sdist_dir, 'foo')
+
+        def children_in_directory(top, _list_directories):
+            return iter([sdist_file] if top == sdist_dir else [])
+
+        with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=True), \
+                mock.patch('bleachbit.Windows.is_service_running', return_value=True), \
+                mock.patch('bleachbit.Windows.get_running_dependent_services',
+                           side_effect=lambda s: ['appidsvc'] if s == 'cryptsvc' else []), \
+                mock.patch('bleachbit.Windows.os.path.exists', return_value=True), \
+                mock.patch('bleachbit.FileUtilities.children_in_directory',
+                           side_effect=children_in_directory), \
+                mock.patch('bleachbit.Windows.run_net_service_command',
+                           return_value=0) as mock_net:
+            commands = delete_updates()
+            for cmd in commands:
+                if isinstance(cmd, Function):
+                    # the mocked stop
+                    list(cmd.execute(True))
+                elif cmd.path == sdist_file:
+                    break
+            commands.close()
+        started = [call.args[0] for call in mock_net.call_args_list
+                   if call.args[1]]
+        self.assertEqual(
+            ['wuauserv', 'cryptsvc', 'bits', 'msiserver', 'appidsvc'], started)
+
+    def test_get_running_dependent_services(self):
+        """Unit test for get_running_dependent_services()"""
+        # Many services depend on RPC, which is always running
+        dependents = get_running_dependent_services('rpcss')
+        self.assertGreater(len(dependents), 0)
+        for dependent in dependents:
+            self.assertIsInstance(dependent, str)
 
     def test_is_service_running(self):
         """Unit test for is_service_running()"""
