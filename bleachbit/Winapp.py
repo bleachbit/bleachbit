@@ -126,8 +126,11 @@ def winapp_expand_vars(pathname):
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     for pattern, sub_repl in _WINAPP_VAR_SUBS:
         if pattern.match(pathname):
-            expand2 = pattern.sub(sub_repl, pathname)
-            return [expand1, os.path.expandvars(expand2)]
+            expand2 = os.path.expandvars(pattern.sub(sub_repl, pathname))
+            # A 64-bit process sees the same directory through both
+            if expand2 != expand1:
+                return [expand1, expand2]
+            break
     return [expand1]
 
 
