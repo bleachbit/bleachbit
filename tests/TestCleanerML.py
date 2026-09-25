@@ -520,6 +520,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         cases = (
             ('android_studio', 'studio'),
             ('rhythmbox', 'rhythmbox'),
+            ('slack', 'slack'),
         )
         self.addCleanup(process_cache.invalidate)
         for cleaner_id, exe_name in cases:
