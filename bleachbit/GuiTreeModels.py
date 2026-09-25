@@ -126,7 +126,7 @@ class TreeDisplayModel:
             return
         i = model.get_iter(row.get_path())
         parent = model.iter_parent(i)
-        if parent and is_toggled_on:
+        if parent and is_toggled_on and model[i][1]:
             # If child is enabled, then also enable the parent.
             model[parent][1] = True
         # If all siblings were toggled off, then also disable the parent.
