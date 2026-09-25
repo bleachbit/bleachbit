@@ -153,7 +153,10 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     if check_winapp2 and wa_element:
         wa_sha512 = wa_element[0].getAttribute('sha512')
         wa_url = wa_element[0].getAttribute('url')
-        update_winapp2(wa_url, wa_sha512, append_text, cb_success)
+        try:
+            update_winapp2(wa_url, wa_sha512, append_text, cb_success)
+        except Exception as e:
+            logger.error('Failed to update winapp2.ini: %s', e)
 
     dom.unlink()
 
