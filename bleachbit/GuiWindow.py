@@ -527,6 +527,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         Otherwise, return False to remove from idle queue.
         """
+        if self.refuse_if_busy():
+            return False
         # create a temporary cleaner object
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 
@@ -679,6 +681,16 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         set_sensitive() leaves the window itself sensitive, so ask the button.
         """
         return self.run_button.get_sensitive()
+
+    def refuse_if_busy(self):
+        """Tell the user and return True if an operation is running"""
+        if self.run_button_get_sensitive():
+            return False
+        self.show_infobar(
+            # TRANSLATORS: Error message shown in the infobar when the user
+            # starts an operation while another one is running.
+            _("Wait for the current operation to finish."))
+        return True
 
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""

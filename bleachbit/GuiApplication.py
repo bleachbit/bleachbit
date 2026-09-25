@@ -232,6 +232,8 @@ class Bleachbit(Gtk.Application):
         if not path:
             # user cancelled
             return
+        if self._window.refuse_if_busy():
+            return
 
         backends['_gui'] = Cleaner.create_wipe_empty_space_cleaner(path)
 

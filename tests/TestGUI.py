@@ -668,6 +668,23 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertEqual([], glib_warnings)
 
+    def test_shred_and_wipe_refused_while_busy(self):
+        """Shredding and wiping do not start while an operation runs"""
+        test_file = self.write_file('shred-while-busy')
+        gui = self.get_window()
+        gui.set_sensitive(False)
+        self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(backends.pop, '_gui', None)
+        with mock.patch.object(gui, 'show_infobar') as show_infobar, \
+                mock.patch.object(gui, 'preview_or_run_operations') as start, \
+                mock.patch('bleachbit.GuiBasic.browse_folder',
+                           return_value=self.tempdir):
+            self.assertFalse(gui.shred_paths([test_file]))
+            self.app.cb_wipe_empty_space(None, None)
+        start.assert_not_called()
+        self.assertEqual(2, show_infobar.call_count)
+        self.assertExists(test_file)
+
     def test_shred_instance_shreds_its_paths_once(self):
         """A shred instance runs on its own and shreds its paths only once"""
         from bleachbit.GuiApplication import Bleachbit
