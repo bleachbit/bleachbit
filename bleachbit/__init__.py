@@ -278,19 +278,19 @@ def _resolve_locale_dir(exe_path, is_linux, is_mac, is_windows, is_netbsd, is_bs
 
     In the macOS .app bundle, exe_path is Contents/Resources (the parent
     of the bleachbit package directory), while locale/ lives one level up
-    at Contents/locale -- neither the './locale/' nor the AppImage-style
-    'next to the executable' check below finds it, which previously fell
-    through to the Linux/macOS '/usr/share/locale/' fallback and silently
-    lost all bundled translations.
+    at Contents/locale -- the AppImage-style 'next to the executable'
+    check below does not find it, which previously fell through to the
+    Linux/macOS '/usr/share/locale/' fallback and silently lost all
+    bundled translations.
+
+    The current directory is not searched: the Explorer context menu
+    starts BleachBit in the folder of the file to shred.
     """
     exe_locale_dir = os.path.join(exe_path, 'locale')
     bundle_locale_dir = os.path.normpath(
         os.path.join(exe_path, '..', 'locale')) if is_mac else None
-    if path_exists("./locale/"):
-        # local locale (personal)
-        return os.path.abspath("./locale/")
     if path_exists(exe_locale_dir):
-        # AppImage
+        # AppImage, or running from source
         return exe_locale_dir
     if is_mac and bundle_locale_dir and path_exists(bundle_locale_dir):
         # macOS .app bundle: Contents/locale, one level above
