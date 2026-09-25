@@ -493,6 +493,7 @@ class Winapp:
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
         attrs = {'command': 'delete'}
+        dotfiles_path = None
         if recurse:
             search = 'walk.files'
             path = dirname
@@ -503,7 +504,14 @@ class Winapp:
                 attrs['regex'] = f'^{fnmatch_translate(filename)}$'
         else:
             search = 'glob'
-            path = os.path.join(dirname, filename)
+            if filename == '*.*':
+                # Windows matches every file, but glob wants a dot in the
+                # name and skips names that start with one
+                path = os.path.join(dirname, '*')
+                dotfiles_path = os.path.join(dirname, '.*')
+                attrs['type'] = 'f'
+            else:
+                path = os.path.join(dirname, filename)
             if path.find('*') == -1:
                 search = 'file'
         if excludekeys:
@@ -517,6 +525,8 @@ class Winapp:
         attrs['search'] = search
         attrs['path'] = path
         yield Delete(_ActionNode(attrs))
+        if dotfiles_path:
+            yield Delete(_ActionNode({**attrs, 'path': dotfiles_path}))
         if removeself:
             search = 'file'
             if dirname.find('*') > -1:

@@ -559,6 +559,20 @@ class WinappTestCase(common.BleachbitTestCase):
         self.assertExists(rf'{dirname}\deleteme.log')
         shutil.rmtree(dirname, True)
 
+    def test_filekey_star_dot_star_every_file(self):
+        """FileKey *.* without RECURSE matches every file, as on Windows"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-winapp-stardotstar')
+        names = ('data_0', 'index', 'deleteme.log', '.hidden')
+        for name in names:
+            self.write_file(os.path.join(dirname, name), b'', 'wb')
+        self.mkdir(os.path.join(dirname, 'sub.dir'))
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
+
+        cleaner = self.ini2cleaner(f'FileKey1={dirname}|*.*')
+        paths = [p for (_o, a) in cleaner.actions for p in a.get_paths()]
+        self.assertEqual(sorted(names),
+                         sorted(os.path.basename(p) for p in paths))
+
     def _verify_keys_state(self, expected_state):
         """Verify registry keys match expected state (dict of key_path -> exists)"""
         for key_path, should_exist in expected_state.items():
