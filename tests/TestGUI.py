@@ -668,6 +668,17 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertEqual([], glib_warnings)
 
+    def test_worker_setup_error_restores_ui(self):
+        """An error before the worker starts leaves the buttons usable"""
+        gui = self.get_window()
+        with mock.patch.object(gui, '_filter_operations_for_expert_mode',
+                               side_effect=KeyError('not_loaded_yet')), \
+                mock.patch('bleachbit.GuiWindow.logger.exception') as log_exception:
+            gui.preview_or_run_operations(True, {'not_loaded_yet': ['cache']})
+        log_exception.assert_called_once()
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+
     def test_shred_and_wipe_refused_while_busy(self):
         """Shredding and wiping do not start while an operation runs"""
         test_file = self.write_file('shred-while-busy')

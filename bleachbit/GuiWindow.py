@@ -771,6 +771,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self.worker = Worker.Worker(self, really_delete, operations)
         except Exception:
             logger.exception('Error in Worker()')
+            self.set_sensitive(True)
+            self.progressbar.hide()
         else:
             self.start_time = time.time()
             self._worker_run = self.worker.run()
