@@ -281,7 +281,7 @@ def notify(msg):
         from bleachbit.Mac import notify_macos
         notify_macos(msg)
         return
-    if importlib.util.find_spec('plyer'):
+    if IS_WINDOWS and importlib.util.find_spec('plyer'):
         # On Windows, use Plyer.
         notify_plyer(msg)
         return
