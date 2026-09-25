@@ -650,3 +650,24 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                     common.touch_file(history)
                     self.assertIn(history, self._bundled_option_paths(
                         cleaner_id, 'history', 'linux'))
+
+    @common.skipIfWindows
+    def test_passwords_login_data_for_account(self):
+        """Passwords delete the account password store too"""
+        config = self.mkdtemp(prefix='bleachbit-login-data')
+        profiles = {
+            'brave': 'BraveSoftware/Brave-Browser/Default',
+            'chromium': 'chromium/Default',
+            'google_chrome': 'google-chrome/Default',
+            'microsoft_edge': 'microsoft-edge/Default',
+            'opera': 'opera',
+            'vivaldi': 'vivaldi/Default',
+        }
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            for cleaner_id, profile in profiles.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    login_data = os.path.join(
+                        config, profile, 'Login Data For Account')
+                    common.touch_file(login_data)
+                    self.assertIn(login_data, self._bundled_option_paths(
+                        cleaner_id, 'passwords', 'linux'))

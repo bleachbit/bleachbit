@@ -176,6 +176,8 @@ later.  See the COPYING file in the top-level directory.
     <warning>This option will delete your saved passwords.</warning>
     <action command="delete" search="file" path="$$profile$$/Login Data"/>
     <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account-journal"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
