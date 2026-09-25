@@ -13,6 +13,8 @@ Test case for module GuiChaff
 # pylint: disable=protected-access
 
 
+import errno
+import os
 import tempfile
 import threading
 import time
@@ -33,7 +35,8 @@ if HAVE_GTK:
                                     STOP_MODE_FREE_SPACE,
                                     MAX_FILE_COUNT,
                                     _make_should_stop,
-                                    _make_progress_cb)
+                                    _make_progress_cb,
+                                    make_files_thread)
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
@@ -355,3 +358,25 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         self.assertFalse(self.dialog.progressbar.get_visible())
         self.assertFalse(self.dialog.abort_button.get_sensitive())
         self.assertTrue(self.dialog.make_button.get_sensitive())
+
+    def test_make_files_thread_error_deletes(self):
+        """Files made before a generation error are still deleted when finished"""
+        output_dir = self.mkdtemp()
+
+        def fake_generate_2600(*_args, generated_file_names, **_kwargs):
+            for _i in range(3):
+                generated_file_names.append(self.mkstemp(dir=output_dir))
+            raise OSError(errno.ENOSPC, 'No space left on device')
+
+        progress_kwargs = []
+
+        def on_progress(_fraction, **kwargs):
+            progress_kwargs.append(kwargs)
+
+        with patch('bleachbit.GuiChaff.generate_2600', side_effect=fake_generate_2600):
+            # pylint: disable-next=possibly-used-before-assignment
+            make_files_thread(STOP_MODE_FILE_COUNT, 10, 0, output_dir, True,
+                              on_progress, threading.Event())
+        self.assertEqual(os.listdir(output_dir), [])
+        self.assertTrue(progress_kwargs[-1]['is_done'])
+        self.assertIn('No space left on device', progress_kwargs[-1]['error'])
