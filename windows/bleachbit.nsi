@@ -225,7 +225,8 @@ Caption "$(INSTALLER_CAPTION)"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
-!define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION RunBleachBit
 ;!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
 ;Later:
 !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
@@ -327,6 +328,12 @@ Function RefreshShellIcons
   !define SHCNE_ASSOCCHANGED 0x08000000
   !define SHCNF_IDLIST 0
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
+; Start BleachBit as the user who ran setup, not the admin that elevated it
+Function RunBleachBit
+  HideWindow ; so BleachBit becomes the active window once setup exits
+  !insertmacro UAC_AsUser_ExecShell "open" "$INSTDIR\${prodname}.exe" "" "$INSTDIR" ""
 FunctionEnd
 
 Function .onVerifyInstDir
