@@ -269,18 +269,47 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_enable_swap_linux(self):
         """Test for enable_swap_linux() with mocks"""
-        # Success
+        header = 'Filename\t\t\t\tType\t\tSize\t\tUsed\t\tPriority\n'
+        before = header + \
+            '/dev/zram0\tpartition\t8388604\t0\t100\n' \
+            '/swap file\tfile\t1048572\t0\t-2\n' \
+            '/dev/sdb1\tpartition\t1048572\t0\t5\n'
+        # swapoff failed on /dev/sdb1, so it is still on
+        after = header + '/dev/sdb1\tpartition\t1048572\t0\t5\n'
+        swapon = General.resolve_exe('swapon')
+
+        # Success: what was on comes back with its priority, and not
+        # through 'swapon -a', which only reads /etc/fstab
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
-            with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
-                enable_swap_linux()
-                self.assertEqual(mock_run.call_args.args[0], [
-                                 General.resolve_exe('swapon'), '-a'])
+            with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=after):
+                with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
+                    enable_swap_linux(before)
+                    self.assertEqual(
+                        [call.args[0] for call in mock_run.call_args_list],
+                        [[swapon, '-p', '100', '/dev/zram0'],
+                         [swapon, '/swap file']])
+
+        # No swap was on, so none is turned on
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
+            with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header):
+                with mock.patch('bleachbit.Memory.General.run_external') as mock_run:
+                    enable_swap_linux(header)
+                    mock_run.assert_not_called()
+
+        # /proc/swaps, the fallback for 'swapon -s', writes a space as \040
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
+            with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header):
+                with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
+                    enable_swap_linux(
+                        header + '/swap\\040file\tfile\t1048572\t0\t-2\n')
+                    mock_run.assert_called_once_with([swapon, '/swap file'])
 
         # Failure
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
-            with mock.patch('bleachbit.Memory.General.run_external', return_value=(1, '', 'swapon failed')):
-                self.assertRaisesRegex(
-                    RuntimeError, 'swapon failed', enable_swap_linux)
+            with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header):
+                with mock.patch('bleachbit.Memory.General.run_external', return_value=(1, '', 'swapon failed')):
+                    self.assertRaisesRegex(
+                        RuntimeError, 'swapon failed', enable_swap_linux, before)
 
     @common.skipIfWindows
     def test_get_swap_size_linux_errors(self):
@@ -593,5 +622,6 @@ Swapouts:                              20258188.
         """Test for disabling and enabling swap"""
         if not common.have_root():
             self.skipTest('not enough privileges')
+        proc_swaps = get_proc_swaps()
         disable_swap_linux()
-        enable_swap_linux()
+        enable_swap_linux(proc_swaps)

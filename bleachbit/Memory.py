@@ -100,13 +100,43 @@ def disable_swap_linux():
     return devices
 
 
-def enable_swap_linux():
-    """Enable Linux swap"""
+def _parse_swap_summary(proc_swaps):
+    """Return (device, priority) for each swap area in 'swapon -s' output"""
+    swap_re = re.compile(r'^(.+?)\s+\w+\s+[0-9]+\s+[0-9]+\s+(-?[0-9]+)\s*$')
+    swaps = []
+    for line in proc_swaps.split('\n')[1:]:
+        ret = swap_re.search(line)
+        if ret:
+            # /proc/swaps writes a space in a name as \040
+            device = re.sub(r'\\([0-7]{3})',
+                            lambda m: chr(int(m.group(1), 8)), ret.group(1))
+            swaps.append((device, int(ret.group(2))))
+    return swaps
+
+
+def enable_swap_linux(proc_swaps):
+    """Enable the Linux swap listed in proc_swaps that is now off
+
+    'swapon -a' would miss swap that is not in /etc/fstab, such as zram
+    started by systemd, and would turn on fstab swap that was off.
+    """
     logger.debug(_("Re-enabling swap."))
-    args = [General.resolve_exe('swapon'), "-a"]
-    (rc, _stdout, stderr) = General.run_external(args)
-    if 0 != rc:
-        raise RuntimeError(stderr.replace("\n", ""))
+    active = [device for device, _priority in
+              _parse_swap_summary(get_proc_swaps())]
+    errors = []
+    for device, priority in _parse_swap_summary(proc_swaps):
+        if device in active:
+            continue
+        args = [General.resolve_exe('swapon')]
+        # Negative priorities are assigned by the kernel and cannot be set
+        if priority >= 0:
+            args += ['-p', str(priority)]
+        args.append(device)
+        (rc, _stdout, stderr) = General.run_external(args)
+        if 0 != rc:
+            errors.append(stderr.replace("\n", ""))
+    if errors:
+        raise RuntimeError(' '.join(errors))
 
 
 def make_self_oom_target_linux(uid=None):
@@ -488,9 +518,9 @@ def wipe_memory():
     except BaseException:
         # Keep the original error if swapon fails too
         try:
-            enable_swap_linux()
+            enable_swap_linux(proc_swaps)
         except Exception as e:
             logger.error('Error when re-enabling swap: %s', e)
         raise
-    enable_swap_linux()
+    enable_swap_linux(proc_swaps)
     yield 0  # how much disk space was recovered
