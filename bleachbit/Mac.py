@@ -603,7 +603,7 @@ def _cookie_result(total_deleted, total_kept, skipped, whole_file_deleted,
     """Build a Safari cookie deletion result dict with a stable schema.
 
     Every branch returns the same set of keys; estimation fields default
-    to None when not applicable (e.g. whole-file delete, error fallback).
+    to None when not applicable (e.g. whole-file delete).
     """
     return {
         "total_deleted": total_deleted,
@@ -690,40 +690,16 @@ def _apply_safari_cookie_deletion(path, new_pages, kept_count, deleted_count,
         )
 
     if kept_count == 0:
-        try:
-            FileUtilities.delete(path, shred_enabled)
-            return _cookie_result(
-                total_deleted=deleted_count,
-                total_kept=0,
-                skipped=False,
-                whole_file_deleted=True,
-                file_size_reduction=original_size,
-            )
-        except OSError as e:
-            logger.error(
-                "Failed to delete Safari cookie database %s: %s",
-                path, e)
-            return _cookie_result(
-                total_deleted=0,
-                total_kept=0,
-                skipped=True,
-                whole_file_deleted=False,
-                file_size_reduction=0,
-            )
-
-    try:
-        _write_safari_cookie_records(path, new_pages)
-    except (OSError, ValueError) as e:
-        logger.error(
-            "Failed to rewrite Safari cookie database %s: %s",
-            path, e)
+        FileUtilities.delete(path, shred_enabled)
         return _cookie_result(
-            total_deleted=0,
-            total_kept=kept_count,
-            skipped=True,
-            whole_file_deleted=False,
-            file_size_reduction=0,
+            total_deleted=deleted_count,
+            total_kept=0,
+            skipped=False,
+            whole_file_deleted=True,
+            file_size_reduction=original_size,
         )
+
+    _write_safari_cookie_records(path, new_pages)
 
     new_size = _get_cookie_disk_size(path)
     return _cookie_result(
