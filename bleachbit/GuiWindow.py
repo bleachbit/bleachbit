@@ -73,6 +73,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _scroll_again = False
     _register_generation = 0
     _app_menu_generation = None
+    _refresh_pending = False
     _worker_run = None
     _worker_source = None
     recognized_cleanerml = False
@@ -804,6 +805,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # No scroll here: append_text() has queued one, and scrolling
         # before GTK lays out the new text makes it do that twice.
         self.set_sensitive(True)
+        if self._refresh_pending:
+            self._refresh_pending = False
+            self.cb_refresh_operations()
 
         # Close the program after cleaning is completed.
         # if the option is selected under preference.
@@ -844,6 +848,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Callback to refresh the list of cleaners and header bar labels"""
         if getattr(self, '_destroyed', False) or self.in_destruction():
             return False
+        if self._worker_source is not None:
+            # Registration empties backends, which the worker still reads
+            self._refresh_pending = True
+            return False
         bleachbit.log_startup_time('refresh started')
         # Only the newest registration may advance. A refresh can arrive
         # mid-way, e.g. from Preferences, and two would both fill backends.
@@ -865,6 +873,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 self.recognized_cleanerml = True
         # reload cleaners from disk
         self.progressbar.show()
+        # The tree shows stale rows until backends is refilled
+        self.set_sensitive(False)
+        self.stop_button.set_sensitive(False)
         rc = register_cleaners(self.update_progress_bar,
                                self.cb_register_cleaners_done,
                                allow_local=allow_local)
@@ -882,6 +893,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Called from register_cleaners()"""
         bleachbit.log_startup_time('cleaners registered')
         self.progressbar.hide()
+        # A running worker re-enables the window when it is done
+        if self._worker_source is None:
+            self.set_sensitive(True)
         # update tree view
         self.tree_store.refresh_rows()
         # expand tree view

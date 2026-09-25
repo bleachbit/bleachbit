@@ -762,6 +762,47 @@ class GUITestCase(common.BleachbitTestCase):
             self.refresh_gui()
         refresh_rows.assert_called_once_with()
 
+    def test_refresh_disables_operations_until_registered(self):
+        """Preview and Clean wait for the cleaners to be registered again"""
+        gui = self.get_window()
+        gui.cb_refresh_operations()
+        self.assertFalse(gui.run_button_get_sensitive())
+        self.assertFalse(gui.preview_button.get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+        self.refresh_gui()
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+
+    def test_refresh_waits_for_running_worker(self):
+        """A refresh asked for while a worker runs starts after it is done"""
+        gui = self.get_window()
+        self._setup_new_cleaner(gui)
+        operations = {self._NEW_CLEANER_ID: [self._NEW_OPTION_ID]}
+        with mock.patch.object(gui.tree_store, 'refresh_rows',
+                               wraps=gui.tree_store.refresh_rows) as refresh_rows:
+            gui.preview_or_run_operations(False, operations)
+            gui.cb_refresh_operations()
+            self.refresh_gui()
+        self.assertEqual(0, gui.worker.total_errors)
+        refresh_rows.assert_called_once_with()
+        self.assertTrue(gui.run_button_get_sensitive())
+
+    def test_registration_done_leaves_running_worker_alone(self):
+        """Finishing a reload re-enables the window only when nothing runs"""
+        gui = self.get_window()
+        gui.set_sensitive(False)
+        self.addCleanup(gui.set_sensitive, True)
+        with mock.patch.object(gui, '_worker_source', 1):
+            gui.cb_register_cleaners_done()
+        self.assertFalse(gui.run_button_get_sensitive())
+        self.assertTrue(gui.stop_button.get_sensitive())
+
+        with mock.patch.object(gui.tree_store, 'refresh_rows',
+                               side_effect=RuntimeError), \
+                self.assertRaises(RuntimeError):
+            gui.cb_register_cleaners_done()
+        self.assertTrue(gui.run_button_get_sensitive())
+
     def test_run_operations(self):
         gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)
