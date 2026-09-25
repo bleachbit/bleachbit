@@ -967,3 +967,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                     mock.patch.object(process_cache, 'get',
                                       return_value=procs):
                 self.assertEqual(expected, cleaner.is_process_running())
+
+    def test_firefox_running_esr(self):
+        """Debian's Firefox ESR is detected as a running Firefox"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'firefox', 'linux', 'firefox-esr'))
