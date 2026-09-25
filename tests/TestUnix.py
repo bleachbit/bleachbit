@@ -44,6 +44,7 @@ from bleachbit.Unix import (
     get_trash_paths,
     is_broken_xdg_desktop,
     is_unix_display_protocol_wayland,
+    is_unregistered_mime,
     journald_clean,
     JOURNALD_REGEX,
     orphaned_framework_versions,
@@ -340,6 +341,12 @@ class UnixTestCase(common.BleachbitTestCase):
                 result, msg=f"Expected is_broken_xdg_desktop({filename}) to return True, but got {result}")
             mock_logger.assert_called()
             mock_logger.reset_mock()
+
+    def test_is_unregistered_mime_without_gio(self):
+        """is_unregistered_mime() when GtkShim has no Gio (no display)"""
+        with mock.patch('bleachbit.GtkShim.Gio', None, create=True):
+            self.assertFalse(is_unregistered_mime(
+                'application/x-bleachbit-test'))
 
     def test_is_broken_xdg_desktop_wine(self):
         """Unit test for certain Wine .desktop file
