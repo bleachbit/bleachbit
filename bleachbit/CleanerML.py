@@ -371,7 +371,9 @@ class CleanerML:
             value_str = _gettext_etree(value_element)
             search_type = value_element.attrib.get('search', '')
             if search_type == 'glob':
-                value_list = expand_glob_join(value_str, '')
+                # Drop the trailing separator, or '$$var$$/x' becomes 'dir//x'
+                value_list = [os.path.normpath(value)
+                              for value in expand_glob_join(value_str, '')]
             elif search_type == 'winreg':
                 if not IS_WINDOWS:
                     continue
