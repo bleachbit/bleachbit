@@ -13,7 +13,7 @@ import time
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, Language, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
+from bleachbit.Constant import REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
@@ -28,22 +28,6 @@ from bleachbit.Wipe import detect_orphaned_wipe_files
 
 if IS_WINDOWS:
     from bleachbit import Windows
-
-
-# TRANSLATORS: Button label on the headerbar and context menu item
-# in the treeview.
-# 'Preview' is a verb.
-PREVIEW_MSG = _('Preview')
-
-# TRANSLATORS: Button label on the headerbar and context menu item
-# in the treeview.
-# 'Clean' is a verb.
-CLEAN_MSG = _('Clean')
-
-# TRANSLATORS: Button in tree view's context menu to open the cookie
-# manager.
-# Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
-MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
 
 # Ensure GTK is available for this GUI module
 require_gtk()
@@ -950,11 +934,11 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # make a menu
         menu = Gtk.Menu()
         menu.connect('hide', lambda widget: widget.detach())
-        preview_item = Gtk.MenuItem(label=PREVIEW_MSG)
+        preview_item = Gtk.MenuItem(label=_('Preview'))
         preview_item.connect('activate', self.cb_run_option,
                              False, cleaner_id, option_id)
         menu.append(preview_item)
-        clean_item = Gtk.MenuItem(label=CLEAN_MSG)
+        clean_item = Gtk.MenuItem(label=_('Clean'))
         clean_item.connect('activate', self.cb_run_option,
                            True, cleaner_id, option_id)
         menu.append(clean_item)
@@ -962,7 +946,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # Check if this option has a cookie command
         if self._option_has_cookie_command(cleaner_id, option_id):
             menu.append(Gtk.SeparatorMenuItem())
-            cookie_item = Gtk.MenuItem(label=MANAGE_COOKIES_TO_KEEP)
+            # TRANSLATORS: Button in tree view's context menu to open the cookie
+            # manager.
+            # Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+            cookie_item = Gtk.MenuItem(label=_("Manage cookies to keep\u2026"))
             cookie_item.connect('activate', self.cb_manage_cookies)
             menu.append(cookie_item)
 
@@ -1073,7 +1060,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self._reload_app_menu()
 
         # Preview button
-        self.preview_button.set_label(PREVIEW_MSG)
+        # TRANSLATORS: Button label on the headerbar and context menu item
+        # in the treeview.
+        # 'Preview' is a verb.
+        self.preview_button.set_label(_('Preview'))
         self.preview_button.set_tooltip_text(
             # TRANSLATORS: Tooltip for the preview button on the headerbar.
             # 'Preview' is a verb, and 'selected operations' refers to
@@ -1081,14 +1071,17 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             _("Preview files in the selected operations (without deleting any files)"))
 
         # Clean button
-        self.run_button.set_label(CLEAN_MSG)
+        # TRANSLATORS: Button label on the headerbar and context menu item
+        # in the treeview.
+        # 'Clean' is a verb.
+        self.run_button.set_label(_('Clean'))
         self.run_button.set_tooltip_text(
             # TRANSLATORS: Tooltip for the clean button on the headerbar.
             # 'Clean' is a verb, and 'operations' are cleaning options (e.g.,
             #  Firefox - Cache).
             _("Clean files in the selected operations"))
 
-        self.stop_button.set_label(ABORT_BUTTON_LABEL)
+        self.stop_button.set_label(_('Abort'))
         self.stop_button.set_tooltip_text(
             # TRANSLATORS: Tooltip for the abort button on the headerbar,
             # and 'abort' ia a verb.

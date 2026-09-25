@@ -721,6 +721,16 @@ class GUITestCase(common.BleachbitTestCase):
         gui.update_headerbar_labels()
         self.assertIsNot(gui.menu_button.get_menu_model(), menu)
 
+    def test_headerbar_labels_follow_language(self):
+        """The button labels are translated again on every update"""
+        gui = self.get_window()
+        with mock.patch('bleachbit.GuiWindow._', side_effect=lambda msg: f'[{msg}]'):
+            gui.update_headerbar_labels()
+            self.assertEqual(gui.preview_button.get_label(), '[Preview]')
+            self.assertEqual(gui.run_button.get_label(), '[Clean]')
+            self.assertEqual(gui.stop_button.get_label(), '[Abort]')
+        gui.update_headerbar_labels()
+
     def test_refresh_supersedes_running_registration(self):
         """A new refresh stops the registration still running"""
         gui = self.get_window()
