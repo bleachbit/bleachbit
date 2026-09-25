@@ -156,22 +156,27 @@ def list_cookies(path):
 def load_keep_list():
     """Load cookie domains to keep from options directory.
 
-    This does not swallow file permission error or JSON parsing errors:
-    when cleaning, these cases should not be treated equally to an empty
-    keep list.
+    This does not swallow file permission error, JSON parsing errors or
+    a file that is not a list of strings: when cleaning, these cases
+    should not be treated equally to an empty keep list.
     """
     path = os.path.join(bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
     domains = set()
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        # utf-8-sig accepts a BOM added by an editor
+        with open(path, 'r', encoding='utf-8-sig') as f:
             data = json.load(f)
     except FileNotFoundError:
         return domains
 
-    if isinstance(data, list):
-        for item in data:
-            if isinstance(item, str) and item:
-                domains.add(item.strip().lstrip('.').lower())
+    if not isinstance(data, list):
+        raise ValueError(f'expected a list, got {type(data).__name__}')
+    for item in data:
+        if not isinstance(item, str):
+            raise ValueError(f'expected a string, got {type(item).__name__}')
+        domain = item.strip().lstrip('.').lower()
+        if domain:
+            domains.add(domain)
     return domains
 
 

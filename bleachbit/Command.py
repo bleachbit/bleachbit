@@ -160,6 +160,24 @@ class DeleteRecycleBinMetadata(Delete):
         yield from super().execute(really_delete)
 
 
+class Fail:
+
+    """Report an action that cannot run, so the Worker counts an error"""
+
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return self.message
+
+    # pylint: disable-next=unused-argument
+    def execute(self, really_delete):
+        """Raise in both preview and clean mode"""
+        raise RuntimeError(self.message)
+        # pylint: disable-next=unreachable
+        yield  # a generator like the other commands
+
+
 class Function:
 
     """Execute a simple Python function"""

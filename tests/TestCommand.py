@@ -31,7 +31,7 @@ from unittest import mock
 from tests import common
 import bleachbit.Command
 from bleachbit import FileUtilities, IS_WINDOWS
-from bleachbit.Command import Delete, DeleteRecycleBinMetadata, Function, Shred, Truncate
+from bleachbit.Command import Delete, DeleteRecycleBinMetadata, Fail, Function, Shred, Truncate
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
@@ -257,6 +257,15 @@ class CommandTestCase(common.BleachbitTestCase):
 
         with self.assertRaises(sqlite3.OperationalError):
             next(cmd.execute(True))
+
+    def test_Fail(self):
+        """Unit test Fail"""
+        cmd = Fail('cannot clean')
+        self.assertEqual(str(cmd), 'cannot clean')
+        for really_delete in (False, True):
+            with self.assertRaises(RuntimeError) as cm:
+                list(cmd.execute(really_delete))
+            self.assertEqual(str(cm.exception), 'cannot clean')
 
     def test_Shred(self):
         """Unit test for Shred"""
