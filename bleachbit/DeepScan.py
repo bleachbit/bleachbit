@@ -119,6 +119,8 @@ class DeepScan:
         logging.getLogger(__name__).debug(
             'DeepScan.scan: searches=%s', str(self.searches))
         yield_time = time.time()
+        # Overlapping searches and nested tops can match a file twice
+        matched = set()
 
         for (top, searches) in self.searches.items():
             # This skips top-level directories that are in the keep list
@@ -138,11 +140,11 @@ class DeepScan:
                 dirnames[:] = kept_dirs
                 path_prefix = directory_prefix(dirpath)
                 for c in compiled_searches:
-                    # fixme, don't match filename twice
                     for filename in filenames:
                         full_name = c.match(dirpath, filename, path_prefix)
-                        if full_name is None:
+                        if full_name is None or full_name in matched:
                             continue
+                        matched.add(full_name)
                         # fixme: support other commands
                         if c.command == 'delete':
                             yield Command.Delete(full_name)
