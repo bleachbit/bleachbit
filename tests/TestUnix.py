@@ -135,6 +135,12 @@ class UnixTestCase(common.BleachbitTestCase):
             mock_run_external.assert_called_once_with(
                 [General.resolve_exe('locale'), '-a'])
 
+    def test_find_available_locales_missing_utility(self):
+        """find_available_locales() without a locale binary (musl)"""
+        with mock.patch('bleachbit.Unix.General.run_external',
+                        side_effect=FileNotFoundError(2, 'No such file', 'locale')):
+            self.assertEqual(find_available_locales(), [])
+
     @mock.patch('locale.getlocale')
     @mock.patch('bleachbit.Unix.find_available_locales')
     def test_find_best_locale(self, mock_find_available_locales, mock_getlocale):
