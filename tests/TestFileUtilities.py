@@ -2086,6 +2086,16 @@ State=AAAA/wA...
             self.assertFalse(whitelisted(path),
                              f"{path} should not be protected")
 
+    @common.skipIfWindows
+    def test_whitelisted_posix_normpath(self):
+        """Keep list matches paths spelled with '//' or a trailing '/'"""
+        options.set_whitelist_paths(
+            [('file', '/home/foo/cookies.sqlite'), ('folder', '/home/folder/')])
+        self.assert_is_whitelisted('/home/foo//cookies.sqlite')
+        self.assert_is_whitelisted('/home/folder')
+        self.assert_is_whitelisted('/home//folder/model.bin')
+        self.assertFalse(whitelisted('/home//folder2/model.bin'))
+
     @common.skipUnlessWindows
     def test_whitelisted_windows(self):
         """Test whitelisted() on Windows"""

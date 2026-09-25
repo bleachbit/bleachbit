@@ -1243,7 +1243,12 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
             return True
         # resolve symlink
         return whitelisted_posix(os.path.realpath(path), False, _followed_link=True)
+    # Cleaner paths can carry '//' or a trailing '/' from variables
+    path = os.path.normpath(path)
     for (keep_type, keep_path) in keep_paths:
+        # normpath('') is '.', but an empty folder entry matches everything
+        if keep_path:
+            keep_path = os.path.normpath(keep_path)
         if keep_type == 'file':
             if path_equal(path, keep_path):
                 return True
