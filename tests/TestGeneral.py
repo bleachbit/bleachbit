@@ -573,3 +573,12 @@ class GeneralTestCase(common.BleachbitTestCase):
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assertIsInstance(sudo_mode(), bool)
+
+    @common.skipIfWindows
+    def test_sudo_mode_follows_sudo_uid(self):
+        """sudo_mode() is True on any POSIX system when SUDO_UID is set"""
+        with mock.patch.dict(os.environ, {'SUDO_UID': str(os.getuid())}):
+            self.assertTrue(sudo_mode())
+        with mock.patch.dict(os.environ):
+            os.environ.pop('SUDO_UID', None)
+            self.assertFalse(sudo_mode())

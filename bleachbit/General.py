@@ -33,7 +33,7 @@ import sys
 import xml.parsers.expat
 
 import bleachbit
-from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
+from bleachbit import IS_POSIX, IS_WINDOWS
 from bleachbit.PathUtils import path_startswith
 
 logger = logging.getLogger(__name__)
@@ -532,7 +532,7 @@ def shell_split(cmd):
 
 def sudo_mode():
     """Return whether running in sudo mode"""
-    if not IS_LINUX:
+    if not IS_POSIX:
         return False
 
     # if 'root' == os.getenv('USER'):
