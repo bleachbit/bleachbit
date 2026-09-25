@@ -318,6 +318,24 @@ class ProtectedPathTestCase(RelativeSuffixAssertions, common.BleachbitTestCase):
                     self.assertIsNotNone(result)
                 break
 
+    def test_check_protected_path_root_parent(self):
+        """A root that holds a protected folder warns"""
+        root = os.path.abspath(os.sep)
+        protected_path_module._protected_paths_cache = [{
+            'path': os.path.join(root, 'bleachbit_protected'),
+            'depth': 0,
+            'case_sensitive': True}]
+        self.assertIsNotNone(check_protected_path(root))
+
+    @requirePPXML
+    @common.skipUnlessWindows
+    def test_load_protected_paths_bare_drive(self):
+        """%systemdrive% loads as the drive root"""
+        drive = os.path.expandvars('%systemdrive%')
+        paths = [ppath['path'] for ppath in load_protected_paths()]
+        self.assertIn(drive + os.sep, paths)
+        self.assertNotIn(drive, paths)
+
     @requirePPXML
     def test_check_protected_path_git_variations(self):
         """Test that .git entries are detected at various nesting levels"""
