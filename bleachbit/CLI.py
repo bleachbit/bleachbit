@@ -8,9 +8,11 @@
 Command line interface
 """
 
+import contextlib
 import errno
 import logging
 import optparse
+import signal
 import sys
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
@@ -34,6 +36,24 @@ def _write_update_output(value):
 def _noop():
     """Do nothing"""
     return None
+
+
+@contextlib.contextmanager
+def _interrupt_on_termination():
+    """Treat SIGTERM and SIGHUP as Ctrl+C so finally blocks and atexit run"""
+    def raise_interrupt(_signum, _frame):
+        raise KeyboardInterrupt
+    # Leave ignored signals alone, e.g. SIGHUP under nohup
+    names = [name for name in ('SIGTERM', 'SIGHUP', 'SIGBREAK')
+             if hasattr(signal, name)
+             and signal.getsignal(getattr(signal, name)) is not signal.SIG_IGN]
+    old_handlers = {name: signal.signal(getattr(signal, name), raise_interrupt)
+                    for name in names}
+    try:
+        yield
+    finally:
+        for name, handler in old_handlers.items():
+            signal.signal(getattr(signal, name), handler)
 
 
 class CliCallback:
@@ -92,9 +112,10 @@ def preview_or_clean(operations, really_clean, quiet=False):
     cb = CliCallback(quiet)
     worker = Worker.Worker(cb, really_clean, operations).run()
     try:
-        for ret in worker:
-            if not ret:
-                break
+        with _interrupt_on_termination():
+            for ret in worker:
+                if not ret:
+                    break
     except BrokenPipeError:
         # Propagate to the top-level handler (e.g., when the downstream
         # pipe consumer like `less` or `head` closes early).
@@ -407,8 +428,9 @@ There is NO WARRANTY, to the extent permitted by law.
             logger.info(_("Wipe empty space in %s"), wipe_path)
             import bleachbit.Wipe
             try:
-                for _ret in bleachbit.Wipe.wipe_path(wipe_path):
-                    pass
+                with _interrupt_on_termination():
+                    for _ret in bleachbit.Wipe.wipe_path(wipe_path):
+                        pass
             except OSError as e:
                 # Do not let one bad path abort the remaining ones.
                 logger.error('%s: %s', wipe_path, e)
