@@ -77,6 +77,14 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         cleaner = self._load_real_cleaner_as(f'{cleaner_id}.xml', platform)
         return [cmd.path for cmd in cleaner.get_commands(option_id)]
 
+    def _bundled_cleaner_detects(self, cleaner_id, platform, exename):
+        """Return whether a bundled cleaner treats exename as its app running"""
+        cleaner = self._load_real_cleaner_as(f'{cleaner_id}.xml', platform)
+        procs = (ProcessInfo(1234, exename, True),)
+        with mock.patch.object(process_cache, 'get', return_value=procs), \
+                mock.patch('bleachbit.Process.IS_WINDOWS', platform == 'win32'):
+            return cleaner.is_process_running()
+
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""
         tests = [('True', True),
@@ -901,3 +909,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             r'HKCU\Software\Microsoft\Internet Explorer\TypedURLs', keys)
         self.assertNotIn(
             r'HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl', keys)
+
+    def test_chromium_running_debian(self):
+        """Chromium is detected under the name Debian and Arch run it as"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'chromium', 'linux', 'chromium'))
