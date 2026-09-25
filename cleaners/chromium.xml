@@ -29,12 +29,19 @@ later.  See the COPYING file in the top-level directory.
   </var>
   <var name="profile">
     <value os="windows">%LocalAppData%\Chromium\User Data\Default</value>
+    <value search="glob" os="windows">%LocalAppData%\Chromium\User Data\Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/chromium/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/chromium/Profile *</value>
     <value os="linux">~/snap/chromium/common/chromium/Default</value>
+    <value search="glob" os="linux">~/snap/chromium/common/chromium/Profile *</value>
     <value os="linux">~/.var/app/org.chromium.Chromium/config/chromium/Default</value>
+    <value search="glob" os="linux">~/.var/app/org.chromium.Chromium/config/chromium/Profile *</value>
     <value os="linux">~/.var/app/io.github.ungoogled_software.ungoogled_chromium/config/chromium/Default</value>
+    <value search="glob" os="linux">~/.var/app/io.github.ungoogled_software.ungoogled_chromium/config/chromium/Profile *</value>
     <value os="freebsd">$XDG_CONFIG_HOME/chromium/Default</value>
+    <value search="glob" os="freebsd">$XDG_CONFIG_HOME/chromium/Profile *</value>
     <value os="openbsd">$XDG_CONFIG_HOME/chromium/Default</value>
+    <value search="glob" os="openbsd">$XDG_CONFIG_HOME/chromium/Profile *</value>
   </var>
   <option id="cache">
     <label>Cache</label>

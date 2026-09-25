@@ -23,9 +23,13 @@ later.  See the COPYING file in the top-level directory.
   </var>
   <var name="profile">
     <value os="windows">%LocalAppData%\BraveSoftware\Brave-Browser\User Data\Default</value>
+    <value search="glob" os="windows">%LocalAppData%\BraveSoftware\Brave-Browser\User Data\Profile *</value>
     <value os="macos">~/Library/Application Support/BraveSoftware/Brave-Browser/Default</value>
+    <value search="glob" os="macos">~/Library/Application Support/BraveSoftware/Brave-Browser/Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/BraveSoftware/Brave-Browser/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/BraveSoftware/Brave-Browser/Profile *</value>
     <value os="linux">~/snap/brave/current/.config/BraveSoftware/Brave-Browser/Default</value>
+    <value search="glob" os="linux">~/snap/brave/current/.config/BraveSoftware/Brave-Browser/Profile *</value>
   </var>
   <option id="cache">
     <label>Cache</label>
