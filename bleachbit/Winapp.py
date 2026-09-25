@@ -217,7 +217,7 @@ class Winapp:
             self.parser = self._read_by_section(pathname, encoding)
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
-        self.re_excludekey = re.compile(r'^excludekey\d+$')
+        self.re_excludekey = re.compile(r'^excludekey(\d+)?$')
         # An app's sections repeat Detect keys; cache the probes for this load
         self._detect_cache = {}
         if not load_now:

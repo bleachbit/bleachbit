@@ -645,6 +645,16 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
             actions.setdefault(action.__class__.__name__, []).append(action)
         return actions
 
+    def test_excludekey_without_number(self):
+        """An ExcludeKey without a number works like FileKey without one"""
+        for suffix in ('1', ''):
+            with self.subTest(suffix=suffix):
+                actions = self._build_actions(
+                    'FileKey=C:\\BB Test|*.*|RECURSE\n'
+                    f'ExcludeKey{suffix}=FILE|C:\\BB Test\\|keep.ini\n',
+                    'winapp2-excludekey')
+                self.assertTrue(actions['Delete'][0].nwholeregex)
+
     def test_action_keeps_xml_special_characters(self):
         """XML-special characters in keys reach the providers unchanged"""
         actions = self._build_actions(
