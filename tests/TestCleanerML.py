@@ -496,3 +496,14 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 'vivaldi', 'cookies', 'linux'))
             self.assertIn(cookies, self._bundled_option_paths(
                 'vivaldi', 'vacuum', 'linux'))
+
+    @common.skipIfWindows
+    def test_vivaldi_cache_disk_cache(self):
+        """Vivaldi cache covers the HTTP disk cache"""
+        cache_home = self.mkdtemp(prefix='bleachbit-vivaldi-cache')
+        entry = os.path.join(cache_home, 'vivaldi', 'Default', 'Cache',
+                             'Cache_Data', 'f_000001')
+        common.touch_file(entry)
+        with common.set_temporary_env('XDG_CACHE_HOME', cache_home):
+            self.assertIn(entry, self._bundled_option_paths(
+                'vivaldi', 'cache', 'linux'))
