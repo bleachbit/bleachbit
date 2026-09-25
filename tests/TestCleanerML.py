@@ -69,6 +69,23 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             self.assertEqual(boolstr_to_bool(arg.lower()), output)
             self.assertEqual(boolstr_to_bool(arg.upper()), output)
 
+    def test_claude_session_keeps_memory(self):
+        """Claude > Session keeps the per-project auto-memory"""
+        project = os.path.join(self.tempdir, '.claude',
+                               'projects', '-tmp-proj')
+        transcript = os.path.join(project, 'abc.jsonl')
+        memory = os.path.join(project, 'memory', 'MEMORY.md')
+        common.touch_file(transcript)
+        common.touch_file(memory)
+        env = {'HOME': self.tempdir, 'USERPROFILE': self.tempdir}
+        with mock.patch.dict(os.environ, env):
+            cleaner = CleanerML('cleaners/claude.xml').get_cleaner()
+        paths = [path for option_id, action in cleaner.actions
+                 if option_id == 'session' for path in action.get_paths()]
+        self.assertIn(transcript, paths)
+        self.assertNotIn(memory, paths)
+        self.assertNotIn(os.path.dirname(memory), paths)
+
     def test_create_pot(self):
         """Unit test for create_pot()"""
         os.chdir('po')
