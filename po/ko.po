@@ -1061,7 +1061,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr "설치할 사용자 ($^NameDA)를 선택합니다."
+msgstr "설치할 사용자 ($(^NameDA))를 선택합니다."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
@@ -1136,7 +1136,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
-msgstr "제거할 사용자 ($^NameDA)를 선택합니다."
+msgstr "제거할 사용자 ($(^NameDA))를 선택합니다."
 
 #. TRANSLATORS: Dialog shown when the installer detects an old version of Windows. Instructs the user to click OK to download a compatible version or Cancel to exit.
 #: windows/NsisInclude/NsisMultiUserLang.nsh

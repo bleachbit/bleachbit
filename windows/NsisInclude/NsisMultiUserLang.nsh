@@ -93,7 +93,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ALBANIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ALBANIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_ALBANIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_ALBANIAN} "Zgjedh një dosje"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_ALBANIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_ALBANIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_ALBANIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_ALBANIAN} "Reinstall version {VERSION} for all users."
@@ -103,9 +103,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ALBANIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_ALBANIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_ALBANIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_ALBANIAN} "Zgjedh filet për copëzim"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ALBANIAN} "Widgets për desktop"
-	LangString SECTION_DESKTOP_NAME ${LANG_ALBANIAN} "Desktop mjedis"
+	LangString SECTION_CORE_NAME ${LANG_ALBANIAN} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ALBANIAN} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_ALBANIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ALBANIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ALBANIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ALBANIAN} "Create a shortcut on the Quick Launch bar."
@@ -115,12 +115,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ALBANIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_ALBANIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ALBANIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_ALBANIAN} "Lokalizimet"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ALBANIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ALBANIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ALBANIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_ALBANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ALBANIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ALBANIAN} "Zgjedh një dosje të shkrueshme për secilin disk, për të cilin doni të mbishkruani hapësirë të lirë."
+	LangString UNINSTALL_TEXT ${LANG_ALBANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_ARABIC
@@ -174,7 +174,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ARABIC} "طرفية ${prodname} لتشخيص الأخطاء"
 	LangString SHORTCUT_NO_UAC ${LANG_ARABIC} "${prodname} (لا UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ARABIC} "تمزيق بواسطة ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ARABIC} "اختر مجلدًا قابلًا للكتابة في كل محرك أقراص مما تريد محو مساحته الفارغة."
+	LangString UNINSTALL_TEXT ${LANG_ARABIC} "سيتم إلغاء تثبيت ${prodname} من المجلد التالي.$\r$\nانقر على 'إلغاء تثبيت' لبدأ إلغاء التثبيت.$\r$\nتحذير: سيحذف برنامج إلغاء التثبيت دليل التثبيت، الذي يتضمن أي ملفات (مثل المنظفات المخصّصة) قد تكون أضفتها أو عدلتها."
 !endif
 
 !ifdef LANG_ASTURIAN
@@ -201,7 +201,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ASTURIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ASTURIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_ASTURIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_ASTURIAN} "Escueyi una carpeta"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_ASTURIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_ASTURIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_ASTURIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_ASTURIAN} "Reinstall version {VERSION} for all users."
@@ -211,9 +211,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ASTURIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_ASTURIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_ASTURIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_ASTURIAN} "Escoyer ficheros a esmigayar"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ASTURIAN} "Widgets pal escritoriu"
-	LangString SECTION_DESKTOP_NAME ${LANG_ASTURIAN} "Entornu d'escritoriu"
+	LangString SECTION_CORE_NAME ${LANG_ASTURIAN} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ASTURIAN} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_ASTURIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ASTURIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ASTURIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ASTURIAN} "Create a shortcut on the Quick Launch bar."
@@ -223,12 +223,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ASTURIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_ASTURIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ASTURIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_ASTURIAN} "Traducciones"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ASTURIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ASTURIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ASTURIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_ASTURIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ASTURIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ASTURIAN} "Escueyi una carpeta pa cada preséu na que se puea escribir y porder usala pa sobrescribir l'espaciu llibre."
+	LangString UNINSTALL_TEXT ${LANG_ASTURIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_BASQUE
@@ -255,7 +255,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_BASQUE} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_BASQUE} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_BASQUE} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_BASQUE} "Hautatu karpeta"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_BASQUE} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_BASQUE} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_BASQUE} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_BASQUE} "Reinstall version {VERSION} for all users."
@@ -265,8 +265,8 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BASQUE} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_BASQUE} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_BASQUE} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_BASQUE} "Hautatu fitxategiak birrintzeko"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BASQUE} "Mahaigainerako trepetak"
+	LangString SECTION_CORE_NAME ${LANG_BASQUE} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BASQUE} "Create a shortcut on the desktop."
 	LangString SECTION_DESKTOP_NAME ${LANG_BASQUE} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_BASQUE} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_BASQUE} "Integrate Shred"
@@ -277,12 +277,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_BASQUE} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_BASQUE} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_BASQUE} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_BASQUE} "Itzulpenak"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_BASQUE} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_BASQUE} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BASQUE} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_BASQUE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BASQUE} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_BASQUE} "Hautatu idazteko baimena duen karpeta bat leku librea gainidatzi behar den unitate bakoitzeko."
+	LangString UNINSTALL_TEXT ${LANG_BASQUE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_BELARUSIAN
@@ -309,7 +309,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_BELARUSIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_BELARUSIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_BELARUSIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_BELARUSIAN} "Выбраць тэчку"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_BELARUSIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_BELARUSIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_BELARUSIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_BELARUSIAN} "Reinstall version {VERSION} for all users."
@@ -319,9 +319,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BELARUSIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_BELARUSIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_BELARUSIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_BELARUSIAN} "Выберыце файлы для зьнішчэньня"
+	LangString SECTION_CORE_NAME ${LANG_BELARUSIAN} "Core files (required)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BELARUSIAN} "Create a shortcut on the desktop."
-	LangString SECTION_DESKTOP_NAME ${LANG_BELARUSIAN} "Віджэты стальніцы"
+	LangString SECTION_DESKTOP_NAME ${LANG_BELARUSIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_BELARUSIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_BELARUSIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_BELARUSIAN} "Create a shortcut on the Quick Launch bar."
@@ -331,12 +331,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_BELARUSIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_BELARUSIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_BELARUSIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_BELARUSIAN} "Лакалізацыі"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_BELARUSIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_BELARUSIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BELARUSIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_BELARUSIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BELARUSIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_BELARUSIAN} "Choose a writable folder for each drive for which to wipe empty space."
+	LangString UNINSTALL_TEXT ${LANG_BELARUSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_BOSNIAN
@@ -363,7 +363,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_BOSNIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_BOSNIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_BOSNIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_BOSNIAN} "Odabir direktorija"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_BOSNIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_BOSNIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_BOSNIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_BOSNIAN} "Reinstall version {VERSION} for all users."
@@ -373,9 +373,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BOSNIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_BOSNIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_BOSNIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_BOSNIAN} "Odabir datoteka za uništavanje"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BOSNIAN} "Widgeti za desktop"
-	LangString SECTION_DESKTOP_NAME ${LANG_BOSNIAN} "Desktop okruženje"
+	LangString SECTION_CORE_NAME ${LANG_BOSNIAN} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BOSNIAN} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_BOSNIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_BOSNIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_BOSNIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_BOSNIAN} "Create a shortcut on the Quick Launch bar."
@@ -385,12 +385,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_BOSNIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_BOSNIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_BOSNIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_BOSNIAN} "Lokalizacije"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_BOSNIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_BOSNIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BOSNIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_BOSNIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BOSNIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_BOSNIAN} "Odaberi direktorij sa dozvolom pisanja za svaki disk za koji se vrši prepisivanje slobodnog prostora."
+	LangString UNINSTALL_TEXT ${LANG_BOSNIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_BULGARIAN
@@ -444,7 +444,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BULGARIAN} "Терминал за премахване на дефекти от ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_BULGARIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BULGARIAN} "Споделено с ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_BULGARIAN} "Изберете папка с права за запис за всяко дисково устройтво, за което свободното дисково пространство да бъде почистено."
+	LangString UNINSTALL_TEXT ${LANG_BULGARIAN} "Приложението ${prodname} ще бъде премахнато от следната папка.$\r$\nИзберете „Деинсталиране“ за да започне премахването.$\r$\nВнимание: Процесът напълно премахва папката, включително файловете (като шаблони за почистване), които се добавяли или променяли."
 !endif
 
 !ifdef LANG_CATALAN
@@ -498,7 +498,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CATALAN} "Terminal de depuració del ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_CATALAN} "${prodname} (Sense UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_CATALAN} "Destrueix amb ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_CATALAN} "Trieu una carpeta amb capacitat d'escriptura per a cada unitat de la qual voleu esborrar l'espai buit."
+	LangString UNINSTALL_TEXT ${LANG_CATALAN} "El ${prodname} es desinstal·larà de la carpeta següent.$\r$\nFeu clic a Desinstal·la per iniciar la desinstal·lació.$\r$\nAVÍS: El desinstal·lador elimina completament el directori d'instal·lació, inclosos els fitxers (com ara els netejadors personalitzats) que hàgiu afegit o modificat."
 !endif
 
 !ifdef LANG_CROATIAN
@@ -552,7 +552,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CROATIAN} "Terminal za otklanjanje grešaka programa ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_CROATIAN} "${prodname} (bez UAC-a)."
 	LangString SHRED_SHELL_MENU ${LANG_CROATIAN} "Nepovratno izbriši pomoću programa ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_CROATIAN} "Odaberite zapisivu mapu za svaki pogon na kojem želite prebrisati slobodan prostor."
+	LangString UNINSTALL_TEXT ${LANG_CROATIAN} "${prodname} deinstalirat će se iz sljedeće mape.$\r$\nKliknite Deinstaliraj za početak deinstalacije.$\r$\nUPOZORENJE: Deinstalacijski program potpuno uklanja instalacijsku mapu, uključujući sve datoteke koje ste dodali ili promijenili, primjerice prilagođene čistače."
 !endif
 
 !ifdef LANG_CZECH
@@ -563,7 +563,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_CZECH} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_CZECH} "You need to log in with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ADMIN_CREDENTIALS_REQUIRED ${LANG_CZECH} "Administrator credentials required."
-	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_CZECH} "K čištění aktualizací systému Windows je nutné oprávnění správce"
+	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_CZECH} "Administrator credentials required to uninstall."
 	LangString MULTIUSER_ALL_USERS ${LANG_CZECH} "For &anyone who uses this computer (all users)"
 	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_CZECH} "For anyone who uses this computer (all users)"
 	LangString MULTIUSER_CURRENT_USER ${LANG_CZECH} "For &me ({USER})"
@@ -579,7 +579,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_CZECH} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_CZECH} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_CZECH} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_CZECH} "Zvolte složku"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_CZECH} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_CZECH} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_CZECH} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_CZECH} "Reinstall version {VERSION} for all users."
@@ -589,9 +589,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_CZECH} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_CZECH} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_CZECH} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_CZECH} "Vyberte soubory ke skartaci"
+	LangString SECTION_CORE_NAME ${LANG_CZECH} "Core files (required)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_CZECH} "Vytvořit zástupce na ploše."
-	LangString SECTION_DESKTOP_NAME ${LANG_CZECH} "Widgety plochy"
+	LangString SECTION_DESKTOP_NAME ${LANG_CZECH} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_CZECH} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_CZECH} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_CZECH} "Create a shortcut on the Quick Launch bar."
@@ -601,12 +601,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_CZECH} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_CZECH} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_CZECH} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_CZECH} "Lokalizace"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_CZECH} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_CZECH} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CZECH} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_CZECH} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_CZECH} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_CZECH} "Zvolte vámi zapisovatelnou složku každého disku/oddílu, na němž má být přepsáno volné místo."
+	LangString UNINSTALL_TEXT ${LANG_CZECH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_DANISH
@@ -633,7 +633,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_DANISH} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_DANISH} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_DANISH} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_DANISH} "Vælg en mappe"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_DANISH} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_DANISH} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_DANISH} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_DANISH} "Reinstall version {VERSION} for all users."
@@ -643,9 +643,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_DANISH} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_DANISH} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_DANISH} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_DANISH} "Vælg filer til makulering"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_DANISH} "Widgets til skrivebordet"
-	LangString SECTION_DESKTOP_NAME ${LANG_DANISH} "Skrivebordsmiljø"
+	LangString SECTION_CORE_NAME ${LANG_DANISH} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_DANISH} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_DANISH} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_DANISH} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_DANISH} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_DANISH} "Create a shortcut on the Quick Launch bar."
@@ -655,12 +655,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_DANISH} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_DANISH} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_DANISH} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_DANISH} "Oversættelser"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_DANISH} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_DANISH} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DANISH} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_DANISH} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_DANISH} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_DANISH} "Vælg en mappe med skriverettigheder for hvert drev, som skal overskrive ledig plads."
+	LangString UNINSTALL_TEXT ${LANG_DANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_DUTCH
@@ -714,7 +714,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DUTCH} "${prodname} Foutopsporing"
 	LangString SHORTCUT_NO_UAC ${LANG_DUTCH} "${prodname} (Geen UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_DUTCH} "Versnipperen met ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_DUTCH} "Kies een beschrijfbare map voor elke schijf om de lege schijfruimte te wissen."
+	LangString UNINSTALL_TEXT ${LANG_DUTCH} "${prodname} wordt verwijderd uit de volgende map.$\r$\nKlik op Verwijderen om de deïnstallatie te starten.$\r$\nWAARSCHUWING: De deïnstallatie verwijdert de gehele installatiemap, inclusief alle bestanden (zoals aangepaste opschoonmachines) die u mogelijk hebt toegevoegd of gewijzigd."
 !endif
 
 !ifdef LANG_ESTONIAN
@@ -768,7 +768,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ESTONIAN} "Terminal veaotsinguks - ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_ESTONIAN} "${prodname} (Ilma UAC-ta)."
 	LangString SHRED_SHELL_MENU ${LANG_ESTONIAN} "Hävita ${prodname}iga"
-	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "Vali kirjutatav kaust iga ketta jaoks, millel sa tahad vaba ruumi üle kirjutada."
+	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "${prodname} eemaldatakse järgnevast kaustast.$\r$\nProtsessi käivitamiseks klõpsa „Eemalda“.$\r$\nHOIATUS: Eemaldusprogramm eemaldab kausta tervikuna, sealhulgas kõik sinu poolt sinna lisatud või muudetud failid (näiteks omaloodud skriptid ja lisamoodulid)."
 !endif
 
 !ifdef LANG_FINNISH
@@ -822,7 +822,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FINNISH} "${prodname} Päätteen virheenkorjaus"
 	LangString SHORTCUT_NO_UAC ${LANG_FINNISH} "${prodname} (Ei UAC:tä)."
 	LangString SHRED_SHELL_MENU ${LANG_FINNISH} "Silppua ${prodname}illä"
-	LangString UNINSTALL_TEXT ${LANG_FINNISH} "Valitse jokaiselle asemalle kirjoitettava kansio, johon tyhjää tilaa pyyhitään."
+	LangString UNINSTALL_TEXT ${LANG_FINNISH} "${prodname} poistetaan seuraavasta kansiosta.$\r$\nAloita asennuksen poisto napsauttamalla 'Poista asennus'.$\r$\nVAROITUS: Asennuksen poisto-ohjelma poistaa asennushakemiston kokonaan, mukaan lukien kaikki lisäämäsi tai muuttamasi tiedostot (kuten mukautetut puhdistusohjelmat)."
 !endif
 
 !ifdef LANG_FRENCH
@@ -876,7 +876,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FRENCH} "Terminal de débogage de ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_FRENCH} "${prodname} (pas d'UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_FRENCH} "Broyer avec ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_FRENCH} "Choisissez un dossier inscriptible pour chaque lecteur pour lequel vous souhaitez écraser l'espace libre."
+	LangString UNINSTALL_TEXT ${LANG_FRENCH} "${prodname} sera désinstallé du dossier suivant.$\r$\nCliquez sur désinstaller pour démarrer la désinstallation.$\r$\nAVERTISSEMENT : Le programme de désinstallation supprime complètement le répertoire d’installation, y compris tous les fichiers (tels que les nettoyeurs personnalisés) que vous avez ajoutés ou modifiés."
 !endif
 
 !ifdef LANG_GALICIAN
@@ -903,7 +903,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_GALICIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_GALICIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_GALICIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_GALICIAN} "Escolla un cartafol"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_GALICIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_GALICIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_GALICIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_GALICIAN} "Reinstall version {VERSION} for all users."
@@ -913,9 +913,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_GALICIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_GALICIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_GALICIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_GALICIAN} "Escolla os ficheiros para destruír"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_GALICIAN} "Trebellos para o escritorio"
-	LangString SECTION_DESKTOP_NAME ${LANG_GALICIAN} "Ambiente de escritorio"
+	LangString SECTION_CORE_NAME ${LANG_GALICIAN} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_GALICIAN} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_GALICIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_GALICIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_GALICIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_GALICIAN} "Create a shortcut on the Quick Launch bar."
@@ -925,12 +925,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_GALICIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_GALICIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_GALICIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_GALICIAN} "Traducións"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_GALICIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_GALICIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GALICIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_GALICIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GALICIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_GALICIAN} "Escolla un cartafol escribíbel para cada unidade para a que queira sobrescribir o espazo libre."
+	LangString UNINSTALL_TEXT ${LANG_GALICIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_GERMAN
@@ -984,7 +984,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GERMAN} "${prodname} Debugging-Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_GERMAN} "${prodname} (ohne UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GERMAN} "Mit ${prodname} schreddern"
-	LangString UNINSTALL_TEXT ${LANG_GERMAN} "Wählen Sie für jedes Laufwerk einen beschreibbaren Ordner, dessen nicht zugewiesener Speicherplatz gesäubert werden soll."
+	LangString UNINSTALL_TEXT ${LANG_GERMAN} "${prodname} wird aus dem folgenden Ordner deinstalliert.$\r$\nKlicken Sie auf »Deinstallieren«, um die Deinstallation zu starten.$\r$\nWARNUNG: Das Deinstallationsprogramm entfernt das Installationsverzeichnis vollständig, einschließlich aller Dateien (z. B. benutzerdefinierte Reiniger), die Sie möglicherweise hinzugefügt oder geändert haben."
 !endif
 
 !ifdef LANG_GREEK
@@ -1038,7 +1038,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GREEK} "Τερματικό αποσφαλμάτωσης ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_GREEK} "${prodname} (χωρίς UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GREEK} "Τεμαχισμός με το ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_GREEK} "Επιλέξτε έναν εγγράψιμο φάκελο για κάθε δίσκο στον οποίο θα εκκαθαριστεί ο ελεύθερος χώρος."
+	LangString UNINSTALL_TEXT ${LANG_GREEK} "Το ${prodname} θα απεγκατασταθεί από τον ακόλουθο φάκελο.$\r$\nΠατήστε «Uninstall» για να ξεκινήσει η απεγκατάσταση.$\r$\nΠΡΟΕΙΔΟΠΟΙΗΣΗ: Το πρόγραμμα απεγκατάστασης αφαιρεί πλήρως τον κατάλογο εγκατάστασης, συμπεριλαμβανομένων τυχόν αρχείων, όπως προσαρμοσμένοι καθαριστές, που έχετε προσθέσει ή αλλάξει."
 !endif
 
 !ifdef LANG_HEBREW
@@ -1092,7 +1092,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HEBREW} "מסוף ניפוי שגיאות של ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_HEBREW} "${prodname} (אין UAC - בקרת גישת משתמש)."
 	LangString SHRED_SHELL_MENU ${LANG_HEBREW} "גריסה עם ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_HEBREW} "בחירת תיקייה הניתנת לכתיבה בכל כונן שבה המקום הריק יימחק לחלוטין."
+	LangString UNINSTALL_TEXT ${LANG_HEBREW} "${prodname} יוסר מהתיקייה הבאה.$\r$\nלחיצה על הסרה תסיר את ההתקנה.$\r$\nאזהרה: תוכנית ההסרה תסיר את תיקיית ההתקנה לחלוטין לרבות כל קבצים שאולי נוספו או נערכו (כגון מנקים שנכתבו ידנית)."
 !endif
 
 !ifdef LANG_HUNGARIAN
@@ -1146,7 +1146,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HUNGARIAN} "${prodname} hibakereső terminál"
 	LangString SHORTCUT_NO_UAC ${LANG_HUNGARIAN} "${prodname} (UAC nélkül)."
 	LangString SHRED_SHELL_MENU ${LANG_HUNGARIAN} "Megsemmisítés ezzel: ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "Válasszon egy írható mappát minden olyan meghajtóhoz, ahol szabad helyet kíván törölni."
+	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "A ${prodname} a következő mappából lesz eltávolítva.$\r$\nKattintson az Eltávolítás gombra az eltávolítás megkezdéséhez.$\r$\nFIGYELEM: Az eltávolító program teljesen törli a telepítési könyvtárat, beleértve minden olyan fájlt is (például egyedi tisztítókat), amelyeket Ön hozzáadott vagy módosított."
 !endif
 
 !ifdef LANG_INDONESIAN
@@ -1200,7 +1200,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_INDONESIAN} "Terminal Debugging ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_INDONESIAN} "${prodname} (Tanpa UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_INDONESIAN} "Hancurkan dengan ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "Pilih folder yang dapat ditulis untuk setiap penyimpanan yang akan dibersihkan ruang kosongnya."
+	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} akan dihapus instalasinya dari folder berikut.\$\r$\nKlik Uninstall untuk memulai penghapusan instalasi.\$\r$\nPERINGATAN: Uninstaller sepenuhnya menghapus direktori instalasi, termasuk berkas apa pun (seperti pembersih khusus) yang mungkin telah Anda tambahkan atau ubah."
 !endif
 
 !ifdef LANG_ITALIAN
@@ -1254,7 +1254,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ITALIAN} "Terminale debug ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_ITALIAN} "${prodname} (nessun UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "Scegli una cartella scrivibile per ogni unità nella quale pulire lo spazio vuoto."
+	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "${prodname} verrà disinstallato dalla seguente cartella.$\r$\nPer avviare la disinstallazione seleziona 'Disinstalla'.$\r$\nATTENZIONE: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi qualsiasi file (ad esempio i pulitori personalizzati) che potrebbero essere stati aggiunti o modificati."
 !endif
 
 !ifdef LANG_JAPANESE
@@ -1281,7 +1281,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_JAPANESE} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_JAPANESE} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_JAPANESE} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_JAPANESE} "フォルダーの選択"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_JAPANESE} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_JAPANESE} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_JAPANESE} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_JAPANESE} "Reinstall version {VERSION} for all users."
@@ -1291,9 +1291,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_JAPANESE} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_JAPANESE} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_JAPANESE} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_JAPANESE} "シュレッド するファイルの選択"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_JAPANESE} "デスクトップウィジェット"
-	LangString SECTION_DESKTOP_NAME ${LANG_JAPANESE} "デスクトップウィジェット"
+	LangString SECTION_CORE_NAME ${LANG_JAPANESE} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_JAPANESE} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_JAPANESE} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_JAPANESE} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_JAPANESE} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_JAPANESE} "Create a shortcut on the Quick Launch bar."
@@ -1303,12 +1303,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_JAPANESE} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_JAPANESE} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_JAPANESE} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_JAPANESE} "ローカライゼーション"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_JAPANESE} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_JAPANESE} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_JAPANESE} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_JAPANESE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_JAPANESE} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_JAPANESE} "未使用領域を上書きするための、各ドライブの書き込み可能なフォルダーを選択してください。"
+	LangString UNINSTALL_TEXT ${LANG_JAPANESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_KOREAN
@@ -1329,7 +1329,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_KOREAN} "버전 {VERSION}이(가) “{FOLDER}”에 모든 사용자를 위해 설치되었습니다."
 	LangString MULTIUSER_INSTALLED_CURRENT_USER ${LANG_KOREAN} "버전 {VERSION}이(가) “{FOLDER}”에 현재 사용자를 위해 설치되었습니다."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_KOREAN} "모든 사용자를 위해 $(^NameDA)를 설치할지 현재 사용자를 위해 설치할지 선택합니다."
-	LangString MULTIUSER_INSTALL_PAGE_SUBTITLE ${LANG_KOREAN} "설치할 사용자 ($^NameDA)를 선택합니다."
+	LangString MULTIUSER_INSTALL_PAGE_SUBTITLE ${LANG_KOREAN} "설치할 사용자 ($(^NameDA))를 선택합니다."
 	LangString MULTIUSER_INVALID_PARAMS ${LANG_KOREAN} "매개변수의 조합이 잘못되었습니다."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_KOREAN} "업그레이드할 수 없습니다. 보조 로그인 서비스가 실행되지 않습니다."
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_KOREAN} "모든 사용자를 위해 새로 설치합니다."
@@ -1342,7 +1342,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER ${LANG_KOREAN} "현재 사용자에 대해 {VERSION} 버전을 다시 설치합니다."
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_KOREAN} "이 프로그램을 관리자로서 실행해야 합니다."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_KOREAN} "$(^NameDA)는 모든 사용자와 현재 사용자 모두에게 설치됩니다.$\r$\n제거할 설치를 선택합니다."
-	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_KOREAN} "제거할 사용자 ($^NameDA)를 선택합니다."
+	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_KOREAN} "제거할 사용자 ($(^NameDA))를 선택합니다."
 	LangString OLD_WINDOWS_WARNING ${LANG_KOREAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_KOREAN} "다음은 ${prodname}이(가) 작동하는 데 필요한 기본 파일입니다 (필수)."
 	LangString SECTION_CORE_NAME ${LANG_KOREAN} "코어 파일 (필수)"
@@ -1362,7 +1362,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_KOREAN} "${prodname} 디버깅 터미널"
 	LangString SHORTCUT_NO_UAC ${LANG_KOREAN} "${prodname} (UAC 없음)."
 	LangString SHRED_SHELL_MENU ${LANG_KOREAN} "${prodname}으로 파쇄"
-	LangString UNINSTALL_TEXT ${LANG_KOREAN} "빈 공간을 지우기 위해 각 드라이브마다 쓰기가 가능한 폴더를 선택하십시오."
+	LangString UNINSTALL_TEXT ${LANG_KOREAN} "${prodname}이(가) 다음 폴더에서 제거됩니다.$\r$\n제거를 클릭하여 제거를 시작합니다.$\r$\n경고: 제거 프로그램은 사용자가 추가하거나 변경한 파일( 예: 사용자 지정 클리너)을 포함하여 설치 디렉터리를 완전히 제거합니다."
 !endif
 
 !ifdef LANG_LATVIAN
@@ -1411,12 +1411,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_LATVIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_LATVIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_LATVIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_LATVIAN} "Lokalizācijas"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_LATVIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_LATVIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LATVIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_LATVIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_LATVIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_LATVIAN} "Choose a writable folder for each drive for which to wipe empty space."
+	LangString UNINSTALL_TEXT ${LANG_LATVIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_LITHUANIAN
@@ -1443,7 +1443,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_LITHUANIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_LITHUANIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_LITHUANIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_LITHUANIAN} "Pasirinkite aplanką"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_LITHUANIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_LITHUANIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_LITHUANIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_LITHUANIAN} "Reinstall version {VERSION} for all users."
@@ -1453,9 +1453,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_LITHUANIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_LITHUANIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_LITHUANIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_LITHUANIAN} "Pasirinkite failus naikinimui"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_LITHUANIAN} "Darbastalio valdikliai"
-	LangString SECTION_DESKTOP_NAME ${LANG_LITHUANIAN} "Darbalaukio valdikliai"
+	LangString SECTION_CORE_NAME ${LANG_LITHUANIAN} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_LITHUANIAN} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_LITHUANIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_LITHUANIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_LITHUANIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_LITHUANIAN} "Create a shortcut on the Quick Launch bar."
@@ -1465,12 +1465,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_LITHUANIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_LITHUANIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_LITHUANIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_LITHUANIAN} "Lokalizacijos"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_LITHUANIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_LITHUANIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LITHUANIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_LITHUANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_LITHUANIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_LITHUANIAN} "Pasirinkite įrašomą aplanką kiekvienam diskui kuriame norėsite perrašyti laisvą vietą."
+	LangString UNINSTALL_TEXT ${LANG_LITHUANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_MALAY
@@ -1497,7 +1497,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_MALAY} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_MALAY} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_MALAY} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_MALAY} "Pilih satu folder"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_MALAY} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_MALAY} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_MALAY} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_MALAY} "Reinstall version {VERSION} for all users."
@@ -1507,9 +1507,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_MALAY} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_MALAY} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_MALAY} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_MALAY} "Pilih fail untuk diricih"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_MALAY} "Widget untuk atas meja"
-	LangString SECTION_DESKTOP_NAME ${LANG_MALAY} "Persekitaran atas meja"
+	LangString SECTION_CORE_NAME ${LANG_MALAY} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_MALAY} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_MALAY} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_MALAY} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_MALAY} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_MALAY} "Create a shortcut on the Quick Launch bar."
@@ -1519,12 +1519,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_MALAY} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_MALAY} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_MALAY} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_MALAY} "Lokalisasi"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_MALAY} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_MALAY} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_MALAY} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_MALAY} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_MALAY} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_MALAY} "Pilih folder boleh tulis untuk setiap pemacu yang mana ruang bebas akan ditulis ganti."
+	LangString UNINSTALL_TEXT ${LANG_MALAY} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_NORWEGIAN
@@ -1578,7 +1578,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_NORWEGIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_NORWEGIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_NORWEGIAN} "Sikker sletting med ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_NORWEGIAN} "Velg en skrivbar mappe for hver lagringsenhet, der ledig plass skal overskrives."
+	LangString UNINSTALL_TEXT ${LANG_NORWEGIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_POLISH
@@ -1632,7 +1632,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_POLISH} "Terminal debugowania ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_POLISH} "${prodname} (Bez UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Zniszcz za pomocą ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_POLISH} "Wybierz zapisywalny katalog dla każdego napędu, w którym chcesz wyczyścić pustą przestrzeń."
+	LangString UNINSTALL_TEXT ${LANG_POLISH} "${prodname} zostanie odinstalowany z następującego katalogu.$\r$\nNaciśnij przycisk Odinstaluj, aby rozpocząć deinstalację.$\r$\nUWAGA: Deinstalator usunie całkowicie katalog instalacji, wraz z wszystkimi plikami (takimi jak niestandardowe instrukcje czyszczące), które mogły zostać dodane lub zmienione."
 !endif
 
 !ifdef LANG_PORTUGUESE
@@ -1686,7 +1686,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESE} "Terminal de depuração do ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESE} "${prodname} (Sem Controlo de Conta de Utilizador)."
 	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESE} "Triturar com ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_PORTUGUESE} "Escolha uma pasta gravável em cada unidade para sobrescrever o espaço vazio."
+	LangString UNINSTALL_TEXT ${LANG_PORTUGUESE} "O produto ${prodname} será desinstalado da seguinte pasta.$\r$\nClique em Desinstalar para iniciar a desinstalação.$\r$\nAVISO: O desinstalador remove completamente a pasta de instalação, incluindo quaisquer ficheiros (como programas de limpeza personalizados) que possa ter adicionado ou alterado."
 !endif
 
 !ifdef LANG_PORTUGUESEBR
@@ -1740,7 +1740,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESEBR} "Terminal de depuração do ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESEBR} "${prodname} (Sem Controle de Conta de Usuário)."
 	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESEBR} "Triturar com ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "Escolha uma pasta gravável em cada unidade para sobrescrever o espaço vazio."
+	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "O produto ${prodname} será desinstalado da seguinte pasta.$\r$\nClique em Desinstalar para iniciar a desinstalação.$\r$\nAVISO: O desinstalador remove completamente a pasta de instalação, incluindo quaisquer arquivos (como programas de limpeza personalizados) que você possa ter adicionado ou alterado."
 !endif
 
 !ifdef LANG_ROMANIAN
@@ -1767,7 +1767,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_ROMANIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_ROMANIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_ROMANIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_ROMANIAN} "Alegeți un dosar"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_ROMANIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_ROMANIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_ROMANIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_ROMANIAN} "Reinstall version {VERSION} for all users."
@@ -1777,9 +1777,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_ROMANIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_ROMANIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_ROMANIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_ROMANIAN} "Alegeți fișierele de distrus"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ROMANIAN} "Widgeturi pentru desktop"
-	LangString SECTION_DESKTOP_NAME ${LANG_ROMANIAN} "Mediu de lucru"
+	LangString SECTION_CORE_NAME ${LANG_ROMANIAN} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_ROMANIAN} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_ROMANIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_ROMANIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_ROMANIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_ROMANIAN} "Create a shortcut on the Quick Launch bar."
@@ -1789,12 +1789,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_ROMANIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_ROMANIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ROMANIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_ROMANIAN} "Localizări"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_ROMANIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ROMANIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ROMANIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_ROMANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ROMANIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ROMANIAN} "Alegeți un dosar în care să aveți drepturi de scriere în care să fie suprascris spațiul liber."
+	LangString UNINSTALL_TEXT ${LANG_ROMANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_RUSSIAN
@@ -1848,7 +1848,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_RUSSIAN} "${prodname} — отладочная консоль"
 	LangString SHORTCUT_NO_UAC ${LANG_RUSSIAN} "${prodname} (без UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_RUSSIAN} "Уничтожить с помощью ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "Выберите доступный для записи каталог для каждого диска, свободное место на котором нужно затереть."
+	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "${prodname} будет удалён из следующей папки.$\r$\nНажмите «Удалить», чтобы начать удаление.$\r$\nПРЕДУПРЕЖДЕНИЕ: Программа удаления полностью удаляет каталог установки, включая любые файлы (например, пользовательские очистители), которые вы могли добавить или изменить."
 !endif
 
 !ifdef LANG_SERBIAN
@@ -1875,7 +1875,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SERBIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SERBIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_SERBIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_SERBIAN} "Изаберите фолдер"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_SERBIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_SERBIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_SERBIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_SERBIAN} "Reinstall version {VERSION} for all users."
@@ -1885,9 +1885,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SERBIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_SERBIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_SERBIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_SERBIAN} "Изаберите датотеке за уништење"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SERBIAN} "Виџети за радну површину"
-	LangString SECTION_DESKTOP_NAME ${LANG_SERBIAN} "Окружење радне површине"
+	LangString SECTION_CORE_NAME ${LANG_SERBIAN} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SERBIAN} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_SERBIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SERBIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SERBIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SERBIAN} "Create a shortcut on the Quick Launch bar."
@@ -1897,12 +1897,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SERBIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_SERBIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SERBIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_SERBIAN} "Локализације"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SERBIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SERBIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SERBIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_SERBIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SERBIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SERBIAN} "Изаберите фасциклу са правом уписа за сваки диск коме желите да препишете слободан простор."
+	LangString UNINSTALL_TEXT ${LANG_SERBIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_SIMPCHINESE
@@ -1956,7 +1956,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SIMPCHINESE} "${prodname} 调试终端"
 	LangString SHORTCUT_NO_UAC ${LANG_SIMPCHINESE} "${prodname} （无 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_SIMPCHINESE} "用 ${prodname} 擦除"
-	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "为每个要擦除未分配区域的驱动器选择一个可写文件夹。"
+	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "将从下列文件夹卸载 ${prodname}。$\r$\n单击卸载启动卸载过程。$\r$\n警告：卸载程序彻底删除安装目录，包括任何可能已添加或更改的文件（如自定义清理器）。"
 !endif
 
 !ifdef LANG_SLOVAK
@@ -1983,7 +1983,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SLOVAK} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SLOVAK} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_SLOVAK} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_SLOVAK} "Vybrať priečinok"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_SLOVAK} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_SLOVAK} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_SLOVAK} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_SLOVAK} "Reinstall version {VERSION} for all users."
@@ -1993,9 +1993,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SLOVAK} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_SLOVAK} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_SLOVAK} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_SLOVAK} "Vyberte súbory, ktoré majú byť rozdrvené"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SLOVAK} "Widgety na plochu"
-	LangString SECTION_DESKTOP_NAME ${LANG_SLOVAK} "Pracovné prostredie"
+	LangString SECTION_CORE_NAME ${LANG_SLOVAK} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SLOVAK} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_SLOVAK} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SLOVAK} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SLOVAK} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SLOVAK} "Create a shortcut on the Quick Launch bar."
@@ -2005,12 +2005,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SLOVAK} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_SLOVAK} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SLOVAK} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_SLOVAK} "Lokalizácia"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SLOVAK} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SLOVAK} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SLOVAK} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_SLOVAK} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SLOVAK} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SLOVAK} "Vyberte zapisovateľný priečinok pre každú jednotku, pre ktorú prepíše voľné miesto."
+	LangString UNINSTALL_TEXT ${LANG_SLOVAK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_SLOVENIAN
@@ -2037,7 +2037,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SLOVENIAN} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SLOVENIAN} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_SLOVENIAN} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_SLOVENIAN} "Izbor mapo"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_SLOVENIAN} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_SLOVENIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_SLOVENIAN} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_SLOVENIAN} "Reinstall version {VERSION} for all users."
@@ -2047,9 +2047,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SLOVENIAN} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_SLOVENIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_SLOVENIAN} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_SLOVENIAN} "Izbor datoteke za popoln izbris"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SLOVENIAN} "Pripomočki za namizje"
-	LangString SECTION_DESKTOP_NAME ${LANG_SLOVENIAN} "Namizno okolje"
+	LangString SECTION_CORE_NAME ${LANG_SLOVENIAN} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SLOVENIAN} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_SLOVENIAN} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SLOVENIAN} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SLOVENIAN} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SLOVENIAN} "Create a shortcut on the Quick Launch bar."
@@ -2059,12 +2059,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SLOVENIAN} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_SLOVENIAN} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SLOVENIAN} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_SLOVENIAN} "Jezikovne prilagoditve"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_SLOVENIAN} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SLOVENIAN} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SLOVENIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_SLOVENIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SLOVENIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SLOVENIAN} "Izbor zapisljive mape za vsak pogon na katerem bo prepisan nedodeljen prostor diska."
+	LangString UNINSTALL_TEXT ${LANG_SLOVENIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_SPANISH
@@ -2118,7 +2118,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SPANISH} "Terminal de Depurador ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_SPANISH} "${prodname} (Sin UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SPANISH} "Fragmentado con ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SPANISH} "Elija una carpeta con permisos de escritura para cada unidad para la cual purgar el espacio libre."
+	LangString UNINSTALL_TEXT ${LANG_SPANISH} "${prodname} será desinstalado desde la carpeta siguiente.$\r$\nPulse sobre Desinstalar para iniciar la desinstalación.$\r$\nAVISO: el desinstalador retira completamente el directorio de instalación, incluyendo cualquier archivo (tal como purga adaptada) que puede haber añadido o modificado."
 !endif
 
 !ifdef LANG_SWEDISH
@@ -2172,7 +2172,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SWEDISH} "Felsökningsterminal för ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_SWEDISH} "${prodname} (utan UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Säkerhetsradera med ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "Välj en skrivbar mapp på varje enhet där ledigt utrymme ska skrivas över."
+	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "${prodname} kommer att avinstalleras från följande mapp.$\r$\nKlicka på Avinstallera för att starta avinstallationen.$\r$\nVARNING: Avinstalleraren tar bort hela installationsmappen, inklusive filer (till exempel anpassade rensningsdefinitioner) som du har lagt till eller ändrat."
 !endif
 
 !ifdef LANG_THAI
@@ -2183,7 +2183,7 @@ Version: 2023-02-223
 	LangString MULTIPRINT2 ${LANG_THAI} "It usually finishes in one minute, but sometimes it takes up to ten minutes."
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_THAI} "You need to log in with an account that is a member of the administrators group to continue."
 	LangString MULTIUSER_ADMIN_CREDENTIALS_REQUIRED ${LANG_THAI} "Administrator credentials required."
-	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_THAI} "จำเป็นต้องมีสิทธิ์ผู้ดูแลระบบเพื่ออัปเดต Windows"
+	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_THAI} "Administrator credentials required to uninstall."
 	LangString MULTIUSER_ALL_USERS ${LANG_THAI} "For &anyone who uses this computer (all users)"
 	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_THAI} "For anyone who uses this computer (all users)"
 	LangString MULTIUSER_CURRENT_USER ${LANG_THAI} "For &me ({USER})"
@@ -2199,7 +2199,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_THAI} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_THAI} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_THAI} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_THAI} "เลือกโฟลเดอร์"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_THAI} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_THAI} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_THAI} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_THAI} "Reinstall version {VERSION} for all users."
@@ -2209,9 +2209,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_THAI} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_THAI} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_THAI} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_THAI} "เลือกแฟ้มที่จะทำลาย"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_THAI} "วิดเจ็ตสำหรับเดสก์ท็อป"
-	LangString SECTION_DESKTOP_NAME ${LANG_THAI} "วิดเจ็ตเดสก์ท็อป"
+	LangString SECTION_CORE_NAME ${LANG_THAI} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_THAI} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_THAI} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_THAI} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_THAI} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_THAI} "Create a shortcut on the Quick Launch bar."
@@ -2221,12 +2221,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_THAI} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_THAI} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_THAI} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_THAI} "แฟ้มภาษา"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_THAI} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_THAI} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_THAI} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_THAI} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_THAI} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_THAI} "เลือกโฟลเดอร์ที่เขียนได้สำหรับแต่ละไดรฟ์เพื่อเขียนทับพื้นที่ว่าง"
+	LangString UNINSTALL_TEXT ${LANG_THAI} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_TRADCHINESE
@@ -2280,7 +2280,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TRADCHINESE} "${prodname} 除錯終端"
 	LangString SHORTCUT_NO_UAC ${LANG_TRADCHINESE} "${prodname}（無 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_TRADCHINESE} "用 ${prodname} 粉碎"
-	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "為每個要擦除未分配空間的裝置選擇一個可寫資料夾。"
+	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "將從以下資料夾卸載 ${prodname}。$\r$\n點擊「卸載」啟動卸載作業。$\r$\n警告：卸載程序將徹底刪除安裝目錄，包含任何您已添加或更改的檔案（如自定義清理器）。"
 !endif
 
 !ifdef LANG_TURKISH
@@ -2334,7 +2334,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TURKISH} "${prodname} Hata Ayıklama Uçbirimi"
 	LangString SHORTCUT_NO_UAC ${LANG_TURKISH} "${prodname} (UAC yok)."
 	LangString SHRED_SHELL_MENU ${LANG_TURKISH} "${prodname} ile parçala"
-	LangString UNINSTALL_TEXT ${LANG_TURKISH} "Boş alanının temizleneceği her sürücü için yazılabilir klasör seç."
+	LangString UNINSTALL_TEXT ${LANG_TURKISH} "${prodname} şu klasörden kaldırılacaktır.$\r$\nKaldırmayı başlatmak için Kaldır'a tıklayın.$\r$\nUYARI: Kaldırıcı eklemiş ya da değiştirmiş olabileceğiniz (özel temizleyiciler gibi) tüm dosyaları içeren kurulum dizinini tümüyle kaldırır."
 !endif
 
 !ifdef LANG_UKRAINIAN
@@ -2388,7 +2388,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UKRAINIAN} "Термінал налагодження ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_UKRAINIAN} "${prodname} (Немає UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_UKRAINIAN} "Shred із ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "Виберіть теку з правами запису для кожного диска, щоб очистити вільний простір."
+	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "${prodname} буде видалено з наступної теки.$\r$\nНатисніть «Видалити», щоб розпочати процес видалення.$\r$\nУВАГА: програма видалення повністю очищує каталог встановлення, включаючи будь-які файли (наприклад, користувацькі очищувачі), які ви могли додати або змінити."
 !endif
 
 !ifdef LANG_UZBEK
@@ -2415,7 +2415,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_UZBEK} "Fresh installation for all users."
 	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_UZBEK} "Fresh installation for the current user."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_UZBEK} "There is no installation of $(^NameDA)."
-	LangString MULTIUSER_PAGE_TITLE ${LANG_UZBEK} "Jildni tanlash"
+	LangString MULTIUSER_PAGE_TITLE ${LANG_UZBEK} "Choose Users"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_UZBEK} "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER ${LANG_UZBEK} "Uninstall version {OLD_VERSION} and install version {VERSION} for the current user."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_UZBEK} "Reinstall version {VERSION} for all users."
@@ -2425,9 +2425,9 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_UZBEK} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_UZBEK} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_UZBEK} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_UZBEK} "Parchalash uchun fayllarni tanlash"
-	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_UZBEK} "Ish stoli uchun vidjetlar"
-	LangString SECTION_DESKTOP_NAME ${LANG_UZBEK} "Ish stoli muhiti"
+	LangString SECTION_CORE_NAME ${LANG_UZBEK} "Core files (required)"
+	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_UZBEK} "Create a shortcut on the desktop."
+	LangString SECTION_DESKTOP_NAME ${LANG_UZBEK} "Desktop"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_UZBEK} "Add an option to delete files from the file context menu in Windows Explorer."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_UZBEK} "Integrate Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_UZBEK} "Create a shortcut on the Quick Launch bar."
@@ -2437,12 +2437,12 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_UZBEK} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_UZBEK} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_UZBEK} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_UZBEK} "Mahalliylashtirishlar"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_UZBEK} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_UZBEK} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UZBEK} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_UZBEK} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_UZBEK} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_UZBEK} "Bo‘sh joyni almashtirish uchun har bir disk uchun yozsa bo‘ladigan jildni tanlang."
+	LangString UNINSTALL_TEXT ${LANG_UZBEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
 !ifdef LANG_VIETNAMESE
@@ -2479,7 +2479,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_VIETNAMESE} "Choose for which users to remove $(^NameDA)."
 	LangString OLD_WINDOWS_WARNING ${LANG_VIETNAMESE} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_VIETNAMESE} "These are the basic files needed for ${prodname} to function (required)."
-	LangString SECTION_CORE_NAME ${LANG_VIETNAMESE} "Chọn (các) tập tin để xóa"
+	LangString SECTION_CORE_NAME ${LANG_VIETNAMESE} "Core files (required)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_VIETNAMESE} "Tạo một lối tắt ở trên màn hình làm việc chính"
 	LangString SECTION_DESKTOP_NAME ${LANG_VIETNAMESE} "Màn hình làm việc chính"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_VIETNAMESE} "Add an option to delete files from the file context menu in Windows Explorer."
@@ -2491,11 +2491,11 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_VIETNAMESE} "Create a shortcut in the Start menu."
 	LangString SECTION_START_MENU_NAME ${LANG_VIETNAMESE} "Start menu"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_VIETNAMESE} "Install language files to use ${prodname} in your preferred local language."
-	LangString SECTION_TRANSLATIONS_NAME ${LANG_VIETNAMESE} "Bản địa hoá"
+	LangString SECTION_TRANSLATIONS_NAME ${LANG_VIETNAMESE} "Translations"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_VIETNAMESE} "Add an uninstall program."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_VIETNAMESE} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_VIETNAMESE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_VIETNAMESE} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_VIETNAMESE} "Chọn một thư mục có thể ghi được cho mỗi ổ đĩa để ghi đè vùng trống."
+	LangString UNINSTALL_TEXT ${LANG_VIETNAMESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
 !endif
 
