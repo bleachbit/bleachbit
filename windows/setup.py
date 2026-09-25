@@ -311,9 +311,7 @@ def copy_file(src, dst):
 
     The dst must be a full path.
     """
-    if not os.path.exists(src):
-        logger.warning('copy_file: %s does not exist', src)
-        return
+    assert_exist(src)
     dst_dirname = os.path.dirname(dst)
     # If the destination directory is current directory, do not create it.
     if dst_dirname and not os.path.exists(dst_dirname):
@@ -336,9 +334,7 @@ def copy_file(src, dst):
 def copy_tree(src, dst):
     """Copy a directory tree"""
     src = os.path.abspath(src)
-    if not os.path.exists(src):
-        logger.warning('copytree: %s does not exist', src)
-        return
+    assert_exist(src)
     logger.info('copying %s to %s', src, dst)
     # copytree() preserves file date
     shutil.copytree(src, dst, dirs_exist_ok=True)
@@ -583,18 +579,17 @@ def build():
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
-    for d in ('dbus-1', 'fonts', 'gtk-3.0', 'pango'):
+    for d in ('fonts', 'gtk-3.0'):
         path = os.path.join(GTK_DIR, 'etc', d)
         copy_tree(path, os.path.join('dist', 'etc', d))
-    for d in ('gdk-pixbuf-2.0', 'girepository-1.0', 'glade', 'gtk-3.0'):
+    for d in ('gdk-pixbuf-2.0', 'girepository-1.0'):
         path = os.path.join(GTK_DIR, 'lib', d)
         copy_tree(path, os.path.join('dist', 'lib', d))
 
     gtk_share = os.path.join(GTK_LIBDIR, 'share')
-    if os.path.exists(gtk_share):
-        for d in ('icons', 'themes'):
-            path = os.path.join(gtk_share, d)
-            copy_tree(path, os.path.join('dist', 'share', d))
+    for d in ('icons', 'themes'):
+        path = os.path.join(gtk_share, d)
+        copy_tree(path, os.path.join('dist', 'share', d))
 
     logger.info('Fixing paths in loaders.cache file')
     loaders_fn = os.path.join(
@@ -607,10 +602,6 @@ def build():
         f.write(data)
         f.truncate()
 
-    # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
-    for d in ('icons',):
-        path = os.path.join(GTK_DIR, 'share', d)
-        copy_tree(path, os.path.join('dist', 'share', d))
     schemas_dir = 'share\\glib-2.0\\schemas'
     gschemas_compiled_src = os.path.join(
         GTK_DIR, schemas_dir, 'gschemas.compiled')
@@ -673,8 +664,8 @@ def build():
         # For Python 3.10, copy vcruntime140.dll
         dll_name = 'vcruntime140.dll'
     else:
-        logger.error('Unsupported Python version. Skipping DLL copy.')
-        return
+        logger.error('Unsupported Python version')
+        sys.exit(1)
     dll_dirs = (sys.prefix, r'c:\windows\system32', r'c:\windows\SysWOW64')
     copied_dll = False
     for dll_dir in dll_dirs:
@@ -685,11 +676,16 @@ def build():
             copied_dll = True
             break
     if not copied_dll:
-        logger.warning('%s not found. Skipping copy.', dll_name)
+        logger.error('%s not found', dll_name)
+        sys.exit(1)
 
     sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
 
     assert_execute_console()
+
+    # The installer runs fc-cache.exe to build the font cache
+    logger.info('Checking fc-cache.exe starts')
+    assert_execute([r'dist\fc-cache.exe', '--version'], 'fontconfig version')
 
 
 @count_size_improvement
@@ -1003,12 +999,35 @@ def shrink(settings):
                 f'{get_dir_size("dist"):,}')
 
 
+def keep_font_cache_in_portable(portable_dir):
+    """Make fontconfig store its cache in the portable folder
+
+    fontconfig writes to the first cachedir it can create and puts the
+    folder of fontconfig-1.dll in front of a path starting with /.
+    %LOCALAPPDATA% stays as the fallback for a read-only folder.
+    """
+    fn = os.path.join(portable_dir, 'etc', 'fonts', 'fonts.conf')
+    with open(fn, encoding='utf-8', newline='') as f:
+        data = f.read()
+    anchor = '<cachedir>LOCAL_APPDATA_FONTCONFIG_CACHE</cachedir>'
+    data, count = re.subn(
+        rf'^([ \t]*)({re.escape(anchor)})(\r?\n)',
+        r'\1<cachedir>/var/cache/fontconfig</cachedir>\3\1\2\3',
+        data, count=1, flags=re.M)
+    if not count:
+        logger.error('%s not found in %s', anchor, fn)
+        sys.exit(1)
+    with open(fn, 'w', encoding='utf-8', newline='') as f:
+        f.write(data)
+
+
 def package_portable(settings):
     """Package the portable version"""
     logger.info('Building portable')
     copy_tree('dist', 'BleachBit-Portable')
     with open("BleachBit-Portable\\BleachBit.ini", "w", encoding=SetupEncoding) as text_file:
         text_file.write("[Portable]")
+    keep_font_cache_in_portable('BleachBit-Portable')
 
     archive('BleachBit-Portable',
             f'BleachBit-{get_version()}-portable{settings["upx_tag"]}.zip',

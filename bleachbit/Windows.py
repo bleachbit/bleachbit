@@ -1285,7 +1285,6 @@ def has_fontconfig_cache(font_conf_file):
     General.reject_xml_dtd(data, 'fonts.conf')
     dom = xml.dom.minidom.parseString(data)
     fc_element = dom.getElementsByTagName('fontconfig')[0]
-    cachefile = 'd031bbba323fd9e5b47e0ee5a0353f11-le32d8.cache-6'
     expanded_localdata = os.path.expandvars('%LOCALAPPDATA%')
     expanded_homepath = os.path.join(os.path.expandvars(
         '%HOMEDRIVE%'), os.path.expandvars('%HOMEPATH%'))
@@ -1297,11 +1296,20 @@ def has_fontconfig_cache(font_conf_file):
             dirpath = os.path.join(expanded_homepath, '.cache', 'fontconfig')
         elif dir_element.firstChild.nodeValue == '~/.fontconfig':
             dirpath = os.path.join(expanded_homepath, '.fontconfig')
+        elif dir_element.firstChild.nodeValue.startswith('/'):
+            # fontconfig puts its install folder, which holds etc\fonts,
+            # in front of a path starting with /
+            prefix = os.path.dirname(os.path.dirname(
+                os.path.dirname(font_conf_file)))
+            dirpath = os.path.normpath(os.path.join(
+                prefix, dir_element.firstChild.nodeValue.lstrip('/')))
         else:
             # user has entered a custom directory
             dirpath = dir_element.firstChild.nodeValue
 
-        if dirpath and os.path.exists(os.path.join(dirpath, cachefile)):
+        # Match any cache version (fontconfig 2.17 writes .cache-9)
+        if dirpath and glob.glob(
+                os.path.join(glob.escape(dirpath), '*.cache-*')):
             return True
 
     return False
