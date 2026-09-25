@@ -172,6 +172,13 @@ class FileActionProvider(ActionProvider):
                     path3 = os.path.normpath(path3)
                 self.paths.append(path3)
 
+    @classmethod
+    def invalidate_cache(cls):
+        """Forget cached listings, which each subclass stores separately"""
+        for plugin in cls.plugins:
+            if issubclass(plugin, FileActionProvider):
+                plugin.cache = FileActionProvider.cache
+
     def get_deep_scan(self):
         if self.ds is None:
             return

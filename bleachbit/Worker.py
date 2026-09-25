@@ -20,6 +20,7 @@ import warnings
 
 # first party imports
 from bleachbit import DeepScan, FileUtilities, IS_WINDOWS
+from bleachbit.Action import FileActionProvider
 from bleachbit.Cleaner import backends
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
@@ -284,6 +285,8 @@ class Worker:
         # Otherwise a scan from an earlier run still reports an application
         # the user has just closed.
         process_cache.invalidate()
+        # A cached walk.files listing goes stale once a run deletes files
+        FileActionProvider.invalidate_cache()
         # Keep the cleaners in case a refresh clears backends mid-run
         self.backends = {operation: backends[operation]
                          for operation in self.operations}
