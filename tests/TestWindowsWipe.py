@@ -278,6 +278,20 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     mock.patch('bleachbit.WindowsWipe.GetVolumePathName', **kwargs):
                 self.assertEqual(volume_from_file(path), drive)
 
+    def test_volume_from_file_junction(self):
+        """volume_from_file() looks up the volume past a junction"""
+        target = self.mkdir('junction_target')
+        link = os.path.join(self.tempdir, 'junction_link')
+        self._create_win_junction(target, link)
+        self.write_file(os.path.join(target, 'x'), b'x')
+        with mock.patch('bleachbit.WindowsWipe.GetVolumePathName',
+                        # pylint: disable-next=possibly-used-before-assignment
+                        wraps=win32file.GetVolumePathName) as mock_volume_path:
+            volume_from_file(extended_path(os.path.join(link, 'x')))
+        resolved = mock_volume_path.call_args.args[0]
+        self.assertIn('junction_target', resolved)
+        self.assertNotIn('junction_link', resolved)
+
     def test_write_zero_fill(self):
         """Unit test for write_zero_fill"""
         tmp_path = os.path.join(self.tempdir, 'write_zero_fill')

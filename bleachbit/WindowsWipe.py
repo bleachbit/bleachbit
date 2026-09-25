@@ -581,7 +581,8 @@ def volume_from_file(file_name):
     r"""Given a Windows file path, determine the volume that contains it.
 
     The path ends with the separator \. For a volume mounted on a folder,
-    it is that folder (like C:\Data\), not the drive letter.
+    it is that folder (like C:\Data\), not the drive letter. Junctions and
+    symlinks into another volume are followed.
 
     Args:
         file_name: Path to the file
@@ -590,8 +591,12 @@ def volume_from_file(file_name):
         Volume path
     """
     try:
+        resolved = os.path.realpath(file_name)
+    except OSError:
+        resolved = file_name
+    try:
         # strip \\?\
-        volume = extended_path_undo(GetVolumePathName(file_name))
+        volume = extended_path_undo(GetVolumePathName(resolved))
     except pywinerror:
         volume = ''
     if os.path.splitdrive(volume)[0].endswith(':'):
