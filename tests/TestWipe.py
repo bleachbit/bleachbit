@@ -801,4 +801,21 @@ class WipeTestCase(common.BleachbitTestCase):
             list(wipe_path(self.tempdir))
         mock_file.close.assert_called_once()
         stack.delete_mock.assert_called_once_with(
-            mock_file.name, ignore_missing=True)
+            mock_file.name, allow_shred=False, ignore_missing=True)
+
+    def test_wipe_path_abort_does_not_shred(self):
+        """An abort deletes the untruncated wipe file without shredding it"""
+        mock_file = self._make_mock_file()
+        with self._wipe_path_common_mocks() as stack:
+            stack.enter_context(mock.patch(
+                'bleachbit.Wipe.tempfile.NamedTemporaryFile', return_value=mock_file))
+            stack.enter_context(mock.patch(
+                'bleachbit.Wipe.time.time', side_effect=itertools.count(0, 3)))
+            truncate_mock = stack.enter_context(
+                mock.patch('bleachbit.FileUtilities.truncate_f'))
+            gen = wipe_path(self.tempdir, idle=True)
+            next(gen)
+            gen.close()
+        truncate_mock.assert_not_called()
+        stack.delete_mock.assert_called_once_with(
+            mock_file.name, allow_shred=False, ignore_missing=True)

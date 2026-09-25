@@ -655,9 +655,10 @@ def wipe_path(pathname, idle=False):
                         logger.debug(
                             _("Encountered unknown error #0 while truncating file."))
                     time.sleep(0.1)
-            # explicitly delete
+            # Delete without shredding: the file holds only zeros, and after
+            # an abort it was not truncated, so shredding would rewrite it all.
             try:
-                delete(f.name, ignore_missing=True)
+                delete(f.name, allow_shred=False, ignore_missing=True)
             except Exception as e:
                 logger.error(
                     'After wiping, error deleting file %s: %s', f.name, e)
