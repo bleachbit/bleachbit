@@ -6,19 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-23 20:05-0600\n"
-"PO-Revision-Date: 2026-09-02 11:02+0000\n"
+"PO-Revision-Date: 2026-09-25 16:06+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
-"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/"
-">\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/>"
+"\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
-"(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
@@ -858,14 +858,14 @@ msgid "Delete the AI models"
 msgstr "Scrios na samhlacha AI"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Old versions"
-msgstr "Nuashonraigh go leagan %s"
+msgstr "Seanleaganacha"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Scrios comhaid chláir ó leaganacha roimhe seo a d’fhág nuashonruithe ina "
+"ndiaidh"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -2721,6 +2721,13 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"B’fhéidir nach bhfuil cead ag BleachBit rochtain iomlán a fháil ar an "
+"diosca. Mura bhfuil an cead sin aige, cuireann macOS bac ar rochtain ar "
+"chomhaid áirithe, agus ní oibreoidh uirlisí glantacháin áirithe.\n"
+"\n"
+"Chun é seo a réiteach, oscail Socruithe an Chórais > Príobháideachas agus "
+"Slándáil > Rochtain Iomlán ar an Diosca, cuir BleachBit ar siúl, agus ansin "
+"déan BleachBit a atosú."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -3175,6 +3182,8 @@ msgstr "Caithfidh comhadlann atá ann cheana féin an cosán le scriosadh: %s"
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Níl sé sábháilte an spás saor a ghlanadh anseo, mar is féidir le haon "
+"úsáideoir an fillteán seo a athrú: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
