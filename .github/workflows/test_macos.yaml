@@ -81,7 +81,9 @@ jobs:
       - name: Smoke test (CLI --version and --list)
         run: |
           .venv/bin/python bleachbit.py --version
-          .venv/bin/python bleachbit.py --list | head -n 20
+          # A pipe into head would hide the exit status of --list
+          .venv/bin/python bleachbit.py --list > "$RUNNER_TEMP/cleaners.txt"
+          head -n 20 "$RUNNER_TEMP/cleaners.txt"
 
       - name: Validate cleaner XML
         run: make -C cleaners tests
