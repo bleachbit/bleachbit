@@ -249,7 +249,10 @@ if [[ ! -f "$CACHED_IMG" ]]; then
     fi
     if [[ ! -f "$CACHED_XZ" ]]; then
         log "Downloading $FREEBSD_URL"
-        wget -c -O "$CACHED_XZ" "$FREEBSD_URL"
+        # Keep a partial download under .part so the next run resumes it
+        # instead of trying to decompress it.
+        wget -c -O "$CACHED_XZ.part" "$FREEBSD_URL"
+        mv "$CACHED_XZ.part" "$CACHED_XZ"
     fi
     log "Decompressing $CACHED_XZ"
     # xz -dk writes the output next to the .xz file (same dir, name minus .xz),
