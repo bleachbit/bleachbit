@@ -671,3 +671,18 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                     common.touch_file(login_data)
                     self.assertIn(login_data, self._bundled_option_paths(
                         cleaner_id, 'passwords', 'linux'))
+
+    @common.skipIfWindows
+    def test_chrome_vacuum_skips_journal(self):
+        """Chrome vacuum does not open a rollback journal as a database"""
+        config = self.mkdtemp(prefix='bleachbit-chrome-vacuum')
+        profile = os.path.join(config, 'google-chrome', 'Default')
+        favicons = os.path.join(profile, 'Favicons')
+        journal = os.path.join(profile, 'Favicons-journal')
+        common.touch_file(favicons)
+        common.touch_file(journal)
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            paths = self._bundled_option_paths(
+                'google_chrome', 'vacuum', 'linux')
+        self.assertIn(favicons, paths)
+        self.assertNotIn(journal, paths)
