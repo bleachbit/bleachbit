@@ -769,6 +769,19 @@ INSERT INTO "meta" VALUES('version','20');"""
         # no mode -> no query string at all
         self.assertNotIn('?', _sqlite_uri('/tmp/plain.db'))
 
+    def test_sqlite_uri_unc(self):
+        """A UNC path gets an empty URI authority, which SQLite accepts"""
+        from bleachbit.Special import _sqlite_uri
+        if IS_WINDOWS:
+            self.assertEqual(_sqlite_uri(r'\\server\share\places.sqlite'),
+                             'file:////server/share/places.sqlite')
+            return
+        # POSIX keeps a leading '//', which gives the same URI shape.
+        filename = os.path.join(self.tempdir, 'unc.sqlite')
+        FileUtilities.execute_sqlite3(filename, 'CREATE TABLE foo(id int)')
+        self.assertTrue(_sqlite_uri('/' + filename).startswith('file:////'))
+        self.assertTrue(Special.sqlite_table_exists('/' + filename, 'foo'))
+
     def test_sqlite_table_exists(self):
         """Unit test for sqlite_table_exists()"""
         # Create test files with different filenames

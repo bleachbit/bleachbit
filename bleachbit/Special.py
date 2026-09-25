@@ -71,6 +71,10 @@ def _sqlite_uri(pathname, mode=None):
     if IS_WINDOWS:
         abs_path = abs_path.replace('\\', '/')
     quoted = quote(abs_path, safe='/:')
+    if quoted.startswith('//'):
+        # An empty authority keeps SQLite from reading the server of a UNC
+        # path as the URI authority, which it rejects.
+        quoted = '//' + quoted
     uri = f'file:{quoted}'
     if mode:
         uri += f'?mode={mode}'
