@@ -160,15 +160,20 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
     progress_cb = _make_progress_cb(
         stop_mode, stop_value, output_folder, on_progress)
 
+    # Filled as files are created, so it survives a generation error
+    generated_file_names = []
+    error_msg = None
     try:
         if inspiration == 0:
-            generated_file_names = generate_2600(
+            generate_2600(
                 file_count, output_folder, on_progress=progress_cb,
-                should_stop=should_stop)
+                should_stop=should_stop,
+                generated_file_names=generated_file_names)
         elif inspiration == 1:
-            generated_file_names = generate_emails(
+            generate_emails(
                 file_count, output_folder, on_progress=progress_cb,
-                should_stop=should_stop)
+                should_stop=should_stop,
+                generated_file_names=generated_file_names)
         else:
             raise ValueError(f'Invalid inspiration {inspiration}')
     except Exception as exc:
@@ -176,8 +181,6 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
         # TRANSLATORS: Error message shown when chaff file generation fails.
         # The placeholder is for the technical error details.
         error_msg = _("Error generating chaff: {error}").format(error=str(exc))
-        on_progress(1.0, is_done=True, error=error_msg)
-        return
     try:
         if delete_when_finished and not abort_event.is_set():
             # TRANSLATORS: Progress message shown while deleting chaff files.
@@ -197,9 +200,7 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
         # The placeholder is for the technical error details.
         error_msg = _("Error deleting chaff files: {error}").format(
             error=str(exc))
-        on_progress(1.0, is_done=True, error=error_msg)
-        return
-    on_progress(1.0, is_done=True)
+    on_progress(1.0, is_done=True, error=error_msg)
 
 
 class ChaffDialog(InfoBarMixin, Gtk.Dialog):
