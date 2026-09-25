@@ -190,9 +190,18 @@ def check_protected_path(user_path):
         protected_is_absolute = os.path.isabs(ppath['path'])
         if not protected_is_absolute:
             # Relative protected paths should match when user path ends with them
-            if path_has_relative_suffix(user_cmp, protected_cmp,
-                                        case_sensitive=case_sensitive):
-                return ppath
+            # or has an ancestor within depth that does, e.g. .git/objects
+            ancestor = user_cmp
+            levels = 0
+            while depth is None or levels <= depth:
+                if path_has_relative_suffix(ancestor, protected_cmp,
+                                            case_sensitive=case_sensitive):
+                    return ppath
+                parent = os.path.dirname(ancestor)
+                if parent == ancestor:
+                    break
+                ancestor = parent
+                levels += 1
             continue
 
         # Exact match
