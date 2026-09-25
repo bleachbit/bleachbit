@@ -427,9 +427,10 @@ SectionEnd
 !ifndef NoSectionShred
   Section "$(SECTION_INTEGRATE_SHRED_NAME)" SectionShred
     ; Register Windows Explorer Shell Extension (Shredder)
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
+    ; New keys under HKCR go to HKLM, which a per-user install cannot write
+    WriteRegStr SHCTX "Software\Classes\${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
+    WriteRegStr SHCTX "Software\Classes\${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
+    WriteRegStr SHCTX "Software\Classes\${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
   SectionEnd
 !endif
 
@@ -560,7 +561,7 @@ Section "Uninstall" SectionUninstall
     Delete "$QUICKLAUNCH\BleachBit.lnk"
     Delete "$SMSTARTUP\BleachBit.lnk"
     # Remove Windows Explorer Shell Extension (Shredder)
-    DeleteRegKey HKCR "${SHRED_REGEX_KEY}"
+    DeleteRegKey SHCTX "Software\Classes\${SHRED_REGEX_KEY}"
 
     # Remove the uninstaller as the very last step.
     # If something goes wrong, let the user run it again.
