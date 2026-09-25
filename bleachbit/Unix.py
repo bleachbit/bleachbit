@@ -235,7 +235,8 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
                 "is_broken_xdg_menu: executable '%s' does not exist in '%s'", execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
-        if wineprefix and len(execs) > 1:
+        # Only C: is inside the prefix; other drives may be unmounted media
+        if wineprefix and len(execs) > 1 and re.match(r'[Cc]:[\\/]', execs[1]):
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
                 logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist in '%s'",

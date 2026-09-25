@@ -563,11 +563,29 @@ PrefersNonDefaultGPU=false""")
     def test_desktop_env_missing_windows_exe(self, mock_exe_exists, mock_path_exists):
         """Unit test for .desktop file with env pointing to missing Windows application"""
         fake_config = FakeConfig({"Desktop Entry": {
-                                 "Exec": "env WINEPREFIX=/some/path wine_exe does_not_exist.exe"}})
+                                 "Exec": r"env WINEPREFIX=/some/path wine_exe 'C:\does_not_exist.exe'"}})
         mock_exe_exists.return_value = True  # for env and wine
         mock_path_exists.return_value = False  # for does_not_exist.exe
         result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
         self.assertTrue(result)
+        mock_path_exists.assert_called_once_with(
+            os.path.join('/some/path', 'drive_c/does_not_exist.exe'))
+
+    @mock.patch('os.path.exists')
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
+    def test_desktop_wine_not_drive_c(self, mock_exe_exists, mock_path_exists):
+        """Wine arguments that are not C: paths are not looked up"""
+        mock_exe_exists.return_value = True
+        mock_path_exists.return_value = False
+        for exec_val in (
+                'env WINEPREFIX=/some/path wine start /ProgIDOpen txtfile %f',
+                'env WINEPREFIX=/some/path wine start /unix /some/path/app.exe',
+                r"env WINEPREFIX=/some/path wine 'D:\Games\foo.exe'"):
+            fake_config = FakeConfig({"Desktop Entry": {"Exec": exec_val}})
+            result = _is_broken_xdg_desktop_application(
+                fake_config, "foo.desktop")
+            self.assertFalse(result, exec_val)
+        mock_path_exists.assert_not_called()
 
     def test_desktop_missing_keys(self):
         """Unit test for .desktop file missing keys"""
