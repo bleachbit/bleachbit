@@ -16,6 +16,7 @@ import re
 from itertools import product
 
 # first party imports
+import bleachbit
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
 from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
@@ -461,7 +462,14 @@ class Cookie(FileActionProvider):
     action_key = 'cookie'
 
     def get_commands(self):
-        keep_list = load_keep_list()
+        try:
+            keep_list = load_keep_list()
+        except (OSError, ValueError) as e:
+            # Leave the cookies alone, but let the browser's other options run.
+            logger.error('Cannot read cookie keep list %s: %s',
+                         os.path.join(bleachbit.options_dir,
+                                      CookieMod.COOKIE_KEEP_LIST_FILENAME), e)
+            return
 
         if not keep_list:
             # If nothing is being kept, use regular delete for better performance

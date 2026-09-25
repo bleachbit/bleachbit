@@ -167,7 +167,8 @@ def load_keep_list():
     path = os.path.join(bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
     domains = set()
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        # utf-8-sig accepts a BOM added by an editor
+        with open(path, 'r', encoding='utf-8-sig') as f:
             data = json.load(f)
     except FileNotFoundError:
         return domains
