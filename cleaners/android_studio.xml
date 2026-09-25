@@ -17,12 +17,10 @@ later.  See the COPYING file in the top-level directory.
   <running type="exe" os="unix" same_user="true">studio</running>
   <var name="gradle_home">
     <value os="windows">%UserProfile%\.gradle</value>
-    <value os="macos">~/.gradle</value>
     <value os="unix">~/.gradle</value>
   </var>
   <var name="android_home">
     <value os="windows">%UserProfile%\.android</value>
-    <value os="macos">~/.android</value>
     <value os="unix">~/.android</value>
   </var>
   <var name="as_cache">
