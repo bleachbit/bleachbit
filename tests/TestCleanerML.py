@@ -562,3 +562,29 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual('Profile 1', profile['last_used'])
         self.assertEqual({'name': 'Personal'},
                          profile['info_cache']['Default'])
+
+    @common.skipIfWindows
+    def test_chromium_network_hsts_nel(self):
+        """HSTS and NEL are cleaned from the Network/ subdirectory"""
+        config = self.mkdtemp(prefix='bleachbit-network-hsts')
+        profiles = {
+            'brave': 'BraveSoftware/Brave-Browser/Default',
+            'chromium': 'chromium/Default',
+            'google_chrome': 'google-chrome/Default',
+            'microsoft_edge': 'microsoft-edge/Default',
+            'opera': 'opera',
+            'vivaldi': 'vivaldi/Default',
+        }
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            for cleaner_id, profile in profiles.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    network = os.path.join(config, profile, 'Network')
+                    hsts = os.path.join(network, 'TransportSecurity')
+                    nel = os.path.join(network, 'Reporting and NEL')
+                    common.touch_file(hsts)
+                    common.touch_file(nel)
+                    self.assertIn(hsts, self._bundled_option_paths(
+                        cleaner_id, 'cookies', 'linux'))
+                    if cleaner_id != 'vivaldi':
+                        self.assertIn(nel, self._bundled_option_paths(
+                            cleaner_id, 'history', 'linux'))

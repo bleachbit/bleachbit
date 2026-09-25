@@ -93,6 +93,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity"/>
     <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/TransportSecurity"/>
   </option>
   <option id="crash_reports">
@@ -127,6 +128,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
     <action command="delete" search="file" path="$$profile$$/Reporting and NEL-journal"/>
     <action command="delete" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Reporting and NEL-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Reporting and NEL"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
@@ -228,6 +231,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/PrivateAggregation"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Reporting and NEL"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Safe Browsing Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/ServerCertificate"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/SharedStorage"/>
@@ -237,6 +241,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Trust Tokens"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Trust Tokens"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Collaboration/MessageDB"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/DataSharing/DataSharingDB"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>
