@@ -442,13 +442,14 @@ fi
 # Use a directory under the freebsd user's home (writable without sudo).
 REMOTE_DIR="bleachbit"
 log "Copying BleachBit source tree to VM (~/$REMOTE_DIR)"
+# Clear the old tree first so files deleted on the host don't linger
 # shellcheck disable=SC2029  # $REMOTE_DIR is meant to expand here, not in the VM
 tar -C "$REPO_ROOT" --exclude='.git' --exclude='__pycache__' \
     --exclude='*.pyc' --exclude='*.egg-info' --exclude='dist' \
     --exclude='build' --exclude='docker-artifacts' --exclude='.venv' \
     -czf - . \
     | ssh "${ssh_opts[@]}" "${SSH_USER}@localhost" \
-        "mkdir -p ~/'$REMOTE_DIR' && tar -C ~/'$REMOTE_DIR' -xzf -"
+        "rm -rf ~/'$REMOTE_DIR' && mkdir -p ~/'$REMOTE_DIR' && tar -C ~/'$REMOTE_DIR' -xzf -"
 
 # ---------------------------------------------------------------------------
 # Install dependencies inside the VM (skipped when SKIP_INSTALL=1)
