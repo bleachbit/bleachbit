@@ -599,6 +599,28 @@ class CleanerTestCase(common.BleachbitTestCase):
         # Restore the original settings.
         options.set_custom_paths(original_custom_paths)
 
+    def test_recycle_bin_keep_list(self):
+        """The recycle bin is not emptied when it holds a kept item"""
+        from bleachbit.Options import options
+        kept = self.write_file('kept.docx')
+        other = self.write_file('other.txt')
+        windows = mock.Mock()
+        windows.get_recycle_bin.return_value = [kept, other]
+
+        def get_commands():
+            with mock.patch('bleachbit.Cleaner.IS_WINDOWS', True), \
+                    mock.patch('bleachbit.Cleaner.Windows', windows, create=True):
+                return list(System().get_commands('recycle_bin'))
+
+        options.set_whitelist_paths([('file', kept)])
+        commands = get_commands()
+        self.assertEqual([kept, other], [cmd.path for cmd in commands])
+        self.assertFalse(any(isinstance(cmd, Command.Function)
+                             for cmd in commands))
+
+        options.set_whitelist_paths([])
+        self.assertIsInstance(get_commands()[-1], Command.Function)
+
     def test_system_options_platform(self):
         """Test that System cleaner options match the current platform"""
         options_ids = [o[0] for o in System().get_options()]
