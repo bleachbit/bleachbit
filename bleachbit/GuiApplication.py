@@ -192,6 +192,9 @@ class Bleachbit(Gtk.Application):
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
+            # left behind if a save was interrupted
+            for f in glob.glob(glob.escape(bleachbit.options_file) + '.*.tmp'):
+                paths.append(f)
             if os.path.isdir(bleachbit.personal_cleaners_dir):
                 paths.append(bleachbit.personal_cleaners_dir)
             for f in glob.glob(os.path.join(bleachbit.options_dir, "*.bz2")):
