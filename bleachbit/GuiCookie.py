@@ -58,9 +58,7 @@ class CookieManagerPane(Gtk.Box):
                 url=URL_COOKIE_MGR))
         notice_label.set_line_wrap(True)
         notice_label.set_xalign(0)
-        notice_label.connect(
-            "activate-link",
-            lambda _label, url: open_url(url, parent_window=None, prompt=True))
+        notice_label.connect("activate-link", self.on_activate_link)
         notice_box.pack_start(notice_label, False, False, 0)
         self.pack_start(notice_box, False, False, 0)
 
@@ -169,6 +167,12 @@ class CookieManagerPane(Gtk.Box):
             logger.error("Failed to save cookie keep list %s: %s",
                          self.keep_list_path, exc)
             return False
+
+    def on_activate_link(self, _label, url):
+        """Open the documentation link after asking the user"""
+        open_url(url, parent_window=None, prompt=True)
+        # Otherwise GTK opens the link too, even after Cancel
+        return True
 
     def update_stat_label(self):
         """Update the stat label: how many selected"""
