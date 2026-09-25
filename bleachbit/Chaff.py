@@ -5,7 +5,7 @@
 # later.  See the COPYING file in the top-level directory.
 
 import bz2
-from datetime import datetime
+from datetime import datetime, timedelta
 import email.generator
 from email.mime.text import MIMEText
 import hashlib
@@ -157,6 +157,7 @@ def _get_random_datetime(min_year=2011, max_year=2012):
     date = datetime.strptime(
         f'{random.randint(1, 365)} {random.randint(min_year, max_year)}',
         '%j %Y')
+    date += timedelta(minutes=random.randrange(24 * 60))
     # Saturday, September 15, 2012 2:20 PM
     return date.strftime('%A, %B %d, %Y %I:%M %p')
 

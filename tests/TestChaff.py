@@ -144,6 +144,14 @@ class ChaffTestCase(common.BleachbitTestCase):
         msg = _generate_email(subject_model, model, number_of_sentences=2)
         self.assertEqual(msg['Subject'], '')
 
+    def test_random_datetime_time_of_day(self):
+        """The Sent time must vary instead of always being midnight"""
+        from bleachbit.Chaff import _get_random_datetime
+
+        times = {_get_random_datetime().split(', ')[-1].split(' ', 1)[1]
+                 for _i in range(100)}
+        self.assertGreater(len(times), 1)
+
     @mock.patch('bleachbit.Chaff._load_model')
     def test_generate_2600_write_error(self, _mock_load_model):
         """The caller's list must name every file, including one whose write failed"""
