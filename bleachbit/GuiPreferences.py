@@ -42,7 +42,7 @@ from bleachbit.Language import (find_supported_language_code,
                                 get_supported_language_code_name_dict,
                                 setup_translation)
 from bleachbit.Language import get_text as _, pget_text as _p
-from bleachbit.Options import options
+from bleachbit.Options import options, protected_path_warning_key
 
 logger = logging.getLogger(__name__)
 
@@ -792,7 +792,7 @@ class PreferencesDialog(InfoBarMixin):
         # Check if user already confirmed this path
         normalized = normalize_path(
             pathname, case_sensitive=match_info['case_sensitive'])
-        warning_key = 'protected_path:' + normalized
+        warning_key = protected_path_warning_key(normalized)
         if options.get_warning_preference(warning_key):
             return True
 

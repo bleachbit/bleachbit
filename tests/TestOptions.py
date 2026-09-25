@@ -24,7 +24,8 @@ from tests import common
 import bleachbit.Options
 from bleachbit import IS_WINDOWS
 from bleachbit.Options import (
-    _option_index, _option_sort_key, _section_sort_key)
+    _option_index, _option_sort_key, _section_sort_key,
+    protected_path_warning_key)
 from bleachbit.Log import is_debugging_enabled_via_cli
 
 
@@ -423,7 +424,8 @@ protected_path = /tmp = True
         try:
             self.assertTrue(o.get_warning_preference(
                 'cleaner:google_chrome:passwords'))
-            self.assertTrue(o.get_warning_preference('protected_path:/tmp'))
+            self.assertTrue(o.get_warning_preference(
+                protected_path_warning_key('/tmp')))
             self.assertFalse(o.config.has_option('warnings', 'cleaner'))
             self.assertFalse(o.config.has_option('warnings', 'protected_path'))
             o.commit()
@@ -432,9 +434,42 @@ protected_path = /tmp = True
         with open(bleachbit.options_file, 'r', encoding='utf-8-sig') as handle:
             contents = handle.read()
         self.assertIn('cleaner:google_chrome:passwords = True', contents)
-        self.assertIn('protected_path:/tmp = True', contents)
+        self.assertIn(f'{protected_path_warning_key("/tmp")} = True', contents)
         self.assertNotIn('cleaner = google_chrome:passwords = True', contents)
         self.assertNotIn('protected_path = /tmp = True', contents)
+
+    def test_protected_path_warning_keys(self):
+        """Test paths that cannot be INI keys and raw keys from older files"""
+        filename = self._write_private_options_file('''[bleachbit]
+[warnings]
+protected_path = /srv/old=1 = True
+protected_path:/srv/raw = True
+[whitelist/paths]
+0_type = folder
+0_path = /home/keep
+''')
+        cleaner_xml = self.write_file('a=b.xml')
+        o = bleachbit.Options.Options()
+        try:
+            o.remember_warning_preference(
+                protected_path_warning_key('/srv/year=2023'))
+            o.set_hashpath(cleaner_xml, '0ABCD')
+            o.commit()
+        finally:
+            o.close()
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            contents = handle.read()
+        self.assertNotIn('protected_path:/', contents)
+
+        o2 = bleachbit.Options.Options()
+        try:
+            for path in ('/srv/year=2023', '/srv/old=1', '/srv/raw'):
+                self.assertTrue(o2.get_warning_preference(
+                    protected_path_warning_key(path)), path)
+            self.assertEqual(o2.get_whitelist_paths(),
+                             [('folder', '/home/keep')])
+        finally:
+            o2.close()
 
     def test_overrides(self):
         """Test CLI override functionality"""
