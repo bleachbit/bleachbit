@@ -52,6 +52,8 @@ Only the Default profile is cleaned.
     <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="cookie" search="file" path="$$profile$$/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
+    <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
   </option>
   <option id="crash_reports">
@@ -123,6 +125,7 @@ Only the Default profile is cleaned.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Calendar"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Contacts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/DIPS"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Favicons"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/heavy_ad_intervention_opt_out.db"/>

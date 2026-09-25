@@ -483,3 +483,16 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             paths = self._bundled_option_paths('safari', 'cookies', 'darwin')
         self.assertIn(safari_jar, paths)
         self.assertNotIn(other_jar, paths)
+
+    @common.skipIfWindows
+    def test_vivaldi_cookies_network(self):
+        """Vivaldi cookies cover the Network/ subdirectory used on Windows"""
+        config = self.mkdtemp(prefix='bleachbit-vivaldi-config')
+        cookies = os.path.join(
+            config, 'vivaldi', 'Default', 'Network', 'Cookies')
+        common.touch_file(cookies)
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            self.assertIn(cookies, self._bundled_option_paths(
+                'vivaldi', 'cookies', 'linux'))
+            self.assertIn(cookies, self._bundled_option_paths(
+                'vivaldi', 'vacuum', 'linux'))
