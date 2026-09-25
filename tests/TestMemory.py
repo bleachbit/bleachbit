@@ -356,6 +356,25 @@ Swapouts:                              20258188.
         self._assert_wipe_memory_happy_path(
             scope_return=0, fork_return=None, fork_called=False)
 
+    @common.skipUnlessLinux
+    def test_wipe_memory_closed(self):
+        """wipe_memory() re-enables swap when it is closed early"""
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
+            with mock.patch('bleachbit.FileUtilities.exe_exists',
+                            return_value=True):
+                with mock.patch('bleachbit.Memory.get_proc_swaps',
+                                return_value=''):
+                    with mock.patch('bleachbit.Memory.disable_swap_linux',
+                                    return_value=['/dev/sda1']):
+                        with mock.patch('bleachbit.Memory.wipe_swap_linux') as mock_wipe:
+                            with mock.patch(
+                                    'bleachbit.Memory.enable_swap_linux') as mock_enable:
+                                gen = wipe_memory()
+                                self.assertTrue(next(gen))
+                                gen.close()
+                                mock_wipe.assert_not_called()
+                                mock_enable.assert_called_once()
+
     @common.skipIfWindows
     def test_memory_child_script(self):
         """Test for _memory_child_script()"""
