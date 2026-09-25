@@ -13,6 +13,7 @@ later.  See the COPYING file in the top-level directory.
   <description>Web browser</description>
   <running type="exe" os="windows" same_user="true">chrome.exe</running>
   <running type="exe" os="linux" same_user="true">chromium-browser</running>
+  <running type="exe" os="linux" same_user="true">chromium</running>
   <!-- OpenBSD and NetBSD use "chrome" for Chromium, while on Linux it means
     Google Chrome, so on Linux this could mistake Google Chrome for
     Chromium. -->
