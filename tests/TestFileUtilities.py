@@ -792,6 +792,18 @@ State=AAAA/wA...
                 delete(path, shred=False)
         self.assertExists(path)
 
+    def test_delete_shred_overwrite_fails(self):
+        """delete() warns when shredding cannot overwrite the contents"""
+        path = self.write_file('test_delete_shred_overwrite_fails', b'secret')
+        e = PermissionError(errno.EPERM, 'Operation not permitted', path)
+        with unittest.mock.patch('bleachbit.FileUtilities.wipe_contents', side_effect=e):
+            with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
+                self.assertTrue(delete(path, shred=True))
+        self.assertIn('Could not overwrite', cm.output[0])
+        # Without the \\?\ prefix on Windows
+        self.assertIn(f'of {path}:', cm.output[0])
+        self.assertNotExists(path)
+
     def test_delete_windows_lstat_denied(self):
         """delete() on Windows still works where os.lstat() is denied
 
