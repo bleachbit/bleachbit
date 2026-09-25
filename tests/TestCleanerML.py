@@ -19,7 +19,6 @@ from unittest import mock
 import bleachbit
 from tests import common
 from bleachbit import Cleaner, Command
-from bleachbit.General import os_match
 from bleachbit.CleanerML import (
     CleanerML,
     boolstr_to_bool,
@@ -28,6 +27,8 @@ from bleachbit.CleanerML import (
     list_cleanerml_files,
     load_cleaners,
     pot_fragment)
+from bleachbit.General import os_match
+from bleachbit.Process import ProcessInfo, process_cache
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -70,6 +71,14 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         """Return the paths an option of a bundled cleaner would touch"""
         cleaner = self._bundled_cleaner(cleaner_id, platform)
         return [cmd.path for cmd in cleaner.get_commands(option_id)]
+
+    def _bundled_cleaner_detects(self, cleaner_id, platform, exename):
+        """Return whether a bundled cleaner treats exename as its app running"""
+        cleaner = self._bundled_cleaner(cleaner_id, platform)
+        procs = (ProcessInfo(1234, exename, True),)
+        with mock.patch.object(process_cache, 'get', return_value=procs), \
+                mock.patch('bleachbit.Process.IS_WINDOWS', platform == 'win32'):
+            return cleaner.is_process_running()
 
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""
@@ -599,3 +608,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             r'HKCU\Software\Microsoft\Internet Explorer\TypedURLs', keys)
         self.assertNotIn(
             r'HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl', keys)
+
+    def test_chromium_running_debian(self):
+        """Chromium is detected under the name Debian and Arch run it as"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'chromium', 'linux', 'chromium'))
