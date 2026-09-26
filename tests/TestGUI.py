@@ -573,6 +573,61 @@ class GUITestCase(common.BleachbitTestCase):
             options.set('delete_confirmation', False)
             backends.pop('_gui', None)
 
+    def test_failed_worker_is_not_left_running(self):
+        """A worker that raises is not treated as still running"""
+        gui = self.get_window()
+        self.addCleanup(gui.set_sensitive, True)
+
+        def failing_run(_worker):
+            yield True
+            raise RuntimeError('worker failed')
+
+        with mock.patch('bleachbit.Worker.Worker.run', failing_run), \
+                common.capture_glib_exceptions() as glib_errors:
+            gui.preview_or_run_operations(False, {'system': ['tmp']})
+            self.refresh_gui()
+        self.assertEqual([RuntimeError], [error[0] for error in glib_errors])
+        self.assertIsNone(gui._worker_source)
+
+    def test_shred_paths_confirm_stops_running_preview(self):
+        """Confirming a shred stops the preview that is still running"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-shred-confirm')
+        for i in range(20):
+            self.write_file(os.path.join(dirname, f'file{i}'))
+        gui = self.get_window()
+        options.set('delete_confirmation', True)
+        self.refresh_gui()
+
+        try:
+            # Confirm before the preview gets a single idle step
+            with mock.patch.object(gui, '_confirm_delete', return_value=True), \
+                    mock.patch.object(gui, 'worker_done',
+                                      wraps=gui.worker_done) as worker_done:
+                gui.shred_paths([dirname])
+                self.assertTrue(self.wait_until(
+                    lambda: worker_done.called and gui.run_button_get_sensitive()))
+
+            self.assertEqual(
+                [True], [call.args[1] for call in worker_done.call_args_list])
+            self.assertNotExists(dirname)
+        finally:
+            options.set('delete_confirmation', False)
+            backends.pop('_gui', None)
+
+    def test_shred_paths_confirms_without_expert_mode(self):
+        """Shredding asks first unless expert mode turned that off"""
+        gui = self.get_window()
+        options.set('delete_confirmation', False)
+        options.set('expert_mode', False)
+        self.addCleanup(backends.pop, '_gui', None)
+        with mock.patch.object(gui, 'worker', None, create=True), \
+                mock.patch.object(gui, 'preview_or_run_operations') as start, \
+                mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog',
+                           return_value=False) as dialog:
+            self.assertFalse(gui.shred_paths([self.tempdir]))
+        dialog.assert_called_once()
+        start.assert_called_once_with(False, {'_gui': ['files']})
+
     def test_shred_paths_clears_clipboard_mock(self):
         """Test that shred_paths with should_clear_clipboard=True clears the clipboard"""
         test_file = self.write_file('shred-me-via-clipboard')
@@ -627,6 +682,167 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertEqual([], glib_warnings)
 
+    def test_shred_settings_leaves_exit_to_quit(self):
+        """Shred settings and quit exits through quit() even with exit_done"""
+        gui = self.get_window()
+        options.set('exit_done', True)
+        gui.start_time = None
+        self.addCleanup(setattr, gui, '_quit_after_worker', False)
+        self.addCleanup(backends.pop, '_gui', None)
+        worker = mock.Mock()
+        with mock.patch.object(gui, 'worker', worker, create=True), \
+                mock.patch.object(gui, 'preview_or_run_operations'), \
+                mock.patch.object(gui, '_confirm_delete', return_value=True), \
+                mock.patch('bleachbit.GuiWindow.sys.exit') as mock_exit:
+            self.assertTrue(gui.shred_paths([self.tempdir],
+                                            shred_settings=True))
+            gui.worker_done(worker, True)
+        mock_exit.assert_not_called()
+
+    def test_worker_setup_error_restores_ui(self):
+        """An error before the worker starts leaves the buttons usable"""
+        gui = self.get_window()
+        with mock.patch.object(gui, '_filter_operations_for_expert_mode',
+                               side_effect=KeyError('not_loaded_yet')), \
+                mock.patch('bleachbit.GuiWindow.logger.exception') as log_exception:
+            gui.preview_or_run_operations(True, {'not_loaded_yet': ['cache']})
+        log_exception.assert_called_once()
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+
+    def test_drop_without_file_uris_shreds_nothing(self):
+        """Dropping only links or other non-file URIs starts no shred"""
+        gui = self.get_window()
+        with mock.patch.object(gui, 'drag_dest_set'), \
+                mock.patch.object(gui, 'connect') as connect, \
+                mock.patch.object(gui.textview, 'drag_dest_set'), \
+                mock.patch.object(gui.textview, 'connect'):
+            gui.setup_drag_n_drop()
+        handler = next(call.args[1] for call in connect.call_args_list
+                       if call.args[0] == 'drag_data_received')
+        data = mock.Mock()
+        data.get_uris.return_value = ['https://example.com/', 'trash:///a']
+        with mock.patch.object(gui, 'shred_paths') as shred_paths:
+            handler(mock.Mock(), None, 0, 0, data, 80, 0)
+        shred_paths.assert_not_called()
+
+    def test_shred_and_wipe_refused_while_busy(self):
+        """Shredding and wiping do not start while an operation runs"""
+        test_file = self.write_file('shred-while-busy')
+        gui = self.get_window()
+        gui.set_sensitive(False)
+        self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(backends.pop, '_gui', None)
+        with mock.patch.object(gui, 'show_infobar') as show_infobar, \
+                mock.patch.object(gui, 'preview_or_run_operations') as start, \
+                mock.patch('bleachbit.GuiBasic.browse_folder',
+                           return_value=self.tempdir):
+            self.assertFalse(gui.shred_paths([test_file]))
+            self.app.cb_wipe_empty_space(None, None)
+        start.assert_not_called()
+        self.assertEqual(2, show_infobar.call_count)
+        self.assertExists(test_file)
+
+    def test_shred_paths_refused_after_reload_during_confirmation(self):
+        """A reload started during the confirmation stops the shred"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-shred-reload')
+        self.write_file(os.path.join(dirname, 'file'))
+        gui = self.get_window()
+        options.set('delete_confirmation', True)
+        self.refresh_gui()
+
+        def fake_confirm_delete(*_args, **_kwargs):
+            # The preview finishes, then e.g. a winapp2 download lands
+            self.assertTrue(self.wait_until(gui.run_button_get_sensitive))
+            gui.cb_refresh_operations()
+            return True
+
+        try:
+            with mock.patch.object(gui, '_confirm_delete',
+                                   side_effect=fake_confirm_delete), \
+                    mock.patch.object(gui, 'show_infobar') as show_infobar:
+                gui.shred_paths([dirname])
+                show_infobar.assert_called_once()
+                self.assertTrue(self.wait_until(gui.run_button_get_sensitive))
+            self.assertExists(dirname)
+            self.assertNotIn('_gui', backends)
+        finally:
+            options.set('delete_confirmation', False)
+            backends.pop('_gui', None)
+
+    def test_shred_paths_leaves_shred_started_during_confirmation(self):
+        """A shred started during another's confirmation runs to the end"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-shred-outer')
+        self.write_file(os.path.join(dirname, 'file'))
+        other = self.mkdtemp(prefix='bleachbit-test-shred-inner')
+        for i in range(20):
+            self.write_file(os.path.join(other, f'file{i}'))
+        gui = self.get_window()
+        options.set('delete_confirmation', True)
+        self.refresh_gui()
+        confirmations = []
+
+        def fake_confirm_delete(*_args, **_kwargs):
+            confirmations.append(True)
+            if len(confirmations) == 1:
+                # e.g. the orphaned wipe file prompt, once the preview is done
+                self.assertTrue(self.wait_until(gui.run_button_get_sensitive))
+                gui.shred_paths([other])
+            return True
+
+        try:
+            with mock.patch.object(gui, '_confirm_delete',
+                                   side_effect=fake_confirm_delete), \
+                    mock.patch.object(gui, 'show_infobar') as show_infobar, \
+                    mock.patch.object(gui, 'worker_done',
+                                      wraps=gui.worker_done) as worker_done:
+                gui.shred_paths([dirname])
+                show_infobar.assert_called_once()
+                self.assertTrue(self.wait_until(gui.run_button_get_sensitive))
+
+            self.assertEqual(
+                [False, True], [call.args[1] for call in worker_done.call_args_list])
+            self.assertNotExists(other)
+            self.assertExists(dirname)
+        finally:
+            options.set('delete_confirmation', False)
+            backends.pop('_gui', None)
+
+    def test_delete_refused_after_reload_during_confirmation(self):
+        """Clean does not start while a reload begun in its dialog runs"""
+        gui = self.get_window()
+        self._setup_new_cleaner(gui)
+
+        def fake_confirm_delete(*_args, **_kwargs):
+            gui.cb_refresh_operations()
+            return True
+
+        with mock.patch.object(gui, '_confirm_delete',
+                               side_effect=fake_confirm_delete), \
+                mock.patch.object(gui, 'show_infobar') as show_infobar, \
+                mock.patch.object(gui, 'preview_or_run_operations') as start:
+            gui.cb_run_option(None, True, self._NEW_CLEANER_ID,
+                              self._NEW_OPTION_ID)
+            gui.run_operations(None)
+            self.refresh_gui()
+        start.assert_not_called()
+        self.assertEqual(2, show_infobar.call_count)
+        self.assertTrue(gui.run_button_get_sensitive())
+
+    def test_shred_instance_shreds_its_paths_once(self):
+        """A shred instance runs on its own and shreds its paths only once"""
+        from bleachbit.GuiApplication import Bleachbit
+        paths = [os.path.join(self.tempdir, 'shred-once')]
+        with mock.patch('bleachbit.GuiApplication.GUI') as gui_cls:
+            gui_cls.shred_paths.return_value = False
+            app = Bleachbit(uac=False, shred_paths=paths, auto_exit=False)
+            self.assertTrue(app.get_flags() & Gio.ApplicationFlags.NON_UNIQUE)
+            app.do_activate()
+            app.do_activate()
+            self.refresh_gui()
+        gui_cls.shred_paths.assert_called_once_with(
+            gui_cls.return_value, paths)
+
     def _setup_new_cleaner(self, gui):
         def _create_cleaner_file_in_directory(dirname):
             cleaner_content = ('<?xml version="1.0" encoding="UTF-8"?>'
@@ -674,6 +890,19 @@ class GUITestCase(common.BleachbitTestCase):
             gui._prompt_orphaned_wipe_files(['/does/not/exist'])
             dialog.assert_called_once()
 
+    def test_update_check_leaves_running_operation_alone(self):
+        """Finding an update does not re-enable the buttons mid-operation"""
+        gui = self.get_window()
+        gui.set_sensitive(False)
+        self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(gui.update_button.hide)
+        with mock.patch('bleachbit.Update.check_updates',
+                        return_value=[('99.0', 'https://example.invalid/')]):
+            gui.check_online_updates()
+            self.assertTrue(self.wait_until(gui.update_button.get_visible))
+        self.assertFalse(gui.run_button_get_sensitive())
+        self.assertTrue(gui.stop_button.get_sensitive())
+
     def test_app_menu_reloads_only_after_setup_translation(self):
         """The app menu is rebuilt only after setup_translation() runs again"""
         gui = self.get_window()
@@ -694,6 +923,47 @@ class GUITestCase(common.BleachbitTestCase):
             self.refresh_gui()
         refresh_rows.assert_called_once_with()
 
+    def test_refresh_disables_operations_until_registered(self):
+        """Preview and Clean wait for the cleaners to be registered again"""
+        gui = self.get_window()
+        gui.cb_refresh_operations()
+        self.assertFalse(gui.run_button_get_sensitive())
+        self.assertFalse(gui.preview_button.get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+        self.refresh_gui()
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+
+    def test_refresh_waits_for_running_worker(self):
+        """A refresh asked for while a worker runs starts after it is done"""
+        gui = self.get_window()
+        self._setup_new_cleaner(gui)
+        operations = {self._NEW_CLEANER_ID: [self._NEW_OPTION_ID]}
+        with mock.patch.object(gui.tree_store, 'refresh_rows',
+                               wraps=gui.tree_store.refresh_rows) as refresh_rows:
+            gui.preview_or_run_operations(False, operations)
+            gui.cb_refresh_operations()
+            self.refresh_gui()
+        self.assertEqual(0, gui.worker.total_errors)
+        refresh_rows.assert_called_once_with()
+        self.assertTrue(gui.run_button_get_sensitive())
+
+    def test_registration_done_leaves_running_worker_alone(self):
+        """Finishing a reload re-enables the window only when nothing runs"""
+        gui = self.get_window()
+        gui.set_sensitive(False)
+        self.addCleanup(gui.set_sensitive, True)
+        with mock.patch.object(gui, '_worker_source', 1):
+            gui.cb_register_cleaners_done()
+        self.assertFalse(gui.run_button_get_sensitive())
+        self.assertTrue(gui.stop_button.get_sensitive())
+
+        with mock.patch.object(gui.tree_store, 'refresh_rows',
+                               side_effect=RuntimeError), \
+                self.assertRaises(RuntimeError):
+            gui.cb_register_cleaners_done()
+        self.assertTrue(gui.run_button_get_sensitive())
+
     def test_run_operations(self):
         gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)
@@ -707,6 +977,19 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.refresh_gui()
         self.assertNotExists(file_to_clean)
+
+    def test_on_destroy_stops_running_worker(self):
+        """Closing the window stops the operation that is still running"""
+        gui = self.get_window()
+        file_to_clean = self._setup_new_cleaner(gui)
+        self.addCleanup(gui.set_sensitive, True)
+        operations = {self._NEW_CLEANER_ID: [self._NEW_OPTION_ID]}
+        with mock.patch.object(gui, 'worker_done') as worker_done:
+            gui.preview_or_run_operations(True, operations)
+            gui.on_destroy(gui)
+            self.refresh_gui()
+        worker_done.assert_not_called()
+        self.assertExists(file_to_clean)
 
     def test_cb_run_option(self):
         gui = self.get_window()
@@ -792,6 +1075,84 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertFalse(model[parent_iter][1],
                          "Parent should remain unchecked when all children are blocked by expert mode")
+
+    def test_parent_unchecked_when_child_blocked_or_cancelled(self):
+        """A warning option that stays off leaves its cleaner unchecked"""
+
+        def blocked_warning(_option_id):
+            return "This option requires expert mode."
+
+        # Blocked without expert mode, then cancelled in the dialog
+        for expert_mode, answer in ((False, None), (True, (False, False))):
+            with self.subTest(expert_mode=expert_mode):
+                model = Gtk.TreeStore(
+                    GObject.TYPE_STRING,   # 0: name
+                    GObject.TYPE_BOOLEAN,  # 1: active
+                    GObject.TYPE_PYOBJECT,  # 2: id
+                    GObject.TYPE_STRING,   # 3: size
+                    GObject.TYPE_STRING,   # 4: icon
+                )
+                parent_iter = model.append(
+                    None, ("TestCleaner", False, "test_cleaner", "", ""))
+                model.append(
+                    parent_iter, ("Option1", False, "option1", "", ""))
+                # pylint: disable-next=possibly-used-before-assignment
+                tdm = TreeDisplayModel()
+                with mock.patch('bleachbit.GuiTreeModels.backends',
+                                {"test_cleaner": mock.Mock(get_warning=blocked_warning)}), \
+                        mock.patch('bleachbit.GuiTreeModels.options') as mock_options, \
+                        mock.patch('bleachbit.GuiBasic.warning_confirm_dialog',
+                                   return_value=answer):
+                    mock_options.get.return_value = expert_mode
+                    mock_options.get_warning_preference.return_value = False
+                    tdm.col1_toggled_cb(None, "0:0", model, None)
+                self.assertFalse(model[parent_iter][1])
+
+    def test_toggle_ignored_when_tree_rebuilt_during_warning(self):
+        """A toggle confirmed after the tree was rebuilt changes no row"""
+        model = Gtk.TreeStore(
+            GObject.TYPE_STRING,   # 0: name
+            GObject.TYPE_BOOLEAN,  # 1: active
+            GObject.TYPE_PYOBJECT,  # 2: id
+            GObject.TYPE_STRING,   # 3: size
+            GObject.TYPE_STRING,   # 4: icon
+        )
+
+        def fill(cleaners):
+            model.clear()
+            for cleaner_id, option_ids in cleaners:
+                parent_iter = model.append(
+                    None, (cleaner_id, False, cleaner_id, "", ""))
+                for option_id in option_ids:
+                    model.append(
+                        parent_iter, (option_id, False, option_id, "", ""))
+
+        fill([("aaa", ["a1"]), ("warned", ["plain", "risky"])])
+
+        def rebuild_and_confirm(*_args):
+            # New rows now sort before the clicked one
+            fill([("aaa", ["a1"]), ("added", ["x1", "x2"]),
+                  ("warned", ["plain", "risky"])])
+            return True, False
+
+        def warning(option_id):
+            return "Be careful." if option_id == "risky" else None
+
+        # pylint: disable-next=possibly-used-before-assignment
+        tdm = TreeDisplayModel()
+        with mock.patch('bleachbit.GuiTreeModels.backends',
+                        {"warned": mock.Mock(get_warning=warning)}), \
+                mock.patch('bleachbit.GuiTreeModels.options') as mock_options, \
+                mock.patch('bleachbit.GuiBasic.warning_confirm_dialog',
+                           side_effect=rebuild_and_confirm):
+            mock_options.get.return_value = True  # expert_mode on
+            mock_options.get_warning_preference.return_value = False
+            tdm.col1_toggled_cb(None, "1:1", model, None)
+
+        checked = [row[2] for row in model if row[1]]
+        checked += [child[2] for row in model
+                    for child in row.iterchildren() if child[1]]
+        self.assertEqual([], checked)
 
     def test_on_quit_commits_pending_options(self):
         """Regression test: quitting via on_quit() (Ctrl+Q/Ctrl+W, and

@@ -340,6 +340,9 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
 
         file_to_shred = self.mkstemp(prefix=fn_prefix)
         self.assertExists(file_to_shred)
+        # --no-delete-confirmation skips the dialog only in expert mode
+        options.set('expert_mode', True)
+        options.commit()
         if not allow_opened_window:
             self.assertRunning(False)
         shred_command_string = self._get_shred_command_string(file_to_shred)
@@ -446,6 +449,9 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         self.assertTrue(IS_WINDOWS)
         file_to_shred = self.mkstemp(prefix=fn_prefix)
         self.assertExists(file_to_shred)
+        # --no-delete-confirmation skips the dialog only in expert mode
+        options.set('expert_mode', True)
+        options.commit()
 
         original = bleachbit.Windows.shell.ShellExecuteEx
 
