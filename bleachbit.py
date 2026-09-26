@@ -25,10 +25,15 @@ def _add_posix_share_to_path():
     if not (os.path.isfile(os.path.join(_launcher_dir, 'bleachbit', '__init__.py')) and
             os.path.isfile(os.path.join(_launcher_dir, 'bleachbit', 'Unix.py'))):
         _appdir = os.environ.get('APPDIR')
+        # `make install` defaults to <prefix>/bin and <prefix>/share
+        _prefix_share = os.path.normpath(
+            os.path.join(_launcher_dir, '..', 'share'))
         if _appdir:
             _share = os.path.normpath(os.path.join(_appdir, 'usr/share/'))
             if os.path.isfile(os.path.join(_share, 'bleachbit', '__init__.py')):
                 sys.path.insert(0, _share)
+        elif os.path.isfile(os.path.join(_prefix_share, 'bleachbit', '__init__.py')):
+            sys.path.append(_prefix_share)
         elif os.path.isfile('/usr/share/bleachbit/__init__.py'):
             sys.path.append('/usr/share/')
 
