@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
+
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
+
+-->
+<cleaner id="docker">
+  <label>Docker Desktop</label>
+  <description>Container platform</description>
+  <running type="exe" os="macos" same_user="true">Docker Desktop</running>
+  <var name="base">
+    <value os="macos">~/Library/Application Support/Docker Desktop</value>
+  </var>
+  <var name="cachedir">
+    <value os="macos">~/Library/Caches/Docker Desktop</value>
+  </var>
+  <var name="logdir">
+    <value os="macos">~/Library/Containers/com.docker.docker/Data/log</value>
+  </var>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <action command="delete" search="walk.all" path="$$base$$/blob_storage/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Cache/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Code Cache/"/>
+    <action command="delete" search="walk.all" path="$$base$$/DawnGraphiteCache/"/>
+    <action command="delete" search="walk.all" path="$$base$$/DawnWebGPUCache/"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUCache/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Session Storage/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Shared Dictionary/"/>
+    <action command="delete" search="walk.all" path="$$cachedir$$/bugsnag/"/>
+  </option>
+  <option id="logs">
+    <label>Logs</label>
+    <description>Delete the logs</description>
+    <action command="delete" search="walk.all" path="$$logdir$$/"/>
+  </option>
+</cleaner>
