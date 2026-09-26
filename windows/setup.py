@@ -194,19 +194,22 @@ def assert_exist(path, msg=None):
 def check_exist(path, msg=None):
     """Check if a path exists
 
-    If not, log a warning and sleep for 5 seconds."""
+    If not, log a warning and sleep for 5 seconds, except on CI."""
     if not os.path.exists(path):
         logger.warning('%s not found', path)
         if msg:
             logger.warning(msg)
-        time.sleep(5)
+        if not os.environ.get('GITHUB_ACTIONS'):
+            time.sleep(5)
 
 
 def assert_module(module):
     """Check if a module is available"""
     try:
-        importlib.util.find_spec(module)
+        spec = importlib.util.find_spec(module)
     except ImportError:
+        spec = None
+    if spec is None:
         logger.error('Failed to import %s', module)
         logger.error('Process aborted because of error!')
         sys.exit(1)
@@ -703,8 +706,6 @@ def delete_unnecessary():
         r'servicemanager.pyd',
         r'share\icons\highcontrast',
         r'win32evtlog.pyd',
-        r'win32pipe.pyd',
-        r'win32wnet.pyd',
     ]
     _delete_paths(delete_paths)
 
@@ -791,10 +792,6 @@ def remove_empty_dirs(root):
 def clean_translations():
     """Clean translations (localizations)"""
     logger.info('Cleaning translations')
-    if os.path.exists(r'dist\share\locale\locale.alias'):
-        os.remove(r'dist\share\locale\locale.alias')
-    else:
-        logger.warning('locale.alias does not exist')
     pygtk_translations = os.listdir('dist/share/locale')
     supported_translations = supported_languages()
     for pt in pygtk_translations:
@@ -927,7 +924,7 @@ def delete_linux_only():
     for fn in files:
         cml = CleanerML(fn)
         if not cml.get_cleaner().is_usable():
-            logger.warning('Deleting cleaner not usable on this OS: %s', fn)
+            logger.info('Deleting cleaner not usable on this OS: %s', fn)
             os.remove(fn)
 
 
@@ -1078,7 +1075,7 @@ def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
     # Now: Done in NSIS file!
     opts = '' if settings['fast'] else '/V3 /DCompressor'
     if settings['upx']:
-        opts += ' /Dpackhdr'
+        opts += f' /Dpackhdr /DUPX_TAG={settings["upx_tag"]}'
     nsis(opts, exe_name_multilang, nsi_path, settings)
 
     # The English-only installer is controlled by the build_english setting,

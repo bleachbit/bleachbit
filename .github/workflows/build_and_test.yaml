@@ -318,7 +318,7 @@ jobs:
           SETUP_ARGS: ${{ github.event_name == 'pull_request' && 'fast' || (github.ref_type == 'tag' && 'max-effort' || '') }}
         run: |
           set PATH=%MSYS_BIN%;%PATH%
-          "%PYTHON_EXE%" -m windows.setup %SETUP_ARGS%
+          "%PYTHON_EXE%" -u -m windows.setup %SETUP_ARGS%
           move windows\BleachBit*.exe .
           move windows\BleachBit*.zip .
 
@@ -547,6 +547,7 @@ jobs:
               $url = "https://download.bleachbit.org/ci/$name"
               Write-Output ("{0,15:N0} bytes  {1}  ->  {2}" -f $_.Length, $name, $url)
               aws s3 cp $file "$dest" --metadata "$meta"
+              if ($LASTEXITCODE -ne 0) { throw "upload of $name failed with exit code $LASTEXITCODE" }
               "- [$name]($url) ({0:N0} bytes)" -f $_.Length >> $env:GITHUB_STEP_SUMMARY
             }
           $filter = if ($tag) { "tag=$tag" } else { "branch=$branch" }
