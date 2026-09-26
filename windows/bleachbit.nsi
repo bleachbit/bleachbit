@@ -446,7 +446,10 @@ Function .onInit
   !insertmacro MULTIUSER_INIT
 
   ; Language display dialog
-  !insertmacro MUI_LANGDLL_DISPLAY
+  ; The elevated inner instance already has the language of the outer one
+  ${If} $IsInnerInstance = 0
+    !insertmacro MUI_LANGDLL_DISPLAY
+  ${EndIf}
 
   ; Check whether application is already installed
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
