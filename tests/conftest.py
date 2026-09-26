@@ -28,13 +28,19 @@ logging.raiseExceptions = False
 
 _worker = os.environ.get('PYTEST_XDIST_WORKER')
 _options_dir = os.environ.get('BLEACHBIT_TEST_OPTIONS_DIR')
+# Only a directory made here is removed at exit, never one the caller set
+_created_dir = None
 # The controller sets the env var before spawning workers, so every worker
 # inherits it. Without keying on the worker id they would all share one
 # config dir and race on the same bleachbit.ini.
 if _worker:
-    if not _options_dir or _worker not in os.path.basename(_options_dir):
-        _options_dir = tempfile.mkdtemp(
-            prefix=f'bleachbit-test-{_worker}-', dir=_options_dir or None)
+    _prefix = f'bleachbit-test-{_worker}-'
+    # Match the whole prefix: the random suffix of the controller's dir can
+    # contain a worker id such as gw1.
+    if (not _options_dir
+            or not os.path.basename(_options_dir).startswith(_prefix)):
+        _options_dir = _created_dir = tempfile.mkdtemp(
+            prefix=_prefix, dir=_options_dir or None)
         os.environ['BLEACHBIT_TEST_OPTIONS_DIR'] = _options_dir
     # Give each worker a private temporary directory so that tests
     # spawning subprocesses and Windows %TEMP%-based cleaners do
@@ -43,14 +49,15 @@ if _worker:
         os.environ[_env_var] = _options_dir
     tempfile.tempdir = _options_dir
 elif not _options_dir:
-    _options_dir = tempfile.mkdtemp(prefix='bleachbit-test-master-')
+    _options_dir = _created_dir = tempfile.mkdtemp(
+        prefix='bleachbit-test-master-')
     os.environ['BLEACHBIT_TEST_OPTIONS_DIR'] = _options_dir
 
 
 def _remove_options_dir():
     """Remove the temporary directory created for this process."""
-    if _options_dir and os.path.isdir(_options_dir):
-        shutil.rmtree(_options_dir, ignore_errors=True)
+    if _created_dir and os.path.isdir(_created_dir):
+        shutil.rmtree(_created_dir, ignore_errors=True)
 
 
 # The interpreter exits without a session when pytest is interrupted or
@@ -63,14 +70,4 @@ atexit.register(_remove_options_dir)
 # pylint: disable-next=unused-argument
 def pytest_sessionfinish(session, exitstatus):
     """Clean up the temporary directory after the test session."""
-    # pytest-rerunfailures keeps a ClientStatusDB socket open in each xdist
-    # worker (connects to the controller's ServerStatusDB) and never closes
-    # it, so the socket warns "unclosed" during interpreter shutdown under
-    # PYTHONWARNINGS=error. Close it here. Skipped on the controller: closing
-    # its listening socket would make the accept() daemon thread raise.
-    if hasattr(session.config, 'workerinput'):
-        db = getattr(session.config, 'failures_db', None)
-        sock = getattr(db, 'sock', None)
-        if sock is not None:
-            sock.close()
     _remove_options_dir()

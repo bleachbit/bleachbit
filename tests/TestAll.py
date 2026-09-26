@@ -18,14 +18,6 @@ import tempfile
 import time
 
 
-try:
-    from tests import common
-except ImportError as e:
-    print(f'Error importing tests: {e}')
-    print('try python3 -m tests.TestAll')
-    sys.exit(1)
-
-
 def main():
     """Run all tests"""
     print("""You should use the unittest discovery, it's much nicer:
@@ -40,11 +32,14 @@ def main():
 
     start_time = time.time()
     with tempfile.TemporaryDirectory(prefix='TestAll ' + __name__) as testdir:
-        with common.set_temporary_env('BLEACHBIT_TEST_OPTIONS_DIR', testdir):
-            suite = unittest.defaultTestLoader.discover(
-                os.getcwd(), pattern='Test*.py')
-            success = unittest.TextTestRunner(
-                verbosity=2).run(suite).wasSuccessful()
+        # bleachbit reads this once at import, so it must be set before
+        # anything imports bleachbit (tests.common included).
+        os.environ['BLEACHBIT_TEST_OPTIONS_DIR'] = testdir
+        suite = unittest.defaultTestLoader.discover(
+            os.getcwd(), pattern='Test*.py')
+        success = unittest.TextTestRunner(
+            verbosity=2).run(suite).wasSuccessful()
+        os.environ.pop('BLEACHBIT_TEST_OPTIONS_DIR', None)
 
     elapsed_time = time.time() - start_time
     minutes = int(elapsed_time // 60)

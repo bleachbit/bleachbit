@@ -265,7 +265,7 @@ class GUITestCase(common.BleachbitTestCase):
             self.assertTrue(pref.lang_label.get_sensitive())
             self.assertTrue(pref.lang_combo.get_sensitive())
             self.assertFalse(options.get('auto_detect_lang'))
-            self.assertTrue(len(options.get('forced_language')) >= 2)
+            self.assertGreaterEqual(len(options.get('forced_language')), 2)
             # The saved language matches the language shown in the
             # dropdown.
             combo_code = pref.lang_combo.get_active_text().split(
@@ -588,9 +588,8 @@ class GUITestCase(common.BleachbitTestCase):
         mock_clear_clipboard.assert_called_once()
         self.assertNotExists(test_file)
 
-    # Flaky ~1/100 on Linux: X11 CLIPBOARD owner can be transiently lost
-    # under parallel xdist workers. assertTrue (not skipTest) lets flaky rerun.
-    @pytest.mark.flaky(reruns=2, reruns_delay=1)
+    # Other xdist workers can take the X11 CLIPBOARD owner away mid-test
+    @pytest.mark.no_xdist
     def test_shred_paths_from_clipboard_menu_integration(self):
         """Shred a path copied to the real clipboard"""
         test_file = self.write_file('shred-me-via-real-clipboard')
