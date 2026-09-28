@@ -8,6 +8,7 @@
 Test cases for module Winapp
 """
 
+import ntpath
 import os
 import re
 import shutil
@@ -201,21 +202,16 @@ class WinappTestCase(common.BleachbitTestCase):
             self.assertEqual(expected_return, actual_return, msg)
 
     def test_winapp_expand_vars_programfiles(self):
-        """%ProgramFiles% adds a path only when %ProgramW6432% differs"""
-        tests = (
-            # 32-bit process on 64-bit Windows
-            (r'C:\Program Files (x86)',
-             [r'C:\Program Files (x86)\Foo', r'C:\Program Files\Foo']),
-            # 64-bit process
-            (r'C:\Program Files', [r'C:\Program Files\Foo']),
-        )
-        for program_files, expected in tests:
-            def expandvars(path, program_files=program_files):
-                return path.replace('%ProgramFiles%', program_files).replace(
-                    '%ProgramW6432%', r'C:\Program Files')
-            with mock.patch('os.path.expandvars', side_effect=expandvars):
+        """%ProgramFiles% expands to each Program Files folder once"""
+        for env, expected in common.program_files_envs():
+            with mock.patch('os.path.expandvars', ntpath.expandvars), \
+                    mock.patch.dict(os.environ, env, clear=True):
                 self.assertEqual(
-                    expected, winapp_expand_vars(r'%ProgramFiles%\Foo'))
+                    [p + r'\Foo' for p in expected],
+                    winapp_expand_vars(r'%ProgramFiles%\Foo'))
+                self.assertEqual(
+                    [p + r'\Common Files\Foo' for p in expected],
+                    winapp_expand_vars(r'%CommonProgramFiles%\Foo'))
 
     @common.skipUnlessWindows
     def test_detect_file(self):
@@ -228,21 +224,18 @@ class WinappTestCase(common.BleachbitTestCase):
                  ('%windir%\\system*', True),
                  ('%windir%\\*ystem32', True),
                  ('%windir%\\*ystem3*', True)]
-        # On 64-bit Windows, Winapp2.ini expands the %ProgramFiles% environment
-        # variable to also %ProgramW6432%, so test unique entries in
-        # %ProgramW6432%.
-        if os.getenv('ProgramW6432'):
-            dir_64 = os.listdir(os.getenv('ProgramFiles'))
-            dir_32 = os.listdir(os.getenv('ProgramW6432'))
-            dir_32_unique = set(dir_32) - set(dir_64)
-            if dir_32 and not dir_32_unique and bleachbit.ARCH_BITS == 32:
+        # On 64-bit Windows, Winapp2.ini expands %ProgramFiles% to both
+        # Program Files folders, whatever the bitness of this process
+        if os.getenv('ProgramFiles(x86)'):
+            native = set(os.listdir(os.getenv('ProgramW6432')))
+            x86 = set(os.listdir(os.getenv('ProgramFiles(x86)')))
+            if not native - x86 or not x86 - native:
                 raise RuntimeError(
-                    'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
-            for pathname in dir_32_unique:
+                    'Test expects entries unique to each Program Files folder')
+            for pathname in native ^ x86:
                 tests.append((f'%ProgramFiles%\\{pathname}', True))
         else:
-            logger.info(
-                'skipping %ProgramW6432% tests because WoW64 not detected')
+            logger.info('skipping Program Files (x86) tests on 32-bit Windows')
         for pathname, expected_return in tests:
             actual_return = detect_file(pathname)
             msg = f'detect_file({pathname}) returned {actual_return}'
