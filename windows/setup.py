@@ -487,7 +487,15 @@ def build_py2exe():
                      'pickle', 'ftplib', 'bleachbit.Unix',
                      'setuptools', 'tomli', 'wheel', 'backports',
                      'importlib_metadata', 'zipp', 'packaging', 'distutils',
-                     'unittest', 'test'],
+                     'unittest', 'test',
+                     'multiprocessing',
+                     'concurrent.futures.process',
+                     'chardet',  # not present now, but defensive
+                     'xmlrpc',  # only consumer was multiprocessing.connection
+                     '_pydecimal',  # dead fallback
+                     # non-Windows platform modules
+                     'psutil._psaix', 'psutil._psbsd', 'psutil._pslinux',
+                     'psutil._psosx', 'psutil._pssunos'],
     }
 
     freeze(
@@ -951,6 +959,37 @@ def repack_library(settings):
         path = os.path.join('dist', 'library', p)
         if os.path.exists(path):
             shutil.rmtree(path)
+
+    # Prune unneeded codecs from the encodings package.
+    encodings_keep_list = (
+        '__init__', 'aliases',
+        'cp*',  # every Windows ANSI codepage
+        'utf_8', 'utf_8_sig',
+        'utf_16', 'utf_16_le', 'utf_16_be',
+        'utf_32', 'utf_32_le', 'utf_32_be',
+        'latin_1', 'ascii', 'mbcs', 'charmap', 'iso8859_1',
+        # Below are codecs used by standard library.
+        'punycode', 'idna',
+        'unicode_escape', 'raw_unicode_escape', 'unicode_internal',
+        'hex_codec', 'base64_codec', 'zlib_codec', 'bz2_codec',
+        'qp_codec', 'quopri_codec', 'uu_codec',
+        'rot_13', 'palmos', 'oem', 'undefined',
+    )
+    encodings_files = glob.glob(os.path.join(
+        'dist', 'library', 'encodings', '*.pyc'))
+    encodings_deleted = 0
+    for enc in encodings_files:
+        stem = os.path.splitext(os.path.basename(enc))[0]
+        if any(fnmatch.fnmatch(stem, pattern)
+               for pattern in encodings_keep_list):
+            continue
+        encodings_deleted += 1
+        try:
+            os.remove(enc)
+        except OSError as e:
+            logger.warning('Failed to remove %s: %s', enc, e)
+    logger.info('Deleted %d of %d files in dist\\library\\encodings',
+                encodings_deleted, len(encodings_files))
 
     # remove .dist-info metadata directories
     for dist_info_dir in glob.glob(os.path.join('dist', 'library', '*.dist-info')):
