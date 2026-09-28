@@ -200,17 +200,30 @@ jobs:
     # optimized files will be uploaded, instead.
     # Push the branch first and wait a moment before pushing the tag.
     concurrency:
-      group: ${{ github.workflow }}-windows-build-${{ github.sha }}
+      group: ${{ github.workflow }}-windows-build-${{ matrix.arch }}-${{ github.sha }}
       cancel-in-progress: ${{ github.ref_type == 'tag' }}
-    name: windows-build
+    name: windows-build (${{ matrix.arch }})
     timeout-minutes: 30
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # x86 keeps the file and artifact names it always had
+          - arch: x86
+            suffix: ''
+            wheel: win32
+          - arch: x64
+            suffix: '-x64'
+            wheel: win_amd64
     outputs:
+      # Both matrix jobs compute the same version, so either one can set it
       version: ${{ steps.revision.outputs.version }}
 
     env:
-      PYTHON_HOME: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3
-      PYTHON_EXE: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3\python.exe
+      ARCH: ${{ matrix.arch }}
+      PYTHON_HOME: ${{ github.workspace }}\vcpkg_installed\${{ matrix.arch }}-windows\tools\python3
+      PYTHON_EXE: ${{ github.workspace }}\vcpkg_installed\${{ matrix.arch }}-windows\tools\python3\python.exe
       MSYS_BIN: C:\msys64\usr\bin
       PIP_CACHE_DIR: ${{ github.workspace }}\.pip-cache
 
@@ -224,12 +237,12 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
-            gtk*-x86-windows.7z
+            gtk*-${{ matrix.arch }}-windows.7z
             gtk-themes.zip
-            pygobject-*-win32.whl
+            pygobject-*-${{ matrix.wheel }}.whl
             nsis-*-setup.exe
             advancecomp.zip
-          key: win-build-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
+          key: win-build-deps-${{ matrix.arch }}-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
 
       - name: Cache pip packages
         # Skipped for tags: requirements are version-pinned but not hash-pinned,
@@ -242,15 +255,15 @@ jobs:
           # The build job installs only requirements.txt + windows/requirements.txt
           # (test deps are installed in the test matrix), so the cache key excludes
           # requirements-test.txt to avoid spurious misses when a test dep bumps.
-          key: pip-win-build-${{ hashFiles('requirements.txt', 'windows/requirements.txt') }}
+          key: pip-win-${{ matrix.arch }}-build-${{ hashFiles('requirements.txt', 'windows/requirements.txt') }}
           # Fall back to the most recent pip cache when a requirements bump
           # invalidates the exact key, so unchanged wheels are reused instead
           # of being re-downloaded from PyPI.
-          restore-keys: pip-win-
+          restore-keys: pip-win-${{ matrix.arch }}-
 
       - name: Install Python and GTK
         shell: pwsh
-        run: .\windows\python-gtk3-install.ps1
+        run: .\windows\python-gtk3-install.ps1 -Arch $env:ARCH
 
       - name: Install NSIS
         shell: pwsh
@@ -321,7 +334,7 @@ jobs:
       - name: Upload build artifacts (core)
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: windows-build-${{ steps.revision.outputs.version }}
+          name: windows-build${{ matrix.suffix }}-${{ steps.revision.outputs.version }}
           if-no-files-found: error
           # The installer and the portable zip are already compressed
           compression-level: 0
@@ -333,20 +346,32 @@ jobs:
         if: github.ref_type == 'tag'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: windows-build-english-${{ steps.revision.outputs.version }}
+          name: windows-build-english${{ matrix.suffix }}-${{ steps.revision.outputs.version }}
           if-no-files-found: error
           compression-level: 0
           path: |
             BleachBit-*-setup-English.exe
 
   windows-test:
-    name: windows-test
+    name: windows-test (${{ matrix.arch }})
     timeout-minutes: 30
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # x86 keeps the coverage flag it always had
+          - arch: x86
+            wheel: win32
+            coverage-flag: windows
+          - arch: x64
+            wheel: win_amd64
+            coverage-flag: windows-x64
 
     env:
-      PYTHON_HOME: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3
-      PYTHON_EXE: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3\python.exe
+      ARCH: ${{ matrix.arch }}
+      PYTHON_HOME: ${{ github.workspace }}\vcpkg_installed\${{ matrix.arch }}-windows\tools\python3
+      PYTHON_EXE: ${{ github.workspace }}\vcpkg_installed\${{ matrix.arch }}-windows\tools\python3\python.exe
       MSYS_BIN: C:\msys64\usr\bin
       PIP_CACHE_DIR: ${{ github.workspace }}\.pip-cache
 
@@ -360,16 +385,16 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           # Cache the downloaded archives AND the unpacked+pip-installed tree, so
-          # a warm run skips both the slow Expand-Archive and the pip installs.
+          # a warm run skips both the unpacking and the pip installs.
           # No restore-keys: a partial-key hit would restore a tree with stale
           # dependencies that the install script would then skip re-installing.
           # This job doesn't mutate the tree, so caching it here is safe.
           path: |
-            gtk*-x86-windows.7z
+            gtk*-${{ matrix.arch }}-windows.7z
             gtk-themes.zip
-            pygobject-*-win32.whl
+            pygobject-*-${{ matrix.wheel }}.whl
             vcpkg_installed
-          key: win-test-env-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+          key: win-test-env-${{ matrix.arch }}-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
 
       - name: Cache pip packages
         # zizmor: ignore[cache-poisoning] test-only job, windows-deploy ships windows-build output
@@ -378,12 +403,12 @@ jobs:
           path: ${{ github.workspace }}\.pip-cache
           # This job installs requirements.txt + windows/requirements.txt
           # + requirements-test.txt, so the cache key includes all three.
-          key: pip-win-test-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
-          restore-keys: pip-win-
+          key: pip-win-${{ matrix.arch }}-test-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+          restore-keys: pip-win-${{ matrix.arch }}-
 
       - name: Install Python and GTK
         shell: pwsh
-        run: .\windows\python-gtk3-install.ps1
+        run: .\windows\python-gtk3-install.ps1 -Arch $env:ARCH
 
       - name: Install PsExec
         shell: pwsh
@@ -420,21 +445,21 @@ jobs:
           TEMP: ${{ runner.temp }}
           TMP: ${{ runner.temp }}
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\;%PATH%
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\;%PATH%
           make tests-pytest PYTHON="%PYTHON_EXE%" PYTEST_COVERAGE=1 PYTEST_ARGS=tests
 
       - name: Run non-admin tests
         id: nonadmin
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\
           call windows\run-psexec-nonadmin-tests.bat
 
       - name: Run low-integrity tests
         id: lowintegrity
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\
           call windows\run-psexec-low-integrity-tests.bat
 
       - name: Collect low-integrity coverage
@@ -466,7 +491,7 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           file: coverage.lcov
-          flag-name: windows
+          flag-name: ${{ matrix.coverage-flag }}
           parallel: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -483,22 +508,16 @@ jobs:
     # cancelled by the job-level concurrency group.
     if: needs.windows-build.result == 'success' && github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request' && !startsWith(github.ref_name, 'dependabot/')
     runs-on: windows-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     env:
       VERSION: ${{ needs.windows-build.outputs.version }}
 
     steps:
       - name: Download build artifacts
+        # Both architectures, plus the English installers on tags
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          name: windows-build-${{ needs.windows-build.outputs.version }}
-          merge-multiple: true
-
-      - name: Download English installer artifact
-        if: github.ref_type == 'tag'
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: windows-build-english-${{ needs.windows-build.outputs.version }}
+          pattern: windows-build-*
           merge-multiple: true
 
       - name: Deploy Windows build
@@ -536,7 +555,8 @@ jobs:
                               elseif ($name -like '*-setup.exe') { 'installer' } `
                               elseif ($name -like '*-portable.zip') { 'portable' } `
                               else { 'unknown' }
-              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,size=$($_.Length),artifact_type=$artifactType,frontend=gtk"
+              $arch = if ($name -like 'BleachBit-*-x64-*') { 'x64' } else { 'x86' }
+              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,size=$($_.Length),artifact_type=$artifactType,arch=$arch,frontend=gtk"
               $url = "https://download.bleachbit.org/ci/$name"
               Write-Output ("{0,15:N0} bytes  {1}  ->  {2}" -f $_.Length, $name, $url)
               aws s3 cp $file "$dest" --metadata "$meta"
@@ -559,5 +579,5 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           parallel-finished: true
-          carryforward: "linux,windows"
+          carryforward: "linux,windows,windows-x64"
           github-token: ${{ secrets.GITHUB_TOKEN }}
