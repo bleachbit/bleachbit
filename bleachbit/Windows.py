@@ -1295,6 +1295,9 @@ def has_fontconfig_cache(font_conf_file):
     expanded_localdata = os.path.expandvars('%LOCALAPPDATA%')
     expanded_homepath = os.path.join(os.path.expandvars(
         '%HOMEDRIVE%'), os.path.expandvars('%HOMEPATH%'))
+    # Cache names carry the architecture, and fontconfig ignores the other
+    # one's, e.g. caches left by the x86 build
+    arch = 'le64' if ARCH_BITS == 64 else 'le32d8'
     for dir_element in fc_element.getElementsByTagName('cachedir'):
 
         if dir_element.firstChild.nodeValue == 'LOCAL_APPDATA_FONTCONFIG_CACHE':
@@ -1315,8 +1318,8 @@ def has_fontconfig_cache(font_conf_file):
             dirpath = dir_element.firstChild.nodeValue
 
         # Match any cache version (fontconfig 2.17 writes .cache-9)
-        if dirpath and glob.glob(
-                os.path.join(glob.escape(dirpath), '*.cache-*')):
+        if dirpath and glob.glob(os.path.join(
+                glob.escape(dirpath), f'*-{arch}.cache-*')):
             return True
 
     return False
