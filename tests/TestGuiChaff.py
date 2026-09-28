@@ -246,6 +246,27 @@ class GuiChaffTestCase(common.BleachbitTestCase):
     @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.download_models')
     @patch('bleachbit.Chaff.have_models')
+    def test_make_files_download_raises(self, mock_have_models, mock_download_models, mock_make_files):
+        """An exception in the download worker still stops the spinner"""
+        mock_have_models.return_value = False
+        mock_download_models.side_effect = RuntimeError('unexpected')
+
+        self.dialog.choose_folder_button.set_filename(self.tempdir)
+        self.dialog.make_button.clicked()
+        # Let the worker finish, then run the idle callbacks it queues
+        self.refresh_gui(0.1)
+        self.refresh_gui()
+
+        mock_download_models.assert_called_once()
+        mock_make_files.assert_not_called()
+        self.assertFalse(self.dialog._download_spinner_box.get_visible())
+        self.assertTrue(self.dialog.make_button.get_sensitive())
+        self.assertEqual(
+            self.dialog.infobar.get_message_type(), Gtk.MessageType.ERROR)
+
+    @patch('bleachbit.GuiChaff.make_files_thread')
+    @patch('bleachbit.Chaff.download_models')
+    @patch('bleachbit.Chaff.have_models')
     def test_close_during_download(self, mock_have_models, mock_download_models, mock_make_files):
         """Closing the dialog during the download must not make files afterwards"""
         mock_have_models.return_value = False
