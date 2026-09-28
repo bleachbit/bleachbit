@@ -1,22 +1,8 @@
-
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -207,7 +193,7 @@ def get_system_information():
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     elif IS_WINDOWS:
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
-                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
+                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP', '__COMPAT_LAYER')
     else:
         envs = ()
 

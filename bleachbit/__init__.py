@@ -15,7 +15,7 @@ import time
 
 from bleachbit import Log
 
-APP_VERSION = "6.0.4"
+APP_VERSION = "6.0.5"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 APP_COPYRIGHT = "Copyright (C) 2008-2026 Andrew Ziem"
