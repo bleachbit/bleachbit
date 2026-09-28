@@ -217,7 +217,7 @@ Caption "$(INSTALLER_CAPTION)"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "picture.MUI2\bleachbit_164x314.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !define MUI_LICENSEPAGE_RADIOBUTTONS
-!insertmacro MUI_PAGE_LICENSE "..\COPYING"
+!insertmacro MUI_PAGE_LICENSE "gpl-3.0.rtf"
 ;Later:
 ;!insertmacro MUI_PAGE_LICENSE "$(MUI_LICENSE)"
 ;!define MUI_PAGE_CUSTOMFUNCTION_PRE "MULTIUSER_PAGE_INSTALLMODE_Pre"
@@ -359,13 +359,13 @@ Section "$(SECTION_CORE_NAME)" SectionCore
 
     # register uninstaller in Add/Remove Programs
     !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
         "HelpLink" "https://www.bleachbit.org/help"
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
         "URLInfoAbout" "https://www.bleachbit.org/"
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
                  "DisplayName" "${prodname}"
 
     # Build cache now while there is a GUI progress bar.
@@ -448,7 +448,10 @@ Function .onInit
   !insertmacro MULTIUSER_INIT
 
   ; Language display dialog
-  !insertmacro MUI_LANGDLL_DISPLAY
+  ; The elevated inner instance already has the language of the outer one
+  ${If} $IsInnerInstance = 0
+    !insertmacro MUI_LANGDLL_DISPLAY
+  ${EndIf}
 
   ; Check whether application is already installed
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \

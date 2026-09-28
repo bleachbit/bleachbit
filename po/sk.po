@@ -6,18 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-23 20:05-0600\n"
-"PO-Revision-Date: 2020-06-05 09:48+0000\n"
-"Last-Translator: Ján Hudec <78mikey87@gmail.com>\n"
-"Language-Team: Slovak <sk@li.org>\n"
+"PO-Revision-Date: 2026-09-27 18:57+0000\n"
+"Last-Translator: Wesssed <wesed1337@gmail.com>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/bleachbit/main/"
+"sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
 "X-Launchpad-Export-Date: 2020-06-07 14:32+0000\n"
-"X-Generator: Launchpad (build ef9fc486e875d54078fa61cf91e898b895125d89)\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
@@ -109,12 +110,12 @@ msgstr "Záznamy"
 #: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
 #: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
-msgstr "Odstrániť poznámky programu"
+msgstr "Odstrániť záznamy"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
 #: ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr "Multimedialny prehliadač"
+msgstr "Multimedialny prehrávač"
 
 #. TRANSLATORS: Name of a cleaning option. Cache is a noun.
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
@@ -185,7 +186,7 @@ msgstr "Správca balíčkov"
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
-msgstr ""
+msgstr "Odstrániť balíčky, ktoré boli predtým závislosťami"
 
 #: ../cleaners/dnf.xml
 msgid ""
@@ -268,10 +269,8 @@ msgstr "História formulárov"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Zmazať históriu hľadania"
+msgstr "Uložené údaje z formulárov a história vyhľadávacieho poľa"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -290,7 +289,7 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"Databáza užívateľských mien a hesiel rovnako ako zoznam stránok, ktoré by "
+"Databáza používateľských mien a hesiel rovnako ako zoznam stránok, ktoré by "
 "nemali ukladať heslá"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -307,7 +306,7 @@ msgstr "Táto voľba zmaže vaše uložené heslá."
 #: ../cleaners/brave.xml ../cleaners/claude.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Session"
-msgstr "Sedenie"
+msgstr "Relácia"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -315,7 +314,7 @@ msgstr "Sedenie"
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Naposledy otvorené karty a okná"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
