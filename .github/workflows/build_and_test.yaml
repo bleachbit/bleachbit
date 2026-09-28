@@ -416,21 +416,21 @@ jobs:
           PYTHONWARNINGS: error
           COVERAGE_FILE: .coverage.admin
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\;%PATH%
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\;%PATH%
           make tests-pytest PYTHON="%PYTHON_EXE%" PYTEST_COVERAGE=1 PYTEST_ARGS=tests
 
       - name: Run non-admin tests
         id: nonadmin
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\
           call windows\run-psexec-nonadmin-tests.bat
 
       - name: Run low-integrity tests
         id: lowintegrity
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\
           call windows\run-psexec-low-integrity-tests.bat
 
       - name: Collect low-integrity coverage
