@@ -24,6 +24,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #>
 
+# CI's pwsh wrapper already does this, but `powershell -File` does not
+$ErrorActionPreference = 'Stop'
+
 $root_dir = Join-Path (Get-Location).Path "vcpkg_installed\x86-windows"
 $python_home = Join-Path $root_dir "tools\python3"
 $themes_dir = Join-Path $python_home "share\themes"
