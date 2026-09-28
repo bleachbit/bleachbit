@@ -493,6 +493,17 @@ Function .onInit
     Abort
   ${EndIf}
 
+!ifdef X64
+  ; x64 code runs on x64 Windows, and on ARM64 from Windows 11 on
+  ${IfNot} ${IsNativeAMD64}
+    ${IfNot} ${IsNativeARM64}
+    ${OrIfNot} ${AtLeastWin11}
+      MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(X64_UNSUPPORTED)" /SD IDCANCEL IDOK open_download_page
+      Abort
+    ${EndIf}
+  ${EndIf}
+!endif
+
   !insertmacro MULTIUSER_INIT
 
   ; Language display dialog
@@ -562,6 +573,13 @@ Function .onInit
     ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" "CurrentVersion"
     ExecShell "open" "https://www.bleachbit.org/goto/old-windows?ver=${VERSION}&os=$R0&lang=$LANGUAGE"
     Abort
+
+!ifdef X64
+  ; On Windows that can't run x64 after user agrees to open the link
+  open_download_page:
+    ExecShell "open" "https://www.bleachbit.org/download/windows"
+    Abort
+!endif
 
 FunctionEnd
 

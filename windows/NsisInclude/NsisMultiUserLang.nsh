@@ -68,6 +68,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_ENGLISH} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ENGLISH} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_ENGLISH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_ALBANIAN
@@ -123,6 +124,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_ALBANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ALBANIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_ALBANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_ALBANIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_ARABIC
@@ -178,6 +180,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_ARABIC} "${prodname} (لا UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ARABIC} "تمزيق بواسطة ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_ARABIC} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_ARABIC} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_ASTURIAN
@@ -233,6 +236,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_ASTURIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ASTURIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_ASTURIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_ASTURIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_BASQUE
@@ -288,6 +292,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_BASQUE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BASQUE} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_BASQUE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_BASQUE} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_BELARUSIAN
@@ -343,6 +348,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_BELARUSIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BELARUSIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_BELARUSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_BELARUSIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_BOSNIAN
@@ -398,6 +404,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_BOSNIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BOSNIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_BOSNIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_BOSNIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_BULGARIAN
@@ -453,6 +460,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_BULGARIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BULGARIAN} "Споделено с ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_BULGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_BULGARIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_CATALAN
@@ -508,6 +516,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_CATALAN} "${prodname} (Sense UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_CATALAN} "Destrueix amb ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_CATALAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_CATALAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_CROATIAN
@@ -563,6 +572,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_CROATIAN} "${prodname} (bez UAC-a)."
 	LangString SHRED_SHELL_MENU ${LANG_CROATIAN} "Nepovratno izbriši pomoću programa ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_CROATIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_CROATIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_CZECH
@@ -618,6 +628,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_CZECH} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_CZECH} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_CZECH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_CZECH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_DANISH
@@ -673,6 +684,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_DANISH} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_DANISH} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_DANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_DANISH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_DUTCH
@@ -728,6 +740,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_DUTCH} "${prodname} (Geen UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_DUTCH} "Versnipperen met ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_DUTCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_DUTCH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_ESTONIAN
@@ -783,6 +796,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_ESTONIAN} "${prodname} (Ilma UAC-ta)."
 	LangString SHRED_SHELL_MENU ${LANG_ESTONIAN} "Hävita ${prodname}iga"
 	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_ESTONIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_FINNISH
@@ -838,6 +852,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_FINNISH} "${prodname} (Ei UAC:tä)."
 	LangString SHRED_SHELL_MENU ${LANG_FINNISH} "Silppua ${prodname}illä"
 	LangString UNINSTALL_TEXT ${LANG_FINNISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_FINNISH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_FRENCH
@@ -893,6 +908,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_FRENCH} "${prodname} (pas d'UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_FRENCH} "Broyer avec ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_FRENCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_FRENCH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_GALICIAN
@@ -948,6 +964,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_GALICIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GALICIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_GALICIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_GALICIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_GERMAN
@@ -1003,6 +1020,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_GERMAN} "${prodname} (ohne UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GERMAN} "Mit ${prodname} schreddern"
 	LangString UNINSTALL_TEXT ${LANG_GERMAN} "${prodname} wird aus dem folgenden Ordner deinstalliert.$\r$\nKlicken Sie auf »Deinstallieren«, um die Deinstallation zu starten.$\r$\nDateien, die Sie diesem Ordner hinzugefügt haben, wie z. B. benutzerdefinierte Reiniger, bleiben erhalten."
+	LangString X64_UNSUPPORTED ${LANG_GERMAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_GREEK
@@ -1058,6 +1076,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_GREEK} "${prodname} (χωρίς UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GREEK} "Τεμαχισμός με το ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_GREEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_GREEK} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_HEBREW
@@ -1113,6 +1132,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_HEBREW} "${prodname} (אין UAC - בקרת גישת משתמש)."
 	LangString SHRED_SHELL_MENU ${LANG_HEBREW} "גריסה עם ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_HEBREW} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_HEBREW} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_HUNGARIAN
@@ -1168,6 +1188,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_HUNGARIAN} "${prodname} (UAC nélkül)."
 	LangString SHRED_SHELL_MENU ${LANG_HUNGARIAN} "Megsemmisítés ezzel: ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_HUNGARIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_INDONESIAN
@@ -1223,6 +1244,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_INDONESIAN} "${prodname} (Tanpa UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_INDONESIAN} "Hancurkan dengan ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_INDONESIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_ITALIAN
@@ -1278,6 +1300,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_ITALIAN} "${prodname} (nessun UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_ITALIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_JAPANESE
@@ -1333,6 +1356,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_JAPANESE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_JAPANESE} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_JAPANESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_JAPANESE} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_KOREAN
@@ -1388,6 +1412,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_KOREAN} "${prodname} (UAC 없음)."
 	LangString SHRED_SHELL_MENU ${LANG_KOREAN} "${prodname}으로 파쇄"
 	LangString UNINSTALL_TEXT ${LANG_KOREAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_KOREAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_LATVIAN
@@ -1443,6 +1468,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_LATVIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_LATVIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_LATVIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_LATVIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_LITHUANIAN
@@ -1498,6 +1524,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_LITHUANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_LITHUANIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_LITHUANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_LITHUANIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_MALAY
@@ -1553,6 +1580,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_MALAY} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_MALAY} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_MALAY} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_MALAY} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_NORWEGIAN
@@ -1608,6 +1636,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_NORWEGIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_NORWEGIAN} "Sikker sletting med ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_NORWEGIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_NORWEGIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_POLISH
@@ -1663,6 +1692,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_POLISH} "${prodname} (Bez UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Zniszcz za pomocą ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_POLISH} "${prodname} zostanie odinstalowany z poniższego folderu.$\r$\nKliknij „Odinstaluj”, aby rozpocząć proces odinstalowywania.$\r$\nPliki dodane do tego folderu, na przykład własne skrypty czyszczące, zostaną zachowane."
+	LangString X64_UNSUPPORTED ${LANG_POLISH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_PORTUGUESE
@@ -1718,6 +1748,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESE} "${prodname} (Sem Controlo de Conta de Utilizador)."
 	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESE} "Triturar com ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_PORTUGUESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_PORTUGUESE} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_PORTUGUESEBR
@@ -1773,6 +1804,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESEBR} "${prodname} (Sem Controle de Conta de Usuário)."
 	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESEBR} "Triturar com ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_PORTUGUESEBR} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_ROMANIAN
@@ -1828,6 +1860,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_ROMANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ROMANIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_ROMANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_ROMANIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_RUSSIAN
@@ -1883,6 +1916,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_RUSSIAN} "${prodname} (без UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_RUSSIAN} "Уничтожить с помощью ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_RUSSIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_SERBIAN
@@ -1938,6 +1972,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_SERBIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SERBIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_SERBIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_SERBIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_SIMPCHINESE
@@ -1993,6 +2028,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_SIMPCHINESE} "${prodname} （无 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_SIMPCHINESE} "用 ${prodname} 擦除"
 	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "将从下列文件夹卸载 ${prodname}。$\r$\n单击卸载启动卸载过程。$\r$\n你添加到这个文件夹的文件，比如清理规则，将被保留。"
+	LangString X64_UNSUPPORTED ${LANG_SIMPCHINESE} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_SLOVAK
@@ -2048,6 +2084,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_SLOVAK} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SLOVAK} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_SLOVAK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_SLOVAK} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_SLOVENIAN
@@ -2103,6 +2140,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_SLOVENIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SLOVENIAN} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_SLOVENIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_SLOVENIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_SPANISH
@@ -2158,6 +2196,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_SPANISH} "${prodname} (Sin UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SPANISH} "Fragmentado con ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_SPANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_SPANISH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_SWEDISH
@@ -2213,6 +2252,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_SWEDISH} "${prodname} (utan UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Säkerhetsradera med ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_SWEDISH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_THAI
@@ -2268,6 +2308,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_THAI} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_THAI} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_THAI} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_THAI} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_TRADCHINESE
@@ -2323,6 +2364,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_TRADCHINESE} "${prodname}（無 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_TRADCHINESE} "用 ${prodname} 粉碎"
 	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "將從以下資料夾卸載 ${prodname}。$\r$\n點擊「卸載」啟動卸載作業。$\r$\n您先前於此資料夾新增的檔案（例如自定義清理器）將會被保留。"
+	LangString X64_UNSUPPORTED ${LANG_TRADCHINESE} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_TURKISH
@@ -2378,6 +2420,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_TURKISH} "${prodname} (UAC yok)."
 	LangString SHRED_SHELL_MENU ${LANG_TURKISH} "${prodname} ile parçala"
 	LangString UNINSTALL_TEXT ${LANG_TURKISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_TURKISH} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_UKRAINIAN
@@ -2433,6 +2476,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_UKRAINIAN} "${prodname} (Немає UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_UKRAINIAN} "Shred із ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "${prodname} буде видалено з наступної теки.$\r$\nНатисніть «Видалити», щоб розпочати видалення.$\r$\nФайли, які ви додали до цієї теки, наприклад, власні засоби очищення, будуть збережені."
+	LangString X64_UNSUPPORTED ${LANG_UKRAINIAN} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_UZBEK
@@ -2488,6 +2532,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_UZBEK} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_UZBEK} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_UZBEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_UZBEK} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
 !ifdef LANG_VIETNAMESE
@@ -2543,5 +2588,6 @@ Version: 2023-02-223
 	LangString SHORTCUT_NO_UAC ${LANG_VIETNAMESE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_VIETNAMESE} "Shred with ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_VIETNAMESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString X64_UNSUPPORTED ${LANG_VIETNAMESE} "This 64-bit version of BleachBit cannot run on this version of Windows. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 !endif
 
