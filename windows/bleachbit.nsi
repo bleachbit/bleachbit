@@ -508,9 +508,11 @@ FunctionEnd
 Function UninstallOld
   ; If installing in silent mode, also uninstall in silent mode
   Var /GLOBAL uninstaller_cmd
-  StrCpy $uninstaller_cmd '$R0 _?=$R1'
+  StrCpy $uninstaller_cmd $R0
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
+  ; _?= must come last: NSIS reads the rest of the line as the folder
+  StrCpy $uninstaller_cmd "$uninstaller_cmd _?=$R1"
   ; Files in use get deleted at the next reboot, taking the new ones with them
   close_bleachbit:
   Call FindRunningBleachBit
