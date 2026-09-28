@@ -214,7 +214,7 @@ def get_system_information():
     for env in envs:
         info[f'os.getenv({env})'] = os.getenv(env)
 
-    info['os.path.expanduser(~")'] = os.path.expanduser('~')
+    info['os.path.expanduser("~")'] = os.path.expanduser('~')
 
     if IS_LINUX:
         from bleachbit.Unix import get_distribution_name_version
