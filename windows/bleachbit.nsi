@@ -114,7 +114,12 @@ Unicode true
 ; is set to 1, per-user installation is pre-selected, otherwise per-machine installation.
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
 
-!define MULTIUSER_INSTALLMODE_64_BIT 0
+; 1 installs to $PROGRAMFILES64 and uses the 64-bit registry view
+!ifdef X64
+  !define MULTIUSER_INSTALLMODE_64_BIT 1
+!else
+  !define MULTIUSER_INSTALLMODE_64_BIT 0
+!endif
 !define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
 
 
