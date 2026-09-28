@@ -117,8 +117,12 @@ Unicode true
 ; 1 installs to $PROGRAMFILES64 and uses the 64-bit registry view
 !ifdef X64
   !define MULTIUSER_INSTALLMODE_64_BIT 1
+  !define OTHER_ARCH_REGVIEW 32
+  !define OTHER_ARCH_PROGRAMFILES "$PROGRAMFILES32"
 !else
   !define MULTIUSER_INSTALLMODE_64_BIT 0
+  !define OTHER_ARCH_REGVIEW 64
+  !define OTHER_ARCH_PROGRAMFILES "$PROGRAMFILES64"
 !endif
 !define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
 
@@ -519,12 +523,26 @@ Function .onInit
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
      "UninstallString"
 
+  ; A per-machine install of the other architecture is registered in the
+  ; other registry view, but shares the Start menu folder and the Shred key
+  StrCpy $R2 ""
+  StrCpy $R3 ""
+  ${If} ${RunningX64}
+    SetRegView ${OTHER_ARCH_REGVIEW}
+    ReadRegStr $R2 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+       "UninstallString"
+    ReadRegStr $R3 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+       "InstallLocation"
+    ; Back to the view MULTIUSER_INIT chose, where our uninstall key goes
+    SetRegView lastused
+  ${EndIf}
+
   ; If not already installed, skip uninstallation. The outer instance handles
   ; per-user installations, since HKCU in the elevated one can be the admin's
   ${If} $IsInnerInstance = 0
-    StrCmp "$R0$PerUserUninstallString" "" new_install
+    StrCmp "$R0$R2$PerUserUninstallString" "" new_install
   ${Else}
-    StrCmp $R0 "" new_install
+    StrCmp "$R0$R2" "" new_install
   ${EndIf}
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
@@ -539,6 +557,12 @@ Function .onInit
     StrCpy $R1 $PerMachineInstallationFolder
     ; BleachBit 2.2 and older did not record InstallLocation
     ${IfThen} $R1 == "" ${|} StrCpy $R1 $INSTDIR ${|}
+    Call UninstallOld
+  ${EndIf}
+  ${If} $R2 != ""
+    StrCpy $R0 $R2
+    StrCpy $R1 $R3
+    ${IfThen} $R1 == "" ${|} StrCpy $R1 "${OTHER_ARCH_PROGRAMFILES}\${prodname}" ${|}
     Call UninstallOld
   ${EndIf}
   ; A per-user installation is registered under HKCU instead
