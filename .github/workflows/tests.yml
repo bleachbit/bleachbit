@@ -168,13 +168,25 @@ jobs:
           git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
 
   windows-test:
-    name: windows-test
+    name: windows-test (${{ matrix.arch }})
     timeout-minutes: 30
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # x86 keeps the coverage flag it always had
+          - arch: x86
+            wheel: win32
+            coverage-flag: windows
+          - arch: x64
+            wheel: win_amd64
+            coverage-flag: windows-x64
 
     env:
-      PYTHON_HOME: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3
-      PYTHON_EXE: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3\python.exe
+      ARCH: ${{ matrix.arch }}
+      PYTHON_HOME: ${{ github.workspace }}\vcpkg_installed\${{ matrix.arch }}-windows\tools\python3
+      PYTHON_EXE: ${{ github.workspace }}\vcpkg_installed\${{ matrix.arch }}-windows\tools\python3\python.exe
       MSYS_BIN: C:\msys64\usr\bin
       PIP_CACHE_DIR: ${{ github.workspace }}\.pip-cache
 
@@ -188,19 +200,19 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           # Cache the downloaded archives AND the unpacked+pip-installed tree, so
-          # a warm run skips both the slow Expand-Archive and the pip installs.
+          # a warm run skips both the unpacking and the pip installs.
           # No restore-keys: a partial-key hit would restore a tree with stale
           # dependencies that the install script would then skip re-installing.
           # The test deps install below also writes to the tree, so
           # requirements-test.txt is in the key.
           path: |
-            gtk*-x86-windows.7z
+            gtk*-${{ matrix.arch }}-windows.7z
             gtk-themes.zip
-            pygobject-*-win32.whl
+            pygobject-*-${{ matrix.wheel }}.whl
             vcpkg_installed
           # No workflow file in the key: editing the Linux jobs would
           # bust it, and the test deps install below runs on every hit anyway
-          key: win-test-env-${{ hashFiles('windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+          key: win-test-env-${{ matrix.arch }}-${{ hashFiles('windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
 
       - name: Cache pip packages
         # zizmor: ignore[cache-poisoning] test-only job, windows-deploy ships windows-build output
@@ -209,12 +221,12 @@ jobs:
           path: ${{ github.workspace }}\.pip-cache
           # This job installs requirements.txt + windows/requirements.txt
           # + requirements-test.txt, so the cache key includes all three.
-          key: pip-win-test-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
-          restore-keys: pip-win-
+          key: pip-win-${{ matrix.arch }}-test-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+          restore-keys: pip-win-${{ matrix.arch }}-
 
       - name: Install Python and GTK
         shell: pwsh
-        run: .\windows\python-gtk3-install.ps1
+        run: .\windows\python-gtk3-install.ps1 -Arch $env:ARCH
 
       - name: Cache PsExec
         # zizmor: ignore[cache-poisoning] the install script checks the hash of a restored copy
@@ -258,21 +270,21 @@ jobs:
           TEMP: ${{ runner.temp }}
           TMP: ${{ runner.temp }}
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\;%PATH%
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\;%PATH%
           make tests-pytest PYTHON="%PYTHON_EXE%" PYTEST_COVERAGE=1 PYTEST_ARGS=tests
 
       - name: Run non-admin tests
         id: nonadmin
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
-          set PATH=%GITHUB_WORKSPACE%\psexec;%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          set PATH=%GITHUB_WORKSPACE%\psexec;%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\
           call windows\run-psexec-nonadmin-tests.bat
 
       - name: Run low-integrity tests
         id: lowintegrity
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
-          set PATH=%GITHUB_WORKSPACE%\psexec;%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          set PATH=%GITHUB_WORKSPACE%\psexec;%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\system32\WindowsPowerShell\v1.0\
           call windows\run-psexec-low-integrity-tests.bat
 
       - name: Collect low-integrity coverage
@@ -304,7 +316,7 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           file: coverage.lcov
-          flag-name: windows
+          flag-name: ${{ matrix.coverage-flag }}
           parallel: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -320,6 +332,6 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           parallel-finished: true
-          carryforward: "linux,windows"
+          carryforward: "linux,windows,windows-x64"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
