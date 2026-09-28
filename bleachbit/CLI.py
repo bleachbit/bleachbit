@@ -8,9 +8,12 @@
 Command line interface
 """
 
+import contextlib
 import errno
 import logging
 import optparse
+import os
+import signal
 import sys
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
@@ -34,6 +37,24 @@ def _write_update_output(value):
 def _noop():
     """Do nothing"""
     return None
+
+
+@contextlib.contextmanager
+def _interrupt_on_termination():
+    """Treat SIGTERM and SIGHUP as Ctrl+C so finally blocks and atexit run"""
+    def raise_interrupt(_signum, _frame):
+        raise KeyboardInterrupt
+    # Leave ignored signals alone, e.g. SIGHUP under nohup
+    names = [name for name in ('SIGTERM', 'SIGHUP', 'SIGBREAK')
+             if hasattr(signal, name)
+             and signal.getsignal(getattr(signal, name)) is not signal.SIG_IGN]
+    old_handlers = {name: signal.signal(getattr(signal, name), raise_interrupt)
+                    for name in names}
+    try:
+        yield
+    finally:
+        for name, handler in old_handlers.items():
+            signal.signal(getattr(signal, name), handler)
 
 
 class CliCallback:
@@ -88,19 +109,22 @@ def list_cleaners():
 
 
 def preview_or_clean(operations, really_clean, quiet=False):
-    """Preview deletes and other changes"""
+    """Preview deletes and other changes, and return False on failure"""
     cb = CliCallback(quiet)
     worker = Worker.Worker(cb, really_clean, operations).run()
     try:
-        for ret in worker:
-            if not ret:
-                break
+        with _interrupt_on_termination():
+            for ret in worker:
+                if not ret:
+                    break
     except BrokenPipeError:
         # Propagate to the top-level handler (e.g., when the downstream
         # pipe consumer like `less` or `head` closes early).
         raise
     except Exception:
         logger.exception('Failed to clean')
+        return False
+    return True
 
 
 def args_to_operations_list(preset, all_but_warning):
@@ -177,6 +201,9 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
             continue
         # backwards compatibility
         option_id = fix_deprecated(cleaner_id, option_id)
+        if cleaner_id not in backends or option_id not in backends[cleaner_id].options:
+            logger.warning(not_valid_cleaner_msg, arg)
+            continue
         # add the specified option
         if cleaner_id not in operations:
             # initialize list of options for this cleaner
@@ -402,10 +429,17 @@ There is NO WARRANTY, to the extent permitted by law.
         for wipe_path in args:
             # TRANSLATORS: Shows activity in the CLI, and %s is the path to the directory.
             logger.info(_("Wipe empty space in %s"), wipe_path)
+            # wipe_path() only logs this, so check here to set the exit status
+            if not os.path.isdir(wipe_path):
+                logger.error(
+                    _("Path to wipe must be an existing directory: %s"), wipe_path)
+                had_error = True
+                continue
             import bleachbit.Wipe
             try:
-                for _ret in bleachbit.Wipe.wipe_path(wipe_path):
-                    pass
+                with _interrupt_on_termination():
+                    for _ret in bleachbit.Wipe.wipe_path(wipe_path):
+                        pass
             except OSError as e:
                 # Do not let one bad path abort the remaining ones.
                 logger.error('%s: %s', wipe_path, e)
@@ -426,8 +460,7 @@ There is NO WARRANTY, to the extent permitted by law.
                 _("--overwrite is intended only for use with --clean"))
         Options.options.set_override('shred', True)
     if options.clean or options.preview:
-        preview_or_clean(operations, options.clean)
-        sys.exit(0)
+        sys.exit(0 if preview_or_clean(operations, options.clean) else 1)
     if options.gui:
         from bleachbit.Bootstrap import check_wayland_and_root
         if check_wayland_and_root():
@@ -443,8 +476,7 @@ There is NO WARRANTY, to the extent permitted by law.
         # create a temporary cleaner object
         backends['_gui'] = create_simple_cleaner(args)
         operations = {'_gui': ['files']}
-        preview_or_clean(operations, True)
-        sys.exit(0)
+        sys.exit(0 if preview_or_clean(operations, True) else 1)
     if options.sysinfo:
         print(SystemInformation.get_system_information())
         sys.exit(0)

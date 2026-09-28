@@ -17,6 +17,7 @@ import io
 import locale
 import os
 import random
+import signal
 import tempfile
 from unittest.mock import MagicMock, patch
 
@@ -100,6 +101,14 @@ class CLITestCase(common.BleachbitTestCase):
             self.assertIsInstance(o, dict)
             self.assertEqual(o, expected)
 
+        # Unknown cleaners and options are skipped with a warning
+        with self.assertLogs('bleachbit.CLI', level='WARNING') as log_context:
+            o = args_to_operations(
+                ['adobe_reader.bogus', 'adobe_reader.mru', 'no_such_cleaner.cache'],
+                False, False)
+        self.assertEqual(o, {'adobe_reader': ['mru']})
+        self.assertEqual(len(log_context.output), 2)
+
         # Test failure on wildcard
         with self.assertRaises(SystemExit) as cm:
             args_to_operations(
@@ -141,9 +150,10 @@ class CLITestCase(common.BleachbitTestCase):
         # These texts are required in the log file.
         file_required_texts = [
             'DEBUG - Debug log file initialized',
-            'ERROR - Failed to clean',
-            'KeyError',
-            'doesnot'
+            # the unknown cleaner, then no operations left
+            'WARNING - ',
+            'doesnot.exist',
+            'ERROR - ',
         ]
 
         # These texts are forbidden in stderr.
@@ -166,14 +176,13 @@ class CLITestCase(common.BleachbitTestCase):
                         '--debug'] + f'--debug-log{delimiter}{log_path}'.split(delimiter)
                 (rc, _stdout, stderr) = run_external(
                     args, stdout=None, timeout=RUN_EXTERNAL_TIMEOUT)
-                self.assertEqual(0, rc, f"rc={rc}, stderr={stderr}")
+                self.assertEqual(1, rc, f"rc={rc}, stderr={stderr}")
                 self.assertExists(log_path)
                 with open(log_path, 'r', encoding='utf-8') as log_file:
                     log_content = log_file.read()
 
-                self.assertEqual(1, stderr.count('Traceback'))
-                self.assertEqual(1, log_content.count(
-                    'Traceback'), log_content)
+                self.assertNotIn('Traceback', stderr)
+                self.assertNotIn('Traceback', log_content)
 
                 for stderr_forbidden_text in stderror_forbidden_texts:
                     self.assertNotIn(stderr_forbidden_text, stderr,
@@ -289,6 +298,41 @@ class CLITestCase(common.BleachbitTestCase):
                 os.remove(filename)
                 self.assertNotExists(filename)
                 self.assertFalse(crash[0], "Crash detected during deletion")
+
+    def test_preview_or_clean_sigterm(self):
+        """SIGTERM stops preview_or_clean() like Ctrl+C so cleanup code runs"""
+        cleaned_up = []
+
+        def fake_run():
+            try:
+                signal.getsignal(signal.SIGTERM)(signal.SIGTERM, None)
+                yield True
+            finally:
+                cleaned_up.append(True)
+
+        old_handler = signal.getsignal(signal.SIGTERM)
+        with patch('bleachbit.Worker.Worker') as mock_worker:
+            mock_worker.return_value.run.side_effect = fake_run
+            with self.assertRaises(KeyboardInterrupt):
+                preview_or_clean({'test': ['option1']}, True, quiet=True)
+        self.assertEqual(cleaned_up, [True])
+        self.assertEqual(signal.getsignal(signal.SIGTERM), old_handler)
+
+    def test_preview_or_clean_ignored_signal(self):
+        """preview_or_clean() leaves ignored signals alone, e.g. under nohup"""
+        handlers = []
+
+        def fake_run():
+            handlers.append(signal.getsignal(signal.SIGTERM))
+            yield True
+
+        old_handler = signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        self.addCleanup(signal.signal, signal.SIGTERM, old_handler)
+        with patch('bleachbit.Worker.Worker') as mock_worker:
+            mock_worker.return_value.run.side_effect = fake_run
+            preview_or_clean({'test': ['option1']}, True, quiet=True)
+        self.assertEqual(handlers, [signal.SIG_IGN])
+        self.assertIs(signal.getsignal(signal.SIGTERM), signal.SIG_IGN)
 
     @pytest.mark.no_xdist
     def test_append_text(self):
@@ -419,6 +463,42 @@ class CLITestCase(common.BleachbitTestCase):
             with self.assertRaises(SystemExit) as cm:
                 process_cmd_line()
             self.assertEqual(cm.exception.code, 1)
+
+    def test_process_cmd_line_wipe_empty_space_missing_path(self):
+        """Unit test for process_cmd_line() --wipe-empty-space, missing path"""
+        missing = os.path.join(self.tempdir, 'does-not-exist')
+        with patch('bleachbit.Wipe.wipe_path') as mock_wipe_path:
+            with patch('sys.argv', ['bleachbit', '--wipe-empty-space', missing]):
+                with self.assertRaises(SystemExit) as cm:
+                    process_cmd_line()
+                self.assertEqual(cm.exception.code, 1)
+        mock_wipe_path.assert_not_called()
+
+    def test_process_cmd_line_preview_failed(self):
+        """Unit test for process_cmd_line() --preview when the run fails"""
+        with patch('bleachbit.CLI.preview_or_clean', return_value=False):
+            with patch('sys.argv', ['bleachbit', '--preview', 'system.tmp']):
+                with self.assertRaises(SystemExit) as cm:
+                    process_cmd_line()
+                self.assertEqual(cm.exception.code, 1)
+
+    def test_preview_or_clean_status(self):
+        """preview_or_clean() returns False when the run fails"""
+        def fake_run():
+            yield False
+
+        def failing_run():
+            yield True
+            raise KeyError('test')
+
+        with patch('bleachbit.Worker.Worker') as mock_worker:
+            mock_worker.return_value.run.side_effect = fake_run
+            self.assertTrue(preview_or_clean(
+                {'test': ['option1']}, False, quiet=True))
+            mock_worker.return_value.run.side_effect = failing_run
+            with self.assertLogs('bleachbit.CLI', level='ERROR'):
+                self.assertFalse(preview_or_clean(
+                    {'test': ['option1']}, False, quiet=True))
 
     def test_process_cmd_line_preview_no_operations(self):
         """Unit test for process_cmd_line() --preview with no operations"""
