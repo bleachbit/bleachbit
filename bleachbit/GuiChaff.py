@@ -439,8 +439,13 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
 
         # Start download in background thread
         def _worker():
-            success = download_models_thread(on_download_error)
-            on_thread_complete(success)
+            success = False
+            try:
+                success = download_models_thread(on_download_error)
+            except Exception:
+                logger.exception('Error downloading chaff models')
+            finally:
+                on_thread_complete(success)
 
         thread = threading.Thread(target=_worker)
         thread.start()
