@@ -184,7 +184,7 @@ personal_cleaners_dir = /root/.config/bleachbit/cleaners
 os.getenv(LOGNAME) = root
 os.getenv(USER) = root
 os.getenv(SUDO_UID) = 1000
-os.path.expanduser(~") = /root"""
+os.path.expanduser("~") = /root"""
         result = anonymize_system_information(test_input)
         self.assertEqual(test_input, result)
 
