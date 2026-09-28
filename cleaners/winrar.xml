@@ -30,6 +30,6 @@ later.  See the COPYING file in the top-level directory.
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="walk.files" path="%LocalAppData%\VirtualStore\Program Files*\WinRAR\" regex="\.[Tt][Mm][Pp]$"/>
-    <action command="delete" search="walk.files" path="%ProgramFiles%\WinRAR\" regex="\.[Tt][Mm][Pp]$"/>
+    <action command="delete" search="walk.files" path="$$ProgramFiles$$\WinRAR\" regex="\.[Tt][Mm][Pp]$"/>
   </option>
 </cleaner>
