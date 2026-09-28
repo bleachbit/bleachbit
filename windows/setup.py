@@ -679,25 +679,30 @@ def build():
     python_version = sys.version_info[:2]
     if python_version == (3, 4):
         # For Python 3.4, copy msvcr100.dll
-        dll_name = 'msvcr100.dll'
+        dll_names = ['msvcr100.dll']
     elif python_version >= (3, 10):
         # For Python 3.10, copy vcruntime140.dll
-        dll_name = 'vcruntime140.dll'
+        dll_names = ['vcruntime140.dll']
+        if bleachbit.ARCH_BITS == 64:
+            # x64 C++ code, such as pywin32, also imports this one
+            dll_names.append('vcruntime140_1.dll')
     else:
         logger.error('Unsupported Python version')
         sys.exit(1)
-    dll_dirs = (sys.prefix, r'c:\windows\system32', r'c:\windows\SysWOW64')
-    copied_dll = False
-    for dll_dir in dll_dirs:
-        dll_path = os.path.join(dll_dir, dll_name)
-        if os.path.exists(dll_path):
-            logger.info('Copying %s from %s', dll_name, dll_path)
-            shutil.copy(dll_path, 'dist')
-            copied_dll = True
-            break
-    if not copied_dll:
-        logger.error('%s not found', dll_name)
-        sys.exit(1)
+    # WOW64 gives a 32-bit Python the SysWOW64 copies through system32
+    dll_dirs = (sys.prefix, r'c:\windows\system32')
+    for dll_name in dll_names:
+        copied_dll = False
+        for dll_dir in dll_dirs:
+            dll_path = os.path.join(dll_dir, dll_name)
+            if os.path.exists(dll_path):
+                logger.info('Copying %s from %s', dll_name, dll_path)
+                shutil.copy(dll_path, 'dist')
+                copied_dll = True
+                break
+        if not copied_dll:
+            logger.error('%s not found', dll_name)
+            sys.exit(1)
 
     sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
 
@@ -828,8 +833,8 @@ def upx():
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    # Skip vcruntime140.dll because CantPackException and already signed.
-    upx_skip = {'vcruntime140.dll'}
+    # Skip the VC runtime because CantPackException and already signed.
+    upx_skip = {'vcruntime140.dll', 'vcruntime140_1.dll'}
     upx_files = [f for f in upx_files
                  if os.path.basename(f).lower() not in upx_skip]
 
