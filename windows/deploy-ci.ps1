@@ -34,7 +34,8 @@ Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-setup-English.exe, BleachBit-*-
                     elseif ($name -like '*-setup.exe') { 'installer' } `
                     elseif ($name -like '*-portable.zip') { 'portable' } `
                     else { 'unknown' }
-    $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,size=$($_.Length),artifact_type=$artifactType,frontend=gtk"
+    $arch = if ($name -like 'BleachBit-*-x64-*') { 'x64' } else { 'x86' }
+    $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,size=$($_.Length),artifact_type=$artifactType,arch=$arch,frontend=gtk"
     $url = "https://download.bleachbit.org/ci/$name"
     Write-Output ("{0,15:N0} bytes  {1}  ->  {2}" -f $_.Length, $name, $url)
     aws s3 cp $file "$dest" --metadata "$meta"

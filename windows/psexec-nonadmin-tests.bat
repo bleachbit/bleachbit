@@ -12,12 +12,15 @@ set "GITHUB_ACTIONS=true"
 set "COVERAGE_FILE=%REPO%\.coverage.nonadmin"
 
 if not defined PYTHON_EXE (
-    if exist "%REPO%\vcpkg_installed\x86-windows\tools\python3\python.exe" (
-        set "PYTHON_EXE=%REPO%\vcpkg_installed\x86-windows\tools\python3\python.exe"
-    ) else (
-        echo ERROR: PYTHON_EXE is not set> "%LOG%"
-        exit /b 1
+    for %%a in (x86 x64) do (
+        if not defined PYTHON_EXE if exist "%REPO%\vcpkg_installed\%%a-windows\tools\python3\python.exe" (
+            set "PYTHON_EXE=%REPO%\vcpkg_installed\%%a-windows\tools\python3\python.exe"
+        )
     )
+)
+if not defined PYTHON_EXE (
+    echo ERROR: PYTHON_EXE is not set> "%LOG%"
+    exit /b 1
 )
 
 (
