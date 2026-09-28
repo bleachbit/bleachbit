@@ -119,10 +119,12 @@ Unicode true
   !define MULTIUSER_INSTALLMODE_64_BIT 1
   !define OTHER_ARCH_REGVIEW 32
   !define OTHER_ARCH_PROGRAMFILES "$PROGRAMFILES32"
+  !define ARP_DISPLAYNAME "${prodname} (64-bit)"
 !else
   !define MULTIUSER_INSTALLMODE_64_BIT 0
   !define OTHER_ARCH_REGVIEW 64
   !define OTHER_ARCH_PROGRAMFILES "$PROGRAMFILES64"
+  !define ARP_DISPLAYNAME "${prodname}"
 !endif
 !define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
 
@@ -393,7 +395,7 @@ Section "$(SECTION_CORE_NAME)" SectionCore
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-                 "DisplayName" "${prodname}"
+                 "DisplayName" "${ARP_DISPLAYNAME}"
 
     # Build cache now while there is a GUI progress bar.
     DetailPrint "$(MULTIPRINT1)"
