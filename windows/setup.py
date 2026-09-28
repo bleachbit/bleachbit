@@ -31,6 +31,7 @@ import re
 import shutil
 import subprocess
 import sys
+import sysconfig
 import tempfile
 import time
 
@@ -78,6 +79,8 @@ SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 UPX_EXE = shutil.which('upx') or (ROOT_DIR + '\\upx\\upx.exe')
 UPX_OPTS = '--best --nrv2e'
 ADVZIP_EXE = shutil.which('advzip') or (ROOT_DIR + '\\advancecomp\\advzip.exe')
+# File name tag for each supported sysconfig.get_platform()
+ARCH_TAGS = {'win32': '', 'win-amd64': '-x64'}
 
 
 def get_build_settings():
@@ -116,6 +119,7 @@ def get_build_settings():
         'build_english': is_max_effort,  # build English-only installer
         'upx': upx_enabled,  # compress executables
         'upx_tag': '-upx' if upx_enabled else '',  # filename tag for UPX builds
+        'arch_tag': ARCH_TAGS[sysconfig.get_platform()],  # filename tag (x64)
         # recompress zips with advzip
         'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)),
         'recompress_lib': not is_fast,  # prune and repack library.zip
@@ -415,10 +419,10 @@ def _prune_assets(root, exts, keep_list, label='asset'):
 
 def environment_check():
     """Check the build environment"""
-    logger.info('Checking for 32-bit Python')
-    if bleachbit.ARCH_BITS != 32:
-        logger.error('Expected 32-bit Python but found %d-bit',
-                     bleachbit.ARCH_BITS)
+    logger.info('Checking the Python platform')
+    if sysconfig.get_platform() not in ARCH_TAGS:
+        logger.error('Expected x86 or x64 Python but found %s',
+                     sysconfig.get_platform())
         sys.exit(1)
 
     logger.info('Checking for translations')
@@ -999,7 +1003,8 @@ def package_portable(settings):
     keep_font_cache_in_portable('BleachBit-Portable')
 
     archive('BleachBit-Portable',
-            f'BleachBit-{get_version()}-portable{settings["upx_tag"]}.zip',
+            f'BleachBit-{get_version()}{settings["arch_tag"]}-portable'
+            f'{settings["upx_tag"]}.zip',
             settings, use_advzip=True)
 
 
@@ -1017,13 +1022,16 @@ def nsis(opts, exe_name, nsi_path, settings):
         # NSIS !packhdr requires backslashes and no quotes in the define
         upx_path = UPX_EXE.replace('/', '\\')
         cmd.insert(-1, f'/DUPX_EXE={upx_path}')
+    if settings['arch_tag']:
+        cmd.insert(-1, '/DX64')
     run_cmd(cmd)
     assert_exist(exe_name)
 
 
 def installer_name(settings, lang='', ext='exe'):
     """Return the installer filename for the given language and extension"""
-    return f'windows\\BleachBit-{get_version()}-setup{lang}{settings["upx_tag"]}.{ext}'
+    return (f'windows\\BleachBit-{get_version()}{settings["arch_tag"]}-setup'
+            f'{lang}{settings["upx_tag"]}.{ext}')
 
 
 def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
