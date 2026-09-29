@@ -464,6 +464,17 @@ def is_gtk_available():
     return _ensure_gtk_libraries()
 
 
+def is_gtk_loaded():
+    """Return whether the gi.repository GTK libraries are loaded.
+
+    Unlike :func:`is_gtk_available`, this only reports a past import --
+    it never triggers the lazy import itself.  Callers that need to know
+    whether GTK is part of this process without pulling it in should use
+    this.
+    """
+    return _gtk_libraries_available or 'gi.repository.Gtk' in sys.modules
+
+
 def require_gtk():
     """Raise ``RuntimeError`` if GTK is not available.
 
