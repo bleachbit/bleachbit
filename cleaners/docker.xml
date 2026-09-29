@@ -11,15 +11,26 @@ later.  See the COPYING file in the top-level directory.
 <cleaner id="docker">
   <label>Docker Desktop</label>
   <description>Container platform</description>
+  <running type="exe" os="linux" same_user="true">Docker Desktop</running>
+  <running type="exe" os="linux" same_user="true">com.docker.backend</running>
   <running type="exe" os="macos" same_user="true">Docker Desktop</running>
+  <running type="exe" os="windows" same_user="true">com.docker.backend.exe</running>
+  <running type="exe" os="windows" same_user="true">Docker Desktop.exe</running>
   <var name="base">
+    <value os="linux">$XDG_CONFIG_HOME/Docker Desktop</value>
     <value os="macos">~/Library/Application Support/Docker Desktop</value>
+    <value os="windows">%AppData%\Docker Desktop</value>
   </var>
   <var name="cachedir">
+    <value os="linux">$XDG_CACHE_HOME/Docker Desktop</value>
     <value os="macos">~/Library/Caches/Docker Desktop</value>
+    <value os="windows">%AppData%\Docker Desktop</value>
+    <value os="windows">%LocalAppData%\Docker Desktop</value>
   </var>
   <var name="logdir">
+    <value os="linux">~/.docker/desktop/log</value>
     <value os="macos">~/Library/Containers/com.docker.docker/Data/log</value>
+    <value os="windows">%LocalAppData%\Docker\log</value>
   </var>
   <option id="cache">
     <label>Cache</label>
@@ -38,5 +49,11 @@ later.  See the COPYING file in the top-level directory.
     <label>Logs</label>
     <description>Delete the logs</description>
     <action command="delete" search="walk.all" path="$$logdir$$/"/>
+  </option>
+  <option id="session">
+    <label>AI assistant</label>
+    <description>Delete the conversation history</description>
+    <action command="delete" search="walk.all" path="~/.docker/cagent/"/>
+    <action command="delete" search="walk.all" path="~/.docker/desktop/cagent/"/>
   </option>
 </cleaner>
