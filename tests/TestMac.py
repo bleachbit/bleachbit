@@ -19,6 +19,8 @@ from tests import common
 from bleachbit import IS_MAC
 from bleachbit.Mac import (
     delete_safari_cookies,
+    delete_with_admin_privileges,
+    _get_apple_locale_via_defaults,
     get_macos_locale,
     is_full_disk_access_enabled,
     is_safari_binarycookies,
@@ -47,6 +49,34 @@ class MacTestCase(common.BleachbitTestCase):
         self.assertIn('hello world', args[2])
 
     @common.skipUnlessMac
+    def test_notify_macos_strips_dyld_env(self):
+        """notify_macos() must not let osascript inherit DYLD_LIBRARY_PATH
+        (or any other DYLD_* variable) from BleachBit's own process
+        environment, for the same reason as delete_with_admin_privileges():
+        osascript is a signed Apple binary, and inheriting a DYLD_*
+        variable pointing outside the system trips the kernel's
+        code-signing check (cs_invalid_page), killing it with SIGKILL --
+        reproduced against a real /Applications/BleachBit.app on a
+        Mac mini M1 (Apple Silicon, no translation involved), confirmed
+        via the unified system log and crash reports (parentProc:
+        BleachBit, termination: CODESIGNING/Invalid Page), intermittent
+        but repeatable across multiple runs and reinstalls."""
+        polluted_env = dict(os.environ)
+        polluted_env['DYLD_LIBRARY_PATH'] = \
+            '/Applications/BleachBit.app/Contents/Frameworks/lib'
+        with mock.patch.dict(os.environ, polluted_env, clear=True):
+            with mock.patch('subprocess.run') as mock_run:
+                notify_macos('hello world')
+
+        self.assertEqual(mock_run.call_count, 1)
+        env_passed = mock_run.call_args.kwargs.get('env')
+        self.assertIsNotNone(
+            env_passed, "osascript must be given an explicit env kwarg")
+        self.assertFalse(
+            any(k.startswith('DYLD_') for k in env_passed),
+            "osascript must not inherit any DYLD_* variable: %r" % env_passed)
+
+    @common.skipUnlessMac
     def test_notify_macos_escapes_quotes_and_backslashes(self):
         """Quotes and backslashes in the message cannot break out of the
         AppleScript string literal or inject additional script."""
@@ -63,6 +93,81 @@ class MacTestCase(common.BleachbitTestCase):
         """A missing/failing osascript must not raise out of notify_macos()."""
         with mock.patch('subprocess.run', side_effect=FileNotFoundError('no osascript')):
             notify_macos('should not raise')
+
+    @common.skipUnlessMac
+    def test_delete_with_admin_privileges_strips_dyld_env(self):
+        """delete_with_admin_privileges() must not let osascript inherit
+        DYLD_LIBRARY_PATH (or any other DYLD_* variable) from BleachBit's
+        own process environment. osascript is a signed Apple binary; if
+        it inherits a DYLD_* variable pointing outside the system, the
+        kernel's code-signing check (cs_invalid_page) kills it with
+        SIGKILL instead of silently ignoring the variable, as reproduced
+        against a real /Applications/BleachBit.app launched from Finder
+        (returncode -9, empty stdout/stderr)."""
+        proc_mock = mock.Mock()
+        proc_mock.returncode = 0
+        proc_mock.stdout = ''
+        proc_mock.stderr = ''
+        path = ('/Applications/Google Chrome.app/Contents/Frameworks/'
+                'Google Chrome Framework.framework/Versions/'
+                '152.0.7977.83/Resources/es.lproj')
+        polluted_env = dict(os.environ)
+        polluted_env['DYLD_LIBRARY_PATH'] = \
+            '/Applications/BleachBit.app/Contents/Frameworks/lib'
+        with mock.patch.dict(os.environ, polluted_env, clear=True):
+            with mock.patch('subprocess.run', return_value=proc_mock) as mock_run:
+                result = delete_with_admin_privileges([path])
+
+        self.assertTrue(result)
+        self.assertEqual(mock_run.call_count, 1)
+        env_passed = mock_run.call_args.kwargs.get('env')
+        self.assertIsNotNone(
+            env_passed, "osascript must be given an explicit env kwarg")
+        self.assertFalse(
+            any(k.startswith('DYLD_') for k in env_passed),
+            "osascript must not inherit any DYLD_* variable: %r" % env_passed)
+
+    @common.skipUnlessMac
+    def test_get_apple_locale_via_defaults_strips_dyld_env(self):
+        """_get_apple_locale_via_defaults() must not let `defaults`
+        inherit DYLD_LIBRARY_PATH (or any other DYLD_* variable) from
+        BleachBit's own process environment -- the same
+        code-signing-check-triggered SIGKILL already found and fixed
+        for osascript elsewhere. Confirmed by hand on a Mac mini M1
+        (Apple Silicon), isolated from BleachBit entirely: `defaults
+        read -g AppleLocale` alone, with DYLD_LIBRARY_PATH set to a
+        real BleachBit.app's Contents/Frameworks/lib, reliably killed
+        the process (exit 137); the identical command with no DYLD_*
+        set succeeded normally. Reproduced on both macOS Tahoe 26.6.2
+        and macOS 27.0 on this machine -- never observed on a Mac mini
+        M4 with the identical app bundle."""
+        proc_mock = mock.Mock()
+        proc_mock.returncode = 0
+        proc_mock.stdout = 'es_ES\n'
+        polluted_env = dict(os.environ)
+        polluted_env['DYLD_LIBRARY_PATH'] = \
+            '/Applications/BleachBit.app/Contents/Frameworks/lib'
+        with mock.patch.dict(os.environ, polluted_env, clear=True):
+            with mock.patch('subprocess.run', return_value=proc_mock) as mock_run:
+                result = _get_apple_locale_via_defaults()
+
+        self.assertEqual(result, 'es_ES')
+        self.assertEqual(mock_run.call_count, 1)
+        env_passed = mock_run.call_args.kwargs.get('env')
+        self.assertIsNotNone(
+            env_passed, "defaults must be given an explicit env kwarg")
+        self.assertFalse(
+            any(k.startswith('DYLD_') for k in env_passed),
+            "defaults must not inherit any DYLD_* variable: %r" % env_passed)
+
+    def test_delete_with_admin_privileges_rejects_disallowed_path(self):
+        """Refuses to elevate deletion of a path outside the
+        orphaned-app-version pattern, without ever invoking osascript."""
+        with mock.patch('subprocess.run') as mock_run:
+            result = delete_with_admin_privileges(['/etc/passwd'])
+
+        self.assertFalse(result)
+        self.assertEqual(mock_run.call_count, 0)
 
     @common.skipUnlessMac
     def test_notify_macos_raises_on_non_mac(self):

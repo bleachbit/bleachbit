@@ -778,6 +778,50 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # before GTK lays out the new text makes it do that twice.
         self.set_sensitive(True)
 
+        # Offer to retry, with macOS's native per-action privilege
+        # elevation (the same mechanism apps like OnyX use), any
+        # deletes that failed due to a permission error (e.g. a file
+        # owned by another user because it was installed by an app's
+        # own updater running with elevated privileges).
+        if really_delete and IS_MAC and worker.access_denied_paths:
+            from bleachbit.Mac import (
+                delete_with_admin_privileges,
+                elevated_delete_paths_eligible,
+            )
+            # Only offer the elevated-retry prompt if it could
+            # actually succeed -- otherwise the user says yes to a
+            # prompt that was always going to fail, and only finds
+            # out afterward.
+            if elevated_delete_paths_eligible(worker.access_denied_paths):
+                # TRANSLATORS: Asks whether to retry, with
+                # administrator privileges, deleting files that
+                # failed due to a permission error.
+                msg = _(
+                    "Some files could not be deleted due to permission "
+                    "errors. They may belong to another user. Retry with "
+                    "administrator privileges?")
+                resp = GuiBasic.message_dialog(
+                    self, msg, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO)
+            else:
+                resp = Gtk.ResponseType.NO
+            if resp == Gtk.ResponseType.YES:
+                if delete_with_admin_privileges(worker.access_denied_paths):
+                    GuiBasic.message_dialog(
+                        self,
+                        # TRANSLATORS: Shown after successfully
+                        # deleting files with elevated privileges.
+                        _("Files deleted successfully."),
+                        Gtk.MessageType.INFO, Gtk.ButtonsType.OK)
+                    self.cb_refresh_operations()
+                else:
+                    GuiBasic.message_dialog(
+                        self,
+                        # TRANSLATORS: Shown when the elevated
+                        # deletion failed or was canceled by the user.
+                        _("The elevated deletion failed or was "
+                          "canceled."),
+                        Gtk.MessageType.ERROR, Gtk.ButtonsType.OK)
+
         # Close the program after cleaning is completed.
         # if the option is selected under preference.
 
