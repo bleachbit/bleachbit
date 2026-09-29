@@ -12,7 +12,7 @@ on:
     branches:
       - '**'
       - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
-    paths:
+    paths: &paths
       - '**'
       - '!bleachbit.spec'
       - '!debian/**'
@@ -22,15 +22,7 @@ on:
       - '!README.md'
       - '!windows/**'
   pull_request:
-    paths:
-      - '**'
-      - '!bleachbit.spec'
-      - '!debian/**'
-      - '!doc/**'
-      - '!po/**'
-      - 'po/Makefile'
-      - '!README.md'
-      - '!windows/**'
+    paths: *paths
   workflow_dispatch:
 
 permissions:
@@ -38,7 +30,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: ${{ github.ref_name != 'master' && github.ref_type != 'tag' }}
 
 # Headless tests on macOS. GTK is not installed, so GUI tests
 # auto-skip via @unittest.skipUnless(HAVE_GTK, ...).
@@ -56,11 +48,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - name: Install gettext (Homebrew)
-        run: |
-          brew install gettext
-          echo "$(brew --prefix gettext)/bin" >> "$GITHUB_PATH"
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
