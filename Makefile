@@ -1,10 +1,9 @@
+##
 # Copyright (C) 2008-2026 Andrew Ziem.  All rights reserved.
-# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+# License GPLv3+: GNU GPL version 3 or later <https://www.gnu.org/licenses/gpl-3.0.html>.
 # This is free software: You are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
-#
-# Makefile edited by https://github.com/Tobias-B-Besemer
-# Done on 2019-03-13
+##
 
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh

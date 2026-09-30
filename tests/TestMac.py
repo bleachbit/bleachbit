@@ -218,7 +218,7 @@ class MacTestCase(common.BleachbitTestCase):
             '11.0': 'Big Sur',
             # A version newer than this dictionary must return None, not a
             # wrong name.
-            '27.0': None,
+            '99.0': None,
             '9.0': None,
             '': None,
         }

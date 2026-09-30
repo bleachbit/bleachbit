@@ -792,6 +792,34 @@ State=AAAA/wA...
                 delete(path, shred=False)
         self.assertExists(path)
 
+    def test_delete_windows_lstat_denied(self):
+        """delete() on Windows still works where os.lstat() is denied
+
+        Some Windows files give Access Denied to os.lstat() but not to the
+        native os.path checks. There is no reliable way to create one in a
+        test, so both are mocked.
+        """
+        denied = PermissionError(13, 'Access is denied')
+        for isdir in (False, True):
+            with self.subTest(isdir=isdir):
+                mock_delete_file = unittest.mock.Mock()
+                mock_delete_path = unittest.mock.Mock()
+                with unittest.mock.patch.multiple(
+                        'bleachbit.FileUtilities', IS_POSIX=False,
+                        IS_WINDOWS=True, delete_file=mock_delete_file,
+                        _delete_path=mock_delete_path), \
+                        unittest.mock.patch('os.lstat', side_effect=denied), \
+                        unittest.mock.patch('os.path.lexists', return_value=True), \
+                        unittest.mock.patch('os.path.isdir', return_value=isdir), \
+                        unittest.mock.patch('os.path.isfile', return_value=not isdir):
+                    self.assertTrue(delete('C:\\locked'))
+                if isdir:
+                    mock_delete_file.assert_not_called()
+                    self.assertIs(mock_delete_path.call_args.args[1], os.rmdir)
+                else:
+                    mock_delete_file.assert_called_once()
+                    mock_delete_path.assert_not_called()
+
     def delete_helper(self, delete_func, shred):
         """Called by test_delete() with shred = False and = True"""
 

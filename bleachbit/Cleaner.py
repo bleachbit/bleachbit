@@ -223,11 +223,11 @@ class System(Cleaner):
                     'desktop_entry',
                     # TRANSLATORS: desktop entries are .desktop files in Linux that
                     # make up the application menu (the menu that shows BleachBit,
-                    # Firefox, and others.  The .desktop files also associate file
+                    # Firefox, and others).  The .desktop files also associate file
                     # types, so clicking on an .html file in Nautilus brings up
                     # Firefox.
                     # More information:
-                    # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
+                    # https://specifications.freedesktop.org/menu/latest/index.html#introduction
                     _('Broken desktop files'),
                     # TRANSLATORS: Description of the Broken desktop files cleaning option.
                     _('Delete broken application menu entries and file associations'))
@@ -466,7 +466,7 @@ class System(Cleaner):
 
         # memory dump
         # how to manually create this file
-        # http://www.pctools.com/guides/registry/detail/856/
+        # https://web.archive.org/web/20170601020156/http://www.pctools.com/guides/registry/detail/856
         if IS_WINDOWS and 'memory_dump' == option_id:
             fname = os.path.expandvars('$windir\\memory.dmp')
             if os.path.exists(fname):
@@ -518,11 +518,13 @@ class System(Cleaner):
             dirnames = ['/tmp', '/var/tmp']
             for dirname in dirnames:
                 for path in children_in_directory(dirname, True):
-                    is_open = FileUtilities.openfiles.is_open(path)
-                    ok = not is_open and os.path.isfile(path) and \
+                    # is_open() resolves the path and rescans /proc, so leave
+                    # it until the cheaper tests have had a chance to reject.
+                    ok = os.path.isfile(path) and \
                         not os.path.islink(path) and \
                         FileUtilities.ego_owner(path) and \
-                        not self.whitelisted(path)
+                        not self.whitelisted(path) and \
+                        not FileUtilities.openfiles.is_open(path)
                     if ok:
                         yield Command.Delete(path)
 

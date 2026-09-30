@@ -175,6 +175,8 @@ def bootstrap():
         _bootstrap_windows()
     elif IS_POSIX:
         _bootstrap_posix()
+    from bleachbit import log_startup_time
+    log_startup_time('bootstrap done')
 
 
 def _suppress_pygobject_asyncio_deprecations():

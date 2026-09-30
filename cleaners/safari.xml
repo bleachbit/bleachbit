@@ -7,10 +7,9 @@ Copyright (c) 2008-2026 Andrew Ziem.
 This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
 
-
-These changes reorganized where Safari stores site data. For a profile that used only modern
-Safari, WebKit/WebsiteData/{LocalStorage,IndexedDB} may be empty, but some profiles may have
-data there from older Safari versions.
+The WebKit changes below reorganized where Safari stores site data. For a profile
+that used only modern Safari, WebKit/WebsiteData/{LocalStorage,IndexedDB} may be
+empty, but some profiles may have data there from older Safari versions.
 
 https://trac.webkit.org/changeset/291909/webkit
 https://trac.webkit.org/changeset/289878/webkit
@@ -38,7 +37,7 @@ https://trac.webkit.org/changeset/289878/webkit
   </option>
   <option id="history">
     <label>History</label>
-    <description>Delete the history of visited sites</description>
+    <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <action command="delete" search="file" path="~/Library/Safari/History.db"/>
     <action command="delete" search="file" path="~/Library/Safari/History.db-wal"/>
     <action command="delete" search="file" path="~/Library/Safari/History.db-shm"/>

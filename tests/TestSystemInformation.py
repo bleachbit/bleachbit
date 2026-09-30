@@ -53,6 +53,12 @@ class SystemInformationTestCase(common.BleachbitTestCase):
                 f'platform.mac_ver() = {version} ({expected_name})', ret,
                 f'version {version} should show {expected_name}')
 
+    def test_get_system_information_mac_version_unknown_codename(self):
+        """Unknown codename still shows the raw version number"""
+        with mock.patch('platform.mac_ver', return_value=('99.0', ('', '', ''), '')), mock.patch('bleachbit.SystemInformation.IS_MAC', True), mock.patch('bleachbit.SystemInformation.IS_LINUX', False):
+            ret = get_system_information()
+        self.assertIn('platform.mac_ver() = 99.0\n', ret)
+
     @common.skipUnlessWindows
     def test_get_system_information_invalid_unicode_userprofile(self):
         invalid_userprofile = 'C:\\Users\\invalid\ud803'
@@ -178,7 +184,7 @@ personal_cleaners_dir = /root/.config/bleachbit/cleaners
 os.getenv(LOGNAME) = root
 os.getenv(USER) = root
 os.getenv(SUDO_UID) = 1000
-os.path.expanduser(~") = /root"""
+os.path.expanduser("~") = /root"""
         result = anonymize_system_information(test_input)
         self.assertEqual(test_input, result)
 

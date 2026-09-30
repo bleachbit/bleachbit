@@ -1,22 +1,8 @@
-
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -207,14 +193,14 @@ def get_system_information():
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     elif IS_WINDOWS:
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
-                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
+                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP', '__COMPAT_LAYER')
     else:
         envs = ()
 
     for env in envs:
         info[f'os.getenv({env})'] = os.getenv(env)
 
-    info['os.path.expanduser(~")'] = os.path.expanduser('~')
+    info['os.path.expanduser("~")'] = os.path.expanduser('~')
 
     if IS_LINUX:
         from bleachbit.Unix import get_distribution_name_version
@@ -224,8 +210,17 @@ def get_system_information():
             mac_version = platform.mac_ver()[0]
             from bleachbit.Mac import macos_version_name
             name = macos_version_name(mac_version)
+            # Always show the raw version, even when the codename is
+            # unknown (e.g. a macOS release newer than this codebase's
+            # MACOSX_DICT_MODERN, such as macOS 27.0 at the time of
+            # writing) -- previously this line was silently omitted
+            # from the report entirely whenever the codename lookup
+            # came up empty, hiding the version number itself along
+            # with the missing codename.
             if name:
                 info['platform.mac_ver()'] = f'{mac_version} ({name})'
+            else:
+                info['platform.mac_ver()'] = mac_version
     else:
         info['platform.uname().version'] = platform.uname().version
 

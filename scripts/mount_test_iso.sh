@@ -17,7 +17,7 @@ expected_hash='71f284d46636bc11d2d02dcf1da4a87003e30056db59cc696f040163bfa28ffb'
 command -v 7z >/dev/null || { echo "7z is required" >&2; exit 1; }
 
 archive="${iso_path}.7z"
-curl -fsSL --retry 3 -o "$archive" "$archive_url"
+curl -fsSL --retry 3 --retry-connrefused -o "$archive" "$archive_url"
 7z x -y -o"$(dirname "$iso_path")" "$archive" >/dev/null
 extracted="$(dirname "$iso_path")/bleachbit_test.iso"
 if [[ "$extracted" != "$iso_path" ]]; then mv -f "$extracted" "$iso_path"; fi

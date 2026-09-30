@@ -225,8 +225,9 @@ class TreeInfoModel:
         Sorting by ID is functionally important, so that vacuuming is done
         last, even for other languages. See https://github.com/bleachbit/bleachbit/issues/441
         """
-        value1 = model[iter1][2].lower()
-        value2 = model[iter2][2].lower()
+        # model[iter][2] would build a TreeModelRow per comparison
+        value1 = model.get_value(iter1, 2).lower()
+        value2 = model.get_value(iter2, 2).lower()
         if value1 == value2:
             return 0
         if value1 > value2:

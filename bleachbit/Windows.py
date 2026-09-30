@@ -1285,7 +1285,6 @@ def has_fontconfig_cache(font_conf_file):
     General.reject_xml_dtd(data, 'fonts.conf')
     dom = xml.dom.minidom.parseString(data)
     fc_element = dom.getElementsByTagName('fontconfig')[0]
-    cachefile = 'd031bbba323fd9e5b47e0ee5a0353f11-le32d8.cache-6'
     expanded_localdata = os.path.expandvars('%LOCALAPPDATA%')
     expanded_homepath = os.path.join(os.path.expandvars(
         '%HOMEDRIVE%'), os.path.expandvars('%HOMEPATH%'))
@@ -1297,11 +1296,20 @@ def has_fontconfig_cache(font_conf_file):
             dirpath = os.path.join(expanded_homepath, '.cache', 'fontconfig')
         elif dir_element.firstChild.nodeValue == '~/.fontconfig':
             dirpath = os.path.join(expanded_homepath, '.fontconfig')
+        elif dir_element.firstChild.nodeValue.startswith('/'):
+            # fontconfig puts its install folder, which holds etc\fonts,
+            # in front of a path starting with /
+            prefix = os.path.dirname(os.path.dirname(
+                os.path.dirname(font_conf_file)))
+            dirpath = os.path.normpath(os.path.join(
+                prefix, dir_element.firstChild.nodeValue.lstrip('/')))
         else:
             # user has entered a custom directory
             dirpath = dir_element.firstChild.nodeValue
 
-        if dirpath and os.path.exists(os.path.join(dirpath, cachefile)):
+        # Match any cache version (fontconfig 2.17 writes .cache-9)
+        if dirpath and glob.glob(
+                os.path.join(glob.escape(dirpath), '*.cache-*')):
             return True
 
     return False
@@ -1330,6 +1338,16 @@ def get_font_conf_file():
     return os.path.join(gnome_dir, 'etc', 'fonts', 'fonts.conf')
 
 
+if IS_WINDOWS:
+    # ctypes caches this on the DLL, so set argtypes once
+    _peek_message = ctypes.windll.user32.PeekMessageW
+    _peek_message.argtypes = [ctypes.POINTER(wintypes.MSG), wintypes.HWND,
+                              wintypes.UINT, wintypes.UINT, wintypes.UINT]
+
+# Under the 300 ms default timeout for low-level hooks
+_SPLASH_PUMP_SECONDS = 0.01
+
+
 class SplashThread(Thread):
     _class_atom = None
 
@@ -1353,7 +1371,7 @@ class SplashThread(Thread):
         except RuntimeError:
             logger.debug('SplashThread could not be started', exc_info=True)
             return
-        started = self._splash_screen_started.wait(timeout=10)
+        started = self._wait_started(timeout=10)
         if not started:
             logger.warning('SplashThread did not start within timeout')
         else:
@@ -1361,6 +1379,19 @@ class SplashThread(Thread):
 
         if self._startup_error:
             logger.debug('Splash screen disabled due to startup error')
+
+    def _wait_started(self, timeout):
+        """Wait for the splash window, running messages sent to this thread"""
+        msg = wintypes.MSG()
+        deadline = time.monotonic() + timeout
+        while not self._splash_screen_started.wait(_SPLASH_PUMP_SECONDS):
+            if time.monotonic() >= deadline:
+                return False
+            # Run GDK's keyboard hook, which the splash's ALT keys wait on.
+            # PM_NOREMOVE leaves posted messages for GTK.
+            # pylint: disable-next=possibly-used-before-assignment
+            _peek_message(ctypes.byref(msg), None, 0, 0, win32con.PM_NOREMOVE)
+        return True
 
     def run(self):
         try:

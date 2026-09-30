@@ -17,6 +17,9 @@ import io
 import locale
 import os
 import random
+import runpy
+import shutil
+import sys
 import tempfile
 from unittest.mock import MagicMock, patch
 
@@ -586,6 +589,21 @@ class CLITestCase(common.BleachbitTestCase):
             self.assertIn('sys.version', output[1])
             # FIXME: verify that there is not a message like
             # (bleachbit.py:1234): Gdk-CRITICAL **: 23:05:08.581: gdk_screen_get_root_window: assertion 'GDK_IS_SCREEN (screen)' failed
+
+    @common.skipIfWindows
+    def test_launcher_prefix_share(self):
+        """The launcher finds the package `make install` put in <prefix>/share"""
+        prefix = self.mkdtemp()
+        common.touch_file(os.path.join(
+            prefix, 'share', 'bleachbit', '__init__.py'))
+        launcher = os.path.join(prefix, 'bin', 'bleachbit')
+        os.mkdir(os.path.dirname(launcher))
+        shutil.copy('bleachbit.py', launcher)
+        launcher_globals = runpy.run_path(launcher, run_name='launcher')
+        with patch.object(sys, 'path', []), patch.dict(os.environ):
+            os.environ.pop('APPDIR', None)
+            launcher_globals['_add_posix_share_to_path']()
+            self.assertEqual(sys.path, [os.path.join(prefix, 'share')])
 
     @pytest.mark.xdist_group('gui')
     @common.skipUnlessWindows

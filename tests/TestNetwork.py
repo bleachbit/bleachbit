@@ -87,6 +87,8 @@ class NetworkTestCase(common.BleachbitTestCase):
         super().setUpClass()
         cls._httpd = http.server.ThreadingHTTPServer(
             ('127.0.0.1', 0), _StatusCodeHandler)
+        # tearDownClass is skipped when setUpClass raises
+        cls.addClassCleanup(cls._httpd.server_close)
         cls._server_thread = threading.Thread(
             target=cls._httpd.serve_forever, daemon=True)
         cls._server_thread.start()
@@ -98,7 +100,6 @@ class NetworkTestCase(common.BleachbitTestCase):
     def tearDownClass(cls):
         cls._httpd.shutdown()
         cls._server_thread.join(timeout=5)
-        cls._httpd.server_close()
         super().tearDownClass()
 
     def test_unset_sslkeylogfile(self):

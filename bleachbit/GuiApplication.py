@@ -36,6 +36,8 @@ if IS_WINDOWS:
         RESPONSE_TEXT_UNREADABLE,
     )
 
+bleachbit.log_startup_time('GuiApplication imported')
+
 
 class Bleachbit(Gtk.Application):
     _window = None
@@ -70,6 +72,7 @@ class Bleachbit(Gtk.Application):
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
             atexit.register(Windows.cleanup_nonce)
+        bleachbit.log_startup_time('application created')
 
     def run(self, *args, **kwargs):
         """Run the GTK application."""
@@ -274,7 +277,9 @@ class Bleachbit(Gtk.Application):
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
+        bleachbit.log_startup_time('GTK startup done')
         self.build_app_menu()
+        bleachbit.log_startup_time('app menu built')
 
     def quit(self, _action=None, _param=None, init_configuration=False):
         if init_configuration:
