@@ -23,6 +23,8 @@ later.  See the COPYING file in the top-level directory.
   <!-- GIMP 2.10 -->
   <running type="exe" os="windows" same_user="true">gimp-2.10.exe</running>
   <running type="exe" os="linux" same_user="true">gimp-2.10</running>
+  <!-- GIMP 3.0/3.2 (macOS) -->
+  <running type="exe" os="macos" same_user="true">gimp</running>
   <var name="base">
     <!-- GIMP 2.4/2.6/2.8 -->
     <value os="windows">%USERPROFILE%\.gimp-2.4</value>
@@ -34,11 +36,25 @@ later.  See the COPYING file in the top-level directory.
     <!-- GIMP 2.10 -->
     <value os="windows">%AppData%\GIMP\2.10</value>
     <value os="linux">~/.config/GIMP/2.10</value>
+    <!-- GIMP 3.0/3.2 (macOS) -->
+    <value os="macos">~/Library/Application Support/GIMP/3.0</value>
+    <value os="macos">~/Library/Application Support/GIMP/3.2</value>
+  </var>
+  <var name="cachedir">
+    <!-- GIMP 3.0/3.2 (macOS) -->
+    <value os="macos">~/Library/Application Support/GIMP/3.0/cache</value>
+    <value os="macos">~/Library/Application Support/GIMP/3.2/cache</value>
   </var>
   <option id="tmp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <!-- GIMP -->
     <action command="delete" search="walk.files" path="$$base$$/tmp/"/>
+  </option>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <!-- GIMP 3.0/3.2 (macOS) -->
+    <action command="delete" search="walk.files" path="$$cachedir$$/"/>
   </option>
 </cleaner>
