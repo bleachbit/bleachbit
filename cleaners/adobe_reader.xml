@@ -12,12 +12,19 @@ later.  See the COPYING file in the top-level directory.
   <label>Adobe Reader</label>
   <description>Document viewer</description>
   <running type="exe" same_user="true">acroread</running>
+  <running type="exe" os="macos" same_user="true">AdobeAcrobat</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="walk.files" path="~/.adobe/Acrobat/*/Cache"/>
     <action command="delete" search="walk.files" path="$localappdata\Adobe\Acrobat\*\Cache"/>
     <action command="delete" search="glob" path="$USERPROFILE\AppData\LocalLow\Adobe\Acrobat\9.0\Search\*.idx"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/com.adobe.ARMDCHelper/" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Containers/com.adobe.Acrobat.Pro/Data/Library/Caches/" os="macos"/>
+    <action command="delete" search="file" path="~/Library/Application Support/Adobe/Acrobat/DC/UserCache64.bin" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Application Support/Adobe/Acrobat/DC/JSCache/" os="macos"/>
+    <action command="delete" search="glob" path="~/Library/Application Support/Adobe/Acrobat/DC/IconCacheAcro*.dat" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Application Support/Adobe/Acrobat/DC/Security/CRLCache/" os="macos"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
@@ -35,5 +42,11 @@ later.  See the COPYING file in the top-level directory.
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="glob" path="/dev/shm/sem.ADBE_*_$LOGNAME"/>
+  </option>
+  <option id="logs" os="macos">
+    <label>Logs</label>
+    <description>Delete the logs</description>
+    <action command="delete" search="walk.all" path="~/Library/Logs/Adobe/"/>
+    <action command="delete" search="walk.all" path="~/Library/Containers/com.adobe.Acrobat.Pro/Data/Library/Logs/"/>
   </option>
 </cleaner>
