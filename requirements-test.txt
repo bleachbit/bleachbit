@@ -1,5 +1,5 @@
 # Test/CI dependencies
-coverage==7.15.4; python_version>='3.10'
+coverage==7.16.1; python_version>='3.10'
 coverage==7.10.7; python_version<'3.10'
 # pytest 9+ does not support Python 3.9, so 3.9 is stuck on the last 8.x
 # release, which has CVE-2025-71176 (predictable /tmp/pytest-of-$USER path).
