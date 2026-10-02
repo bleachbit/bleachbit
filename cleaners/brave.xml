@@ -31,7 +31,8 @@ later.  See the COPYING file in the top-level directory.
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
+    <action command="delete" search="file" path="$$profile$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State" os="windows"/>
     <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>

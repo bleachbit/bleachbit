@@ -44,8 +44,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
-    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
+    <action command="delete" search="file" path="$$profile$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State" os="windows"/>
     <action command="delete" search="walk.all" path="$$profile$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$profile$$/DawnCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>

@@ -47,6 +47,10 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="file" path="$$profile$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State" os="windows"/>
+    <action command="delete" search="file" path="$$profile$$/Network Persistent State.backup" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State.backup" os="windows"/>
     <action command="delete" search="walk.all" path="$$profile$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="file" path="$$profile$$/Preferences.backup"/>

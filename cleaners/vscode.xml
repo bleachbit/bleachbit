@@ -82,6 +82,10 @@ VSCodium 1.121.03429 on Windows has process `VSCodium.exe`.
     <action command="delete" search="walk.all" path="$$base$$/DawnGraphiteCache/"/>
     <action command="delete" search="walk.all" path="$$base$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$base$$/GPUCache/"/>
+    <action command="delete" search="file" path="$$base$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$base$$/Network/Network Persistent State" os="windows"/>
+    <action command="delete" search="glob" path="$$base$$/Partitions/*/Network Persistent State" os="unix"/>
+    <action command="delete" search="glob" path="$$base$$/Partitions/*/Network/Network Persistent State" os="windows"/>
   </option>
   <option id="logs">
     <label>Logs</label>

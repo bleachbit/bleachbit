@@ -41,6 +41,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$base$$/DawnGraphiteCache/"/>
     <action command="delete" search="walk.all" path="$$base$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$base$$/GPUCache/"/>
+    <action command="delete" search="file" path="$$base$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$base$$/Network/Network Persistent State" os="windows"/>
     <action command="delete" search="walk.all" path="$$base$$/Session Storage/"/>
     <action command="delete" search="walk.all" path="$$base$$/Shared Dictionary/"/>
     <action command="delete" search="walk.all" path="$$cachedir$$/bugsnag/"/>
