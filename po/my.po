@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 20:05-0600\n"
+"POT-Creation-Date: 2026-09-29 10:27-0600\n"
 "PO-Revision-Date: 2012-11-20 11:43+0000\n"
 "Last-Translator: Pyae Sone <Unknown>\n"
 "Language-Team: Burmese <my@li.org>\n"
@@ -82,7 +82,7 @@ msgstr "အသုံးပြုခြင်းရာဇဝင်ကိုဖျ
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -96,7 +96,7 @@ msgstr ""
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -122,7 +122,7 @@ msgstr ""
 #: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
 #: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
 #: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml ../cleaners/docker.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
@@ -146,8 +146,9 @@ msgstr "ခဏသိမ်းထားရာနေရာ"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
+#: ../cleaners/android_studio.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -686,6 +687,22 @@ msgstr ""
 msgid "Package lists"
 msgstr ""
 
+#: ../cleaners/docker.xml
+msgid "Container platform"
+msgstr ""
+
+#. Label for Claude coding assistant
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+msgid "AI assistant"
+msgstr ""
+
+#. Description for deleting Claude Code sessions
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+#, fuzzy
+#| msgid "Delete the command history"
+msgid "Delete the conversation history"
+msgstr "command history ကိုဖျက်မည်"
+
 #: ../cleaners/android_studio.xml
 msgid "Development environment"
 msgstr ""
@@ -737,11 +754,6 @@ msgstr ""
 msgid "Custom folders will be reset."
 msgstr ""
 
-#. Label for Claude coding assistant
-#: ../cleaners/claude.xml
-msgid "AI assistant"
-msgstr ""
-
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
 #, fuzzy
@@ -755,13 +767,6 @@ msgstr "Form ရာဇဝင်"
 #| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
 msgstr "မကြာသေးခင်ကဖွင့်ခဲ့သော စာရင်းကိုဖျက်မည်"
-
-#. Description for deleting Claude Code sessions
-#: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
-msgid "Delete the conversation history"
-msgstr "command history ကိုဖျက်မည်"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 20:05-0600\n"
+"POT-Creation-Date: 2026-09-29 10:27-0600\n"
 "PO-Revision-Date: 2026-06-22 08:01+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/bleachbit/main/ta/"
@@ -85,7 +85,7 @@ msgstr "பாவனை வரலாற்றை அழி"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -99,7 +99,7 @@ msgstr "பதிவுகள்"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -125,7 +125,7 @@ msgstr "வரைகலை பார்வையாளர்"
 #: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
 #: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
 #: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml ../cleaners/docker.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
@@ -149,8 +149,9 @@ msgstr "இடைமாற்று"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
+#: ../cleaners/android_studio.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -690,6 +691,20 @@ msgstr "வழக்கற்ற கோப்புகளை அழி"
 msgid "Package lists"
 msgstr "தொகுப்பு பட்டியல்"
 
+#: ../cleaners/docker.xml
+msgid "Container platform"
+msgstr ""
+
+#. Label for Claude coding assistant
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+msgid "AI assistant"
+msgstr "AI உதவியாளர்"
+
+#. Description for deleting Claude Code sessions
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+msgid "Delete the conversation history"
+msgstr "உரையாடல் வரலாற்றை நீக்கவும்"
+
 #: ../cleaners/android_studio.xml
 #, fuzzy
 #| msgid "Desktop environment"
@@ -745,11 +760,6 @@ msgstr "ஆவண பார்வையாளர்"
 msgid "Custom folders will be reset."
 msgstr "விருப்ப கோப்புறைகள் மீட்டமைக்கப்படும்."
 
-#. Label for Claude coding assistant
-#: ../cleaners/claude.xml
-msgid "AI assistant"
-msgstr "AI உதவியாளர்"
-
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
 msgid "File history"
@@ -759,11 +769,6 @@ msgstr "கோப்பு வரலாறு"
 #: ../cleaners/claude.xml
 msgid "Delete the file history used for /restore"
 msgstr "/ மீட்டமைக்க பயன்படுத்தப்படும் கோப்பு வரலாற்றை நீக்கவும்"
-
-#. Description for deleting Claude Code sessions
-#: ../cleaners/claude.xml
-msgid "Delete the conversation history"
-msgstr "உரையாடல் வரலாற்றை நீக்கவும்"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"

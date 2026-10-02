@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 20:05-0600\n"
+"POT-Creation-Date: 2026-09-29 10:27-0600\n"
 "PO-Revision-Date: 2026-08-29 14:51+0000\n"
 "Last-Translator: caoc78611-bot <caoc78611@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/bleachbit/"
@@ -85,7 +85,7 @@ msgstr "Xóa lịch sử sử dụng"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -99,7 +99,7 @@ msgstr "Nhật ký"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -125,7 +125,7 @@ msgstr "Trình xem tập tin đa phương tiện"
 #: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
 #: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
 #: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml ../cleaners/docker.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
@@ -149,8 +149,9 @@ msgstr "Bộ nhớ đệm"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
+#: ../cleaners/android_studio.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -704,6 +705,21 @@ msgstr "Xóa các tập tin ít dùng"
 msgid "Package lists"
 msgstr "Danh sách gói"
 
+#: ../cleaners/docker.xml
+msgid "Container platform"
+msgstr ""
+
+#. Label for Claude coding assistant
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+msgid "AI assistant"
+msgstr "Trợ lý AI"
+
+#. Description for deleting Claude Code sessions
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+#, fuzzy
+msgid "Delete the conversation history"
+msgstr "Xóa lịch sử cuộc trò chuyện"
+
 #: ../cleaners/android_studio.xml
 #, fuzzy
 #| msgid "Desktop environment"
@@ -757,11 +773,6 @@ msgstr "Trình xem tài liệu"
 msgid "Custom folders will be reset."
 msgstr "Các thư mục tùy chọn sẽ được thiết đặt lại."
 
-#. Label for Claude coding assistant
-#: ../cleaners/claude.xml
-msgid "AI assistant"
-msgstr "Trợ lý AI"
-
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
 #, fuzzy
@@ -775,12 +786,6 @@ msgstr "Lịch sử tập tin"
 #| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
 msgstr "Xóa lịch sử tệp được sử dụng cho /restore"
-
-#. Description for deleting Claude Code sessions
-#: ../cleaners/claude.xml
-#, fuzzy
-msgid "Delete the conversation history"
-msgstr "Xóa lịch sử cuộc trò chuyện"
 
 #: ../cleaners/claude.xml
 #, fuzzy

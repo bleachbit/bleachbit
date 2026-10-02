@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 20:05-0600\n"
+"POT-Creation-Date: 2026-09-29 10:27-0600\n"
 "PO-Revision-Date: 2023-03-19 07:42+0000\n"
 "Last-Translator: Frederik Pjetri <rikpjetri@gmail.com>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -85,7 +85,7 @@ msgstr "Fshij historinë e përdorimit"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -99,7 +99,7 @@ msgstr "Regjistrat (logs)"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -125,7 +125,7 @@ msgstr "Multimedia shfaqës"
 #: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
 #: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
 #: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml ../cleaners/docker.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
@@ -149,8 +149,9 @@ msgstr "Cache (vend i fshehtë)"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
+#: ../cleaners/android_studio.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -707,6 +708,22 @@ msgstr "Fshij filet e vjetër"
 msgid "Package lists"
 msgstr "Listat e pakove"
 
+#: ../cleaners/docker.xml
+msgid "Container platform"
+msgstr ""
+
+#. Label for Claude coding assistant
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+msgid "AI assistant"
+msgstr ""
+
+#. Description for deleting Claude Code sessions
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+#, fuzzy
+#| msgid "Delete the command history"
+msgid "Delete the conversation history"
+msgstr "Fshij historinë e komandave"
+
 #: ../cleaners/android_studio.xml
 #, fuzzy
 #| msgid "Desktop environment"
@@ -760,11 +777,6 @@ msgstr "Shfaqësi i dokumentit"
 msgid "Custom folders will be reset."
 msgstr "Dosjet e përshtatura do të rivendosen."
 
-#. Label for Claude coding assistant
-#: ../cleaners/claude.xml
-msgid "AI assistant"
-msgstr ""
-
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
 #, fuzzy
@@ -778,13 +790,6 @@ msgstr "Historia e formularit"
 #| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
 msgstr "Fshij listën e dokumenteve të përdorura së fundi"
-
-#. Description for deleting Claude Code sessions
-#: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
-msgid "Delete the conversation history"
-msgstr "Fshij historinë e komandave"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"

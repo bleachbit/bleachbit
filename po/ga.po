@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-09-23 20:05-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-29 10:27-0600\n"
 "PO-Revision-Date: 2026-09-25 16:06+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
-"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/>"
-"\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/"
+">\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
-"6 && n<11) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
+"(n>6 && n<11) ? 3 : 4;\n"
 "X-Generator: Weblate 2026.10.dev0\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -85,7 +85,7 @@ msgstr "Scrios an stair úsáide"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -99,7 +99,7 @@ msgstr "Logaí"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
@@ -125,7 +125,7 @@ msgstr "Amharcóir ilmheán"
 #: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
 #: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
 #: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml ../cleaners/docker.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
@@ -149,8 +149,9 @@ msgstr "Taisce"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
+#: ../cleaners/android_studio.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -704,6 +705,20 @@ msgstr "Scrios comhaid atá imithe i léig"
 msgid "Package lists"
 msgstr "Liostaí pacáistí"
 
+#: ../cleaners/docker.xml
+msgid "Container platform"
+msgstr ""
+
+#. Label for Claude coding assistant
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+msgid "AI assistant"
+msgstr "Cúntóir AI"
+
+#. Description for deleting Claude Code sessions
+#: ../cleaners/docker.xml ../cleaners/claude.xml
+msgid "Delete the conversation history"
+msgstr "Scrios stair an chomhrá"
+
 #: ../cleaners/android_studio.xml
 msgid "Development environment"
 msgstr "Timpeallacht forbartha"
@@ -753,11 +768,6 @@ msgstr "Amharcóir cáipéisí"
 msgid "Custom folders will be reset."
 msgstr "Athshocrófar fillteáin saincheaptha."
 
-#. Label for Claude coding assistant
-#: ../cleaners/claude.xml
-msgid "AI assistant"
-msgstr "Cúntóir AI"
-
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
 msgid "File history"
@@ -767,11 +777,6 @@ msgstr "Stair chomhaid"
 #: ../cleaners/claude.xml
 msgid "Delete the file history used for /restore"
 msgstr "Scrios an stair chomhaid a úsáideadh le haghaidh /restore"
-
-#. Description for deleting Claude Code sessions
-#: ../cleaners/claude.xml
-msgid "Delete the conversation history"
-msgstr "Scrios stair an chomhrá"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
