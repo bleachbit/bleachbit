@@ -11,8 +11,10 @@ later.  See the COPYING file in the top-level directory.
 <cleaner id="zen">
   <label>Zen</label>
   <description>Web browser</description>
+  <running type="exe" os="unix" same_user="true">zen</running>
+  <running type="exe" os="unix" same_user="true">zen-bin</running>
   <running type="exe" os="unix" same_user="true">zen-browser</running>
-  <running type="exe" os="windows" same_user="true">zen-browser.exe</running>
+  <running type="exe" os="windows" same_user="true">zen.exe</running>
   <running type="pathname">~/.zen/*.default/lock</running>
   <running type="pathname">~/snap/zen/common/.zen/*.default/lock</running>
   <running type="pathname">~/.var/app/app.zen_browser.zen/.zen/*.default*/lock</running>

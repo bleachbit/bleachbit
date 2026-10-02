@@ -21,7 +21,8 @@ Unlike Chromium, Opera does not support multiple profiles.
          directories. -->
     <value os="windows" search="glob">%AppData%\Opera Software\Opera*</value>
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
-    <value os="linux" search="glob">~/snap/opera*/*/.config/opera*</value>
+    <!-- [0-9]* skips the "current" symlink, which would list each revision twice -->
+    <value os="linux" search="glob">~/snap/opera*/[0-9]*/.config/opera*</value>
   </var>
   <var name="profile">
     <!-- Is it still needed without Default? -->
@@ -32,8 +33,8 @@ Unlike Chromium, Opera does not support multiple profiles.
          ~/snap/opera-beta/60/.config/opera-beta
          ~/snap/opera/420/.config/opera/Default on Opera 126 installed by snap -->
     <!-- Is it still needed without Default? -->
-    <value os="linux" search="glob">~/snap/opera*/*/.config/opera*</value>
-    <value os="linux" search="glob">~/snap/opera*/*/.config/opera*/Default</value>
+    <value os="linux" search="glob">~/snap/opera*/[0-9]*/.config/opera*</value>
+    <value os="linux" search="glob">~/snap/opera*/[0-9]*/.config/opera*/Default</value>
   </var>
   <var name="localapp">
     <value os="windows" search="glob">%LocalAppData%\Opera Software\Opera*</value>
@@ -86,6 +87,7 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity"/>
     <!-- Before Opera 15 -->
     <!-- C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
@@ -120,6 +122,8 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
     <action command="delete" search="file" path="$$profile$$/Reporting and NEL-journal"/>
     <action command="delete" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Reporting and NEL-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Reporting and NEL"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
@@ -168,7 +172,6 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
     <action command="delete" search="walk.all" path="$$profile$$/Session Storage"/>
     <!-- Before Opera 15 -->
     <action command="delete" search="walk.all" path="%AppData%\Opera\Opera*\pstorage\"/>
@@ -180,6 +183,8 @@ Unlike Chromium, Opera does not support multiple profiles.
     <warning>This option will delete your saved passwords.</warning>
     <action command="delete" search="file" path="$$profile$$/Login Data"/>
     <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account-journal"/>
     <!-- Before Opera 15 -->
     <action command="delete" search="file" path="~/.opera/wand.dat"/>
   </option>
@@ -214,10 +219,12 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/SharedStorage"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Affiliation Database"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Trust Tokens"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Trust Tokens"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/DIPS"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/MediaDeviceSalts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/ServerCertificate"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Reporting and NEL"/>
     <!-- Thumbnails was an SQLite file until about January 2016 and is a folder by Chrome 48 -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>

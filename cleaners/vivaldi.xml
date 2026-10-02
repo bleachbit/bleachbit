@@ -20,14 +20,12 @@ Only the Default profile is cleaned.
   <var name="base">
     <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi</value>
-    <value os="linux">~/.config/vivaldi</value>
     <value os="linux">~/snap/vivaldi/current/.config/vivaldi</value>
     <value os="macos">$HOME/Library/Application Support/Vivaldi</value>
   </var>
   <var name="profile">
     <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi/Default</value>
-    <value os="linux">~/.config/vivaldi/Default</value>
     <value os="linux">~/snap/vivaldi/current/.config/vivaldi/Default</value>
     <value os="macos">$HOME/Library/Application Support/Vivaldi/Default</value>
   </var>
@@ -40,9 +38,12 @@ Only the Default profile is cleaned.
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Cache"/>
     <action command="delete" search="walk.all" path="$$profile$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <!-- specific to OS or packaging -->
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/vivaldi/"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/Vivaldi/" os="macos"/>
     <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/mesa_shader_cache_db"/>
     <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/mesa_shader_cache"/>
     <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/vivaldi"/>
@@ -52,7 +53,10 @@ Only the Default profile is cleaned.
     <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="cookie" search="file" path="$$profile$$/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
+    <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
@@ -114,6 +118,8 @@ Only the Default profile is cleaned.
     <warning>This option will delete your saved passwords.</warning>
     <action command="delete" search="file" path="$$profile$$/Login Data"/>
     <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account-journal"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
@@ -123,6 +129,7 @@ Only the Default profile is cleaned.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Calendar"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Contacts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/DIPS"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Favicons"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/heavy_ad_intervention_opt_out.db"/>
@@ -138,6 +145,7 @@ Only the Default profile is cleaned.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Trust Tokens"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Trust Tokens"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>
   </option>
 </cleaner>

@@ -9,6 +9,7 @@ Test cases for module CleanerML
 """
 
 # standard imports
+import json
 import os
 import shutil
 import sys
@@ -17,7 +18,7 @@ from unittest import mock
 # first party imports
 import bleachbit
 from tests import common
-from bleachbit import Cleaner
+from bleachbit import Cleaner, Command
 from bleachbit.CleanerML import (
     CleanerML,
     boolstr_to_bool,
@@ -26,6 +27,8 @@ from bleachbit.CleanerML import (
     list_cleanerml_files,
     load_cleaners,
     pot_fragment)
+from bleachbit.General import os_match
+from bleachbit.Process import ProcessInfo, process_cache
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -57,6 +60,27 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         xmlcleaner = self._get_xmlcleaner()
         # really delete
         self.run_all(xmlcleaner, True)
+
+    def _bundled_cleaner(self, cleaner_id, platform=sys.platform):
+        """Load a bundled cleaner as if running on platform"""
+        with mock.patch('bleachbit.CleanerML.general_os_match',
+                        lambda os_str, _platform: os_match(os_str, platform)):
+            return CleanerML(f'cleaners/{cleaner_id}.xml').get_cleaner()
+
+    def _bundled_option_paths(self, cleaner_id, option_id, platform=sys.platform):
+        """Return the paths an option of a bundled cleaner would touch"""
+        cleaner = self._bundled_cleaner(cleaner_id, platform)
+        # glob values end in a separator, so a path can hold '//'
+        return [os.path.normpath(cmd.path)
+                for cmd in cleaner.get_commands(option_id)]
+
+    def _bundled_cleaner_detects(self, cleaner_id, platform, exename):
+        """Return whether a bundled cleaner treats exename as its app running"""
+        cleaner = self._bundled_cleaner(cleaner_id, platform)
+        procs = (ProcessInfo(1234, exename, True),)
+        with mock.patch.object(process_cache, 'get', return_value=procs), \
+                mock.patch('bleachbit.Process.IS_WINDOWS', platform == 'win32'):
+            return cleaner.is_process_running()
 
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""
@@ -461,3 +485,263 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.run_all(xmlc, True)
         self.assertNotExists(test_log_path_a)
         self.assertNotExists(test_log_path_b)
+
+    @common.skipIfWindows
+    def test_safari_cookies_skip_other_apps(self):
+        """Safari cookies leave other apps' jars in ~/Library/HTTPStorages"""
+        home = self.mkdtemp(prefix='bleachbit-safari-home')
+        storages = os.path.join(home, 'Library', 'HTTPStorages')
+        safari_jar = os.path.join(storages, 'com.apple.Safari.binarycookies')
+        other_jar = os.path.join(storages, 'us.zoom.xos.binarycookies')
+        common.touch_file(safari_jar)
+        common.touch_file(other_jar)
+        with common.set_temporary_env('HOME', home):
+            paths = self._bundled_option_paths('safari', 'cookies', 'darwin')
+        self.assertIn(safari_jar, paths)
+        self.assertNotIn(other_jar, paths)
+
+    @common.skipIfWindows
+    def test_vivaldi_cookies_network(self):
+        """Vivaldi cookies cover the Network/ subdirectory used on Windows"""
+        config = self.mkdtemp(prefix='bleachbit-vivaldi-config')
+        cookies = os.path.join(
+            config, 'vivaldi', 'Default', 'Network', 'Cookies')
+        common.touch_file(cookies)
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            self.assertIn(cookies, self._bundled_option_paths(
+                'vivaldi', 'cookies', 'linux'))
+            self.assertIn(cookies, self._bundled_option_paths(
+                'vivaldi', 'vacuum', 'linux'))
+
+    @common.skipIfWindows
+    def test_vivaldi_cache_disk_cache(self):
+        """Vivaldi cache covers the HTTP disk cache"""
+        cache_home = self.mkdtemp(prefix='bleachbit-vivaldi-cache')
+        entry = os.path.join(cache_home, 'vivaldi', 'Default', 'Cache',
+                             'Cache_Data', 'f_000001')
+        common.touch_file(entry)
+        with common.set_temporary_env('XDG_CACHE_HOME', cache_home):
+            self.assertIn(entry, self._bundled_option_paths(
+                'vivaldi', 'cache', 'linux'))
+
+    @common.skipIfWindows
+    def test_site_data_keeps_extension_state(self):
+        """Chromium-based site data leaves the extension StateStore alone"""
+        config = self.mkdtemp(prefix='bleachbit-extension-state')
+        profiles = {
+            'brave': 'BraveSoftware/Brave-Browser/Default',
+            'chromium': 'chromium/Default',
+            'microsoft_edge': 'microsoft-edge/Default',
+            'opera': 'opera',
+        }
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            for cleaner_id, profile in profiles.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    local_storage = os.path.join(
+                        config, profile, 'Local Storage', '000003.log')
+                    state = os.path.join(
+                        config, profile, 'Extension State', '000003.log')
+                    common.touch_file(local_storage)
+                    common.touch_file(state)
+                    paths = self._bundled_option_paths(
+                        cleaner_id, 'site_data', 'linux')
+                    self.assertIn(local_storage, paths)
+                    self.assertNotIn(state, paths)
+
+    @common.skipIfWindows
+    def test_chrome_sync_keeps_profile_list(self):
+        """Signing out of Chrome keeps every profile in Local State"""
+        config = self.mkdtemp(prefix='bleachbit-chrome-sync')
+        local_state = os.path.join(config, 'google-chrome', 'Local State')
+        os.makedirs(os.path.dirname(local_state))
+        info_cache = {
+            'Default': {'name': 'Personal', 'user_name': 'me@example.com',
+                        'is_consented_primary_account': True},
+            'Profile 1': {'name': 'Work'},
+        }
+        self.write_file(local_state, text=json.dumps(
+            {'profile': {'info_cache': info_cache, 'last_used': 'Profile 1'}}))
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            cleaner = self._bundled_cleaner('google_chrome', 'linux')
+            for cmd in cleaner.get_commands('sync'):
+                if cmd.path == local_state:
+                    list(cmd.execute(True))
+        with open(local_state, encoding='utf-8') as f:
+            profile = json.load(f)['profile']
+        self.assertEqual(['Default', 'Profile 1'],
+                         sorted(profile['info_cache']))
+        self.assertEqual('Profile 1', profile['last_used'])
+        self.assertEqual({'name': 'Personal'},
+                         profile['info_cache']['Default'])
+
+    @common.skipIfWindows
+    def test_chromium_network_hsts_nel(self):
+        """HSTS and NEL are cleaned from the Network/ subdirectory"""
+        config = self.mkdtemp(prefix='bleachbit-network-hsts')
+        profiles = {
+            'brave': 'BraveSoftware/Brave-Browser/Default',
+            'chromium': 'chromium/Default',
+            'google_chrome': 'google-chrome/Default',
+            'microsoft_edge': 'microsoft-edge/Default',
+            'opera': 'opera',
+            'vivaldi': 'vivaldi/Default',
+        }
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            for cleaner_id, profile in profiles.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    network = os.path.join(config, profile, 'Network')
+                    hsts = os.path.join(network, 'TransportSecurity')
+                    nel = os.path.join(network, 'Reporting and NEL')
+                    common.touch_file(hsts)
+                    common.touch_file(nel)
+                    self.assertIn(hsts, self._bundled_option_paths(
+                        cleaner_id, 'cookies', 'linux'))
+                    if cleaner_id != 'vivaldi':
+                        self.assertIn(nel, self._bundled_option_paths(
+                            cleaner_id, 'history', 'linux'))
+
+    def test_ie_history_keeps_feature_control(self):
+        """IE history leaves the Internet Feature Control settings alone"""
+        cleaner = self._bundled_cleaner('internet_explorer', 'win32')
+        with mock.patch('bleachbit.Action.IS_WINDOWS', True):
+            keys = [cmd.keyname for cmd in cleaner.get_commands('history')
+                    if isinstance(cmd, Command.Winreg)]
+        self.assertIn(
+            r'HKCU\Software\Microsoft\Internet Explorer\TypedURLs', keys)
+        self.assertNotIn(
+            r'HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl', keys)
+
+    def test_chromium_running_debian(self):
+        """Chromium is detected under the name Debian and Arch run it as"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'chromium', 'linux', 'chromium'))
+
+    def test_firefox_running_esr(self):
+        """Debian's Firefox ESR is detected as a running Firefox"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'firefox', 'linux', 'firefox-esr'))
+
+    def test_librewolf_running_windows(self):
+        """LibreWolf is detected as running on Windows"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'librewolf', 'win32', 'librewolf.exe'))
+
+    def test_zen_running(self):
+        """Zen is detected under the names its builds run as"""
+        for platform, exename in (('linux', 'zen'), ('linux', 'zen-bin'),
+                                  ('win32', 'zen.exe')):
+            with self.subTest(platform=platform, exename=exename):
+                self.assertTrue(self._bundled_cleaner_detects(
+                    'zen', platform, exename))
+
+    @common.skipIfWindows
+    def test_chromium_brave_every_profile(self):
+        """Chromium and Brave clean profiles other than Default"""
+        config = self.mkdtemp(prefix='bleachbit-chromium-profiles')
+        bases = {
+            'brave': 'BraveSoftware/Brave-Browser',
+            'chromium': 'chromium',
+        }
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            for cleaner_id, base in bases.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    history = os.path.join(
+                        config, base, 'Profile 1', 'History')
+                    common.touch_file(history)
+                    self.assertIn(history, self._bundled_option_paths(
+                        cleaner_id, 'history', 'linux'))
+
+    @common.skipIfWindows
+    def test_passwords_login_data_for_account(self):
+        """Passwords delete the account password store too"""
+        config = self.mkdtemp(prefix='bleachbit-login-data')
+        profiles = {
+            'brave': 'BraveSoftware/Brave-Browser/Default',
+            'chromium': 'chromium/Default',
+            'google_chrome': 'google-chrome/Default',
+            'microsoft_edge': 'microsoft-edge/Default',
+            'opera': 'opera',
+            'vivaldi': 'vivaldi/Default',
+        }
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            for cleaner_id, profile in profiles.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    login_data = os.path.join(
+                        config, profile, 'Login Data For Account')
+                    common.touch_file(login_data)
+                    self.assertIn(login_data, self._bundled_option_paths(
+                        cleaner_id, 'passwords', 'linux'))
+
+    @common.skipIfWindows
+    def test_chrome_vacuum_skips_journal(self):
+        """Chrome vacuum does not open a rollback journal as a database"""
+        config = self.mkdtemp(prefix='bleachbit-chrome-vacuum')
+        profile = os.path.join(config, 'google-chrome', 'Default')
+        favicons = os.path.join(profile, 'Favicons')
+        journal = os.path.join(profile, 'Favicons-journal')
+        common.touch_file(favicons)
+        common.touch_file(journal)
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            paths = self._bundled_option_paths(
+                'google_chrome', 'vacuum', 'linux')
+        self.assertIn(favicons, paths)
+        self.assertNotIn(journal, paths)
+
+    @common.skipIfWindows
+    def test_vivaldi_opera_paths_once(self):
+        """Vivaldi and snap Opera list each file once"""
+        home = self.mkdtemp(prefix='bleachbit-duplicate-paths')
+        config = os.path.join(home, '.config')
+        vivaldi_history = os.path.join(config, 'vivaldi', 'Default', 'History')
+        opera_history = os.path.join(
+            home, 'snap', 'opera', '420', '.config', 'opera', 'History')
+        common.touch_file(vivaldi_history)
+        common.touch_file(opera_history)
+        os.symlink('420', os.path.join(home, 'snap', 'opera', 'current'))
+        # Bootstrap points XDG_CONFIG_HOME at ~/.config when it is unset
+        with common.set_temporary_env('HOME', home), \
+                common.set_temporary_env('XDG_CONFIG_HOME', config):
+            vivaldi_paths = self._bundled_option_paths(
+                'vivaldi', 'history', 'linux')
+            opera_paths = self._bundled_option_paths(
+                'opera', 'history', 'linux')
+        self.assertEqual(1, vivaldi_paths.count(vivaldi_history))
+        opera_real = [os.path.realpath(path) for path in opera_paths]
+        self.assertEqual(1, opera_real.count(os.path.realpath(opera_history)))
+
+    @common.skipIfWindows
+    def test_edge_cache_linux_disk_cache(self):
+        """Edge cache covers its disk cache under XDG_CACHE_HOME"""
+        cache_home = self.mkdtemp(prefix='bleachbit-edge-cache')
+        with common.set_temporary_env('XDG_CACHE_HOME', cache_home):
+            for channel in ('microsoft-edge', 'microsoft-edge-beta'):
+                with self.subTest(channel=channel):
+                    entry = os.path.join(cache_home, channel, 'Default',
+                                         'Cache', 'Cache_Data', 'f_000001')
+                    common.touch_file(entry)
+                    self.assertIn(entry, self._bundled_option_paths(
+                        'microsoft_edge', 'cache', 'linux'))
+
+    @common.skipIfWindows
+    def test_thunderbird_epiphany_cookie_keep_list(self):
+        """Thunderbird and Epiphany cookies go through the keep list"""
+        home = self.mkdtemp(prefix='bleachbit-cookie-keep')
+        config = os.path.join(home, '.config')
+        databases = {
+            'epiphany': os.path.join(config, 'epiphany', 'cookies.sqlite'),
+            'thunderbird': os.path.join(
+                home, '.thunderbird', 'abcd1234.default', 'cookies.sqlite'),
+        }
+        for path in databases.values():
+            common.touch_file(path)
+        with common.set_temporary_env('HOME', home), \
+                common.set_temporary_env('XDG_CONFIG_HOME', config), \
+                mock.patch('bleachbit.Action.load_keep_list',
+                           return_value={'example.com'}):
+            for cleaner_id, path in databases.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    cleaner = self._bundled_cleaner(cleaner_id, 'linux')
+                    commands = [cmd for cmd in cleaner.get_commands('cookies')
+                                if os.path.normpath(cmd.path) == path]
+                    self.assertEqual(1, len(commands))
+                    self.assertIsInstance(commands[0], Command.Function)
