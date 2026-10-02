@@ -44,6 +44,7 @@ Unlike Chromium, Opera does not support multiple profiles.
     <!-- Opera 126 has C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\ShaderCache -->
     <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUPersistentCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
@@ -52,6 +53,8 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="delete" search="file" path="$$profile$$/Network Persistent State.backup" os="unix"/>
     <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State.backup" os="windows"/>
     <action command="delete" search="walk.all" path="$$profile$$/Code Cache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnGraphiteCache/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="file" path="$$profile$$/Preferences.backup"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>

@@ -31,13 +31,18 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUPersistentCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="file" path="$$profile$$/Network Persistent State" os="unix"/>
     <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State" os="windows"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnGraphiteCache/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnGraphiteCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnWebGPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/GPUCache"/>
     <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network Persistent State" os="unix"/>
     <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network/Network Persistent State" os="windows"/>
     <!-- Windows-specific -->

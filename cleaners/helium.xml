@@ -39,6 +39,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
     <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUPersistentCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
@@ -50,7 +51,9 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$profile$$/DawnGraphiteCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnGraphiteCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnWebGPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/GPUCache"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
