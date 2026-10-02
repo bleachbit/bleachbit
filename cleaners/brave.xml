@@ -80,7 +80,7 @@ later.  See the COPYING file in the top-level directory.
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
-    <action command="delete" search="walk.all" path="$$base$$/Crashpad/" os="macos"/>
+    <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>

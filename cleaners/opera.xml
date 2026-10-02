@@ -105,6 +105,7 @@ Unlike Chromium, Opera does not support multiple profiles.
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
