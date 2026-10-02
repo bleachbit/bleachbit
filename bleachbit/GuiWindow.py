@@ -73,6 +73,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _scroll_again = False
     _register_generation = 0
     _app_menu_generation = None
+    _quit_after_worker = False
+    _refresh_pending = False
+    _worker_run = None
+    _worker_source = None
     recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
@@ -176,6 +180,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.connect("configure-event", self.on_configure_event)
         self.connect("window-state-event", self.on_window_state_event)
         self.connect("delete-event", self.on_delete_event)
+        self.connect("destroy", self.on_destroy)
         self.connect("show", self.on_show)
 
         if appicon_path and os.path.exists(appicon_path):
@@ -479,8 +484,12 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         else:
             self.destroy()
 
+    def _delete_confirmation_required(self):
+        """Return True unless expert mode turned the confirmation off"""
+        return options.get("delete_confirmation") or not options.get('expert_mode')
+
     def _confirm_delete(self, mention_preview, shred_settings=False):
-        if options.get("delete_confirmation") or not options.get('expert_mode'):
+        if self._delete_confirmation_required():
             return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
         return True
 
@@ -524,14 +533,17 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         Otherwise, return False to remove from idle queue.
         """
+        if self.refuse_if_busy():
+            return False
         # create a temporary cleaner object
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 
         operations = {'_gui': ['files']}
 
         # If no confirmation is requested, skip the preview.
-        if options.get("delete_confirmation"):
+        if self._delete_confirmation_required():
             self.preview_or_run_operations(False, operations)
+            preview = self.worker
             # Set the pending flag before the confirmation dialog because
             # the dialog runs a nested GTK main loop in which the preview
             # worker may finish and call worker_done().  If the flag is set
@@ -540,6 +552,12 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self._gui_cleaner_cleanup_pending = self.worker
             if not self._confirm_delete(False, shred_settings):
                 # User dis-confirmed the deletion.
+                return False
+            if self.worker is preview and self._worker_source is not None:
+                # It would write to the delete log and call worker_done()
+                self._stop_worker()
+            elif self.refuse_if_busy():
+                # A reload or another shred started during the dialog
                 return False
             # User confirmed.  If the preview already finished during the
             # confirmation dialog, worker_done() removed _gui from backends.
@@ -555,6 +573,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # continue with deletion.
         self.preview_or_run_operations(True, operations)
         if shred_settings:
+            # Exiting in worker_done() would skip the caller's config rebuild
+            self._quit_after_worker = True
             return True
 
         if self._auto_exit:
@@ -673,6 +693,19 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """
         return self.run_button.get_sensitive()
 
+    def refuse_if_busy(self):
+        """Tell the user and return True if an operation is running
+
+        Call it after the confirmation dialog: a reload can start during it.
+        """
+        if self.run_button_get_sensitive():
+            return False
+        self.show_infobar(
+            # TRANSLATORS: Error message shown in the infobar when the user
+            # starts an operation while another one is running.
+            _("Wait for the current operation to finish."))
+        return True
+
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
@@ -680,7 +713,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # Disable delete confirmation message.
         # if the option is selected under preference.
 
-        if self._confirm_delete(True):
+        if self._confirm_delete(True) and not self.refuse_if_busy():
             self.preview_or_run_operations(True)
 
     def _filter_operations_for_expert_mode(self, operations, really_delete):
@@ -752,13 +785,36 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self.worker = Worker.Worker(self, really_delete, operations)
         except Exception:
             logger.exception('Error in Worker()')
+            self.set_sensitive(True)
+            self.progressbar.hide()
         else:
             self.start_time = time.time()
-            worker = self.worker.run()
-            GLib.idle_add(worker.__next__)
+            self._worker_run = self.worker.run()
+            self._worker_source = GLib.idle_add(self._step_worker,
+                                                self._worker_run)
+
+    def _step_worker(self, worker_run):
+        """Run the worker up to its next yield"""
+        try:
+            return next(worker_run)
+        except Exception:
+            # PyGObject drops the source after printing the error
+            if worker_run is self._worker_run:
+                self._worker_source = None
+            raise
+
+    def _stop_worker(self):
+        """Stop the running worker without letting it finish"""
+        if self._worker_source is None:
+            return
+        GLib.source_remove(self._worker_source)
+        self._worker_source = None
+        self._worker_run.close()
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
+        if worker is self.worker:
+            self._worker_source = None
         # Remove the temporary _gui cleaner used for shred-paths and
         # wipe-empty-space operations, so it does not leak into the tree
         # view on the next refresh. For confirmed deletes, keep it through
@@ -777,12 +833,15 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # No scroll here: append_text() has queued one, and scrolling
         # before GTK lays out the new text makes it do that twice.
         self.set_sensitive(True)
+        if self._refresh_pending:
+            self._refresh_pending = False
+            self.cb_refresh_operations()
 
         # Close the program after cleaning is completed.
         # if the option is selected under preference.
 
         if really_delete:
-            if options.get("exit_done"):
+            if options.get("exit_done") and not self._quit_after_worker:
                 sys.exit()
 
         # notification for long-running process
@@ -817,6 +876,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Callback to refresh the list of cleaners and header bar labels"""
         if getattr(self, '_destroyed', False) or self.in_destruction():
             return False
+        if self._worker_source is not None:
+            # Registration empties backends, which the worker still reads
+            self._refresh_pending = True
+            return False
         bleachbit.log_startup_time('refresh started')
         # Only the newest registration may advance. A refresh can arrive
         # mid-way, e.g. from Preferences, and two would both fill backends.
@@ -838,6 +901,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 self.recognized_cleanerml = True
         # reload cleaners from disk
         self.progressbar.show()
+        # The tree shows stale rows until backends is refilled
+        self.set_sensitive(False)
+        self.stop_button.set_sensitive(False)
         rc = register_cleaners(self.update_progress_bar,
                                self.cb_register_cleaners_done,
                                allow_local=allow_local)
@@ -855,6 +921,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Called from register_cleaners()"""
         bleachbit.log_startup_time('cleaners registered')
         self.progressbar.hide()
+        # A running worker re-enables the window when it is done
+        if self._worker_source is None:
+            self.set_sensitive(True)
         # update tree view
         self.tree_store.refresh_rows()
         # expand tree view
@@ -909,7 +978,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             return
 
         # delete
-        if self._confirm_delete(False):
+        if self._confirm_delete(False) and not self.refuse_if_busy():
             self.preview_or_run_operations(True, operations)
             return
 
@@ -987,7 +1056,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             if info == 80:
                 uris = data.get_uris()
                 paths = FileUtilities.uris_to_paths(uris)
-                self.shred_paths(paths)
+                # uris_to_paths() logs the URIs it skipped
+                if paths:
+                    self.shred_paths(paths)
             # GtkTextView installs its own ::drag-data-received handler that
             # calls gtk_drag_finish(FALSE) when the view is not editable. On
             # Wayland that tears down the data offer in addition to the
@@ -1283,6 +1354,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         options.close()
         return False
 
+    def on_destroy(self, _widget):
+        """Stop the running operation so it does not outlive the window"""
+        self._stop_worker()
+
     def on_show(self, _widget):
         """Handle the show event.
 
@@ -1399,5 +1474,4 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             def update_button_state():
                 if updates:
                     self.update_button.show()
-                    self.set_sensitive(True)
             GLib.idle_add(update_button_state)

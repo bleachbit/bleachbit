@@ -128,8 +128,16 @@ def get_clipboard_paths(clipboard=None, targets=None):
         # Plain text pasted from a text editor
         text = clipboard.wait_for_text()
         if text:
-            shred_paths = [p.strip()
-                           for p in text.splitlines() if p.strip()]
+            for line in text.splitlines():
+                path = line.strip()
+                if not path:
+                    continue
+                if not os.path.isabs(path):
+                    # It would resolve against the working directory
+                    logger.warning(
+                        'Skipping relative path from clipboard: %s', path)
+                    continue
+                shred_paths.append(path)
     return shred_paths
 
 
@@ -349,6 +357,7 @@ def notify_plyer(msg):
 def threaded(func):
     """Decoration to create a threaded function"""
     def wrapper(*args):
-        thread = threading.Thread(target=func, args=args)
+        # Daemon, so a hung network request cannot hold up the exit
+        thread = threading.Thread(target=func, args=args, daemon=True)
         thread.start()
     return wrapper
