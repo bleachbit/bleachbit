@@ -12,6 +12,7 @@ Test case for module DeepScan
 # standard imports
 import os
 import shutil
+import subprocess
 import unittest
 from unittest import mock
 
@@ -24,6 +25,7 @@ from tests.common import SPECIAL_TEST_STRINGS
 from bleachbit import IS_MAC, IS_WINDOWS, FS_CASE_SENSITIVE
 from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
+from bleachbit.FileUtilities import openfiles
 
 if IS_WINDOWS:
     # pylint: disable-next=ungrouped-imports
@@ -156,6 +158,39 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertNotIn(keep_file, paths)
         self.assertIn(search_file, paths)
 
+    @common.skipIfWindows
+    def test_scan_skip_open(self):
+        """skip_open leaves files that a process holds open"""
+        open_fn = self.write_file('open.bbtestswp', b'x')
+        closed_fn = self.write_file('closed.bbtestswp', b'x')
+        searches = {self.tempdir: [
+            Search(command='delete', regex=r'\.bbtestswp$', skip_open=True)]}
+        # Open for reading so FreeBSD reports the path, as in test_open_files
+        with open(open_fn, 'rb'):
+            openfiles.scan()
+            paths = [cmd.path for cmd in DeepScan(
+                searches).scan() if cmd is not True]
+        self.assertEqual(paths, [closed_fn])
+
+    @common.skipIfWindows
+    def test_scan_skip_open_unlisted(self):
+        """skip_open keeps files when open files cannot be listed"""
+        self.write_file('a.bbtestswp', b'x')
+        # A second match catches a failed listing cached as empty
+        self.write_file('b.bbtestswp', b'x')
+        bak_fn = self.write_file('c.bbtestbak', b'x')
+        searches = {self.tempdir: [
+            Search(command='delete', regex=r'\.bbtestswp$', skip_open=True),
+            Search(command='delete', regex=r'\.bbtestbak$')]}
+        for exc in (FileNotFoundError('lsof'),
+                    subprocess.CalledProcessError(1, 'lsof')):
+            with self.subTest(exc=exc), \
+                    mock.patch('bleachbit.FileUtilities.open_files', side_effect=exc), \
+                    mock.patch.object(openfiles, 'last_scan_time', None):
+                paths = [cmd.path for cmd in DeepScan(
+                    searches).scan() if cmd is not True]
+                self.assertEqual(paths, [bak_fn])
+
     @common.skipUnlessWindows
     def test_scan_does_not_follow_junction(self):
         """DeepScan must not descend into a junction"""
@@ -188,8 +223,32 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 nwholeregex = action.get('nwholeregex')
                 break
         self.assertIsNotNone(wholeregex)
-        self.assertIsNotNone(nwholeregex)
         return CompiledSearch(Search(command='delete', wholeregex=wholeregex, nwholeregex=nwholeregex))
+
+    def test_angular_matches_only_cache_dir(self):
+        """.angular option should match the cache folder but not config files."""
+        cs = self._get_compiled_search('angular')
+        matched = [
+            ('/home/u/proj/.angular/cache/19.0.0/babel-webpack', 'x.json'),
+            (r'C:\Users\u\proj\.angular\cache', 'x.json'),
+        ]
+        excluded = [
+            ('/home/u', '.angular-config.json'),
+            ('/home/u/.config/angular', '.angular-config.json'),
+            ('/home/u/proj', '.angular.json'),
+            ('/home/u/proj', '.angular-cli.json'),
+            (r'C:\Users\u', '.angular-config.json'),
+        ]
+        for dirpath, filename in matched:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNotNone(
+                    cs.match(dirpath, filename),
+                    f"Should match {dirpath}/{filename}")
+        for dirpath, filename in excluded:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNone(
+                    cs.match(dirpath, filename),
+                    f"Should exclude {dirpath}/{filename}")
 
     def test_node_modules_excludes_dot_dirs(self):
         """node_modules option should exclude system/cache/editor directories."""
@@ -200,6 +259,10 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ('/home/morpheus/.npm/_npx/15b07286cbcc3329/node_modules',
              '.package-lock.json'),
             ('/home/smith/.cache/typescript/5.9/node_modules', '.package-lock.json'),
+            # root's home when running as root, on Linux and macOS
+            ('/root/.nvm/versions/node/v20.11.0/lib/node_modules/npm', 'index.js'),
+            ('/root/.vscode-server/bin/abc/node_modules/foo', 'index.js'),
+            ('/var/root/.nvm/versions/node/v20.11.0/lib/node_modules/npm', 'index.js'),
             (r'C:\Users\glados\.windsurf\extensions\ms-python.python-2026.4.0-universal\out\client\node_modules', 'unicode.js'),
             (r'C:\Users\glados\.cursor\projects\empty-window\canvases\node_modules', 'cursor.js'),
             (r'C:\Users\glados\AppData\Local\Programs\myapp\node_modules', 'file.js'),
@@ -229,6 +292,7 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             (r'C:\Users\esnowden\Documents\nsa\prism\node_modules\crypto-js', 'aes.js'),
             (r'C:\Users\chunkylover53\Documents\work-from-home\node_modules\click-button-automator\node_modules\is-buffer', 'index.js'),
             ('/home/chunkylover53/Downloads/donut-radar/node_modules/react-dom', 'bar.js'),
+            ('/root/projects/app/node_modules/react', 'index.js'),
         ]
         for dirpath, filename in matched:
             with self.subTest(dirpath=dirpath, filename=filename):
@@ -246,6 +310,13 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ('/home/username/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/venv',
              '__init__.py'),
             ('/home/username/.pyenv/versions/3.12.7/lib/python3.12/venv', '__init__.py'),
+            ('/home/username/miniconda3/lib/python3.12/venv', '__init__.py'),
+            ('/home/username/miniconda3/envs/foo/lib/python3.11/venv/scripts/common',
+             'activate'),
+            ('/home/username/src/cpython/Lib/venv', '__init__.py'),
+            (r'C:\Users\charlie\scoop\apps\python\3.12.4\Lib\venv', '__init__.py'),
+            # tool-managed venvs in root's home
+            ('/root/.local/share/uv/tools/ruff/.venv', 'pyvenv.cfg'),
             # pipx-managed venvs (managed by pipx, like npm cache)
             ('/home/username/.local/share/pipx/venvs/duplicity', 'pyvenv.cfg'),
             # typeshed stubs bundled with editor extensions
@@ -287,6 +358,9 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         matched = [
             ('/home/genisys/t800/.venv/yolo-v666', 'pyvenv.cfg'),
             ('/home/stark/jarvis/venv/yolo14', 'pyvenv.cfg'),
+            ('/root/projects/app/.venv', 'pyvenv.cfg'),
+            ('/home/stark/jarvis/venv/lib/python3.12/site-packages/numpy',
+             '__init__.py'),
             (r'C:\Users\esnowden\Documents\nsa\prism\venv', 'pyvenv.cfg'),
         ]
         if IS_WINDOWS:

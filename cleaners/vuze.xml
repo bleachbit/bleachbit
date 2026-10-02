@@ -15,16 +15,12 @@ later.  See the COPYING file in the top-level directory.
     <value os="windows">%AppData%\Azureus</value>
     <value os="linux">~/.azureus</value>
   </var>
-  <var name="ProgramFiles">
-    <!-- See https://docs.bleachbit.org/cml/variables.html for explanation of $$ProgramFiles$$ -->
-    <value os="windows">$$ProgramFiles$$\Vuze</value>
-  </var>
   <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
     <action command="delete" search="walk.files" path="$$Profile$$/" regex="\.[Bb][Aa][Kk]$"/>
-    <action command="delete" search="walk.all" path="$$ProgramFiles$$\backup\"/>
-    <action command="delete" search="walk.all" path="$$ProgramFiles$$\Vuze AzConfigBackup\"/>
+    <action command="delete" search="walk.all" path="$$ProgramFiles$$\Vuze\backup\"/>
+    <action command="delete" search="walk.all" path="$$ProgramFiles$$\Vuze\Vuze AzConfigBackup\"/>
   </option>
   <option id="cache">
     <label>Cache</label>
@@ -41,9 +37,9 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="glob" path="$$Profile$$/plugins/*/eventlog.txt"/>
     <action command="delete" search="file" path="$$Profile$$/update.log"/>
     <action command="delete" search="file" path="$$Profile$$/tracker.log"/>
-    <action command="delete" search="glob" path="$$ProgramFiles$$\*.log"/>
-    <action command="delete" search="walk.files" path="$$ProgramFiles$$\log\"/>
-    <action command="delete" search="glob" path="$$ProgramFiles$$\.install4j\*.log"/>
+    <action command="delete" search="glob" path="$$ProgramFiles$$\Vuze\*.log"/>
+    <action command="delete" search="walk.files" path="$$ProgramFiles$$\Vuze\log\"/>
+    <action command="delete" search="glob" path="$$ProgramFiles$$\Vuze\.install4j\*.log"/>
   </option>
   <option id="stats">
     <label>Statistics</label>

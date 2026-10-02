@@ -12,7 +12,7 @@ later.  See the COPYING file in the top-level directory.
   <label>Slack</label>
   <description>Chat client</description>
   <running type="exe" os="windows" same_user="true">slack.exe</running>
-  <running type="exe" os="linux" same_user="true">Slack</running>
+  <running type="exe" os="linux" same_user="true">slack</running>
   <var name="base">
     <value os="windows">%UserProfile%\AppData\Roaming\Slack</value>
     <value os="linux">~/.config/Slack</value>

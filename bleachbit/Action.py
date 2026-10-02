@@ -135,13 +135,17 @@ class FileActionProvider(ActionProvider):
         assert (isinstance(self.nwholeregex, (str, type(None))))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
+        if self.object_type not in ('', 'f', 'd'):
+            raise RuntimeError(f"Invalid type='{self.object_type}'")
         self._set_paths(action_element.getAttribute('path'), path_vars)
         self.ds = None
         if 'deep' == self.search:
+            skip_open = action_element.getAttribute('skip_open')
             self.ds = (self.paths[0], DeepScan.Search(
                 command=action_element.getAttribute('command'),
                 regex=self.regex, nregex=self.nregex,
-                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
+                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex,
+                skip_open=bool(skip_open) and General.boolstr_to_bool(skip_open)))
             if len(self.paths) != 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained

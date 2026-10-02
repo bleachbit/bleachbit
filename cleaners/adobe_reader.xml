@@ -22,7 +22,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="mru">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
-    <action command="delete" search="file" path="~/.adobe/Acrobat/*/Preferences/reader_prefs"/>
+    <!-- On Linux the list shares Preferences/reader_prefs with every other setting -->
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\5.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\6.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\7.0\AVGeneral\cRecentFiles"/>

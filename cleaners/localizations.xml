@@ -26,7 +26,8 @@ later.  See the COPYING file in the top-level directory.
     <path location="/usr/share">
       <!-- check for Qt translations in every folder's subfolder locale or translations -->
       <!-- also check for localizations in folders named locale(s)/translation(s) in every subfolder -->
-      <path directoryregex="^.*$">
+      <!-- X11 has its own rule below -->
+      <path directoryregex="^(?!X11$).*$">
         <path directoryregex="^(locale|translation)s?$">
           <regexfilter prefix=".*_" postfix="\.qm"/>
           <path location="." filter="*"/>
@@ -68,6 +69,10 @@ later.  See the COPYING file in the top-level directory.
       <path location="texmaker/" filter="*.dic"/>
       <path location="vim/vim74/lang" filter="menu_*.vim"/>
       <path location="vim/vim74/lang" filter="*"/>
+      <path location="X11/locale">
+        <!-- Every UTF-8 locale loads en_US.UTF-8/XLC_LOCALE and Compose -->
+        <regexfilter prefix="(?!en_US\.UTF-8$)" postfix=""/>
+      </path>
     </path>
     <path location="/var/lib/flatpak/runtime">
       <path directoryregex="^.*$">

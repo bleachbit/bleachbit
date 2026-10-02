@@ -11,7 +11,9 @@ later.  See the COPYING file in the top-level directory.
 <cleaner id="apt" os="linux">
   <label>APT</label>
   <description>Package manager</description>
+  <running type="exe" same_user="false">apt</running>
   <running type="exe" same_user="false">apt-get</running>
+  <running type="exe" same_user="false">aptitude</running>
   <running type="exe" same_user="false">synaptic</running>
   <!-- gnome-app-install uses synaptic -->
   <option id="clean">
@@ -32,6 +34,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="package_lists">
     <label>Package lists</label>
     <description>Delete the cache</description>
-    <action command="delete" search="walk.all" path="/var/lib/apt/lists/"/>
+    <!-- Unlinking the lock while apt holds it would let a second update run -->
+    <action command="delete" search="walk.all" path="/var/lib/apt/lists/" nregex="^lock$"/>
   </option>
 </cleaner>
