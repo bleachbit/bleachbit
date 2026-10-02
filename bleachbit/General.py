@@ -327,13 +327,29 @@ def makedirs(path):
         chownself(path)
 
 
+# Operating system tokens recognized in the os attribute.
+# Keep in sync with the os pattern in doc/cleaner_markup_language.xsd.
+VALID_OS_TOKENS = frozenset(
+    ('bsd', 'darwin', 'freebsd', 'linux', 'macos', 'netbsd', 'openbsd',
+     'unix', 'windows'))
+
+
 def _os_match_token(os_str, platform):
     """Return whether a single operating system token matches the platform
+
+    Returns True or False for a recognized token. An unrecognized token
+    logs a warning and returns None, which os_match() treats as a
+    non-match for a positive token and as a disqualifier for a negated
+    token (fail closed).
 
     Keyword arguments:
     os_str -- one operating system as written in XML (e.g., 'linux')
     platform -- used only for unit tests
     """
+    if os_str not in VALID_OS_TOKENS:
+        logger.warning(
+            'The os="%s" attribute is not recognized.', os_str)
+        return None
     # "darwin" is accepted as a deprecated alias for "macos"
     if os_str == 'darwin':
         logger.warning(
@@ -367,7 +383,9 @@ def os_match(os_str, platform=sys.platform):
         be a comma-separated list of tokens, each optionally negated
         with a leading '!' (e.g., 'unix,!macos'). If negated tokens
         are present, none may match; if positive tokens are present,
-        at least one must match.
+        at least one must match. An unrecognized token logs a warning:
+        a positive token is a non-match, and a negated token
+        disqualifies (fails closed).
     platform -- used only for unit tests
     """
     # If blank, return true.
@@ -377,10 +395,16 @@ def os_match(os_str, platform=sys.platform):
     neg_tokens = [t[1:] for t in tokens if t.startswith('!')]
     pos_tokens = [t for t in tokens if not t.startswith('!')]
 
-    if any(_os_match_token(t, platform) for t in neg_tokens):
+    # Evaluate every token so each unrecognized token logs a warning.
+    neg_results = [_os_match_token(t, platform) for t in neg_tokens]
+    pos_results = [_os_match_token(t, platform) for t in pos_tokens]
+
+    # An unrecognized negated token returns None, which disqualifies
+    # because its intent cannot be verified.
+    if any(r is not False for r in neg_results):
         return False
-    if pos_tokens:
-        return any(_os_match_token(t, platform) for t in pos_tokens)
+    if pos_results:
+        return any(pos_results)
     return True
 
 

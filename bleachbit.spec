@@ -15,6 +15,7 @@
 # Standard macro definitions on OBS.
 #  openSUSE:Leap:15.6 reports suse_version 1500
 #  openSUSE:Leap:16.0 reports suse_version 1600
+#  openSUSE:Leap:16.1 reports suse_version 1610
 #  openSUSE:Slowroll reports suse_version=1699
 #  openSUSE:Tumbleweed reports suse_version=1699
 #  CentOS_9_Stream reports centos_version=900
@@ -31,9 +32,11 @@
 %if 0%{?is_opensuse}
 %define pyprefix %{modern_python}
 %define is_leap 0
-%if 0%{?suse_version} <= 1600
+# Leap 16.x reports suse_version 1600, 1610, etc., while the rolling
+# Tumbleweed and Slowroll releases report 1699.
+%if 0%{?suse_version} < 1699
 %define is_leap 1
-%endif # suse_version <= 1600
+%endif # suse_version < 1699
 %if 0%{?suse_version} == 1500
 %define pyexe /usr/bin/python3.11
 %endif # suse_version == 1500
@@ -80,10 +83,10 @@ BuildRequires:  make
 BuildRequires:  %{pyprefix}
 BuildRequires:  python-rpm-macros
 BuildRequires:  %{pyprefix}-base
-# Leap 16.0 split the unversioned /usr/bin/python3 symlink into a separate
+# Leap 16.x split the unversioned /usr/bin/python3 symlink into a separate
 # python3-base package that is no longer pulled in transitively by
 # python313-base. Require it explicitly so %{__python3} resolves.
-%if 0%{?suse_version} == 1600
+%if %{is_leap} && 0%{?suse_version} >= 1600
 BuildRequires:  python3-base
 %endif
 BuildRequires:  %{pyprefix}-psutil

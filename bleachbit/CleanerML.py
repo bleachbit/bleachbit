@@ -146,7 +146,7 @@ class CleanerML:
         """Create cleaner from XML in pathname.
 
         If xlate_cb is set, use it as a callback for each
-        translate-able string.
+        translate-able string (untranslated, as in the XML).
 
         trusted is False for cleaners from user-writable directories;
         their command-execution actions are ignored.
@@ -244,16 +244,18 @@ class CleanerML:
 
     def handle_cleaner_label(self, label):
         """<label> element under <cleaner>"""
-        self.cleaner.name = _(_gettext_etree(label))
+        msgid = _gettext_etree(label)
+        self.cleaner.name = _(msgid)
         translate = label.attrib.get('translate', '')
         if translate and boolstr_to_bool(translate):
-            self.xlate_cb(self.cleaner.name)
+            self.xlate_cb(msgid)
 
     def handle_cleaner_description(self, description):
         """<description> element under <cleaner>"""
-        self.cleaner.description = _(_gettext_etree(description))
+        msgid = _gettext_etree(description)
+        self.cleaner.description = _(msgid)
         translators = description.attrib.get('translators', '')
-        self.xlate_cb(self.cleaner.description, translators)
+        self.xlate_cb(msgid, translators)
 
     def handle_cleaner_running(self, running_elements):
         """<running> element under <cleaner>"""
@@ -300,22 +302,25 @@ class CleanerML:
 
     def handle_cleaner_option_label(self, label):
         """<label> element under <option>"""
-        self.option_name = _(_gettext_etree(label))
+        msgid = _gettext_etree(label)
+        self.option_name = _(msgid)
         translate = label.attrib.get('translate', '')
         translators = label.attrib.get('translators', '')
         if not translate or boolstr_to_bool(translate):
-            self.xlate_cb(self.option_name, translators)
+            self.xlate_cb(msgid, translators)
 
     def handle_cleaner_option_description(self, description):
         """<description> element under <option>"""
-        self.option_description = _(_gettext_etree(description))
+        msgid = _gettext_etree(description)
+        self.option_description = _(msgid)
         translators = description.attrib.get('translators', '')
-        self.xlate_cb(self.option_description, translators)
+        self.xlate_cb(msgid, translators)
 
     def handle_cleaner_option_warning(self, warning):
         """<warning> element under <option>"""
-        self.option_warning = _(_gettext_etree(warning))
-        self.xlate_cb(self.option_warning)
+        msgid = _gettext_etree(warning)
+        self.option_warning = _(msgid)
+        self.xlate_cb(msgid)
 
     def handle_cleaner_option_action(self, action_node):
         """<action> element under <option>"""

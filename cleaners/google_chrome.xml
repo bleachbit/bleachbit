@@ -53,15 +53,22 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
     <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUPersistentCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <!-- Chrome 126 keeps Network Persistent State in $$profile$$ on Linux and in $$profile$$/Network on Windows -->
-    <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
-    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
+    <!-- Chrome 126 keeps Network Persistent State in $$profile$$ on Unix and in $$profile$$/Network on Windows -->
+    <action command="delete" search="file" path="$$profile$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State" os="windows"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnGraphiteCache/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnGraphiteCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnWebGPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/GPUCache"/>
+    <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network Persistent State" os="unix"/>
+    <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network/Network Persistent State" os="windows"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
@@ -92,14 +99,15 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
-    <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/TransportSecurity" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity" os="windows"/>
     <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/TransportSecurity"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
-    <action command="delete" search="walk.all" path="$$base$$/Crashpad/" os="macos"/>
+    <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>

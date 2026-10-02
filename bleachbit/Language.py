@@ -559,10 +559,14 @@ def setup_translation():
             "Error in setup_translation() with language code %s: %s", user_locale, e)
         t = None
         return
-    if hasattr(locale, 'bindtextdomain'):
+    # bindtextdomain() is for C gettext consumers (e.g., Gtk.Builder
+    # translating .ui files). CLI/TUI processes have no consumer.
+    from bleachbit.GtkShim import is_gtk_loaded
+    gtk_loaded = is_gtk_loaded()
+    if gtk_loaded and hasattr(locale, 'bindtextdomain'):
         locale.bindtextdomain(text_domain, locale_dir)
         locale.textdomain(text_domain)
-    elif IS_WINDOWS:
+    elif gtk_loaded and IS_WINDOWS:
         from bleachbit.Windows import flush_gettext_cache, load_i18n_dll
         libintl = load_i18n_dll()
         if not libintl:
@@ -591,8 +595,10 @@ def setup_translation():
         # Log for debugging
         logger.debug("Windows translation domain set to: %s, dir: %s",
                      text_domain, locale_dir)
-    else:
-        logger.error('The function bindtextdomain() is not available.')
+    elif gtk_loaded:
+        # FIXME (macOS): call libintl.dylib's bindtextdomain() via ctypes
+        # like Windows, so Gtk.Builder finds bleachbit.mo translations.
+        logger.warning('The function bindtextdomain() is not available.')
 
     # locale.setlocale() on Linux will throw an exception if the locale is not
     # available, so find the best matching locale. When set, Gtk.Builder is
