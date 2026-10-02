@@ -85,7 +85,8 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
-    <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/TransportSecurity" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity" os="windows"/>
     <!-- Before Opera 15 -->
     <!-- C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->

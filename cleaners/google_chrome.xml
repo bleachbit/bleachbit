@@ -92,7 +92,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
-    <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/TransportSecurity" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity" os="windows"/>
     <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/TransportSecurity"/>
   </option>
   <option id="crash_reports">
