@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-23 20:05-0600\n"
-"PO-Revision-Date: 2026-09-02 11:02+0000\n"
-"Last-Translator: Igor Rückert <igorruckert@yahoo.com.br>\n"
+"PO-Revision-Date: 2026-10-02 16:18+0000\n"
+"Last-Translator: Cirnos <cirnos@tuta.io>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bleachbit/main/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -854,6 +854,7 @@ msgstr "Atualizar para a versão %s"
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Excluir arquivos de programas de versões anteriores deixados por atualizações"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -2720,6 +2721,11 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"BleachBit pode não ter Acesso Total ao Disco. Sem ele, macOS bloqueia acesso "
+"a alguns arquivos, e alguns limpadores não funcionarão.\n"
+"\n"
+"Para corrigir isto, abra Ajustes do Sistema > Privacidade e Segurança > "
+"Acesso Total ao Disco, ative BleachBit, e reinicie BleachBit."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -3175,6 +3181,8 @@ msgstr "Caminho para limpeza %s precisa ser um diretório existente"
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Limpar espaço livre aqui é inseguro pois qualquer usuário pode alterar este "
+"diretório: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
