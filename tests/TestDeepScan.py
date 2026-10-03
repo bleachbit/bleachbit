@@ -12,6 +12,7 @@ Test case for module DeepScan
 # standard imports
 import os
 import shutil
+import unicodedata
 import unittest
 from unittest import mock
 
@@ -24,6 +25,7 @@ from tests.common import SPECIAL_TEST_STRINGS
 from bleachbit import IS_MAC, IS_WINDOWS, FS_CASE_SENSITIVE
 from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
+from bleachbit.FileUtilities import whitelisted
 
 if IS_WINDOWS:
     # pylint: disable-next=ungrouped-imports
@@ -155,6 +157,28 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         ]
         self.assertNotIn(keep_file, paths)
         self.assertIn(search_file, paths)
+
+    @common.skipIfWindows
+    def test_keep_list_decomposed_name(self):
+        """The macOS deep scan honors a kept file with a decomposed name"""
+        search_dir = self.mkdtemp()
+        keep_file = self.write_file(os.path.join(
+            search_dir, unicodedata.normalize('NFD', 'r\u00e9sum\u00e9.bbtestbak')))
+        options.set_whitelist_paths([('file', keep_file)])
+        searches = {
+            search_dir: [
+                Search(command='delete', regex=r'\.bbtestbak$')
+            ]
+        }
+        with mock.patch('bleachbit.DeepScan.IS_MAC', True), \
+                mock.patch('bleachbit.FileUtilities.IS_MAC', True):
+            paths = [
+                cmd.path
+                for cmd in DeepScan(searches).scan()
+                if cmd is not True
+            ]
+            self.assertEqual(1, len(paths))
+            self.assertTrue(whitelisted(paths[0]))
 
     @common.skipUnlessWindows
     def test_scan_does_not_follow_junction(self):

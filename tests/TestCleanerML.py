@@ -26,6 +26,7 @@ from bleachbit.CleanerML import (
     list_cleanerml_files,
     load_cleaners,
     pot_fragment)
+from bleachbit.Options import options
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -477,3 +478,39 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.run_all(xmlc, True)
         self.assertNotExists(test_log_path_a)
         self.assertNotExists(test_log_path_b)
+
+    def test_var_glob(self):
+        """A glob <var> value does not leave '//' in action paths"""
+        basedir = self.mkdtemp(prefix='bleachbit-cleanerml-glob')
+        xml_str = f"""
+<cleaner id="testvarglob">
+    <label>cleaner label</label>
+    <description>cleaner description</description>
+    <var name="profile">
+        <value search="glob">{basedir}/*</value>
+    </var>
+    <option id="option1">
+        <label>option1 label</label>
+        <description>option1 description</description>
+        <action search="file" command="delete" path="$$profile$$/test.log" />
+    </option>
+</cleaner>
+"""
+        cml_path = os.path.join(self.tempdir, 'test_var_glob.xml')
+        self.write_file(cml_path, xml_str.encode(sys.getdefaultencoding()))
+        profile = os.path.join(basedir, 'profile')
+        test_log_path = os.path.join(profile, 'test.log')
+        common.touch_file(test_log_path)
+        # The glob matches directories only
+        common.touch_file(os.path.join(basedir, 'profiles.ini'))
+
+        xmlc = CleanerML(cml_path)
+        self.assertEqual([profile], xmlc.vars['profile'])
+        commands = list(xmlc.cleaner.get_commands('option1'))
+        self.assertEqual([test_log_path], [cmd.path for cmd in commands])
+
+        options.set_whitelist_paths([('file', test_log_path)])
+        for cmd in commands:
+            for result in cmd.execute(False):
+                self.assertEqual(0, result['n_deleted'])
+        self.assertExists(test_log_path)
