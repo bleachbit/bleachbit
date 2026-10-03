@@ -718,6 +718,7 @@ def delete_unnecessary():
         r'_win32sysloader.pyd',
         r'perfmon.pyd',
         r'servicemanager.pyd',
+        r'share\icons\adwaita\cursors',  # unused, no cursor theme is set
         r'share\icons\highcontrast',
         r'win32evtlog.pyd',
     ]
