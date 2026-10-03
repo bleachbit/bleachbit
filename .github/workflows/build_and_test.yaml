@@ -238,7 +238,7 @@ jobs:
         with:
           path: |
             gtk*-${{ matrix.arch }}-windows.7z
-            gtk-themes.zip
+            gtk-themes.7z
             pygobject-*-${{ matrix.wheel }}.whl
             nsis-*-setup.exe
             advancecomp.zip
@@ -391,7 +391,7 @@ jobs:
           # This job doesn't mutate the tree, so caching it here is safe.
           path: |
             gtk*-${{ matrix.arch }}-windows.7z
-            gtk-themes.zip
+            gtk-themes.7z
             pygobject-*-${{ matrix.wheel }}.whl
             vcpkg_installed
           key: win-test-env-${{ matrix.arch }}-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}

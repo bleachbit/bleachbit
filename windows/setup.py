@@ -725,6 +725,7 @@ def delete_unnecessary():
         r'_win32sysloader.pyd',
         r'perfmon.pyd',
         r'servicemanager.pyd',
+        r'share\icons\adwaita\cursors',  # unused, no cursor theme is set
         r'share\icons\highcontrast',
         r'win32evtlog.pyd',
     ]
@@ -750,7 +751,9 @@ def delete_icons():
         'emblem-readonly.png',  # keep list page in preferences
         'emblem-readonly.svg',  # keep list page in preferences
     ]
-    _prune_assets(r'dist\share\icons', ['*.png', '*.svg'],
+    # AdwaitaLegacy's git markers would keep the pruned dirs from being removed
+    _prune_assets(r'dist\share\icons',
+                  ['*.png', '*.svg', '.placeholder', '.empty'],
                   icon_keep_list, label='protected icon')
 
 
