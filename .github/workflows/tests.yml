@@ -207,7 +207,7 @@ jobs:
           # requirements-test.txt is in the key.
           path: |
             gtk*-${{ matrix.arch }}-windows.7z
-            gtk-themes.zip
+            gtk-themes.7z
             pygobject-*-${{ matrix.wheel }}.whl
             vcpkg_installed
           # No workflow file in the key: editing the Linux jobs would

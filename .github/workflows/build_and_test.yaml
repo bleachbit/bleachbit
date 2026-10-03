@@ -87,7 +87,7 @@ jobs:
         with:
           path: |
             gtk*-${{ matrix.arch }}-windows.7z
-            gtk-themes.zip
+            gtk-themes.7z
             pygobject-*-${{ matrix.wheel }}.whl
             nsis-*-setup.exe
             advancecomp.zip
