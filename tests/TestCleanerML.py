@@ -26,6 +26,7 @@ from bleachbit.CleanerML import (
     list_cleanerml_files,
     load_cleaners,
     pot_fragment)
+from bleachbit.Process import ProcessInfo
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -91,6 +92,15 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             [r'C:\Windows\Sysnative', r'C:\Windows\SysWOW64'],
             variables['WindowsSystem'])
 
+    @common.skipUnlessLinux
+    def test_dnf_running(self):
+        """The DNF cleaner notices a running dnf"""
+        cleaner = CleanerML('cleaners/dnf.xml').get_cleaner()
+        for name in ('dnf', 'dnf5', 'yum'):
+            procs = (ProcessInfo(1234, name, False),)
+            with mock.patch('bleachbit.Process.process_cache.get', return_value=procs):
+                self.assertTrue(cleaner.is_process_running(), name)
+
     def test_list_cleanerml_files(self):
         """Unit test for list_cleanerml_files()"""
         for pathname in list_cleanerml_files():
@@ -137,6 +147,29 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         list(load_cleaners())
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
+
+    @common.skipUnlessLinux
+    def test_load_cleaners_twice_localizations(self):
+        """Reloading cleaners does not add the localization rules again"""
+        from bleachbit import Unix
+        tempdir = self.mkdtemp(prefix='bleachbit-cleanerml-loc')
+        os.makedirs(os.path.join(tempdir, 'share', 'locale', 'fr'))
+        cleaners_dir = os.path.join(tempdir, 'cleaners')
+        os.mkdir(cleaners_dir)
+        self.write_file(os.path.join(cleaners_dir, 'loc.xml'), text=(
+            '<cleaner id="loctest" os="linux"><label>x</label><localizations>'
+            f'<path location="{tempdir}/share"><path location="locale" filter="*"/></path>'
+            '</localizations></cleaner>'))
+        with mock.patch.object(bleachbit, 'personal_cleaners_dir', cleaners_dir), \
+                mock.patch.object(bleachbit, 'local_cleaners_dir', None), \
+                mock.patch.object(bleachbit, 'system_cleaners_dir', None), \
+                mock.patch.object(Unix, 'locales', Unix.Locales()), \
+                mock.patch.dict(Cleaner.backends):
+            list(load_cleaners())
+            list(load_cleaners())
+            paths = list(Unix.locales.localization_paths(['en']))
+        self.assertEqual(
+            paths, [os.path.join(tempdir, 'share', 'locale', 'fr')])
 
     def test_untrusted_process_action(self):
         """A process action is ignored for an untrusted cleaner"""

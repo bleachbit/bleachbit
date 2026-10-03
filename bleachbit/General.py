@@ -30,6 +30,7 @@ import shutil
 import stat
 import subprocess
 import sys
+import threading
 import xml.parsers.expat
 
 import bleachbit
@@ -420,6 +421,19 @@ def _set_detached_kwargs(kwargs):
     kwargs['close_fds'] = True
 
 
+def _release_detached(process):
+    """Drop a detached Popen without a ResourceWarning or a zombie"""
+    if IS_WINDOWS:
+        process.returncode = 0
+    else:
+        try:
+            # wait() reaps the child and sets returncode
+            threading.Thread(target=process.wait, daemon=True).start()
+        except RuntimeError:
+            # Leave it unreaped rather than report a failed launch
+            process.returncode = 0
+
+
 def run_external_nowait(args, env=None, kwargs=None):
     """Run an external program in the background. Return immediately.
 
@@ -446,7 +460,7 @@ def run_external_nowait(args, env=None, kwargs=None):
                                    stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL,
                                    env=env, **kwargs)
-        process.returncode = 0
+        _release_detached(process)
         if IS_WINDOWS:
             # Popen offers no public way to release the Windows handle.
             # pylint: disable-next=protected-access
@@ -521,7 +535,7 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
                                    stderr=subprocess.DEVNULL,
                                    stdin=subprocess.DEVNULL,
                                    env=env, **kwargs)
-        process.returncode = 0
+        _release_detached(process)
         return (0, '', '')
 
     with subprocess.Popen(args, stdout=stdout,

@@ -122,7 +122,8 @@ def _enumerate_proc_fs():
         pid = int(base)
         name = None
         try:
-            target = os.path.realpath(filename)
+            # realpath() no longer raises on EACCES in Python 3.13+
+            target = os.readlink(filename)
             # Google Chrome 74 on Ubuntu 19.04 showed up as
             # /opt/google/chrome/chrome (deleted)
             name = os.path.basename(target).replace(' (deleted)', '')
@@ -222,6 +223,12 @@ def is_process_running(exename, require_same_user):
         if name == exename and (not require_same_user or proc.same_user):
             return True
     return False
+
+
+def is_pid_running(pid, require_same_user):
+    """Check whether a process with this PID is running"""
+    return any(proc.pid == pid and (not require_same_user or proc.same_user)
+               for proc in process_cache.get())
 
 
 def terminate_process(exename, require_same_user):

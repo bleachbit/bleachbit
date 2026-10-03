@@ -13,9 +13,9 @@ later.  See the COPYING file in the top-level directory.
   <description>Web browser</description>
   <running type="exe" os="unix" same_user="true">zen-browser</running>
   <running type="exe" os="windows" same_user="true">zen-browser.exe</running>
-  <running type="pathname">~/.zen/*.default/lock</running>
-  <running type="pathname">~/snap/zen/common/.zen/*.default/lock</running>
-  <running type="pathname">~/.var/app/app.zen_browser.zen/.zen/*.default*/lock</running>
+  <running type="pathname">~/.zen/*/lock</running>
+  <running type="pathname">~/snap/zen/common/.zen/*/lock</running>
+  <running type="pathname">~/.var/app/app.zen_browser.zen/.zen/*/lock</running>
   <var name="base">
     <value os="windows">%AppData%\Zen</value>
     <value os="linux">~/.zen</value>
