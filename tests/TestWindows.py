@@ -681,6 +681,18 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         return_value = delete_registry_key('HKCU\\' + key, True)
         self.assertFalse(return_value)
 
+    def test_delete_registry_key_access_denied(self):
+        """Access denied opening the key is reported in preview and clean"""
+        denied = PermissionError(13, 'Access is denied', None, 5)
+        with mock.patch('bleachbit.Windows.winreg.OpenKey', side_effect=denied):
+            for really_delete in (False, True):
+                with self.subTest(really_delete=really_delete):
+                    with self.assertRaises(OSError) as cm:
+                        delete_registry_key(
+                            'HKCU\\Software\\BleachBit\\Denied', really_delete)
+                    self.assertEqual('Access denied in delete_registry_key()',
+                                     cm.exception.strerror)
+
     def test_delete_updates(self):
         """Unit test for delete_updates
 
@@ -1054,6 +1066,26 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertTrue(detect_registry_key('HKCU\\Software\\Microsoft\\'))
         self.assertTrue(not detect_registry_key(
             'HKCU\\Software\\DoesNotExist'))
+
+    def test_registry_helpers_use_64_bit_view(self):
+        """Registry keys open in the 64-bit view, even from 32-bit Python"""
+        key = 'HKLM\\Software\\BleachBitTestWow64'
+        not_found = FileNotFoundError(2, 'not found', None, 2)
+        with mock.patch('bleachbit.Windows.winreg.OpenKey',
+                        side_effect=not_found) as open_key:
+            self.assertFalse(detect_registry_key(key))
+            self.assertFalse(delete_registry_key(key, False))
+            self.assertFalse(delete_registry_value(key, 'value', False))
+            self.assertIsNone(read_registry_key(key, 'value'))
+        views = [call.args[3] & (winreg.KEY_WOW64_64KEY | winreg.KEY_WOW64_32KEY)
+                 for call in open_key.call_args_list]
+        # detection also looks in the 32-bit view
+        self.assertEqual([winreg.KEY_WOW64_64KEY, winreg.KEY_WOW64_32KEY] +
+                         [winreg.KEY_WOW64_64KEY] * 3, views)
+
+        with mock.patch('bleachbit.Windows.winreg.OpenKey',
+                        side_effect=[not_found, mock.MagicMock()]):
+            self.assertTrue(detect_registry_key(key))
 
     @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths(self):
