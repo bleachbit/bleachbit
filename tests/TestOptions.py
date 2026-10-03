@@ -24,7 +24,8 @@ from tests import common
 import bleachbit.Options
 from bleachbit import IS_WINDOWS
 from bleachbit.Options import (
-    _option_index, _option_sort_key, _section_sort_key)
+    _option_index, _option_sort_key, _section_sort_key,
+    protected_path_warning_key)
 from bleachbit.Log import is_debugging_enabled_via_cli
 
 
@@ -237,6 +238,26 @@ auto_hide = True
         o.close()
         self.assertEqual(set(old_keep_list), set(o.get_whitelist_paths()))
 
+    def test_paths_keep_surrounding_whitespace(self):
+        """Keep list and custom paths come back unchanged after a restart"""
+        self._write_private_options_file('[bleachbit]\n')
+        keep_list = [('folder', '/data/Photos '), ('file', '/data/b.txt\t'),
+                     ('file', '"/data/quoted"'), ('folder', '/data/plain')]
+        custom = [('folder', '/data/old\u00a0')]
+        o = bleachbit.Options.Options()
+        try:
+            o.set_whitelist_paths(keep_list)
+            o.set_custom_paths(custom)
+            o.commit()
+        finally:
+            o.close()
+        o2 = bleachbit.Options.Options()
+        try:
+            self.assertEqual(o2.get_whitelist_paths(), keep_list)
+            self.assertEqual(o2.get_custom_paths(), custom)
+        finally:
+            o2.close()
+
     def test_init_configuration(self):
         """Test for init_configuration()"""
         if os.path.exists(bleachbit.options_file):
@@ -244,6 +265,13 @@ auto_hide = True
         self.assertNotExists(bleachbit.options_file)
         bleachbit.Options.init_configuration()
         self.assertExists(bleachbit.options_file)
+
+    def test_init_configuration_chown_under_sudo(self):
+        """init_configuration() must give the new file back to the sudo user"""
+        with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chownself:
+            bleachbit.Options.init_configuration()
+        mock_chownself.assert_any_call(bleachbit.options_file)
 
     def test_open_config_write_refuses_symlink(self):
         """The config write must not follow a symlink to another file"""
@@ -281,6 +309,55 @@ auto_hide = True
         # https://github.com/bleachbit/bleachbit/issues/560#issuecomment-497361700
         _test_is_corrupt("[bleachbit]\nshred=['True']\n", True)
         os.remove(bleachbit.options_file)
+
+    def test_get_invalid_value(self):
+        """A corrupt value must not raise before the GUI can reset the file"""
+        self._write_private_options_file(
+            '[bleachbit]\ndark_mode = Tru\nwindow_x = left\n')
+        o = bleachbit.Options.Options()
+        try:
+            with self.assertLogs('bleachbit.Options',
+                                 level='WARNING') as log_context:
+                self.assertTrue(o.get('dark_mode'))
+                self.assertIsNone(o.get('window_x'))
+                # some options are read once per file, so warn only once
+                self.assertTrue(o.get('dark_mode'))
+            self.assertEqual(len(log_context.output), 2)
+            self.assertTrue(o.is_corrupt())
+        finally:
+            o.cancel_pending_flush()
+
+    def test_duplicate_key_keeps_later_sections(self):
+        """A duplicate key must not stop the read before the keep list"""
+        self._write_private_options_file('''[bleachbit]
+expert_mode = False
+expert_mode = True
+[whitelist/paths]
+0_type = folder
+0_path = /home/keep
+''')
+        o = bleachbit.Options.Options()
+        try:
+            self.assertTrue(o.get('expert_mode'))
+            self.assertEqual(o.get_whitelist_paths(),
+                             [('folder', '/home/keep')])
+        finally:
+            o.cancel_pending_flush()
+
+    def test_unreadable_file_is_moved_aside(self):
+        """A file with no section header must not be overwritten"""
+        filename = self._write_private_options_file('')
+        contents = '[bleachbit]\nshred = True\n'.encode('utf-16')
+        with open(filename, 'wb') as handle:
+            handle.write(contents)
+        with self.assertLogs('bleachbit.Options', level='ERROR'):
+            o = bleachbit.Options.Options()
+        try:
+            o.commit()
+        finally:
+            o.close()
+        with open(filename + '.bad', 'rb') as handle:
+            self.assertEqual(handle.read(), contents)
 
     def test_purge(self):
         """Test purging"""
@@ -364,6 +441,68 @@ auto_hide = True
             # forced commit() failure above never clears dirty/cancels the timer
             o.cancel_pending_flush()
 
+    def test_error_other_write_errors(self):
+        """Test that other write errors are logged instead of raised"""
+        o = bleachbit.Options.Options()
+        try:
+            for err in (errno.EROFS, errno.EPERM, errno.EDQUOT, errno.EIO):
+                with self.subTest(errno=errno.errorcode[err]):
+                    with mock.patch('builtins.open',
+                                    side_effect=OSError(err, os.strerror(err))):
+                        with self.assertLogs(level='ERROR') as log_context:
+                            o.set('test_key', str(err))
+                            o.commit()
+                    self.assertIn(bleachbit.options_file,
+                                  log_context.output[0])
+                    self.assertTrue(o._dirty)
+        finally:
+            o.cancel_pending_flush()
+
+    def test_failed_write_keeps_old_file(self):
+        """A write that fails part way must leave the old file whole"""
+        filename = self._write_private_options_file('''[bleachbit]
+[whitelist/paths]
+0_type = folder
+0_path = /home/keep
+''')
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            old_contents = handle.read()
+
+        def write_then_fail(fileobj, *_args, **_kwargs):
+            fileobj.write('[bleachbit]\n')
+            raise OSError(errno.ENOSPC, 'No space left on device')
+
+        o = bleachbit.Options.Options()
+        try:
+            with mock.patch.object(o.config, 'write', side_effect=write_then_fail):
+                with self.assertLogs(level='ERROR'):
+                    o.commit()
+        finally:
+            o.cancel_pending_flush()
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            self.assertEqual(handle.read(), old_contents)
+        self.assertEqual(
+            [name for name in os.listdir(self.tempdir) if name.endswith('.tmp')], [])
+
+    def test_write_in_place_when_move_is_denied(self):
+        """A writable file is saved in place when it cannot be replaced"""
+        filename = self._write_private_options_file('[bleachbit]\n')
+        denied = PermissionError(errno.EACCES, os.strerror(errno.EACCES))
+        for target in ('tempfile.mkstemp', 'os.replace'):
+            with self.subTest(target=target):
+                o = bleachbit.Options.Options()
+                try:
+                    o.set('test_key', target)
+                    with mock.patch(target, side_effect=denied):
+                        o.commit()
+                    self.assertFalse(o._dirty)
+                finally:
+                    o.close()
+                with open(filename, 'r', encoding='utf-8-sig') as handle:
+                    self.assertIn(f'test_key = {target}', handle.read())
+        self.assertEqual(
+            [name for name in os.listdir(self.tempdir) if name.endswith('.tmp')], [])
+
     def test_error_permission(self):
         """Test graceful degradation with permission errors"""
         permission_error = PermissionError('Permission denied')
@@ -423,7 +562,8 @@ protected_path = /tmp = True
         try:
             self.assertTrue(o.get_warning_preference(
                 'cleaner:google_chrome:passwords'))
-            self.assertTrue(o.get_warning_preference('protected_path:/tmp'))
+            self.assertTrue(o.get_warning_preference(
+                protected_path_warning_key('/tmp')))
             self.assertFalse(o.config.has_option('warnings', 'cleaner'))
             self.assertFalse(o.config.has_option('warnings', 'protected_path'))
             o.commit()
@@ -432,9 +572,42 @@ protected_path = /tmp = True
         with open(bleachbit.options_file, 'r', encoding='utf-8-sig') as handle:
             contents = handle.read()
         self.assertIn('cleaner:google_chrome:passwords = True', contents)
-        self.assertIn('protected_path:/tmp = True', contents)
+        self.assertIn(f'{protected_path_warning_key("/tmp")} = True', contents)
         self.assertNotIn('cleaner = google_chrome:passwords = True', contents)
         self.assertNotIn('protected_path = /tmp = True', contents)
+
+    def test_protected_path_warning_keys(self):
+        """Test paths that cannot be INI keys and raw keys from older files"""
+        filename = self._write_private_options_file('''[bleachbit]
+[warnings]
+protected_path = /srv/old=1 = True
+protected_path:/srv/raw = True
+[whitelist/paths]
+0_type = folder
+0_path = /home/keep
+''')
+        cleaner_xml = self.write_file('a=b.xml')
+        o = bleachbit.Options.Options()
+        try:
+            o.remember_warning_preference(
+                protected_path_warning_key('/srv/year=2023'))
+            o.set_hashpath(cleaner_xml, '0ABCD')
+            o.commit()
+        finally:
+            o.close()
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            contents = handle.read()
+        self.assertNotIn('protected_path:/', contents)
+
+        o2 = bleachbit.Options.Options()
+        try:
+            for path in ('/srv/year=2023', '/srv/old=1', '/srv/raw'):
+                self.assertTrue(o2.get_warning_preference(
+                    protected_path_warning_key(path)), path)
+            self.assertEqual(o2.get_whitelist_paths(),
+                             [('folder', '/home/keep')])
+        finally:
+            o2.close()
 
     def test_overrides(self):
         """Test CLI override functionality"""
