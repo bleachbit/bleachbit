@@ -291,26 +291,11 @@ jobs:
           set PATH=%MSYS_BIN%;%PATH%
           make PYTHON="%PYTHON_EXE%" -C po local
 
-      - name: Configure Windows Defender exclusion
-        shell: pwsh
-        # Windows kernel filter driver briefly locks newly-written DLLs written
-        # by strip.exe in setup.py
-        # Defender is already disabled with exclusion in place, so this step just
-        # verifies the status.
-        run: |
-          $status = Get-MpComputerStatus | Select-Object RealTimeProtectionEnabled, AMServiceEnabled
-          Write-Output "Defender status: $($status | Out-String)"
-          Write-Output "Current exclusions:"
-          (Get-MpPreference).ExclusionPath
-          # List kernel file system filter drivers for diagnostics.
-          Write-Output "File system filter drivers:"
-          fltmc filters
-
       - name: Build executable and installers
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         # The English-only installer is built only for tags (releases) to save
         # the cost of GHA minutes and storage.
-        # PR builds pass 'fast' (skips strip and the library.zip repack)
+        # PR builds pass 'fast' (skips the library.zip repack)
         # since windows-deploy never ships PR-triggered artifacts.
         # Tagged builds pass 'max-effort' (enables advzip zopfli recompression
         # and the English-only installer).
@@ -373,8 +358,7 @@ jobs:
           # a warm run skips both the slow Expand-Archive and the pip installs.
           # No restore-keys: a partial-key hit would restore a tree with stale
           # dependencies that the install script would then skip re-installing.
-          # This job doesn't mutate the tree, so caching it here is safe (unlike
-          # windows-build, whose shrink step strips files in place).
+          # This job doesn't mutate the tree, so caching it here is safe.
           path: |
             gtk*-x86-windows.zip
             gtk-themes.zip

@@ -77,7 +77,6 @@ if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
 SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 UPX_EXE = shutil.which('upx') or (ROOT_DIR + '\\upx\\upx.exe')
 UPX_OPTS = '--best --nrv2e'
-STRIP_EXE = shutil.which('strip')
 ADVZIP_EXE = shutil.which('advzip') or (ROOT_DIR + '\\advancecomp\\advzip.exe')
 
 
@@ -86,10 +85,10 @@ def get_build_settings():
 
     Presets:
       fast       - enable quick mode for PR builds
-                   * skip UPX, strip, and the library.zip repack
+                   * skip UPX and the library.zip repack
                    * set faster compression for .zip and NSIS
       regular    - default build
-                   * enables strip and the stored library.zip repack
+                   * enables the stored library.zip repack
                    * set maximum compression for .zip and NSIS
       max-effort - enable Deadpool mode for release builds
                    * build English-only installer
@@ -119,7 +118,6 @@ def get_build_settings():
         'upx_tag': '-upx' if upx_enabled else '',  # filename tag for UPX builds
         # recompress zips with advzip
         'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)),
-        'strip': not is_fast and bool(STRIP_EXE),  # strip executables
         'recompress_lib': not is_fast,  # prune and repack library.zip
     }
 
@@ -809,73 +807,6 @@ def clean_translations():
 
 
 @count_size_improvement
-def strip():
-    """Strip executables to reduce size"""
-    if not STRIP_EXE:
-        logger.warning('strip.exe does not exist. Skipping strip.')
-        return
-    strip_patterns = ['*.dll', '*.pyd']
-    strip_keep_list = ['_sqlite3.dll']
-    strip_list = recursive_glob('dist', strip_patterns)
-    strip_files_str = [f for f in strip_list if os.path.basename(
-        f) not in strip_keep_list]
-    logger.info('Stripping %d executables matching %s except %d filename%s',
-                len(strip_files_str),
-                ' '.join(strip_patterns),
-                len(strip_keep_list),
-                '' if len(strip_keep_list) == 1 else 's')
-    strip_tmp_fn = 'strip.tmp'
-    # Process each file individually in case it is locked. See
-    # https://github.com/bleachbit/bleachbit/issues/690
-    for strip_file in strip_files_str:
-        delete_file(strip_tmp_fn)
-        if not os.path.exists(strip_file):
-            logger.error('%s does not exist before stripping', strip_file)
-            continue
-        cmd = [STRIP_EXE, '--strip-debug', '--discard-all',
-               '--preserve-dates', '-o', strip_tmp_fn, strip_file]
-        returncode = run_cmd(cmd, check=False, log_cmd=False)
-        if returncode:
-            logger.error('strip.exe exited with code %d for %s',
-                         returncode, strip_file)
-            delete_file(strip_tmp_fn)
-            continue
-        if not os.path.exists(strip_file):
-            delete_file(strip_tmp_fn)
-            raise RuntimeError(f"{strip_file} disappeared after stripping")
-        if not os.path.exists(strip_tmp_fn):
-            logger.warning('%s was not produced by stripping %s',
-                           strip_tmp_fn, strip_file)
-            continue
-
-        # A kernel file system filter driver may briefly lock the file
-        # after strip.exe reads it, so we have a retry loop.
-        # https://github.com/bleachbit/bleachbit/issues/690
-        replaced = False
-        for attempt in range(100):
-            try:
-                os.replace(strip_tmp_fn, strip_file)  # atomic replace
-                replaced = True
-                break
-            except PermissionError:
-                if attempt == 0:
-                    logger.warning(
-                        'permissions error while replacing %s (retrying)',
-                        strip_file)
-                else:
-                    logger.debug(
-                        'retry %d replacing %s', attempt + 1, strip_file)
-                time.sleep(.1)
-        if not replaced:
-            logger.error(
-                'failed to replace %s after 100 retries; '
-                'keeping original (unstripped) and discarding %s',
-                strip_file, strip_tmp_fn)
-        delete_file(strip_tmp_fn)
-#    assert_execute_console()
-
-
-@count_size_improvement
 def upx():
     """Compress executables with UPX to reduce size"""
     if not os.path.exists(UPX_EXE):
@@ -1019,8 +950,6 @@ def shrink(settings):
     delete_unused_themes()
     clean_translations()
     remove_empty_dirs('dist')
-    if settings['strip']:
-        strip()
     if settings['upx']:
         upx()
     clean_dist_locale()
@@ -1154,8 +1083,8 @@ def main():
     logger.info('BleachBit version %s', get_version())
     environment_check()
     settings = get_build_settings()
-    logger.info('Build preset: %s (UPX: %s, AdvZip: %s, Strip: %s)',
-                settings['preset'], settings['upx'], settings['advzip'], settings['strip'])
+    logger.info('Build preset: %s (UPX: %s, AdvZip: %s)',
+                settings['preset'], settings['upx'], settings['advzip'])
     build()
     shrink(settings)
     package_portable(settings)
