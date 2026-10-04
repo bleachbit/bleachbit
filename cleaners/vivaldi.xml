@@ -19,7 +19,6 @@ Tested with Vivaldi 6.x on Windows 10/11, Linux and macOS.
   <var name="base">
     <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi</value>
-    <value os="linux">~/.config/vivaldi</value>
     <value os="linux" search="glob">~/snap/vivaldi/[0-9]*/.config/vivaldi</value>
     <value os="macos">$HOME/Library/Application Support/Vivaldi</value>
   </var>
@@ -28,7 +27,6 @@ Tested with Vivaldi 6.x on Windows 10/11, Linux and macOS.
     <value search="glob" os="windows">%LOCALAPPDATA%\Vivaldi\User Data\Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi/Default</value>
     <value search="glob" os="linux">$XDG_CONFIG_HOME/vivaldi/Profile *</value>
-    <value os="linux">~/.config/vivaldi/Default</value>
     <value os="linux" search="glob">~/snap/vivaldi/[0-9]*/.config/vivaldi/Default</value>
     <value search="glob" os="linux">~/snap/vivaldi/[0-9]*/.config/vivaldi/Profile *</value>
     <value os="macos">$HOME/Library/Application Support/Vivaldi/Default</value>
