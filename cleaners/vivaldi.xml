@@ -155,6 +155,7 @@ Only the Default profile is cleaned.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Trust Tokens"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Trust Tokens"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>
   </option>
 </cleaner>
