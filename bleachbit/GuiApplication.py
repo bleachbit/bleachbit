@@ -293,7 +293,11 @@ class Bleachbit(Gtk.Application):
             # before quitting (e.g. toggling a checkbox and closing the
             # app within a few seconds).
             options.commit()
-        self._window.destroy()
+        if self._window is not None:
+            self._window.destroy()
+        else:
+            # The GUI constructor has not returned yet, so no window is set.
+            Gtk.Application.quit(self)
 
     def get_system_information_dialog(self):
         """Show system information dialog"""
