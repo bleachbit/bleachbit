@@ -385,7 +385,8 @@ class CleanerTreeParentTogglePersistenceTestCase(_CleanerTreeEventLoopMixin, com
 
         self.assertFalse(tree1._enabled.get(("google_chrome", None), True))
         self.assertFalse(tree1._enabled.get(("google_chrome", "cache"), True))
-        self.assertFalse(tree1._enabled.get(("google_chrome", "cookies"), True))
+        self.assertFalse(tree1._enabled.get(
+            ("google_chrome", "cookies"), True))
 
         # Step 2: Enable cache and cookies individually
         for opt_name in ("cache", "cookies"):
@@ -639,7 +640,8 @@ class ConfirmScreenTestCase(common.BleachbitTestCase):
             async with app.run_test() as pilot:
                 app.push_screen(ConfirmScreen(1, 1, 10, 1024))
                 await pilot.pause()
-                self.assertTrue(app.screen.query_one("#btn-no", Button).has_focus)
+                self.assertTrue(app.screen.query_one(
+                    "#btn-no", Button).has_focus)
 
         asyncio.run(run())
 
@@ -741,21 +743,21 @@ class IntegrationTestCase(common.BleachbitTestCase):
                 # 1. Send numeric progress message
                 app.post_message(ProgressMessage(0.5))
                 await pilot.pause()
-                bar = app.query_one("#progress-bar")
-                self.assertEqual(bar.progress, 0.5)
-                self.assertEqual(bar.total, 1.0)
+                progress_bar = app.query_one("#progress-bar")
+                self.assertEqual(progress_bar.progress, 0.5)
+                self.assertEqual(progress_bar.total, 1.0)
 
                 # 2. Send string progress message (indeterminate)
                 app.post_message(ProgressMessage("Cleaning..."))
                 await pilot.pause()
-                self.assertIsNone(bar.progress)
-                self.assertIsNone(bar.total)
+                self.assertIsNone(progress_bar.progress)
+                self.assertIsNone(progress_bar.total)
 
                 # 3. Send numeric progress message again (restoring total)
                 app.post_message(ProgressMessage(0.75))
                 await pilot.pause()
-                self.assertEqual(bar.progress, 0.75)
-                self.assertEqual(bar.total, 1.0)
+                self.assertEqual(progress_bar.progress, 0.75)
+                self.assertEqual(progress_bar.total, 1.0)
 
         asyncio.run(run())
 

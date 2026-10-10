@@ -18,6 +18,9 @@ Differences from the main (GTK) Windows build:
 FIXME: stop duplicating code with windows/setup.py
 """
 
+# Helpers are intentionally copied from windows/setup.py; see FIXME above.
+# pylint: disable=duplicate-code
+
 # standard library
 import fnmatch
 import importlib.util
@@ -73,7 +76,8 @@ def archive(infile, outfile, fast_build):
     """Create an archive from a file"""
     assert_exist(infile)
     if os.path.exists(outfile):
-        logger.warning('Deleting output archive that already exists: %s', outfile)
+        logger.warning(
+            'Deleting output archive that already exists: %s', outfile)
         os.remove(outfile)
     sz_opts = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'
     if fast_build:
@@ -83,7 +87,8 @@ def archive(infile, outfile, fast_build):
     assert_exist(outfile)
     outfile_abs = os.path.abspath(outfile)
     outfile_size = os.path.getsize(outfile)
-    logger.info('Created archive: %s (%s bytes)', outfile_abs, f'{outfile_size:,}')
+    logger.info('Created archive: %s (%s bytes)',
+                outfile_abs, f'{outfile_size:,}')
 
 
 def recursive_glob(rootdir, patterns):
@@ -166,7 +171,8 @@ def copy_file(src, dst):
         if os.path.getsize(src) == os.path.getsize(dst):
             with open(src, 'rb') as f1, open(dst, 'rb') as f2:
                 if f1.read() == f2.read():
-                    logger.debug('files identical, skipping copy: %s to %s', src, dst)
+                    logger.debug(
+                        'files identical, skipping copy: %s to %s', src, dst)
                     return
         logger.warning('target file exists with different content: %s', dst)
         os.remove(dst)
@@ -354,8 +360,9 @@ def build_py2exe():
             options=options,
             version_info=version_info,
         )
-    except PermissionError as e :
-        logger.error("Failed to freeze: %s; check that other process does not have files open", e)
+    except PermissionError as e:
+        logger.error(
+            "Failed to freeze: %s; check that other process does not have files open", e)
         raise
 
 
@@ -371,7 +378,8 @@ def build():
             try:
                 shutil.rmtree(dir_path)
             except PermissionError as e:
-                logger.error("Failed to delete %s: %s. Check that another process does not have the file locked.", dir_path, e)
+                logger.error(
+                    "Failed to delete %s: %s. Check that another process does not have the file locked.", dir_path, e)
         if os.path.exists(dir_path):
             logger.error('failed to delete %s', os.path.abspath(dir_path))
 
@@ -467,7 +475,8 @@ def delete_unnecessary():
         if os.path.isdir(path):
             this_dir_size = get_dir_size(path)
             shutil.rmtree(path, ignore_errors=True)
-            logger.info('Deleting directory %s saved %s B', path, f'{this_dir_size:,}')
+            logger.info('Deleting directory %s saved %s B',
+                        path, f'{this_dir_size:,}')
         else:
             file_size = os.path.getsize(path)
             logger.info('Deleting file %s saved %s B', path, f'{file_size:,}')
@@ -583,12 +592,14 @@ def shrink(fast_build):
     try:
         remove_empty_dirs('dist')
     except PermissionError:
-        logger.error('Permission denied removing empty directories in dist: check for files locked by other process')
+        logger.error(
+            'Permission denied removing empty directories in dist: check for files locked by other process')
     upx(fast_build)
     delete_linux_only()
     recompress_library(fast_build)
 
-    logger.info('Final size of the dist folder: %s', f'{get_dir_size("dist"):,}')
+    logger.info('Final size of the dist folder: %s',
+                f'{get_dir_size("dist"):,}')
 
 
 # ---------------------------------------------------------------------------
