@@ -548,12 +548,21 @@ def recompress_library(fast_build):
         'urllib3',
         'unittest',
         'packaging',
-        'requests'
+        'requests',
+        'textual\\demo',
     ]
     for path in delete_paths:
         full_path = os.path.join('dist\\library', path)
         if os.path.exists(full_path):
             shutil.rmtree(full_path, ignore_errors=True)
+    # bleachbit.Memory wipes Linux swap/free memory and is never used on
+    # Windows (the 'memory' option is registered only on Linux).  Strip it
+    # from the Windows build.  Safe because Cleaner.py imports it lazily.
+    delete_files = ['bleachbit\\Memory.pyc']
+    for path in delete_files:
+        full_path = os.path.join('dist\\library', path)
+        if os.path.exists(full_path):
+            os.remove(full_path)
 
     os.chdir('dist\\library')
     cmd = f'{SZ_EXE} a -tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0 ..\\library.zip * -r'

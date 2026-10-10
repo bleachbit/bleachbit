@@ -153,6 +153,11 @@ def assert_execute(args, expected_output, timeout=120):
         logger.error('Command %s timed out after %ss. Partial output:\n%s',
                      args, timeout, partial)
         raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
+    except subprocess.CalledProcessError as e:
+        output = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s failed with exit code %s. Output:\n%s',
+                     args, e.returncode, output)
+        raise
     if -1 == actual_output.find(expected_output):
         raise RuntimeError(
             f'When running command {args} expected output {expected_output} but got {actual_output}')
@@ -852,21 +857,17 @@ def recompress_library(fast_build):
     # clean unused modules from library.zip
     delete_paths = ['plyer\\platforms\\android',
                     'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
-    # TUI-only: strip modules the TUI doesn't need
-    delete_paths += [
-        'textual\\demo',
-        'urllib3\\contrib\\emscripten',
-        'packaging\\licenses',
-        'bleachbit\\Memory.pyc',
-        '_pydecimal.pyc',
-    ]
+    # bleachbit.Memory wipes Linux swap/free memory and is never used on
+    # Windows (the 'memory' option is registered only on Linux).  Strip it
+    # from the Windows build.  Safe because Cleaner.py imports it lazily.
+    delete_files = ['bleachbit\\Memory.pyc']
     for p in delete_paths:
         path = os.path.join('dist', 'library', p)
-        if not os.path.exists(path):
-            continue
-        if os.path.isdir(path):
+        if os.path.exists(path):
             shutil.rmtree(path)
-        else:
+    for p in delete_files:
+        path = os.path.join('dist', 'library', p)
+        if os.path.exists(path):
             os.remove(path)
 
     # remove .dist-info metadata directories

@@ -20,6 +20,33 @@ from bleachbit.tui.cleaner_tree import CleanerTree
 from bleachbit.tui.screens.file_list import _escape_markup
 
 
+class _CleanerTreeEventLoopMixin:
+    """Ensure an asyncio event loop exists for tests that build CleanerTree.
+
+    CleanerTree subclasses Textual's Tree, whose __init__ creates an
+    asyncio.Lock().  On Python 3.9 that eagerly calls get_event_loop(),
+    which raises if a prior test set the loop to None.  Python 3.10+
+    defers this lazily, so creating a loop here would just leak an
+    unclosed event loop (and its AF_UNIX self-pipe sockets) on modern
+    Python.
+    """
+
+    def setUp(self):
+        super().setUp()
+        if sys.version_info < (3, 10):
+            self._setup_event_loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self._setup_event_loop)
+        else:
+            self._setup_event_loop = None
+
+    def tearDown(self):
+        loop = getattr(self, '_setup_event_loop', None)
+        if loop is not None:
+            loop.close()
+            asyncio.set_event_loop(None)
+        super().tearDown()
+
+
 class FileListMarkupTestCase(common.BleachbitTestCase):
     """Test markup escaping in file-list paths."""
 
@@ -35,7 +62,7 @@ class FileListMarkupTestCase(common.BleachbitTestCase):
             self.assertEqual(to_content(_escape_markup(path)).plain, path)
 
 
-class CleanerTreeNodeDataTestCase(common.BleachbitTestCase):
+class CleanerTreeNodeDataTestCase(_CleanerTreeEventLoopMixin, common.BleachbitTestCase):
     """Test that CleanerTree node.data stores human-readable names."""
 
     def test_populate_real_stores_names(self):
@@ -81,7 +108,7 @@ class CleanerTreeNodeDataTestCase(common.BleachbitTestCase):
         self.assertIsNone(tree.get_focused_option())
 
 
-class CleanerTreeLabelTestCase(common.BleachbitTestCase):
+class CleanerTreeLabelTestCase(_CleanerTreeEventLoopMixin, common.BleachbitTestCase):
     """Test label formatting for cleaner and option nodes."""
 
     def test_cleaner_label_contains_name_not_id(self):
@@ -120,7 +147,7 @@ class CleanerTreeLabelTestCase(common.BleachbitTestCase):
         self.assertNotIn("  cache", label_text)
 
 
-class CleanerTreeNavigationTestCase(common.BleachbitTestCase):
+class CleanerTreeNavigationTestCase(_CleanerTreeEventLoopMixin, common.BleachbitTestCase):
     """Test jump-to-top and jump-to-bottom navigation logic.
 
     Note: action_jump_to_top and action_jump_to_bottom require a mounted
@@ -279,7 +306,7 @@ class CleanerTreeNavigationTestCase(common.BleachbitTestCase):
                       "select_node should be called with cleaner parent")
 
 
-class TogglePersistenceTestCase(common.BleachbitTestCase):
+class TogglePersistenceTestCase(_CleanerTreeEventLoopMixin, common.BleachbitTestCase):
     """Test that toggle state tracking works correctly."""
 
     def test_enabled_tracks_state(self):
@@ -318,7 +345,7 @@ class TogglePersistenceTestCase(common.BleachbitTestCase):
         self.assertNotIn(("test", "opt2"), enabled)
 
 
-class CleanerTreeParentTogglePersistenceTestCase(common.BleachbitTestCase):
+class CleanerTreeParentTogglePersistenceTestCase(_CleanerTreeEventLoopMixin, common.BleachbitTestCase):
     """Test that parent toggle state persists correctly across close/reopen."""
 
     def setUp(self):
@@ -333,6 +360,7 @@ class CleanerTreeParentTogglePersistenceTestCase(common.BleachbitTestCase):
         from bleachbit.Options import options
         if options.config.has_section("tree"):
             options.config.remove_section("tree")
+        super().tearDown()
 
     def test_parent_toggle_persists_after_reopen(self):
         """Toggling a parent should persist after reopen.
@@ -416,7 +444,7 @@ class CleanerTreeParentTogglePersistenceTestCase(common.BleachbitTestCase):
         )
 
 
-class CleanerTreeFilterTestCase(common.BleachbitTestCase):
+class CleanerTreeFilterTestCase(_CleanerTreeEventLoopMixin, common.BleachbitTestCase):
     """Test filter/search functionality on the cleaner tree."""
 
     def _make_data(self):
