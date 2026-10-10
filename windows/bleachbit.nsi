@@ -371,7 +371,9 @@ Section "$(SECTION_CORE_NAME)" SectionCore
     # Build cache now while there is a GUI progress bar.
     DetailPrint "$(MULTIPRINT1)"
     DetailPrint "$(MULTIPRINT2)"
-    ExecWait '"$instdir\fc-cache.exe"'
+    # nsExec runs it without flashing a console window
+    nsExec::Exec '"$instdir\fc-cache.exe"'
+    Pop $0 ; exit code
 SectionEnd
 
 
