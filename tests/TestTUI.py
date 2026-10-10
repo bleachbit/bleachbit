@@ -805,3 +805,38 @@ class IntegrationTestCase(common.BleachbitTestCase):
                 self.assertFalse(isinstance(app.screen, FileListOverlay))
 
         asyncio.run(run())
+
+    def test_worker_messages_with_modal_screen_open(self):
+        """Backend messages must not crash while a modal screen is on top.
+
+        Regression test: App.query_one() only searches the top screen, so
+        a worker message posted while a ModalScreen (help, preferences,
+        file list, confirm) was open crashed the app with NoMatches.
+        """
+        import types
+        from bleachbit.tui.app import BleachBitTUI
+        from bleachbit.tui.backend import (
+            ItemSizeMessage, LogMessage, ProgressMessage,
+            TotalSizeMessage, WorkerDoneMessage)
+        from bleachbit.tui.screens.help_screen import HelpScreen
+
+        async def run():
+            app = BleachBitTUI()
+            async with app.run_test() as pilot:
+                await pilot.pause()
+                await app.push_screen(HelpScreen())
+                await pilot.pause()
+                app.post_message(LogMessage("a log line"))
+                app.post_message(ProgressMessage(0.5))
+                app.post_message(TotalSizeMessage(456))
+                app.post_message(ItemSizeMessage("fake", "opt", 123))
+                worker = types.SimpleNamespace(
+                    total_bytes=789, total_deleted=2,
+                    total_errors=0, total_special=0)
+                app.post_message(WorkerDoneMessage(worker, False))
+                await pilot.pause()
+                self.assertTrue(isinstance(app.screen, HelpScreen))
+                self.assertEqual(
+                    app._tree._option_sizes.get(("fake", "opt")), 123)
+
+        asyncio.run(run())

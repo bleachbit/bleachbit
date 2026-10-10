@@ -155,16 +155,25 @@ class BleachBitTUI(App):
         self._log_lines: list[str] = []
 
     def compose(self) -> ComposeResult:
+        # Keep direct widget references: App.query_one() only searches the
+        # top screen, so these would be unreachable while a modal screen
+        # (help, preferences, file list, confirm) is on the stack.
+        self._status_bar = Static(_("Status: idle"), id="status-bar")
+        self._filter_input = Input(placeholder=_("Filter cleaners/options..."), id="filter-input")
+        self._progress_bar = ProgressBar(total=1.0, show_eta=False, id="progress-bar", classes="hidden")
+        self._progress_label = Static("", id="progress-label")
+        self._tree = CleanerTree()
+        self._output_text = Static("", id="output-text", markup=False)
         yield Header(show_clock=True)
         yield Static(_("This is alpha-level software. Please use caution."), id="alpha-banner")
-        yield Static(_("Status: idle"), id="status-bar")
-        yield Input(placeholder=_("Filter cleaners/options..."), id="filter-input")
+        yield self._status_bar
+        yield self._filter_input
         with Container(id="progress-container"):
-            yield ProgressBar(total=1.0, show_eta=False, id="progress-bar", classes="hidden")
-            yield Static("", id="progress-label")
-        with Container(id="main-container"):
-            yield CleanerTree()
-        yield VerticalScroll(Static("", id="output-text", markup=False), id="output-log")
+            yield self._progress_bar
+            yield self._progress_label
+        self._main_container = Container(self._tree, id="main-container")
+        yield self._main_container
+        yield VerticalScroll(self._output_text, id="output-log")
         yield Footer()
 
     def on_mount(self):
@@ -173,17 +182,15 @@ class BleachBitTUI(App):
         setup_translation()
         try:
             load_cleaners()
-            tree = self.query_one(CleanerTree)
-            tree.populate_tree(get_cleaner_tree_data())
-            tree.focus()
+            self._tree.populate_tree(get_cleaner_tree_data())
+            self._tree.focus()
         except Exception:
             import logging
             logging.getLogger(__name__).exception("Failed to load cleaners on mount")
             self.notify(_("Error loading cleaners. Check the log."), severity="error")
             # Still set up the tree with empty data so the UI is functional
-            tree = self.query_one(CleanerTree)
-            tree.populate_tree([])
-            tree.focus()
+            self._tree.populate_tree([])
+            self._tree.focus()
 
         overwrite = get_overwrite()
         overwrite_status = _("ON") if overwrite else _("OFF")
@@ -192,7 +199,7 @@ class BleachBitTUI(App):
     # --- Status bar helpers ---
 
     def _update_status(self, state: str, message: str = ""):
-        status_bar = self.query_one("#status-bar", Static)
+        status_bar = self._status_bar
         if state == "working":
             status_bar.update(f"[working]{_('Status')}: {message}[/working]")
         elif state == "done":
@@ -208,9 +215,7 @@ class BleachBitTUI(App):
         # Keep only last 200 lines
         if len(self._log_lines) > 200:
             self._log_lines = self._log_lines[-200:]
-        for output in self.query("#output-text").results(Static):
-            output.update("\n".join(self._log_lines))
-            break
+        self._output_text.update("\n".join(self._log_lines))
 
     # --- Backend message handlers ---
 
@@ -219,8 +224,8 @@ class BleachBitTUI(App):
 
     def on_progress_message(self, message: ProgressMessage):
         status = message.status
-        bar = self.query_one("#progress-bar", ProgressBar)
-        label = self.query_one("#progress-label", Static)
+        bar = self._progress_bar
+        label = self._progress_label
 
         if isinstance(status, (int, float)):
             fraction = float(status)
@@ -235,24 +240,22 @@ class BleachBitTUI(App):
             label.update(status)
 
     def on_total_size_message(self, message: TotalSizeMessage):
-        tree = self.query_one(CleanerTree)
-        tree.update_root_total(message.total_bytes)
+        self._tree.update_root_total(message.total_bytes)
 
     def on_item_size_message(self, message: ItemSizeMessage):
-        tree = self.query_one(CleanerTree)
-        tree.update_option_size(message.operation, message.option_id, message.size)
+        self._tree.update_option_size(message.operation, message.option_id, message.size)
 
     def on_worker_done_message(self, message: WorkerDoneMessage):
         self._is_working = False
         self._current_worker = None
 
-        bar = self.query_one("#progress-bar", ProgressBar)
+        bar = self._progress_bar
         bar.update(progress=0.0)
         bar.update(total=1.0)
         bar.add_class("hidden")
-        self.query_one("#progress-label", Static).update("")
+        self._progress_label.update("")
 
-        tree = self.query_one(CleanerTree)
+        tree = self._tree
 
         if message.total_errors:
             tree.set_errors_for_active_operations(message.total_errors)
@@ -321,8 +324,7 @@ class BleachBitTUI(App):
         if self._is_working:
             self.notify(_("Already working..."), severity="warning")
             return
-        tree = self.query_one(CleanerTree)
-        focused = tree.get_focused_option()
+        focused = self._tree.get_focused_option()
         if focused is None:
             self.notify(_("Focus an option first."), severity="warning")
             return
@@ -333,8 +335,7 @@ class BleachBitTUI(App):
         if self._is_working:
             self.notify(_("Already working..."), severity="warning")
             return
-        tree = self.query_one(CleanerTree)
-        focused = tree.get_focused_option()
+        focused = self._tree.get_focused_option()
         if focused is None:
             self.notify(_("Focus an option first."), severity="warning")
             return
@@ -357,7 +358,7 @@ class BleachBitTUI(App):
     @work(exclusive=True)
     async def _confirm_and_delete(self):
         """Show confirmation dialog, then delete if confirmed."""
-        tree = self.query_one(CleanerTree)
+        tree = self._tree
         enabled = tree.get_enabled_options()
 
         if not enabled:
@@ -389,7 +390,7 @@ class BleachBitTUI(App):
         Otherwise *enabled* should be a list of (cleaner_id, option_id) tuples.
         """
         self._is_working = True
-        tree = self.query_one(CleanerTree)
+        tree = self._tree
 
         if enabled is None:
             enabled = tree.get_enabled_options()
@@ -397,24 +398,22 @@ class BleachBitTUI(App):
         if not enabled:
             self.notify(_("No options enabled. Enable some first."), severity="warning")
             self._is_working = False
-            bar = self.query_one("#progress-bar", ProgressBar)
+            bar = self._progress_bar
             bar.add_class("hidden")
-            self.query_one("#progress-label", Static).update("")
+            self._progress_label.update("")
             return
 
         status = _("Deleting...") if delete else _("Previewing...")
         self._update_status("working", status)
         self._log_lines = []
-        for output in self.query("#output-text").results(Static):
-            output.update("")
-            break
+        self._output_text.update("")
 
         # Reset progress bar for new operation
-        bar = self.query_one("#progress-bar", ProgressBar)
+        bar = self._progress_bar
         bar.update(progress=0.0)
         bar.update(total=1.0)
         bar.remove_class("hidden")
-        self.query_one("#progress-label", Static).update(_("Starting..."))
+        self._progress_label.update(_("Starting..."))
 
         operations = build_operations(enabled)
         # Propagate overwrite preference via bleachbit Options
@@ -455,8 +454,7 @@ class BleachBitTUI(App):
         if self._inline_file_list is not None:
             self._inline_file_list.remove()
             self._inline_file_list = None
-            tree = self.query_one(CleanerTree)
-            tree.focus()
+            self._tree.focus()
 
     def action_show_help(self):
         """Show help overlay."""
@@ -468,7 +466,7 @@ class BleachBitTUI(App):
 
     def action_start_filter(self):
         """Show filter input and focus it."""
-        filter_input = self.query_one("#filter-input", Input)
+        filter_input = self._filter_input
         filter_input.add_class("visible")
         filter_input.focus()
         filter_input.value = ""
@@ -482,18 +480,16 @@ class BleachBitTUI(App):
 
     def action_clear_filter(self):
         """Hide filter input and restore full tree."""
-        filter_input = self.query_one("#filter-input", Input)
+        filter_input = self._filter_input
         filter_input.remove_class("visible")
         filter_input.value = ""
-        tree = self.query_one(CleanerTree)
-        tree.clear_filter()
-        tree.focus()
+        self._tree.clear_filter()
+        self._tree.focus()
 
     def on_input_changed(self, event: Input.Changed):
         """Handle filter input changes."""
         if event.input.id == "filter-input":
-            tree = self.query_one(CleanerTree)
-            tree.filter_tree(event.value)
+            self._tree.filter_tree(event.value)
 
     def on_input_submitted(self, event: Input.Submitted):
         """Handle Enter in filter input — dismiss filter."""
@@ -524,8 +520,7 @@ class BleachBitTUI(App):
         """Show file list inline below the tree."""
         self._dismiss_inline_file_list()
 
-        container = self.query_one("#main-container", Container)
         widget = FileListWidget(cleaner_name, option_name)
-        container.mount(widget)
+        self._main_container.mount(widget)
         self._inline_file_list = widget
-        self.set_timer(0.1, lambda: self.query_one(CleanerTree).focus())
+        self.set_timer(0.1, lambda: self._tree.focus())
