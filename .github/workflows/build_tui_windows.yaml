@@ -3,7 +3,7 @@ name: Build, Test, and Deploy TUI for Windows
 on:
   push:
     branches:
-      - tui
+      - 'tui*'
     tags:
       - 'v*'
     paths-ignore: &paths-ignore
@@ -25,7 +25,7 @@ on:
       - 'windows/NsisInclude/NsisMultiUserLang.nsh'
   pull_request:
     branches:
-      - tui
+      - 'tui*'
     paths-ignore: *paths-ignore
   workflow_dispatch:
 
@@ -185,6 +185,6 @@ jobs:
               $sha1 = (Get-FileHash -Algorithm SHA1 $file).Hash.ToLower()
               $md5 = (Get-FileHash -Algorithm MD5 $file).Hash.ToLower()
               $artifactType = if ($name -like '*-setup.exe') { 'installer' } else { 'portable' }
-              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,artifact_type=$artifactType,frontend=tui"
+              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,size=$($_.Length),artifact_type=$artifactType,frontend=tui"
               aws s3 cp $file "$dest" --metadata "$meta"
             }
