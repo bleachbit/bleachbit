@@ -975,9 +975,14 @@ def keep_font_cache_in_portable(portable_dir):
     with open(fn, encoding='utf-8', newline='') as f:
         data = f.read()
     anchor = '<cachedir>LOCAL_APPDATA_FONTCONFIG_CACHE</cachedir>'
+    cachedir = '<cachedir>/var/cache/fontconfig</cachedir>'
+    if cachedir in data:
+        # Just copied from dist, so the installer would ship it too
+        logger.error('%s already contains %s', fn, cachedir)
+        sys.exit(1)
     data, count = re.subn(
         rf'^([ \t]*)({re.escape(anchor)})(\r?\n)',
-        r'\1<cachedir>/var/cache/fontconfig</cachedir>\3\1\2\3',
+        rf'\1{cachedir}\3\1\2\3',
         data, count=1, flags=re.M)
     if not count:
         logger.error('%s not found in %s', anchor, fn)
