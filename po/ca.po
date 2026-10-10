@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-29 10:27-0600\n"
-"PO-Revision-Date: 2026-09-12 20:51+0000\n"
+"PO-Revision-Date: 2026-10-11 11:51+0000\n"
 "Last-Translator: Jaime Muñoz Martín <jmmartin_5@outlook.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/bleachbit/main/"
 "ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -703,7 +703,7 @@ msgstr "Llistes de paquets"
 
 #: ../cleaners/docker.xml
 msgid "Container platform"
-msgstr ""
+msgstr "Plataforma de contenidors"
 
 #. Label for Claude coding assistant
 #: ../cleaners/docker.xml ../cleaners/claude.xml
@@ -864,6 +864,8 @@ msgstr "Actualitza a la versió %s"
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Suprimeix els fitxers de programa de versions anteriors deixats per les "
+"actualitzacions"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -2721,6 +2723,12 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"És possible que el BleachBit no tingui accés complet al disc. Sense ell, el "
+"macOS bloqueja l'accés a alguns fitxers i alguns netejadors no funcionaran.\n"
+"\n"
+"Per solucionar-ho, obriu la Configuració del sistema > Privadesa i "
+"seguretat > Accés complet al disc, activeu BleachBit i, a continuació, "
+"reinicieu el BleachBit."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -3175,6 +3183,8 @@ msgstr "El camí per a la neteja ha de ser una carpeta existent: %s"
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Esborrar l'espai lliure aquí no és segur perquè qualsevol usuari pot canviar "
+"aquesta carpeta: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
