@@ -280,10 +280,11 @@ def build_py2exe():
         'bundle_files': 3,
         'compressed': 1,
         'optimize': 2,
-        'packages': ['chardet', 'encodings', 'textual', 'rich', 'rich._unicode_data',
+        'packages': ['charset_normalizer', 'encodings', 'textual', 'rich', 'rich._unicode_data',
                      'markdown_it', 'mdurl', 'linkify_it'],
         'excludes': ['pyreadline', 'doctest', 'ftplib',
-                     'charset_normalizer', 'gi', 'cairo', 'Gtk', 'Gdk', 'GLib',
+                     'chardet',  # not present now, but defensive
+                     'gi', 'cairo', 'Gtk', 'Gdk', 'GLib',
                      'Pango', 'tcl', 'tk', 'tkinter', 'bleachbit.GUI',
                      'bleachbit.GuiApplication', 'bleachbit.GuiBasic',
                      'bleachbit.GuiChaff', 'bleachbit.GuiCookie',
