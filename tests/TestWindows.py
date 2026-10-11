@@ -1003,6 +1003,17 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 run_net_service_command(service, start)
             self.assertEqual(is_service_running(service), initial_running)
 
+    def test_run_net_service_command_cryptsvc_access_denied(self):
+        """Treat access denied stopping cryptsvc as a warning."""
+        error = pywintypes.error(5, 'ControlService', 'Access is denied.')
+        with mock.patch(
+                'bleachbit.Windows.win32serviceutil.StopServiceWithDeps',
+                side_effect=error):
+            with self.assertLogs('bleachbit.Windows', level='WARNING') as log:
+                self.assertEqual(
+                    0, run_net_service_command('cryptsvc', False))
+        self.assertIn('Failed to stop Windows service cryptsvc', log.output[0])
+
     def test_run_net_service_command_invalid_service(self):
         """Test as run_net_service_command() with invalid service"""
         for service in ('does_not_exist', None):
