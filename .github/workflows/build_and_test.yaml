@@ -251,14 +251,14 @@ jobs:
       - name: Install NSIS
         shell: pwsh
         run: |
-          if (-not (Test-Path nsis-3.12-setup.exe)) {
-            Invoke-WebRequest -Uri "https://download.bleachbit.org/dependency/nsis-3.12-setup.exe" -OutFile nsis-3.12-setup.exe
+          if (-not (Test-Path nsis-3.13-setup.exe)) {
+            Invoke-WebRequest -Uri "https://download.bleachbit.org/dependency/nsis-3.13-setup.exe" -OutFile nsis-3.13-setup.exe
           }
-          $hash = (Get-FileHash nsis-3.12-setup.exe -Algorithm SHA256).Hash
-          if ($hash -ne '3bc2b06253a7e4957111be152ac6a536e0c7478a706e19da814038db5d706495') {
+          $hash = (Get-FileHash nsis-3.13-setup.exe -Algorithm SHA256).Hash
+          if ($hash -ne 'db9a1038bbc0e53fef24f423fd609979bd578e942f1be1198db186d1c42652a3') {
             throw "SHA256 mismatch=$hash"
           }
-          Start-Process -FilePath .\nsis-3.12-setup.exe -ArgumentList '/S' -Wait
+          Start-Process -FilePath .\nsis-3.13-setup.exe -ArgumentList '/S' -Wait
 
       - name: Install AdvanceCOMP (advzip)
         # This is used in the NSIS build setup for releases (tags).
