@@ -302,6 +302,11 @@ class Bleachbit(Gtk.Application):
         bleachbit.log_startup_time('app menu built')
 
     def quit(self, _action=None, _param=None, init_configuration=False):
+        if self._window is None:
+            # Ctrl+C while GUI() runs. Raising stops it before show_all(),
+            # quit() covers a raise swallowed by a GTK callback
+            Gtk.Application.quit(self)
+            raise KeyboardInterrupt
         if init_configuration:
             # After "shred settings and quit", rebuild the minimal configuration.
             # which is important for portable mode.
@@ -364,8 +369,14 @@ class Bleachbit(Gtk.Application):
     def do_activate(self):
         is_first_activation = not self._window
         if is_first_activation:
-            self._window = GUI(
-                application=self, title=APP_NAME, auto_exit=self._auto_exit)
+            try:
+                self._window = GUI(
+                    application=self, title=APP_NAME, auto_exit=self._auto_exit)
+            except KeyboardInterrupt:
+                # The half-built window is already in the app's list
+                for window in self.get_windows():
+                    window.destroy()
+                return
         self._window.present()
         if self._shred_paths:
             # A later activation must not shred the same paths again
