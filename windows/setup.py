@@ -253,7 +253,7 @@ def assert_execute_comms_check():
                    'FIVE BY FIVE')
 
 
-def run_cmd(cmd, check=True, log_cmd=True):
+def run_cmd(cmd, check=True, log_cmd=True, env=None):
     """Run a command and log the output
 
     Return the exit code. If check is true, a non-zero exit code aborts.
@@ -266,7 +266,8 @@ def run_cmd(cmd, check=True, log_cmd=True):
         else:
             logger.info(cmd)
     with subprocess.Popen(cmd, stdin=subprocess.PIPE,
-                          stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                          env=env) as p:
         stdout, stderr = p.communicate()
         if stdout:
             logger.info(stdout.decode(SetupEncoding))
@@ -613,17 +614,6 @@ def build():
         path = os.path.join(gtk_share, d)
         copy_tree(path, os.path.join('dist', 'share', d))
 
-    logger.info('Fixing paths in loaders.cache file')
-    loaders_fn = os.path.join(
-        'dist', 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
-    with open(loaders_fn, 'r+', encoding=SetupEncoding) as f:
-        data = f.read()
-        data = re.sub(r'^".*[/\\](.*\.dll)"$',
-                      r'"\1"', data, flags=re.I | re.M)
-        f.seek(0)
-        f.write(data)
-        f.truncate()
-
     schemas_dir = 'share\\glib-2.0\\schemas'
     gschemas_compiled_src = os.path.join(
         GTK_DIR, schemas_dir, 'gschemas.compiled')
@@ -969,6 +959,8 @@ def shrink(settings):
     if settings['recompress_lib']:
         repack_library(settings)
 
+    rebuild_loaders_cache()
+
     # so calculate the size of the folder, as it is a goal to shrink it.
     logger.info('Final size of the dist folder: %s',
                 f'{get_dir_size("dist"):,}')
@@ -976,6 +968,42 @@ def shrink(settings):
     # After all the shrink changes, check that the app still works.
     assert_execute_console()
     assert_execute_comms_check()
+
+
+def rebuild_loaders_cache():
+    """Rebuild loaders.cache from what dist ships
+
+    Run after the pruning in shrink() so a DLL the SVG loader needs
+    fails the build when it's missing or was pruned.
+    """
+    logger.info('Rebuilding loaders.cache file')
+    # The GTK bundle's copy can predate the SVG loader and list nothing
+    dist_dir = os.path.abspath('dist')
+    pixbuf_dir = os.path.join(dist_dir, 'lib', 'gdk-pixbuf-2.0', '2.10.0')
+    loaders_fn = os.path.join(pixbuf_dir, 'loaders.cache')
+    query_loaders = os.path.join(
+        GTK_DIR, 'tools', 'gdk-pixbuf', 'gdk-pixbuf-query-loaders.exe')
+    assert_exist(query_loaders)
+    # Windows looks next to the exe first and the bundle keeps its own
+    # glib etc. there, so run a copy that can only find the DLLs in dist
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_exe = shutil.copy(query_loaders, tmp_dir)
+        env = dict(os.environ,
+                   GDK_PIXBUF_MODULEDIR=os.path.join(pixbuf_dir, 'loaders'),
+                   GDK_PIXBUF_MODULE_FILE=loaders_fn,
+                   PATH=dist_dir)
+        run_cmd([tmp_exe, '--update-cache'], env=env)
+    with open(loaders_fn, 'r+', encoding=SetupEncoding) as f:
+        data = f.read()
+        data = re.sub(r'^".*[/\\](.*\.dll)"$',
+                      r'"\1"', data, flags=re.I | re.M)
+        # query-loaders skips a loader it can't load and still exits 0
+        if '"pixbufloader-svg.dll"' not in data:
+            logger.error('%s has no SVG loader', loaders_fn)
+            sys.exit(1)
+        f.seek(0)
+        f.write(data)
+        f.truncate()
 
 
 def keep_font_cache_in_portable(portable_dir):
