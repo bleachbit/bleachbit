@@ -25,14 +25,20 @@ if bleachbit.IS_LINUX:
     data_files.append(('/usr/share/applications',
                       ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
+    data_files.append(('/usr/share/icons/hicolor/scalable/apps/',
+                       ['./bleachbit.svg']))
 elif bleachbit.IS_NETBSD:
     data_files.append(('/usr/pkg/share/applications',
                       ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
+    data_files.append(('/usr/pkg/share/icons/hicolor/scalable/apps/',
+                       ['./bleachbit.svg']))
 elif bleachbit.IS_BSD:
     data_files.append(
         ('/usr/local/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))
+    data_files.append(('/usr/local/share/icons/hicolor/scalable/apps/',
+                       ['./bleachbit.svg']))
 
 
 def run_setup(args=None):

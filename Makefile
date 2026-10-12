@@ -123,6 +123,8 @@ install:
 	# icon
 	mkdir -p $(DESTDIR)$(datadir)/pixmaps
 	$(INSTALL_DATA) bleachbit.png $(DESTDIR)$(datadir)/pixmaps/
+	mkdir -p $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps
+	$(INSTALL_DATA) bleachbit.svg $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/
 
 	# translations
 	$(MAKE) -C po install DESTDIR=$(DESTDIR)
