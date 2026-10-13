@@ -29,7 +29,6 @@ import importlib.util
 import logging
 import os
 import shutil
-import struct
 import subprocess
 import sys
 import time
@@ -41,6 +40,7 @@ import certifi
 import bleachbit
 from setup import supported_languages
 from bleachbit.CleanerML import CleanerML
+from bleachbit.FileUtilities import children_in_directory
 from bleachbit.SystemInformation import get_version
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
@@ -191,13 +191,13 @@ def sign_files(filenames):
 
 
 def get_dir_size(start_path='.'):
-    """Get the size of a directory"""
-    total_size = 0
-    for dirpath, _dirnames, filenames in os.walk(start_path):
-        for f in filenames:
-            fp = os.path.join(dirpath, f)
-            total_size += os.path.getsize(fp)
-    return total_size
+    """Get the size of a directory
+
+    FileUtilities.getsizedir() is not used because it prepends the
+    extended-length prefix, which Windows rejects on the relative paths
+    used here.
+    """
+    return sum(os.path.getsize(fn) for fn in children_in_directory(start_path))
 
 
 def copy_file(src, dst):
@@ -260,8 +260,8 @@ def count_size_improvement(func):
 def environment_check():
     """Check the build environment for TUI build"""
     logger.info('Checking for 64-bit Python')
-    bits = 8 * struct.calcsize('P')
-    assert 64 == bits, f'Expected 64-bit Python, got {bits}-bit'
+    assert 64 == bleachbit.ARCH_BITS, \
+        f'Expected 64-bit Python, got {bleachbit.ARCH_BITS}-bit'
 
     logger.info('Checking for translations')
     assert_exist('locale', 'run "make -C po local" to build translations')
@@ -557,7 +557,7 @@ def delete_linux_only():
     for fn in files:
         cml = CleanerML(fn)
         if not cml.get_cleaner().is_usable():
-            logger.warning('Deleting cleaner not usable on this OS: %s', fn)
+            logger.info('Deleting cleaner not usable on this OS: %s', fn)
             os.remove(fn)
 
 
