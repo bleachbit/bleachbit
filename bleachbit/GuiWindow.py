@@ -1312,8 +1312,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
             # only restore position and size if window left corner
             # is within the closest monitor
-            if r.x >= g.x and r.x < g.x + g.width and \
-               r.y >= g.y and r.y < g.y + g.height:
+            if g.x <= r.x < g.x + g.width and \
+               g.y <= r.y < g.y + g.height:
                 logger.debug("closest monitor %s, prior window geometry = %s+%s",
                              str(g), (r.x, r.y), (r.width, r.height))
                 self.move(r.x, r.y)
