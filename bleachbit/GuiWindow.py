@@ -754,10 +754,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # prompt that was always going to fail, and only finds
             # out afterward.
             if elevated_delete_paths_eligible(worker.access_denied_paths):
-                # TRANSLATORS: Asks whether to retry, with
-                # administrator privileges, deleting files that
-                # failed due to a permission error.
                 msg = _(
+                    # TRANSLATORS: Asks whether to retry, with
+                    # administrator privileges, deleting files that
+                    # failed due to a permission error.
                     "Some files could not be deleted due to permission "
                     "errors. They may belong to another user. Retry with "
                     "administrator privileges?")

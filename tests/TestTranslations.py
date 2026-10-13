@@ -17,6 +17,8 @@ For format-string validation run ``make -C po tests``.
 
 import os
 import re
+import shutil
+import subprocess
 import unittest
 
 _PO_DIR = os.path.join(os.path.dirname(__file__), '..', 'po')
@@ -68,6 +70,40 @@ def _parse_po(path):
     return results
 
 
+def _xgettext_entries(source_path):
+    """Return (msgid, hints) for each entry xgettext extracts from a file.
+
+    ``hints`` are the ``#.`` extracted comments, i.e. the TRANSLATORS
+    hints that translators see in the .pot file. Return None when
+    xgettext is not installed.
+    """
+    xgettext = shutil.which('xgettext')
+    if xgettext is None:
+        return None
+    proc = subprocess.run(
+        [xgettext, '--language=Python', '--from-code=UTF-8',
+         '--add-comments=TRANSLATORS', '-k_', '-o', '-', source_path],
+        capture_output=True, encoding='utf-8', check=True)
+    entries = []
+    for block in proc.stdout.split('\n\n'):
+        hints = []
+        msgid = ''
+        in_msgid = False
+        for line in block.splitlines():
+            if line.startswith('#. '):
+                hints.append(line[3:])
+            elif line.startswith('msgid '):
+                in_msgid = True
+                msgid = line[len('msgid '):].strip()[1:-1]
+            elif line.startswith('msgstr'):
+                in_msgid = False
+            elif in_msgid and line.startswith('"'):
+                msgid += line.strip()[1:-1]
+        if msgid:
+            entries.append((msgid, hints))
+    return entries
+
+
 class TestTranslations(unittest.TestCase):
     """Validate .po files beyond what msgfmt --check covers."""
 
@@ -95,6 +131,31 @@ class TestTranslations(unittest.TestCase):
         self.assertEqual([], failures,
                          "NSIS placeholder mismatch in translations:\n" +
                          "\n".join(failures))
+
+    def test_elevated_retry_strings_have_translator_hints(self):
+        """The elevated-retry dialog strings must reach translators with hints.
+
+        xgettext attaches a TRANSLATORS comment only when it is on the
+        row right before the string (see doc/CONTRIBUTING.md). A hint
+        above ``msg = _(`` with the string on the next row is lost.
+        """
+        source = os.path.join(os.path.dirname(__file__), '..',
+                              'bleachbit', 'GuiWindow.py')
+        entries = _xgettext_entries(source)
+        if entries is None:
+            self.skipTest('xgettext not found')
+        fragments = (
+            'Retry with administrator privileges?',
+            'Files deleted successfully.',
+            'The elevated deletion failed or was canceled.',
+        )
+        for fragment in fragments:
+            matching = [hints for msgid, hints in entries
+                        if fragment in msgid]
+            self.assertTrue(matching, f'string not extracted: {fragment!r}')
+            self.assertTrue(
+                any(hint.startswith('TRANSLATORS') for hint in matching[0]),
+                f'missing TRANSLATORS hint for: {fragment!r}')
 
 
 if __name__ == '__main__':
