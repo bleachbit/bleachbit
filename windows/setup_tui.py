@@ -113,22 +113,58 @@ def assert_exist(path, msg=None):
 
 
 def check_exist(path, msg=None):
-    """Check if a path exists. If not, log a warning and sleep."""
+    """Check if a path exists
+
+    If not, log a warning and sleep for 5 seconds, except on CI."""
     if not os.path.exists(path):
         logger.warning('%s not found', path)
         if msg:
             logger.warning(msg)
-        time.sleep(5)
+        if not os.environ.get('GITHUB_ACTIONS'):
+            time.sleep(5)
 
 
 def assert_module(module):
     """Check if a module is available"""
     try:
-        importlib.util.find_spec(module)
+        spec = importlib.util.find_spec(module)
     except ImportError:
+        spec = None
+    if spec is None:
         logger.error('Failed to import %s', module)
         logger.error('Process aborted because of error!')
         sys.exit(1)
+
+
+def assert_execute(args, expected_output, timeout=120):
+    """Run a command and check it returns the expected output.
+
+    A timeout guards against hangs. On timeout, the child is killed
+    and any captured output is logged to aid troubleshooting.
+    """
+    try:
+        actual_output = subprocess.check_output(
+            args, stderr=subprocess.STDOUT, timeout=timeout).decode(SetupEncoding)
+    except subprocess.TimeoutExpired as e:
+        partial = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s timed out after %ss. Partial output:\n%s',
+                     args, timeout, partial)
+        raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
+    except subprocess.CalledProcessError as e:
+        output = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s failed with exit code %s. Output:\n%s',
+                     args, e.returncode, output)
+        raise
+    if -1 == actual_output.find(expected_output):
+        raise RuntimeError(
+            f'When running command {args} expected output {expected_output} but got {actual_output}')
+
+
+def assert_execute_console():
+    """Check the application starts"""
+    logger.info('Checking bleachbit_tui.exe starts')
+    assert_execute([r'dist\bleachbit_tui.exe', '--sysinfo'],
+                   'BleachBit version')
 
 
 def run_cmd(cmd):
@@ -165,9 +201,7 @@ def get_dir_size(start_path='.'):
 
 def copy_file(src, dst):
     """Copy a file. dst must be a full path."""
-    if not os.path.exists(src):
-        logger.warning('copy_file: %s does not exist', src)
-        return
+    assert_exist(src)
     dst_dirname = os.path.dirname(dst)
     if dst_dirname and not os.path.exists(dst_dirname):
         os.makedirs(dst_dirname)
@@ -186,9 +220,7 @@ def copy_file(src, dst):
 def copy_tree(src, dst):
     """Copy a directory tree"""
     src = os.path.abspath(src)
-    if not os.path.exists(src):
-        logger.warning('copytree: %s does not exist', src)
-        return
+    assert_exist(src)
     logger.info('copying %s to %s', src, dst)
     shutil.copytree(src, dst, dirs_exist_ok=True)
 
@@ -428,8 +460,8 @@ def build():
     if python_version >= (3, 10):
         dll_names = ['vcruntime140.dll', 'vcruntime140_1.dll']
     else:
-        logger.error('Unsupported Python version. Skipping DLL copy.')
-        return
+        logger.error('Unsupported Python version')
+        sys.exit(1)
     dll_dirs = (sys.prefix, r'c:\windows\system32')
     for dll_name in dll_names:
         copied_dll = False
@@ -441,12 +473,15 @@ def build():
                 copied_dll = True
                 break
         if not copied_dll:
-            logger.warning('%s not found. Skipping copy.', dll_name)
+            logger.error('%s not found', dll_name)
+            sys.exit(1)
 
     # Protected path XML
     copy_file('share\\protected_path.xml', 'dist\\share\\protected_path.xml')
 
     sign_files(('dist\\bleachbit_tui.exe',))
+
+    assert_execute_console()
 
 
 # ---------------------------------------------------------------------------
@@ -565,6 +600,8 @@ def repack_library(fast_build):
                 f'{file_size_new - file_size_old:+,}', f'{file_size_old:,}', f'{file_size_new:,}')
     shutil.rmtree('dist\\library', ignore_errors=True)
     assert_exist('dist\\library.zip')
+    # Nothing else runs the exe after library.zip is rewritten
+    assert_execute_console()
 
 
 def shrink(fast_build):
@@ -603,7 +640,8 @@ def nsis(opts, exe_name, nsi_path):
     if os.path.exists(exe_name):
         logger.info('Deleting old file: %s', exe_name)
         os.remove(exe_name)
-    cmd = f'{NSIS_EXE} {opts} /DVERSION={get_version()} {nsi_path}'
+    # /WX: treat NSIS warnings as errors
+    cmd = f'{NSIS_EXE} /WX {opts} /DVERSION={get_version()} {nsi_path}'
     run_cmd(cmd)
     assert_exist(exe_name)
 
