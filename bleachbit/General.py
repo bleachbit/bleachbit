@@ -322,7 +322,12 @@ def makedirs(path):
     parentdir = os.path.split(path)[0]
     if not os.path.lexists(parentdir):
         makedirs(parentdir)
-    os.mkdir(path, 0o700)
+    if IS_WINDOWS:
+        # Python makes 0o700 an owner-only ACL, and an elevated process's owner
+        # is Administrators, which would lock out the user's normal session
+        os.mkdir(path)
+    else:
+        os.mkdir(path, 0o700)
     if sudo_mode():
         chownself(path)
 

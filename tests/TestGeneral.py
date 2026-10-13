@@ -305,6 +305,17 @@ class GeneralTestCase(common.BleachbitTestCase):
         # clean up
         shutil.rmtree(os.path.join(self.tempdir, 'just'))
 
+    @common.skipUnlessWindows
+    def test_makedirs_inherits_acl(self):
+        """makedirs leaves the parent's ACL inherited on Windows"""
+        import win32security
+        path = os.path.join(self.mkdtemp(), 'config')
+        makedirs(path)
+        sd = win32security.GetFileSecurity(
+            path, win32security.DACL_SECURITY_INFORMATION)
+        control, _revision = sd.GetSecurityDescriptorControl()
+        self.assertFalse(control & win32security.SE_DACL_PROTECTED)
+
     def test_run_external(self):
         """Unit test for run_external"""
         args = {'nt': ['cmd.exe', '/c', 'dir', r'%windir%\system32', '/s', '/b'],
