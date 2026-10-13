@@ -11,9 +11,10 @@ Example invocation (from parent directory):
 python3 -m windows.setup_tui
 
 Differences from the main (GTK) Windows build:
-  - Uses native 64-bit Python (no 32-bit PyGTK constraint)
+  - Uses vanilla 64-bit Python (no 32-bit PyGTK constraint)
   - No GTK / PyGObject dependencies
   - Builds a single console executable (bleachbit_tui.exe)
+  - No option for UPX compression
 
 FIXME: stop duplicating code with windows/setup.py
 """
@@ -63,8 +64,6 @@ if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
     logger.info('NSIS found in alternate location: %s', NSIS_ALT_EXE)
     NSIS_EXE = NSIS_ALT_EXE
 SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
-UPX_EXE = ROOT_DIR + '\\upx\\upx.exe'
-UPX_OPTS = '--best --nrv2e'
 PORTABLE_DIR = 'BleachBit-Portable'
 
 
@@ -72,15 +71,20 @@ PORTABLE_DIR = 'BleachBit-Portable'
 # Utility functions
 # ---------------------------------------------------------------------------
 
-def archive(infile, outfile, fast_build):
-    """Create an archive from a file"""
+def archive(infile, outfile, fast_build, store=False):
+    """Create an archive from a file
+
+    If store is enabled, the files are not compressed.
+    """
     assert_exist(infile)
     if os.path.exists(outfile):
         logger.warning(
             'Deleting output archive that already exists: %s', outfile)
         os.remove(outfile)
     sz_opts = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'
-    if fast_build:
+    if store:
+        sz_opts = '-tzip -mm=Copy -bso0 -bsp0'
+    elif fast_build:
         sz_opts = '-tzip -mx=1 -bso0 -bsp0'
     cmd = f'{SZ_EXE} a {sz_opts} {outfile} {infile}'
     run_cmd(cmd)
@@ -278,7 +282,7 @@ def build_py2exe():
 
     options = {
         'bundle_files': 3,
-        'compressed': 1,
+        'compressed': 0,  # stored, so imports skip inflate
         'optimize': 2,
         'packages': ['charset_normalizer', 'encodings', 'textual', 'rich', 'rich._unicode_data',
                      'markdown_it', 'mdurl', 'linkify_it'],
@@ -500,26 +504,6 @@ def clean_translations():
 
 
 @count_size_improvement
-def upx(fast_build):
-    """Compress executables with UPX to reduce size"""
-    if fast_build:
-        logger.warning('Fast mode: Skipped executable with UPX')
-        return
-
-    if not os.path.exists(UPX_EXE):
-        logger.warning(
-            'UPX not found. To compress executables, install UPX to: %s', UPX_EXE)
-        return
-
-    logger.info('Compressing executables')
-    # Do not compress bleachbit_tui.exe to avoid false positives
-    # with antivirus software.
-    upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    cmd = f'{UPX_EXE} {UPX_OPTS} {" ".join(upx_files)}'
-    run_cmd(cmd)
-
-
-@count_size_improvement
 def delete_linux_only():
     """Delete Linux-only cleaners to reduce size"""
     logger.info('Deleting Linux-only cleaners')
@@ -531,17 +515,16 @@ def delete_linux_only():
             os.remove(fn)
 
 
-@count_size_improvement
-def recompress_library(fast_build):
-    """Recompress library.zip to reduce size"""
+def repack_library(fast_build):
+    """Prune library.zip and repack it stored, so imports skip inflate"""
     if fast_build:
-        logger.warning('Fast mode: Skipped recompression of library.zip')
+        logger.warning('Fast mode: Skipped repack of library.zip')
         return
     if not os.path.exists(SZ_EXE):
         logger.warning('%s does not exist', SZ_EXE)
         return
 
-    logger.info('Recompressing library.zip with 7-Zip')
+    logger.info('Repacking library.zip with 7-Zip')
 
     if not os.path.exists('dist\\library'):
         os.makedirs('dist\\library')
@@ -575,13 +558,11 @@ def recompress_library(fast_build):
             os.remove(full_path)
 
     os.chdir('dist\\library')
-    cmd = f'{SZ_EXE} a -tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0 ..\\library.zip * -r'
-    run_cmd(cmd)
+    archive('.', '..\\library.zip', fast_build, store=True)
     os.chdir('..\\..')
     file_size_new = os.path.getsize('dist\\library.zip')
-    file_size_diff = file_size_old - file_size_new
-    logger.info('Recompression of library.zip reduced size by %s from %s to %s',
-                f'{file_size_diff:,}', f'{file_size_old:,}', f'{file_size_new:,}')
+    logger.info('library.zip changed size by %s from %s to %s',
+                f'{file_size_new - file_size_old:+,}', f'{file_size_old:,}', f'{file_size_new:,}')
     shutil.rmtree('dist\\library', ignore_errors=True)
     assert_exist('dist\\library.zip')
 
@@ -595,9 +576,8 @@ def shrink(fast_build):
     except PermissionError:
         logger.error(
             'Permission denied removing empty directories in dist: check for files locked by other process')
-    upx(fast_build)
     delete_linux_only()
-    recompress_library(fast_build)
+    repack_library(fast_build)
 
     logger.info('Final size of the dist folder: %s',
                 f'{get_dir_size("dist"):,}')
@@ -640,7 +620,7 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit_tui.nsi'):
     write_nsis_expressions_to_files()
 
     exe_name = f'windows\\BleachBit-TUI-{get_version()}-setup.exe'
-    opts = '' if fast_build else '/V3 /Dpackhdr /DCompressor'
+    opts = '' if fast_build else '/V3 /DCompressor'
     nsis(opts, exe_name, nsi_path)
 
     sign_files((exe_name,))

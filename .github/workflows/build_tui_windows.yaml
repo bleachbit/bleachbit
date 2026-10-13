@@ -66,7 +66,6 @@ jobs:
         with:
           path: |
             nsis-3.12-setup.exe
-            upx.zip
           key: win-tui-build-deps-${{ hashFiles('.github/workflows/build_tui_windows.yaml') }}
 
       - name: Install dependencies
@@ -76,19 +75,6 @@ jobs:
           python -m pip install --disable-pip-version-check -r windows/requirements_tui.txt -r windows/requirements.txt -r requirements-test.txt
           python -c "import textual, win32file; from py2exe import freeze"
           "PYTHON_EXE=$((Get-Command python).Source)" >> $env:GITHUB_ENV
-
-      - name: Install UPX
-        shell: pwsh
-        run: |
-          if (-not (Test-Path upx.zip)) {
-            Invoke-WebRequest -Uri "https://github.com/upx/upx/releases/download/v5.1.1/upx-5.1.1-win64.zip" -OutFile upx.zip
-          }
-          $hash = (Get-FileHash upx.zip -Algorithm SHA256).Hash
-          if ($hash -ne 'fa5380bca4c2718547aaa0134bc0d8a7fa27e102f0ac6371573d60d1c21d64de') {
-            throw "SHA256 mismatch=$hash"
-          }
-          7z x upx.zip
-          Rename-Item upx-5.1.1-win64 upx
 
       - name: Install NSIS
         shell: pwsh

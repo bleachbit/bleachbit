@@ -10,15 +10,6 @@
 
 
 ;--------------------------------
-;Pack header:
-
-!ifdef packhdr
-  ;Using UPX path info from windows/setup.py ->
-  !packhdr "$%TEMP%\exehead.tmp" '"\upx\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
-!endif
-
-
-;--------------------------------
 ;Include Modern UI
 
   !include "MUI2.nsh"
