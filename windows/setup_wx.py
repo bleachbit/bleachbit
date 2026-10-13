@@ -14,7 +14,6 @@ import glob
 import importlib.util
 import logging
 import os
-import re
 import shutil
 import struct
 import subprocess
@@ -38,6 +37,8 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 logger.propagate = False
 
+SetupEncoding = sys.stdout.encoding or 'utf-8'
+
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger.info('ROOT_DIR %s', ROOT_DIR)
 sys.path.append(ROOT_DIR)
@@ -50,18 +51,23 @@ if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
 SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 
 
-def archive(infile, outfile, fast_build):
-    """Create an archive from a file"""
+def archive(infile, outfile, fast_build, store=False):
+    """Create an archive from a file
+
+    If store is enabled, the files are not compressed.
+    """
     assert_exist(infile)
     if os.path.exists(outfile):
         logger.warning(
             'Deleting output archive that already exists: %s', outfile)
         os.remove(outfile)
     sz_opts = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'
-    if fast_build:
+    if store:
+        sz_opts = '-tzip -mm=Copy -bso0 -bsp0'
+    elif fast_build:
         sz_opts = '-tzip -mx=1 -bso0 -bsp0'
     cmd = f'{SZ_EXE} a {sz_opts} {outfile} {infile}'
-    run_cmd(cmd)
+    run_7z(cmd)
     assert_exist(outfile)
 
 
@@ -83,34 +89,88 @@ def assert_exist(path, msg=None):
 
 
 def check_exist(path, msg=None):
-    """Check if a path exists"""
+    """Check if a path exists
+
+    If not, log a warning and sleep for 5 seconds, except on CI."""
     if not os.path.exists(path):
         logger.warning('%s not found', path)
         if msg:
             logger.warning(msg)
-        time.sleep(5)
+        if not os.environ.get('GITHUB_ACTIONS'):
+            time.sleep(5)
 
 
 def assert_module(module):
     """Check if a module is available"""
     try:
-        importlib.util.find_spec(module)
+        spec = importlib.util.find_spec(module)
     except ImportError:
+        spec = None
+    if spec is None:
         logger.error('Failed to import %s', module)
+        logger.error('Process aborted because of error!')
         sys.exit(1)
 
 
-def run_cmd(cmd):
-    """Run a command and log the output"""
+def assert_execute(args, expected_output, timeout=120):
+    """Run a command and check it returns the expected output.
+
+    A timeout guards against hangs (e.g., a GUI main loop not quitting).
+    On timeout, the child is killed and any captured output is logged
+    to aid troubleshooting.
+    """
+    try:
+        actual_output = subprocess.check_output(
+            args, stderr=subprocess.STDOUT, timeout=timeout).decode(SetupEncoding)
+    except subprocess.TimeoutExpired as e:
+        partial = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s timed out after %ss. Partial output:\n%s',
+                     args, timeout, partial)
+        raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
+    if -1 == actual_output.find(expected_output):
+        raise RuntimeError(
+            f'When running command {args} expected output {expected_output} '
+            f'but got {actual_output}')
+
+
+def assert_execute_console():
+    """Check the application starts"""
+    logger.info('Checking bleachbit_console_wx.exe starts')
+    assert_execute([r'dist\bleachbit_console_wx.exe', '--sysinfo'],
+                   'BleachBit version')
+
+
+def run_cmd(cmd, check=True):
+    """Run a command and log the output
+
+    Return the exit code. If check is true, a non-zero exit code aborts.
+    """
     logger.info(cmd)
-    p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()
-    stdout_decoded = stdout.decode(sys.stdout.encoding if sys.stdout.encoding else 'utf-8')
-    stderr_decoded = stderr.decode(sys.stdout.encoding if sys.stdout.encoding else 'utf-8')
-    logger.info(stdout_decoded)
-    if stderr_decoded:
-        logger.error(stderr_decoded)
+    with subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
+        stdout, stderr = p.communicate()
+        stdout_decoded = stdout.decode(SetupEncoding)
+        stderr_decoded = stderr.decode(SetupEncoding)
+        logger.info(stdout_decoded)
+        if stderr_decoded:
+            logger.error(stderr_decoded)
+    if p.returncode and check:
+        logger.error('Command exited with code %d', p.returncode)
+        sys.exit(1)
+    return p.returncode
+
+
+def run_7z(cmd):
+    """Run 7-Zip
+
+    Exit code 1 is a warning, such as a locked file. Higher is fatal.
+    """
+    returncode = run_cmd(cmd, check=False)
+    if returncode == 1:
+        logger.warning('7-Zip exited with a warning')
+    elif returncode:
+        logger.error('7-Zip exited with code %d', returncode)
+        sys.exit(1)
 
 
 def get_dir_size(start_path='.'):
@@ -125,9 +185,7 @@ def get_dir_size(start_path='.'):
 
 def copy_file(src, dst):
     """Copy a file"""
-    if not os.path.exists(src):
-        logger.warning('copy_file: %s does not exist', src)
-        return
+    assert_exist(src)
     dst_dirname = os.path.dirname(dst)
     if dst_dirname and not os.path.exists(dst_dirname):
         os.makedirs(dst_dirname)
@@ -145,9 +203,7 @@ def copy_file(src, dst):
 def copy_tree(src, dst):
     """Copy a directory tree"""
     src = os.path.abspath(src)
-    if not os.path.exists(src):
-        logger.warning('copytree: %s does not exist', src)
-        return
+    assert_exist(src)
     logger.info('copying %s to %s', src, dst)
     shutil.copytree(src, dst, dirs_exist_ok=True)
 
@@ -224,7 +280,7 @@ def build_py2exe():
 
     options = {
         'bundle_files': 3,
-        'compressed': 1,
+        'compressed': 0,     # Stored, so imports skip inflate
         'optimize': 2,
         'includes': ['wx', 'win32api', 'win32con'],
         'packages': [
@@ -345,8 +401,8 @@ def build():
     if python_version >= (3, 10):
         dll_name = 'vcruntime140.dll'
     else:
-        logger.error('Unsupported Python version. Skipping DLL copy.')
-        return
+        logger.error('Unsupported Python version')
+        sys.exit(1)
     dll_dirs = (sys.prefix, r'c:\windows\system32')
     copied_dll = False
     for dll_dir in dll_dirs:
@@ -357,7 +413,10 @@ def build():
             copied_dll = True
             break
     if not copied_dll:
-        logger.warning('%s not found. Skipping copy.', dll_name)
+        logger.error('%s not found', dll_name)
+        sys.exit(1)
+
+    assert_execute_console()
 
 
 @count_size_improvement
@@ -416,45 +475,6 @@ def clean_translations():
 
 
 @count_size_improvement
-def strip():
-    """Strip executables to reduce size"""
-    if not bleachbit.FileUtilities.exe_exists('strip.exe'):
-        logger.warning('strip.exe does not exist. Skipping strip.')
-        return
-    logger.info('Stripping executables')
-    strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
-    strip_keep_list = ['_sqlite3.dll']
-    strip_files_str = [f for f in strip_list if os.path.basename(
-        f) not in strip_keep_list]
-    for strip_file in strip_files_str:
-        if os.path.exists('strip.tmp'):
-            os.remove('strip.tmp')
-        if not os.path.exists(strip_file):
-            logger.error('%s does not exist before stripping', strip_file)
-            continue
-        cmd = f'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp {strip_file}'
-        run_cmd(cmd)
-        if not os.path.exists(strip_file):
-            logger.error('%s does not exist after stripping', strip_file)
-            continue
-        if not os.path.exists('strip.tmp'):
-            logger.warning('strip.tmp missing while processing %s', strip_file)
-            continue
-        error_counter = 0
-        while error_counter < 100:
-            try:
-                os.remove(strip_file)
-            except PermissionError:
-                logger.warning('permissions error while removing %s', strip_file)
-                time.sleep(.1)
-                error_counter += 1
-            else:
-                break
-        if not os.path.exists(strip_file):
-            os.rename('strip.tmp', strip_file)
-
-
-@count_size_improvement
 def delete_linux_only():
     """Delete Linux-only cleaners to reduce size"""
     logger.info('Deleting Linux-only cleaners')
@@ -462,24 +482,24 @@ def delete_linux_only():
     for fn in files:
         cml = CleanerML(fn)
         if not cml.get_cleaner().is_usable():
-            logger.warning('Deleting cleaner not usable on this OS: %s', fn)
+            logger.info('Deleting cleaner not usable on this OS: %s', fn)
             os.remove(fn)
 
 
 @count_size_improvement
-def recompress_library(fast_build):
-    """Recompress library.zip to reduce size"""
+def repack_library(fast_build):
+    """Prune library.zip and repack it stored, so imports skip inflate"""
     if fast_build:
-        logger.warning('Fast mode: Skipped recompression of library.zip')
+        logger.warning('Fast mode: Skipped repacking of library.zip')
         return
     if not os.path.exists(SZ_EXE):
         logger.warning('%s does not exist', SZ_EXE)
         return
-    logger.info('Recompressing library.zip with 7-Zip')
+    logger.info('Repacking library.zip with 7-Zip')
     if not os.path.exists('dist\\library'):
         os.makedirs('dist\\library')
     cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
-    run_cmd(cmd)
+    run_7z(cmd)
     file_size_old = os.path.getsize('dist\\library.zip')
     os.remove('dist\\library.zip')
     delete_paths = ['distutils', 'plyer\\platforms\\android',
@@ -489,14 +509,15 @@ def recompress_library(fast_build):
         if os.path.exists(path):
             shutil.rmtree(path)
     os.chdir('dist\\library')
-    archive('.', '..\\library.zip', fast_build)
+    archive('.', '..\\library.zip', fast_build, store=True)
     os.chdir('..\\..')
     file_size_new = os.path.getsize('dist\\library.zip')
-    file_size_diff = file_size_old - file_size_new
-    logger.info('Recompression of library.zip reduced size by %s from %s to %s',
-                f'{file_size_diff:,}', f'{file_size_old:,}', f'{file_size_new:,}')
+    logger.info('library.zip changed size by %s from %s to %s',
+                f'{file_size_new - file_size_old:+,}', f'{file_size_old:,}', f'{file_size_new:,}')
     shutil.rmtree('dist\\library', ignore_errors=True)
     assert_exist('dist\\library.zip')
+    # Nothing else runs the exe after library.zip is rewritten
+    assert_execute_console()
 
 
 def shrink(fast_build):
@@ -504,9 +525,8 @@ def shrink(fast_build):
     delete_unnecessary()
     clean_translations()
     remove_empty_dirs('dist')
-    strip()
     delete_linux_only()
-    recompress_library(fast_build)
+    repack_library(fast_build)
     logger.info('Final size of the dist folder: %s',
                 f'{get_dir_size("dist"):,}')
 
@@ -515,7 +535,7 @@ def package_portable(fast_build):
     """Package the portable version"""
     logger.info('Building portable')
     copy_tree('dist', 'BleachBit-Portable')
-    with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
+    with open("BleachBit-Portable\\BleachBit.ini", "w", encoding=SetupEncoding) as text_file:
         text_file.write("[Portable]")
     archive('BleachBit-Portable',
             f'BleachBit-wx-{get_version()}-portable.zip', fast_build)
@@ -526,7 +546,8 @@ def nsis(opts, exe_name, nsi_path):
     if os.path.exists(exe_name):
         logger.info('Deleting old file: %s', exe_name)
         os.remove(exe_name)
-    cmd = f'{NSIS_EXE} {opts} /DVERSION={get_version()} {nsi_path}'
+    # /WX: treat NSIS warnings as errors
+    cmd = f'{NSIS_EXE} /WX {opts} /DVERSION={get_version()} {nsi_path}'
     run_cmd(cmd)
     assert_exist(exe_name)
 
@@ -565,11 +586,14 @@ def main():
     shrink(fast_build)
     package_portable(fast_build)
     package_installer(fast_build)
-    os.system(r'dir *.zip windows\*.exe windows\*.zip')
+    subprocess.run(
+        ['cmd', '/c', 'dir', '*.zip', r'windows\*.exe', r'windows\*.zip'],
+        check=False)
     duration = time.time() - start_time
     minutes = int(duration // 60)
     seconds = int(duration % 60)
-    logger.info(__file__ + ' success! Duration: %d minutes, %d seconds', minutes, seconds)
+    logger.info('%s success! Duration: %d minutes, %d seconds',
+                __file__, minutes, seconds)
 
 
 if '__main__' == __name__:

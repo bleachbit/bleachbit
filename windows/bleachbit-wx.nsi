@@ -17,7 +17,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
-!define MUI_FINISHPAGE_RUN "$INSTDIR\bleachbit.exe"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\bleachbit-wx.exe"
 !insertmacro MUI_PAGE_FINISH
 
 !insertmacro MUI_UNPAGE_CONFIRM
@@ -31,8 +31,8 @@ Section "BleachBit" SectionCore
     !include "NsisInclude\LocaleToInstall.nsh"
     WriteUninstaller "$INSTDIR\uninstall.exe"
     CreateDirectory "$SMPROGRAMS\${prodname}"
-    CreateShortcut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\bleachbit.exe"
-    CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\bleachbit.exe"
+    CreateShortcut "$SMPROGRAMS\${prodname}\${prodname}.lnk" "$INSTDIR\bleachbit-wx.exe"
+    CreateShortcut "$DESKTOP\BleachBit.lnk" "$INSTDIR\bleachbit-wx.exe"
 SectionEnd
 
 Section "Uninstall"
