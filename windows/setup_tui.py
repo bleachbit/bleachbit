@@ -88,7 +88,7 @@ def archive(infile, outfile, fast_build, store=False):
     elif fast_build:
         sz_opts = '-tzip -mx=1 -bso0 -bsp0'
     cmd = f'{SZ_EXE} a {sz_opts} {outfile} {infile}'
-    run_cmd(cmd)
+    run_7z(cmd)
     assert_exist(outfile)
     outfile_abs = os.path.abspath(outfile)
     outfile_size = os.path.getsize(outfile)
@@ -168,15 +168,37 @@ def assert_execute_console():
                    'BleachBit version')
 
 
-def run_cmd(cmd):
-    """Run a command and log the output"""
-    logger.info(cmd)
+def run_cmd(cmd, check=True, log_cmd=True):
+    """Run a command and log the output.
+
+    Return the exit code. If check is true, a non-zero exit code aborts.
+    """
+    if log_cmd:
+        if isinstance(cmd, list):
+            logger.info(subprocess.list2cmdline(cmd))
+        else:
+            logger.info(cmd)
     with subprocess.Popen(cmd, stdin=subprocess.PIPE,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         stdout, stderr = p.communicate()
-        logger.info(stdout.decode(SetupEncoding))
+        if stdout:
+            logger.info(stdout.decode(SetupEncoding))
         if stderr:
             logger.error(stderr.decode(SetupEncoding))
+    if p.returncode and check:
+        logger.error('Command exited with code %d', p.returncode)
+        sys.exit(1)
+    return p.returncode
+
+
+def run_7z(cmd):
+    """Run 7-Zip, treating exit code 1 as a warning."""
+    returncode = run_cmd(cmd, check=False)
+    if returncode == 1:
+        logger.warning('7-Zip exited with a warning')
+    elif returncode:
+        logger.error('7-Zip exited with code %d', returncode)
+        sys.exit(1)
 
 
 def sign_files(filenames):
@@ -574,7 +596,7 @@ def repack_library(fast_build):
     if not os.path.exists('dist\\library'):
         os.makedirs('dist\\library')
     cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
-    run_cmd(cmd)
+    run_7z(cmd)
     file_size_old = os.path.getsize('dist\\library.zip')
     os.remove('dist\\library.zip')
 
