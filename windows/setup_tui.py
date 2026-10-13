@@ -24,6 +24,7 @@ FIXME: stop duplicating code with windows/setup.py
 
 # standard library
 import fnmatch
+import glob
 import importlib.util
 import logging
 import os
@@ -318,8 +319,18 @@ def build_py2exe():
         'optimize': 2,
         'packages': ['charset_normalizer', 'encodings', 'textual', 'rich', 'rich._unicode_data',
                      'markdown_it', 'mdurl', 'linkify_it'],
-        'excludes': ['pyreadline', 'doctest', 'ftplib',
+        'excludes': ['pyreadline', 'difflib', 'doctest', 'pickle', 'ftplib',
+                     'unittest', 'test',
+                     'multiprocessing',
+                     'concurrent.futures.process',
                      'chardet',  # not present now, but defensive
+                     'xmlrpc',  # only consumer was multiprocessing.connection
+                     '_pydecimal',  # dead fallback
+                     # non-Windows platform modules
+                     'psutil._psaix', 'psutil._psbsd', 'psutil._pslinux',
+                     'psutil._psosx', 'psutil._pssunos',
+                     'setuptools', 'tomli', 'wheel', 'backports',
+                     'importlib_metadata', 'zipp', 'packaging', 'distutils',
                      'gi', 'cairo', 'Gtk', 'Gdk', 'GLib',
                      'Pango', 'tcl', 'tk', 'tkinter', 'bleachbit.GUI',
                      'bleachbit.GuiApplication', 'bleachbit.GuiBasic',
@@ -493,12 +504,12 @@ def delete_unnecessary():
     """Delete unnecessary files from dist/"""
     logger.info('Deleting unnecessary files')
     delete_paths = [
+        r'_multiprocessing.pyd',
+        r'_queue.pyd',
         r'_win32sysloader.pyd',
         r'perfmon.pyd',
         r'servicemanager.pyd',
         r'win32evtlog.pyd',
-        r'win32pipe.pyd',
-        r'win32wnet.pyd',
         r'libcrypto-3.dll',
         r'libssl-3.dll',
         r'_decimal.pyd',
@@ -591,6 +602,45 @@ def repack_library(fast_build):
         full_path = os.path.join('dist\\library', path)
         if os.path.exists(full_path):
             os.remove(full_path)
+
+    # Prune unneeded codecs from the encodings package.
+    encodings_keep_list = (
+        '__init__', 'aliases',
+        'cp*',  # every Windows ANSI codepage
+        'utf_8', 'utf_8_sig',
+        'utf_16', 'utf_16_le', 'utf_16_be',
+        'utf_32', 'utf_32_le', 'utf_32_be',
+        'latin_1', 'ascii', 'mbcs', 'charmap', 'iso8859_1',
+        # Below are codecs used by standard library.
+        'punycode', 'idna',
+        'unicode_escape', 'raw_unicode_escape', 'unicode_internal',
+        'hex_codec', 'base64_codec', 'zlib_codec', 'bz2_codec',
+        'qp_codec', 'quopri_codec', 'uu_codec',
+        'rot_13', 'palmos', 'oem', 'undefined',
+    )
+    encodings_files = glob.glob(os.path.join(
+        'dist', 'library', 'encodings', '*.pyc'))
+    encodings_deleted = 0
+    for enc in encodings_files:
+        stem = os.path.splitext(os.path.basename(enc))[0]
+        if any(fnmatch.fnmatch(stem, pattern)
+               for pattern in encodings_keep_list):
+            continue
+        encodings_deleted += 1
+        try:
+            os.remove(enc)
+        except OSError as e:
+            logger.warning('Failed to remove %s: %s', enc, e)
+    logger.info('Deleted %d of %d files in dist\\library\\encodings',
+                encodings_deleted, len(encodings_files))
+
+    # remove .dist-info metadata directories
+    for dist_info_dir in glob.glob(os.path.join('dist', 'library', '*.dist-info')):
+        logger.info('Removing .dist-info directory: %s', dist_info_dir)
+        shutil.rmtree(dist_info_dir)
+
+    # remove empty directories
+    remove_empty_dirs('dist\\library')
 
     os.chdir('dist\\library')
     archive('.', '..\\library.zip', fast_build, store=True)
