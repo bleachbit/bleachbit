@@ -223,6 +223,32 @@ class GUITestCase(common.BleachbitTestCase):
             self.assertEqual(get_font_size_from_name(
                 font_name), expected, f"Font name '{font_name}' should return {expected}")
 
+    def test_splash_screen_only_for_fontconfig_backend(self):
+        """The font cache splash shows only with the fontconfig backend"""
+        from bleachbit import GuiWindow
+        fake_windows = mock.Mock()
+        fake_windows.get_font_conf_file.return_value = __file__
+        cases = ((None, False, False),
+                 ('win32', False, False),
+                 ('fc', False, True),
+                 ('fontconfig', False, True),
+                 ('fc', True, False))
+        with mock.patch.object(GuiWindow, 'IS_WINDOWS', True), \
+                mock.patch.object(GuiWindow, 'Windows', fake_windows,
+                                  create=True), \
+                mock.patch.dict(os.environ):
+            os.environ.pop('BLEACHBIT_SPLASH_SCREEN_DELAY', None)
+            for backend, has_cache, expected in cases:
+                with self.subTest(backend=backend, has_cache=has_cache):
+                    fake_windows.reset_mock()
+                    fake_windows.has_fontconfig_cache.return_value = has_cache
+                    os.environ.pop('PANGOCAIRO_BACKEND', None)
+                    if backend:
+                        os.environ['PANGOCAIRO_BACKEND'] = backend
+                    self.get_window()._show_splash_screen()
+                    self.assertEqual(
+                        fake_windows.splash_thread.start.called, expected)
+
     def test_preferences(self):
         """Opens the preferences dialog and closes it"""
 
