@@ -91,7 +91,6 @@ import warnings
 import webbrowser
 from contextlib import contextmanager
 from pathlib import PureWindowsPath
-from html import escape as esc
 from traceback import format_exc
 
 from bleachbit import bleachbit_exe_path, log_startup_time, IS_MAC, IS_POSIX, IS_WINDOWS
@@ -173,6 +172,8 @@ def _build_error_html(error, traceback_text=None):
 
     It does not write to a file.
     """
+    # Keep html off the startup path: only the error page needs it
+    from html import escape as esc  # pylint: disable=import-outside-toplevel
 
     try:
         # Import here to avoid a circular import.

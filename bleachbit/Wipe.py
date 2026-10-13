@@ -12,7 +12,6 @@ import atexit
 import ctypes
 import errno
 import os
-import secrets
 import string
 import struct
 import tempfile
@@ -58,6 +57,8 @@ WINDOWS_RESERVED_FILENAMES.update(
 
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
+    # Keep secrets off the startup path: it drags in hmac and _hashlib
+    import secrets  # pylint: disable=import-outside-toplevel
     return ''.join(secrets.choice(FILENAME_CHARS)
                    for i in range(length))
 
