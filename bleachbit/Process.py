@@ -10,12 +10,15 @@ Enumerate and terminate processes
 
 import signal
 import glob
+import logging
 import subprocess
 import time
 from collections import namedtuple
 import os
 
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
+
+logger = logging.getLogger(__name__)
 
 ProcessInfo = namedtuple('ProcessInfo', ['pid', 'name', 'same_user'])
 
@@ -92,21 +95,22 @@ def _enumerate_psutil_windows():
     """Enumerate processes with psutils on Windows"""
     psutil = _import_psutil()
     current_user = psutil.Process().username().lower()
-    for proc in psutil.process_iter(['name', 'username', 'cmdline']):
+    # On Windows, do not fetch 'cmdline' because it can be much slower
+    # sometimes, and it does not add useful information.
+    start_time = time.time()
+    for proc in psutil.process_iter(['name', 'username']):
         try:
             name = proc.info['name']
             if not name:
                 continue
             same_user = (proc.info['username'] or '').lower() == current_user
-            names = {name}
-            cmdline = proc.info.get('cmdline')
-            if cmdline:
-                names.add(os.path.basename(cmdline[0]))
-            for proc_name in names:
-                if proc_name:
-                    yield ProcessInfo(proc.pid, proc_name, same_user)
+            yield ProcessInfo(proc.pid, name, same_user)
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
+    elapsed = time.time() - start_time
+    if elapsed >= 0.5:
+        log_func = logger.warning if elapsed >= 2.0 else logger.debug
+        log_func('process enumeration took %.1f seconds', elapsed)
 
 
 def _enumerate_proc_fs():
