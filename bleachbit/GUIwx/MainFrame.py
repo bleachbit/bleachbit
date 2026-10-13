@@ -900,14 +900,19 @@ class MainFrame(wx.Frame):
         ``EVT_DATAVIEW_ITEM_CONTEXT_MENU``.
         """
         if evt.GetPosition() == wx.DefaultPosition:
-            self._show_tree_context_menu(self.tree.GetCurrentItem())
+            item = self.tree.GetCurrentItem()
+            pos = wx.DefaultPosition
+            if item.IsOk():
+                rect = self.tree.GetItemRect(item)
+                pos = wx.Point(rect.GetLeft(), rect.GetBottom() + 1)
+            self._show_tree_context_menu(item, pos)
         else:
             evt.Skip()
 
     def _on_tree_context_menu(self, evt):
         self._show_tree_context_menu(evt.GetItem())
 
-    def _show_tree_context_menu(self, item):
+    def _show_tree_context_menu(self, item, pos=wx.DefaultPosition):
         menu = wx.Menu()
         obj = None
         if item and item.IsOk():
@@ -967,7 +972,7 @@ class MainFrame(wx.Frame):
         mi_safe = menu.Append(
             wx.ID_ANY, _('Select safe (cache, log, vacuum, temp)'))
         self.Bind(wx.EVT_MENU, self._on_select_safe, mi_safe)
-        self.tree.PopupMenu(menu)
+        self.tree.PopupMenu(menu, pos)
         menu.Destroy()
 
     def _run_single_option(self, cleaner_id, option_id, really_delete):
@@ -1310,11 +1315,17 @@ class MainFrame(wx.Frame):
         ``EVT_LIST_ITEM_RIGHT_CLICK``.
         """
         if evt.GetPosition() == wx.DefaultPosition:
-            self._on_result_context_menu(evt)
+            pos = wx.DefaultPosition
+            row = self.results.GetNextItem(
+                -1, wx.LIST_NEXT_ALL, wx.LIST_STATE_FOCUSED)
+            if row != -1:
+                rect = self.results.GetItemRect(row)
+                pos = wx.Point(rect.GetLeft(), rect.GetBottom() + 1)
+            self._on_result_context_menu(evt, pos)
         else:
             evt.Skip()
 
-    def _on_result_context_menu(self, _evt):
+    def _on_result_context_menu(self, _evt, pos=wx.DefaultPosition):
         rows = self._selected_rows()
         paths = [r['path'] for r in rows if r['path']]
         if not rows:
@@ -1363,7 +1374,7 @@ class MainFrame(wx.Frame):
         for item, key in uncheck_items:
             self.Bind(wx.EVT_MENU,
                       lambda _e, k=key: self._uncheck_option(*k), item)
-        self.results.PopupMenu(menu)
+        self.results.PopupMenu(menu, pos)
         menu.Destroy()
 
     def _uncheck_option(self, cleaner_id, option_id):

@@ -327,19 +327,27 @@ class GUIwxTestCase(common.BleachbitTestCase):
         with mock.patch.object(tree, 'PopupMenu',
                                side_effect=popup_menu) as popup, \
                 mock.patch.object(
-                    tree, 'GetCurrentItem', return_value=current):
-            # A mouse click is left to EVT_DATAVIEW_ITEM_CONTEXT_MENU,
-            # which wxOSX sends from its own EVT_CONTEXT_MENU handler,
-            # so at most one menu opens.
+                    tree, 'GetCurrentItem', return_value=current), \
+                mock.patch.object(
+                    tree, 'GetItemRect',
+                    return_value=wx.Rect(10, 20, 30, 15)):
+            # A mouse click is left to EVT_DATAVIEW_ITEM_CONTEXT_MENU.
+            # wxOSX sends that from its own EVT_CONTEXT_MENU handler,
+            # so the skipped event can still open one menu there.
             self._send_context_menu(tree.GetMainWindow(), wx.Point(5, 5))
-            self.assertLessEqual(popup.call_count, 1)
+            if wx.Platform == '__WXMAC__':
+                self.assertLessEqual(popup.call_count, 1)
+            else:
+                popup.assert_not_called()
             popup.reset_mock()
             del labels[:]
             # Shift+F10 and the Menu key have no position; the menu is
-            # for the focused option.
+            # for the focused option and opens at its row's rect.
             self._send_context_menu(
                 tree.GetMainWindow(), wx.DefaultPosition)
             popup.assert_called_once()
+            self.assertEqual(
+                wx.Point(10, 35), popup.call_args[0][1])
         self.assertTrue(
             any(BROWSER1_ID in label for label in labels), labels)
 
@@ -349,15 +357,22 @@ class GUIwxTestCase(common.BleachbitTestCase):
         row = {'path': 'C:\\a.txt', 'cleaner_id': BROWSER1_ID,
                'option_id': 'cache', 'cleaner_name': 'Browser',
                'option_name': 'Cache'}
+        results.SetItemCount(1)
+        results.Focus(0)
+        rect = results.GetItemRect(0)
+        pos = wx.Point(rect.GetLeft(), rect.GetBottom() + 1)
         with mock.patch.object(results, 'PopupMenu') as popup, \
                 mock.patch.object(
                     self.frame, '_selected_rows', return_value=[row]):
             # A mouse click is left to EVT_LIST_ITEM_RIGHT_CLICK.
             self._send_context_menu(results, wx.Point(5, 5))
             popup.assert_not_called()
-            # Shift+F10 and the Menu key have no position.
+            # Shift+F10 and the Menu key have no position; the menu
+            # opens at the focused row's rect.
             self._send_context_menu(results, wx.DefaultPosition)
             popup.assert_called_once()
+            self.assertEqual(pos, popup.call_args[0][1])
+        results.SetItemCount(0)
 
     def test_wx_ui_proxy_batches_callbacks(self):
         """Test WxUIProxy event batching and rescheduling."""
