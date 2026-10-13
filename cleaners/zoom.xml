@@ -13,6 +13,7 @@ later.  See the COPYING file in the top-level directory.
   <description>Chat client</description>
   <running type="exe" os="windows" same_user="true">Zoom.exe</running>
   <running type="exe" os="linux" same_user="true">zoom</running>
+  <running type="exe" os="macos" same_user="true">zoom.us</running>
   <var name="base">
     <value os="windows">%AppData%\Zoom</value>
     <value search="glob" os="linux">~/snap/zoom-client/*/.zoom</value>
@@ -34,6 +35,8 @@ Zoom 5.2.440215.0803 on Ubuntu 20.04
 -->
     <action command="delete" search="walk.all" path="~/snap/zoom-client/common/.cache/"/>
     <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/zoom/"/>
+    <!-- Zoom macOS: real app cache, confirmed on macOS 27 (WebKit, ZoomCefWebView subfolders) -->
+    <action command="delete" search="walk.all" path="~/Library/Caches/us.zoom.xos/" os="macos"/>
   </option>
   <option id="logs">
     <label>Logs</label>
@@ -55,6 +58,9 @@ Zoom 5.2.0 on Windows 10
 -->
     <action command="delete" search="walk.all" path="$$base$$/logs/"/>
     <action command="delete" search="file" path="$$base$$/installer.txt"/>
+    <!-- Zoom macOS: confirmed real log locations on macOS 27 -->
+    <action command="delete" search="walk.all" path="~/Library/Logs/zoom.us/" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Logs/ZoomPhone/" os="macos"/>
   </option>
   <!--
 Zoom 5.2.440215.0803 on Ubuntu 20.04

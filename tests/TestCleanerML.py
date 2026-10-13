@@ -354,6 +354,22 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 self.assertEqual(expected,
                                  xmlcleaner.os_match(os_attr, platform))
 
+        # unrecognized tokens log a warning and fail closed: a positive
+        # token is a non-match and a negated token disqualifies
+        unknown_cases = [
+            ('posix', 'linux', False),
+            ('posix', 'win32', False),
+            ('!posix', 'win32', False),
+            ('!hal9000', 'linux', False),
+            ('linux,hal9000', 'linux', True),
+            ('windows,!hal9000', 'win32', False),
+        ]
+        for os_attr, platform, expected in unknown_cases:
+            with self.subTest(os=os_attr, platform=platform):
+                with self.assertLogs('bleachbit.General', level='WARNING'):
+                    self.assertEqual(expected,
+                                     xmlcleaner.os_match(os_attr, platform))
+
         # as unknown operating system
         with self.assertRaisesRegex(RuntimeError, 'Unknown operating system: hal9000'):
             xmlcleaner.os_match('linux', 'hal9000')

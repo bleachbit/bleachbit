@@ -10,6 +10,8 @@ later.  See the COPYING file in the top-level directory.
 -->
 <cleaner id="google_earth">
   <label>Google Earth</label>
+  <!-- Google Earth Pro (macOS) -->
+  <running type="exe" os="macos" same_user="true">Google Earth</running>
   <option id="temporary_files">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
@@ -18,5 +20,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.files" path="~/.googleearth/Temp"/>
     <action command="delete" search="file" path="$USERPROFILE\Application Data\Google\GoogleEarth\dbCache.dat"/>
     <action command="delete" search="file" path="$USERPROFILE\Application Data\Google\GoogleEarth\dbCache.dat.index"/>
+    <!-- Google Earth Pro (macOS) -->
+    <action command="delete" search="walk.files" path="~/Library/Caches/Google Earth/" os="macos"/>
   </option>
 </cleaner>

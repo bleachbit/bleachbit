@@ -21,6 +21,13 @@ VSCodium 1.121.03429 on Windows has process `VSCodium.exe`.
   <running type="exe" os="linux" same_user="true">devin-desktop-next</running>
   <running type="exe" os="linux" same_user="true">devin-desktop</running>
   <running type="exe" os="linux" same_user="true">windsurf</running>
+  <running type="exe" os="macos" same_user="true">Code</running>
+  <running type="exe" os="macos" same_user="true">Cursor</running>
+  <running type="exe" os="macos" same_user="true">Devin</running>
+  <running type="exe" os="macos" same_user="true">Devin - Next</running>
+  <running type="exe" os="macos" same_user="true">VSCodium</running>
+  <running type="exe" os="macos" same_user="true">Windsurf</running>
+  <running type="exe" os="macos" same_user="true">Windsurf - Next</running>
   <running type="exe" os="windows" same_user="true">Antigravity.exe</running>
   <running type="exe" os="windows" same_user="true">Code.exe</running>
   <running type="exe" os="windows" same_user="true">cursor.exe</running>
@@ -39,6 +46,14 @@ VSCodium 1.121.03429 on Windows has process `VSCodium.exe`.
     <value os="linux">$XDG_CONFIG_HOME/VSCodium</value>
     <value os="linux">$XDG_CONFIG_HOME/Windsurf - Next</value>
     <value os="linux">$XDG_CONFIG_HOME/Windsurf</value>
+    <value os="macos">~/Library/Application Support/Code</value>
+    <value os="macos">~/Library/Application Support/Code - Insiders</value>
+    <value os="macos">~/Library/Application Support/Cursor</value>
+    <value os="macos">~/Library/Application Support/Devin</value>
+    <value os="macos">~/Library/Application Support/Devin - Next</value>
+    <value os="macos">~/Library/Application Support/VSCodium</value>
+    <value os="macos">~/Library/Application Support/Windsurf</value>
+    <value os="macos">~/Library/Application Support/Windsurf - Next</value>
     <value os="windows">%AppData%\Antigravity</value>
     <value os="windows">%AppData%\Code</value>
     <value os="windows">%AppData%\Cursor</value>
@@ -63,15 +78,25 @@ VSCodium 1.121.03429 on Windows has process `VSCodium.exe`.
     <action command="delete" search="walk.all" path="$$base$$/CachedExtensionVSIXs/"/>
     <action command="delete" search="walk.all" path="$$base$$/CachedProfilesData/"/>
     <action command="delete" search="walk.all" path="$$base$$/Code Cache/"/>
-    <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
     <action command="delete" search="walk.all" path="$$base$$/DawnGraphiteCache/"/>
     <action command="delete" search="walk.all" path="$$base$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$base$$/GPUCache/"/>
+    <action command="delete" search="file" path="$$base$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$base$$/Network/Network Persistent State" os="windows"/>
+    <action command="delete" search="glob" path="$$base$$/Partitions/*/Network Persistent State" os="unix"/>
+    <action command="delete" search="glob" path="$$base$$/Partitions/*/Network/Network Persistent State" os="windows"/>
+    <action command="delete" search="walk.all" path="$$base$$/Partitions/*/DawnGraphiteCache/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Partitions/*/DawnWebGPUCache/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Partitions/*/GPUCache/"/>
+  </option>
+  <option id="crash_reports">
+    <label>Crash reports</label>
+    <description>Delete the files</description>
+    <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
   </option>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
     <action command="delete" search="walk.all" path="$$base$$/logs/"/>
-    <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
   </option>
 </cleaner>

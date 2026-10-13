@@ -14,14 +14,26 @@ later.  See the COPYING file in the top-level directory.
   <running type="exe" os="windows" same_user="true">thunderbird.exe</running>
   <running type="exe" os="linux" same_user="true">thunderbird</running>
   <running type="exe" os="freebsd">thunderbird</running>
+  <var name="base">
+    <value os="windows">%AppData%\Thunderbird</value>
+    <value os="linux">~/.thunderbird</value>
+    <value os="linux">~/.config/thunderbird</value>
+    <value os="linux">~/.config/mozilla/thunderbird</value>
+    <value os="linux" search="glob">~/snap/thunderbird/[0-9]*/.config/thunderbird</value>
+    <value os="linux" search="glob">~/snap/thunderbird/[0-9]*/.config/mozilla/thunderbird</value>
+    <value os="linux">~/.var/app/org.mozilla.Thunderbird/.thunderbird</value>
+  </var>
   <var name="profile">
     <!-- Fedora 11 Thunderbird 3.0 has ~/.thunderbird/default/????????.slt/ -->
     <!-- Ubuntu 10.04 Thunderbird 3 has ~/.thunderbird/????????.default/ -->
     <!-- Ubuntu 9.10 Thunderbird 2.0 has ~/.mozilla-thunderbird/????????.default/ -->
     <!-- openSUSE 11.3 Thunderbird 3 has ~/.thunderbird/Profiles/????????.default/ -->
+    <!-- Ubuntu 26.04 Thunderbird 1xx snap has ~/snap/thunderbird/1274/.config/thunderbird/????????.default/ -->
     <value search="glob" os="linux">~/.thunderbird/*</value>
     <value search="glob" os="linux">~/.mozilla-thunderbird/*</value>
     <value search="glob" os="linux">~/.thunderbird/Profiles/*</value>
+    <value search="glob" os="linux">~/.config/thunderbird/*</value>
+    <value search="glob" os="linux">~/snap/thunderbird/[0-9]*/.config/thunderbird/*</value>
     <value search="glob" os="linux">~/.var/app/org.mozilla.Thunderbird/.thunderbird/*</value>
     <value search="glob" os="windows">%AppData%\Thunderbird\Profiles\*</value>
   </var>
@@ -41,6 +53,13 @@ later.  See the COPYING file in the top-level directory.
     <label>Cookies</label>
     <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite"/>
+  </option>
+  <option id="crash_reports">
+    <label>Crash reports</label>
+    <description>Delete the files</description>
+    <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/crashes/"/>
+    <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
   </option>
   <option id="index">
     <label>Index</label>

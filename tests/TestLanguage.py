@@ -498,9 +498,15 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
             try:
                 translations = {}
                 for lang in ('es', 'it', 'de', 'fr'):
+                    # setup_translation() binds the libintl domain only
+                    # when GTK is loaded; this test exercises the bind
+                    # itself, so pretend it is.
                     with mock.patch(
                             'bleachbit.Language.get_active_language_code',
-                            return_value=lang):
+                            return_value=lang), \
+                            mock.patch(
+                            'bleachbit.GtkShim.is_gtk_loaded',
+                            return_value=True):
                         setup_translation()
                     translated = libintl.dgettext(domain, msgid)
                     translations[lang] = translated.decode('utf-8')

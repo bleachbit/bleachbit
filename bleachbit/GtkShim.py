@@ -91,7 +91,6 @@ import warnings
 import webbrowser
 from contextlib import contextmanager
 from pathlib import PureWindowsPath
-from html import escape as esc
 from traceback import format_exc
 
 from bleachbit import bleachbit_exe_path, log_startup_time, IS_MAC, IS_POSIX, IS_WINDOWS
@@ -173,6 +172,8 @@ def _build_error_html(error, traceback_text=None):
 
     It does not write to a file.
     """
+    # Keep html off the startup path: only the error page needs it
+    from html import escape as esc  # pylint: disable=import-outside-toplevel
 
     try:
         # Import here to avoid a circular import.
@@ -462,6 +463,17 @@ def gtk_may_be_available():
 def is_gtk_available():
     """Return whether GTK libraries and a display are actually available."""
     return _ensure_gtk_libraries()
+
+
+def is_gtk_loaded():
+    """Return whether the gi.repository GTK libraries are loaded.
+
+    Unlike :func:`is_gtk_available`, this only reports a past import --
+    it never triggers the lazy import itself.  Callers that need to know
+    whether GTK is part of this process without pulling it in should use
+    this.
+    """
+    return _gtk_libraries_available or 'gi.repository.Gtk' in sys.modules
 
 
 def require_gtk():

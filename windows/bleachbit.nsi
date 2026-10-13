@@ -227,7 +227,8 @@ Caption "$(INSTALLER_CAPTION)"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
-!define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION RunBleachBit
 ;!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
 ;Later:
 !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
@@ -331,6 +332,17 @@ Function RefreshShellIcons
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
 FunctionEnd
 
+; Start BleachBit as the user who ran setup, not the admin that elevated it
+Function RunBleachBit
+  HideWindow ; so BleachBit becomes the active window once setup exits
+  ${If} ${UAC_IsInnerInstance}
+    !insertmacro UAC_AsUser_ExecShell "open" "$INSTDIR\${prodname}.exe" "" "$INSTDIR" ""
+  ${Else}
+    ; Setup was started elevated, so there is no user instance to ask
+    ${StdUtils.ExecShellAsUser} $0 "$INSTDIR\${prodname}.exe" "open" ""
+  ${EndIf}
+FunctionEnd
+
 Function .onVerifyInstDir
   ; This callback belongs to MUI_PAGE_DIRECTORY and is called every time the user presses Browse
   ; button and selects install directory. It does not affect typing in the input field.
@@ -371,7 +383,9 @@ Section "$(SECTION_CORE_NAME)" SectionCore
     # Build cache now while there is a GUI progress bar.
     DetailPrint "$(MULTIPRINT1)"
     DetailPrint "$(MULTIPRINT2)"
-    ExecWait '"$instdir\fc-cache.exe"'
+    # nsExec runs it without flashing a console window
+    nsExec::Exec '"$instdir\fc-cache.exe"'
+    Pop $0 ; exit code
 SectionEnd
 
 

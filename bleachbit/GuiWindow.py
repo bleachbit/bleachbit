@@ -365,6 +365,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             Windows.splash_thread.start()
             return
 
+        # Only Pango's fontconfig backend builds the font cache on startup
+        if os.environ.get('PANGOCAIRO_BACKEND') not in ('fc', 'fontconfig'):
+            return
+
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
             logger.error('No fonts.conf file %s', font_conf_file)
@@ -1308,8 +1312,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
             # only restore position and size if window left corner
             # is within the closest monitor
-            if r.x >= g.x and r.x < g.x + g.width and \
-               r.y >= g.y and r.y < g.y + g.height:
+            if g.x <= r.x < g.x + g.width and \
+               g.y <= r.y < g.y + g.height:
                 logger.debug("closest monitor %s, prior window geometry = %s+%s",
                              str(g), (r.x, r.y), (r.width, r.height))
                 self.move(r.x, r.y)

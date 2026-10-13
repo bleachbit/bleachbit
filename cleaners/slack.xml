@@ -35,7 +35,8 @@ later.  See the COPYING file in the top-level directory.
   <option id="history">
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
-    <action command="delete" search="file" path="$$base$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$base$$/TransportSecurity" os="unix"/>
+    <action command="delete" search="file" path="$$base$$/Network/TransportSecurity" os="windows"/>
     <action command="delete" search="walk.all" path="$$base$$/Local Storage/leveldb"/>
     <action command="delete" search="walk.all" path="$$base$$/Session Storage"/>
     <action command="delete" search="walk.all" path="$$base$$/VideoDecodeStats"/>

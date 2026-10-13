@@ -22,6 +22,8 @@ LibreWolf 150.0.1-1 installed by .deb from its official repository uses
   <var name="base">
     <value os="windows">%AppData%\librewolf</value>
     <value os="unix">~/.librewolf</value>
+    <value os="unix">~/.config/librewolf/librewolf</value>
+    <value os="linux">~/.var/app/io.gitlab.librewolf-community/.librewolf</value>
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\librewolf\Profiles\*</value>

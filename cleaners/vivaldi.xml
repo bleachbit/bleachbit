@@ -21,27 +21,36 @@ Only the Default profile is cleaned.
     <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi</value>
     <value os="linux">~/.config/vivaldi</value>
-    <value os="linux">~/snap/vivaldi/current/.config/vivaldi</value>
+    <value os="linux" search="glob">~/snap/vivaldi/[0-9]*/.config/vivaldi</value>
     <value os="macos">$HOME/Library/Application Support/Vivaldi</value>
   </var>
   <var name="profile">
     <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi/Default</value>
     <value os="linux">~/.config/vivaldi/Default</value>
-    <value os="linux">~/snap/vivaldi/current/.config/vivaldi/Default</value>
+    <value os="linux" search="glob">~/snap/vivaldi/[0-9]*/.config/vivaldi/Default</value>
     <value os="macos">$HOME/Library/Application Support/Vivaldi/Default</value>
   </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
+    <action command="delete" search="file" path="$$profile$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State" os="windows"/>
     <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUPersistentCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
     <action command="delete" search="walk.all" path="$$profile$$/Code Cache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnGraphiteCache/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnGraphiteCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnWebGPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/GPUCache"/>
+    <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network Persistent State" os="unix"/>
+    <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network/Network Persistent State" os="windows"/>
     <!-- specific to OS or packaging -->
     <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/mesa_shader_cache_db"/>
     <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/mesa_shader_cache"/>
@@ -52,12 +61,14 @@ Only the Default profile is cleaned.
     <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="cookie" search="file" path="$$profile$$/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
-    <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/TransportSecurity" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity" os="windows"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
