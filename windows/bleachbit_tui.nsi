@@ -164,12 +164,10 @@ Caption "$(INSTALLER_CAPTION)"
 !insertmacro MUI_LANGUAGE "Italian"
 !insertmacro MUI_LANGUAGE "Japanese"
 !insertmacro MUI_LANGUAGE "Korean"
-!insertmacro MUI_LANGUAGE "Kurdish"
 !insertmacro MUI_LANGUAGE "Latvian"
 !insertmacro MUI_LANGUAGE "Lithuanian"
 !insertmacro MUI_LANGUAGE "Malay"
 !insertmacro MUI_LANGUAGE "Norwegian"
-!insertmacro MUI_LANGUAGE "NorwegianNynorsk"
 !insertmacro MUI_LANGUAGE "Polish"
 !insertmacro MUI_LANGUAGE "Portuguese"
 !insertmacro MUI_LANGUAGE "PortugueseBR"
@@ -278,36 +276,49 @@ SectionEnd
 
 Function .onInit
 
-  ${If} ${AtMostWin7}
-    MessageBox MB_OK|MB_ICONEXCLAMATION "This version of Windows is not compatible with this version of BleachBit. Please see https://www.bleachbit.org/bleachbit-windows-7 to download a compatible version." /SD IDOK
+  ${If} ${AtMostWin8.1}
+    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_WINDOWS_WARNING)" /SD IDOK IDOK open_old_windows_page
     Abort
   ${EndIf}
 
   !insertmacro MULTIUSER_INIT
 
   ; Language display dialog
-  !insertmacro MUI_LANGDLL_DISPLAY
+  ; The elevated inner instance already has the language of the outer one
+  ${If} $IsInnerInstance = 0
+    !insertmacro MUI_LANGDLL_DISPLAY
+  ${EndIf}
 
   ; Check whether application is already installed
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
      "UninstallString"
 
+  ; If not already installed, skip uninstallation
   StrCmp $R0 "" new_install
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
     "$(ALREADY_INSTALLED)" \
+    /SD IDOK \
     IDOK uninstall_old
+
   Abort
 
   uninstall_old:
-    ; Run the uninstaller silently
-    ClearErrors
-    ExecWait '$R0 /S _?=$INSTDIR'
-    IfErrors 0 new_install
-    MessageBox MB_ICONSTOP|MB_OK "$(ALREADY_INSTALLED_UNINSTALL_FAILED)"
-    Abort
+  ; If installing in silent mode, also uninstall in silent mode
+  Var /GLOBAL uninstaller_cmd
+  StrCpy $uninstaller_cmd '$R0 _?=$INSTDIR'
+  IfSilent 0 +2
+  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
+  ExecWait $uninstaller_cmd ; Actually run the uninstaller
 
   new_install:
+  Return
+
+  ; On old version of Windows after user agrees to open the link.
+  open_old_windows_page:
+    ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" "CurrentVersion"
+    ExecShell "open" "https://www.bleachbit.org/goto/old-windows?ver=${VERSION}&os=$R0&lang=$LANGUAGE"
+    Abort
 
 FunctionEnd
 

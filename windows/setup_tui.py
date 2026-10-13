@@ -325,7 +325,6 @@ def build_py2exe():
                      'concurrent.futures.process',
                      'chardet',  # not present now, but defensive
                      'xmlrpc',  # only consumer was multiprocessing.connection
-                     '_pydecimal',  # dead fallback
                      # non-Windows platform modules
                      'psutil._psaix', 'psutil._psbsd', 'psutil._pslinux',
                      'psutil._psosx', 'psutil._pssunos',
@@ -611,6 +610,7 @@ def repack_library(fast_build):
         'utf_16', 'utf_16_le', 'utf_16_be',
         'utf_32', 'utf_32_le', 'utf_32_be',
         'latin_1', 'ascii', 'mbcs', 'charmap', 'iso8859_1',
+        '_win_cp_codecs',  # required by encodings on Python 3.14+
         # Below are codecs used by standard library.
         'punycode', 'idna',
         'unicode_escape', 'raw_unicode_escape', 'unicode_internal',
