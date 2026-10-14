@@ -224,7 +224,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
-            gtk*-x86-windows.zip
+            gtk*-x86-windows.7z
             gtk-themes.zip
             pygobject-*-win32.whl
             nsis-*-setup.exe
@@ -365,7 +365,7 @@ jobs:
           # dependencies that the install script would then skip re-installing.
           # This job doesn't mutate the tree, so caching it here is safe.
           path: |
-            gtk*-x86-windows.zip
+            gtk*-x86-windows.7z
             gtk-themes.zip
             pygobject-*-win32.whl
             vcpkg_installed
