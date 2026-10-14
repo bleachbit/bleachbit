@@ -8,6 +8,8 @@
 Integration specific to macOS
 """
 
+import ctypes
+import ctypes.util
 import errno
 import logging
 import os
@@ -145,6 +147,65 @@ def get_macos_locale():
     # AppleLocale can include a variant suffix like 'es_ES@currency=EUR'.
     value = normalize_locale_code(value)
     return value or None
+
+
+def bind_libintl_domain(text_domain, locale_dir):
+    """Bind the gettext text domain through GNU libintl using ctypes.
+
+    Gtk.Builder translates .ui files (such as the hamburger menu) with the
+    C library libintl, not with Python's gettext. Python builds for macOS
+    (Homebrew, python.org) lack locale.bindtextdomain(), so without this
+    call the .mo files are never found and these strings stay in English.
+
+    The candidates are tried in order, so that the libintl that GTK uses
+    is found first (inside an app bundle, DYLD_LIBRARY_PATH resolves the
+    bare name to the bundled copy).
+
+    Returns True if the domain was bound.
+    """
+    candidates = []
+    found = ctypes.util.find_library('intl')
+    if found:
+        candidates.append(found)
+    candidates.extend((
+        'libintl.8.dylib',
+        'libintl.dylib',
+        '/opt/homebrew/lib/libintl.8.dylib',  # Homebrew on Apple silicon
+        '/opt/local/lib/libintl.8.dylib',  # MacPorts
+    ))
+    libintl = None
+    for name in candidates:
+        try:
+            libintl = ctypes.CDLL(name)
+            break
+        except OSError as e:
+            logger.debug('could not load %s: %s', name, e)
+    if libintl is None:
+        logger.warning(
+            'internationalization library (libintl) was not found, '
+            'so translations will not work.')
+        return False
+    try:
+        libintl.libintl_bindtextdomain.argtypes = [
+            ctypes.c_char_p, ctypes.c_char_p]
+        libintl.libintl_bindtextdomain.restype = ctypes.c_char_p
+        libintl.libintl_bind_textdomain_codeset.argtypes = [
+            ctypes.c_char_p, ctypes.c_char_p]
+        libintl.libintl_bind_textdomain_codeset.restype = ctypes.c_char_p
+        libintl.libintl_textdomain.argtypes = [ctypes.c_char_p]
+        libintl.libintl_textdomain.restype = ctypes.c_char_p
+        encoded_domain = text_domain.encode('utf-8')
+        if libintl.libintl_bindtextdomain(
+                encoded_domain, os.fsencode(locale_dir)) is None:
+            logger.warning('libintl_bindtextdomain() failed.')
+            return False
+        libintl.libintl_bind_textdomain_codeset(encoded_domain, b'UTF-8')
+        libintl.libintl_textdomain(encoded_domain)
+    except AttributeError as e:
+        logger.warning('libintl does not export the expected functions: %s', e)
+        return False
+    logger.debug('libintl text domain %s bound to %s', text_domain, locale_dir)
+    return True
 
 
 def notify_macos(msg):
