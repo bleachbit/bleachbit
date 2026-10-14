@@ -463,3 +463,105 @@ class GUIwxTestCase(common.BleachbitTestCase):
                 options.set(key, value)
             options.set_whitelist_paths(saved_whitelist)
             options.set_custom_paths(saved_custom)
+
+    def test_preferences_dialog_selects_interface_language(self):
+        """Test the Languages page saves the interface language."""
+        prefs = self.PreferencesModule
+        langs = {'en_US': 'English', 'es': 'Español', 'zh_TW': '中文'}
+
+        def active_language():
+            # get_active_language_code() on an en_US system.
+            if (not options.get('auto_detect_lang')
+                    and options.get('forced_language')):
+                return options.get('forced_language')
+            return 'en_US'
+
+        dialog = None
+        try:
+            options.set('auto_detect_lang', True)
+            options.set('forced_language', '', section='bleachbit')
+            with mock.patch.object(
+                    prefs, 'get_supported_language_code_name_dict',
+                    return_value=langs),                     mock.patch.object(
+                        prefs, 'get_active_language_code',
+                        side_effect=active_language),                     mock.patch.object(prefs, 'setup_translation') as setup:
+                dialog = prefs.PreferencesDialog(self.frame)
+                panel = next(
+                    child for child in dialog.GetChildren()
+                    if isinstance(child, wx.Notebook)).GetPage(1)
+                self.assertIsInstance(panel, prefs._LanguagesPanel)
+                self.assertFalse(dialog.language_changed)
+                self.assertTrue(panel._cb_auto.GetValue())
+                self.assertFalse(panel._choice.IsEnabled())
+                self.assertEqual(
+                    ['English (en_US)', 'Español (es)', '中文 (zh_TW)'],
+                    panel._choice.GetItems())
+                self.assertEqual(0, panel._choice.GetSelection())
+
+                # Turning auto-detect off enables the dropdown.
+                panel._cb_auto.SetValue(False)
+                panel._on_auto_detect(None)
+                self.assertFalse(options.get('auto_detect_lang'))
+                self.assertTrue(panel._choice.IsEnabled())
+                self.assertTrue(dialog.language_changed)
+
+                # Choosing a language forces it.
+                panel._choice.SetSelection(1)
+                panel._on_language(None)
+                self.assertEqual('es', options.get('forced_language'))
+
+                # Turning auto-detect back on clears the forced language
+                # and shows the system language again.
+                panel._cb_auto.SetValue(True)
+                panel._on_auto_detect(None)
+                self.assertTrue(options.get('auto_detect_lang'))
+                self.assertEqual('', options.get('forced_language'))
+                self.assertFalse(panel._choice.IsEnabled())
+                self.assertEqual(0, panel._choice.GetSelection())
+
+                # Turning it off again keeps the system language, so the
+                # dropdown must not show the old forced language.
+                panel._cb_auto.SetValue(False)
+                panel._on_auto_detect(None)
+                self.assertEqual(0, panel._choice.GetSelection())
+                self.assertEqual(4, setup.call_count)
+        finally:
+            if dialog is not None:
+                dialog.Destroy()
+
+    def test_cleaners_do_not_run_while_loading(self):
+        """Cleaners cannot run while they are registered again."""
+        frame = self.frame
+        saved_loader = frame._loader_thread
+        saved_buttons = [(btn, btn.IsEnabled()) for btn in (
+            frame.btn_preview, frame.btn_clean, frame.btn_abort)]
+        option = self.MainFrameModule._OptionNode(
+            BROWSER1_ID, 'cache', 'Cache')
+        items = []
+
+        def popup_menu(menu, *_args):
+            items.extend(mi.IsEnabled() for mi in menu.GetMenuItems())
+            return True
+
+        try:
+            frame._loader_thread = object()
+            with mock.patch.object(
+                    self.MainFrameModule, 'WorkerThread') as worker:
+                frame._start_worker(False, {BROWSER1_ID: ['cache']})
+                worker.assert_not_called()
+                # Shredding has its own cleaner, so it still runs (the
+                # startup shred starts while cleaners load).
+                frame._start_worker(True, {'_gui': ['files']})
+                worker.assert_called_once()
+            with mock.patch.object(
+                    frame.tree, 'PopupMenu', side_effect=popup_menu):
+                frame._show_tree_context_menu(
+                    frame._tree_model.ObjectToItem(option))
+        finally:
+            frame._loader_thread = saved_loader
+            frame._worker_thread = None
+            for btn, enabled in saved_buttons:
+                btn.Enable(enabled)
+        # "Preview only" and "Clean only" are disabled; "Filter log by"
+        # is not.
+        self.assertEqual([False, False, True], items[:3])
