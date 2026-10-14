@@ -8,14 +8,21 @@
 Preferences dialog for the experimental wxPython GUI.
 
 Currently surfaces a few common boolean options on a General tab
-plus parity with the GTK GUI for the Keep list (whitelist) and
-Custom (paths to delete) lists.
+plus parity with the GTK GUI for the interface language, the Keep
+list (whitelist) and Custom (paths to delete) lists.
 """
+
+import logging
 
 import wx
 
+from bleachbit.Language import (get_active_language_code,
+                                get_supported_language_code_name_dict,
+                                setup_translation)
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
+
+logger = logging.getLogger(__name__)
 
 
 # (option_key, label) pairs.  Order is preserved in the dialog.
@@ -34,6 +41,113 @@ _PREFS = (
 # Page identifiers for the locations panel.
 LOCATIONS_WHITELIST = 1
 LOCATIONS_CUSTOM = 2
+
+# Milliseconds before an infobar notice hides itself, as in the GTK GUI.
+_INFOBAR_TIMEOUT_MS = 15000
+
+
+class _LanguagesPanel(wx.Panel):
+    """Panel that chooses the BleachBit interface language.
+
+    Mirrors the "BleachBit interface language" section of the GTK
+    Languages page: an *Auto-detect language* checkbox and, below it,
+    a *Language:* dropdown that is enabled only while auto-detect is
+    off.  Changes are saved to ``Options`` immediately, and
+    ``on_change`` is called so the dialog can ask for a restart.
+    """
+
+    def __init__(self, parent, on_change):
+        super().__init__(parent)
+        self._on_change = on_change
+
+        try:
+            supported_langs = get_supported_language_code_name_dict()
+        except Exception as exc:  # pylint: disable=broad-except
+            logger.error('Failed to get list of supported languages: %s', exc)
+            supported_langs = {'en_US': 'English'}
+
+        box_sizer = wx.StaticBoxSizer(
+            wx.VERTICAL, self,
+            # TRANSLATORS: Section title on the preferences languages page.
+            _('BleachBit interface language'))
+        box = box_sizer.GetStaticBox()
+
+        is_auto_detect = bool(options.get('auto_detect_lang'))
+        self._cb_auto = wx.CheckBox(box, label=_('Auto-detect language'))
+        self._cb_auto.SetValue(is_auto_detect)
+        self._cb_auto.SetToolTip(
+            _('Automatically detect the system language'))
+        self._cb_auto.Bind(wx.EVT_CHECKBOX, self._on_auto_detect)
+
+        # The label is created right before the dropdown so screen
+        # readers on Windows use it as the dropdown's name.
+        self._lang_label = wx.StaticText(box, label=_('Language:'))
+        self._lang_codes = []
+        labels = []
+        for lang_code, native in supported_langs.items():
+            self._lang_codes.append(lang_code)
+            labels.append('%s (%s)' % (native, lang_code)
+                          if native else lang_code)
+        self._choice = wx.Choice(box, choices=labels)
+        self._select_active_language()
+        self._choice.Bind(wx.EVT_CHOICE, self._on_language)
+
+        lang_row = wx.BoxSizer(wx.HORIZONTAL)
+        lang_row.Add(self._lang_label, 0,
+                     wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, 5)
+        lang_row.Add(self._choice, 0, wx.ALIGN_CENTER_VERTICAL)
+
+        box_sizer.Add(self._cb_auto, 0, wx.ALL, 6)
+        # Indent the dropdown under the checkbox, like the GTK GUI.
+        box_sizer.Add(lang_row, 0, wx.LEFT, 20)
+        box_sizer.AddSpacer(6)
+        self._update_sensitivity()
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(box_sizer, 0, wx.EXPAND | wx.ALL, 6)
+        self.SetSizer(sizer)
+
+    def _select_active_language(self):
+        """Select the language in use now, or nothing if it is not listed."""
+        current_lang_code = get_active_language_code()
+        if current_lang_code in self._lang_codes:
+            self._choice.SetSelection(
+                self._lang_codes.index(current_lang_code))
+        else:
+            self._choice.SetSelection(wx.NOT_FOUND)
+
+    def _update_sensitivity(self):
+        enabled = not self._cb_auto.GetValue()
+        self._lang_label.Enable(enabled)
+        self._choice.Enable(enabled)
+
+    def _on_auto_detect(self, _evt):
+        is_auto_detect = self._cb_auto.GetValue()
+        options.set('auto_detect_lang', is_auto_detect)
+        if is_auto_detect:
+            options.set('forced_language', '', section='bleachbit')
+        # The active language may have changed (e.g. back to the system
+        # language), so do not leave a stale choice in the dropdown.
+        self._select_active_language()
+        self._update_sensitivity()
+        self._language_changed()
+
+    def _on_language(self, _evt):
+        idx = self._choice.GetSelection()
+        if idx == wx.NOT_FOUND:
+            return
+        lang_code = self._lang_codes[idx]
+        if lang_code == options.get('forced_language'):
+            return
+        options.set('forced_language', lang_code, section='bleachbit')
+        self._language_changed()
+
+    def _language_changed(self):
+        # Translate strings created from now on (e.g. reloaded cleaner
+        # names) in the new language; the rest of the window needs a
+        # restart, as in the GTK GUI.
+        setup_translation()
+        self._on_change()
 
 
 class _LocationsPanel(wx.Panel):
@@ -153,13 +267,22 @@ class _LocationsPanel(wx.Panel):
 
 
 class PreferencesDialog(wx.Dialog):
-    """wx preferences dialog: General options + Keep list + Custom list."""
+    """wx preferences dialog: General options, Languages, Keep list and
+    Custom list."""
 
     def __init__(self, parent):
         super().__init__(
             parent, title=_('Preferences'),
             style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         )
+        # Set when the interface language changes, so the caller can
+        # reload the cleaners in the new language.
+        self.language_changed = False
+        self._infobar_timer = None
+        self.Bind(wx.EVT_WINDOW_DESTROY, self._on_destroy)
+
+        # Non-blocking notices, like the GTK InfoBar.
+        self._infobar = wx.InfoBar(self)
         notebook = wx.Notebook(self)
 
         # General page (checkboxes, saved on OK via commit()).
@@ -174,6 +297,14 @@ class PreferencesDialog(wx.Dialog):
         general.SetSizer(gen_sizer)
         notebook.AddPage(general, _('General'))
 
+        # Languages page (saved immediately), in the same place as in
+        # the GTK GUI: right after General.
+        notebook.AddPage(
+            _LanguagesPanel(notebook, self._on_language_changed),
+            # TRANSLATORS: Label for the "Languages" page in the
+            # Preferences dialog.
+            _('Languages'))
+
         # Keep list / Custom list pages (saved immediately).
         notebook.AddPage(
             _LocationsPanel(notebook, LOCATIONS_WHITELIST),
@@ -183,6 +314,7 @@ class PreferencesDialog(wx.Dialog):
             _('Custom'))
 
         outer = wx.BoxSizer(wx.VERTICAL)
+        outer.Add(self._infobar, 0, wx.EXPAND)
         outer.Add(notebook, 1, wx.EXPAND | wx.ALL, 6)
         btns = self.CreateButtonSizer(wx.OK | wx.CANCEL)
         if btns:
@@ -190,6 +322,30 @@ class PreferencesDialog(wx.Dialog):
         self.SetSizer(outer)
         self.SetMinSize((620, 480))
         self.Fit()
+
+    def _on_language_changed(self):
+        self.language_changed = True
+        # Translate now so the notice is shown in the chosen language.
+        # TRANSLATORS: Notice shown in an infobar after changing a
+        # preference that requires starting the application to be
+        # effective.
+        self.show_infobar(_('Restart BleachBit for full effect.'),
+                          wx.ICON_INFORMATION)
+
+    def show_infobar(self, message, flags=wx.ICON_INFORMATION):
+        """Show a non-blocking notice that hides itself after a while."""
+        self._infobar.ShowMessage(message, flags)
+        if self._infobar_timer is None:
+            self._infobar_timer = wx.CallLater(
+                _INFOBAR_TIMEOUT_MS, self._infobar.Dismiss)
+        else:
+            self._infobar_timer.Restart(_INFOBAR_TIMEOUT_MS)
+
+    def _on_destroy(self, evt):
+        if evt.GetEventObject() is self and self._infobar_timer is not None:
+            self._infobar_timer.Stop()
+            self._infobar_timer = None
+        evt.Skip()
 
     def commit(self):
         """Save the General-tab checkbox state into ``Options``.
