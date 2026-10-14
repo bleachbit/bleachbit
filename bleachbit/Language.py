@@ -595,9 +595,15 @@ def setup_translation():
         # Log for debugging
         logger.debug("Windows translation domain set to: %s, dir: %s",
                      text_domain, locale_dir)
+    elif gtk_loaded and IS_MAC:
+        # Python builds for macOS lack locale.bindtextdomain(), so call
+        # libintl directly, so Gtk.Builder finds bleachbit.mo translations.
+        # Import here because bleachbit.Mac imports this module.
+        from bleachbit.Mac import bind_libintl_domain
+        if not bind_libintl_domain(text_domain, locale_dir):
+            logger.warning('Failed to bind the translation domain; '
+                           'the GUI may not be translated.')
     elif gtk_loaded:
-        # FIXME (macOS): call libintl.dylib's bindtextdomain() via ctypes
-        # like Windows, so Gtk.Builder finds bleachbit.mo translations.
         logger.warning('The function bindtextdomain() is not available.')
 
     # locale.setlocale() on Linux will throw an exception if the locale is not
