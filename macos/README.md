@@ -68,13 +68,28 @@ The libraries under the LGPL are separate files, so they can be replaced
 by a modified version. The application has to be signed again after that,
 for example with `codesign --force -s - <file>`.
 
+## First launch
+
+A downloaded .dmg has a quarantine mark, and macOS does not open an
+application that is not notarized without the user's permission. This was
+tested only on macOS 27.0.1 (Apple Silicon), with the quarantine mark
+added by hand to a copy of the .dmg instead of a real download:
+
+1. Opening the .dmg and copying `BleachBit.app` out of it showed no
+   warning.
+2. Opening the application showed a warning that Apple could not verify
+   that it is free of malware. Do not choose the button that moves it to
+   the Trash.
+3. In System Settings, Privacy & Security, the Security section offers
+   "Open Anyway" for BleachBit. macOS asked for the password of an
+   administrator, and then the application opened.
+
 ## Limitations
 
 * The libraries are built for the macOS version of the build machine, so
   the result runs on that version of macOS or newer.
-* The application is not notarized. Because of that, the first launch
-  needs the usual steps for an application from an unidentified
-  developer.
+* The application is not notarized, so macOS blocks it the first time it
+  is opened if the .dmg was downloaded (see "First launch").
 * The bundle has to be built again after `brew upgrade`, because it
   contains the versions that were installed at the time.
 
