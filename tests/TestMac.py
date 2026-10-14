@@ -474,3 +474,28 @@ class MacTestCase(common.BleachbitTestCase):
                 self.assertIsInstance(domain, str)
                 self.assertTrue(domain)
                 self.assertNotIn('\x00', domain)
+
+    def test_bind_libintl_domain_calls_libintl(self):
+        """bind_libintl_domain() binds the text domain through libintl.
+
+        Python builds for macOS (Homebrew, python.org) lack
+        locale.bindtextdomain(), so Gtk.Builder never finds bleachbit.mo
+        unless libintl is called directly. Mocked, so it runs on any OS.
+        """
+        from bleachbit.Mac import bind_libintl_domain
+        fake_lib = mock.MagicMock()
+        fake_lib.libintl_bindtextdomain.return_value = b'/some/locale'
+        with mock.patch('ctypes.CDLL', return_value=fake_lib):
+            self.assertTrue(bind_libintl_domain('bleachbit', '/some/locale'))
+        fake_lib.libintl_bindtextdomain.assert_called_once_with(
+            b'bleachbit', b'/some/locale')
+        fake_lib.libintl_bind_textdomain_codeset.assert_called_once_with(
+            b'bleachbit', b'UTF-8')
+        fake_lib.libintl_textdomain.assert_called_once_with(b'bleachbit')
+
+    def test_bind_libintl_domain_library_missing(self):
+        """bind_libintl_domain() returns False when libintl cannot be loaded."""
+        from bleachbit.Mac import bind_libintl_domain
+        with mock.patch('ctypes.CDLL', side_effect=OSError('not found')), \
+                mock.patch('ctypes.util.find_library', return_value=None):
+            self.assertFalse(bind_libintl_domain('bleachbit', '/some/locale'))
