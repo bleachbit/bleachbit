@@ -213,8 +213,10 @@ Caption "$(INSTALLER_CAPTION)"
 
 ; Installer:
 !define MUI_WELCOMEFINISHPAGE_BITMAP "picture.MUI2\bleachbit_164x314.bmp"
+!define MUI_PAGE_CUSTOMFUNCTION_PRE PageWelcomeLicensePre
 !insertmacro MUI_PAGE_WELCOME
 !define MUI_LICENSEPAGE_RADIOBUTTONS
+!define MUI_PAGE_CUSTOMFUNCTION_PRE PageWelcomeLicensePre
 !insertmacro MUI_PAGE_LICENSE "gpl-3.0.rtf"
 ;Later:
 ;!insertmacro MUI_PAGE_LICENSE "$(MUI_LICENSE)"
@@ -338,6 +340,14 @@ Function RunBleachBit
   ${Else}
     ; Setup was started elevated, so there is no user instance to ask
     ${StdUtils.ExecShellAsUser} $0 "$INSTDIR\${prodname}.exe" "open" ""
+  ${EndIf}
+FunctionEnd
+
+; The elevated inner instance starts at the first page again, but the outer
+; one already showed these
+Function PageWelcomeLicensePre
+  ${If} $InstallShowPagesBeforeComponents = 0
+    Abort
   ${EndIf}
 FunctionEnd
 
