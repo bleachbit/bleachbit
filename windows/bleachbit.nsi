@@ -516,9 +516,23 @@ FunctionEnd
 
 ; Run the old uninstaller command $R0 on the installation in $R1
 Function UninstallOld
-  ; If installing in silent mode, also uninstall in silent mode
   Var /GLOBAL uninstaller_cmd
   StrCpy $uninstaller_cmd $R0
+  ; Run a copy so the old uninstaller can delete itself. In place it leaves
+  ; uninstall.exe behind and asks for a reboot to remove the folder
+  StrCpy $2 '"$R1\${UNINSTALL_FILENAME}"'
+  StrLen $3 $2
+  StrCpy $4 $R0 $3
+  ${If} $4 == $2
+    InitPluginsDir
+    ClearErrors
+    CopyFiles /SILENT "$R1\${UNINSTALL_FILENAME}" "$PLUGINSDIR"
+    ${IfNot} ${Errors}
+      StrCpy $4 $R0 "" $3
+      StrCpy $uninstaller_cmd '"$PLUGINSDIR\${UNINSTALL_FILENAME}"$4'
+    ${EndIf}
+  ${EndIf}
+  ; If installing in silent mode, also uninstall in silent mode
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
   ; _?= must come last: NSIS reads the rest of the line as the folder
