@@ -44,6 +44,15 @@ import tempfile
 # local import
 import bleachbit
 from setup import supported_languages
+from macos.licenses import (
+    dylib_sources,
+    formula_entries,
+    formulas_of,
+    mirrored_sources,
+    python_packages,
+    theme_sources,
+    write_notices,
+)
 from macos.relocate import Relocator, macho_files
 
 logger = logging.getLogger(__name__)
@@ -58,11 +67,17 @@ logger.addHandler(ch)
 # Prevent propagation to root logger to avoid duplicate messages
 logger.propagate = False
 
-# show the summary of the relocation, which has its own logger
-relocate_logger = logging.getLogger('macos.relocate')
-relocate_logger.setLevel(logging.INFO)
-relocate_logger.addHandler(ch)
-relocate_logger.propagate = False
+
+def show_log_of(module):
+    """Show the messages that another module of this package logs"""
+    other = logging.getLogger(module)
+    other.setLevel(logging.INFO)
+    other.addHandler(ch)
+    other.propagate = False
+
+
+show_log_of('macos.relocate')
+show_log_of('macos.licenses')
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PYTHON_FORMULA = 'python@3.12'
@@ -424,6 +439,30 @@ def write_launcher_and_plist(b, version):
         f.write(render_template(text, version=version))
 
 
+def write_license_notices(prefix, b, version):
+    """Write the license notices of the software that is in the bundle"""
+    typelibs = os.path.join(b.frameworks, 'girepository-1.0')
+    loaders = os.path.join(b.lib, 'gdk-pixbuf-2.0', '2.10.0', 'loaders')
+    schemas = os.path.join(b.share, 'glib-2.0', 'schemas')
+    paths = (
+        dylib_sources(prefix, b.lib)
+        + mirrored_sources(
+            typelibs, os.path.join(prefix, 'lib', 'girepository-1.0'))
+        + mirrored_sources(
+            loaders, os.path.join(prefix, 'lib', 'gdk-pixbuf-2.0', '2.10.0',
+                                  'loaders'))
+        + mirrored_sources(
+            schemas, os.path.join(prefix, 'share', 'glib-2.0', 'schemas'),
+            '.xml')
+        + theme_sources(prefix)
+        + [os.path.join(prefix, 'opt', PYTHON_FORMULA)])
+    formulas = formulas_of(paths, os.path.join(prefix, 'Cellar'))
+    entries = formula_entries(formulas, prefix)
+    write_notices(b.resources, version, entries,
+                  python_packages(b.site_packages))
+    logger.info('license notices for %d Homebrew packages', len(entries))
+
+
 def smoke_tests(b):
     """Run the bundled Python and the launcher. Return a list of errors."""
     errors = []
@@ -456,6 +495,9 @@ def verify(b, relocator, prefix, strict):
     errors.extend(smoke_tests(b))
     for path in find_bytecode(b.app):
         errors.append('bytecode cache in the bundle: ' + path)
+    if not os.path.exists(os.path.join(b.resources,
+                                       'THIRD-PARTY-NOTICES.txt')):
+        errors.append('THIRD-PARTY-NOTICES.txt is not in the bundle')
     found = find_files_containing(b.app, [prefix, '/Users/', b.app])
     # The path of the build is never wanted, and it is ours to avoid.
     for path in found.pop(b.app):
@@ -516,6 +558,7 @@ def build(output, make_image, strict):
     run('codesign', '--force', '-s', '-', b.python_app)
     write_loaders_cache(prefix, b)
     write_launcher_and_plist(b, version)
+    write_license_notices(prefix, b, version)
 
     errors = verify(b, relocator, prefix, strict)
     if errors:
