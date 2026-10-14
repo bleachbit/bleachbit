@@ -33,12 +33,28 @@ $themes_dir = Join-Path $python_home "share\themes"
 $python_exists = Test-Path "$python_home\python.exe"
 # location of this .ps1 script
 $script_dir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2026-09-24/"
+$base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2026-10-13/"
 
 function Assert-FileHash($Path, $Expected) {
     $actual = (Get-FileHash -Path $Path -Algorithm SHA256).Hash
     if ($actual -ine $Expected) {
         throw "SHA256 mismatch for ${Path}: expected $Expected, got $actual"
+    }
+}
+
+function Expand-7z($Path) {
+    $seven_zip = (Get-Command 7z.exe -ErrorAction SilentlyContinue).Source
+    if (-not $seven_zip) {
+        $seven_zip = Join-Path $env:ProgramFiles "7-Zip\7z.exe"
+    }
+    if (-not (Test-Path $seven_zip)) {
+        Write-Error "7-Zip is needed to unpack $Path"
+        exit 1
+    }
+    & $seven_zip x -bso0 -bsp0 -y $Path
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "7-Zip failed to unpack ${Path}: exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
     }
 }
 
@@ -69,22 +85,18 @@ if (-not $env:GITHUB_ACTIONS) {
 }
 
 # Python and GTK+
-$GTK_ZIP_FN = "gtk3.24-x86-windows.zip"
-if (-not (Test-Path $GTK_ZIP_FN)) {
+$GTK_ARCHIVE_FN = "gtk3.24-x86-windows.7z"
+if (-not (Test-Path $GTK_ARCHIVE_FN)) {
     Write-Host "Downloading Python and GTK+..."
-    Invoke-WebRequest -Uri "$base_download_url/$GTK_ZIP_FN" -OutFile $GTK_ZIP_FN
+    Invoke-WebRequest -Uri "$base_download_url/$GTK_ARCHIVE_FN" -OutFile $GTK_ARCHIVE_FN
 } else {
     Write-Host "Python and GTK+ are already downloaded."
 }
-Assert-FileHash $GTK_ZIP_FN "b0d0f5e690423d5084a3150f0d5307ba077ab55a84d1d4f82388713c6bb1d9ce"
+Assert-FileHash $GTK_ARCHIVE_FN "d3fd28959ab69ceb185a3f22cfe03bd6f00ab4f7e896621b850e377913a992f3"
 
 if (-not (Test-Path $python_home\python.exe)) {
     Write-Host "Unpacking Python and GTK+..."
-    $vcpkg_installed = ".\vcpkg_installed"
-    if (-not (Test-Path $vcpkg_installed)) {
-        New-Item -Path $vcpkg_installed -ItemType Directory
-    }
-    Expand-Archive -Path $GTK_ZIP_FN -DestinationPath .
+    Expand-7z $GTK_ARCHIVE_FN
 } else {
     Write-Host "Python and GTK+ are already unpacked."
 }
@@ -197,7 +209,7 @@ if (-not (Test-Path $PYGOBJECT_FN)) {
 } else {
     Write-Host "PyGObject is already downloaded."
 }
-Assert-FileHash $PYGOBJECT_FN "4b9551925f6fb90836ad0e76258b3187dd32b788077739642887b2dc9198384c"
+Assert-FileHash $PYGOBJECT_FN "a51a6fa9b1cbe55485d63c08e953538c72007a3798fc2285ca369625a0265f29"
 
 if (-not $python_exists) {
     Write-Host "pip install $PYGOBJECT_FN..."
