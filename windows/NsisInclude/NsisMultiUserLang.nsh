@@ -66,7 +66,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ENGLISH} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_ENGLISH} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ENGLISH} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_ALBANIAN
