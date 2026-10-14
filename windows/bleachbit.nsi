@@ -617,7 +617,12 @@ Section "Uninstall" SectionUninstall
     # Remove the uninstaller as the very last step.
     # If something goes wrong, let the user run it again.
     Delete $INSTDIR\uninstall.exe
-    RMDir /REBOOTOK "$INSTDIR\."
+    # Files the user added, like custom cleaners, are no reason to reboot
+    ${If} ${RebootFlag}
+        RMDir /REBOOTOK "$INSTDIR\."
+    ${Else}
+        RMDir "$INSTDIR\."
+    ${EndIf}
 
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.
