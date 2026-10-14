@@ -81,7 +81,8 @@ class MacosLicensesTestCase(common.BleachbitTestCase):
                 touch(os.path.join(root, name))
             self.assertEqual(
                 mirrored_sources(root, '/brew/schemas', '.xml'),
-                ['/brew/schemas/a.xml', '/brew/schemas/b.xml'])
+                [os.path.join('/brew/schemas', 'a.xml'),
+                 os.path.join('/brew/schemas', 'b.xml')])
 
     def test_python_packages(self):
         """Unit test for python_packages()"""
