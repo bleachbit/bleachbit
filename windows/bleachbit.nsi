@@ -183,6 +183,7 @@ VIFileVersion ${File_VERSION}
 !include UAC.nsh
 !include NsisMultiUser.nsh
 !include LogicLib.nsh
+!include Sections.nsh
 !include StdUtils.nsh
 !include WinVer.nsh
 
@@ -453,6 +454,19 @@ SectionEnd
 ;--------------------------------
 ;Installer Functions
 
+!macro SelectSectionIfExists SECTION PATH
+  ${If} ${FileExists} "${PATH}"
+    !insertmacro SelectSection ${SECTION}
+  ${Else}
+    !insertmacro UnselectSection ${SECTION}
+  ${EndIf}
+!macroend
+
+!macro CopySectionFromOuter SECTION
+  !insertmacro UAC_AsUser_GetSection Flags ${SECTION} $0
+  SectionSetFlags ${SECTION} $0
+!macroend
+
 Function .onInit
 
   ${If} ${AtMostWin8.1}
@@ -466,6 +480,18 @@ Function .onInit
   ; The elevated inner instance already has the language of the outer one
   ${If} $IsInnerInstance = 0
     !insertmacro MUI_LANGDLL_DISPLAY
+  ${EndIf}
+
+  ; The outer instance already uninstalled the old version and preselected
+  ; its components
+  ${If} $IsInnerInstance = 1
+    !insertmacro CopySectionFromOuter ${SectionStart}
+    !insertmacro CopySectionFromOuter ${SectionDesktop}
+    !insertmacro CopySectionFromOuter ${SectionQuickLaunch}
+    !ifndef NoTranslations
+      !insertmacro CopySectionFromOuter ${SectionTranslations}
+    !endif
+    !insertmacro CopySectionFromOuter ${SectionShred}
   ${EndIf}
 
   ; Check whether application is already installed
@@ -517,6 +543,7 @@ FunctionEnd
 ; Run the old uninstaller command $R0 on the installation in $R1
 Function UninstallOld
   Var /GLOBAL uninstaller_cmd
+  Call ReadOldComponents
   StrCpy $uninstaller_cmd $R0
   ; Run a copy so the old uninstaller can delete itself. In place it leaves
   ; uninstall.exe behind and asks for a reboot to remove the folder
@@ -555,6 +582,28 @@ Function UninstallOld
       Reboot
       Abort
     ${EndIf}
+  ${EndIf}
+FunctionEnd
+
+
+; Preselect the optional components the old installation in $R1 has, before
+; its uninstaller removes them. Only the first one counts. Clobbers $0.
+Function ReadOldComponents
+  Var /GLOBAL old_components_read
+  ${If} $old_components_read = 1
+    Return
+  ${EndIf}
+  StrCpy $old_components_read 1
+  !insertmacro SelectSectionIfExists ${SectionStart} "$SMPROGRAMS\${prodname}\${prodname}.lnk"
+  !insertmacro SelectSectionIfExists ${SectionDesktop} "$DESKTOP\BleachBit.lnk"
+  !insertmacro SelectSectionIfExists ${SectionQuickLaunch} "$QUICKLAUNCH\BleachBit.lnk"
+  !ifndef NoTranslations
+    !insertmacro SelectSectionIfExists ${SectionTranslations} "$R1\share\locale\*.*"
+  !endif
+  ; HKCR covers both the per-machine and the per-user key
+  ReadRegStr $0 HKCR "${SHRED_REGEX_KEY}" ""
+  ${If} $0 == ""
+    !insertmacro UnselectSection ${SectionShred}
   ${EndIf}
 FunctionEnd
 
