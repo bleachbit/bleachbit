@@ -26,6 +26,7 @@ from bleachbit.CleanerML import (
     list_cleanerml_files,
     load_cleaners,
     pot_fragment)
+from bleachbit.General import os_match as general_os_match
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -426,6 +427,37 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             self.assertNotIn('windows_only', xmlc.cleaner.options)
             self.assertNotIn('linux_only', xmlc.cleaner.options)
             self.assertIn('mac_only', xmlc.cleaner.options)
+
+    def _load_real_cleaner_as(self, filename, platform):
+        """Load a cleaner from the cleaners directory as if on another platform
+
+        CleanerML.os_match() calls General.os_match() with the real
+        platform, so the call is replaced to use the given platform.
+        """
+        def os_match_for_platform(os_str, _platform=None):
+            return general_os_match(os_str, platform)
+
+        with mock.patch('bleachbit.CleanerML.general_os_match',
+                        os_match_for_platform):
+            return CleanerML(os.path.join('cleaners', filename)).cleaner
+
+    def test_teamviewer_options_by_platform(self):
+        """The TeamViewer cleaner has the options of each platform
+
+        macOS has the cache. Windows keeps the logs and the most recently
+        used list. Linux does not load the cleaner.
+        """
+        mac = self._load_real_cleaner_as('teamviewer.xml', 'darwin')
+        self.assertEqual(sorted(mac.options), ['cache'])
+        # The framework adds an action of its own for the localizations.
+        self.assertEqual(
+            sum(1 for option_id, __action in mac.actions
+                if option_id == 'cache'), 2)
+        windows = self._load_real_cleaner_as('teamviewer.xml', 'win32')
+        self.assertEqual(sorted(windows.options), ['logs', 'mru'])
+        linux = self._load_real_cleaner_as('teamviewer.xml', 'linux')
+        self.assertEqual(sorted(linux.options), [])
+        self.assertEqual(linux.actions, [])
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""

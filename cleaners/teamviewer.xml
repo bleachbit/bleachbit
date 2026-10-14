@@ -8,18 +8,30 @@ This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
 
 -->
-<cleaner id="teamviewer" os="windows">
+<cleaner id="teamviewer" os="windows,macos">
   <label>TeamViewer</label>
   <description>Remote control software</description>
+  <running type="exe" os="macos" same_user="true">TeamViewer</running>
   <var name="Profile">
     <value os="windows">%AppData%\TeamViewer</value>
   </var>
-  <option id="logs">
+  <option id="cache" os="macos">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <!--
+TeamViewer 15.82.6 on macOS 27.0.1, after opening and closing the application
+~/Library/Caches/com.teamviewer.TeamViewer/
+~/Library/Caches/TeamViewer/
+-->
+    <action command="delete" search="walk.all" path="~/Library/Caches/com.teamviewer.TeamViewer/"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/TeamViewer/"/>
+  </option>
+  <option id="logs" os="windows">
     <label>Logs</label>
     <description>Delete the logs</description>
     <action command="delete" search="glob" path="$$Profile$$\TeamViewer*_Logfile.log"/>
   </option>
-  <option id="mru">
+  <option id="mru" os="windows">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
     <action command="delete" search="walk.files" path="$$Profile$$\MRU\"/>
