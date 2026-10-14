@@ -55,29 +55,25 @@ from macos.licenses import (
 )
 from macos.relocate import Relocator, macho_files
 
+LOG_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
+LOG_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+
+def show_log_of(*names):
+    """Show the messages of the loggers of this package in one format"""
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter(LOG_FORMAT, LOG_DATE_FORMAT))
+    for name in names:
+        other = logging.getLogger(name)
+        other.setLevel(logging.INFO)
+        other.addHandler(handler)
+        # Do not pass the messages to the root logger: they would be
+        # shown twice.
+        other.propagate = False
+
+
+show_log_of(__name__, 'macos.relocate', 'macos.licenses')
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter(
-    "%(asctime)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S")
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
-# Prevent propagation to root logger to avoid duplicate messages
-logger.propagate = False
-
-
-def show_log_of(module):
-    """Show the messages that another module of this package logs"""
-    other = logging.getLogger(module)
-    other.setLevel(logging.INFO)
-    other.addHandler(ch)
-    other.propagate = False
-
-
-show_log_of('macos.relocate')
-show_log_of('macos.licenses')
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PYTHON_FORMULA = 'python@3.12'
