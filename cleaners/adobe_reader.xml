@@ -25,6 +25,11 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="~/Library/Application Support/Adobe/Acrobat/DC/JSCache/" os="macos"/>
     <action command="delete" search="glob" path="~/Library/Application Support/Adobe/Acrobat/DC/IconCacheAcro*.dat" os="macos"/>
     <action command="delete" search="walk.all" path="~/Library/Application Support/Adobe/Acrobat/DC/Security/CRLCache/" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Application Support/Adobe/Acrobat/DC/ThumbCache/" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Application Support/Adobe/Acrobat/DC/BHCache/" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Application Support/Adobe/Acrobat/DC/ConnectorIcons/" os="macos"/>
+    <action command="delete" search="file" path="~/Library/Application Support/Adobe/Acrobat/DC/DCAPIDiscoveryCacheAcrobat" os="macos"/>
+    <action command="delete" search="glob" path="~/Library/Application Support/Adobe/Acrobat/DC/Adobe*Fnt*.lst" os="macos"/>
   </option>
   <option id="mru">
     <label>Most recently used</label>
