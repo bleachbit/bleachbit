@@ -94,11 +94,13 @@ class CLITestCase(common.BleachbitTestCase):
         # test explicit cleaners (without --preset or --all-but-warning)
         # adobe_reader is used here only as a stable example cleaner for
         # testing wildcard/exclusion parsing. Its 'logs' option is macOS-only
+        # and its 'mru'/'tmp' options are excluded on macOS
         # (cleaners/adobe_reader.xml), so the expected option set differs by
         # platform.
-        adobe_reader_options = ['cache', 'mru', 'tmp']
         if bleachbit.IS_MAC:
-            adobe_reader_options = sorted(adobe_reader_options + ['logs'])
+            adobe_reader_options = ['cache', 'logs']
+        else:
+            adobe_reader_options = ['cache', 'mru', 'tmp']
         adobe_reader_options_no_cache = [
             o for o in adobe_reader_options if o != 'cache']
 
