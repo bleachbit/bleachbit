@@ -23,7 +23,7 @@ https://trac.webkit.org/changeset/289878/webkit
     <label>Cookies</label>
     <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="cookie" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Cookies/Cookies.binarycookies"/>
-    <action command="cookie" search="glob" path="~/Library/HTTPStorages/*.binarycookies"/>
+    <action command="cookie" search="glob" path="~/Library/HTTPStorages/com.apple.Safari*.binarycookies"/>
   </option>
   <option id="cache">
     <label>Cache</label>
