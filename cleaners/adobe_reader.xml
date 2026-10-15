@@ -31,7 +31,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="~/Library/Application Support/Adobe/Acrobat/DC/DCAPIDiscoveryCacheAcrobat" os="macos"/>
     <action command="delete" search="glob" path="~/Library/Application Support/Adobe/Acrobat/DC/Adobe*Fnt*.lst" os="macos"/>
   </option>
-  <option id="mru">
+  <option id="mru" os="!macos">
     <label>Most recently used</label>
     <description>Delete the list of recently used documents</description>
     <action command="delete" search="file" path="~/.adobe/Acrobat/*/Preferences/reader_prefs"/>
@@ -43,7 +43,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\10.0\AVGeneral\cRecentFiles"/>
     <action command="winreg" path="HKCU\Software\Adobe\Acrobat Reader\11.0\AVGeneral\cRecentFiles"/>
   </option>
-  <option id="tmp">
+  <option id="tmp" os="!macos">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="glob" path="/dev/shm/sem.ADBE_*_$LOGNAME"/>
