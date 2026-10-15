@@ -22,9 +22,21 @@ later.  See the COPYING file in the top-level directory.
 TeamViewer 15.82.6 on macOS 27.0.1, after opening and closing the application
 ~/Library/Caches/com.teamviewer.TeamViewer/
 ~/Library/Caches/TeamViewer/
+~/Library/HTTPStorages/com.teamviewer.TeamViewer/
 -->
     <action command="delete" search="walk.all" path="~/Library/Caches/com.teamviewer.TeamViewer/"/>
     <action command="delete" search="walk.all" path="~/Library/Caches/TeamViewer/"/>
+    <action command="delete" search="walk.all" path="~/Library/HTTPStorages/com.teamviewer.TeamViewer/"/>
+  </option>
+  <option id="cookies" os="macos">
+    <label>Cookies</label>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
+    <action command="delete" search="file" path="~/Library/HTTPStorages/com.teamviewer.TeamViewer.binarycookies"/>
+  </option>
+  <option id="site_data" os="macos">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
+    <action command="delete" search="walk.all" path="~/Library/WebKit/com.teamviewer.TeamViewer/"/>
   </option>
   <option id="logs" os="windows">
     <label>Logs</label>

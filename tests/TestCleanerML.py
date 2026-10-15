@@ -444,15 +444,17 @@ class CleanerMLTestCase(common.BleachbitTestCase):
     def test_teamviewer_options_by_platform(self):
         """The TeamViewer cleaner has the options of each platform
 
-        macOS has the cache. Windows keeps the logs and the most recently
-        used list. Linux does not load the cleaner.
+        macOS has the cache, the cookies and the site data. Windows keeps
+        the logs and the most recently used list. Linux does not load the
+        cleaner.
         """
         mac = self._load_real_cleaner_as('teamviewer.xml', 'darwin')
-        self.assertEqual(sorted(mac.options), ['cache'])
+        self.assertEqual(sorted(mac.options), [
+                         'cache', 'cookies', 'site_data'])
         # The framework adds an action of its own for the localizations.
         self.assertEqual(
             sum(1 for option_id, __action in mac.actions
-                if option_id == 'cache'), 2)
+                if option_id == 'cache'), 3)
         windows = self._load_real_cleaner_as('teamviewer.xml', 'win32')
         self.assertEqual(sorted(windows.options), ['logs', 'mru'])
         linux = self._load_real_cleaner_as('teamviewer.xml', 'linux')
