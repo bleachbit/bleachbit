@@ -298,7 +298,7 @@ def copy_typelibs(prefix, b):
         if os.path.exists(src):
             target = os.path.join(b.lib, name)
             shutil.copy2(os.path.realpath(src), target)
-            os.chmod(target, 0o755)
+            os.chmod(target, os.stat(target).st_mode | 0o200)
         else:
             logger.warning('typelib names %s, which is not in %s/lib',
                            name, prefix)
@@ -427,7 +427,7 @@ def write_launcher_and_plist(b, version):
     os.makedirs(b.macos, exist_ok=True)
     launcher = os.path.join(b.macos, 'BleachBit')
     shutil.copy2(os.path.join(HERE, 'launcher.sh'), launcher)
-    os.chmod(launcher, 0o755)
+    os.chmod(launcher, os.stat(launcher).st_mode | 0o100)
     with open(os.path.join(HERE, 'Info.plist.in'), encoding='utf-8') as f:
         text = f.read()
     with open(os.path.join(b.contents, 'Info.plist'), 'w',

@@ -19,6 +19,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 
 # local import
 from bleachbit import IS_MAC, IS_WINDOWS
@@ -117,6 +118,39 @@ class MacosRelocateTestCase(common.BleachbitTestCase):
                 frameworks + '/Python.framework/Versions/3.12/Python',
                 frameworks + '/lib', frameworks),
             '@rpath/Python.framework/Versions/3.12/Python')
+
+
+@unittest.skipIf(IS_WINDOWS, 'needs POSIX file modes')
+class MacosRelocateCopyLibTestCase(common.BleachbitTestCase):
+    """Test case for the permissions of the libraries copied into a bundle"""
+
+    def test_copy_lib_permissions(self):
+        """A copied library is writable by the owner and no more open than
+        its source
+
+        The libraries of Homebrew are read-only, but the install name has
+        to be changed, so the owner needs to write. Regression test: the
+        copy was given the mode 0o755 whatever the mode of the source was,
+        which sets a fixed mask and opens the file to every other user.
+        """
+        # The method under test is protected.
+        # pylint: disable=protected-access
+        for source_mode in (0o444, 0o440):
+            with self.subTest(source_mode=oct(source_mode)):
+                with tempfile.TemporaryDirectory() as root:
+                    source = os.path.join(root, 'libx.dylib')
+                    with open(source, 'wb') as f:
+                        f.write(b'x')
+                    os.chmod(source, source_mode)
+                    relocator = Relocator(
+                        os.path.join(root, 'Test.app'), '/opt/homebrew')
+                    with mock.patch('macos.relocate.run') as run_mock:
+                        target = relocator._copy_lib(source, 'libx.dylib')
+                    run_mock.assert_called_once()
+                    self.assertEqual(os.stat(target).st_mode & 0o777,
+                                     source_mode | 0o200)
+                    self.assertEqual(os.stat(source).st_mode & 0o777,
+                                     source_mode)
 
 
 @unittest.skipUnless(IS_MAC and shutil.which('clang'),

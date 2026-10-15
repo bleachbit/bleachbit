@@ -164,7 +164,8 @@ class Relocator:
     def _copy_lib(self, src, name):
         target = os.path.join(self.libdir, name)
         shutil.copy2(os.path.realpath(src), target)
-        os.chmod(target, 0o755)
+        # The copy of a read-only library must be writable to change it.
+        os.chmod(target, os.stat(target).st_mode | 0o200)
         run('install_name_tool', '-id', '@rpath/' + name, target)
         return target
 
