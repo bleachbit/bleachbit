@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
+
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
+
+-->
+<cleaner id="duckduckgo" os="macos">
+  <label>DuckDuckGo</label>
+  <description>Web browser</description>
+  <running type="exe" os="macos" same_user="true">DuckDuckGo</running>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <!--
+DuckDuckGo 1.211.1 on macOS 27.0.1, after browsing and closing the application
+~/Library/Caches/com.duckduckgo.macos.browser/WebKit/NetworkCache/
+~/Library/Caches/com.duckduckgo.macos.browser/WebKit/CacheStorage/
+~/Library/Caches/com.duckduckgo.macos.browser/WebKit/AlternativeServices/
+The folder HSTS next to them is not deleted: it keeps the sites that must be
+opened with HTTPS, which is a security setting and not a cache.
+-->
+    <action command="delete" search="walk.all" path="~/Library/Caches/com.duckduckgo.macos.browser/WebKit/NetworkCache/"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/com.duckduckgo.macos.browser/WebKit/CacheStorage/"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/com.duckduckgo.macos.browser/WebKit/AlternativeServices/"/>
+  </option>
+</cleaner>
