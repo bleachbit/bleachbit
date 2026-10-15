@@ -118,14 +118,15 @@ def default_vars():
     if not IS_WINDOWS:
         return ret
     from bleachbit.Windows import get_windows_system_paths
-    # Expand ProgramFiles to also be ProgramW6432, etc.
-    wowvars = (('ProgramFiles', 'ProgramW6432'),
-               ('CommonProgramFiles', 'CommonProgramW6432'))
-    for v1, v2 in wowvars:
-        # Remove None, if variable is not found.
-        # Make list unique.
-        mylist = list({x for x in (os.getenv(v1), os.getenv(v2)) if x})
-        ret[v1] = mylist
+    # Expand ProgramFiles to both Program Files folders. A 64-bit process
+    # sees ProgramW6432 as ProgramFiles, and 32-bit Windows has neither.
+    wowvars = (('ProgramFiles', 'ProgramW6432', 'ProgramFiles(x86)'),
+               ('CommonProgramFiles', 'CommonProgramW6432',
+                'CommonProgramFiles(x86)'))
+    for names in wowvars:
+        # Drop unset variables and duplicates, keeping the order
+        values = (os.getenv(name) for name in names)
+        ret[names[0]] = list(dict.fromkeys(x for x in values if x))
     ret['WindowsSystem'] = get_windows_system_paths()
     return ret
 

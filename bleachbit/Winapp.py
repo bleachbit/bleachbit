@@ -62,8 +62,10 @@ _S2O_EDGE_UNDERSCORE = re.compile(r'(^_|_$)')
 _FNMATCH_END = re.compile(r'\\[Zz](\(\?ms\))?$')
 _EXCLUDEKEY_TRAILING_SEP = re.compile(r'\\\\((?:\))?)$')
 _WINAPP_VAR_SUBS = (
-    (re.compile('%ProgramFiles%', re.IGNORECASE), '%ProgramW6432%'),
-    (re.compile('%CommonProgramFiles%', re.IGNORECASE), '%CommonProgramW6432%'),
+    (re.compile('%ProgramFiles%', re.IGNORECASE),
+     ('%ProgramW6432%', '%ProgramFiles(x86)%')),
+    (re.compile('%CommonProgramFiles%', re.IGNORECASE),
+     ('%CommonProgramW6432%', '%CommonProgramFiles(x86)%')),
 )
 
 
@@ -122,13 +124,18 @@ def winapp_expand_vars(pathname):
     Returns the list of candidate paths to try, which is one or two long.
     """
     # This is the regular expansion
-    expand1 = os.path.expandvars(pathname)
-    # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
-    for pattern, sub_repl in _WINAPP_VAR_SUBS:
+    ret = [os.path.expandvars(pathname)]
+    # Winapp2.ini expands %ProgramFiles% to both Program Files folders
+    for pattern, sub_repls in _WINAPP_VAR_SUBS:
         if pattern.match(pathname):
-            expand2 = pattern.sub(sub_repl, pathname)
-            return [expand1, os.path.expandvars(expand2)]
-    return [expand1]
+            for sub_repl in sub_repls:
+                expanded = os.path.expandvars(pattern.sub(sub_repl, pathname))
+                # Skip a variable unset on 32-bit Windows, and the folder
+                # this process already sees as %ProgramFiles%
+                if not expanded.startswith('%') and expanded not in ret:
+                    ret.append(expanded)
+            break
+    return ret
 
 
 def detect_file(pathname):

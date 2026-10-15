@@ -489,6 +489,23 @@ class ProtectedPathTestCase(RelativeSuffixAssertions, common.BleachbitTestCase):
             self.assertIsNotNone(check_protected_path(cased_profile))
 
     @requirePPXML
+    @common.skipUnlessWindows
+    def test_program_files_on_other_drive(self):
+        """Test both Program Files folders are protected on any drive"""
+        pf = r'D:\Program Files'
+        pf86 = r'D:\Program Files (x86)'
+        # %ProgramFiles% as a 64-bit and as a 32-bit process sees it
+        for program_files in (pf, pf86):
+            env = {'ProgramFiles': program_files, 'ProgramW6432': pf,
+                   'ProgramFiles(x86)': pf86}
+            with mock.patch.dict(os.environ, env):
+                clear_cache()
+                for folder in (pf, pf86):
+                    self.assertIsNotNone(
+                        check_protected_path(os.path.join(folder, 'Foo')),
+                        folder)
+
+    @requirePPXML
     def test_case_insensitive(self):
         """Test case insensitive cross platform"""
         home = os.path.expanduser('~')
