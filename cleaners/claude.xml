@@ -38,6 +38,12 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.files" path="~/.claude/logs/"/>
     <action command="delete" search="glob" path="~/.claude/*.log" type="f"/>
   </option>
+  <option id="memory">
+    <label translators="Claude Code: notes it saves by itself and loads in later sessions. Not system memory.">Auto memory</label>
+    <description>Delete the notes Claude Code keeps about your projects</description>
+    <warning>Claude Code would forget what it learned about you and your projects</warning>
+    <action command="delete" search="walk.all" path="~/.claude/projects/" wholeregex="[/\\]projects[/\\][^/\\]+[/\\]memory([/\\]|$)"/>
+  </option>
   <option id="session">
     <label>Session</label>
     <description translators="Description for deleting Claude Code sessions">Delete the conversation history</description>

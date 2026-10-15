@@ -97,6 +97,20 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertNotIn(memory, paths)
         self.assertNotIn(os.path.dirname(memory), paths)
 
+    def test_claude_memory(self):
+        """Claude > Auto memory deletes only the per-project auto-memory"""
+        home = self.mkdtemp(prefix='bleachbit-claude-memory')
+        project = os.path.join(home, '.claude', 'projects', '-tmp-proj')
+        common.touch_file(os.path.join(project, 'abc.jsonl'))
+        memory = os.path.join(project, 'memory', 'MEMORY.md')
+        common.touch_file(memory)
+        env = {'HOME': home, 'USERPROFILE': home}
+        with mock.patch.dict(os.environ, env):
+            cleaner = CleanerML('cleaners/claude.xml').get_cleaner()
+        paths = [path for option_id, action in cleaner.actions
+                 if option_id == 'memory' for path in action.get_paths()]
+        self.assertEqual([memory, os.path.dirname(memory)], paths)
+
     def test_create_pot(self):
         """Unit test for create_pot()"""
         os.chdir('po')
