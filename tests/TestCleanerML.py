@@ -449,7 +449,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         cleaner.
         """
         mac = self._load_real_cleaner_as('teamviewer.xml', 'darwin')
-        self.assertEqual(sorted(mac.options), ['cache', 'cookies', 'site_data'])
+        self.assertEqual(sorted(mac.options), [
+                         'cache', 'cookies', 'site_data'])
         # The framework adds an action of its own for the localizations.
         self.assertEqual(
             sum(1 for option_id, __action in mac.actions
