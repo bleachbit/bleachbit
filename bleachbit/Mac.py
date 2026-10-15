@@ -163,14 +163,16 @@ def bind_libintl_domain(text_domain, locale_dir):
 
     Returns True if the domain was bound.
     """
-    candidates = []
-    found = ctypes.util.find_library('intl')
-    if found:
-        candidates.append(found)
-    candidates.extend((
+    candidates = [
         'libintl.8.dylib',
         'libintl.dylib',
+    ]
+    found = ctypes.util.find_library('intl')
+    if found and found not in candidates:
+        candidates.append(found)
+    candidates.extend((
         '/opt/homebrew/lib/libintl.8.dylib',  # Homebrew on Apple silicon
+        '/usr/local/lib/libintl.8.dylib',  # Homebrew on Intel
         '/opt/local/lib/libintl.8.dylib',  # MacPorts
     ))
     libintl = None
