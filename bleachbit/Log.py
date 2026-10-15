@@ -44,12 +44,18 @@ class DelayLog:
     def __init__(self):
         self.queue = []
         self.msg = ''
+        self.drained = False
 
     def read(self):
         yield from self.queue
         self.queue = []
+        # The GUI reads once and then shows log records itself, but the
+        # console handler keeps writing here.
+        self.drained = True
 
     def write(self, msg):
+        if self.drained:
+            return
         self.msg += msg
         if self.msg and self.msg[-1] == '\n':
             self.queue.append(self.msg)
@@ -95,13 +101,21 @@ def init_log():
             break
 
     if debug_log_path:
-        if os.name != 'nt' and not os.path.exists(debug_log_path):
-            # This log may contain sensitive system info (paths, username),
-            # so keep it from being created world-readable.
-            fd = os.open(debug_log_path,
-                         os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
-            os.close(fd)
-        file_handler = logging.FileHandler(debug_log_path)
+        try:
+            if os.name != 'nt' and not os.path.exists(debug_log_path):
+                # This log may contain sensitive system info (paths, username),
+                # so keep it from being created world-readable.
+                fd = os.open(debug_log_path,
+                             os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+                os.close(fd)
+            file_handler = logging.FileHandler(
+                debug_log_path, encoding='utf-8')
+        except OSError as e:
+            logger.error('Cannot open debug log: %s', e)
+            return logger
+        # Keep lines with undecodable paths. FileHandler takes no errors
+        # argument before Python 3.9.
+        file_handler.stream.reconfigure(errors='backslashreplace')
         # Always use DEBUG level for log file.
         file_handler.setLevel(logging.DEBUG)
         # removed: %(name)s

@@ -243,8 +243,13 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
 
 def find_available_locales():
     """Returns a list of available locales using locale -a"""
-    rc, stdout, stderr = General.run_external(
-        [General.resolve_exe('locale'), '-a'])
+    try:
+        rc, stdout, stderr = General.run_external(
+            [General.resolve_exe('locale'), '-a'])
+    except OSError as e:
+        # musl systems may have no locale utility
+        logger.warning("Failed to get available locales: %s", e)
+        return []
     if rc == 0:
         return stdout.strip().split('\n')
 
@@ -493,6 +498,9 @@ def is_unregistered_mime(mimetype):
     registered or unknown, conservatively returns False."""
     try:
         from bleachbit.GtkShim import Gio
+        # GtkShim gives None, not ImportError, without a display or PyGObject
+        if Gio is None:
+            return False
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:

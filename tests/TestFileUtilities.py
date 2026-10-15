@@ -24,6 +24,7 @@ import sys
 import tempfile
 import time
 import unittest.mock
+import urllib.parse
 import warnings
 
 # third-party import
@@ -1402,6 +1403,26 @@ State=AAAA/wA...
         os.unlink(db_path)
         self.assertNotExists(db_path)
 
+    def test_execute_sqlite3_semicolon_in_literal(self):
+        """execute_sqlite3() keeps a ';' inside a literal, such as a path"""
+        db_path = self.mkstemp(suffix='.sqlite')
+        attach_path = os.path.join(self.mkdtemp(), 'a;b.sqlite')
+
+        execute_sqlite3(
+            db_path,
+            "CREATE TABLE test (name TEXT);"
+            "INSERT INTO test (name) VALUES ('x;y');"
+            f"ATTACH DATABASE '{attach_path}' AS other;"
+            "CREATE TABLE other.test (name TEXT)")
+
+        with contextlib.closing(sqlite3.connect(db_path)) as conn:
+            rows = conn.execute('SELECT name FROM test').fetchall()
+        self.assertEqual(rows, [('x;y',)])
+        self.assertExists(attach_path)
+
+        with self.assertRaises(sqlite3.OperationalError):
+            execute_sqlite3(db_path, "INSERT INTO test (name) VALUES ('x")
+
     def test_execute_sqlite3_open_error_translation(self):
         """Unit test for execute_sqlite3() open-error translation
 
@@ -1942,6 +1963,37 @@ State=AAAA/wA...
                 self.assertEqual(same_partition(home, drive),
                                  home_drive == this_drive)
 
+    def test_same_partition_device(self):
+        """same_partition() compares devices, not only sizes or free space"""
+        devices = {'/a': 1, '/b': 2, '/c': 3, '/d': 4}
+        blocks = {'/a': (1000, 500), '/b': (1000, 400), '/c': (1000, 500),
+                  '/d': (1000, 499)}
+
+        def fake_stat(path):
+            return unittest.mock.Mock(st_dev=devices[path])
+
+        def fake_statvfs(path):
+            f_blocks, f_bfree = blocks[path]
+            return unittest.mock.Mock(f_blocks=f_blocks, f_bfree=f_bfree)
+
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', False), \
+                unittest.mock.patch('os.stat', side_effect=fake_stat), \
+                unittest.mock.patch('os.statvfs', side_effect=fake_statvfs, create=True):
+            self.assertTrue(same_partition('/a', '/a'))
+            # different file systems of the same size
+            self.assertFalse(same_partition('/a', '/b'))
+            # btrfs subvolumes of one file system
+            self.assertTrue(same_partition('/a', '/c'))
+            # and one whose free space changed between the calls
+            self.assertTrue(same_partition('/a', '/d'))
+
+        # Free space on C: changes between the two lookups
+        changing_free_space = unittest.mock.Mock(side_effect=[1000, 996])
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', True), \
+                unittest.mock.patch('bleachbit.FileUtilities.free_space', changing_free_space), \
+                unittest.mock.patch('os.stat', return_value=unittest.mock.Mock(st_dev=7)):
+            self.assertTrue(same_partition('C:\\Temp', 'C:\\'))
+
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""
         self.assertEqual(uris_to_paths(['']), [])
@@ -1968,6 +2020,15 @@ State=AAAA/wA...
         self.assertEqual(uris_to_paths(['file:']), [])
         self.assertEqual(uris_to_paths(['file://']), [])
         self.assertEqual(uris_to_paths(['file:///']), [os.path.normpath('/')])
+
+    @common.skipIfWindows
+    def test_uris_to_paths_undecodable(self):
+        """A file URI for a name that is not valid UTF-8 gives the name on disk"""
+        path = os.path.join(os.fsencode(self.tempdir), b'caf\xe9.txt')
+        uri = 'file://' + urllib.parse.quote(path)
+        # url2pathname() before Python 3.14
+        with unittest.mock.patch('urllib.request.url2pathname', urllib.parse.unquote):
+            self.assertEqual(uris_to_paths([uri]), [os.fsdecode(path)])
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""

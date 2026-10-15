@@ -271,6 +271,21 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual(mock_get.call_count, 1)
         pref.dialog.destroy()
 
+    @common.skipIfWindows
+    def test_preferences_keep_language_list(self):
+        """Every locale the localizations cleaner purges can be kept"""
+        from bleachbit.Unix import get_purgeable_locales
+        pref = self.app.get_preferences_dialog()
+        try:
+            page = pref.page_stack.get_child_by_name('languages')
+            model = self.find_widget(page, Gtk.TreeView).get_model()
+            listed = {row[1] for row in model}
+            self.assertIn('cy', listed)
+            self.assertEqual(
+                set(get_purgeable_locales(['en'])) - listed, set())
+        finally:
+            pref.dialog.destroy()
+
     def test_preferences_language_selection(self):
         """Test language selection and sensitivity in preferences dialog"""
         options.set('auto_detect_lang', True)
@@ -336,6 +351,33 @@ class GUITestCase(common.BleachbitTestCase):
                 pref.dialog.destroy()
                 options.set('auto_detect_lang', True)
                 options.set('forced_language', '')
+
+    @pytest.mark.no_xdist
+    def test_preferences_undecodable_path(self):
+        """Paths that are not valid UTF-8 reach GTK only sanitized"""
+        saved = os.path.join(self.tempdir, 'caf\udce9')
+        added = os.path.join(self.tempdir, 'na\udcefve')
+        options.set_list('shred_drives', [saved])
+        pref = self.app.get_preferences_dialog()
+        try:
+            page = pref.page_stack.get_child_by_name('drives')
+            with mock.patch('bleachbit.GuiBasic.browse_folder', return_value=added):
+                self.find_widget(page, Gtk.Button, 'Add').clicked()
+            self.assertEqual(options.get_list('shred_drives'), [saved, added])
+            treeview = self.find_widget(page, Gtk.TreeView)
+            treeview.get_selection().select_path(Gtk.TreePath(0))
+            self.find_widget(page, Gtk.Button, 'Remove').clicked()
+            self.assertEqual(options.get_list('shred_drives'), [added])
+
+            options.set('expert_mode', True)
+            with mock.patch('bleachbit.ProtectedPath.check_protected_path',
+                            return_value={'case_sensitive': True}), \
+                    mock.patch('bleachbit.ProtectedPath.calculate_impact',
+                               return_value={'file_count': 0, 'size_human': '0B'}), \
+                    mock.patch.object(Gtk.Dialog, 'run', return_value=Gtk.ResponseType.OK):
+                self.assertTrue(pref._check_protected_path(saved))
+        finally:
+            pref.dialog.destroy()
 
     def test_preferences_cookies_page(self):
         """Opens the preferences dialog and navigates to cookies page"""
@@ -699,6 +741,29 @@ class GUITestCase(common.BleachbitTestCase):
             gui._prompt_orphaned_wipe_files(['/does/not/exist'])
             dialog.assert_called_once()
 
+    def test_update_found_mid_operation(self):
+        """An update found mid-operation leaves Preview/Clean disabled"""
+        class SyncThread:
+            def __init__(self, target=None, args=()):
+                self.target = target
+                self.args = args
+
+            def start(self):
+                self.target(*self.args)
+
+        gui = self.get_window()
+        gui.set_sensitive(False)
+        self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(gui.update_button.hide)
+        with mock.patch('bleachbit.GuiUtil.threading.Thread', SyncThread), \
+                mock.patch('bleachbit.Update.check_updates',
+                           return_value=[('99.0', 'https://example.invalid/')]):
+            gui.check_online_updates()
+            self.refresh_gui()
+        self.assertTrue(gui.update_button.get_visible())
+        self.assertFalse(gui.run_button.get_sensitive())
+        self.assertTrue(gui.stop_button.get_sensitive())
+
     def test_app_menu_reloads_only_after_setup_translation(self):
         """The app menu is rebuilt only after setup_translation() runs again"""
         gui = self.get_window()
@@ -708,6 +773,32 @@ class GUITestCase(common.BleachbitTestCase):
         setup_translation()
         gui.update_headerbar_labels()
         self.assertIsNot(gui.menu_button.get_menu_model(), menu)
+
+    def test_headerbar_labels_follow_language(self):
+        """The button labels are translated again on every update"""
+        gui = self.get_window()
+        with mock.patch('bleachbit.GuiWindow._', side_effect=lambda msg: f'[{msg}]'):
+            gui.update_headerbar_labels()
+            self.assertEqual(gui.preview_button.get_label(), '[Preview]')
+            self.assertEqual(gui.run_button.get_label(), '[Clean]')
+            self.assertEqual(gui.stop_button.get_label(), '[Abort]')
+        gui.update_headerbar_labels()
+
+    def test_configure_keeps_normal_size(self):
+        """A maximized or fullscreen size must not replace the saved size"""
+        gui = self.get_window()
+        options.set('window_width', 800)
+        options.set('window_height', 600)
+        for state in (Gdk.WindowState.MAXIMIZED, Gdk.WindowState.FULLSCREEN):
+            with self.subTest(state=state):
+                gui.on_window_state_event(
+                    gui, types.SimpleNamespace(new_window_state=state))
+                with mock.patch.object(gui, 'get_size', return_value=(1920, 1080)):
+                    gui.on_configure_event(gui, None)
+                self.assertEqual(options.get('window_width'), 800)
+                self.assertEqual(options.get('window_height'), 600)
+        gui.on_window_state_event(
+            gui, types.SimpleNamespace(new_window_state=Gdk.WindowState(0)))
 
     def test_refresh_supersedes_running_registration(self):
         """A new refresh stops the registration still running"""

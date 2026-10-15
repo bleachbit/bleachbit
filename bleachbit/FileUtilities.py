@@ -855,6 +855,21 @@ def exe_exists(pathname):
     return exists_in_path(pathname)
 
 
+def _split_sqlite3(cmds):
+    """Split SQL commands on ';', except inside a literal such as a path"""
+    # In FreeBSD, sqlite3 is a separate package
+    import sqlite3
+    statement = ''
+    for part in cmds.split(';'):
+        statement += part + ';'
+        if sqlite3.complete_statement(statement):
+            yield statement
+            statement = ''
+    if statement:
+        # Let SQLite report the incomplete statement
+        yield statement
+
+
 def execute_sqlite3(path, cmds):
     """Execute SQL commands on SQLite database
 
@@ -899,7 +914,7 @@ def execute_sqlite3(path, cmds):
             if conn.execute('PRAGMA secure_delete').fetchone()[0] != 1:
                 raise RuntimeError(f'could not enable secure_delete on {path}')
 
-        for cmd in cmds.split(';'):
+        for cmd in _split_sqlite3(cmds):
             try:
                 conn.execute(cmd)
             except sqlite3.OperationalError as exc:
@@ -1151,9 +1166,9 @@ def same_partition(dir1, dir2):
     """Are both directories on the same partition?"""
     if IS_WINDOWS:
         try:
-            return free_space(dir1) == free_space(dir2)
+            # st_dev is the volume serial number
+            return os.stat(dir1).st_dev == os.stat(dir2).st_dev
         except OSError as e:
-            # psutil.disk_usage() raises OSError (with .winerror on Windows).
             # 5 = access denied: Microsoft Office 2010 Starter Edition has a
             #     virtual drive that gives access denied.
             #     https://bugs.launchpad.net/bleachbit/+bug/1372179
@@ -1163,10 +1178,15 @@ def same_partition(dir1, dir2):
             if getattr(e, 'winerror', None) in (5, 1326):
                 return dir1[0] == dir2[0]
             raise
+    if os.stat(dir1).st_dev == os.stat(dir2).st_dev:
+        return True
+    # Subvolumes of one btrfs file system have their own device numbers
+    # but share its blocks, and free blocks can change between the calls.
     # pylint: disable=no-member
     stat1 = os.statvfs(dir1)
     stat2 = os.statvfs(dir2)
-    return stat1[stat.ST_DEV] == stat2[stat.ST_DEV]
+    return stat1.f_blocks == stat2.f_blocks and \
+        abs(stat1.f_bfree - stat2.f_bfree) <= stat1.f_blocks // 1000
 
 
 def truncate_f(f):
@@ -1192,7 +1212,13 @@ def uris_to_paths(file_uris):
             continue
         parsed_uri = urllib.parse.urlparse(file_uri)
         if parsed_uri.scheme == 'file':
-            file_path = url2pathname(parsed_uri.path)
+            if IS_POSIX:
+                # Before Python 3.14, url2pathname() decodes as UTF-8 and
+                # replaces the bytes of a name that is not valid UTF-8.
+                file_path = os.fsdecode(
+                    urllib.parse.unquote_to_bytes(parsed_uri.path))
+            else:
+                file_path = url2pathname(parsed_uri.path)
             if len(file_path) > 2 and file_path[2] == ':':
                 # remove front slash for Windows-style path
                 file_path = file_path[1:]
