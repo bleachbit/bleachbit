@@ -13,11 +13,13 @@ later.  See the COPYING file in the top-level directory.
   <description>Web browser</description>
   <running type="exe" os="unix" same_user="true">zen-browser</running>
   <running type="exe" os="windows" same_user="true">zen-browser.exe</running>
+  <running type="exe" os="macos" same_user="true">zen</running>
   <running type="pathname">~/.zen/*.default/lock</running>
   <running type="pathname">~/snap/zen/common/.zen/*.default/lock</running>
   <running type="pathname">~/.var/app/app.zen_browser.zen/.zen/*.default*/lock</running>
   <var name="base">
     <value os="windows">%AppData%\Zen</value>
+    <value os="macos">~/Library/Application Support/zen</value>
     <value os="linux">~/.zen</value>
     <value os="linux">~/snap/zen/common/.zen</value>
     <value os="linux">~/.var/app/app.zen_browser.zen/.zen</value>
@@ -26,6 +28,7 @@ later.  See the COPYING file in the top-level directory.
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\Zen\Profiles\*</value>
+    <value search="glob" os="macos">~/Library/Application Support/zen/Profiles/*</value>
     <value search="glob" os="linux">~/.zen/*</value>
     <value search="glob" os="linux">~/snap/zen/common/.zen/*</value>
     <value search="glob" os="linux">~/.var/app/app.zen_browser.zen/.zen/*</value>
@@ -48,6 +51,7 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="~/.cache/zen/"/>
     <action command="delete" search="walk.all" path="~/snap/zen/common/.zen/mozilla/"/>
     <action command="delete" search="walk.all" path="~/.var/app/app.zen_browser.zen/cache/zen/"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/zen/Profiles/*/" os="macos"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\OfflineCache"/>
@@ -69,6 +73,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
+    <action command="delete" search="glob" path="~/Library/Logs/DiagnosticReports/zen-*.ips" os="macos"/>
     <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
   </option>
   <option id="forms">
@@ -87,6 +92,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <action command="delete" search="file" path="$$profile$$/signons3.txt"/>
     <action command="delete" search="file" path="$$profile$$/signons.sqlite"/>
     <action command="delete" search="file" path="$$profile$$/logins.json"/>
+    <action command="delete" search="file" path="$$profile$$/logins-backup.json"/>
   </option>
   <option id="session">
     <label>Session</label>
@@ -113,6 +119,8 @@ sessionstore-backups/recovery.jsonlz4
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/recovery.bak*"/>
     <action command="delete" search="file" path="$$profile$$/sessionstore-backups/previous.bak"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/upgrade.js*-20*"/>
+    <action command="delete" search="file" path="$$profile$$/zen-sessions.jsonlz4"/>
+    <action command="delete" search="glob" path="$$profile$$/zen-sessions-backup/*"/>
   </option>
   <option id="site_data">
     <label>Site data</label>
@@ -120,11 +128,14 @@ sessionstore-backups/recovery.jsonlz4
     <action command="delete" search="walk.all" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="glob" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/storage.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/serviceworker.txt"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
     <description>Settings for individual sites</description>
     <action command="delete" search="file" path="$$profile$$/content-prefs.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/permissions.sqlite"/>
   </option>
   <option id="url_history">
     <label>URL history</label>
@@ -142,6 +153,8 @@ sessionstore-backups/recovery.jsonlz4
     <action command="mozilla.favicons" search="file" path="$$profile$$/favicons.sqlite"/>
     <!-- Firefox 108 has alternative services with visited domains -->
     <action command="delete" search="file" path="$$profile$$/AlternateServices.txt"/>
+    <!-- Firefox 148 has AlternateServices.bin instead of .txt -->
+    <action command="delete" search="file" path="$$profile$$/AlternateServices.bin"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>

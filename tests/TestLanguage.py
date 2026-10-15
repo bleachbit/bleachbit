@@ -523,3 +523,47 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
                 # environment variables have been restored to their
                 # pre-test values.
                 setup_translation()
+
+
+class MacGettextBindTestCase(common.BleachbitTestCase):
+    """macOS: bind the libintl domain when Python lacks locale.bindtextdomain().
+
+    Without it the Gtk.Builder strings (hamburger menu) stay in English
+    on Python builds such as Homebrew's 3.12.
+    """
+
+    @common.skipUnlessMac
+    def test_setup_translation_binds_libintl_on_mac(self):
+        import locale
+        from bleachbit import Language as language_module
+        from bleachbit.Mac import bind_libintl_domain
+
+        # Simulate a Python build without bindtextdomain() in case the
+        # running macOS Python build provides it.
+        had_bindtextdomain = hasattr(locale, 'bindtextdomain')
+        saved_bindtextdomain = getattr(locale, 'bindtextdomain', None)
+        if had_bindtextdomain:
+            del locale.bindtextdomain
+        with common.set_temporary_env('LANG', os.environ.get('LANG')), \
+                common.set_temporary_env('LANGUAGE', os.environ.get('LANGUAGE')):
+            t_backup = language_module.t
+            try:
+                with mock.patch('bleachbit.Language.get_active_language_code',
+                                return_value='es'), \
+                        mock.patch('bleachbit.GtkShim.is_gtk_loaded',
+                                   return_value=True), \
+                        mock.patch('bleachbit.Mac.bind_libintl_domain',
+                                   wraps=bind_libintl_domain) as bind, \
+                        self.assertLogs('bleachbit.Mac', level='DEBUG') as cm:
+                    setup_translation()
+                bind.assert_called_once()
+                self.assertEqual(bind.call_args[0][0], 'bleachbit')
+                self.assertTrue(
+                    any('libintl text domain bleachbit bound to' in msg
+                        for msg in cm.output),
+                    cm.output)
+            finally:
+                if had_bindtextdomain:
+                    locale.bindtextdomain = saved_bindtextdomain
+                language_module.t = t_backup
+                setup_translation()

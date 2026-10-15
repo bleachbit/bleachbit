@@ -71,6 +71,7 @@ Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires:       python3
 Requires:       gtk3
+Requires:       hicolor-icon-theme
 Requires:       python3-gobject
 Requires:       python3-psutil
 Requires:       python3-requests
@@ -79,13 +80,14 @@ Requires:       polkit
 
 %if 0%{?is_opensuse}
 BuildRequires:  desktop-file-utils
+BuildRequires:  hicolor-icon-theme
 BuildRequires:  make
 BuildRequires:  %{pyprefix}
 BuildRequires:  python-rpm-macros
 BuildRequires:  %{pyprefix}-base
 # Leap 16.x split the unversioned /usr/bin/python3 symlink into a separate
 # python3-base package that is no longer pulled in transitively by
-# python313-base. Require it explicitly so %{__python3} resolves.
+# python313-base. Require it explicitly so %%{__python3} resolves.
 %if %{is_leap} && 0%{?suse_version} >= 1600
 BuildRequires:  python3-base
 %endif
@@ -98,6 +100,7 @@ BuildRequires:  %{pyprefix}-sqlite-utils
 BuildRequires:  %{pyprefix}-xml
 BuildRequires:  update-desktop-files
 Requires:       gobject-introspection
+Requires:       hicolor-icon-theme
 Requires:       %{pyprefix}
 Requires:       %{pyprefix}-gobject
 Requires:       %{pyprefix}-gobject-Gdk

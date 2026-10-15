@@ -8,6 +8,9 @@
 
 """
 Build BleachBit tarballs
+
+setup.py only builds the source distribution (sdist); it installs nothing.
+Installation is handled by the Makefile (Linux) and windows/setup.py.
 """
 
 # standard library
@@ -19,26 +22,6 @@ import bleachbit
 
 
 APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had."
-
-data_files = []
-if bleachbit.IS_LINUX:
-    data_files.append(('/usr/share/applications',
-                      ['./org.bleachbit.BleachBit.desktop']))
-    data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
-    data_files.append(('/usr/share/icons/hicolor/scalable/apps/',
-                       ['./bleachbit.svg']))
-elif bleachbit.IS_NETBSD:
-    data_files.append(('/usr/pkg/share/applications',
-                      ['./org.bleachbit.BleachBit.desktop']))
-    data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
-    data_files.append(('/usr/pkg/share/icons/hicolor/scalable/apps/',
-                       ['./bleachbit.svg']))
-elif bleachbit.IS_BSD:
-    data_files.append(
-        ('/usr/local/share/applications', ['./org.bleachbit.BleachBit.desktop']))
-    data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))
-    data_files.append(('/usr/local/share/icons/hicolor/scalable/apps/',
-                       ['./bleachbit.svg']))
 
 
 def run_setup(args=None):
