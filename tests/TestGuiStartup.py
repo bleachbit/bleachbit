@@ -144,6 +144,19 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertNotExists(bleachbit.options_file)
         issues = GuiStartup._get_config_permission_issues()
         self.assertFalse(issues)
+        # Options creates the file itself, with its own mode and owner
+        self.assertNotExists(bleachbit.options_file)
+
+    def test_config_permission_nonissue_missing_dir(self):
+        """A missing options directory on first start is not an error"""
+        parent_dir = os.path.join(self.tempdir, 'missing_parent')
+        options_dir = os.path.join(parent_dir, 'bleachbit')
+        with mock.patch('bleachbit.options_dir', options_dir), \
+                mock.patch('bleachbit.options_file',
+                           os.path.join(options_dir, 'bleachbit.ini')):
+            issues = GuiStartup._get_config_permission_issues()
+        self.assertFalse(issues)
+        self.assertNotExists(parent_dir)
 
     @common.skipIfWindows
     def test_config_permission_issue_non_writeable_options_dir(self):
@@ -172,6 +185,22 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertTrue(any('Write error' in issue for issue in issues),
                         f"Expected 'Write error' in issues: {issues}")
 
+    @common.skipIfWindows
+    def test_config_permission_nonissue_non_writeable_options_dir(self):
+        """A writable config in a read-only options dir can still be saved"""
+        read_only_dir = self.mkdir('read_only_options')
+        options_file = os.path.join(read_only_dir, 'bleachbit.ini')
+        common.touch_file(options_file)
+        os.chmod(read_only_dir, stat.S_IRUSR | stat.S_IXUSR)
+        try:
+            with mock.patch('bleachbit.options_dir', read_only_dir), \
+                    mock.patch('bleachbit.options_file', options_file):
+                issues = GuiStartup._get_config_permission_issues()
+        finally:
+            os.chmod(read_only_dir, stat.S_IRWXU)
+            shutil.rmtree(read_only_dir)
+        self.assertFalse(issues)
+
     @common.also_with_sudo
     def test_permission_issues_normal_file(self):
         """Test ownership check on a normal file owned by the user."""
@@ -184,6 +213,22 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertFalse(has_error)
         self.assertTrue(any('File owner:' in line for line in lines))
         self.assertTrue(any('Current user:' in line for line in lines))
+
+    @common.skipIfWindows
+    def test_permission_issues_effective_user(self):
+        """Under sudo -u or su, the effective user owning the file is fine"""
+        path = self.write_file('check_me')
+        other_uid = os.geteuid() + 1
+        with mock.patch.dict(os.environ, {'SUDO_UID': str(other_uid),
+                                          'SUDO_USER': 'someone_else'}):
+            has_error, _lines = _get_posix_permission_issues(
+                os.stat(path), path)
+            self.assertFalse(has_error)
+            if os.geteuid() != 0:
+                # owned by neither the real nor the effective user
+                has_error, _lines = _get_posix_permission_issues(
+                    mock.Mock(st_uid=other_uid + 1), path)
+                self.assertTrue(has_error)
 
     @common.skipUnlessWindows
     def test_get_windows_user_info(self):

@@ -85,6 +85,10 @@ def _get_posix_permission_issues(fstat, options_file):
         if os.geteuid() == 0:
             lines.append('File owner does not match current user '
                          '(root can access regardless)')
+        elif fstat.st_uid == os.geteuid():
+            # e.g. sudo -u or su to another account, which owns its config
+            lines.append('File owner does not match current user '
+                         '(but matches the effective user)')
         else:
             has_error = True
             lines.append('File owner does not match current user')
@@ -214,16 +218,24 @@ def _get_config_permission_issues():
             f.read(1)
     except FileNotFoundError:
         # A missing configuration file is normal on first start and is
-        # not a permission issue. The append test below verifies that
-        # the file can be created/written.
+        # not a permission issue.
         pass
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Read error: {type(e).__name__}: {e}")
 
     try:
-        with open(_options_file, 'a', encoding='utf-8') as f:
-            f.write('')
+        # without O_CREAT, so the check does not create the file itself
+        os.close(os.open(_options_file, os.O_WRONLY | os.O_APPEND))
+    except FileNotFoundError:
+        # Options creates it later, along with any missing directories
+        parent_dir = _options_dir
+        while not os.path.isdir(parent_dir) and \
+                os.path.dirname(parent_dir) != parent_dir:
+            parent_dir = os.path.dirname(parent_dir)
+        if not os.access(parent_dir, os.W_OK | os.X_OK):
+            has_error = True
+            lines.append(f'Write error: cannot create files in {parent_dir}')
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Write error: {type(e).__name__}: {e}")
@@ -234,6 +246,9 @@ def _get_config_permission_issues():
         lines.append(f'File: {_options_file}')
         lines.append(
             f'Permissions: {mode} ({oct(stat.S_IMODE(fstat.st_mode))})')
+    except FileNotFoundError:
+        # The write check above covers a missing file
+        pass
     except OSError as e:
         has_error = True
         lines.append(f'Cannot stat {_options_file}: {e}')
@@ -245,6 +260,9 @@ def _get_config_permission_issues():
         lines.append(f'Directory: {_options_dir}')
         lines.append(
             f'Directory permissions: {dmode} ({oct(stat.S_IMODE(dstat.st_mode))})')
+    except FileNotFoundError:
+        # The write check above covers a missing directory
+        pass
     except OSError as e:
         has_error = True
         lines.append(f'Cannot stat directory {_options_dir}: {e}')
