@@ -147,6 +147,9 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
     assert backoff_factor > 0
     assert isinstance(timeout, int)
     assert timeout > 0
+    if not HAVE_REQUESTS:
+        raise RequestException(
+            'The requests package is not installed: network features are disabled.')
     if hasattr(sys, 'frozen'):
         # when frozen by py2exe, certificates are in alternate location
         ca_bundle = os.path.join(bleachbit_exe_path, 'cacert.pem')
@@ -156,9 +159,6 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
         else:
             logger.error(
                 'Application is frozen but certificate file not found: %s', ca_bundle)
-    if not HAVE_REQUESTS:
-        raise RequestException(
-            'The requests package is not installed: network features are disabled.')
     assert headers is None or isinstance(headers, dict)
     request_headers = {'User-Agent': get_user_agent()}
     if headers:
