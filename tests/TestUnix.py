@@ -455,6 +455,90 @@ PrefersNonDefaultGPU=false""")
             'the emptied folder itself must also be yielded for deletion')
 
     @common.skipIfWindows
+    def test_get_trash_paths_refuses_links_and_foreign_dirs(self):
+        """get_trash_paths() skips snap and mount trash the spec disallows"""
+        uid = os.getuid()
+
+        def make(path):
+            self.mkdir(os.path.dirname(path))
+            return self.write_file(path)
+
+        home = self.mkdtemp(prefix='bleachbit-test-trash-home')
+        victim = self.mkdtemp(prefix='bleachbit-test-trash-victim')
+        make(os.path.join(victim, 'files', 'victim.txt'))
+        snap_file = make(os.path.join(
+            home, 'snap', 'app', '1', '.local', 'share', 'Trash', 'files', 'snap.txt'))
+        evil_trash = self.mkdir(os.path.join(
+            home, 'snap', 'evil', '1', '.local', 'share', 'Trash'))
+        os.symlink(os.path.join(victim, 'files'),
+                   os.path.join(evil_trash, 'files'))
+
+        linked = self.mkdtemp(prefix='bleachbit-test-trash-linked')
+        os.symlink(victim, os.path.join(linked, f'.Trash-{uid}'))
+        linked_files = self.mkdtemp(prefix='bleachbit-test-trash-linked-files')
+        self.mkdir(os.path.join(linked_files, f'.Trash-{uid}'))
+        os.symlink(os.path.join(victim, 'files'),
+                   os.path.join(linked_files, f'.Trash-{uid}', 'files'))
+        no_sticky = self.mkdtemp(prefix='bleachbit-test-trash-no-sticky')
+        make(os.path.join(no_sticky, '.Trash', str(uid), 'files', 'x.txt'))
+        sticky = self.mkdtemp(prefix='bleachbit-test-trash-sticky')
+        sticky_file = make(os.path.join(
+            sticky, '.Trash', str(uid), 'files', 'y.txt'))
+        os.chmod(os.path.join(sticky, '.Trash'), 0o1700)
+        good = self.mkdtemp(prefix='bleachbit-test-trash-good')
+        good_file = make(os.path.join(good, f'.Trash-{uid}', 'files', 'z.txt'))
+        foreign = self.mkdtemp(prefix='bleachbit-test-trash-foreign')
+        make(os.path.join(foreign, f'.Trash-{uid}', 'files', 'f.txt'))
+        foreign_trash = os.path.join(foreign, f'.Trash-{uid}')
+
+        real_lstat = os.lstat
+
+        def fake_lstat(path, *args, **kwargs):
+            st = real_lstat(path, *args, **kwargs)
+            if path == foreign_trash:
+                return mock.Mock(st_mode=st.st_mode, st_uid=uid + 1)
+            return st
+
+        mount_points = [linked, linked_files, no_sticky, sticky, good, foreign]
+        with mock.patch('os.path.expanduser',
+                        side_effect=lambda p: p.replace('~', home, 1)), \
+                mock.patch.dict(os.environ, {'XDG_DATA_HOME': os.path.join(home, 'data')}), \
+                mock.patch('bleachbit.Unix.get_mount_points', return_value=mount_points), \
+                mock.patch('os.lstat', side_effect=fake_lstat):
+            paths = [cmd.path for cmd in get_trash_paths()]
+
+        self.assertCountEqual(paths, [snap_file, sticky_file, good_file])
+
+    @common.skipIfWindows
+    def test_get_trash_paths_home_trash_links(self):
+        """get_trash_paths() follows a linked home trash but no link in it"""
+        home = self.mkdtemp(prefix='bleachbit-test-trash-home')
+        data = self.mkdir(os.path.join(home, 'data'))
+        real_trash = self.mkdtemp(prefix='bleachbit-test-trash-real')
+        victim = self.mkdtemp(prefix='bleachbit-test-trash-victim')
+        self.write_file(os.path.join(victim, 'victim.txt'))
+        home_trash = os.path.join(data, 'Trash')
+        os.symlink(real_trash, home_trash)
+        self.mkdir(os.path.join(real_trash, 'files', 'dir'))
+        os.symlink(victim, os.path.join(real_trash, 'info'))
+        fallback_trash = os.path.join(home, '.local', 'share', 'Trash')
+        self.mkdir(os.path.join(fallback_trash, 'files'))
+        expected = {
+            self.write_file(os.path.join(home_trash, 'files', 'a.txt')): home_trash,
+            self.write_file(os.path.join(home_trash, 'files', 'dir', 'b.txt')): home_trash,
+            os.path.join(home_trash, 'files', 'dir'): home_trash,
+            self.write_file(os.path.join(fallback_trash, 'files', 'c.txt')): fallback_trash,
+        }
+
+        with mock.patch('os.path.expanduser',
+                        side_effect=lambda p: p.replace('~', home, 1)), \
+                mock.patch.dict(os.environ, {'XDG_DATA_HOME': data}), \
+                mock.patch('bleachbit.Unix.get_mount_points', return_value=[]):
+            found = {cmd.path: cmd.top for cmd in get_trash_paths()}
+
+        self.assertEqual(found, expected)
+
+    @common.skipIfWindows
     def test_desktop_valid_exe(self):
         """Unit test for .desktop file with valid Unix exe (not env)"""
         fake_config = FakeConfig({"Desktop Entry": {"Exec": "ls"}})

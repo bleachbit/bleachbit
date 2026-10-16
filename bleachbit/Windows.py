@@ -81,6 +81,8 @@ if IS_WINDOWS:
 logger = logging.getLogger(__name__)
 
 IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003
+# IsReparseTagNameSurrogate(): set for symlinks and junctions
+IO_REPARSE_TAG_NAME_SURROGATE = 0x20000000
 FILE_ATTRIBUTE_REPARSE_POINT = 0x400
 
 SPLASH_ICON_SIZE_PX = 256  # 256x256 pixels
@@ -294,7 +296,14 @@ def cleanup_nonce():
         # and deletes shared %TEMP% files with a %TEMP% parent lock, racing
         # other workers.
         return
+    # Like the tmp cleaner, keep recent ones another instance may still use
+    max_age_seconds = 7 * 24 * 60 * 60
     for fn in glob.glob(os.path.expandvars(r'%TEMP%\gdbus-nonce-file-*')):
+        try:
+            if time.time() - os.stat(fn).st_mtime < max_age_seconds:
+                continue
+        except OSError:
+            continue
         logger.debug('cleaning GTK nonce file: %s', fn)
         FileUtilities.delete(fn)
 
@@ -374,10 +383,31 @@ def _close_delete_parent_lock():
     if _delete_parent_lock_handle is not None:
         logger.debug('Closing parent lock handle for %s',
                      _delete_parent_lock_key)
-        # pylint: disable-next=possibly-used-before-assignment
-        win32file.CloseHandle(_delete_parent_lock_handle)
+        # Forget it first, so a handle that fails to close is not retried
+        handle = _delete_parent_lock_handle
         _delete_parent_lock_handle = None
         _delete_parent_lock_key = None
+        # pylint: disable-next=possibly-used-before-assignment
+        win32file.CloseHandle(handle)
+
+
+def _check_delete_parent(handle, pathname):
+    """Refuse the parent locked by handle if it is a symlink or junction"""
+    try:
+        info = win32file.GetFileInformationByHandleEx(
+            handle, win32file.FileAttributeTagInfo)
+        attrs = info['FileAttributes']
+        is_link = info['ReparseTag'] & IO_REPARSE_TAG_NAME_SURROGATE
+    except pywintypes.error as e:
+        # Some devices have no tag (invalid function/parameter, not supported)
+        if e.winerror not in (1, 50, 87):
+            raise
+        attrs = win32file.GetFileInformationByHandle(handle)[0]
+        is_link = True
+    if attrs & FILE_ATTRIBUTE_REPARSE_POINT and is_link:
+        raise OSError(errno.EACCES,
+                      "Refusing to delete through a directory link",
+                      pathname)
 
 
 def _lock_delete_parent(pathname):
@@ -395,16 +425,25 @@ def _lock_delete_parent(pathname):
     parent_key = os.path.normcase(parent)
     if _delete_parent_lock_handle is not None and _delete_parent_lock_key == parent_key:
         logger.debug('Reusing parent lock handle for %s', parent_key)
+        # The lock does not stop an empty parent becoming a junction
+        try:
+            _check_delete_parent(_delete_parent_lock_handle, pathname)
+        except Exception:
+            _close_delete_parent_lock()
+            raise
         return
     _close_delete_parent_lock()
     flags = win32con.FILE_FLAG_BACKUP_SEMANTICS | getattr(
         win32con, 'FILE_FLAG_OPEN_REPARSE_POINT', 0x00200000)
-    access = getattr(win32con, 'FILE_READ_ATTRIBUTES', 0x80)
+    # Share modes do not apply to attribute-only opens, so also list it
+    access = getattr(win32con, 'FILE_LIST_DIRECTORY', 0x1) | getattr(
+        win32con, 'FILE_READ_ATTRIBUTES', 0x80)
     try:
         handle = win32file.CreateFile(
             parent,
             access,
-            win32con.FILE_SHARE_READ,
+            # No delete sharing, so it cannot be renamed, but its entries can
+            win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
             None,
             win32con.OPEN_EXISTING,
             flags,
@@ -418,15 +457,10 @@ def _lock_delete_parent(pathname):
                       "Access denied locking directory before delete()",
                       pathname)
     try:
-        attrs = win32file.GetFileAttributesW(parent)
-    except pywintypes.error:
+        _check_delete_parent(handle, pathname)
+    except Exception:
         win32file.CloseHandle(handle)
         raise
-    if attrs & FILE_ATTRIBUTE_REPARSE_POINT:
-        win32file.CloseHandle(handle)
-        raise OSError(errno.EACCES,
-                      "Refusing to delete through a directory link",
-                      pathname)
     logger.debug('Opened parent lock handle for %s', parent_key)
     _delete_parent_lock_handle = handle
     _delete_parent_lock_key = parent_key

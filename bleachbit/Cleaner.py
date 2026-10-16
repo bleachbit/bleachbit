@@ -13,6 +13,7 @@ import logging
 import os
 import os.path
 import re
+import stat
 import tempfile
 import time
 
@@ -375,7 +376,9 @@ class System(Cleaner):
             if IS_MAC:
                 dirnames.insert(0, os.path.expanduser("~/Library/Caches/"))
             for dirname in dirnames:
-                for filename in children_in_directory(dirname, True):
+                # Filesystems mounted below it may hold more than cache
+                for filename in children_in_directory(dirname, True,
+                                                      same_device=True):
                     if not self.whitelisted(filename):
                         yield Command.Delete(filename)
 
@@ -517,16 +520,17 @@ class System(Cleaner):
         if IS_POSIX and 'tmp' == option_id:
             dirnames = ['/tmp', '/var/tmp']
             for dirname in dirnames:
-                for path in children_in_directory(dirname, True):
+                # Others can swap in links, and mounts below are not tmp files
+                for path, st in FileUtilities.children_below(
+                        dirname, same_device=True):
                     # is_open() resolves the path and rescans /proc, so leave
                     # it until the cheaper tests have had a chance to reject.
-                    ok = os.path.isfile(path) and \
-                        not os.path.islink(path) and \
-                        FileUtilities.ego_owner(path) and \
+                    ok = stat.S_ISREG(st.st_mode) and \
+                        st.st_uid == os.getuid() and \
                         not self.whitelisted(path) and \
                         not FileUtilities.openfiles.is_open(path)
                     if ok:
-                        yield Command.Delete(path)
+                        yield Command.Delete(path, top=dirname)
 
         # temporary files
         if IS_WINDOWS and 'tmp' == option_id:
@@ -645,12 +649,14 @@ class System(Cleaner):
         # re.escape because a home directory may contain regex metacharacters
         home = re.escape(os.path.expanduser('~'))
         regexes = [
-            r'^/tmp/\.X0-lock$',
+            r'^/tmp/\.X[0-9]+-lock$',
             r'^/tmp/\.truecrypt_aux_mnt.*/(control|volume)$',
             r'^/tmp/\.vbox-[^/]+-ipc/lock$',
             r'^/tmp/\.wine-[0-9]+/server-.*/lock$',
             '^/tmp/fsa/',  # fsarchiver
             '^/tmp/gconfd-[^/]+/lock/ior$',
+            # JVM perf data, mapped with no open fd that FreeBSD would list
+            '^/tmp/hsperfdata_[^/]+/',
             '^/tmp/kde-',
             '^/tmp/kdesudo-',
             '^/tmp/ksocket-',
@@ -790,7 +796,9 @@ class CustomFileAction(Action.ActionProvider):
             path = simpler_cleaner_process_path(path)
             if not path:
                 continue
-            if os.path.isdir(path):
+            # Like delete(), shred a link or junction, not its target
+            # pylint: disable-next=protected-access
+            if stat.S_ISDIR(FileUtilities._file_type(path) or 0):
                 for child in children_in_directory(path, True):
                     yield Command.Shred(child)
             yield Command.Shred(path)

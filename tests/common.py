@@ -62,6 +62,7 @@ from bleachbit.Bootstrap import bootstrap
 from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
 from bleachbit.FileUtilities import (
     children_in_directory,
+    close_delete_parent_lock,
     extended_path,
     get_filesystem_type,
     is_hard_link,
@@ -287,6 +288,7 @@ class BleachbitTestCase(unittest.TestCase):
         # tempdir while rmtree is mid-way through deleting it.
         bleachbit.Options.options.cancel_pending_flush()
         gc_collect()
+        close_delete_parent_lock()
         # Stop patching the options paths before rmtree to avoid a
         # potential flush into cls.tempdir while rmtree() is running
         # to avoid OSError [Errno 66] Directory not empty.
@@ -355,6 +357,8 @@ class BleachbitTestCase(unittest.TestCase):
         # WinError 32 in rmtree() in tearDownClass.
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
+        # delete() keeps a lock on the last parent dir, blocking its removal
+        close_delete_parent_lock()
         # Cancel first: a deferred flush holds bleachbit.ini open, which
         # fails the remove below with WinError 32. Cancelling takes the
         # flush lock, so it also waits out a flush already running.

@@ -201,22 +201,40 @@ def sync():
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
-def wipe_write(path):
+def wipe_write(path, dir_fd=None):
     """Overwrite a file's contents with zeros without truncating it.
 
     Return the open file handle; the caller must close it."""
-    from bleachbit.FileUtilities import getsize, _open_nofollow_fd
-    size = getsize(path)
+    from bleachbit.FileUtilities import getsize, _islink, _open_nofollow_fd
+    size = getsize(path, dir_fd)
     flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
     try:
-        fd = _open_nofollow_fd(path, flags)
+        fd = _open_nofollow_fd(path, flags, dir_fd=dir_fd)
     except OSError as e:
         # Only retry on a genuine permission error; a symlink also raises
         # EACCES here, and chmod() on a symlink path follows it, which
         # would mutate an attacker-controlled target's permissions.
-        if e.errno == errno.EACCES and not os.path.islink(path):
-            os.chmod(path, 0o200)  # user write only
-            fd = _open_nofollow_fd(path, flags)
+        if e.errno == errno.EACCES and not _islink(path, dir_fd):
+            if dir_fd is None:
+                os.chmod(path, 0o200)  # user write only
+            else:
+                # Through a descriptor, so a link swapped in is not followed
+                try:
+                    chmod_fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW,
+                                       dir_fd=dir_fd)
+                except OSError:
+                    # Not readable either: fchmodat() without following a link
+                    try:
+                        os.chmod(path, 0o200, dir_fd=dir_fd,
+                                 follow_symlinks=False)
+                    except (NotImplementedError, ValueError):
+                        raise e from None
+                else:
+                    try:
+                        os.chmod(chmod_fd, 0o200)  # user write only
+                    finally:
+                        os.close(chmod_fd)
+            fd = _open_nofollow_fd(path, flags, dir_fd=dir_fd)
         else:
             raise
     f = os.fdopen(fd, 'wb')
@@ -233,13 +251,15 @@ def wipe_write(path):
     return f
 
 
-def wipe_contents(path):
+def wipe_contents(path, dir_fd=None):
     """Wipe files contents
 
     https://en.wikipedia.org/wiki/Data_remanence
     2006 NIST Special Publication 800-88 (p. 7): "Studies have
     shown that most of today's media can be effectively cleared
     by one overwrite"
+
+    dir_fd is POSIX only.
     """
     from bleachbit.FileUtilities import truncate_f
 
@@ -290,14 +310,14 @@ def wipe_contents(path):
             # pylint: disable-next=consider-using-with
             f = open(path, 'wb')
     else:
-        f = wipe_write(path)
+        f = wipe_write(path, dir_fd)
     try:
         truncate_f(f)
     finally:
         f.close()
 
 
-def wipe_name(pathname1):
+def wipe_name(pathname1, dir_fd=None):
     """Wipe the original filename and return the new pathname
 
     File systems vary in how they store a pathname and how they respond
@@ -307,8 +327,9 @@ def wipe_name(pathname1):
     This function tries to rename the file a single time to a random
     name with the identical length.
 
-
+    With dir_fd, both names are relative to that directory.
     """
+    from bleachbit.FileUtilities import _lexists
     (head, tail) = os.path.split(pathname1)
     target_length = len(tail)
     attempt_count = 0
@@ -322,10 +343,11 @@ def wipe_name(pathname1):
         if not __valid_random_filename(new_tail):
             continue
         pathname2 = os.path.join(head, new_tail)
-        if os.path.lexists(pathname2):
+        if _lexists(pathname2, dir_fd):
             continue
         try:
-            os.rename(pathname1, pathname2)
+            os.rename(pathname1, pathname2,
+                      src_dir_fd=dir_fd, dst_dir_fd=dir_fd)
             break
         except OSError as e:
             if e.errno in (errno.EACCES, errno.EPERM, errno.EROFS):

@@ -17,11 +17,12 @@ import platform
 import posixpath
 import re
 import shlex
+import stat
 import subprocess
 
 import bleachbit
 from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
-from bleachbit.FileUtilities import children_in_directory, exe_exists
+from bleachbit.FileUtilities import children_below, children_in_directory, exe_exists
 from bleachbit.Language import get_text as _, native_locale_names, \
     LocaleCode
 from bleachbit.VFS import RealVFS
@@ -444,6 +445,15 @@ def get_purgeable_locales(locales_to_keep):
     return frozenset(purgeable_locales)
 
 
+def _is_own_dir(path, uid):
+    """Return whether path is a directory owned by uid and not a link"""
+    try:
+        st = os.lstat(path)
+    except OSError:
+        return False
+    return stat.S_ISDIR(st.st_mode) and st.st_uid == uid
+
+
 def get_trash_paths():
     """Iterate over all trash on POSIX systems"""
     # Import here to avoid a circular import.
@@ -461,31 +471,47 @@ def get_trash_paths():
         os.environ.get('XDG_DATA_HOME', os.path.expanduser('~/.local/share')),
         'Trash')
     fallback_trash = os.path.expanduser('~/.local/share/Trash')
-    trash_dirs = [home_trash]
+    # (trash dir, top): no link below top is followed
+    trash_dirs = [(home_trash, None)]
     if home_trash != fallback_trash:
-        trash_dirs.append(fallback_trash)
+        trash_dirs.append((fallback_trash, None))
     # Snap apps store trash under ~/snap/<app>/<revision>/.local/share/Trash
     for d in glob.glob(os.path.expanduser("~/snap/*/*/.local/share/Trash")):
         # Do not follow revision symlinks. For example, current -> 238 would match twice.
         rev_dir = os.path.dirname(os.path.dirname(os.path.dirname(d)))
         if not os.path.islink(rev_dir):
-            trash_dirs.append(d)
+            trash_dirs.append((d, rev_dir))
     # Per-mountpoint trash (method 1: .Trash/$uid, method 2: .Trash-$uid)
     uid = os.getuid()
     for mountpoint in get_mount_points():
-        trash_dirs.append(os.path.join(mountpoint, '.Trash', str(uid)))
-        trash_dirs.append(os.path.join(mountpoint, f'.Trash-{uid}'))
+        # The spec only allows a sticky .Trash that is not a link
+        try:
+            shared_mode = os.lstat(os.path.join(mountpoint, '.Trash')).st_mode
+        except OSError:
+            shared_mode = 0
+        if stat.S_ISDIR(shared_mode) and shared_mode & stat.S_ISVTX:
+            trash_dirs.append(
+                (os.path.join(mountpoint, '.Trash', str(uid)), mountpoint))
+        trash_dirs.append(
+            (os.path.join(mountpoint, f'.Trash-{uid}'), mountpoint))
     # Deduplicate while preserving order
     seen = set()
-    for trash_dir in trash_dirs:
+    for trash_dir, top in trash_dirs:
+        if top is None:
+            # A trash dir the user made a link is still followed
+            top = trash_dir
+        elif not _is_own_dir(trash_dir, uid):
+            # A snap, another user or a removable disk may control it
+            continue
         real_path = os.path.realpath(trash_dir)
         if real_path in seen:
             continue
         seen.add(real_path)
         for subdir in ('files', 'info', 'expunged'):
             dirname = os.path.join(trash_dir, subdir)
-            for filename in children_in_directory(dirname, True):
-                yield Command.Delete(filename)
+            for filename, _st in children_below(
+                    dirname, list_directories=True, top=top):
+                yield Command.Delete(filename, top=top)
 
 
 def is_unregistered_mime(mimetype):

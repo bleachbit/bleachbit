@@ -126,6 +126,62 @@ class WipeTestCase(common.BleachbitTestCase):
         with open(target, 'rb') as f:
             self.assertEqual(f.read(), b'keepme' * 100)
 
+    @common.skipIfWindows
+    def test_wipe_write_dir_fd_read_only(self):
+        """wipe_write() with dir_fd changes the mode through a descriptor"""
+        name = 'wipe_write_read_only'
+        filename = self.write_file(name, b'abcdefghij' * 100)
+        os.chmod(filename, 0o400)
+        dir_fd = os.open(self.tempdir, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            with mock.patch('os.chmod', wraps=os.chmod) as mock_chmod:
+                wipe_write(name, dir_fd).close()
+        finally:
+            os.close(dir_fd)
+        if not common.have_root():
+            mock_chmod.assert_called_once()
+        for call in mock_chmod.call_args_list:
+            self.assertIsInstance(call.args[0], int)
+        os.chmod(filename, 0o600)
+        with open(filename, 'rb') as f:
+            contents = f.read()
+        self.assertEqual(contents, b'\x00' * len(contents))
+        self.assertGreaterEqual(len(contents), 1000)
+
+    @common.skipIfWindows
+    def test_wipe_write_dir_fd_unreadable(self):
+        """wipe_write() with dir_fd changes the mode of an unreadable file"""
+        if common.have_root():
+            self.skipTest('root can open any file')
+        name = 'wipe_write_unreadable'
+        original = b'abcdefghij' * 100
+        filename = self.write_file(name, original)
+        os.chmod(filename, 0)
+        dir_fd = os.open(self.tempdir, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            try:
+                os.chmod(name, 0, dir_fd=dir_fd, follow_symlinks=False)
+            except (NotImplementedError, ValueError):
+                # No fchmodat() that skips links, as before glibc 2.32
+                with self.assertRaises(PermissionError):
+                    wipe_write(name, dir_fd)
+                wiped = False
+            else:
+                wipe_write(name, dir_fd).close()
+                wiped = True
+        finally:
+            os.close(dir_fd)
+        self.assertEqual(os.stat(filename).st_mode & 0o777,
+                         0o200 if wiped else 0)
+        os.chmod(filename, 0o600)
+        with open(filename, 'rb') as f:
+            contents = f.read()
+        if wiped:
+            self.assertEqual(contents, b'\x00' * len(contents))
+            self.assertGreaterEqual(len(contents), len(original))
+        else:
+            self.assertEqual(contents, original)
+
     def test_wipe_contents(self):
         """Unit test for wipe_contents()"""
 

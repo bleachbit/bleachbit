@@ -291,38 +291,42 @@ class Worker:
                     self.operations[operation].remove(delayable)
                     self.delayed_ops.append((priority, operation, delayable))
 
-        # standard operations
-        with warnings.catch_warnings(record=True) as ws:
-            # This warning system allows general warnings. Duplicate will
-            # be removed, and the warnings will show near the end of
-            # the log.
+        try:
+            # standard operations
+            with warnings.catch_warnings(record=True) as ws:
+                # This warning system allows general warnings. Duplicate will
+                # be removed, and the warnings will show near the end of
+                # the log.
 
-            warnings.simplefilter('once')
-            # simplefilter('once') prepends a catch-all filter that would
-            # capture PyGObject's asyncio deprecation warnings and re-log
-            # them as red errors in the GUI.  Re-install the ignore filter
-            # so it takes precedence over the 'once' filter.
-            ignore_pygobject_asyncio_warnings()
-            for _dummy in self.run_operations(self.operations):
-                # yield to GTK+ idle loop
-                yield True
-            for w in ws:
-                logger.warning(w.message)
+                warnings.simplefilter('once')
+                # simplefilter('once') prepends a catch-all filter that would
+                # capture PyGObject's asyncio deprecation warnings and re-log
+                # them as red errors in the GUI.  Re-install the ignore filter
+                # so it takes precedence over the 'once' filter.
+                ignore_pygobject_asyncio_warnings()
+                for _dummy in self.run_operations(self.operations):
+                    # yield to GTK+ idle loop
+                    yield True
+                for w in ws:
+                    logger.warning(w.message)
 
-        # run deep scan
-        if self.deepscans:
-            yield from self.run_deep_scan()
+            # run deep scan
+            if self.deepscans:
+                yield from self.run_deep_scan()
 
-        # After standard operations and deep scan, close the lock
-        # of the parent directory.
-        close_delete_parent_lock()
+            # After standard operations and deep scan, close the lock
+            # of the parent directory.
+            close_delete_parent_lock()
 
-        # delayed operations
-        for _priority, operation, option_id in sorted(
-                self.delayed_ops, key=lambda op: op[0]):
-            for _ret in self.run_delayed_op(operation, option_id):
-                # yield to GTK+ idle loop
-                yield True
+            # delayed operations
+            for _priority, operation, option_id in sorted(
+                    self.delayed_ops, key=lambda op: op[0]):
+                for _ret in self.run_delayed_op(operation, option_id):
+                    # yield to GTK+ idle loop
+                    yield True
+        finally:
+            # Wiping empty space takes the lock again
+            close_delete_parent_lock()
 
         # print final stats
         bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)
