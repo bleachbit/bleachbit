@@ -160,8 +160,8 @@ def _get_windows_file_owner(filepath):
     return file_owner_sid_str, file_owner_name
 
 
-def _get_windows_permission_issues(options_file):
-    """Check Windows-specific ownership issues.
+def _get_windows_permission_issues(options_file, options_dir=None):
+    """Check Windows-specific ownership and ACL issues.
 
     Returns (has_error, lines).
     """
@@ -179,8 +179,7 @@ def _get_windows_permission_issues(options_file):
         # from the owner. This is not representative of a normal installation.
         if 'GITHUB_ACTIONS' in os.environ and file_owner_name == 'Administrators':
             lines.append('Skipping file ownership check in CI')
-            return False, lines
-        if file_owner_sid_str != current_sid and file_owner_sid_str not in group_sids:
+        elif file_owner_sid_str != current_sid and file_owner_sid_str not in group_sids:
             if file_owner_name == file_owner_sid_str:
                 # The file owner's SID could not be resolved to an account
                 # name (e.g., issue #2271).
@@ -193,6 +192,22 @@ def _get_windows_permission_issues(options_file):
     except Exception as e:
         has_error = True
         lines.append(f'Could not check file ownership: {e}')
+
+    # When elevated, GUI.check_appdata_permissions() offers the repair instead.
+    if (options_dir and not bleachbit.portable_mode
+            # pylint: disable-next=possibly-used-before-assignment
+            and not Windows.shell.IsUserAnAdmin()):
+        try:
+            if Windows.has_broken_appdata_acl(options_dir):
+                has_error = True
+                lines.append(
+                    'Configuration folder permissions lock out non-elevated '
+                    'processes (issue #2401); run BleachBit with administrator '
+                    'privileges to repair them')
+        except Exception as e:
+            has_error = True
+            lines.append(f'Could not check directory ACL: {e}')
+
     return has_error, lines
 
 
@@ -250,17 +265,16 @@ def _get_config_permission_issues():
         lines.append(f'Cannot stat directory {_options_dir}: {e}')
 
     # File ownership vs current user
-    if 'fstat' in locals():
-        if IS_POSIX:
-            _has_error, _lines = _get_posix_permission_issues(
-                fstat, _options_file)
-            has_error = has_error or _has_error
-            lines.extend(_lines)
-        elif IS_WINDOWS:
-            _has_error, _lines = _get_windows_permission_issues(
-                _options_file)
-            has_error = has_error or _has_error
-            lines.extend(_lines)
+    if IS_POSIX and 'fstat' in locals():
+        _has_error, _lines = _get_posix_permission_issues(
+            fstat, _options_file)
+        has_error = has_error or _has_error
+        lines.extend(_lines)
+    elif IS_WINDOWS:
+        _has_error, _lines = _get_windows_permission_issues(
+            _options_file, _options_dir)
+        has_error = has_error or _has_error
+        lines.extend(_lines)
 
     if has_error:
         return lines

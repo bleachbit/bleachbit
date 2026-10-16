@@ -54,6 +54,8 @@ from bleachbit.Windows import (
     get_windows_system_paths,
     get_windows_version,
     elevate_privileges,
+    fix_appdata_acl,
+    has_broken_appdata_acl,
     has_fontconfig_cache,
     is_junction,
     move_to_recycle_bin,
@@ -1529,3 +1531,86 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # multiple arguments, one with spaces, in a realistic combination
         self._assert_roundtrips(
             base, ['--context-menu', r'C:\path with spaces\file.txt', '--debug-log'])
+
+    def test_appdata_acl_check_and_fix(self):
+        """Detect and fix a broken 0o700 ACL on %APPDATA%\\BleachBit"""
+        # Simulate the elevated first run: the folder is owned by the current
+        # user here, so pretend the current user is someone else.
+        import win32security  # pylint: disable=import-outside-toplevel
+        other_sid = win32security.ConvertStringSidToSid('S-1-5-32-545')
+        parent = os.path.join(self.tempdir, 'appdata_roaming')
+        os.mkdir(parent)
+        self.assertFalse(has_broken_appdata_acl(parent))
+        self.assertFalse(has_broken_appdata_acl(parent, other_sid))
+
+        broken_dir = os.path.join(parent, 'BleachBit')
+        os.mkdir(broken_dir, 0o700)
+        cleaners_dir = os.path.join(broken_dir, 'cleaners')
+        os.mkdir(cleaners_dir, 0o700)
+        ini_file = os.path.join(broken_dir, 'bleachbit.ini')
+        self.write_file(ini_file, b'[bleachbit]\n')
+
+        # A 0o700 folder owned by the current user works, so it is not flagged.
+        # When elevated the owner is Administrators, so read it from the file.
+        owner_sid = win32security.GetFileSecurity(
+            broken_dir, win32security.OWNER_SECURITY_INFORMATION).GetSecurityDescriptorOwner()
+        self.assertFalse(has_broken_appdata_acl(broken_dir, owner_sid))
+        self.assertTrue(has_broken_appdata_acl(broken_dir, other_sid))
+
+        fix_appdata_acl(broken_dir)
+        self.assertFalse(has_broken_appdata_acl(broken_dir, other_sid))
+        self.assertFalse(has_broken_appdata_acl(cleaners_dir, other_sid))
+
+        # Child-only broken DACL is also detected and repaired
+        os.rmdir(cleaners_dir)
+        os.mkdir(cleaners_dir, 0o700)
+        self.assertTrue(has_broken_appdata_acl(broken_dir, other_sid))
+        fix_appdata_acl(broken_dir)
+        self.assertFalse(has_broken_appdata_acl(broken_dir, other_sid))
+
+        # Hard-linked files are neither checked nor repaired
+        outside_dir = os.path.join(self.tempdir, 'outside_options')
+        os.mkdir(outside_dir, 0o700)
+        outside_file = os.path.join(outside_dir, 'victim.txt')
+        self.write_file(outside_file, b'x')
+        os.link(outside_file, os.path.join(broken_dir, 'link.txt'))
+        self.assertFalse(has_broken_appdata_acl(broken_dir, other_sid))
+        fix_appdata_acl(broken_dir)
+        self.assertTrue(bleachbit.Windows._is_path_acl_broken(  # pylint: disable=protected-access
+            outside_file, other_sid))
+
+        # Non-existent path and portable mode
+        self.assertFalse(
+            has_broken_appdata_acl(os.path.join(parent, 'does_not_exist')))
+        with mock.patch('bleachbit.portable_mode', True):
+            self.assertFalse(has_broken_appdata_acl())
+
+    def test_fix_appdata_acl_continues_after_failure(self):
+        """A failure on one path does not prevent repairing the others"""
+        import win32security  # pylint: disable=import-outside-toplevel
+        other_sid = win32security.ConvertStringSidToSid('S-1-5-32-545')
+        parent = os.path.join(self.tempdir, 'appdata_partial')
+        os.mkdir(parent)
+        broken_dir = os.path.join(parent, 'BleachBit')
+        os.mkdir(broken_dir, 0o700)
+        cleaners_dir = os.path.join(broken_dir, 'cleaners')
+        os.mkdir(cleaners_dir, 0o700)
+        ini_file = os.path.join(broken_dir, 'bleachbit.ini')
+        self.write_file(ini_file, b'[bleachbit]\n')
+
+        real_set = win32security.SetNamedSecurityInfo
+
+        def flaky_set(target, *args, **kwargs):
+            if target == ini_file:
+                raise OSError('simulated failure')
+            return real_set(target, *args, **kwargs)
+
+        with mock.patch.object(win32security, 'SetNamedSecurityInfo',
+                               side_effect=flaky_set) as setter:
+            with self.assertRaises(OSError):
+                fix_appdata_acl(broken_dir)
+        attempted = [call.args[0] for call in setter.call_args_list]
+        # cleaners/ is yielded after the top-level files, so its presence
+        # proves iteration continued past the failing file.
+        self.assertIn(cleaners_dir, attempted)
+        self.assertFalse(has_broken_appdata_acl(cleaners_dir, other_sid))

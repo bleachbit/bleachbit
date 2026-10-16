@@ -839,6 +839,134 @@ def _add_command_line_parameters(parameters):
     return subprocess.list2cmdline(parameters + args)
 
 
+def _current_user_sid():
+    """Return the PySID of the user running this process."""
+    token = win32security.OpenProcessToken(
+        win32api.GetCurrentProcess(), win32security.TOKEN_QUERY)
+    try:
+        return win32security.GetTokenInformation(
+            token, win32security.TokenUser)[0]
+    finally:
+        win32api.CloseHandle(token)
+
+
+def _is_path_acl_broken(path, user_sid):
+    """Return True if an OWNER RIGHTS ACE on path locks out user_sid, or
+    its ACL cannot be read."""
+    try:
+        sd = win32security.GetFileSecurity(
+            path, win32security.DACL_SECURITY_INFORMATION |
+            win32security.OWNER_SECURITY_INFORMATION)
+    except pywintypes.error as exc:
+        if getattr(exc, 'winerror', None) == 5:  # ERROR_ACCESS_DENIED
+            return True
+        raise
+    if sd.GetSecurityDescriptorOwner() == user_sid:
+        return False
+    dacl = sd.GetSecurityDescriptorDacl()
+    if dacl is None:
+        return False
+    owner_rights_sid = win32security.ConvertStringSidToSid('S-1-3-4')
+    return any(dacl.GetAce(i)[2] == owner_rights_sid
+               for i in range(dacl.GetAceCount()))
+
+
+def _is_single_link_file(path):
+    """Return True if path is not a hard link."""
+    try:
+        return os.lstat(path).st_nlink == 1
+    except OSError:
+        return False
+
+
+def _appdata_acl_targets(options_dir):
+    """Yield options_dir, the files directly in it, and the cleaners subtree.
+
+    Symlinks, junctions, and hard-linked files are skipped.
+    """
+    yield options_dir
+    try:
+        entries = list(os.scandir(options_dir))
+    except OSError:
+        return
+    for entry in entries:
+        if entry.is_symlink():
+            continue
+        if entry.is_file(follow_symlinks=False) and _is_single_link_file(entry.path):
+            yield entry.path
+    cleaners_dir = os.path.join(options_dir, 'cleaners')
+    if os.path.isdir(cleaners_dir) and not os.path.islink(cleaners_dir):
+        yield cleaners_dir
+        for root, dirs, files in os.walk(cleaners_dir, followlinks=False):
+            for name in dirs:
+                target = os.path.join(root, name)
+                if not os.path.islink(target):
+                    yield target
+            for name in files:
+                target = os.path.join(root, name)
+                if not os.path.islink(target) and _is_single_link_file(target):
+                    yield target
+
+
+def has_broken_appdata_acl(options_dir=None, user_sid=None):
+    """Return True if options_dir (or a child) locks out user_sid.
+
+    Before commit c3007aa0e818e905abb3dcb3035cb3dd40b715d1, General.makedirs()
+    called os.mkdir(path, 0o700), which on Windows sets a protected DACL with
+    an OWNER RIGHTS ACE. If an elevated process created the directory, its
+    owner is Administrators, and non-elevated processes are locked out
+    (issue #2401). A 0o700 directory owned by the user works, so it is not
+    flagged.
+
+    user_sid defaults to the user running this process.
+    """
+    if not IS_WINDOWS:
+        return False
+    if options_dir is None:
+        if bleachbit.portable_mode:
+            return False
+        options_dir = bleachbit.options_dir
+    if not options_dir or not os.path.exists(options_dir) or os.path.islink(options_dir):
+        return False
+    if user_sid is None:
+        user_sid = _current_user_sid()
+    for target in _appdata_acl_targets(options_dir):
+        if _is_path_acl_broken(target, user_sid):
+            return True
+    return False
+
+
+def fix_appdata_acl(options_dir=None):
+    """Reset the DACL on options_dir and its children to inherit from the parent.
+
+    Equivalent to ``icacls "%APPDATA%\\BleachBit" /reset /T``.
+    """
+    if not IS_WINDOWS:
+        return
+    if options_dir is None:
+        if bleachbit.portable_mode:
+            return
+        options_dir = bleachbit.options_dir
+    if not options_dir or not os.path.exists(options_dir) or os.path.islink(options_dir):
+        return
+    empty_dacl = win32security.ACL()
+    flags = (win32security.DACL_SECURITY_INFORMATION |
+             win32security.UNPROTECTED_DACL_SECURITY_INFORMATION)
+    failed = []
+    for target in _appdata_acl_targets(options_dir):
+        try:
+            win32security.SetNamedSecurityInfo(
+                target, win32security.SE_FILE_OBJECT, flags,
+                None, None, empty_dacl, None)
+        except Exception:
+            failed.append(target)
+            logger.exception('Error resetting ACL on %s', target)
+    if failed:
+        raise OSError(
+            f'Failed to reset ACL on {len(failed)} path(s), '
+            f'first: {failed[0]}')
+
+
 def empty_recycle_bin(path, really_delete):
     """Empty the recycle bin or preview its size.
 

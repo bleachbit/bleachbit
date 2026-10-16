@@ -360,6 +360,9 @@ class Bleachbit(Gtk.Application):
             # Check for orphaned wipe files from interrupted operations
             GLib.idle_add(self._window.check_orphaned_wipe_files,
                           priority=GLib.PRIORITY_LOW)
+            if IS_WINDOWS:
+                GLib.idle_add(self._window.check_appdata_permissions,
+                              priority=GLib.PRIORITY_LOW)
 
         self._maybe_prompt_font_check()
 

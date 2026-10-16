@@ -699,6 +699,48 @@ class GUITestCase(common.BleachbitTestCase):
             gui._prompt_orphaned_wipe_files(['/does/not/exist'])
             dialog.assert_called_once()
 
+    @common.skipUnlessWindows
+    def test_prompt_appdata_permissions(self):
+        """Confirming the permissions prompt repairs the configuration folder ACL"""
+        gui = self.get_window()
+        with mock.patch('bleachbit.GuiBasic.message_dialog',
+                        return_value=Gtk.ResponseType.NO) as dialog, \
+                mock.patch('bleachbit.Windows.fix_appdata_acl') as fix_acl:
+            gui._prompt_appdata_permissions()
+            dialog.assert_called_once()
+            fix_acl.assert_not_called()
+
+        with mock.patch('bleachbit.GuiBasic.message_dialog',
+                        return_value=Gtk.ResponseType.YES) as dialog, \
+                mock.patch('bleachbit.Windows.fix_appdata_acl') as fix_acl, \
+                mock.patch('bleachbit.Windows.has_broken_appdata_acl',
+                           return_value=False), \
+                mock.patch.object(gui, 'append_text') as append_text:
+            gui._prompt_appdata_permissions()
+            dialog.assert_called_once()
+            fix_acl.assert_called_once_with()
+            self.assertIn('Repaired permissions',
+                          append_text.call_args.args[0])
+
+        # A failed or ineffective repair is reported, not claimed as success.
+        for fix_side_effect, has_broken in ((OSError('fail'), False),
+                                            (None, True)):
+            with mock.patch('bleachbit.GuiBasic.message_dialog',
+                            return_value=Gtk.ResponseType.YES), \
+                    mock.patch('bleachbit.Windows.fix_appdata_acl',
+                               side_effect=fix_side_effect), \
+                    mock.patch('bleachbit.Windows.has_broken_appdata_acl',
+                               return_value=has_broken), \
+                    mock.patch.object(gui, 'append_text') as append_text:
+                gui._prompt_appdata_permissions()
+                self.assertIn('Could not fully repair',
+                              append_text.call_args.args[0])
+
+        with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False), \
+                mock.patch('bleachbit.Windows.has_broken_appdata_acl') as has_broken:
+            self.assertFalse(gui.check_appdata_permissions())
+            has_broken.assert_not_called()
+
     def test_app_menu_reloads_only_after_setup_translation(self):
         """The app menu is rebuilt only after setup_translation() runs again"""
         gui = self.get_window()

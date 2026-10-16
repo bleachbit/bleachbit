@@ -240,6 +240,18 @@ class BleachbitTestCase(unittest.TestCase):
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._patch_options_paths()
+        if bleachbit.IS_WINDOWS:
+            # mkdtemp() leaves a protected 0o700 DACL on the bleachbit-test-*
+            # ancestors; reset them outside-in (issue #2401).
+            ancestors = []
+            parent = os.path.dirname(cls.tempdir)
+            while os.path.basename(parent).startswith('bleachbit-test-'):
+                ancestors.append(parent)
+                parent = os.path.dirname(parent)
+            for ancestor in reversed(ancestors):
+                Windows.fix_appdata_acl(ancestor)
+            Windows.fix_appdata_acl(cls.tempdir)
+            Windows.fix_appdata_acl(bleachbit.options_dir)
         bleachbit.Options.options.reset_overrides()
         bleachbit.Options.options.set_override("first_start", False)
 

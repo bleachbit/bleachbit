@@ -226,3 +226,39 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         sid = win32security.ConvertStringSidToSid(bogus)
         name, _ = GuiStartup._lookup_account_name_or_sid(sid)
         self.assertEqual(name, bogus)
+
+    @common.skipUnlessWindows
+    def test_config_permission_issue_protected_dacl(self):
+        """A 0o700 config directory (issue #2401) is flagged until repaired."""
+        import win32security  # pylint: disable=import-outside-toplevel
+        protected_dir = os.path.join(self.tempdir, 'protected_options')
+        os.mkdir(protected_dir, 0o700)
+        self.addCleanup(shutil.rmtree, protected_dir, ignore_errors=True)
+        protected_file = os.path.join(protected_dir, 'bleachbit.ini')
+        self.write_file(protected_file, b'[bleachbit]\n')
+        with mock.patch('bleachbit.options_dir', protected_dir), \
+                mock.patch('bleachbit.options_file', protected_file), \
+                mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False):
+            # Owned by the current user, so it works and is not flagged.
+            # When elevated the owner is Administrators, so read it from the file.
+            owner_sid = win32security.GetFileSecurity(
+                protected_dir, win32security.OWNER_SECURITY_INFORMATION).GetSecurityDescriptorOwner()
+            with mock.patch('bleachbit.Windows._current_user_sid', return_value=owner_sid):
+                self.assertFalse(GuiStartup._get_config_permission_issues())
+
+            # Simulate an elevated first run: the owner is not the user
+            other_sid = win32security.ConvertStringSidToSid('S-1-5-32-545')
+            with mock.patch('bleachbit.Windows._current_user_sid', return_value=other_sid):
+                issues = GuiStartup._get_config_permission_issues()
+                self.assertIsInstance(issues, list)
+                self.assertTrue(
+                    any('issue #2401' in issue for issue in issues),
+                    f'Expected issue #2401 in issues: {issues}')
+                with mock.patch('bleachbit.portable_mode', True):
+                    self.assertFalse(
+                        GuiStartup._get_config_permission_issues())
+                with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=True):
+                    self.assertFalse(
+                        GuiStartup._get_config_permission_issues())
+                bleachbit.Windows.fix_appdata_acl(protected_dir)
+                self.assertFalse(GuiStartup._get_config_permission_issues())

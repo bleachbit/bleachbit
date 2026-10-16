@@ -1378,6 +1378,70 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self.shred_paths(orphaned_files)
         return False
 
+    def check_appdata_permissions(self):
+        """Check for broken %APPDATA%\\BleachBit permissions and offer to fix them."""
+        # pylint: disable-next=possibly-used-before-assignment
+        if not IS_WINDOWS or not Windows.shell.IsUserAnAdmin():
+            return False
+
+        def _worker():
+            try:
+                has_broken_acl = Windows.has_broken_appdata_acl()
+            except Exception:
+                logger.exception(
+                    'Error checking configuration folder permissions')
+                return
+            if has_broken_acl:
+                GLib.idle_add(self._prompt_appdata_permissions)
+
+        threading.Thread(target=_worker, daemon=True).start()
+        return False
+
+    def _prompt_appdata_permissions(self):
+        """Ask whether to repair %APPDATA%\\BleachBit permissions, on the main thread."""
+        if self.textbuffer is None:
+            # window was destroyed while the check was running
+            return False
+
+        # TRANSLATORS: This message is shown on Windows when the configuration
+        # folder (%APPDATA%\BleachBit) has broken file permissions that prevent
+        # non-administrator processes from accessing it. %s is the folder path.
+        msg = _("BleachBit detected a permissions issue with its configuration "
+                "folder (%s). Would you like to repair it?") % bleachbit.options_dir
+
+        # TRANSLATORS: Title of confirmation dialog for repairing folder permissions.
+        title = _("Confirm")
+        resp = GuiBasic.message_dialog(self,
+                                       msg,
+                                       Gtk.MessageType.WARNING,
+                                       Gtk.ButtonsType.YES_NO,
+                                       title)
+
+        if resp == Gtk.ResponseType.YES:
+            repaired = False
+            try:
+                # pylint: disable-next=possibly-used-before-assignment
+                Windows.fix_appdata_acl()
+                # The reset is a no-op if the parent folder's ACL is
+                # itself broken, so verify instead of assuming success.
+                repaired = not Windows.has_broken_appdata_acl()
+            except Exception:
+                logger.exception(
+                    'Error repairing permissions for %s', bleachbit.options_dir)
+            if repaired:
+                # TRANSLATORS: Message shown in the log after repairing
+                # folder permissions. %s is the folder path.
+                self.append_text(
+                    _("Repaired permissions for %s.") % bleachbit.options_dir + '\n')
+            else:
+                # TRANSLATORS: Message shown in the log when repairing
+                # folder permissions did not fully succeed. %s is the
+                # folder path.
+                self.append_text(
+                    _("Could not fully repair permissions for %s.")
+                    % bleachbit.options_dir + '\n')
+        return False
+
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
