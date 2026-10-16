@@ -13,14 +13,12 @@ later.  See the COPYING file in the top-level directory.
   <description>Email client</description>
   <running type="exe">geary</running>
   <var name="accounts">
-    <value search="glob">~/.local/share/geary/*</value>
     <value search="glob">$XDG_DATA_HOME/geary/*</value>
     <value search="glob">~/.var/app/org.gnome.Geary/data/geary/*</value>
   </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action command="delete" search="walk.all" path="~/.cache/geary"/>
     <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/geary"/>
     <action command="delete" search="walk.all" path="~/.var/app/org.gnome.Geary/cache"/>
   </option>

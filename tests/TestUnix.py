@@ -13,6 +13,7 @@ Test case for module Unix
 
 from unittest import mock
 import os
+import posixpath
 import random
 import re
 import subprocess
@@ -1288,6 +1289,16 @@ class UnreadableVFS(ListVFS):
         return super().listdir(path)
 
 
+class DotVFS(ListVFS):
+    """ListVFS that resolves '.' components like a real filesystem"""
+
+    def listdir(self, path):
+        return super().listdir(posixpath.normpath(path))
+
+    def isdir(self, path):
+        return super().isdir(posixpath.normpath(path))
+
+
 class LocalizationsTestCase(common.BleachbitTestCase):
 
     """Test case for localizations in Unix module"""
@@ -1382,6 +1393,15 @@ class LocalizationsTestCase(common.BleachbitTestCase):
                 self._path_matches_recognized(neg_path, recognized),
                 f'Path should NOT be matched by localizations.xml: {neg_path}'
             )
+
+    def test_localization_keeps_x11_utf8(self):
+        """X11/locale/en_US.UTF-8 serves every UTF-8 locale, so keep it"""
+        vfs = DotVFS(['/usr/share/X11/locale/en_US.UTF-8/XLC_LOCALE',
+                      '/usr/share/X11/locale/zh_TW/XLC_LOCALE'])
+        recognized = {posixpath.normpath(path)
+                      for path in self._get_recognized_paths(vfs)}
+        self.assertIn('/usr/share/X11/locale/zh_TW', recognized)
+        self.assertNotIn('/usr/share/X11/locale/en_US.UTF-8', recognized)
 
     def test_localization_paths_unreadable_dir(self):
         """A directory that cannot be listed is skipped, not fatal
