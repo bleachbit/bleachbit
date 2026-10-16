@@ -100,13 +100,43 @@ def disable_swap_linux():
     return devices
 
 
-def enable_swap_linux():
-    """Enable Linux swap"""
+def _parse_swap_summary(proc_swaps):
+    """Return (device, priority) for each swap area in 'swapon -s' output"""
+    swap_re = re.compile(r'^(.+?)\s+\w+\s+[0-9]+\s+[0-9]+\s+(-?[0-9]+)\s*$')
+    swaps = []
+    for line in proc_swaps.split('\n')[1:]:
+        ret = swap_re.search(line)
+        if ret:
+            # /proc/swaps writes a space in a name as \040
+            device = re.sub(r'\\([0-7]{3})',
+                            lambda m: chr(int(m.group(1), 8)), ret.group(1))
+            swaps.append((device, int(ret.group(2))))
+    return swaps
+
+
+def enable_swap_linux(proc_swaps):
+    """Enable the Linux swap listed in proc_swaps that is now off
+
+    'swapon -a' would miss swap that is not in /etc/fstab, such as zram
+    started by systemd, and would turn on fstab swap that was off.
+    """
     logger.debug(_("Re-enabling swap."))
-    args = [General.resolve_exe('swapon'), "-a"]
-    (rc, _stdout, stderr) = General.run_external(args)
-    if 0 != rc:
-        raise RuntimeError(stderr.replace("\n", ""))
+    active = [device for device, _priority in
+              _parse_swap_summary(get_proc_swaps())]
+    errors = []
+    for device, priority in _parse_swap_summary(proc_swaps):
+        if device in active:
+            continue
+        args = [General.resolve_exe('swapon')]
+        # Negative priorities are assigned by the kernel and cannot be set
+        if priority >= 0:
+            args += ['-p', str(priority)]
+        args.append(device)
+        (rc, _stdout, stderr) = General.run_external(args)
+        if 0 != rc:
+            errors.append(stderr.replace("\n", ""))
+    if errors:
+        raise RuntimeError(' '.join(errors))
 
 
 def make_self_oom_target_linux(uid=None):
@@ -330,6 +360,14 @@ def get_swap_uuid(device):
     return uuid
 
 
+def get_swap_label(device):
+    """Find the label for the swap device, or None"""
+    args = [General.resolve_exe('blkid'),
+            '-o', 'value', '-s', 'LABEL', device]
+    (_rc, stdout, _stderr) = General.run_external(args)
+    return stdout.rstrip('\n') or None
+
+
 def physical_free_darwin(run_vmstat=None):
     def parse_line(k, v):
         return k, int(v.strip(" ."))
@@ -443,6 +481,7 @@ def wipe_swap_linux(devices, proc_swaps):
                 f'swap device {device} is larger ({actual_size_bytes})'
                 f' than expected ({safety_limit_bytes})')
         uuid = get_swap_uuid(device)
+        label = get_swap_label(device)
         # overwrite with zeros without truncating the device
         wipe_write(device).close()
         # reinitialize
@@ -452,6 +491,9 @@ def wipe_swap_linux(devices, proc_swaps):
         if uuid:
             args.append("-U")
             args.append(uuid)
+        if label:
+            args.append("-L")
+            args.append(label)
         (rc, _stdout, stderr) = General.run_external(args)
         if 0 != rc:
             raise RuntimeError(stderr.replace("\n", ""))
@@ -468,20 +510,29 @@ def wipe_memory():
             raise RuntimeError(f"wipe_memory: Command {cmd} not found")
     # cache the file because 'swapoff' changes it
     proc_swaps = get_proc_swaps()
-    devices = disable_swap_linux()
-    yield True  # process GTK+ idle loop
-    # TRANSLATORS: The variable is a device like /dev/sda2
-    logger.debug(_("Detected these swap devices: %s"), str(devices))
-    wipe_swap_linux(devices, proc_swaps)
-    yield True
-    # Prefer a separate systemd scope so that systemd's unit-level OOM
-    # policy cannot kill the parent when the child is OOM-killed. Fall back
-    # to a plain fork where systemd-run is unavailable.
-    rc = _run_memory_child_systemd_scope()
-    if rc is None:
-        rc = _run_memory_child_fork()
-    if rc not in (0, 9):
-        logger.warning(
-            _("The child memory-wiping process returned code %d."), rc)
-    enable_swap_linux()
+    # Turn swap back on also after an error, a partial swapoff or an abort
+    try:
+        devices = disable_swap_linux()
+        yield True  # process GTK+ idle loop
+        # TRANSLATORS: The variable is a device like /dev/sda2
+        logger.debug(_("Detected these swap devices: %s"), str(devices))
+        wipe_swap_linux(devices, proc_swaps)
+        yield True
+        # Prefer a separate systemd scope so that systemd's unit-level OOM
+        # policy cannot kill the parent when the child is OOM-killed. Fall back
+        # to a plain fork where systemd-run is unavailable.
+        rc = _run_memory_child_systemd_scope()
+        if rc is None:
+            rc = _run_memory_child_fork()
+        if rc not in (0, 9):
+            logger.warning(
+                _("The child memory-wiping process returned code %d."), rc)
+    except BaseException:
+        # Keep the original error if swapon fails too
+        try:
+            enable_swap_linux(proc_swaps)
+        except Exception as e:
+            logger.error('Error when re-enabling swap: %s', e)
+        raise
+    enable_swap_linux(proc_swaps)
     yield 0  # how much disk space was recovered

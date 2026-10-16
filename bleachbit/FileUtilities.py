@@ -623,8 +623,11 @@ def _delete_file_impl(path, shred):
             # If a broken symlink, try os.remove() below.
         except IOError as e:
             # permission denied (13) happens shredding MSIE 8 on Windows 7
-            logger.debug("IOError #%s shredding '%s'",
-                         e.errno, path)
+            # TRANSLATORS: Warning in the log when shredding a file could not
+            # overwrite its contents. %(path)s is the file path; %(error)s is
+            # the reason, such as 'Permission denied'.
+            logger.warning(_("Could not overwrite the contents of %(path)s: %(error)s"),
+                           {'path': extended_path_undo(path), 'error': e.strerror or e})
     if shred:
         # wipe name
         os.remove(wipe_name(path))

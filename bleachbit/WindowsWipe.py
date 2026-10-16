@@ -96,6 +96,7 @@ from win32api import (GetVolumeInformation, GetDiskFreeSpace,
                       GetVersionEx, Sleep)
 from win32file import (CreateFile, CreateFileW,
                        CloseHandle, GetDriveType,
+                       GetVolumePathName, GetVolumeNameForVolumeMountPoint,
                        GetFileSize, GetFileAttributesW,
                        SetFileAttributesW,
                        DeviceIoControl, SetFilePointer,
@@ -105,7 +106,8 @@ from win32file import (CreateFile, CreateFileW,
 from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
                        FILE_SHARE_DELETE,
                        FILE_SHARE_READ, FILE_SHARE_WRITE,
-                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
+                       OPEN_EXISTING, CREATE_ALWAYS, CREATE_NEW,
+                       FILE_FLAG_BACKUP_SEMANTICS,
                        DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
 from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_GET_VOLUME_BITMAP,
@@ -122,18 +124,20 @@ from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       FILE_FLAG_RANDOM_ACCESS,
                       FILE_FLAG_NO_BUFFERING,
                       FILE_FLAG_WRITE_THROUGH,
-                      COMPRESSION_FORMAT_DEFAULT)
+                      COMPRESSION_FORMAT_DEFAULT,
+                      COMPRESSION_FORMAT_NONE)
 
 # local import
 from bleachbit import IS_WINDOWS
-from bleachbit.FileUtilities import extended_path, extended_path_undo
+from bleachbit.FileUtilities import extended_path, extended_path_undo, pywinerror
 
 # Constants.
 VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
+FILE_FLAG_OPEN_REPARSE_POINT = 0x00200000
 SIMULATE_CONCURRENCY = False     # remove this test function when QA complete
 # drive_letter_safety = "E"       # protection to only use removable drives
 # don't use C: or D:, but E: and beyond OK.
-TMP_FILE_NAME = "bbtemp.dat"
+TMP_FILE_NAME = "bbtemp{}.dat"  # a random part is filled in per wipe
 SPIKE_FILE_NAME = "bbspike"     # cluster number will be appended
 WRITE_BUF_SIZE = 512 * 1024     # 512 kilobytes
 ZERO_FILL_BUFFER = bytearray(WRITE_BUF_SIZE)
@@ -576,7 +580,9 @@ def truncate_file(file_handle):
 def volume_from_file(file_name):
     r"""Given a Windows file path, determine the volume that contains it.
 
-    Append the separator \ to it (more useful for subsequent calls).
+    The path ends with the separator \. For a volume mounted on a folder,
+    it is that folder (like C:\Data\), not the drive letter. Junctions and
+    symlinks into another volume are followed.
 
     Args:
         file_name: Path to the file
@@ -584,9 +590,19 @@ def volume_from_file(file_name):
     Returns:
         Volume path
     """
-    # strip \\?\
-    split_path = os.path.splitdrive(extended_path_undo(file_name))
-    volume = split_path[0]
+    try:
+        resolved = os.path.realpath(file_name)
+    except OSError:
+        resolved = file_name
+    try:
+        # strip \\?\
+        volume = extended_path_undo(GetVolumePathName(resolved))
+    except pywinerror:
+        volume = ''
+    if os.path.splitdrive(volume)[0].endswith(':'):
+        return volume
+    # A network path, or GetVolumePathName failed
+    volume = os.path.splitdrive(extended_path_undo(file_name))[0]
     if volume and volume[-1] != os.sep:
         volume += os.sep
     return volume
@@ -653,7 +669,11 @@ def obtain_readwrite(volume):
     """
     assert volume
 
-    volume = '\\\\.\\' + volume
+    if os.path.splitdrive(volume)[1] == os.sep:
+        volume = '\\\\.\\' + volume
+    else:
+        # A volume mounted on a folder may have no drive letter
+        volume = GetVolumeNameForVolumeMountPoint(volume)
     if volume[-1] == os.sep:
         volume = volume.rstrip(os.sep)
 
@@ -688,12 +708,11 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
     # Assemble input structure and query Windows for retrieval pointers.
     # The input structure is the number 0 as a signed 64 bit integer.
     input_struct = struct.pack('q', 0)
-    # 4K, 32K, 256K, 2M step ups in buffer size, until call succeeds.
+    # 4K, 32K, 256K and so on step ups in buffer size, until call succeeds.
     # Compressed/encrypted/sparse files tend to have more chopped up extents.
-    buf_retry_sizes = [4 * 1024, 32 * 1024, 256 * 1024, 2 * 1024**2]
+    retrieval_pointers_buf_size = 4 * 1024
 
-    rp_struct = None
-    for retrieval_pointers_buf_size in buf_retry_sizes:
+    while True:
         try:
             rp_struct = DeviceIoControl(file_handle,
                                         FSCTL_GET_RETRIEVAL_POINTERS,
@@ -709,18 +728,14 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
                 # (122, 'DeviceIoControl',
                 # 'The data area passed to a system call is too small.')
                 # (234, 'DeviceIoControl', 'More data is available.')
-                pass
+                retrieval_pointers_buf_size *= 8
             else:
                 logger.error("Unhandled error code %d in get_extents for file '%s': %s",
                              err_code, filename, str(err_info))
                 raise
         else:
-            # Call succeeded, break out from for loop.
+            # Call succeeded, break out from while loop.
             break
-
-    if rp_struct is None:
-        raise RuntimeError(
-            f"Failed to get retrieval pointers for file '{filename}'")
 
     # At this point we have a FSCTL_GET_RETRIEVAL_POINTERS (rp) structure.
     # Process content of the first part of structure.
@@ -908,7 +923,7 @@ def poll_clusters_freed(volume_handle, total_clusters, orig_extents):
         # in between our polling attempts.
         if count_free > count_allocated:
             return True
-        Sleep(1000 / attempts_per_second)
+        Sleep(1000 // attempts_per_second)
 
     return False
 
@@ -1098,12 +1113,24 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                                   cluster_size, total_clusters,
                                   tmp_file_path)
         return True
-    # Put the zero-fill file in place.
+    # Put the zero-fill file in place. Never open an existing file or
+    # follow a link that happens to have the name.
     file_handle = CreateFile(tmp_file_path, GENERIC_READ | GENERIC_WRITE,
-                             0, None, CREATE_ALWAYS,
-                             FILE_ATTRIBUTE_HIDDEN, None)
-    write_zero_fill(file_handle, write_length)
-    new_extents = get_extents(file_handle)
+                             0, None, CREATE_NEW,
+                             FILE_ATTRIBUTE_HIDDEN |
+                             FILE_FLAG_OPEN_REPARSE_POINT, None)
+    try:
+        # In a compressed folder the file is compressed too, and NTFS stores
+        # compressed zeros without any clusters to move.
+        if GetFileAttributesW(tmp_file_path) & FILE_ATTRIBUTE_COMPRESSED:
+            DeviceIoControl(file_handle, FSCTL_SET_COMPRESSION,
+                            struct.pack('H', COMPRESSION_FORMAT_NONE), None)
+        write_zero_fill(file_handle, write_length)
+        new_extents = get_extents(file_handle)
+    except BaseException:
+        # clean_up() cannot delete the file while it is open
+        CloseHandle(file_handle)
+        raise
 
     # We know the original extent was contiguous.
     # The new zero-fill file may not be contiguous, so it requires a
@@ -1137,6 +1164,8 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                 # Break into smaller pieces and do what we can.
                 logger.debug("!! Move encountered an error: %s !!", e)
                 CloseHandle(file_handle)
+                # The smaller pieces create it again
+                DeleteFile(tmp_file_path)
                 if lcn_start >= lcn_end:
                     return False
                 for split_s, split_e in split_extent(lcn_start, lcn_end):
@@ -1264,7 +1293,8 @@ def file_wipe(file_name):
         # logger.debug("Attempting defrag file wipe.")
         # Put the temp file in the same folder as the target wipe file.
         # Should be able to write this path if user can write the wipe file.
-        tmp_file_path = os.path.dirname(file_name) + os.sep + TMP_FILE_NAME
+        tmp_file_path = (os.path.dirname(file_name) + os.sep +
+                         TMP_FILE_NAME.format(os.urandom(8).hex()))
         if is_special:
             orig_extents = choose_if_bridged(volume_handle,
                                              volume_info.total_clusters,

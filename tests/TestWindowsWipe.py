@@ -11,16 +11,18 @@ Test case for module WindowsWipe
 
 # standard library
 import os
+import struct
 import sys
 import time
 import unittest
 from contextlib import suppress
+from unittest import mock
 
 import bleachbit
 
 # local
 from tests import common
-from bleachbit.FileUtilities import children_in_directory
+from bleachbit.FileUtilities import children_in_directory, extended_path
 
 # third party
 if bleachbit.IS_WINDOWS:
@@ -45,6 +47,9 @@ if bleachbit.IS_WINDOWS:
         file_wipe,
         wipe_file_direct,
         extents_a_minus_b,
+        poll_clusters_freed,
+        wipe_extent_by_defrag,
+        clean_up,
         GENERIC_READ,
         GENERIC_WRITE
     )
@@ -176,6 +181,24 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             print(
                 "skipping large-file extent check: volume appears WOF-compressed (Compact OS)")
 
+    def test_get_extents_many_runs(self):
+        """get_extents() reads more runs than fit in a 2 MB buffer"""
+        run_count = 200000
+        runs = b''.join(struct.pack('qq', (i + 1) * 8, 1000 + i * 8)
+                        for i in range(run_count))
+
+        def device_io_control(_handle, _code, _input, out_size):
+            if out_size < 16 + len(runs):
+                # pylint: disable-next=possibly-used-before-assignment
+                raise pywintypes.error(234, 'DeviceIoControl',
+                                       'More data is available.')
+            return struct.pack('IIq', run_count, 0, 0) + runs
+
+        with mock.patch('bleachbit.WindowsWipe.DeviceIoControl',
+                        side_effect=device_io_control):
+            extents = get_extents(None)
+        self.assertEqual(len(extents), run_count)
+
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
         path = self.write_file(filename='test.txt', text='test data')
@@ -240,6 +263,35 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertGreater(volume_info.bytes_per_sector, 0)
         self.assertGreater(volume_info.total_clusters, 0)
 
+    def test_volume_from_file(self):
+        """volume_from_file() returns the drive root, also as a fallback"""
+        filename = self.write_file('volume_from_file', b'x')
+        path = extended_path(filename)
+        drive = os.path.splitdrive(filename)[0] + os.sep
+        self.assertEqual(volume_from_file(path), drive)
+
+        # pylint: disable-next=possibly-used-before-assignment
+        too_long = pywintypes.error(206, 'GetVolumePathName', 'too long')
+        for kwargs in ({'side_effect': too_long},
+                       {'return_value': '\\\\?\\UNC\\server\\share\\'}):
+            with self.subTest(**kwargs), \
+                    mock.patch('bleachbit.WindowsWipe.GetVolumePathName', **kwargs):
+                self.assertEqual(volume_from_file(path), drive)
+
+    def test_volume_from_file_junction(self):
+        """volume_from_file() looks up the volume past a junction"""
+        target = self.mkdir('junction_target')
+        link = os.path.join(self.tempdir, 'junction_link')
+        self._create_win_junction(target, link)
+        self.write_file(os.path.join(target, 'x'), b'x')
+        with mock.patch('bleachbit.WindowsWipe.GetVolumePathName',
+                        # pylint: disable-next=possibly-used-before-assignment
+                        wraps=win32file.GetVolumePathName) as mock_volume_path:
+            volume_from_file(extended_path(os.path.join(link, 'x')))
+        resolved = mock_volume_path.call_args.args[0]
+        self.assertIn('junction_target', resolved)
+        self.assertNotIn('junction_link', resolved)
+
     def test_write_zero_fill(self):
         """Unit test for write_zero_fill"""
         tmp_path = os.path.join(self.tempdir, 'write_zero_fill')
@@ -256,6 +308,83 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with open(tmp_path, 'rb') as f:
             data = f.read()
             self.assertEqual(data, b'\x00' * write_length)
+
+    def test_poll_clusters_freed_sleep(self):
+        """poll_clusters_freed() waits between checks with a valid Sleep"""
+        # Allocated on the first check and free on the second, so the real
+        # win32api.Sleep runs once.
+        with mock.patch('bleachbit.WindowsWipe.get_volume_bitmap',
+                        return_value=(b'\xff', 8)), \
+                mock.patch('bleachbit.WindowsWipe.check_extents',
+                           side_effect=[(0, 1), (1, 0)]):
+            # pylint: disable-next=possibly-used-before-assignment
+            self.assertTrue(poll_clusters_freed(None, 8, [(0, 0)]))
+
+    def test_wipe_extent_by_defrag_compressed_folder(self):
+        """The zero-fill file gets clusters to move in a compressed folder"""
+        folder = self.mkdir('compressed_folder')
+        from bleachbit.General import run_external
+        (rc, _, _) = run_external(['compact', '/c', folder])
+        if rc != 0:
+            self.skipTest('folder compression is not supported')
+        volume_info = get_volume_information(volume_from_file(folder))
+        cluster_size = (volume_info.sectors_per_cluster *
+                        volume_info.bytes_per_sector)
+        tmp_path = os.path.join(folder, 'zero_fill')
+
+        # Clusters 0-15 look free and the moves are only recorded, so
+        # nothing on the volume is overwritten.
+        with mock.patch('bleachbit.WindowsWipe.get_volume_bitmap',
+                        return_value=(bytes(2), 16)), \
+                mock.patch('bleachbit.WindowsWipe.move_file') as mock_move:
+            # pylint: disable-next=possibly-used-before-assignment
+            wipe_extent_by_defrag(None, 0, 15, cluster_size, 16, tmp_path)
+
+        moved = sum(call.args[4] for call in mock_move.call_args_list)
+        self.assertEqual(moved, 16)
+        self.assertNotExists(tmp_path)
+
+    def test_wipe_extent_by_defrag_existing_name(self):
+        """wipe_extent_by_defrag() does not reuse a file or link at its path"""
+        existing = self.write_file('zero_fill_file', b'keepme')
+        target = self.write_file('zero_fill_target', b'')
+        link = os.path.join(self.tempdir, 'zero_fill_link')
+        self._create_win_file_symlink(target, link)
+        os.remove(target)
+
+        for path in (existing, link):
+            with self.subTest(path=path), \
+                    mock.patch('bleachbit.WindowsWipe.get_volume_bitmap',
+                               return_value=(bytes(2), 16)), \
+                    mock.patch('bleachbit.WindowsWipe.move_file'):
+                # pylint: disable-next=possibly-used-before-assignment
+                with self.assertRaises(pywintypes.error) as cm:
+                    wipe_extent_by_defrag(None, 0, 0, 4096, 16, path)
+                # ERROR_FILE_EXISTS
+                self.assertEqual(cm.exception.winerror, 80)
+
+        with open(existing, 'rb') as f:
+            self.assertEqual(f.read(), b'keepme')
+        # The dangling link was not followed to create its target
+        self.assertNotExists(target)
+
+    def test_wipe_extent_by_defrag_error(self):
+        """A failed zero-fill does not leave the temp file behind"""
+        tmp_path = os.path.join(self.tempdir, 'zero_fill_error')
+        # pylint: disable-next=possibly-used-before-assignment
+        disk_full = pywintypes.error(112, 'WriteFile', 'disk full')
+        with mock.patch('bleachbit.WindowsWipe.get_volume_bitmap',
+                        return_value=(bytes(2), 16)), \
+                mock.patch('bleachbit.WindowsWipe.write_zero_fill',
+                           side_effect=disk_full):
+            with self.assertRaises(pywintypes.error):
+                try:
+                    wipe_extent_by_defrag(None, 0, 0, 4096, 16, tmp_path)
+                finally:
+                    # As file_wipe() does
+                    # pylint: disable-next=possibly-used-before-assignment
+                    clean_up(None, None, tmp_path)
+        self.assertNotExists(tmp_path)
 
     def test_file_wipe_basic(self):
         """Basic unit test for file_wipe"""

@@ -12,6 +12,7 @@ import atexit
 import ctypes
 import errno
 import os
+import stat
 import string
 import struct
 import tempfile
@@ -103,8 +104,9 @@ def detect_orphaned_wipe_files(shred_drives=None):
     - Located in directories from options shred_drives
     - Filename starts with 'empty_'
     - Filename has >100 characters (due to random suffix)
-    - No file extension
     - Contains only null bytes when sampled
+
+    A dot does not rule a file out: the random suffix often contains one.
 
     Returns:
         list: Paths to detected orphaned wipe files
@@ -125,12 +127,10 @@ def detect_orphaned_wipe_files(shred_drives=None):
                 if not entry.is_file():
                     continue
                 filename = entry.name
-                # Check criteria: starts with 'empty_', >100 chars, no extension
+                # Check criteria: starts with 'empty_', >100 chars
                 if not filename.startswith('empty_'):
                     continue
                 if len(filename) <= 100:
-                    continue
-                if '.' in filename:
                     continue
                 # Read a small sample to check for null bytes
                 try:
@@ -207,7 +207,8 @@ def wipe_write(path):
     Return the open file handle; the caller must close it."""
     from bleachbit.FileUtilities import getsize, _open_nofollow_fd
     size = getsize(path)
-    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
+    # O_TRUNC would free the blocks before any zeros land on them
+    flags = os.O_WRONLY
     try:
         fd = _open_nofollow_fd(path, flags)
     except OSError as e:
@@ -221,6 +222,10 @@ def wipe_write(path):
             raise
     f = os.fdopen(fd, 'wb')
     try:
+        if stat.S_ISBLK(os.fstat(fd).st_mode):
+            # getsize() is 0 for a device node, such as a swap partition
+            size = f.seek(0, os.SEEK_END)
+            f.seek(0)
         blanks = memoryview(ZERO_FILL_BUFFER)
         while size > 0:
             f.write(blanks[:min(size, WRITE_BUF_SIZE)])
@@ -387,12 +392,17 @@ def wipe_path(pathname, idle=False):
             tempfile.TMP_MAX = min(tmp_max_orig, 20)
         try:
             while True:
+                suffix = __random_string(maxlen)
+                # Windows drops a trailing dot from the name it creates, so
+                # f.name would not match the file and delete() would miss it
+                if not __valid_random_filename(suffix):
+                    continue
                 try:
                     # The temporary file outlives the retry loop and is deleted at exit.
                     # pylint: disable-next=consider-using-with
                     f = tempfile.NamedTemporaryFile(
                         dir=pathname,
-                        suffix=__random_string(maxlen),
+                        suffix=suffix,
                         delete=False,
                         prefix="empty_"
                     )
@@ -645,9 +655,10 @@ def wipe_path(pathname, idle=False):
                         logger.debug(
                             _("Encountered unknown error #0 while truncating file."))
                     time.sleep(0.1)
-            # explicitly delete
+            # Delete without shredding: the file holds only zeros, and after
+            # an abort it was not truncated, so shredding would rewrite it all.
             try:
-                delete(f.name, ignore_missing=True)
+                delete(f.name, allow_shred=False, ignore_missing=True)
             except Exception as e:
                 logger.error(
                     'After wiping, error deleting file %s: %s', f.name, e)
