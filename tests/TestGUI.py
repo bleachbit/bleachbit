@@ -845,3 +845,20 @@ class GUITestCase(common.BleachbitTestCase):
 
         mock_commit.assert_called_once()
         mock_destroy.assert_called_once()
+
+    def test_ctrl_c_while_window_is_built(self):
+        """Ctrl+C during GUI() destroys the window without showing it"""
+        window = self.app._window
+        half_built = mock.Mock()
+        self.app._window = None
+        try:
+            with mock.patch('bleachbit.GuiApplication.GUI',
+                            side_effect=lambda **_kw: self.app.quit()), \
+                    mock.patch('bleachbit.GuiApplication.Gtk.Application.quit') as mock_quit, \
+                    mock.patch.object(self.app, 'get_windows', return_value=[half_built]):
+                self.app.do_activate()
+            self.assertIsNone(self.app._window)
+        finally:
+            self.app._window = window
+        mock_quit.assert_called_once_with(self.app)
+        half_built.destroy.assert_called_once_with()
