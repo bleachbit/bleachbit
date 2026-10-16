@@ -20,9 +20,10 @@ import sys
 import platform
 import warnings
 from collections.abc import Callable
+from urllib.parse import quote
 
 # local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
+from bleachbit import bleachbit_exe_path, comms_check_url, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
 from bleachbit.FileUtilities import delete, open_for_overwrite
 from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_active_language_code, get_text as _
@@ -181,6 +182,45 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
         response = session.get(url, headers=request_headers,
                                timeout=timeout, verify=True)
     return response
+
+
+COMMS_CHECK_PHRASE = 'STATION CHECK, STANDBY'
+
+
+def comms_check(timeout=15, max_retries=1):
+    """Smoke test the network stack (requests, TLS, and the CA bundle)"""
+    url = f'{comms_check_url}?msg={quote(COMMS_CHECK_PHRASE)}'
+    try:
+        response = fetch_url(url, max_retries=max_retries, timeout=timeout,
+                             headers=get_update_request_headers())
+    except (RequestException, OSError) as exc:
+        req_exc = requests.exceptions if HAVE_REQUESTS else None
+        if req_exc and isinstance(exc, req_exc.Timeout):
+            kind = 'Drop track is jammed.'
+        elif req_exc and isinstance(exc, req_exc.ConnectionError):
+            kind = 'Dropship is offline.'
+        else:
+            kind = "That's it, man. Game over, man. Game over!"
+        print(f'SMOKE TEST FAILED: {kind} ({type(exc).__name__}: {exc})')
+        return 1
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = None
+    if not isinstance(payload, dict):
+        payload = {}
+    speaker = payload.get('speaker')
+    quote_text = payload.get('quote')
+    reply = (f'{speaker}: {quote_text}' if speaker and quote_text
+             else response.text)
+    if response.status_code == 200 and payload.get('status') == 'ok':
+        print(f'SMOKE TEST SUCCESS: {reply}\n'
+              'Express elevator to hell, going down!')
+        return 0
+    logger.error('comms-check returned HTTP %s: %r',
+                 response.status_code, reply[:200])
+    print("SMOKE TEST FAILED: That's it, man. Game over, man. Game over!")
+    return 1
 
 
 def _version_major_minor(version):

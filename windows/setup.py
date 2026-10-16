@@ -223,11 +223,17 @@ def assert_execute(args, expected_output, timeout=120):
     try:
         actual_output = subprocess.check_output(
             args, stderr=subprocess.STDOUT, timeout=timeout).decode(SetupEncoding)
+    except subprocess.CalledProcessError as e:
+        output = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s failed with exit code %s. Output:\n%s',
+                     args, e.returncode, output)
+        raise
     except subprocess.TimeoutExpired as e:
         partial = (e.output or b'').decode(SetupEncoding, errors='replace')
         logger.error('Command %s timed out after %ss. Partial output:\n%s',
                      args, timeout, partial)
         raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
+    logger.info(actual_output.rstrip())
     if -1 == actual_output.find(expected_output):
         raise RuntimeError(
             f'When running command {args} expected output {expected_output} but got {actual_output}')
@@ -238,6 +244,13 @@ def assert_execute_console():
     logger.info('Checking bleachbit_console.exe starts')
     assert_execute([r'dist\bleachbit_console.exe', '--gui', '--exit', '--no-uac'],
                    'Success')
+
+
+def assert_execute_comms_check():
+    """Check the network stack (requests, TLS, CA bundle)"""
+    logger.info('Check the frozen network stack can talk')
+    assert_execute([r'dist\bleachbit_console.exe', '--comms-check', '--no-uac'],
+                   'FIVE BY FIVE')
 
 
 def run_cmd(cmd, check=True, log_cmd=True):
@@ -938,8 +951,6 @@ def repack_library(settings):
                 f'{file_size_new - file_size_old:+,}', f'{file_size_old:,}', f'{file_size_new:,}')
     shutil.rmtree('dist\\library', ignore_errors=True)
     assert_exist('dist\\library.zip')
-    # Nothing else runs the exe after library.zip is rewritten
-    assert_execute_console()
 
 
 def shrink(settings):
@@ -961,6 +972,10 @@ def shrink(settings):
     # so calculate the size of the folder, as it is a goal to shrink it.
     logger.info('Final size of the dist folder: %s',
                 f'{get_dir_size("dist"):,}')
+
+    # After all the shrink changes, check that the app still works.
+    assert_execute_console()
+    assert_execute_comms_check()
 
 
 def keep_font_cache_in_portable(portable_dir):

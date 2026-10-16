@@ -319,5 +319,6 @@ locale_dir = _resolve_locale_dir(
 # URLs
 #
 base_url = "https://update.bleachbit.org"
+comms_check_url = f"{base_url}/comms-check"  # build-time smoke test
 help_contents_url = "https://www.bleachbit.org/help"
 update_check_url = f"{base_url}/update/{APP_VERSION}"

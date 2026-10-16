@@ -314,6 +314,10 @@ def parse_cmd_line(argv=None):
     parser.add_option('--exit', action='store_true',
                       help=optparse.SUPPRESS_HELP)
 
+    # Build-time smoke test for network stack
+    parser.add_option('--comms-check', action='store_true',
+                      help=optparse.SUPPRESS_HELP)
+
     # some workaround for context menu added here
     # https://github.com/bleachbit/bleachbit/commit/b09625925149c98a6c79e278c35d5995e7526993
     def expand_context_menu_option(_option, _opt, _value, parser):
@@ -377,6 +381,9 @@ There is NO WARRANTY, to the extent permitted by law.
 """
         print(version_message)
         sys.exit(0)
+    if options.comms_check:
+        from bleachbit import Network
+        sys.exit(Network.comms_check())
     if IS_WINDOWS and options.update_winapp2:
         from bleachbit import Update
         # TRANSLATORS: Log message on the CLI.
