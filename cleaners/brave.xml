@@ -127,7 +127,7 @@ later.  See the COPYING file in the top-level directory.
   </option>
   <option id="search_engines">
     <label>Search engines</label>
-    <description translators="'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html">Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
+    <description>Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
     <action command="chrome.keywords" search="file" path="$$profile$$/Web Data"/>
   </option>
   <option id="session">

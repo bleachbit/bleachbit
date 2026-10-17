@@ -10,7 +10,7 @@ later.  See the COPYING file in the top-level directory.
 -->
 <cleaner id="vlc">
   <label>VLC media player</label>
-  <description>Media player</description>
+  <description translators="Cleaner description: the category of application.">Media player</description>
   <running type="exe" os="windows" same_user="true">vlc.exe</running>
   <running type="exe" os="linux" same_user="true">vlc</running>
   <running type="exe" os="macos" same_user="true">VLC</running>
@@ -23,8 +23,8 @@ later.  See the COPYING file in the top-level directory.
     <value os="linux">vlc-qt-interface.conf</value>
   </var>
   <option id="mru">
-    <label>Most recently used</label>
-    <description>Delete the most recently used list</description>
+    <label translators="Name of a cleaning option: the list of most recently used items, often the last opened files.">Most recently used</label>
+    <description translators="Description of the Most recently used cleaning option.">Delete the most recently used list</description>
     <action search="file" path="$$Profile$$/$$Config-File$$" command="ini" section="General" parameter="filedialog-path"/>
     <action search="file" path="$$Profile$$/$$Config-File$$" command="ini" section="RecentsMRL"/>
     <action search="file" path="$$Profile$$/$$Config-File$$" command="ini" section="OpenDialog" parameter="netMRL"/>

@@ -21,7 +21,7 @@ will uninstall all extensions.
   <running type="exe" os="windows" same_user="true">soffice.exe</running>
   <option id="history">
     <label>History</label>
-    <description>Delete the usage history</description>
+    <description translators="Description of the History cleaning option.">Delete the usage history</description>
     <!-- LibreOffice 3 from the openSUSE repo uses ~/.libreoffice/3-suse/user/ -->
     <!-- LibreOffice 3.4.5 on Fedora 16 uses ~/.libreoffice/3/user -->
     <!-- LibreOffice 3.5 on Mint 9 (Ubuntu 10.04) uses ~/.config/libreoffice/3/user/ -->

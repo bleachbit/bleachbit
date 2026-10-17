@@ -139,7 +139,7 @@ later.  See the COPYING file in the top-level directory.
   </option>
   <option id="search_engines">
     <label>Search engines</label>
-    <description translators="'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html">Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
+    <description>Reset the search engine usage history and delete non-factory search engines, some of which are added automatically</description>
     <action command="chrome.keywords" search="file" path="$$profile$$/Web Data"/>
   </option>
   <option id="session">
@@ -152,8 +152,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$profile$$/Sessions"/>
   </option>
   <option id="site_data">
-    <label translators="Label for cleaning option to delete site data such as LocalStorage and IndexedDB">Site data</label>
-    <description translators="Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate">Delete LocalStorage, IndexedDB, and other data stored by websites</description>
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
     <!-- do not delete extension preferences ~/.config/chromium/Default/database/chrome-extension* (Fedora 14, Chromium 12) -->
     <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
     <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>

@@ -10,7 +10,7 @@ later.  See the COPYING file in the top-level directory.
 -->
 <cleaner id="docker">
   <label>Docker Desktop</label>
-  <description>Container platform</description>
+  <description translators="Cleaner description: the category of application. 'Container' means a software container that packages and runs applications in isolation, not a physical shipping container.">Container platform</description>
   <running type="exe" os="linux" same_user="true">Docker Desktop</running>
   <running type="exe" os="linux" same_user="true">com.docker.backend</running>
   <running type="exe" os="macos" same_user="true">Docker Desktop</running>
