@@ -19,6 +19,7 @@ import ast
 import os
 import re
 import unittest
+import warnings
 
 _PO_DIR = os.path.join(os.path.dirname(__file__), '..', 'po')
 
@@ -31,7 +32,12 @@ def _parse_po_string(token):
     token = token.strip()
     if not token:
         return ''
-    return ast.literal_eval(token)
+    with warnings.catch_warnings():
+        # An invalid escape sequence (e.g. ``\q``) raises SyntaxWarning,
+        # which CI turns into an error under PYTHONWARNINGS=error. Decode
+        # it the way Python does (keeping the backslash) instead.
+        warnings.simplefilter('ignore')
+        return ast.literal_eval(token)
 
 
 def _parse_po(path):
@@ -83,6 +89,15 @@ def _parse_po(path):
 class TestTranslations(unittest.TestCase):
     """Validate .po files beyond what msgfmt --check covers."""
 
+    def _po_entries(self, po_path, failures):
+        """Parse a .po file, recording a clean failure if it is malformed."""
+        try:
+            return _parse_po(po_path)
+        except (SyntaxError, ValueError) as e:
+            failures.append(
+                f"{os.path.basename(po_path)}: parse error: {e!r}")
+            return []
+
     def _po_files(self):
         po_dir = os.path.abspath(_PO_DIR)
         return [os.path.join(po_dir, f)
@@ -95,7 +110,7 @@ class TestTranslations(unittest.TestCase):
         """
         failures = []
         for po_path in self._po_files():
-            for msgctxt, msgid, msgstr in _parse_po(po_path):
+            for msgctxt, msgid, msgstr in self._po_entries(po_path, failures):
                 if not msgctxt or not msgctxt.startswith('nsis:'):
                     continue
                 expected = sorted(_NSIS_PLACEHOLDER.findall(msgid))
@@ -108,7 +123,7 @@ class TestTranslations(unittest.TestCase):
                          "NSIS placeholder mismatch in translations:\n" +
                          "\n".join(failures))
 
-    def test_nsis_escaped_quotes_match(self):
+    def test_no_excess_backslash_escapes(self):
         """Translations must not contain excess backslash escapes.
 
         Regression test for excess escaping in Indonesian and Sinhala, where
@@ -116,7 +131,7 @@ class TestTranslations(unittest.TestCase):
         """
         failures = []
         for po_path in self._po_files():
-            for msgctxt, msgid, msgstr in _parse_po(po_path):
+            for msgctxt, msgid, msgstr in self._po_entries(po_path, failures):
                 if '\\"' in msgstr or '\\\n' in msgstr:
                     failures.append(
                         f"{os.path.basename(po_path)}: msgctxt={msgctxt!r} "
@@ -125,8 +140,8 @@ class TestTranslations(unittest.TestCase):
                          "Unexpected backslash escapes in translations:\n" +
                          "\n".join(failures))
 
-    def test_parse_po_string_trailing_escaped_quote(self):
-        """PO string parser must preserve trailing escaped quotes."""
+    def test_parse_po_string_decodes_escapes(self):
+        """PO string parser decodes escaped quotes and backslash-newline."""
         self.assertEqual(_parse_po_string('"Say \\"hello\\""'), 'Say "hello"')
         self.assertEqual(_parse_po_string('"Line 1\\\\\\n"'), 'Line 1\\\n')
 
