@@ -1429,15 +1429,15 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 logger.exception(
                     'Error repairing permissions for %s', bleachbit.options_dir)
             if repaired:
-                # TRANSLATORS: Message shown in the log after repairing
-                # folder permissions. %s is the folder path.
                 self.append_text(
+                    # TRANSLATORS: Message shown in the log after repairing
+                    # folder permissions. %s is the folder path.
                     _("Repaired permissions for %s.") % bleachbit.options_dir + '\n')
             else:
-                # TRANSLATORS: Message shown in the log when repairing
-                # folder permissions did not fully succeed. %s is the
-                # folder path.
                 self.append_text(
+                    # TRANSLATORS: Message shown in the log when repairing
+                    # folder permissions did not fully succeed. %s is the
+                    # folder path.
                     _("Could not fully repair permissions for %s.")
                     % bleachbit.options_dir + '\n')
         return False

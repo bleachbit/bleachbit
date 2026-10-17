@@ -142,6 +142,10 @@ class Worker:
                              getattr(cmd, 'path', cmd))
             else:
                 # For other errors, show the traceback.
+                # TRANSLATORS: The special keyword {operation_option} will be
+                # replaced by a cleaner and option such as 'firefox.cache'.
+                # The special keyword {command} will be replaced by the
+                # cleaning action that failed. Do not translate the placeholders.
                 msg = _('Error: {operation_option}: {command}')
                 data = {'command': cmd, 'operation_option': operation_option}
                 logger.error(msg.format(**data), exc_info=True)
@@ -233,6 +237,8 @@ class Worker:
                 _('To stop this process, press the abort button on the toolbar and wait.'))
             self.ui.append_text('\n\n')
             self.ui.append_text(
+                # TRANSLATORS: Warning shown while wiping a drive's
+                # empty space.
                 _('If the application is force closed before the process is complete, '
                   'large files may remain on the disk, and they may use all available space. '
                   'To remove them, start BleachBit again.'))
@@ -353,6 +359,8 @@ class Worker:
             line = _("Special operations: %d") % self.total_special
             self.ui.append_text("\n%s" % line)
         if self.total_errors > 0:
+            # TRANSLATORS: %d is the count of errors that occurred
+            # during the cleaning or preview operation.
             line = _("Errors: %d") % self.total_errors
             self.ui.append_text("\n%s" % line, 'error')
         self.ui.append_text('\n')
