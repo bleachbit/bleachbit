@@ -1165,7 +1165,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_ELEVATION_ERROR ${LANG_INDONESIAN} "Tidak dapat meningkatkan hak akses, kesalahan {ERROR}."
 	LangString MULTIUSER_ELEVATION_NOT_SUPPORTED ${LANG_INDONESIAN} "Sistem operasi tidak mendukung peningkatan hak akses."
 	LangString MULTIUSER_INSTALLED_ALL_USERS ${LANG_INDONESIAN} "Versi {VERSION} terinstal untuk semua pengguna di $\"{FOLDER}$\"."
-	LangString MULTIUSER_INSTALLED_CURRENT_USER ${LANG_INDONESIAN} "Versi {VERSION} terinstal untuk pengguna saat ini di \$\"{FOLDER}\$\"."
+	LangString MULTIUSER_INSTALLED_CURRENT_USER ${LANG_INDONESIAN} "Versi {VERSION} terinstal untuk pengguna saat ini di $\"{FOLDER}$\"."
 	LangString MULTIUSER_INSTALL_HEADER ${LANG_INDONESIAN} "Pilih apakah akan menginstal $(^NameDA) untuk semua pengguna atau untuk pengguna saat ini."
 	LangString MULTIUSER_INSTALL_PAGE_SUBTITLE ${LANG_INDONESIAN} "Pilih untuk pengguna mana $(^NameDA) akan diinstal."
 	LangString MULTIUSER_INVALID_PARAMS ${LANG_INDONESIAN} "Kombinasi parameter tidak valid."
@@ -1179,7 +1179,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS ${LANG_INDONESIAN} "Instal ulang versi {VERSION} untuk semua pengguna."
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER ${LANG_INDONESIAN} "Instal ulang versi {VERSION} untuk pengguna saat ini."
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_INDONESIAN} "Anda perlu menjalankan program ini sebagai administrator."
-	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_INDONESIAN} "$(^NameDA) terinstal baik untuk semua pengguna maupun untuk pengguna saat ini.\$\r$\nPilih instalasi mana yang akan dihapus."
+	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_INDONESIAN} "$(^NameDA) terinstal baik untuk semua pengguna maupun untuk pengguna saat ini.$\r$\nPilih instalasi mana yang akan dihapus."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_INDONESIAN} "Pilih untuk pengguna mana $(^NameDA) akan dihapus."
 	LangString OLD_WINDOWS_WARNING ${LANG_INDONESIAN} "Versi BleachBit ini memerlukan Windows 10 atau yang lebih baru. Untuk mengunduh versi yang kompatibel untuk sistem Anda, klik OK. Untuk keluar dari installer, klik Batal."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_INDONESIAN} "Ini adalah berkas dasar yang diperlukan agar ${prodname} berfungsi (diperlukan)."
@@ -1200,7 +1200,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_INDONESIAN} "Terminal Debugging ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_INDONESIAN} "${prodname} (Tanpa UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_INDONESIAN} "Hancurkan dengan ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} akan dihapus instalasinya dari folder berikut.\$\r$\nKlik Uninstall untuk memulai penghapusan instalasi.\$\r$\nPERINGATAN: Uninstaller sepenuhnya menghapus direktori instalasi, termasuk berkas apa pun (seperti pembersih khusus) yang mungkin telah Anda tambahkan atau ubah."
+	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} akan dihapus instalasinya dari folder berikut.$\r$\nKlik Uninstall untuk memulai penghapusan instalasi.$\r$\nPERINGATAN: Uninstaller sepenuhnya menghapus direktori instalasi, termasuk berkas apa pun (seperti pembersih khusus) yang mungkin telah Anda tambahkan atau ubah."
 !endif
 
 !ifdef LANG_ITALIAN
