@@ -27,8 +27,7 @@ tests: require-xmllint
 	shopt -s nullglob; \
 	for f in *.xml; \
 	do \
-		xmllint --noout --schema ../doc/cleaner_markup_language.xsd "$$f"; \
 		: 'In case of an error, delay exit, so we can see all errors.'; \
-		lintrc=$$(($$lintrc + $$?)); \
+		xmllint --noout --schema ../doc/cleaner_markup_language.xsd "$$f" || lintrc=1; \
 	done; \
 	exit $$lintrc
