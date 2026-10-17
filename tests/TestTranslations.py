@@ -96,6 +96,24 @@ class TestTranslations(unittest.TestCase):
                          "NSIS placeholder mismatch in translations:\n" +
                          "\n".join(failures))
 
+    def test_nsis_escaped_quotes_match(self):
+        """NSIS translations must not add backslashes before quotes.
+
+        Regression test for excess escaping in Indonesian, where
+        ``\\"{FOLDER}\\"`` was written as ``\\\\\\"{FOLDER}\\\\\\"``.
+        """
+        failures = []
+        for po_path in self._po_files():
+            for msgctxt, msgid, msgstr in _parse_po(po_path):
+                if not msgctxt or not msgctxt.startswith('nsis:'):
+                    continue
+                if msgstr.count('\\"') > msgid.count('\\"'):
+                    failures.append(
+                        f"{os.path.basename(po_path)}: msgid={msgid!r}")
+        self.assertEqual([], failures,
+                         "Excess backslashes before quotes in translations:\n" +
+                         "\n".join(failures))
+
 
 if __name__ == '__main__':
     unittest.main()
