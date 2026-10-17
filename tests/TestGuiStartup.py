@@ -145,6 +145,15 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         issues = GuiStartup._get_config_permission_issues()
         self.assertFalse(issues)
 
+    def test_config_permission_nonissue_missing_dir(self):
+        """A missing options directory (fresh profile) is not an error."""
+        new_dir = os.path.join(self.mkdtemp(), 'a', 'bleachbit')
+        new_file = os.path.join(new_dir, 'bleachbit.ini')
+        with mock.patch('bleachbit.options_dir', new_dir), \
+                mock.patch('bleachbit.options_file', new_file):
+            self.assertFalse(GuiStartup._get_config_permission_issues())
+        self.assertNotExists(new_dir)
+
     @common.skipIfWindows
     def test_config_permission_issue_non_writeable_options_dir(self):
         """Config does not exist and options dir is not writeable"""

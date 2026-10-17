@@ -224,6 +224,21 @@ def _get_config_permission_issues():
     _options_file = bleachbit.options_file
     _options_dir = bleachbit.options_dir
 
+    if not os.path.exists(_options_dir):
+        # On a fresh profile, Options creates the directory later. It is
+        # not a permission issue unless the nearest existing ancestor
+        # does not allow creating it.
+        ancestor = os.path.dirname(os.path.abspath(_options_dir))
+        while not os.path.exists(ancestor):
+            parent = os.path.dirname(ancestor)
+            if parent == ancestor:
+                break
+            ancestor = parent
+        if os.access(ancestor, os.W_OK | os.X_OK):
+            return False
+        return [f'Cannot create directory {_options_dir}: '
+                f'no write access to {ancestor}']
+
     try:
         with open(_options_file, 'rb') as f:
             f.read(1)
