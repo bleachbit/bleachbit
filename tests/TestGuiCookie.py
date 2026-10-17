@@ -16,6 +16,7 @@ from unittest import mock
 
 from tests import common
 
+from bleachbit import General, IS_WINDOWS
 from bleachbit.GtkShim import is_gtk_available
 
 HAVE_GTK = is_gtk_available()
@@ -46,6 +47,7 @@ class GuiCookieTestCase(common.BleachbitTestCase):
         with open(filename, encoding='utf-8') as f:
             self.assertEqual(json.load(f), ['keepme.example'])
 
+    @common.also_with_sudo
     def test_save_changes_still_works(self):
         """save_changes() still writes the sorted keep list normally"""
         filename = os.path.join(self.tempdir, 'cookie_keep_list.json')
@@ -55,3 +57,20 @@ class GuiCookieTestCase(common.BleachbitTestCase):
         with open(filename, encoding='utf-8') as f:
             self.assertEqual(json.load(f), ['a.example', 'b.example'])
         self.assertEqual(pane.saved_domains, {'a.example', 'b.example'})
+        if not IS_WINDOWS:
+            self.assertEqual(os.stat(filename).st_uid,
+                             General.get_real_uid())
+
+    @common.skipIfWindows
+    def test_save_changes_sudo_chown(self):
+        """Creating the keep list in sudo mode chowns it to the user."""
+        filename = os.path.join(self.mkdtemp(), 'cookie_keep_list.json')
+        pane = self._fake_pane(filename, ['a.example'])
+        with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chown:
+            self.assertTrue(CookieManagerPane.save_changes(pane))
+            mock_chown.assert_called_once_with(filename)
+            mock_chown.reset_mock()
+            # Overwriting an existing file should not chown again
+            self.assertTrue(CookieManagerPane.save_changes(pane))
+            mock_chown.assert_not_called()
