@@ -155,9 +155,6 @@ VIFileVersion ${File_VERSION}
   ; NsisMultiUser sets the directory.
   ;InstallDir "$PROGRAMFILES\${prodname}"
 
-  ;Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\${prodname}" ""
-
   ;Request application privileges for Windows Vista
   ; NsisMultiUser sets this, when needed.
   ;RequestExecutionLevel admin
