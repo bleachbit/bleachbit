@@ -21,7 +21,7 @@ from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit.PathUtils import path_equal
-from bleachbit.Process import is_process_running
+from bleachbit.Process import is_pid_running, is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import gtk_may_be_available
@@ -54,6 +54,20 @@ MENU_DIRS = ('~/.local/share/applications',
              '~/.kde/share/mimelnk/application/ram.desktop',
              '~/.kde2/share/mimelnk/application/',
              '~/.kde2/share/applnk')
+
+
+def _lock_link_is_live(path):
+    """Return whether a dangling lock symlink names a running process
+
+    Gecko links 'IP:+PID' and Chromium 'hostname-PID'. Only the user's own
+    processes count: a Flatpak sandbox PID can be a kernel thread on the host.
+    """
+    try:
+        target = os.readlink(path)
+    except OSError:
+        return False
+    match = re.search(r'[:+-](\d+)$', target)
+    return match is not None and is_pid_running(int(match.group(1)), True)
 
 
 class Cleaner:
@@ -184,7 +198,7 @@ class Cleaner:
             elif 'pathname' == test:
                 expanded = os.path.expanduser(os.path.expandvars(pathname))
                 for globbed in glob.iglob(expanded):
-                    if os.path.exists(globbed):
+                    if os.path.exists(globbed) or _lock_link_is_live(globbed):
                         logger.debug(
                             "file '%s' exists indicating '%s' is running", globbed, self.name)
                         return True

@@ -173,12 +173,16 @@ class Locales:
     def localization_paths(self, locales_to_keep):
         """Returns all localization items matching the previously added xml configuration"""
         purgeable_locales = get_purgeable_locales(locales_to_keep)
+        # Overlapping rules, e.g. for Qt translations, can match a path twice
+        seen = set()
 
         for (locale, specifier, path) in self._paths.get_localizations('/'):
             specific = locale + (specifier or '')
             if specific in purgeable_locales or \
                     (locale in purgeable_locales and specific not in locales_to_keep):
-                yield path
+                if path not in seen:
+                    seen.add(path)
+                    yield path
 
 
 def _is_broken_xdg_desktop_application(config, desktop_pathname):
@@ -219,6 +223,9 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
         execs = list(exec_parts)
         wineprefix = None
         del execs[0]
+        if execs and execs[0].startswith('-'):
+            # env options like -u VAR: keep it rather than guess the command
+            return False
         while execs and execs[0].find("=") >= 0:
             (name, value) = execs[0].split("=", 1)
             if name == 'WINEPREFIX':
@@ -232,7 +239,8 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
                 "is_broken_xdg_menu: executable '%s' does not exist in '%s'", execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
-        if wineprefix and len(execs) > 1:
+        # Only C: is inside the prefix; other drives may be unmounted media
+        if wineprefix and len(execs) > 1 and re.match(r'[Cc]:[\\/]', execs[1]):
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
                 logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist in '%s'",
@@ -519,6 +527,10 @@ def is_broken_xdg_desktop(pathname):
         logger.info(
             "is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'", pathname)
         return True
+    # Hidden=true hides a system entry, so it may omit the other keys
+    if config.has_option('Desktop Entry', 'Hidden') and \
+            config.get('Desktop Entry', 'Hidden').strip().lower() == 'true':
+        return False
     if not config.has_option('Desktop Entry', 'Type'):
         logger.info(
             "is_broken_xdg_menu: missing required option 'Type': '%s'", pathname)
@@ -561,7 +573,9 @@ def rotated_logs():
     """
     keep_lists = [re.compile(r'/var/log/(removed_)?(packages|scripts)'),
                   re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')]
-    positive_re = re.compile(r'(\.(\d+|bz2|gz|xz|old)|\-\d{8}?)')
+    # Anchored so live logs like Xorg.0.log and php8.1-fpm.log are kept
+    positive_re = re.compile(
+        r'(\.(\d+|bz2|gz|lz4|xz|zst|old)|-\d{8}(\d{2})?)$')
 
     for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
         if bleachbit.FileUtilities.whitelisted(path):
@@ -655,7 +669,7 @@ def wine_to_linux_path(wineprefix, windows_pathname):
     return os.path.join(wineprefix, windows_pathname)
 
 
-def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line_regexes=None):
+def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line_regexes=None, hformat='si'):
     """Runs a specified command and returns how much space was (reportedly) freed.
     The subprocess shouldn't need any user input and the user should have the
     necessary rights.
@@ -675,7 +689,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
     for line in output.split('\n'):
         m = freed_space_regex.match(line)
         if m is not None:
-            freed_space += FileUtilities.human_to_bytes(m.group(1))
+            freed_space += FileUtilities.human_to_bytes(m.group(1), hformat)
         for error_re in error_line_regexes:
             if error_re.search(line):
                 raise RuntimeError('Invalid output from %s: %s' % (cmd, line))
@@ -686,7 +700,8 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
 def journald_clean():
     """Clean the system journals"""
     try:
-        return run_cleaner_cmd(General.resolve_exe('journalctl'), ['--vacuum-size=1'], JOURNALD_REGEX)
+        # journalctl prints 1024-based sizes such as 128.0K and 8.0M
+        return run_cleaner_cmd(General.resolve_exe('journalctl'), ['--vacuum-size=1'], JOURNALD_REGEX, hformat='du')
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -768,6 +783,10 @@ def yum_clean():
     return old_size - new_size
 
 
+# Fail instead of waiting for the lock; DNF5 accepts but ignores it
+DNF_EXIT_ON_LOCK = '--setopt=exit_on_lock=True'
+
+
 def dnf_clean():
     """Run 'dnf clean all' and return size in bytes recovered"""
     if os.path.exists('/var/run/dnf.pid'):
@@ -787,7 +806,8 @@ def dnf_clean():
     # DNF4 does not report freed space in its output, so infer effect
     # by measuring the delta in directory size.
     old_size = FileUtilities.getsizedir('/var/cache/dnf')
-    args = [General.resolve_exe('dnf'), '--enablerepo=*', 'clean', 'all']
+    args = [General.resolve_exe('dnf'), '--enablerepo=*',
+            DNF_EXIT_ON_LOCK, 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
     (rc, stdout, stderr) = General.run_external(args)
     allout = stdout + stderr
@@ -874,7 +894,7 @@ def dnf_autoremove():
         raise RuntimeError(msg)
     if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
         raise RuntimeError(_('Executable not found: %s') % 'dnf')
-    cmd = [General.resolve_exe('dnf'), '-y', 'autoremove']
+    cmd = [General.resolve_exe('dnf'), '-y', DNF_EXIT_ON_LOCK, 'autoremove']
     (rc, stdout, stderr) = General.run_external(cmd)
     freed_bytes = 0
     allout = stdout + stderr

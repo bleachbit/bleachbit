@@ -22,6 +22,7 @@ from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, System, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
 from bleachbit.FileUtilities import extended_path_undo
 from bleachbit.PathUtils import path_startswith
+from bleachbit.Process import ProcessInfo
 
 from tests import common
 
@@ -204,6 +205,25 @@ class CleanerTestCase(common.BleachbitTestCase):
         cleaner.add_action('other', _StubAction('shred'))
         self.assertTrue(cleaner.has_action_key('other', 'shred'))
         self.assertFalse(cleaner.has_action_key('opt', 'shred'))
+
+    @common.skipIfWindows
+    def test_is_process_running_lock_symlink(self):
+        """A dangling lock symlink counts only while the user owns its PID"""
+        procs = (ProcessInfo(2, 'kthreadd', False),
+                 ProcessInfo(os.getpid(), 'firefox-esr', True))
+        lock = os.path.join(self.tempdir, 'lock')
+        for target, expected in ((f'127.0.0.1:+{os.getpid()}', True),
+                                 (f'127.0.0.1:+{os.getpid() + 1}', False),
+                                 (f'myhost-{os.getpid()}', True),
+                                 # stale Flatpak lock with a sandbox PID
+                                 ('127.0.0.1:+2', False)):
+            os.symlink(target, lock)
+            cleaner = Cleaner()
+            cleaner.add_running('pathname', lock)
+            with mock.patch('bleachbit.Process.process_cache.get', return_value=procs):
+                self.assertEqual(cleaner.is_process_running(),
+                                 expected, target)
+            os.remove(lock)
 
     def test_auto_hide(self):
         count = 0

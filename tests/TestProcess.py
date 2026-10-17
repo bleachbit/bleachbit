@@ -109,7 +109,7 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
             raise FileNotFoundError(path)
 
         with mock.patch('glob.iglob', return_value=['/proc/1234/exe']), \
-                mock.patch('os.path.realpath', side_effect=PermissionError(13, 'denied')), \
+                mock.patch('os.readlink', side_effect=PermissionError(13, 'denied')), \
                 mock.patch('builtins.open', side_effect=fake_open), \
                 mock.patch('os.stat') as mock_stat, \
                 mock.patch('bleachbit.General.get_real_uid', return_value=1000):
