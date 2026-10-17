@@ -50,6 +50,13 @@ jobs:
           for pr in ${prs}; do
             state=$(gh pr view "${pr}" --json state --jq .state)
             if [[ "${state}" != OPEN ]]; then
+              # closed or merged pull request
+              echo "PR ${pr} is ${state}: deleting caches for refs/pull/${pr}/merge"
               gh cache delete --all --ref "refs/pull/${pr}/merge" --succeed-on-no-caches
+              remaining=$(gh cache list --limit 1000 --ref "refs/pull/${pr}/merge" --json id --jq 'length')
+              echo "PR ${pr}: ${remaining} caches remain (should be zero) for refs/pull/${pr}/merge"
+            else
+              echo "PR ${pr} is ${state}: keeping caches"
             fi
           done
+          echo "Total caches remaining (including non-PR): $(gh cache list --limit 1000 --json id --jq 'length')"
