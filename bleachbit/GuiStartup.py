@@ -11,7 +11,7 @@ import sys
 from importlib.util import find_spec
 
 import bleachbit
-from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
+from bleachbit import General, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -215,6 +215,10 @@ def _get_config_permission_issues():
     """Check for permission and file access issues with the
     configuration.
 
+    Side effects: creates the options directory and an empty
+    configuration file if they are missing. In sudo mode, chowns
+    them to the real user.
+
     If no errors, returns False.
     If errors found, returns list of strings with info.
     """
@@ -223,6 +227,28 @@ def _get_config_permission_issues():
 
     _options_file = bleachbit.options_file
     _options_dir = bleachbit.options_dir
+
+    try:
+        General.makedirs(_options_dir)
+    except OSError as e:
+        lines.append(f'Cannot create directory {_options_dir}: '
+                     f'{type(e).__name__}: {e}')
+        parent = os.path.dirname(_options_dir)
+        while not os.path.lexists(parent) and parent != os.path.dirname(parent):
+            parent = os.path.dirname(parent)
+        try:
+            pstat = os.stat(parent)
+            lines.append(f'Nearest existing parent directory: {parent}')
+            lines.append(
+                f'Parent directory permissions: {stat.filemode(pstat.st_mode)} '
+                f'({oct(stat.S_IMODE(pstat.st_mode))})')
+            if IS_POSIX:
+                lines.extend(_get_posix_permission_issues(pstat, parent)[1])
+            elif IS_WINDOWS:
+                lines.extend(_get_windows_permission_issues(parent)[1])
+        except OSError as e2:
+            lines.append(f'Cannot stat parent directory {parent}: {e2}')
+        return lines
 
     try:
         with open(_options_file, 'rb') as f:
@@ -237,8 +263,11 @@ def _get_config_permission_issues():
         lines.append(f"Read error: {type(e).__name__}: {e}")
 
     try:
+        mkfile = not os.path.exists(_options_file)
         with open(_options_file, 'a', encoding='utf-8') as f:
             f.write('')
+        if mkfile and General.sudo_mode():
+            General.chownself(_options_file)
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Write error: {type(e).__name__}: {e}")

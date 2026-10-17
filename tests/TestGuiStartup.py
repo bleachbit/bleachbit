@@ -145,6 +145,71 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         issues = GuiStartup._get_config_permission_issues()
         self.assertFalse(issues)
 
+    @common.also_with_sudo
+    def test_config_permission_nonissue_missing_dir(self):
+        """A missing options directory (fresh profile) is created without error."""
+        new_dir = os.path.join(self.mkdtemp(), 'a', 'bleachbit')
+        new_file = os.path.join(new_dir, 'bleachbit.ini')
+        with mock.patch('bleachbit.options_dir', new_dir), \
+                mock.patch('bleachbit.options_file', new_file):
+            self.assertFalse(GuiStartup._get_config_permission_issues())
+        self.assertExists(new_dir)
+        self.assertExists(new_file)
+        if not IS_WINDOWS:
+            real_uid = bleachbit.General.get_real_uid()
+            self.assertEqual(os.stat(new_dir).st_uid, real_uid)
+            self.assertEqual(os.stat(new_file).st_uid, real_uid)
+
+    @common.skipIfWindows
+    def test_config_permission_missing_file_sudo_chown(self):
+        """Creating a missing config file in sudo mode chowns it to the user."""
+        new_dir = self.mkdtemp()
+        new_file = os.path.join(new_dir, 'bleachbit.ini')
+        with mock.patch('bleachbit.options_dir', new_dir), \
+                mock.patch('bleachbit.options_file', new_file), \
+                mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chown:
+            self.assertFalse(GuiStartup._get_config_permission_issues())
+            mock_chown.assert_called_once_with(new_file)
+            mock_chown.reset_mock()
+            # Existing file should not be re-chowned by the probe
+            self.assertFalse(GuiStartup._get_config_permission_issues())
+            mock_chown.assert_not_called()
+
+    @common.skipIfWindows
+    def test_config_permission_issue_missing_dir_non_writeable_parent(self):
+        """Missing options dir under a non-writable parent reports an error."""
+        non_writable_parent = self.mkdir('not_writeable_parent')
+        missing_dir = os.path.join(non_writable_parent, 'bleachbit')
+        missing_file = os.path.join(missing_dir, 'bleachbit.ini')
+        use_chattr = common.have_root()
+        try:
+            if use_chattr:
+                subprocess.run(
+                    ['chattr', '+i', non_writable_parent], check=True)
+            else:
+                os.chmod(non_writable_parent, stat.S_IRUSR | stat.S_IXUSR)
+            with mock.patch('bleachbit.options_dir', missing_dir), \
+                    mock.patch('bleachbit.options_file', missing_file):
+                issues = GuiStartup._get_config_permission_issues()
+        finally:
+            if use_chattr:
+                subprocess.run(
+                    ['chattr', '-i', non_writable_parent], check=True)
+            else:
+                os.chmod(non_writable_parent, stat.S_IRWXU)
+            shutil.rmtree(non_writable_parent)
+        self.assertNotExists(missing_dir)
+        self.assertIsInstance(issues, list)
+        self.assertTrue(
+            any('Cannot create directory' in issue for issue in issues),
+            f"Expected 'Cannot create directory' in issues: {issues}")
+        self.assertIn(
+            f'Nearest existing parent directory: {non_writable_parent}', issues)
+        self.assertTrue(
+            any(issue.startswith('Current user:') for issue in issues),
+            f"Expected 'Current user:' in issues: {issues}")
+
     @common.skipIfWindows
     def test_config_permission_issue_non_writeable_options_dir(self):
         """Config does not exist and options dir is not writeable"""
