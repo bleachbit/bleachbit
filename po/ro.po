@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-29 10:27-0600\n"
-"PO-Revision-Date: 2026-10-12 19:51+0000\n"
-"Last-Translator: Marcel Alin <marcelino_18@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-10-18 00:14+0000\n"
+"Last-Translator: nighter_watch <nighter@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ro/>\n"
 "Language: ro\n"
@@ -1053,73 +1052,77 @@ msgstr "Pentru oricine folosește acest computer (toți utilizatorii)"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
-msgstr ""
+msgstr "Pentru &mine"
 
 #. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_CURRENT_USER but without the & accelerator. {USER} is a placeholder that will be replaced with the Windows username.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "Pentru mine"
 
 #. TRANSLATORS: Error message shown in dialog box during installation on Windows. {ERROR} is a placeholder that will be replaced with the error details.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "Incapabil de a continua, eroare"
 
 #. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "Sistemul de operare nu acceptă elevarea"
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr ""
+"Versiunea {VERSION} este instalat pentru toți utilizatorii din \"{FOLDER}\""
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr ""
+"Versiunea {VERSION} este instalat pentru toti utilizatorii din \"{FOLDER}\""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
 msgstr ""
+"Selectati daca doriti sa instalati $(^NameDA) pentru toti utilizatorii sau "
+"pentru utilizatorul actual"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "Alegeti pentru ce utilizatori sa instaleze $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of parameters."
-msgstr ""
+msgstr "Combinație nevalidă de parametri."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
-msgstr ""
+msgstr "Nu se poate ridica, serviciul de conectare secundară nu rulează."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh installation for all users."
-msgstr ""
+msgstr "Instalare nouă pentru toți utilizatorii."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh installation for the current user."
-msgstr ""
+msgstr "Instalare nouă pentru utilizatorul curent."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
-msgstr ""
+msgstr "Nu există nicio instalare pentru $(^NameDA)."
 
 #. TRANSLATORS: Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1127,13 +1130,15 @@ msgstr ""
 #| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "Alegeți un dosar"
+msgstr "Alegeți un utilizator"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 msgstr ""
+"Dezinstalați versiunea {OLD_VERSION} și instalați versiunea {VERSION} pentru "
+"toți utilizatorii."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
@@ -1141,21 +1146,23 @@ msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for the "
 "current user."
 msgstr ""
+"Dezinstalați versiunea {OLD_VERSION} și instalați versiunea {VERSION} pentru "
+"utilizatorul curent."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "Reinstalați versiunea {VERSION} pentru toți utilizatorii."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for the current user."
-msgstr ""
+msgstr "Reinstalați versiunea {VERSION} pentru utilizatorul curent."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as an administrator."
-msgstr ""
+msgstr "Trebuie să rulați acest program ca administrator."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
