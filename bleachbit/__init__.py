@@ -262,8 +262,10 @@ __icons = (
     # NetBSD
     '/usr/pkg/share/pixmaps/bleachbit.png',
     # FreeBSD and OpenBSD
+    '/usr/local/share/pixmaps/bleachbit.png',
+    # Windows
     os.path.normpath(os.path.join(bleachbit_exe_path,
-                                  'share\\bleachbit.png')),  # Windows
+                                  'share\\bleachbit.png')),
     # When running from source (i.e., not installed).
     os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')),
 )
