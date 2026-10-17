@@ -21,7 +21,7 @@ from tests.common import pytest
 
 from tests import common
 import bleachbit
-from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, load_cleaners, section2option
+from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, load_cleaners, section2option, winapp_expand_vars
 from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import IS_WINDOWS, logger
 from bleachbit.FileUtilities import extended_path_undo
@@ -199,6 +199,23 @@ class WinappTestCase(common.BleachbitTestCase):
             msg = (f'detectos({req}, {mock_ver})=={actual_return}'
                    f' instead of {expected_return}')
             self.assertEqual(expected_return, actual_return, msg)
+
+    def test_winapp_expand_vars_programfiles(self):
+        """%ProgramFiles% adds a path only when %ProgramW6432% differs"""
+        tests = (
+            # 32-bit process on 64-bit Windows
+            (r'C:\Program Files (x86)',
+             [r'C:\Program Files (x86)\Foo', r'C:\Program Files\Foo']),
+            # 64-bit process
+            (r'C:\Program Files', [r'C:\Program Files\Foo']),
+        )
+        for program_files, expected in tests:
+            def expandvars(path, program_files=program_files):
+                return path.replace('%ProgramFiles%', program_files).replace(
+                    '%ProgramW6432%', r'C:\Program Files')
+            with mock.patch('os.path.expandvars', side_effect=expandvars):
+                self.assertEqual(
+                    expected, winapp_expand_vars(r'%ProgramFiles%\Foo'))
 
     @common.skipUnlessWindows
     def test_detect_file(self):
@@ -542,6 +559,20 @@ class WinappTestCase(common.BleachbitTestCase):
         self.assertExists(rf'{dirname}\deleteme.log')
         shutil.rmtree(dirname, True)
 
+    def test_filekey_star_dot_star_every_file(self):
+        """FileKey *.* without RECURSE matches every file, as on Windows"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-winapp-stardotstar')
+        names = ('data_0', 'index', 'deleteme.log', '.hidden')
+        for name in names:
+            self.write_file(os.path.join(dirname, name), b'', 'wb')
+        self.mkdir(os.path.join(dirname, 'sub.dir'))
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
+
+        cleaner = self.ini2cleaner(f'FileKey1={dirname}|*.*')
+        paths = [p for (_o, a) in cleaner.actions for p in a.get_paths()]
+        self.assertEqual(sorted(names),
+                         sorted(os.path.basename(p) for p in paths))
+
     def _verify_keys_state(self, expected_state):
         """Verify registry keys match expected state (dict of key_path -> exists)"""
         for key_path, should_exist in expected_state.items():
@@ -628,6 +659,28 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
             actions.setdefault(action.__class__.__name__, []).append(action)
         return actions
 
+    def test_excludekey_without_number(self):
+        """An ExcludeKey without a number works like FileKey without one"""
+        for suffix in ('1', ''):
+            with self.subTest(suffix=suffix):
+                actions = self._build_actions(
+                    'FileKey=C:\\BB Test|*.*|RECURSE\n'
+                    f'ExcludeKey{suffix}=FILE|C:\\BB Test\\|keep.ini\n',
+                    'winapp2-excludekey')
+                self.assertTrue(actions['Delete'][0].nwholeregex)
+
+    def test_excludekey_reg_trailing_backslash(self):
+        """A REG ExcludeKey ending in a backslash still excludes the key"""
+        actions = self._build_actions(
+            'RegKey1=HKCU\\Software\\BleachBit\\Foo\n'
+            'RegKey2=HKCU\\Software\\BleachBit\\Foo\\Keep\n'
+            'ExcludeKey1=REG|HKCU\\Software\\BleachBit\\Foo\\Keep\\\n',
+            'winapp2-regexclude')
+        self.assertEqual(['HKCU\\Software\\BleachBit\\Foo'],
+                         [a.keyname for a in actions['Winreg']])
+        self.assertEqual(['HKCU\\Software\\BleachBit\\Foo\\Keep'],
+                         actions['Winreg'][0].excludekeys)
+
     def test_action_keeps_xml_special_characters(self):
         """XML-special characters in keys reach the providers unchanged"""
         actions = self._build_actions(
@@ -703,6 +756,61 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         self.assertGreaterEqual(len(steps), 3)
         self.assertEqual(len(cleaner.actions), 3)
 
+    def test_load_cleaners_merges_system_file(self):
+        """The system winapp2.ini adds to the personal one, not replaces it"""
+        personal = self.write_file(
+            'winapp2-personal.ini',
+            text='[NewApp *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-new.tmp\n'
+            '[SharedApp *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-personal.tmp\n')
+        system = self.write_file(
+            'winapp2-system.ini',
+            text='[OldApp *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-old.tmp\n'
+            '[SharedApp *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-system.tmp\n')
+
+        with mock.patch('bleachbit.Winapp.list_winapp_files',
+                        return_value=[personal, system]), \
+                mock.patch.dict('bleachbit.Cleaner.backends'):
+            list(load_cleaners())
+            cleaner = bleachbit.Cleaner.backends['winapp2_applications']
+
+        self.assertEqual(['newapp', 'oldapp', 'sharedapp'],
+                         [o for (o, _name) in cleaner.get_options()])
+        # the personal file wins for a section in both
+        self.assertEqual(['bleachbit-test-new.tmp', 'bleachbit-test-old.tmp',
+                          'bleachbit-test-personal.tmp'],
+                         sorted(os.path.basename(a.paths[0])
+                                for (_o, a) in cleaner.actions))
+
+    def test_load_cleaners_keeps_option_ids_across_files(self):
+        """A section in both winapp2.ini files keeps its option id"""
+        personal = self.write_file(
+            'winapp2-personal-ids.ini',
+            text='[Notepad++ *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-personal.tmp\n')
+        system = self.write_file(
+            'winapp2-system-ids.ini',
+            text='[Notepad *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-notepad.tmp\n'
+            '[Notepad++ *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-system.tmp\n')
+
+        with mock.patch('bleachbit.Winapp.list_winapp_files',
+                        return_value=[personal, system]), \
+                mock.patch.dict('bleachbit.Cleaner.backends'):
+            list(load_cleaners())
+            cleaner = bleachbit.Cleaner.backends['winapp2_applications']
+
+        self.assertEqual([('notepad', 'Notepad++'), ('notepad_2', 'Notepad')],
+                         list(cleaner.get_options()))
+        self.assertEqual([('notepad', 'bleachbit-test-personal.tmp'),
+                          ('notepad_2', 'bleachbit-test-notepad.tmp')],
+                         sorted((o, os.path.basename(a.paths[0]))
+                                for (o, a) in cleaner.actions))
+
     def test_filekey_recurse_rejects_excessive_wildcards(self):
         """A FileKey RECURSE pattern with too many wildcards is rejected (ReDoS defense)"""
         self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-redos')
@@ -711,6 +819,37 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                       'FileKey1=%Temp%|' + '*a' * 11 + '|RECURSE\n')
         winapp = Winapp(self.ini_fn)
         self.assertEqual(winapp.errors, 1)
+
+    def test_bad_section_keeps_rest_of_file(self):
+        """A malformed section is skipped, not the whole file"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-badsection')
+        good = ('[Good App *]\nLangSecRef=3021\n'
+                'FileKey1=%Temp%|bleachbit-test-good.tmp\n')
+        tests = (
+            # duplicate section: the first one wins
+            '[Good App *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-dup.tmp\n',
+            # duplicate key
+            '[Bad App *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-a.tmp\n'
+            'FileKey1=%Temp%|bleachbit-test-b.tmp\n',
+            # line without a delimiter
+            '[Bad App *]\nLangSecRef=3021\n'
+            'FileKey1=%Temp%|bleachbit-test-a.tmp\n'
+            'not an option\n',
+        )
+        for bad in tests:
+            with self.subTest(bad=bad):
+                with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+                    ini.write(good + bad)
+                winapp = Winapp(self.ini_fn)
+                self.assertEqual(winapp.errors, 1)
+                cleaner = next(winapp.get_cleaners())
+                self.assertEqual(['good_app'],
+                                 [o for (o, _name) in cleaner.get_options()])
+                paths = [p for (_o, a) in cleaner.actions for p in a.paths]
+                self.assertEqual(1, len(paths))
+                self.assertTrue(paths[0].endswith('bleachbit-test-good.tmp'))
 
     @common.skipIfWindows
     def test_list_winapp_files_skips_world_writable(self):
@@ -848,6 +987,35 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                  ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
+
+    def test_colliding_section_names(self):
+        """Sections that normalize to the same option id stay separate"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-optionid')
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            for i, section in enumerate(('Notepad *', 'Notepad++ *')):
+                ini.write(f'[{section}]\nLangSecRef=3021\nWarning=warning{i}\n'
+                          f'FileKey1=%Temp%|bleachbit-test-{i}.tmp\n')
+
+        cleaner = next(Winapp(self.ini_fn).get_cleaners())
+        self.assertEqual([('notepad', 'Notepad'), ('notepad_2', 'Notepad++')],
+                         list(cleaner.get_options()))
+        for i, option_id in enumerate(('notepad', 'notepad_2')):
+            self.assertEqual(f'warning{i}', cleaner.get_warning(option_id))
+            actions = [a for (o, a) in cleaner.actions if o == option_id]
+            self.assertEqual(1, len(actions))
+            self.assertTrue(
+                actions[0].paths[0].endswith(f'bleachbit-test-{i}.tmp'))
+
+        # the id stays the same when the other section is not detected
+        missing = os.path.join(self.tempdir, 'does_not_exist')
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            ini.write(f'[Notepad *]\nLangSecRef=3021\nDetectFile={missing}\n'
+                      'FileKey1=%Temp%|bleachbit-test-0.tmp\n'
+                      '[Notepad++ *]\nLangSecRef=3021\n'
+                      'FileKey1=%Temp%|bleachbit-test-1.tmp\n')
+        cleaner = next(Winapp(self.ini_fn).get_cleaners())
+        self.assertEqual([('notepad_2', 'Notepad++')],
+                         list(cleaner.get_options()))
 
     def test_fnmatch_translate(self):
         """Test that fnmatch_translate strips the end anchor and matches patterns"""
