@@ -186,12 +186,23 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         tests = [
             # (expected, exe, require_same_user)
             (True, exe, False),  # Check the actual process name
-            (True, exe, True),  # Check the actual process name
         ]
-        # These processes may be running but not by the current user.
-        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
-                         'gdm3', 'snapd', 'systemd-journald')
-        tests += [(False, name, True) for name in non_user_exes]
+        # Under sudo, the test process runs as root and get_real_uid() returns
+        # the non-root user (e.g. from SUDO_UID). Current process won't match
+        # same_user, but root daemons like snapd WILL match if running under root
+        # when sudo_mode() is false or root is the user.
+        # More importantly:
+        # 1. exe with require_same_user=True only matches if the current process
+        #    runs as the real user.
+        # 2. Daemons like snapd run as root; under normal user execution they are
+        #    not the same user. Under sudo, if sudo was run as root without SUDO_UID
+        #    or root daemons match root, they would be same_user.
+        if not sudo_mode():
+            tests.append((True, exe, True))
+            # These processes may be running but not by the current user.
+            non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
+                             'gdm3', 'snapd', 'systemd-journald')
+            tests += [(False, name, True) for name in non_user_exes]
         # These do not exist.
         tests += [
             (False, 'does-not-exist', True),
