@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 10:27-0600\n"
+"POT-Creation-Date: 2026-10-17 17:59-0600\n"
 "PO-Revision-Date: 2017-04-29 22:49+0000\n"
 "Last-Translator: enolp <enolp@softastur.org>\n"
 "Language-Team: Asturian <ast@li.org>\n"
@@ -19,6 +19,7 @@ msgstr ""
 "X-Launchpad-Export-Date: 2017-12-22 18:36+0000\n"
 "X-Generator: Launchpad (build 18521)\n"
 
+#. Cleaner description: the category of application.
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
 #: ../cleaners/vlc.xml
@@ -28,27 +29,29 @@ msgstr "Reproductor multimedia"
 #. TRANSLATORS: Sidebar label for the page managing browser cookies in
 #. the Preferences dialog.
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/GuiPreferences.py
+#: ../cleaners/google_chrome.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/GuiPreferences.py
 msgid "Cookies"
 msgstr "Cookies"
 
+#. Description of the Cookies cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/google_chrome.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
 #, fuzzy
 #| msgid ""
 #| "Delete cookies, which contain information such as web site preferences, "
@@ -60,20 +63,23 @@ msgstr ""
 "Desanicia les cookies que contienen información como preferencies d'un sitiu "
 "web, autenticación ya identificación pa rastrexu"
 
+#. Name of a cleaning option for usage history.
 #: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
-#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml ../cleaners/fish.xml
-#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
-#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/python.xml ../cleaners/vim.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/easytag.xml ../cleaners/safari.xml
+#: ../cleaners/safari_windows.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
 msgid "History"
 msgstr "Historial"
 
+#. Description of the History cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
 #: ../cleaners/gnome.xml ../cleaners/windows_defender.xml
 #: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
@@ -89,11 +95,11 @@ msgstr "Desanicia l'historial d'usu"
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
 #: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
-#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Rexistros"
 
@@ -103,11 +109,11 @@ msgstr "Rexistros"
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
 #: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
-#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Desanicia los rexistros"
 
@@ -121,23 +127,24 @@ msgstr "Visor multimedia"
 #: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
 #: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
-#: ../cleaners/waterfox.xml ../cleaners/emesene.xml ../cleaners/nexuiz.xml
-#: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
-#: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml ../cleaners/docker.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/safari.xml
+#: ../cleaners/safari_windows.xml ../cleaners/waterfox.xml
+#: ../cleaners/emesene.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/epiphany.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/smartftp.xml
+#: ../cleaners/thunderbird.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/gimp.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
 #: ../cleaners/flash.xml ../cleaners/google_chrome.xml
-#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/tremulous.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/gftp.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "Caché"
 
@@ -154,14 +161,16 @@ msgstr "Caché"
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
 #: ../cleaners/apt.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
 #: ../cleaners/android_studio.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml ../cleaners/gimp.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/flash.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Desanicia la caché"
 
+#. Name of a cleaning option: the list of most recently used items, often the last opened files.
 #: ../cleaners/paint.xml ../cleaners/openoffice.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
@@ -171,6 +180,7 @@ msgstr "Desanicia la caché"
 msgid "Most recently used"
 msgstr "Lo más usao apocayá"
 
+#. Description of the Most recently used cleaning option.
 #: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
@@ -213,8 +223,9 @@ msgstr "Rexistros de charres"
 msgid "Delete the chat logs"
 msgstr "Desanicia los rexistros de les charres"
 
+#. Cleaner description: the category of application.
 #: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/links2.xml
@@ -238,31 +249,34 @@ msgstr "Ficheros de respaldu"
 msgid "Delete the backup files"
 msgstr "Desanicia los ficheros de respaldu"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/vscode.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Crash reports"
 msgstr "Informes de casques"
 
+#. Description of a cleaning option that deletes files on disk.
 #: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
-#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/vscode.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/google_chrome.xml
+#: ../cleaners/transmission.xml ../cleaners/profanity.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vuze.xml ../cleaners/opera.xml
 msgid "Delete the files"
 msgstr "Desanicia los ficheros"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Form history"
 msgstr "Historial de formularios"
 
@@ -274,19 +288,21 @@ msgstr "Historial de formularios"
 msgid "Saved form entries and search bar history"
 msgstr "Desanicia l'historial de guetes"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Passwords"
 msgstr "Contraseñes"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -294,59 +310,68 @@ msgstr ""
 "Una base de datos de nomes d'usuariu y contraseñes amás d'un llistáu de "
 "sitios que nun deberíen atroxar contraseñes"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#. Warning shown when the user selects the Passwords cleaning option.
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
 msgstr "Esta opción desaniciará les tos contraseñes guardaes."
 
+#. Label for cleaning option that deletes saved session data.
 #: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/claude.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Session"
 msgstr "Sesión"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#. Description for the Session cleaning option.
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Previously open tabs and windows"
+msgstr ""
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB.
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/teamviewer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Site data"
+msgstr ""
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate.
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/teamviewer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr ""
+
+#: ../cleaners/librewolf.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
-msgid "Previously open tabs and windows"
-msgstr ""
-
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Site data"
-msgstr ""
-
-#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
-
-#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Site preferences"
 msgstr "Preferencies sitios"
 
-#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/helium.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Settings for individual sites"
 msgstr "Axustes pa sitios individuales"
 
@@ -367,7 +392,7 @@ msgstr "Llistáu de páxines web visitaes"
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
 #: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -378,7 +403,7 @@ msgid "Vacuum"
 msgstr "Llimpiar"
 
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
 #: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -476,7 +501,7 @@ msgstr "Desanicia les cookies, URLs visitaes y l'historial de guetes"
 msgid "Word processor"
 msgstr "Procesador de Words"
 
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/safari_windows.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml
@@ -487,31 +512,49 @@ msgstr ""
 "Desanicia la caché web qu'amenorga'l tiempu p'amosar les páxines visitaes de "
 "nueves"
 
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/chromium.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
+#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 #, fuzzy
 #| msgid "A history of forms entered in web sites"
 msgid "A history of forms entered in websites"
 msgstr "Un historial de formularios introducíos nos sitios web"
 
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
 "Desanicia l'historial qu'inclúi los sitios visitaos, descargues y miniatures"
 
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
 msgid "Sync"
 msgstr ""
 
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
 msgid "Delete the sync data (including web apps) and sign out of the browser"
 msgstr ""
+
+#: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Search engines"
+msgstr "Motores de gueta"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+"Reanicia l'historial d'usu de los motores de gueta y desanicia los motores "
+"de gueta que nun seyan de fábrica, dalcuando amestaos automáticamente"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
@@ -626,24 +669,6 @@ msgstr "Sesión actual"
 msgid "Delete the current session"
 msgstr "Desanicia la sesión actual"
 
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Search engines"
-msgstr "Motores de gueta"
-
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr ""
-"Reanicia l'historial d'usu de los motores de gueta y desanicia los motores "
-"de gueta que nun seyan de fábrica, dalcuando amestaos automáticamente"
-
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
 msgstr "Xestor de ficheros"
@@ -707,6 +732,7 @@ msgstr "Desanicia los ficheros obsoletos"
 msgid "Package lists"
 msgstr "Llistaos de paquetes"
 
+#. Cleaner description: the category of application. 'Container' means a software container that packages and runs applications in isolation, not a physical shipping container.
 #: ../cleaners/docker.xml
 msgid "Container platform"
 msgstr ""
@@ -862,7 +888,7 @@ msgstr "Llistáu de ficheros baxaos"
 msgid "Delete the list of visited web pages"
 msgstr "Desanicia'l llistáu de páxines web visitaes"
 
-#. Cleaning option that deletes AI models in a web browser
+#. Cleaning option that deletes AI models in a web browser.
 #: ../cleaners/google_chrome.xml
 msgid "AI"
 msgstr ""
@@ -2037,6 +2063,7 @@ msgstr "¿Abrir un restolador web pa %s?"
 
 #. TRANSLATORS: Title of a confirmation dialog.
 #. TRANSLATORS: Title of confirmation dialog for deleting orphaned wipe files.
+#. TRANSLATORS: Title of confirmation dialog for repairing folder permissions.
 #: ../bleachbit/GuiBasic.py ../bleachbit/GuiWindow.py
 msgid "Confirm"
 msgstr ""
@@ -2864,6 +2891,31 @@ msgid ""
 "Would you like to preview them with an option to delete them?"
 msgstr ""
 
+#. TRANSLATORS: This message is shown on Windows when the configuration
+#. folder (%APPDATA%\BleachBit) has broken file permissions that prevent
+#. non-administrator processes from accessing it. %s is the folder path.
+#: ../bleachbit/GuiWindow.py
+#, python-format
+msgid ""
+"BleachBit detected a permissions issue with its configuration folder (%s). "
+"Would you like to repair it?"
+msgstr ""
+
+#. TRANSLATORS: Message shown in the log after repairing
+#. folder permissions. %s is the folder path.
+#: ../bleachbit/GuiWindow.py
+#, python-format
+msgid "Repaired permissions for %s."
+msgstr ""
+
+#. TRANSLATORS: Message shown in the log when repairing
+#. folder permissions did not fully succeed. %s is the
+#. folder path.
+#: ../bleachbit/GuiWindow.py
+#, python-format
+msgid "Could not fully repair permissions for %s."
+msgstr ""
+
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
@@ -3255,6 +3307,10 @@ msgstr ""
 msgid "Database is locked: %s"
 msgstr ""
 
+#. TRANSLATORS: The special keyword {operation_option} will be
+#. replaced by a cleaner and option such as 'firefox.cache'.
+#. The special keyword {command} will be replaced by the
+#. cleaning action that failed. Do not translate the placeholders.
 #: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
@@ -3272,6 +3328,8 @@ msgstr "Espera, por favor. Llimpiando l'espaciu llibre en discu."
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
 
+#. TRANSLATORS: Warning shown while wiping a drive's
+#. empty space.
 #: ../bleachbit/Worker.py
 msgid ""
 "If the application is force closed before the process is complete, large "
@@ -3330,6 +3388,8 @@ msgstr "Ficheros pa desaniciar: %d"
 msgid "Special operations: %d"
 msgstr "Operaciones especiales: %d"
 
+#. TRANSLATORS: %d is the count of errors that occurred
+#. during the cleaning or preview operation.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Errors: %d"

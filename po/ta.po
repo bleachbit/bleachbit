@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-29 10:27-0600\n"
+"POT-Creation-Date: 2026-10-17 17:59-0600\n"
 "PO-Revision-Date: 2026-06-22 08:01+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/bleachbit/main/ta/"
@@ -20,6 +20,7 @@ msgstr ""
 "X-Generator: Weblate 2026.7.dev0\n"
 "X-Launchpad-Export-Date: 2015-12-14 18:16+0000\n"
 
+#. Cleaner description: the category of application.
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
 #: ../cleaners/vlc.xml
@@ -29,27 +30,29 @@ msgstr "ஊடக இயக்கி"
 #. TRANSLATORS: Sidebar label for the page managing browser cookies in
 #. the Preferences dialog.
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/GuiPreferences.py
+#: ../cleaners/google_chrome.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/GuiPreferences.py
 msgid "Cookies"
 msgstr "நினைவிகள்"
 
+#. Description of the Cookies cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/google_chrome.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
@@ -57,20 +60,23 @@ msgstr ""
 "உள்நுழைவுத் செய்தி, இணையதள விருப்பத்தேர்வுகள் மற்றும் கண்காணிப்பு அடையாளங்காட்டிகளைச் "
 "சேமிக்கும் குக்கீகளை நீக்கவும்"
 
+#. Name of a cleaning option for usage history.
 #: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
-#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml ../cleaners/fish.xml
-#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
-#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/python.xml ../cleaners/vim.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/easytag.xml ../cleaners/safari.xml
+#: ../cleaners/safari_windows.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
 msgid "History"
 msgstr "வரலாறு"
 
+#. Description of the History cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
 #: ../cleaners/gnome.xml ../cleaners/windows_defender.xml
 #: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
@@ -86,11 +92,11 @@ msgstr "பாவனை வரலாற்றை அழி"
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
 #: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
-#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "பதிவுகள்"
 
@@ -100,11 +106,11 @@ msgstr "பதிவுகள்"
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
 #: ../cleaners/docker.xml ../cleaners/android_studio.xml ../cleaners/vscode.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
-#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "பதிவுகளை அழி"
 
@@ -118,23 +124,24 @@ msgstr "வரைகலை பார்வையாளர்"
 #: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
 #: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
-#: ../cleaners/waterfox.xml ../cleaners/emesene.xml ../cleaners/nexuiz.xml
-#: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
-#: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml ../cleaners/docker.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/safari.xml
+#: ../cleaners/safari_windows.xml ../cleaners/waterfox.xml
+#: ../cleaners/emesene.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/epiphany.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/smartftp.xml
+#: ../cleaners/thunderbird.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/gimp.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
 #: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
 #: ../cleaners/flash.xml ../cleaners/google_chrome.xml
-#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/tremulous.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/gftp.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "இடைமாற்று"
 
@@ -151,14 +158,16 @@ msgstr "இடைமாற்று"
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
 #: ../cleaners/apt.xml ../cleaners/docker.xml ../cleaners/palemoon.xml
 #: ../cleaners/android_studio.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml ../cleaners/gimp.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/flash.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "நினைவில் உள்ளதை அழி"
 
+#. Name of a cleaning option: the list of most recently used items, often the last opened files.
 #: ../cleaners/paint.xml ../cleaners/openoffice.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
@@ -168,6 +177,7 @@ msgstr "நினைவில் உள்ளதை அழி"
 msgid "Most recently used"
 msgstr "சமீபத்தில் பாவிக்கப்பட்டவை"
 
+#. Description of the Most recently used cleaning option.
 #: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
@@ -212,8 +222,9 @@ msgstr "அரட்டை பதிவுகள்"
 msgid "Delete the chat logs"
 msgstr "அரட்டை பதிவுகளை அழி"
 
+#. Cleaner description: the category of application.
 #: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/links2.xml
@@ -237,31 +248,34 @@ msgstr "காப்புக் கோப்புகள்"
 msgid "Delete the backup files"
 msgstr "காப்புக் கோப்புகளை அழி"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/vscode.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Crash reports"
 msgstr "சிதைவு அறிக்கைகள்"
 
+#. Description of a cleaning option that deletes files on disk.
 #: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
-#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/vscode.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/google_chrome.xml
+#: ../cleaners/transmission.xml ../cleaners/profanity.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vuze.xml ../cleaners/opera.xml
 msgid "Delete the files"
 msgstr "கோப்புகளை அழி"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Form history"
 msgstr "படிவ வரலாறு"
 
@@ -271,19 +285,21 @@ msgstr "படிவ வரலாறு"
 msgid "Saved form entries and search bar history"
 msgstr "சேமித்த படிவ உள்ளீடுகள் மற்றும் தேடல் பட்டி வரலாறு"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Passwords"
 msgstr "கடவுச்சொற்கள்"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -291,59 +307,68 @@ msgstr ""
 "பயனர்பெயர்கள் மற்றும் கடவுச்சொற்களின் தரவுத்தளம் மற்றும் கடவுச்சொற்களை சேமிக்காத தளங்களின் "
 "பட்டியல்"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#. Warning shown when the user selects the Passwords cleaning option.
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
 msgstr "இந்தத் தேர்வு உங்கள் சேமிக்கப்பட்ட கடவுச்சொல்லை நீக்குவதற்கானது."
 
+#. Label for cleaning option that deletes saved session data.
 #: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/claude.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Session"
 msgstr "அமர்வு"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#. Description for the Session cleaning option.
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Previously open tabs and windows"
+msgstr "முன்பு தாவல்கள் மற்றும் சாளரங்களைத் திறக்கவும்"
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB.
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/teamviewer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Site data"
+msgstr "தள தரவு"
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate.
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/teamviewer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr "வலைத்தளங்களால் சேமிக்கப்பட்ட LocalStorage, IndexedDB மற்றும் பிற தரவை நீக்கவும்"
+
+#: ../cleaners/librewolf.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
-msgid "Previously open tabs and windows"
-msgstr "முன்பு தாவல்கள் மற்றும் சாளரங்களைத் திறக்கவும்"
-
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Site data"
-msgstr "தள தரவு"
-
-#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr "வலைத்தளங்களால் சேமிக்கப்பட்ட LocalStorage, IndexedDB மற்றும் பிற தரவை நீக்கவும்"
-
-#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Site preferences"
 msgstr "தள விருப்பத்தேர்வுகள்"
 
-#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/helium.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Settings for individual sites"
 msgstr "தனிப்பட்ட தளங்களுக்கான அமைப்புகள்"
 
@@ -364,7 +389,7 @@ msgstr "பார்த்த இனைய பக்கங்களை பட்
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
 #: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -375,7 +400,7 @@ msgid "Vacuum"
 msgstr "வெற்றிடம்"
 
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
 #: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
 #: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -467,7 +492,7 @@ msgstr "குக்கீகளை நீக்கு, பார்வையி
 msgid "Word processor"
 msgstr "சொல் செயலி"
 
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/safari_windows.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml
@@ -478,28 +503,46 @@ msgstr ""
 "வலை தற்காலிக சேமிப்பை நீக்கவும், இது மறுபரிசீலனை செய்யப்பட்ட பக்கங்களைக் காண்பிக்கும் "
 "நேரத்தை குறைக்கிறது"
 
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/chromium.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
+#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "A history of forms entered in websites"
 msgstr "இணையதளங்களில் உள்ளிடப்பட்ட படிவங்களின் வரலாறு"
 
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr "பார்வையிட்ட தளங்கள், பதிவிறக்கங்கள் மற்றும் சிறுபடங்கள் அடங்கிய வரலாற்றை நீக்கவும்"
 
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
 msgid "Sync"
 msgstr "ஒத்திசைவு"
 
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
 msgid "Delete the sync data (including web apps) and sign out of the browser"
 msgstr "ஒத்திசைவு தரவை (இணைய பயன்பாடுகள் உட்பட) நீக்கி, உலாவியில் இருந்து வெளியேறவும்"
+
+#: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Search engines"
+msgstr "தேடு பொறிகள்"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+"தேடுபொறி பயன்பாட்டு வரலாற்றை மீட்டமைக்கவும், காரணி அல்லாத தேடுபொறிகளை நீக்கவும், அவற்றில் "
+"சில தானாக சேர்க்கப்படுகின்றன"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
@@ -610,24 +653,6 @@ msgstr "நடப்பு அமர்வு"
 msgid "Delete the current session"
 msgstr "நடப்பு அமர்வை அழி"
 
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Search engines"
-msgstr "தேடு பொறிகள்"
-
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr ""
-"தேடுபொறி பயன்பாட்டு வரலாற்றை மீட்டமைக்கவும், காரணி அல்லாத தேடுபொறிகளை நீக்கவும், அவற்றில் "
-"சில தானாக சேர்க்கப்படுகின்றன"
-
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
 msgstr "கோப்பு நிர்வாகி"
@@ -691,6 +716,7 @@ msgstr "வழக்கற்ற கோப்புகளை அழி"
 msgid "Package lists"
 msgstr "தொகுப்பு பட்டியல்"
 
+#. Cleaner description: the category of application. 'Container' means a software container that packages and runs applications in isolation, not a physical shipping container.
 #: ../cleaners/docker.xml
 msgid "Container platform"
 msgstr ""
@@ -837,7 +863,7 @@ msgstr "பதிவிறக்கப்பட்ட கோப்புகள�
 msgid "Delete the list of visited web pages"
 msgstr "அழி பார்க்கப்பட்ட வலைப்பக்க வரலாற்றை"
 
-#. Cleaning option that deletes AI models in a web browser
+#. Cleaning option that deletes AI models in a web browser.
 #: ../cleaners/google_chrome.xml
 msgid "AI"
 msgstr "AI"
@@ -2012,6 +2038,7 @@ msgstr "வலை உலாவியை %s க்கு திறக்கவா
 
 #. TRANSLATORS: Title of a confirmation dialog.
 #. TRANSLATORS: Title of confirmation dialog for deleting orphaned wipe files.
+#. TRANSLATORS: Title of confirmation dialog for repairing folder permissions.
 #: ../bleachbit/GuiBasic.py ../bleachbit/GuiWindow.py
 msgid "Confirm"
 msgstr "உறுதிப்படுத்தவும்"
@@ -2810,6 +2837,31 @@ msgstr ""
 "ப்ளீச்பிட் குறுக்கீடு செய்யப்பட்ட வட்டு துடைப்பு செயல்பாட்டிலிருந்து மீதமுள்ள கோப்புகளைக் "
 "கண்டறிந்தது. அவற்றை நீக்குவதற்கான விருப்பத்துடன் அவற்றை முன்னோட்டமிட விரும்புகிறீர்களா?"
 
+#. TRANSLATORS: This message is shown on Windows when the configuration
+#. folder (%APPDATA%\BleachBit) has broken file permissions that prevent
+#. non-administrator processes from accessing it. %s is the folder path.
+#: ../bleachbit/GuiWindow.py
+#, python-format
+msgid ""
+"BleachBit detected a permissions issue with its configuration folder (%s). "
+"Would you like to repair it?"
+msgstr ""
+
+#. TRANSLATORS: Message shown in the log after repairing
+#. folder permissions. %s is the folder path.
+#: ../bleachbit/GuiWindow.py
+#, python-format
+msgid "Repaired permissions for %s."
+msgstr ""
+
+#. TRANSLATORS: Message shown in the log when repairing
+#. folder permissions did not fully succeed. %s is the
+#. folder path.
+#: ../bleachbit/GuiWindow.py
+#, python-format
+msgid "Could not fully repair permissions for %s."
+msgstr ""
+
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
@@ -3216,6 +3268,10 @@ msgstr "அணுகல் மறுக்கப்பட்டது: %s"
 msgid "Database is locked: %s"
 msgstr ""
 
+#. TRANSLATORS: The special keyword {operation_option} will be
+#. replaced by a cleaner and option such as 'firefox.cache'.
+#. The special keyword {command} will be replaced by the
+#. cleaning action that failed. Do not translate the placeholders.
 #: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
@@ -3232,6 +3288,8 @@ msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
 "இந்த செயல்முறையை நிறுத்த, கருவிப்பட்டியில் உள்ள அபார்ட் பட்டனை அழுத்தி காத்திருக்கவும்."
 
+#. TRANSLATORS: Warning shown while wiping a drive's
+#. empty space.
 #: ../bleachbit/Worker.py
 msgid ""
 "If the application is force closed before the process is complete, large "
@@ -3293,6 +3351,8 @@ msgstr "அழிக்கப்படவுள்ள கோப்புகள�
 msgid "Special operations: %d"
 msgstr "சிறப்பு செயல்பாடுகள்: %d"
 
+#. TRANSLATORS: %d is the count of errors that occurred
+#. during the cleaning or preview operation.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Errors: %d"
