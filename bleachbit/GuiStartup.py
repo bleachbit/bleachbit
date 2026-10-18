@@ -8,10 +8,12 @@ import logging
 import os
 import stat
 import sys
+import tempfile
 from importlib.util import find_spec
 
 import bleachbit
 from bleachbit import General, IS_MAC, IS_POSIX, IS_WINDOWS
+from bleachbit.FileUtilities import _open_nofollow_fd
 from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -190,8 +192,10 @@ def _get_windows_permission_issues(options_file, options_dir=None):
                 has_error = True
                 lines.append('File owner does not match current user')
     except Exception as e:
-        has_error = True
-        lines.append(f'Could not check file ownership: {e}')
+        # Options creates a missing file later, so only the folder is checked
+        if os.path.lexists(options_file):
+            has_error = True
+            lines.append(f'Could not check file ownership: {e}')
 
     # When elevated, GUI.check_appdata_permissions() offers the repair instead.
     if (options_dir and not bleachbit.portable_mode
@@ -215,9 +219,9 @@ def _get_config_permission_issues():
     """Check for permission and file access issues with the
     configuration.
 
-    Side effects: creates the options directory and an empty
-    configuration file if they are missing. In sudo mode, chowns
-    them to the real user.
+    Side effects: creates the options directory if it is missing. In
+    sudo mode, chowns it to the real user. The configuration file is
+    left to Options to create.
 
     If no errors, returns False.
     If errors found, returns list of strings with info.
@@ -255,19 +259,28 @@ def _get_config_permission_issues():
             f.read(1)
     except FileNotFoundError:
         # A missing configuration file is normal on first start and is
-        # not a permission issue. The append test below verifies that
-        # the file can be created/written.
+        # not a permission issue. The write test below verifies that
+        # the file can be created.
         pass
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Read error: {type(e).__name__}: {e}")
 
     try:
-        mkfile = not os.path.exists(_options_file)
-        with open(_options_file, 'a', encoding='utf-8') as f:
-            f.write('')
-        if mkfile and General.sudo_mode():
-            General.chownself(_options_file)
+        # Without O_CREAT, so the check does not create the file itself:
+        # Options does, with a private mode and refusing a symlink
+        os.close(_open_nofollow_fd(_options_file, os.O_WRONLY | os.O_APPEND))
+    except FileNotFoundError:
+        try:
+            # Options saves through a temporary file in the same directory
+            fd, temp_path = tempfile.mkstemp(
+                prefix=os.path.basename(_options_file) + '.', suffix='.tmp',
+                dir=_options_dir)
+            os.close(fd)
+            os.remove(temp_path)
+        except OSError as e:
+            has_error = True
+            lines.append(f"Write error: {type(e).__name__}: {e}")
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Write error: {type(e).__name__}: {e}")
@@ -278,6 +291,9 @@ def _get_config_permission_issues():
         lines.append(f'File: {_options_file}')
         lines.append(
             f'Permissions: {mode} ({oct(stat.S_IMODE(fstat.st_mode))})')
+    except FileNotFoundError:
+        # The write test above covers a missing file
+        pass
     except OSError as e:
         has_error = True
         lines.append(f'Cannot stat {_options_file}: {e}')
