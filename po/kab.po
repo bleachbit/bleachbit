@@ -6,23 +6,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-10-20 09:20+0000\n"
+"Last-Translator: Amadɣas <massiin@proton.me>\n"
+"Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
+"kab/>\n"
 "Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. Cleaner description: the category of application.
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
 #: ../cleaners/vlc.xml
 msgid "Media player"
-msgstr ""
+msgstr "Imeɣri n umidya"
 
 #. TRANSLATORS: Sidebar label for the page managing browser cookies in
 #. the Preferences dialog.
@@ -37,7 +39,7 @@ msgstr ""
 #: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/GuiPreferences.py
 msgid "Cookies"
-msgstr ""
+msgstr "Inagan n tuqqna"
 
 #. Description of the Cookies cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
@@ -54,6 +56,8 @@ msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
+"Kkes inagan n tuqqna, igebren talɣut n tuqqna, ismenyifen n usmel web akked "
+"isulay n uḍfar"
 
 #. Name of a cleaning option for usage history.
 #: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
@@ -69,7 +73,7 @@ msgstr ""
 #: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
 #: ../cleaners/octave.xml
 msgid "History"
-msgstr ""
+msgstr "Azray"
 
 #. Description of the History cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
@@ -79,7 +83,7 @@ msgstr ""
 #: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
 #: ../cleaners/amule.xml
 msgid "Delete the usage history"
-msgstr ""
+msgstr "Kkes azray n useqdec"
 
 #. TRANSLATORS: Name of a cleaning option for Windows log files.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
@@ -93,7 +97,7 @@ msgstr ""
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Logs"
-msgstr ""
+msgstr "Iɣmisen"
 
 #. TRANSLATORS: Description of the Logs cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
@@ -107,12 +111,12 @@ msgstr ""
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the logs"
-msgstr ""
+msgstr "Kkes iɣmisen"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
 #: ../cleaners/flash.xml
 msgid "Multimedia viewer"
-msgstr ""
+msgstr "Ameskan n ugetmedia"
 
 #. TRANSLATORS: Name of a cleaning option. Cache is a noun.
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
@@ -138,7 +142,7 @@ msgstr ""
 #: ../cleaners/gftp.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Cleaner.py
 msgid "Cache"
-msgstr ""
+msgstr "Tazarkatut"
 
 #. TRANSLATORS: The description of what certain cleaning options do.
 #: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
@@ -160,7 +164,7 @@ msgstr ""
 #: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
 #: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
-msgstr ""
+msgstr "Sfeḍ tazarkatut"
 
 #. Name of a cleaning option: the list of most recently used items, often the last opened files.
 #: ../cleaners/paint.xml ../cleaners/openoffice.xml
@@ -170,7 +174,7 @@ msgstr ""
 #: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
 #: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
 msgid "Most recently used"
-msgstr ""
+msgstr "Ifuyla yettwasqedcen melmi kan"
 
 #. Description of the Most recently used cleaning option.
 #: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
@@ -179,12 +183,12 @@ msgstr ""
 #: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
 #: ../cleaners/vlc.xml
 msgid "Delete the most recently used list"
-msgstr ""
+msgstr "Sfeḍ tabdart n yisemliyen yettwasqedcen melmi kan"
 
 #: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
 #: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
-msgstr ""
+msgstr "Asefrak n yikemmas"
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
@@ -195,25 +199,27 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
+"Sekyed akken iwata tabdart n yikemmas ara yettwakksen s uselkem n « dnf list "
+"autoremove »."
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
 #: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
 #: ../cleaners/discord.xml
 msgid "Chat client"
-msgstr ""
+msgstr "Amsaɣ n udiwenni usrid"
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
 #: ../cleaners/seamonkey.xml
 msgid "Chat logs"
-msgstr ""
+msgstr "Iɣmisen n idiwenniyen"
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
 #: ../cleaners/seamonkey.xml
 msgid "Delete the chat logs"
-msgstr ""
+msgstr "Sfeḍ iɣmisen n idiwenniyen"
 
 #. Cleaner description: the category of application.
 #: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
@@ -225,14 +231,14 @@ msgstr ""
 #: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Web browser"
-msgstr ""
+msgstr "Iminig Web"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
 #: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
 #: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
 msgid "Backup files"
-msgstr ""
+msgstr "Ifuyla n weḥraz"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
