@@ -436,9 +436,16 @@ class WipeTestCase(common.BleachbitTestCase):
         self.assertGreater(counter, 0)
 
     def test_wipe_path_world_writable_warns(self):
-        """wipe_path() warns when the shred drive is world-writable"""
+        """wipe_path() warns when the shred drive is world-writable
+
+        The clock is mocked so the first yield comes after one block
+        instead of after two seconds of filling the disk, which starves
+        the other xdist workers.
+        """
         with mock.patch('bleachbit.Wipe.IS_POSIX', True), \
                 mock.patch('bleachbit.PathUtils.is_world_writable', return_value=True), \
+                mock.patch('bleachbit.Wipe.time.time',
+                           side_effect=itertools.count(0, 3)), \
                 self.assertLogs('bleachbit.Wipe', level='WARNING') as cm:
             for _ret in wipe_path(self.tempdir, True):
                 break
