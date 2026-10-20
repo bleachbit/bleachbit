@@ -310,21 +310,33 @@ APPIMAGE_OUTPUT ?= BleachBit-$(shell $(PYTHON_CMD) -c "import sys; sys.path.inse
 APPIMAGE_OUTPUT_PATH := $(abspath $(APPIMAGE_OUTPUT))
 LINUXDEPLOY ?= linuxdeploy-x86_64.AppImage
 LINUXDEPLOY_GTK_PLUGIN ?= linuxdeploy-plugin-gtk.sh
-LINUXDEPLOY_URL ?= https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-LINUXDEPLOY_GTK_PLUGIN_URL ?= https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
+# Pinned release and commit, bump the hashes with them
+LINUXDEPLOY_VERSION ?= 1-alpha-20251107-1
+LINUXDEPLOY_URL ?= https://github.com/linuxdeploy/linuxdeploy/releases/download/$(LINUXDEPLOY_VERSION)/linuxdeploy-x86_64.AppImage
+LINUXDEPLOY_SHA256 ?= c20cd71e3a4e3b80c3483cef793cda3f4e990aca14014d23c544ca3ce1270b4d
+LINUXDEPLOY_GTK_PLUGIN_COMMIT ?= 7a3fbc31a9e5075073ff8790f26effbac5f84453
+LINUXDEPLOY_GTK_PLUGIN_URL ?= https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/$(LINUXDEPLOY_GTK_PLUGIN_COMMIT)/linuxdeploy-plugin-gtk.sh
+LINUXDEPLOY_GTK_PLUGIN_SHA256 ?= b0f4cbc684a0103a9651f0955b635eaea0096b3a66c0f5a2c2aa337960375171
 
 $(LINUXDEPLOY):
 	@echo "* Downloading linuxdeploy"
 	wget -c "$(LINUXDEPLOY_URL)" -O $(LINUXDEPLOY)
+	echo "$(LINUXDEPLOY_SHA256)  $(LINUXDEPLOY)" | sha256sum -c || \
+		{ rm -f $(LINUXDEPLOY); exit 1; }
 	chmod +x $(LINUXDEPLOY)
 
 $(LINUXDEPLOY_GTK_PLUGIN):
 	@echo "* Downloading linuxdeploy-plugin-gtk"
 	wget -c "$(LINUXDEPLOY_GTK_PLUGIN_URL)" -O $(LINUXDEPLOY_GTK_PLUGIN)
+	echo "$(LINUXDEPLOY_GTK_PLUGIN_SHA256)  $(LINUXDEPLOY_GTK_PLUGIN)" | sha256sum -c || \
+		{ rm -f $(LINUXDEPLOY_GTK_PLUGIN); exit 1; }
 	chmod +x $(LINUXDEPLOY_GTK_PLUGIN)
 
 appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	@echo "* Building AppImage: $(APPIMAGE_OUTPUT)"
+	# The rules above run only when the files are missing
+	echo "$(LINUXDEPLOY_SHA256)  $(LINUXDEPLOY)" | sha256sum -c
+	echo "$(LINUXDEPLOY_GTK_PLUGIN_SHA256)  $(LINUXDEPLOY_GTK_PLUGIN)" | sha256sum -c
 	# Clean previous build
 	rm -rf "$(APPIMAGE_APPDIR)"
 	# Build translations (.mo files)
