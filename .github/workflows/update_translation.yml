@@ -36,7 +36,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gettext
-          curl -fsSLO https://raw.githubusercontent.com/bleachbit/bleachbit-misc/refs/heads/master/extract_desktop.py
+          # pinned to a bleachbit-misc commit, bump the hash with it
+          curl -fsSLO https://raw.githubusercontent.com/bleachbit/bleachbit-misc/75b30faf16b1b852f7241dac91f5c252d88eee90/extract_desktop.py
+          echo '8cb804918c93ad8932e5f99c291980cd2eb88c158de189acb5ebe93ccc22e4a3  extract_desktop.py' | sha256sum -c
 
       - name: Compile message catalogs to binary format
         run: make -C po local
