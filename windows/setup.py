@@ -300,12 +300,8 @@ def sign_files(filenames):
     """
     if os.path.exists('CodeSign.bat'):
         logger.info('Signing code: %s', ' '.join(filenames))
-        cmd = ['CodeSign.bat', *filenames]
-        # Not fatal because signing needs a certificate that may be missing
-        returncode = run_cmd(cmd, check=False)
-        if returncode:
-            logger.error('CodeSign.bat exited with code %d for %s',
-                         returncode, ' '.join(filenames))
+        # A failed signature must not ship unnoticed
+        run_cmd(['CodeSign.bat', *filenames])
     else:
         logger.warning('CodeSign.bat not available for %s',
                        ' '.join(filenames))
