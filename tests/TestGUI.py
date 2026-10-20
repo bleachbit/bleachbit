@@ -24,7 +24,8 @@ from tests.common import pytest
 
 import bleachbit
 from bleachbit.Cleaner import Cleaner, backends
-from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
+from bleachbit.GtkShim import (Gdk, Gio, GLib, GObject, Gtk, is_gtk_available,
+                               suppress_pygobject_asyncio_warnings)
 from bleachbit.Language import get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -84,7 +85,12 @@ class GUITestCase(common.BleachbitTestCase):
         if window:
             window.destroy()
             cls.clear_window()
-            cls.refresh_gui()
+            # tearDownClass() runs in its own warnings scope, without the
+            # filters that setUp() installs, so a refresh here would turn
+            # PyGObject's asyncio DeprecationWarning into an error on
+            # Python 3.14+ with PYTHONWARNINGS=error.
+            with suppress_pygobject_asyncio_warnings():
+                cls.refresh_gui()
 
     @classmethod
     def get_window(cls):
