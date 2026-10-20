@@ -39,6 +39,18 @@
 
 
 ;--------------------------------
+;NSIS version
+
+; Older NSIS creates the plugin directory with weak permissions (CVE-2023-37378),
+; loses a race creating it (bug 1315, fixed in 3.11) or uses the Low IL temp directory
+; when elevated (bug 1326, fixed in 3.12), and the inner instance runs elevated.
+; The version is packed as decimal digits: 3.12 is 0x03012000.
+!if ${NSIS_PACKEDVERSION} < 0x03012000
+  !error "NSIS 3.12 or later is required"
+!endif
+
+
+;--------------------------------
 ;Include Modern UI
 
   !include "MUI2.nsh"
