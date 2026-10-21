@@ -499,6 +499,7 @@ def _scan_children(top, list_directories, pending_dirs, same_device=False):
                             continue
                         if st.st_dev != top_dev or entry.path in mounts:
                             continue
+                        is_link = not stat.S_ISDIR(st.st_mode)
                     if list_directories:
                         pending_dirs.append(entry.path)
                     if not is_link:
@@ -519,6 +520,10 @@ def children_in_directory(top, list_directories=False, same_device=False):
     a non-empty directory. Symlinks and Windows junctions are never
     traversed. With same_device (POSIX), mount points below top are
     neither traversed nor returned.
+
+    Traversal is path-based and intended for user-owned directories;
+    use children_below() with delete(top=) where another user or process
+    may replace a directory with a link during the walk.
     """
     if isinstance(top, tuple):
         for top_ in top:
@@ -592,7 +597,7 @@ def children_below(dirname, list_directories=False, same_device=False,
 
     With list_directories, directories come last, deepest first. With
     same_device, mount points below dirname are skipped, bind mounts
-    included.
+    included; st_dev and the mount table are checked at walk time.
     """
     top = dirname if top is None else top
     path_max = _path_max(dirname)

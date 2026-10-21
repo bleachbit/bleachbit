@@ -296,6 +296,23 @@ class WorkerTestCase(common.BleachbitTestCase):
                               log_context.output[0])
                 self.assertNotIn('\\\\', log_context.output[0])
 
+    def test_SymlinkRefusedNoTraceback(self):
+        """Worker logs ELOOP and ENOTDIR refusals without a traceback"""
+        path = self.write_file('test_symlink_refused', b'')
+        for err_no in (errno.ELOOP, errno.ENOTDIR):
+            with self.subTest(errno=err_no):
+                def refuse(p, err_no=err_no):
+                    raise OSError(err_no, os.strerror(err_no), p)
+
+                cmd = Command.Function(path, refuse, 'Test')
+                worker = Worker(CLI.CliCallback(), True, {'test': ['option1']})
+                with self.assertLogs('bleachbit.Worker', level='ERROR') as cm:
+                    list(worker.execute(cmd, 'test.option1'))
+                output = '\n'.join(cm.output)
+                self.assertIn(f'Access denied: {path}', output)
+                self.assertNotIn('Traceback', output)
+                self.assertEqual(worker.total_errors, 1)
+
     def test_DoesNotExist(self):
         """Test Worker using Action.DoesNotExistAction"""
         with self.assertLogs(level='ERROR') as log_context:
