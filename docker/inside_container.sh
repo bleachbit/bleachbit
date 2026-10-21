@@ -27,6 +27,9 @@ prepare_source() {
     rm -rf "$TMP_SRC"
     cp -a /work/. "$TMP_SRC"
     cd "$TMP_SRC"
+    if command -v git >/dev/null 2>&1; then
+        git config --global --add safe.directory "$TMP_SRC" || true
+    fi
 }
 
 run_optional_tests() {

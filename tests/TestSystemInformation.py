@@ -59,6 +59,14 @@ class SystemInformationTestCase(common.BleachbitTestCase):
             ret = get_system_information()
         self.assertIn('platform.mac_ver() = 99.0\n', ret)
 
+    def test_get_system_information_revision(self):
+        """Test that Git revision appears in get_system_information when Revision module exists."""
+        fake_revision_mod = mock.MagicMock()
+        fake_revision_mod.revision = 'abcd1234'
+        with mock.patch.dict('sys.modules', {'bleachbit.Revision': fake_revision_mod}):
+            ret = get_system_information()
+        self.assertIn('Git revision = abcd1234\n', ret)
+
     @common.skipUnlessWindows
     def test_get_system_information_invalid_unicode_userprofile(self):
         invalid_userprofile = 'C:\\Users\\invalid\ud803'
