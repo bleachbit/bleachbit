@@ -15,7 +15,8 @@
 #   5. Bootstraps bash, then runs scripts/install-deps.sh --dev inside the VM
 #      to install FreeBSD package dependencies (single source of truth shared
 #      with Linux/macOS).
-#   6. Runs `make tests` (or $TEST_TARGET) and relays its exit code.
+#   6. Builds translations (`gmake -C po local`), then runs `make tests`
+#      (or $TEST_TARGET) and relays its exit code.
 #   7. Tears down the VM and removes temp files, unless the VM is being
 #      persisted for reuse (KEEP_VM=1 or SKIP_INSTALL=1), in which case the
 #      snapshot, seed ISO, SSH key, and VM metadata are kept in $CACHE_DIR/vm.
@@ -442,11 +443,16 @@ fi
 # Use a directory under the freebsd user's home (writable without sudo).
 REMOTE_DIR="bleachbit"
 log "Copying BleachBit source tree to VM (~/$REMOTE_DIR)"
-# Clear the old tree first so files deleted on the host don't linger
+# Clear the old tree first so files deleted on the host don't linger.
+# Exclude ./locale: it is a generated, gitignored build product of
+# `make -C po local`, and copying a stale or partial one from the host
+# would skew the translation tests in the VM (they are rebuilt in the VM
+# before the test run below).
 # shellcheck disable=SC2029  # $REMOTE_DIR is meant to expand here, not in the VM
 tar -C "$REPO_ROOT" --exclude='.git' --exclude='__pycache__' \
     --exclude='*.pyc' --exclude='*.egg-info' --exclude='dist' \
     --exclude='build' --exclude='docker-artifacts' --exclude='.venv' \
+    --exclude='./locale' \
     -czf - . \
     | ssh "${ssh_opts[@]}" "${SSH_USER}@localhost" \
         "rm -rf ~/'$REMOTE_DIR' && mkdir -p ~/'$REMOTE_DIR' && tar -C ~/'$REMOTE_DIR' -xzf -"
@@ -509,6 +515,11 @@ TEST_SCRIPT=$(cat <<REMOTE
 set -eu
 cd ~/bleachbit
 export MAKE=gmake PYTHON=python3
+# Build local translations the same way CI does (make -C po local) so the
+# language tests exercise real .mo files. Without this they would skip --
+# or fail if the host had a partial locale/ tree.
+echo "[vm] building translations (gmake -C po local)"
+gmake -C po local
 echo "[vm] running: $RUN_CMD"
 if ! $RUN_CMD; then
     echo "[vm] test command FAILED" >&2
