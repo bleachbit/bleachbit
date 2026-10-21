@@ -65,6 +65,7 @@ from bleachbit.FileUtilities import (
     is_hard_link,
     is_normal_directory,
     listdir,
+    open_files_linux,
     open_files_lsof,
     open_files_psutil,
     open_files_freebsd,
@@ -2256,13 +2257,29 @@ State=AAAA/wA...
         openfiles.scan()
         self.assertFalse(openfiles.is_open(filename))
 
+    def test_open_files_linux_maps_unescape(self):
+        """open_files_linux() decodes octal escapes in /proc/*/maps"""
+        maps_data = (
+            b'7f0000-7f1000 r--s 00000000 08:01 123 /tmp/a\\040b\\012c\n'
+            b'7f1000-7f2000 rw-p 00000000 00:00 0 [heap]\n'
+        )
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.glob.iglob',
+                side_effect=[iter(['/proc/1/fd/3']), iter(['/proc/1/maps'])]), \
+                unittest.mock.patch(
+                    'bleachbit.FileUtilities.open', create=True,
+                    new=unittest.mock.mock_open(read_data=maps_data)):
+            self.assertEqual(list(open_files_linux()),
+                             ['/proc/1/fd/3', '/tmp/a b\nc'])
+
     @common.skipUnlessLinux
     def test_open_files_mapped(self):
         """OpenFiles counts a file that is mapped but no longer open"""
         if sys.version_info < (3, 13):
             self.skipTest('mmap needs trackfd=False to not keep a descriptor')
+        # The kernel escapes a newline in /proc/*/maps as \012
         filename = self.write_file(
-            'bleachbit-test-open-files-mapped', b'x' * 4096)
+            'bleachbit-test-open-files-mapped a\nb', b'x' * 4096)
         with open(filename, 'rb') as f:
             mapped = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ,
                                trackfd=False)

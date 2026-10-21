@@ -116,6 +116,12 @@ def close_delete_parent_lock():
         bleachbit.Windows._close_delete_parent_lock()
 
 
+def _unescape_octal(data):
+    """Decode \\ooo octal escapes in a bytes path from /proc"""
+    return os.fsdecode(re.sub(
+        rb'\\([0-3][0-7]{2})', lambda m: bytes([int(m.group(1), 8)]), data))
+
+
 def open_files_linux():
     """Return iterator of open and memory-mapped files on Linux"""
     yield from glob.iglob("/proc/*/fd/*")
@@ -129,7 +135,7 @@ def open_files_linux():
                     fields = line.split(maxsplit=5)
                     if len(fields) == 6 and fields[4] != b'0' and \
                             fields[5].startswith(b'/'):
-                        mapped.add(os.fsdecode(fields[5].rstrip(b'\n')))
+                        mapped.add(_unescape_octal(fields[5].rstrip(b'\n')))
         except OSError:
             # The process exited, or it belongs to another user
             continue
@@ -432,9 +438,7 @@ def _mount_points_below(dirname):
         if len(fields) < 5:
             continue
         # The kernel escapes space, tab, newline and backslash as \ooo
-        mountpoint = os.fsdecode(re.sub(
-            rb'\\([0-3][0-7]{2})', lambda m: bytes([int(m.group(1), 8)]),
-            fields[4]))
+        mountpoint = _unescape_octal(fields[4])
         if mountpoint.startswith(prefix):
             mounts.add(os.path.join(dirname, mountpoint[len(prefix):]))
     return mounts
