@@ -548,6 +548,22 @@ class GUITestCase(common.BleachbitTestCase):
         for obj in test_files_dirs:
             self.assertNotExists(obj)
 
+    @common.skipIfWindows
+    def test_shred_quit_linked_options_dir(self):
+        """Shred settings through a linked options dir, keeping the link"""
+        target = self.mkdir('shred-quit-target')
+        self.write_file(os.path.join(target, 'bleachbit.ini'))
+        link = os.path.join(self.tempdir, 'shred-quit-link')
+        os.symlink(target, link)
+
+        with mock.patch.object(bleachbit, 'options_dir', link), \
+                mock.patch('bleachbit.GuiApplication.GUI.shred_paths',
+                           return_value=False) as mock_shred_paths:
+            self.app.cb_shred_quit(None, None)
+
+        self.assertEqual(mock_shred_paths.call_args.args[1],
+                         [os.path.join(link, 'bleachbit.ini')])
+
     def test_shred_paths_cancel_cleans_temporary_backend(self):
         """Test that shred_paths with cancel cleans up the temporary backend"""
         test_file = self.write_file('shred-cancel')

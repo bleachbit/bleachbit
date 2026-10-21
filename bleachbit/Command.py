@@ -62,10 +62,11 @@ class Delete:
     """Delete a single file or directory.  Obey the user
     preference regarding shredding."""
 
-    def __init__(self, path, shred=False):
+    def __init__(self, path, shred=False, top=None):
         """Create a Delete instance to delete 'path'"""
         self.path = path
         self.shred = shred
+        self.top = top
 
     def __str__(self):
         return f'Command to {"shred" if self.shred else "delete"} {self.path}'
@@ -98,7 +99,8 @@ class Delete:
             'size': size}
         if really_delete:
             try:
-                deleted = FileUtilities.delete(self.path, self.shred)
+                deleted = FileUtilities.delete(
+                    self.path, self.shred, top=self.top)
             # pylint: disable-next=possibly-used-before-assignment
             except WindowsError as e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being

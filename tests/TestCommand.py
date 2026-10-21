@@ -22,6 +22,7 @@
 Test case for Command
 """
 
+import errno
 import os
 import sqlite3
 from unittest import mock
@@ -66,6 +67,26 @@ class CommandTestCase(common.BleachbitTestCase):
             self.assertIsNone(ret['size'])
             self.assertEqual(ret['path'], path)
             self.assertExists(path)
+
+    def test_delete_dir_left_renamed(self):
+        """Delete raises for a directory it could not rename back"""
+        dirname = self.mkdir('renamed_dir')
+        self.write_file(os.path.join(dirname, 'a_file'), b'content')
+        real_rename = os.rename
+
+        def rename(src, dst, **kwargs):
+            if os.path.basename(dst) == 'renamed_dir':
+                # A sharing violation must not mark the old name for reboot
+                raise OSError(errno.EACCES, 'In use', src, 32)
+            return real_rename(src, dst, **kwargs)
+
+        cmd = Delete(dirname, shred=True)
+        with mock.patch('bleachbit.FileUtilities.is_dir_empty',
+                        return_value=True), \
+                mock.patch('os.rename', side_effect=rename):
+            with self.assertRaises(OSError) as cm:
+                next(cmd.execute(really_delete=True))
+        self.assertExists(os.path.join(cm.exception.filename, 'a_file'))
 
     def test_Function(self):
         """Unit test for Function"""

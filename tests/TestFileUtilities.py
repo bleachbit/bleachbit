@@ -16,6 +16,7 @@ import errno
 import itertools
 import json
 import locale
+import mmap
 import os
 import sqlite3
 import stat
@@ -34,9 +35,11 @@ from tests.common import pytest
 
 # local import
 from bleachbit.FileUtilities import (
+    _mount_points_below,
     _remove_windows_readonly,
     _truncate_locked_file,
     bytes_to_human,
+    children_below,
     children_in_directory,
     clean_ini,
     clean_json,
@@ -593,6 +596,182 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertEqual(entries_files_only, [real_file])
         self.assertEqual(len(entries_files_only), 1)
 
+    @common.skipIfWindows
+    def test_children_below_path_max(self):
+        """children_below() skips paths as long as PC_PATH_MAX"""
+        top = self.mkdir('children-below-path-max')
+        sub = self.mkdir(os.path.join(top, 'd'))
+        kept = [self.write_file(os.path.join(top, 'f')),
+                self.write_file(os.path.join(sub, 'f'))]
+        long_dir = self.mkdir(os.path.join(top, 'long-dir'))
+        skipped = [self.write_file(os.path.join(sub, 'ff')),
+                   self.write_file(os.path.join(long_dir, 'f'))]
+
+        path_max = len(os.fsencode(os.path.join(sub, 'ff')))
+        with unittest.mock.patch('os.pathconf', return_value=path_max):
+            self.assertCountEqual(dict(children_below(top)), kept)
+        for fallback in ({'return_value': -1}, {'side_effect': OSError}):
+            with unittest.mock.patch('os.pathconf', **fallback):
+                self.assertCountEqual(dict(children_below(top)),
+                                      kept + skipped)
+
+    @common.skipIfWindows
+    def test_children_below(self):
+        """children_below() lists non-directories and never enters a link"""
+        top = self.mkdir('children-below')
+        real_file = self.write_file(os.path.join(top, 'file'), b'abc')
+        nested = self.mkdir(os.path.join(top, 'sub', 'nested'))
+        nested_file = self.write_file(os.path.join(nested, 'nested-file'))
+        outside = self.mkdir('children-below-outside')
+        self.write_file(os.path.join(outside, 'outside-file'))
+        dir_link = os.path.join(top, 'dir-link')
+        os.symlink(outside, dir_link)
+
+        found = dict(children_below(top))
+        self.assertCountEqual(found, [real_file, nested_file, dir_link])
+        self.assertTrue(stat.S_ISREG(found[real_file].st_mode))
+        self.assertEqual(found[real_file].st_size, 3)
+        self.assertTrue(stat.S_ISLNK(found[dir_link].st_mode))
+
+    @common.skipIfWindows
+    def test_children_below_deep(self):
+        """children_below() holds no descriptor per directory level"""
+        top = self.mkdir('children-below-deep')
+        deep = self.mkdir(os.path.join(top, *['d'] * 20))
+        path = self.write_file(os.path.join(deep, 'f'))
+        real_open, real_close = os.open, os.close
+        open_fds = set()
+        peak = 0
+
+        def counting_open(*args, **kwargs):
+            nonlocal peak
+            fd = real_open(*args, **kwargs)
+            open_fds.add(fd)
+            peak = max(peak, len(open_fds))
+            return fd
+
+        def counting_close(fd):
+            open_fds.discard(fd)
+            real_close(fd)
+
+        with unittest.mock.patch('os.open', side_effect=counting_open), \
+                unittest.mock.patch('os.close', side_effect=counting_close):
+            self.assertEqual(list(dict(children_below(top))), [path])
+        self.assertEqual(open_fds, set())
+        self.assertLessEqual(peak, 2)
+
+    @common.skipIfWindows
+    def test_mount_points_below(self):
+        """_mount_points_below() reads mounts below dirname from mountinfo"""
+        top = self.mkdir('mount-points-below')
+        real = os.path.realpath(top)
+        mountinfo = ('22 1 8:1 / / rw - ext4 /dev/sda1 rw\n'
+                     f'30 22 0:40 / {real} rw - tmpfs tmpfs rw\n'
+                     f'31 30 8:1 /srv {real}/bind rw - ext4 /dev/sda1 rw\n'
+                     f'32 30 0:41 / {real}/a\\040b rw - tmpfs tmpfs rw\n'
+                     f'33 22 0:42 / {real}-sibling rw - tmpfs tmpfs rw\n')
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_LINUX', True):
+            with unittest.mock.patch(
+                    'bleachbit.FileUtilities.open', create=True,
+                    new=unittest.mock.mock_open(read_data=mountinfo.encode())):
+                self.assertEqual(_mount_points_below(top),
+                                 {os.path.join(top, 'bind'),
+                                  os.path.join(top, 'a b')})
+            with unittest.mock.patch('bleachbit.FileUtilities.open',
+                                     create=True, side_effect=OSError):
+                self.assertEqual(_mount_points_below(top), set())
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_LINUX', False):
+            self.assertEqual(_mount_points_below(top), set())
+
+    @common.skipIfWindows
+    def test_children_same_device_mount_table(self):
+        """same_device also skips a bind mount, which keeps st_dev"""
+        top = self.mkdir('children-mount-table')
+        top_file = self.write_file(os.path.join(top, 'file'))
+        bind = self.mkdir(os.path.join(top, 'bind'))
+        bind_file = self.write_file(os.path.join(bind, 'file'))
+        # A file can be bind-mounted onto another file
+        file_bind = self.write_file(os.path.join(top, 'file-bind'))
+
+        with unittest.mock.patch('bleachbit.FileUtilities._mount_points_below',
+                                 return_value={bind, file_bind}):
+            self.assertEqual(list(dict(children_below(top, same_device=True))),
+                             [top_file])
+            self.assertEqual(list(dict(children_below(
+                top, list_directories=True, same_device=True))), [top_file])
+            self.assertEqual(
+                list(children_in_directory(top, True, same_device=True)),
+                [top_file])
+            self.assertCountEqual(children_in_directory(top, True),
+                                  [top_file, bind_file, bind, file_bind])
+
+    @common.skipIfWindows
+    def test_children_in_directory_same_device(self):
+        """children_in_directory(same_device=True) skips other filesystems"""
+        top = self.mkdir('children-in-directory-device')
+        top_file = self.write_file(os.path.join(top, 'file'))
+        sub = self.mkdir(os.path.join(top, 'mounted'))
+        sub_file = self.write_file(os.path.join(sub, 'file'))
+
+        self.assertCountEqual(
+            children_in_directory(top, True, same_device=True),
+            [top_file, sub, sub_file])
+        other_dev = unittest.mock.Mock(st_dev=os.stat(top).st_dev + 1)
+        with unittest.mock.patch('os.stat', return_value=other_dev):
+            self.assertEqual(
+                list(children_in_directory(top, True, same_device=True)),
+                [top_file])
+
+    @common.skipIfWindows
+    def test_children_below_same_device(self):
+        """children_below(same_device=True) stays off other filesystems"""
+        top = self.mkdir('children-below-device')
+        top_file = self.write_file(os.path.join(top, 'file'))
+        sub = self.mkdir(os.path.join(top, 'mounted'))
+        sub_file = self.write_file(os.path.join(sub, 'file'))
+
+        self.assertCountEqual(dict(children_below(top, same_device=True)),
+                              [top_file, sub_file])
+        # Mounting needs root, so top reports another device than its subdirs
+        other_dev = unittest.mock.Mock(st_dev=os.stat(top).st_dev + 1)
+        with unittest.mock.patch('os.fstat', return_value=other_dev):
+            self.assertEqual(list(dict(children_below(top, same_device=True))),
+                             [top_file])
+            self.assertCountEqual(dict(children_below(top)),
+                                  [top_file, sub_file])
+
+    @common.skipIfWindows
+    def test_children_below_search_only(self):
+        """children_below() and delete() need only search permission above"""
+        if not hasattr(os, 'O_PATH'):
+            self.skipTest('O_PATH is not available')
+        if os.geteuid() == 0:
+            self.skipTest('root can read any directory')
+        top = self.mkdir('children-below-search-only')
+        middle = self.mkdir(os.path.join(top, 'middle'))
+        sub = self.mkdir(os.path.join(middle, 'dir', 'sub'))
+        path = self.write_file(os.path.join(sub, 'file'))
+        os.chmod(top, 0o100)
+        os.chmod(middle, 0o100)
+        try:
+            found = [p for p, _st in children_below(
+                os.path.dirname(sub), list_directories=True, top=top)]
+            self.assertEqual(found, [path, sub])
+            for p in found:
+                self.assertTrue(delete(p, shred=False, top=top))
+        finally:
+            os.chmod(middle, 0o700)
+            os.chmod(top, 0o700)
+        self.assertNotExists(sub)
+
+    @common.skipIfWindows
+    def test_children_below_log_root(self):
+        """children_below() logs a directory it cannot open"""
+        missing = os.path.join(self.tempdir, 'children-below-missing')
+        with self.assertLogs('bleachbit.FileUtilities', level='DEBUG') as cm:
+            self.assertEqual(list(children_below(missing)), [])
+        self.assertIn(missing, cm.output[0])
+
     @common.skipUnlessWindows
     def test_children_in_directory_windows_links(self):
         """Windows: ensure symlinked dirs and junctions are not followed"""
@@ -717,8 +896,8 @@ State=AAAA/wA...
         With shred disabled, the original file is never deleted, so a
         (simulated) symlink at its path must block the write and leave
         the original content in place. With shred enabled, the original
-        is deleted first as usual, and the guard must then block the
-        symlinked path from being recreated.
+        is deleted first as usual, and a symlink planted after that must
+        still block the path from being recreated.
         """
         content = '[Section]\nkey=value\n'
 
@@ -736,7 +915,7 @@ State=AAAA/wA...
         filename = self.write_file('clean_ini_target_shred', text=content)
         with unittest.mock.patch(
                 'bleachbit.FileUtilities.os.path.islink',
-                side_effect=lambda p: p == filename):
+                side_effect=lambda p: p == filename and not os.path.lexists(p)):
             with self.assertRaises(OSError):
                 clean_ini(filename, 'Section', None)
         self.assertNotExists(filename)
@@ -763,10 +942,31 @@ State=AAAA/wA...
         filename = self.write_file('clean_json_target_shred', text=content)
         with unittest.mock.patch(
                 'bleachbit.FileUtilities.os.path.islink',
-                side_effect=lambda p: p == filename):
+                side_effect=lambda p: p == filename and not os.path.lexists(p)):
             with self.assertRaises(OSError):
                 clean_json(filename, 'deleteme')
         self.assertNotExists(filename)
+
+    @common.skipIfWindows
+    def test_clean_ini_json_symlink_with_shred(self):
+        """A symlinked config is refused with shred as it is without"""
+        cases = (('ini', '[Section]\nkey=value\n',
+                  lambda path: clean_ini(path, 'Section', None)),
+                 ('json', '{"deleteme": 1, "keep": 2}',
+                  lambda path: clean_json(path, 'deleteme')))
+        for shred in (False, True):
+            options.set('shred', shred)
+            for ext, content, clean in cases:
+                with self.subTest(ext=ext, shred=shred):
+                    target = self.write_file(
+                        f'symlink-target-{shred}.{ext}', text=content)
+                    link = os.path.join(self.tempdir, f'symlink-{shred}.{ext}')
+                    os.symlink(target, link)
+                    with self.assertRaises(OSError):
+                        clean(link)
+                    self.assertTrue(os.path.islink(link))
+                    with open(target, encoding='utf-8') as f:
+                        self.assertEqual(f.read(), content)
 
     @pytest.mark.no_xdist
     def test_delete(self):
@@ -790,6 +990,45 @@ State=AAAA/wA...
         with unittest.mock.patch('os.remove', side_effect=e):
             with self.assertRaises(PermissionError):
                 delete(path, shred=False)
+        self.assertExists(path)
+
+    @common.skipIfWindows
+    def test_delete_top_refuses_link(self):
+        """delete() with top does not go through a symlinked directory"""
+        top = self.mkdir('delete-top')
+        outside = self.mkdir('delete-top-outside')
+        secret = self.write_file(os.path.join(outside, 'secret'), b'secret')
+        # Stands in for a directory swapped for a link after it was listed
+        os.symlink(outside, os.path.join(top, 'link'))
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                with self.assertRaises(OSError):
+                    delete(os.path.join(top, 'link', 'secret'),
+                           shred=shred, top=top)
+                with open(secret, 'rb') as f:
+                    self.assertEqual(f.read(), b'secret')
+
+                sub = self.mkdir(os.path.join(top, 'sub'))
+                inside = self.write_file(os.path.join(sub, 'inside'), b'abc')
+                self.assertTrue(delete(inside, shred=shred, top=top))
+                self.assertNotExists(inside)
+                self.assertTrue(delete(sub, shred=shred, top=top))
+                self.assertNotExists(sub)
+
+    @common.skipIfWindows
+    def test_delete_top_error_filename(self):
+        """An error from delete() with top names the whole path"""
+        top = self.mkdir('delete-top-error')
+        path = self.write_file(os.path.join(top, 'file'))
+
+        def denied(name, **_kwargs):
+            raise PermissionError(errno.EACCES, 'Permission denied', name)
+
+        with unittest.mock.patch('os.remove', side_effect=denied):
+            with self.assertRaises(PermissionError) as cm:
+                delete(path, shred=False, top=top)
+        self.assertEqual(cm.exception.errno, errno.EACCES)
+        self.assertEqual(cm.exception.filename, path)
         self.assertExists(path)
 
     def test_delete_windows_lstat_denied(self):
@@ -819,6 +1058,46 @@ State=AAAA/wA...
                 else:
                     mock_delete_file.assert_called_once()
                     mock_delete_path.assert_not_called()
+
+    def test_delete_windows_non_link_reparse_point(self):
+        """delete() treats only links and unopenable reparse points as links"""
+        cloud_tag = 0x9000601A
+        junction_tag = 0xA0000003
+        symlink_tag = 0xA000000C
+        af_unix_tag = 0x80000023
+        app_exec_link_tag = 0x8000001B
+        # (reparse tag, isdir, _delete_path func, or None for delete_file)
+        cases = ((0, True, os.rmdir),
+                 (cloud_tag, True, os.rmdir),
+                 (0, False, None),
+                 (cloud_tag, False, None),
+                 (junction_tag, True, os.remove),
+                 (symlink_tag, False, os.remove),
+                 (af_unix_tag, False, os.remove),
+                 (app_exec_link_tag, False, os.remove))
+        for tag, isdir, expected in cases:
+            with self.subTest(tag=hex(tag), isdir=isdir):
+                st = unittest.mock.Mock(
+                    st_reparse_tag=tag,
+                    st_file_attributes=stat.FILE_ATTRIBUTE_REPARSE_POINT)
+                mock_delete_file = unittest.mock.Mock()
+                mock_delete_path = unittest.mock.Mock()
+                with unittest.mock.patch.multiple(
+                        'bleachbit.FileUtilities', IS_POSIX=False,
+                        IS_WINDOWS=True, delete_file=mock_delete_file,
+                        _delete_path=mock_delete_path), \
+                        unittest.mock.patch('os.lstat', return_value=st), \
+                        unittest.mock.patch('os.path.lexists', return_value=True), \
+                        unittest.mock.patch('os.path.isdir', return_value=isdir), \
+                        unittest.mock.patch('os.path.isfile', return_value=not isdir):
+                    self.assertTrue(delete('C:\\placeholder', shred=not isdir))
+                if expected is None:
+                    mock_delete_file.assert_called_once()
+                    self.assertTrue(mock_delete_file.call_args.args[1])
+                    mock_delete_path.assert_not_called()
+                else:
+                    mock_delete_file.assert_not_called()
+                    self.assertIs(mock_delete_path.call_args.args[1], expected)
 
     def delete_helper(self, delete_func, shred):
         """Called by test_delete() with shred = False and = True"""
@@ -1079,6 +1358,40 @@ State=AAAA/wA...
             self.assertExists(dirname)
         os.remove(fn)
         self.assertTrue(is_dir_empty(dirname))
+
+    def test_delete_shred_dir_filled_after_check(self):
+        """A shredded directory that gains an entry keeps its name"""
+        dirname = self.mkdir('filled_dir')
+        fn = self.write_file(os.path.join(dirname, 'a_file'), b'content')
+        # As if the entry was created after the emptiness check
+        with unittest.mock.patch('bleachbit.FileUtilities.is_dir_empty',
+                                 return_value=True):
+            self.assertFalse(delete(dirname, shred=True))
+        self.assertExists(fn)
+
+    def test_delete_shred_dir_left_renamed(self):
+        """The error names where a shredded directory is left renamed"""
+        real_rename = os.rename
+
+        def rename(src, dst, **kwargs):
+            if os.path.basename(dst) == 'renamed_dir':
+                raise PermissionError(errno.EACCES, 'Permission denied', src)
+            return real_rename(src, dst, **kwargs)
+
+        for top in (None, self.tempdir):
+            with self.subTest(top=top):
+                dirname = self.mkdir('renamed_dir')
+                self.write_file(os.path.join(dirname, 'a_file'), b'content')
+                with unittest.mock.patch(
+                        'bleachbit.FileUtilities.is_dir_empty',
+                        return_value=True), \
+                        unittest.mock.patch('os.rename', side_effect=rename):
+                    with self.assertRaises(OSError) as cm:
+                        delete(dirname, shred=True, top=top)
+                left = cm.exception.filename
+                self.assertNotEqual(os.path.basename(left), 'renamed_dir')
+                self.assertExists(os.path.join(left, 'a_file'))
+                self.assertNotExists(dirname)
 
     def test_delete_read_only_file(self):
         """Unit test for delete() with read-only file"""
@@ -1886,13 +2199,28 @@ State=AAAA/wA...
         fake_file = unittest.mock.Mock(path='/tmp/opened')
         proc = unittest.mock.Mock()
         proc.open_files.return_value = [fake_file]
+        proc.memory_maps.return_value = []
         denied = unittest.mock.Mock()
         denied.open_files.side_effect = OSError('denied')
         empty = unittest.mock.Mock(path='')
         proc_empty = unittest.mock.Mock()
         proc_empty.open_files.return_value = [empty]
+        proc_empty.memory_maps.return_value = []
         with unittest.mock.patch('psutil.process_iter', return_value=[proc, denied, proc_empty]):
             self.assertEqual(list(open_files_psutil()), ['/tmp/opened'])
+
+    def test_open_files_psutil_mapped(self):
+        """open_files_psutil() yields a file that is mapped but not open"""
+        proc = unittest.mock.Mock()
+        proc.open_files.return_value = []
+        proc.memory_maps.return_value = [
+            unittest.mock.Mock(path='/tmp/mapped'),
+            unittest.mock.Mock(path='[anon]')]
+        no_maps = unittest.mock.Mock()
+        no_maps.open_files.return_value = []
+        no_maps.memory_maps.side_effect = psutil.AccessDenied()
+        with unittest.mock.patch('psutil.process_iter', return_value=[proc, no_maps]):
+            self.assertEqual(list(open_files_psutil()), ['/tmp/mapped'])
 
     def test_open_files_freebsd_without_psutil(self):
         """open_files_freebsd() falls back to lsof when psutil is missing"""
@@ -1927,6 +2255,22 @@ State=AAAA/wA...
         os.unlink(filename)
         openfiles.scan()
         self.assertFalse(openfiles.is_open(filename))
+
+    @common.skipUnlessLinux
+    def test_open_files_mapped(self):
+        """OpenFiles counts a file that is mapped but no longer open"""
+        if sys.version_info < (3, 13):
+            self.skipTest('mmap needs trackfd=False to not keep a descriptor')
+        filename = self.write_file(
+            'bleachbit-test-open-files-mapped', b'x' * 4096)
+        with open(filename, 'rb') as f:
+            mapped = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ,
+                               trackfd=False)
+        try:
+            self.assertTrue(OpenFiles().is_open(filename))
+        finally:
+            mapped.close()
+        self.assertFalse(OpenFiles().is_open(filename))
 
     def test_same_partition(self):
         """Unit test for same_partition()"""

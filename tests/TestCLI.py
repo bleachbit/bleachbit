@@ -278,7 +278,7 @@ class CLITestCase(common.BleachbitTestCase):
 
                 # the defaults bind this iteration's values into the closure
                 # pylint: disable-next=unused-argument, dangerous-default-value
-                def dummy_delete(path, shred=False, crash=crash,
+                def dummy_delete(path, shred=False, top=None, crash=crash,
                                  deleted_paths=deleted_paths, filename=filename):
                     try:
                         self.assertLExists(path)

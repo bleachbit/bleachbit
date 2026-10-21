@@ -6,10 +6,11 @@
 
 import glob
 import os
+import stat
 import sys
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, GuiBasic, appicon_path, portable_mode, IS_WINDOWS
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, portable_mode, IS_WINDOWS
 from bleachbit.Cleaner import backends
 from bleachbit.GtkShim import (
     GLib, Gdk, Gio, Gtk,
@@ -37,6 +38,16 @@ if IS_WINDOWS:
     )
 
 bleachbit.log_startup_time('GuiApplication imported')
+
+
+def _settings_paths(path):
+    """Return path, or the entries in it if it links to a directory"""
+    # Shred the settings but keep the link for init_configuration()
+    # pylint: disable-next=protected-access
+    is_link = stat.S_ISLNK(FileUtilities._file_type(path) or 0)
+    if is_link and os.path.isdir(path):
+        return [os.path.join(path, name) for name in os.listdir(path)]
+    return [path]
 
 
 class Bleachbit(Gtk.Application):
@@ -193,11 +204,11 @@ class Bleachbit(Gtk.Application):
             # executables
             paths.append(bleachbit.options_file)
             if os.path.isdir(bleachbit.personal_cleaners_dir):
-                paths.append(bleachbit.personal_cleaners_dir)
+                paths.extend(_settings_paths(bleachbit.personal_cleaners_dir))
             for f in glob.glob(os.path.join(bleachbit.options_dir, "*.bz2")):
                 paths.append(f)
         else:
-            paths.append(bleachbit.options_dir)
+            paths.extend(_settings_paths(bleachbit.options_dir))
 
         # prompt the user to confirm
         if not GUI.shred_paths(self._window, paths, shred_settings=True):

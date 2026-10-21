@@ -14,6 +14,7 @@ Test case for module Windows
 
 # standard imports
 import ctypes
+import errno
 import itertools
 import os
 import platform
@@ -36,6 +37,7 @@ from bleachbit import FileUtilities, General
 from bleachbit.Command import Delete, Function
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import (
+    cleanup_nonce,
     clear_clipboard,
     delete_locked_file,
     delete_registry_key,
@@ -136,6 +138,29 @@ class WindowsSystemPathsTestCase(common.BleachbitTestCase):
             [r'C:\Windows\Sysnative\LogFiles\*.log',
              r'C:\Windows\SysWOW64\LogFiles\*.log'],
             paths)
+
+
+class WindowsNonceTestCase(common.BleachbitTestCase):
+    """Test cleanup_nonce()"""
+
+    def test_cleanup_nonce_keeps_recent(self):
+        """cleanup_nonce() keeps a nonce file the session bus may still use"""
+        self.write_file('gdbus-nonce-file-LIVE01', b'nonce')
+        stale = self.write_file('gdbus-nonce-file-OLD001', b'nonce')
+        old = time.time() - 8 * 24 * 60 * 60
+        os.utime(stale, (old, old))
+        tempdir = self.tempdir
+        real_expandvars = os.path.expandvars
+
+        def expandvars(path):
+            return real_expandvars(path.replace('%TEMP%\\', tempdir + os.sep))
+
+        mock_delete = mock.Mock()
+        with common.set_temporary_env('BLEACHBIT_TEST_OPTIONS_DIR', None), \
+                mock.patch('os.path.expandvars', expandvars), \
+                mock.patch.object(FileUtilities, 'delete', mock_delete):
+            cleanup_nonce()
+        mock_delete.assert_called_once_with(stale)
 
 
 if bleachbit.IS_WINDOWS:
@@ -529,6 +554,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertFalse(os.path.exists(link_pathname))
         self.assertTrue(FileUtilities.delete(link_pathname, shred=shred))
         self.assertNotLExists(link_pathname)
+        FileUtilities.close_delete_parent_lock()
         shutil.rmtree(container_dir, True)
 
     @pytest.mark.xdist_group('recycle-bin')
@@ -578,6 +604,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertExists(pathname)
         logger.info('reboot Windows and check the three files are deleted')
 
+    # FileAttributeTagInfo of a plain directory
+    _DIRECTORY_TAG_INFO = {'FileAttributes': 0x10, 'ReparseTag': 0}
+
     def test_delete_parent_lock_needed(self):
         old_admin = Windows._delete_parent_lock_admin
         try:
@@ -604,13 +633,16 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with mock.patch('bleachbit.Windows._delete_parent_lock_needed', return_value=True), \
                 mock.patch('bleachbit.Windows._delete_parent_directory', return_value=r'\\?\C:\Windows\Temp'), \
                 mock.patch('bleachbit.Windows.win32file.CreateFile', return_value=handle) as create_file, \
-                mock.patch('bleachbit.Windows.win32file.GetFileAttributesW', return_value=0), \
+                mock.patch('bleachbit.Windows.win32file.GetFileInformationByHandleEx',
+                           return_value=self._DIRECTORY_TAG_INFO) as get_info, \
                 mock.patch('bleachbit.Windows.win32file.CloseHandle') as close_handle:
             self.assertEqual(Windows.with_parent_lock(
                 r'C:\Windows\Temp\one.tmp', delete_func, r'C:\Windows\Temp\one.tmp'), mock.sentinel.deleted)
             self.assertEqual(Windows.with_parent_lock(
                 r'C:\Windows\Temp\two.tmp', delete_func, r'C:\Windows\Temp\two.tmp'), mock.sentinel.deleted)
             self.assertEqual(create_file.call_count, 1)
+            # The reused handle is checked again
+            self.assertEqual(get_info.call_count, 2)
             self.assertEqual(delete_func.call_count, 2)
             Windows._close_delete_parent_lock()
             close_handle.assert_called_once_with(handle)
@@ -623,7 +655,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with mock.patch('bleachbit.Windows._delete_parent_lock_needed', return_value=True), \
                 mock.patch('bleachbit.Windows._delete_parent_directory', return_value=r'\\?\C:\Windows\Temp'), \
                 mock.patch('bleachbit.Windows.win32file.CreateFile', return_value=handle), \
-                mock.patch('bleachbit.Windows.win32file.GetFileAttributesW', return_value=0), \
+                mock.patch('bleachbit.Windows.win32file.GetFileInformationByHandleEx',
+                           return_value=self._DIRECTORY_TAG_INFO), \
                 mock.patch('bleachbit.Windows.win32file.CloseHandle') as close_handle:
             with self.assertRaises(RuntimeError):
                 Windows.with_parent_lock(
@@ -631,17 +664,152 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             close_handle.assert_called_once_with(handle)
             self.assertIsNone(Windows._delete_parent_lock_handle)
 
+    def test_close_delete_parent_lock_forgets_bad_handle(self):
+        """A handle that fails to close does not make later closes fail"""
+        handle = mock.sentinel.handle
+        Windows._delete_parent_lock_handle = handle
+        Windows._delete_parent_lock_key = r'\\?\c:\windows\temp'
+        # pylint: disable-next=possibly-used-before-assignment
+        error = pywintypes.error(6, 'CloseHandle', 'The handle is invalid.')
+        with mock.patch('bleachbit.Windows.win32file.CloseHandle',
+                        side_effect=error) as close_handle:
+            with self.assertRaises(pywintypes.error):
+                Windows._close_delete_parent_lock()
+            self.assertIsNone(Windows._delete_parent_lock_handle)
+            self.assertIsNone(Windows._delete_parent_lock_key)
+            Windows._close_delete_parent_lock()
+        close_handle.assert_called_once_with(handle)
+
     def test_lock_delete_parent_rejects_reparse_point(self):
+        """The parent lock uses its handle to refuse a symlink or junction"""
+        Windows._delete_parent_lock_handle = None
+        Windows._delete_parent_lock_key = None
+        handle = mock.sentinel.handle
+        for tag in (0xA0000003, 0xA000000C):  # junction, symlink
+            info = {'FileAttributes': 0x10 | Windows.FILE_ATTRIBUTE_REPARSE_POINT,
+                    'ReparseTag': tag}
+            with self.subTest(tag=hex(tag)), \
+                    mock.patch('bleachbit.Windows._delete_parent_directory', return_value=r'\\?\C:\Windows\Temp'), \
+                    mock.patch('bleachbit.Windows.win32file.CreateFile', return_value=handle), \
+                    mock.patch('bleachbit.Windows.win32file.GetFileInformationByHandleEx',
+                               return_value=info) as get_info, \
+                    mock.patch('bleachbit.Windows.win32file.CloseHandle') as close_handle:
+                with self.assertRaises(OSError):
+                    Windows._lock_delete_parent(r'C:\Windows\Temp\one.tmp')
+                self.assertIs(get_info.call_args.args[0], handle)
+                close_handle.assert_called_once_with(handle)
+                self.assertIsNone(Windows._delete_parent_lock_handle)
+
+    def test_lock_delete_parent_allows_cloud_placeholder(self):
+        """A reparse point that is not a link, like OneDrive's, is locked"""
+        Windows._delete_parent_lock_handle = None
+        Windows._delete_parent_lock_key = None
+        handle = mock.sentinel.handle
+        info = {'FileAttributes': 0x10 | Windows.FILE_ATTRIBUTE_REPARSE_POINT,
+                'ReparseTag': 0x9000601A}
+        with mock.patch('bleachbit.Windows._delete_parent_directory', return_value=r'\\?\D:\OneDrive\Docs'), \
+                mock.patch('bleachbit.Windows.win32file.CreateFile', return_value=handle), \
+                mock.patch('bleachbit.Windows.win32file.GetFileInformationByHandleEx',
+                           return_value=info), \
+                mock.patch('bleachbit.Windows.win32file.CloseHandle') as close_handle:
+            Windows._lock_delete_parent(r'D:\OneDrive\Docs\one.txt')
+            self.assertIs(Windows._delete_parent_lock_handle, handle)
+            Windows._close_delete_parent_lock()
+            close_handle.assert_called_once_with(handle)
+
+    def test_lock_delete_parent_tag_unsupported(self):
+        """Without a tag, any reparse point is refused, other errors raise"""
+        handle = mock.sentinel.handle
+        reparse_dir = 0x10 | Windows.FILE_ATTRIBUTE_REPARSE_POINT
+        for winerror, attrs, expected in ((50, 0x10, 'locked'),
+                                          (50, reparse_dir, 'refused'),
+                                          (5, 0x10, 'error')):
+            Windows._delete_parent_lock_handle = None
+            Windows._delete_parent_lock_key = None
+            # pylint: disable-next=possibly-used-before-assignment
+            error = pywintypes.error(
+                winerror, 'GetFileInformationByHandleEx', 'error')
+            # GetFileInformationByHandle() returns the attributes first
+            basic_info = (attrs,) + (0,) * 9
+            with self.subTest(winerror=winerror, attrs=hex(attrs)), \
+                    mock.patch('bleachbit.Windows._delete_parent_directory', return_value=r'\\?\C:\Windows\Temp'), \
+                    mock.patch('bleachbit.Windows.win32file.CreateFile', return_value=handle), \
+                    mock.patch('bleachbit.Windows.win32file.GetFileInformationByHandleEx',
+                               side_effect=error), \
+                    mock.patch('bleachbit.Windows.win32file.GetFileInformationByHandle',
+                               return_value=basic_info) as get_basic_info, \
+                    mock.patch('bleachbit.Windows.win32file.CloseHandle'):
+                if expected == 'locked':
+                    Windows._lock_delete_parent(r'C:\Windows\Temp\one.tmp')
+                    get_basic_info.assert_called_once_with(handle)
+                    self.assertIs(Windows._delete_parent_lock_handle, handle)
+                    Windows._close_delete_parent_lock()
+                elif expected == 'refused':
+                    with self.assertRaises(OSError) as cm:
+                        Windows._lock_delete_parent(r'C:\Windows\Temp\one.tmp')
+                    self.assertEqual(cm.exception.errno, errno.EACCES)
+                    self.assertIsNone(Windows._delete_parent_lock_handle)
+                else:
+                    with self.assertRaises(pywintypes.error):
+                        Windows._lock_delete_parent(r'C:\Windows\Temp\one.tmp')
+                    get_basic_info.assert_not_called()
+                    self.assertIsNone(Windows._delete_parent_lock_handle)
+
+    def test_lock_delete_parent_blocks_rename(self):
+        """The parent lock takes part in sharing and does not share delete"""
         Windows._delete_parent_lock_handle = None
         Windows._delete_parent_lock_key = None
         handle = mock.sentinel.handle
         with mock.patch('bleachbit.Windows._delete_parent_directory', return_value=r'\\?\C:\Windows\Temp'), \
+                mock.patch('bleachbit.Windows.win32file.CreateFile', return_value=handle) as create_file, \
+                mock.patch('bleachbit.Windows.win32file.GetFileInformationByHandleEx',
+                           return_value=self._DIRECTORY_TAG_INFO), \
+                mock.patch('bleachbit.Windows.win32file.CloseHandle'):
+            Windows._lock_delete_parent(r'C:\Windows\Temp\one.tmp')
+            Windows._close_delete_parent_lock()
+        access, share = create_file.call_args.args[1:3]
+        self.assertTrue(access & 0x1)  # FILE_LIST_DIRECTORY
+        self.assertEqual(share, Windows.win32con.FILE_SHARE_READ |
+                         Windows.win32con.FILE_SHARE_WRITE)
+
+    def test_lock_delete_parent_blocks_rename_real(self):
+        """The parent lock blocks renaming the parent but not entries in it"""
+        Windows._delete_parent_lock_handle = None
+        Windows._delete_parent_lock_key = None
+        dirname = self.mkdtemp(prefix='bleachbit-parent-lock')
+        filename = os.path.join(dirname, 'file')
+        common.touch_file(filename)
+        Windows._lock_delete_parent(filename)
+        try:
+            with self.assertRaises(PermissionError) as cm:
+                os.rename(dirname, dirname + '.renamed')
+            self.assertEqual(cm.exception.winerror, 32)
+            os.rename(filename, filename + '.renamed')
+            self.assertExists(filename + '.renamed')
+        finally:
+            Windows._close_delete_parent_lock()
+        os.rename(dirname, dirname + '.renamed')
+        self.assertExists(dirname + '.renamed')
+
+    def test_lock_delete_parent_rechecks_reused_handle(self):
+        """A reused parent lock is refused once the parent became a junction"""
+        Windows._delete_parent_lock_handle = None
+        Windows._delete_parent_lock_key = None
+        handle = mock.sentinel.handle
+        junction = {'FileAttributes': 0x10 | Windows.FILE_ATTRIBUTE_REPARSE_POINT,
+                    'ReparseTag': 0xA0000003}
+        delete_func = mock.Mock()
+        with mock.patch('bleachbit.Windows._delete_parent_lock_needed', return_value=True), \
+                mock.patch('bleachbit.Windows._delete_parent_directory', return_value=r'\\?\C:\Windows\Temp'), \
                 mock.patch('bleachbit.Windows.win32file.CreateFile', return_value=handle), \
-                mock.patch('bleachbit.Windows.win32file.GetFileAttributesW',
-                           return_value=Windows.FILE_ATTRIBUTE_REPARSE_POINT), \
+                mock.patch('bleachbit.Windows.win32file.GetFileInformationByHandleEx',
+                           side_effect=[self._DIRECTORY_TAG_INFO, junction]), \
                 mock.patch('bleachbit.Windows.win32file.CloseHandle') as close_handle:
+            Windows.with_parent_lock(r'C:\Windows\Temp\one.tmp', delete_func)
             with self.assertRaises(OSError):
-                Windows._lock_delete_parent(r'C:\Windows\Temp\one.tmp')
+                Windows.with_parent_lock(
+                    r'C:\Windows\Temp\two.tmp', delete_func)
+            delete_func.assert_called_once_with()
             close_handle.assert_called_once_with(handle)
             self.assertIsNone(Windows._delete_parent_lock_handle)
 

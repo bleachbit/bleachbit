@@ -26,6 +26,7 @@ from xml.sax.saxutils import quoteattr
 from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, FS_CASE_SENSITIVE, logger
 from bleachbit.Action import ActionProvider, ChromeOrphanedFrameworkVersions, Command, Delete, has_glob, expand_multi_var
 from bleachbit.CleanerML import CleanerML
+from bleachbit.FileUtilities import close_delete_parent_lock
 from tests import common
 from tests.TestFileUtilities import ini_helper
 from tests.TestFileUtilities import json_helper
@@ -534,6 +535,7 @@ class ActionTestCase(common.BleachbitTestCase):
             self.assertNotExists(subdir)
             if variant == 'all':
                 self.assertExists(dirname)
+                close_delete_parent_lock()
                 os.rmdir(dirname)
             elif variant == 'top':
                 self.assertNotExists(dirname)
