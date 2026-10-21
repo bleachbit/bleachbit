@@ -505,9 +505,13 @@ PrefersNonDefaultGPU=false""")
                 mock.patch.dict(os.environ, {'XDG_DATA_HOME': os.path.join(home, 'data')}), \
                 mock.patch('bleachbit.Unix.get_mount_points', return_value=mount_points), \
                 mock.patch('os.lstat', side_effect=fake_lstat):
-            paths = [cmd.path for cmd in get_trash_paths()]
+            found = {cmd.path: cmd.top for cmd in get_trash_paths()}
 
-        self.assertCountEqual(paths, [snap_file, sticky_file, good_file])
+        self.assertEqual(found, {
+            snap_file: os.path.join(home, 'snap'),
+            sticky_file: sticky,
+            good_file: good,
+        })
 
     @common.skipIfWindows
     def test_get_trash_paths_home_trash_links(self):
