@@ -953,10 +953,9 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True,
        Returns True if the path was deleted, False otherwise.
     """
     from bleachbit.Options import options
-    path = extended_path(path)
     do_shred = allow_shred and (shred or options.get('shred'))
     if top is None or not IS_POSIX:
-        return _delete(path, path, do_shred, ignore_missing)
+        return _delete(path, extended_path(path), do_shred, ignore_missing)
     parent, name = os.path.split(path.rstrip(os.sep))
     if not name:
         raise OSError(errno.EINVAL, os.strerror(errno.EINVAL), path)

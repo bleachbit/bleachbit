@@ -1403,6 +1403,7 @@ State=AAAA/wA...
                         delete(dirname, shred=True, top=top)
                 left = cm.exception.filename
                 self.assertEqual(cm.exception.filename2, dirname)
+                self.assertEqual(os.path.dirname(left), self.tempdir)
                 self.assertNotEqual(os.path.basename(left), 'renamed_dir')
                 self.assertExists(os.path.join(left, 'a_file'))
                 self.assertNotExists(dirname)
