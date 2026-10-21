@@ -324,7 +324,14 @@ Swapouts:                              20258188.
             with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header):
                 with mock.patch('bleachbit.Memory.General.run_external', return_value=(1, '', 'swapon failed')):
                     self.assertRaisesRegex(
-                        RuntimeError, 'swapon failed', enable_swap_linux, before)
+                        RuntimeError, '/dev/zram0: swapon failed',
+                        enable_swap_linux, before)
+                self.assertRaisesRegex(
+                    RuntimeError, 'Unexpected first line',
+                    enable_swap_linux, 'bad header\n')
+                self.assertRaisesRegex(
+                    RuntimeError, 'Unexpected line',
+                    enable_swap_linux, header + 'malformed line\n')
 
     @common.skipIfWindows
     def test_get_swap_size_linux_errors(self):

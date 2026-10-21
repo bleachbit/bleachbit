@@ -102,15 +102,25 @@ def disable_swap_linux():
 
 def _parse_swap_summary(proc_swaps):
     """Return (device, priority) for each swap area in 'swapon -s' output"""
+    if not proc_swaps:
+        return []
+    lines = proc_swaps.split('\n')
+    if not re.search(r'Filename\s+Type\s+Size', lines[0]):
+        raise RuntimeError(
+            "Unexpected first line in swap summary '%s'" % lines[0])
     swap_re = re.compile(r'^(.+?)\s+\w+\s+[0-9]+\s+[0-9]+\s+(-?[0-9]+)\s*$')
     swaps = []
-    for line in proc_swaps.split('\n')[1:]:
+    for line in lines[1:]:
+        if not line.strip():
+            continue
         ret = swap_re.search(line)
-        if ret:
-            # /proc/swaps writes a space in a name as \040
-            device = re.sub(r'\\([0-7]{3})',
-                            lambda m: chr(int(m.group(1), 8)), ret.group(1))
-            swaps.append((device, int(ret.group(2))))
+        if not ret:
+            raise RuntimeError(
+                "Unexpected line in swap summary '%s'" % line)
+        # /proc/swaps writes a space in a name as \040
+        device = re.sub(r'\\([0-7]{3})',
+                        lambda m: chr(int(m.group(1), 8)), ret.group(1))
+        swaps.append((device, int(ret.group(2))))
     return swaps
 
 
@@ -134,7 +144,8 @@ def enable_swap_linux(proc_swaps):
         args.append(device)
         (rc, _stdout, stderr) = General.run_external(args)
         if 0 != rc:
-            errors.append(stderr.replace("\n", ""))
+            err = stderr.replace("\n", "").strip()
+            errors.append(f"{device}: {err}" if err else device)
     if errors:
         raise RuntimeError(' '.join(errors))
 
