@@ -46,7 +46,6 @@ from bleachbit.FileUtilities import (
     delete_file,
     delete,
     detect_encoding,
-    ego_owner,
     exe_exists,
     execute_sqlite3,
     exists_in_path,
@@ -65,6 +64,7 @@ from bleachbit.FileUtilities import (
     is_hard_link,
     is_normal_directory,
     listdir,
+    open_files_linux,
     open_files_lsof,
     open_files_psutil,
     open_files_freebsd,
@@ -1012,7 +1012,7 @@ State=AAAA/wA...
                 inside = self.write_file(os.path.join(sub, 'inside'), b'abc')
                 self.assertTrue(delete(inside, shred=shred, top=top))
                 self.assertNotExists(inside)
-                self.assertTrue(delete(sub, shred=shred, top=top))
+                self.assertTrue(delete(sub + os.sep, shred=shred, top=top))
                 self.assertNotExists(sub)
 
     @common.skipIfWindows
@@ -1021,15 +1021,25 @@ State=AAAA/wA...
         top = self.mkdir('delete-top-error')
         path = self.write_file(os.path.join(top, 'file'))
 
-        def denied(name, **_kwargs):
-            raise PermissionError(errno.EACCES, 'Permission denied', name)
-
-        with unittest.mock.patch('os.remove', side_effect=denied):
-            with self.assertRaises(PermissionError) as cm:
-                delete(path, shred=False, top=top)
-        self.assertEqual(cm.exception.errno, errno.EACCES)
-        self.assertEqual(cm.exception.filename, path)
+        for err_filename in (os.path.basename(path), None, 3):
+            with self.subTest(err_filename=err_filename):
+                err = PermissionError(
+                    errno.EACCES, 'Permission denied', err_filename)
+                with unittest.mock.patch('os.remove', side_effect=err):
+                    with self.assertRaises(PermissionError) as cm:
+                        delete(path, shred=False, top=top)
+                self.assertEqual(cm.exception.errno, errno.EACCES)
+                self.assertEqual(cm.exception.filename, path)
         self.assertExists(path)
+
+        for bad_path in (os.path.join(self.tempdir, 'outside'), 'relative',
+                         os.sep):
+            with self.subTest(bad_path=bad_path):
+                with self.assertRaises(OSError) as cm:
+                    delete(bad_path, top=top)
+                self.assertEqual(cm.exception.errno, errno.EINVAL)
+                self.assertEqual(cm.exception.filename, bad_path)
+        self.assertEqual(list(children_below(self.tempdir, top=top)), [])
 
     def test_delete_shred_overwrite_fails(self):
         """delete() warns when shredding cannot overwrite the contents"""
@@ -1364,10 +1374,13 @@ State=AAAA/wA...
 
         # Make sure shredding does not leave a renamed directory like
         # in https://github.com/bleachbit/bleachbit/issues/783
-        for allow_shred in (False, True):
-            self.assertFalse(delete(dirname, allow_shred=allow_shred))
-            self.assertExists(fn)
-            self.assertExists(dirname)
+        for top in (None, self.tempdir):
+            for allow_shred in (False, True):
+                with self.subTest(top=top, allow_shred=allow_shred):
+                    self.assertFalse(delete(
+                        dirname, shred=True, allow_shred=allow_shred, top=top))
+                    self.assertExists(fn)
+                    self.assertExists(dirname)
         os.remove(fn)
         self.assertTrue(is_dir_empty(dirname))
 
@@ -1401,6 +1414,8 @@ State=AAAA/wA...
                     with self.assertRaises(OSError) as cm:
                         delete(dirname, shred=True, top=top)
                 left = cm.exception.filename
+                self.assertEqual(cm.exception.filename2, dirname)
+                self.assertEqual(os.path.dirname(left), self.tempdir)
                 self.assertNotEqual(os.path.basename(left), 'renamed_dir')
                 self.assertExists(os.path.join(left, 'a_file'))
                 self.assertNotExists(dirname)
@@ -1460,6 +1475,18 @@ State=AAAA/wA...
                 self.assertDirectoryCount(tmp_dir, 2)
                 self.assertTrue(is_hard_link(link))
                 self.assertTrue(is_hard_link(target))
+                if IS_POSIX:
+                    symlink = os.path.join(tmp_dir, f'symlink-{shred}')
+                    os.symlink(link, symlink)
+                    dir_fd = os.open(tmp_dir, os.O_RDONLY | os.O_DIRECTORY)
+                    try:
+                        self.assertTrue(
+                            is_hard_link(os.path.basename(link), dir_fd))
+                        self.assertFalse(
+                            is_hard_link(os.path.basename(symlink), dir_fd))
+                    finally:
+                        os.close(dir_fd)
+                    os.unlink(symlink)
 
                 self.assertTrue(delete(link, shred=shred))
                 self.assertNotExists(link)
@@ -1689,21 +1716,6 @@ State=AAAA/wA...
             self.assertIn(
                 'charset_normalizer module is not available', cm.output[0])
             os.unlink(temp.name)
-
-    @common.skipIfWindows
-    def test_ego_owner(self):
-        """Unit test for ego_owner()"""
-        # pylint: disable=no-member
-        self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
-
-        own_fn = self.mkstemp()
-        self.assertTrue(ego_owner(own_fn))
-
-        # A path that vanished must not raise
-        os.unlink(own_fn)
-        self.assertFalse(ego_owner(own_fn))
-        self.assertFalse(
-            ego_owner(os.path.join(self.tempdir, 'does_not_exist')))
 
     def test_execute_sqlite3(self):
         """Unit test for execute_sqlite3()"""
@@ -2268,13 +2280,29 @@ State=AAAA/wA...
         openfiles.scan()
         self.assertFalse(openfiles.is_open(filename))
 
+    def test_open_files_linux_maps_unescape(self):
+        """open_files_linux() decodes octal escapes in /proc/*/maps"""
+        maps_data = (
+            b'7f0000-7f1000 r--s 00000000 08:01 123 /tmp/a\\040b\\012c\n'
+            b'7f1000-7f2000 rw-p 00000000 00:00 0 [heap]\n'
+        )
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.glob.iglob',
+                side_effect=[iter(['/proc/1/fd/3']), iter(['/proc/1/maps'])]), \
+                unittest.mock.patch(
+                    'bleachbit.FileUtilities.open', create=True,
+                    new=unittest.mock.mock_open(read_data=maps_data)):
+            self.assertEqual(list(open_files_linux()),
+                             ['/proc/1/fd/3', '/tmp/a b\nc'])
+
     @common.skipUnlessLinux
     def test_open_files_mapped(self):
         """OpenFiles counts a file that is mapped but no longer open"""
         if sys.version_info < (3, 13):
             self.skipTest('mmap needs trackfd=False to not keep a descriptor')
+        # The kernel escapes a newline in /proc/*/maps as \012
         filename = self.write_file(
-            'bleachbit-test-open-files-mapped', b'x' * 4096)
+            'bleachbit-test-open-files-mapped a\nb', b'x' * 4096)
         with open(filename, 'rb') as f:
             mapped = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ,
                                trackfd=False)

@@ -116,6 +116,12 @@ def close_delete_parent_lock():
         bleachbit.Windows._close_delete_parent_lock()
 
 
+def _unescape_octal(data):
+    """Decode \\ooo octal escapes in a bytes path from /proc"""
+    return os.fsdecode(re.sub(
+        rb'\\([0-3][0-7]{2})', lambda m: bytes([int(m.group(1), 8)]), data))
+
+
 def open_files_linux():
     """Return iterator of open and memory-mapped files on Linux"""
     yield from glob.iglob("/proc/*/fd/*")
@@ -129,7 +135,7 @@ def open_files_linux():
                     fields = line.split(maxsplit=5)
                     if len(fields) == 6 and fields[4] != b'0' and \
                             fields[5].startswith(b'/'):
-                        mapped.add(os.fsdecode(fields[5].rstrip(b'\n')))
+                        mapped.add(_unescape_octal(fields[5].rstrip(b'\n')))
         except OSError:
             # The process exited, or it belongs to another user
             continue
@@ -432,9 +438,7 @@ def _mount_points_below(dirname):
         if len(fields) < 5:
             continue
         # The kernel escapes space, tab, newline and backslash as \ooo
-        mountpoint = os.fsdecode(re.sub(
-            rb'\\([0-3][0-7]{2})', lambda m: bytes([int(m.group(1), 8)]),
-            fields[4]))
+        mountpoint = _unescape_octal(fields[4])
         if mountpoint.startswith(prefix):
             mounts.add(os.path.join(dirname, mountpoint[len(prefix):]))
     return mounts
@@ -495,6 +499,7 @@ def _scan_children(top, list_directories, pending_dirs, same_device=False):
                             continue
                         if st.st_dev != top_dev or entry.path in mounts:
                             continue
+                        is_link = not stat.S_ISDIR(st.st_mode)
                     if list_directories:
                         pending_dirs.append(entry.path)
                     if not is_link:
@@ -515,6 +520,10 @@ def children_in_directory(top, list_directories=False, same_device=False):
     a non-empty directory. Symlinks and Windows junctions are never
     traversed. With same_device (POSIX), mount points below top are
     neither traversed nor returned.
+
+    Traversal is path-based and intended for user-owned directories;
+    use children_below() with delete(top=) where another user or process
+    may replace a directory with a link during the walk.
     """
     if isinstance(top, tuple):
         for top_ in top:
@@ -544,10 +553,16 @@ def _path_max(path):
 
 def _open_dir_below(top, dirname):
     """Return a dir_fd for dirname, following no link below top (POSIX)"""
-    rel = os.path.relpath(dirname, top)
+    try:
+        if os.path.isabs(top) != os.path.isabs(dirname):
+            raise ValueError
+        rel = os.path.relpath(dirname, top)
+    except ValueError as e:
+        raise OSError(errno.EINVAL, f'{dirname} is not below {top}',
+                      dirname) from e
     parts = [] if rel == os.curdir else rel.split(os.sep)
     if os.pardir in parts:
-        raise ValueError(f'{dirname} is not below {top}')
+        raise OSError(errno.EINVAL, f'{dirname} is not below {top}', dirname)
     # O_PATH needs only search permission, like a path lookup
     flags = getattr(os, 'O_PATH', os.O_RDONLY) | os.O_DIRECTORY
     fd = os.open(top, flags)
@@ -582,7 +597,7 @@ def children_below(dirname, list_directories=False, same_device=False,
 
     With list_directories, directories come last, deepest first. With
     same_device, mount points below dirname are skipped, bind mounts
-    included.
+    included; st_dev and the mount table are checked at walk time.
     """
     top = dirname if top is None else top
     path_max = _path_max(dirname)
@@ -941,24 +956,25 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True,
        Returns True if the path was deleted, False otherwise.
     """
     from bleachbit.Options import options
-    path = extended_path(path)
     do_shred = allow_shred and (shred or options.get('shred'))
     if top is None or not IS_POSIX:
-        return _delete(path, path, do_shred, ignore_missing)
+        return _delete(path, extended_path(path), do_shred, ignore_missing)
+    parent, name = os.path.split(path.rstrip(os.sep))
+    if not name:
+        raise OSError(errno.EINVAL, os.strerror(errno.EINVAL), path)
     try:
-        dir_fd = _open_dir_below(top, os.path.dirname(path))
+        dir_fd = _open_dir_below(top, parent)
     except OSError as e:
         if ignore_missing and errno.ENOENT == e.errno:
             return False
         # Name the whole path, not just the directory that failed
         raise OSError(e.errno, e.strerror, path) from e
     try:
-        return _delete(path, os.path.basename(path), do_shred,
-                       ignore_missing, dir_fd)
+        return _delete(path, name, do_shred, ignore_missing, dir_fd)
     except OSError as e:
         # Name the whole path, not what was relative to dir_fd
-        if isinstance(e.filename, int) or (
-                e.filename is not None and not os.path.isabs(e.filename)):
+        if isinstance(e.filename, int) or not (
+                e.filename and os.path.isabs(e.filename)):
             e.filename = path
         raise
     finally:
@@ -1031,12 +1047,12 @@ def _delete(path, name, do_shred, ignore_missing, dir_fd=None):
                     os.rename(delpath, name,
                               src_dir_fd=dir_fd, dst_dir_fd=dir_fd)
                 except OSError as e:
-                    left = os.path.join(os.path.dirname(path),
+                    left = os.path.join(os.path.dirname(path.rstrip(os.sep)),
                                         os.path.basename(delpath))
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Directory was left renamed to: %s"), left)
                     # No winerror, or Command.Delete would mark path for reboot
-                    raise OSError(e.errno, e.strerror, left) from e
+                    raise OSError(e.errno, e.strerror, left, None, path) from e
         return True
     if stat.S_ISREG(mode):
         delete_file(name, do_shred, dir_fd=dir_fd)
@@ -1079,22 +1095,6 @@ def detect_encoding(fn):
         # charset_normalizer reports the BOM separately from the codec
         return 'utf_8_sig'
     return match.encoding
-
-
-def ego_owner(filename):
-    """Return whether current user owns the file
-
-    Returns False if the file is gone or unreadable, so callers walking a
-    busy directory such as /tmp do not abort on a vanished file.
-
-    POSIX only"""
-    assert IS_POSIX
-    try:
-        st_uid = os.lstat(filename).st_uid
-    except OSError:
-        return False
-    # pylint: disable=no-member
-    return st_uid == os.getuid()
 
 
 def exists_in_path(filename):
@@ -1383,7 +1383,7 @@ def is_hard_link(path, dir_fd=None):
     if dir_fd is None:
         return os.path.isfile(path) and os.stat(path).st_nlink > 1
     try:
-        st = os.stat(path, dir_fd=dir_fd)
+        st = os.lstat(path, dir_fd=dir_fd)
     except OSError:
         return False
     return stat.S_ISREG(st.st_mode) and st.st_nlink > 1

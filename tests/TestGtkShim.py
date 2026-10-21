@@ -260,6 +260,7 @@ print(f"OK success={{success}}")
                       'surrogate argv caused GTK import to crash')
 
     @common.skipIfWindows
+    @common.skipIfMac
     def test_no_display_does_not_import_gtk_libraries(self):
         """A failed display precondition must not import gi.repository."""
         script = '''

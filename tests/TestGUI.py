@@ -560,9 +560,13 @@ class GUITestCase(common.BleachbitTestCase):
                 mock.patch('bleachbit.GuiApplication.GUI.shred_paths',
                            return_value=False) as mock_shred_paths:
             self.app.cb_shred_quit(None, None)
+            self.assertEqual(mock_shred_paths.call_args.args[1],
+                             [os.path.join(link, 'bleachbit.ini')])
 
-        self.assertEqual(mock_shred_paths.call_args.args[1],
-                         [os.path.join(link, 'bleachbit.ini')])
+            with mock.patch('bleachbit.GuiApplication.os.listdir',
+                            side_effect=PermissionError):
+                self.app.cb_shred_quit(None, None)
+            self.assertEqual(mock_shred_paths.call_args.args[1], [])
 
     def test_shred_paths_cancel_cleans_temporary_backend(self):
         """Test that shred_paths with cancel cleans up the temporary backend"""

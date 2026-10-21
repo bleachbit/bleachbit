@@ -627,6 +627,11 @@ def put_env(key, val):
         os.environ[key] = val
 
 
+def skipIfMac(f):
+    """Skip unit test if running on macOS"""
+    return unittest.skipIf(bleachbit.IS_MAC, 'running on macOS')(f)
+
+
 def skipIfWindows(f):
     """Skip unit test if running on Windows (i.e., skipUnlessPOSIX)"""
     return unittest.skipIf(bleachbit.IS_WINDOWS, 'running on Windows')(f)

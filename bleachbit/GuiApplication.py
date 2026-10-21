@@ -46,7 +46,10 @@ def _settings_paths(path):
     # pylint: disable-next=protected-access
     is_link = stat.S_ISLNK(FileUtilities._file_type(path) or 0)
     if is_link and os.path.isdir(path):
-        return [os.path.join(path, name) for name in os.listdir(path)]
+        try:
+            return [os.path.join(path, name) for name in os.listdir(path)]
+        except OSError:
+            return []
     return [path]
 
 

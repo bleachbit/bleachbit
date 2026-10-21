@@ -476,11 +476,12 @@ def get_trash_paths():
     if home_trash != fallback_trash:
         trash_dirs.append((fallback_trash, None))
     # Snap apps store trash under ~/snap/<app>/<revision>/.local/share/Trash
-    for d in glob.glob(os.path.expanduser("~/snap/*/*/.local/share/Trash")):
+    snap_dir = os.path.expanduser("~/snap")
+    for d in glob.glob(os.path.join(snap_dir, "*/*/.local/share/Trash")):
         # Do not follow revision symlinks. For example, current -> 238 would match twice.
         rev_dir = os.path.dirname(os.path.dirname(os.path.dirname(d)))
         if not os.path.islink(rev_dir):
-            trash_dirs.append((d, rev_dir))
+            trash_dirs.append((d, snap_dir))
     # Per-mountpoint trash (method 1: .Trash/$uid, method 2: .Trash-$uid)
     uid = os.getuid()
     for mountpoint in get_mount_points():
