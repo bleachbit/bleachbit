@@ -548,10 +548,16 @@ def _path_max(path):
 
 def _open_dir_below(top, dirname):
     """Return a dir_fd for dirname, following no link below top (POSIX)"""
-    rel = os.path.relpath(dirname, top)
+    try:
+        if os.path.isabs(top) != os.path.isabs(dirname):
+            raise ValueError
+        rel = os.path.relpath(dirname, top)
+    except ValueError as e:
+        raise OSError(errno.EINVAL, f'{dirname} is not below {top}',
+                      dirname) from e
     parts = [] if rel == os.curdir else rel.split(os.sep)
     if os.pardir in parts:
-        raise ValueError(f'{dirname} is not below {top}')
+        raise OSError(errno.EINVAL, f'{dirname} is not below {top}', dirname)
     # O_PATH needs only search permission, like a path lookup
     flags = getattr(os, 'O_PATH', os.O_RDONLY) | os.O_DIRECTORY
     fd = os.open(top, flags)
@@ -946,20 +952,22 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True,
     do_shred = allow_shred and (shred or options.get('shred'))
     if top is None or not IS_POSIX:
         return _delete(path, path, do_shred, ignore_missing)
+    parent, name = os.path.split(path.rstrip(os.sep))
+    if not name:
+        raise OSError(errno.EINVAL, os.strerror(errno.EINVAL), path)
     try:
-        dir_fd = _open_dir_below(top, os.path.dirname(path))
+        dir_fd = _open_dir_below(top, parent)
     except OSError as e:
         if ignore_missing and errno.ENOENT == e.errno:
             return False
         # Name the whole path, not just the directory that failed
         raise OSError(e.errno, e.strerror, path) from e
     try:
-        return _delete(path, os.path.basename(path), do_shred,
-                       ignore_missing, dir_fd)
+        return _delete(path, name, do_shred, ignore_missing, dir_fd)
     except OSError as e:
         # Name the whole path, not what was relative to dir_fd
-        if isinstance(e.filename, int) or (
-                e.filename is not None and not os.path.isabs(e.filename)):
+        if isinstance(e.filename, int) or not (
+                e.filename and os.path.isabs(e.filename)):
             e.filename = path
         raise
     finally:
@@ -1032,12 +1040,12 @@ def _delete(path, name, do_shred, ignore_missing, dir_fd=None):
                     os.rename(delpath, name,
                               src_dir_fd=dir_fd, dst_dir_fd=dir_fd)
                 except OSError as e:
-                    left = os.path.join(os.path.dirname(path),
+                    left = os.path.join(os.path.dirname(path.rstrip(os.sep)),
                                         os.path.basename(delpath))
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Directory was left renamed to: %s"), left)
                     # No winerror, or Command.Delete would mark path for reboot
-                    raise OSError(e.errno, e.strerror, left) from e
+                    raise OSError(e.errno, e.strerror, left, None, path) from e
         return True
     if stat.S_ISREG(mode):
         delete_file(name, do_shred, dir_fd=dir_fd)
@@ -1384,7 +1392,7 @@ def is_hard_link(path, dir_fd=None):
     if dir_fd is None:
         return os.path.isfile(path) and os.stat(path).st_nlink > 1
     try:
-        st = os.stat(path, dir_fd=dir_fd)
+        st = os.lstat(path, dir_fd=dir_fd)
     except OSError:
         return False
     return stat.S_ISREG(st.st_mode) and st.st_nlink > 1

@@ -1013,7 +1013,7 @@ State=AAAA/wA...
                 inside = self.write_file(os.path.join(sub, 'inside'), b'abc')
                 self.assertTrue(delete(inside, shred=shred, top=top))
                 self.assertNotExists(inside)
-                self.assertTrue(delete(sub, shred=shred, top=top))
+                self.assertTrue(delete(sub + os.sep, shred=shred, top=top))
                 self.assertNotExists(sub)
 
     @common.skipIfWindows
@@ -1022,15 +1022,25 @@ State=AAAA/wA...
         top = self.mkdir('delete-top-error')
         path = self.write_file(os.path.join(top, 'file'))
 
-        def denied(name, **_kwargs):
-            raise PermissionError(errno.EACCES, 'Permission denied', name)
-
-        with unittest.mock.patch('os.remove', side_effect=denied):
-            with self.assertRaises(PermissionError) as cm:
-                delete(path, shred=False, top=top)
-        self.assertEqual(cm.exception.errno, errno.EACCES)
-        self.assertEqual(cm.exception.filename, path)
+        for err_filename in (os.path.basename(path), None, 3):
+            with self.subTest(err_filename=err_filename):
+                err = PermissionError(
+                    errno.EACCES, 'Permission denied', err_filename)
+                with unittest.mock.patch('os.remove', side_effect=err):
+                    with self.assertRaises(PermissionError) as cm:
+                        delete(path, shred=False, top=top)
+                self.assertEqual(cm.exception.errno, errno.EACCES)
+                self.assertEqual(cm.exception.filename, path)
         self.assertExists(path)
+
+        for bad_path in (os.path.join(self.tempdir, 'outside'), 'relative',
+                         os.sep):
+            with self.subTest(bad_path=bad_path):
+                with self.assertRaises(OSError) as cm:
+                    delete(bad_path, top=top)
+                self.assertEqual(cm.exception.errno, errno.EINVAL)
+                self.assertEqual(cm.exception.filename, bad_path)
+        self.assertEqual(list(children_below(self.tempdir, top=top)), [])
 
     def test_delete_windows_lstat_denied(self):
         """delete() on Windows still works where os.lstat() is denied
@@ -1353,10 +1363,13 @@ State=AAAA/wA...
 
         # Make sure shredding does not leave a renamed directory like
         # in https://github.com/bleachbit/bleachbit/issues/783
-        for allow_shred in (False, True):
-            self.assertFalse(delete(dirname, allow_shred=allow_shred))
-            self.assertExists(fn)
-            self.assertExists(dirname)
+        for top in (None, self.tempdir):
+            for allow_shred in (False, True):
+                with self.subTest(top=top, allow_shred=allow_shred):
+                    self.assertFalse(delete(
+                        dirname, shred=True, allow_shred=allow_shred, top=top))
+                    self.assertExists(fn)
+                    self.assertExists(dirname)
         os.remove(fn)
         self.assertTrue(is_dir_empty(dirname))
 
@@ -1390,6 +1403,7 @@ State=AAAA/wA...
                     with self.assertRaises(OSError) as cm:
                         delete(dirname, shred=True, top=top)
                 left = cm.exception.filename
+                self.assertEqual(cm.exception.filename2, dirname)
                 self.assertNotEqual(os.path.basename(left), 'renamed_dir')
                 self.assertExists(os.path.join(left, 'a_file'))
                 self.assertNotExists(dirname)
@@ -1449,6 +1463,18 @@ State=AAAA/wA...
                 self.assertDirectoryCount(tmp_dir, 2)
                 self.assertTrue(is_hard_link(link))
                 self.assertTrue(is_hard_link(target))
+                if IS_POSIX:
+                    symlink = os.path.join(tmp_dir, f'symlink-{shred}')
+                    os.symlink(link, symlink)
+                    dir_fd = os.open(tmp_dir, os.O_RDONLY | os.O_DIRECTORY)
+                    try:
+                        self.assertTrue(
+                            is_hard_link(os.path.basename(link), dir_fd))
+                        self.assertFalse(
+                            is_hard_link(os.path.basename(symlink), dir_fd))
+                    finally:
+                        os.close(dir_fd)
+                    os.unlink(symlink)
 
                 self.assertTrue(delete(link, shred=shred))
                 self.assertNotExists(link)
