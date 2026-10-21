@@ -70,8 +70,8 @@ def parse_swapoff(swapoff):
     """Parse the output of swapoff and return the device name"""
     # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
     # Example output in English with LVM and hyphen: 'swapoff on /dev/mapper/lubuntu-swap_1'
-    # This matches swap devices and swap files
-    ret = re.search(r'^swapoff (\w* )?(/[\w/.-]+)$', swapoff)
+    # This matches swap devices and swap files (including spaces in the path)
+    ret = re.search(r'^swapoff (\w* )?(/[\w/. -]+)$', swapoff)
     if not ret:
         # no matches
         return None
@@ -101,14 +101,14 @@ def disable_swap_linux():
 
 
 def _parse_swap_summary(proc_swaps):
-    """Return (device, priority) for each swap area in 'swapon -s' output"""
+    """Return (device, size_kb, priority) for each swap area in 'swapon -s' output"""
     if not proc_swaps:
         return []
     lines = proc_swaps.split('\n')
     if not re.search(r'Filename\s+Type\s+Size', lines[0]):
         raise RuntimeError(
             "Unexpected first line in swap summary '%s'" % lines[0])
-    swap_re = re.compile(r'^(.+?)\s+\w+\s+[0-9]+\s+[0-9]+\s+(-?[0-9]+)\s*$')
+    swap_re = re.compile(r'^(.+?)\s+\w+\s+([0-9]+)\s+[0-9]+\s+(-?[0-9]+)\s*$')
     swaps = []
     for line in lines[1:]:
         if not line.strip():
@@ -120,7 +120,7 @@ def _parse_swap_summary(proc_swaps):
         # /proc/swaps writes a space in a name as \040
         device = re.sub(r'\\([0-7]{3})',
                         lambda m: chr(int(m.group(1), 8)), ret.group(1))
-        swaps.append((device, int(ret.group(2))))
+        swaps.append((device, int(ret.group(2)), int(ret.group(3))))
     return swaps
 
 
@@ -131,10 +131,10 @@ def enable_swap_linux(proc_swaps):
     started by systemd, and would turn on fstab swap that was off.
     """
     logger.debug(_("Re-enabling swap."))
-    active = [device for device, _priority in
+    active = [device for device, _size_kb, _priority in
               _parse_swap_summary(get_proc_swaps())]
     errors = []
-    for device, priority in _parse_swap_summary(proc_swaps):
+    for device, _size_kb, priority in _parse_swap_summary(proc_swaps):
         if device in active:
             continue
         args = [General.resolve_exe('swapon')]
@@ -338,14 +338,9 @@ def get_swap_size_linux(device, proc_swaps=None):
     """Return the size of the partition in bytes"""
     if proc_swaps is None:
         proc_swaps = get_proc_swaps()
-    line = proc_swaps.split('\n')[0]
-    if not re.search(r'Filename\s+Type\s+Size', line):
-        raise RuntimeError("Unexpected first line in swap summary '%s'" % line)
-    size_re = re.compile(r"%s\s+\w+\s+([0-9]+)\s" % device)
-    for line in proc_swaps.split('\n')[1:]:
-        ret = size_re.search(line)
-        if ret:
-            return int(ret.group(1)) * 1024
+    for swap_dev, size_kb, _priority in _parse_swap_summary(proc_swaps):
+        if swap_dev == device:
+            return size_kb * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" %
                        (device, proc_swaps))
 
@@ -356,7 +351,7 @@ def get_swap_uuid(device):
     args = [General.resolve_exe('blkid'),
             device, '-s', 'UUID']
     (_rc, stdout, _stderr) = General.run_external(args)
-    uuid_re = re.compile(r"^%s: UUID=\"([a-z0-9-]+)\"" % device)
+    uuid_re = re.compile(r"^%s: UUID=\"([a-z0-9-]+)\"" % re.escape(device))
     for line in stdout.split('\n'):
         # example: /dev/sda5: UUID="ee0e85f6-6e5c-42b9-902f-776531938bbf"
         ret = uuid_re.search(line)

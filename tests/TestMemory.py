@@ -251,7 +251,9 @@ Swapouts:                              20258188.
             # Ubuntu 15.10 has format "swapoff /dev/sda3"
             ('swapoff /dev/sda3', '/dev/sda3'),
             ('swapoff for /dev/sda6', '/dev/sda6'),
-            ('swapoff on /dev/mapper/lubuntu-swap_1', '/dev/mapper/lubuntu-swap_1'))
+            ('swapoff on /dev/mapper/lubuntu-swap_1', '/dev/mapper/lubuntu-swap_1'),
+            ('swapoff /swap file', '/swap file'),
+            ('swapoff on /swap file', '/swap file'))
 
         for test in tests:
             self.assertEqual(parse_swapoff(test[0]), test[1])
@@ -342,10 +344,16 @@ Swapouts:                              20258188.
             get_swap_size_linux, '/dev/sda1', 'bad header\n')
 
         # Missing device
-        proc_swaps = 'Filename\tType\tSize\tUsed\tPriority\n/dev/sda2\tpartition\t123\t0\t-2\n'
+        proc_swaps = (
+            'Filename\tType\tSize\tUsed\tPriority\n'
+            '/dev/sda2\tpartition\t123\t0\t-2\n'
+            '/swap\\040file\tfile\t456\t0\t-3\n'
+        )
         self.assertRaisesRegex(
             RuntimeError, 'cannot find size of swap device',
             get_swap_size_linux, '/dev/sda1', proc_swaps)
+        self.assertEqual(
+            get_swap_size_linux('/swap file', proc_swaps), 456 * 1024)
 
     @common.skipIfWindows
     def test_wipe_swap_linux(self):
