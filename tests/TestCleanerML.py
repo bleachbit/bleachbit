@@ -461,6 +461,37 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual(sorted(linux.options), [])
         self.assertEqual(linux.actions, [])
 
+    def test_seamonkey_options_by_platform(self):
+        """The SeaMonkey cleaner has the macOS paths only on macOS"""
+        caches = '~/Library/Caches/SeaMonkey/Profiles/*/'
+        support = '~/Library/Application Support/SeaMonkey/Profiles/*/'
+        expected = {
+            'cache': [caches + 'Cache/', caches + 'cache2/',
+                      caches + 'startupCache/'],
+            'chat_logs': [support + 'chatzilla/inputHistory.txt',
+                          support + 'chatzilla/urls.txt',
+                          support + 'chatzilla/logs/'],
+            'cookies': [support + 'cookies.sqlite'],
+            'download_history': [support + 'downloads.sqlite'],
+            'history': [support + 'urlbarhistory.sqlite',
+                        support + 'sessionstore.bak'],
+        }
+
+        def paths(platform, option):
+            cleaner = self._load_real_cleaner_as('seamonkey.xml', platform)
+            return [os.path.normpath(path)
+                    for option_id, action in cleaner.actions
+                    if option_id == option
+                    for path in action.paths]
+
+        for option, patterns in expected.items():
+            for pattern in patterns:
+                mac_path = os.path.normpath(os.path.expanduser(pattern))
+                with self.subTest(option=option, path=pattern):
+                    self.assertIn(mac_path, paths('darwin', option))
+                    self.assertNotIn(mac_path, paths('win32', option))
+                    self.assertNotIn(mac_path, paths('linux', option))
+
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
         self.assertIsString(pot_fragment("Foo", 'bar.xml'))
