@@ -836,6 +836,7 @@ def _delete_file_impl(path, shred, dir_fd=None):
     Returns True.
     """
     # wipe contents
+    overwrite_err = None
     if shred and not is_hard_link(path, dir_fd):
         try:
             wipe_contents(path, dir_fd)
@@ -848,14 +849,19 @@ def _delete_file_impl(path, shred, dir_fd=None):
             # If a broken symlink, try os.remove() below.
         except IOError as e:
             # permission denied (13) happens shredding MSIE 8 on Windows 7
+            overwrite_err = e
+    if shred:
+        # wipe name
+        os.remove(wipe_name(path, dir_fd), dir_fd=dir_fd)
+        if overwrite_err is not None:
+            # Warn only when the file was still removed; if os.remove() also
+            # failed (e.g. a locked file), the caller reports that failure.
             # TRANSLATORS: Warning in the log when shredding a file could not
             # overwrite its contents. %(path)s is the file path; %(error)s is
             # the reason, such as 'Permission denied'.
             logger.warning(_("Could not overwrite the contents of %(path)s: %(error)s"),
-                           {'path': extended_path_undo(path), 'error': e.strerror or e})
-    if shred:
-        # wipe name
-        os.remove(wipe_name(path, dir_fd), dir_fd=dir_fd)
+                           {'path': extended_path_undo(path),
+                            'error': overwrite_err.strerror or overwrite_err})
         return True
     # Code below is shred == False
     try:
