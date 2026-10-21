@@ -614,6 +614,10 @@ def build():
         path = os.path.join(gtk_share, d)
         copy_tree(path, os.path.join('dist', 'share', d))
 
+    # The startup checks before shrink() rebuilds it need working paths
+    fix_loaders_cache_paths(os.path.join(
+        'dist', 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache'))
+
     schemas_dir = 'share\\glib-2.0\\schemas'
     gschemas_compiled_src = os.path.join(
         GTK_DIR, schemas_dir, 'gschemas.compiled')
@@ -993,17 +997,27 @@ def rebuild_loaders_cache():
                    GDK_PIXBUF_MODULE_FILE=loaders_fn,
                    PATH=dist_dir)
         run_cmd([tmp_exe, '--update-cache'], env=env)
+    data = fix_loaders_cache_paths(loaders_fn)
+    # query-loaders skips a loader it can't load and still exits 0
+    if '"pixbufloader-svg.dll"' not in data:
+        logger.error('%s has no SVG loader', loaders_fn)
+        sys.exit(1)
+
+
+def fix_loaders_cache_paths(loaders_fn):
+    """Strip the directories from the loader paths in loaders.cache
+
+    GdkPixbuf finds a bare file name in its loaders folder, wherever dist is.
+    Return the new contents.
+    """
     with open(loaders_fn, 'r+', encoding=SetupEncoding) as f:
         data = f.read()
         data = re.sub(r'^".*[/\\](.*\.dll)"$',
                       r'"\1"', data, flags=re.I | re.M)
-        # query-loaders skips a loader it can't load and still exits 0
-        if '"pixbufloader-svg.dll"' not in data:
-            logger.error('%s has no SVG loader', loaders_fn)
-            sys.exit(1)
         f.seek(0)
         f.write(data)
         f.truncate()
+    return data
 
 
 def keep_font_cache_in_portable(portable_dir):
