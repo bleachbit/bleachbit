@@ -398,6 +398,18 @@ Swapouts:                              20258188.
                                 self.assertEqual(
                                     args[args.index('-L') + 1], 'swap')
 
+        # /dev/mapper/* symlink is resolved before wipe_write(), which
+        # refuses symlinks
+        with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0), \
+                mock.patch('bleachbit.Memory.get_swap_size_linux', return_value=1024 ** 2), \
+                mock.patch('bleachbit.Memory.get_swap_uuid', return_value=None), \
+                mock.patch('bleachbit.Memory.get_swap_label', return_value=None), \
+                mock.patch('bleachbit.Memory.os.path.realpath', return_value='/dev/dm-0'), \
+                mock.patch('bleachbit.Memory.wipe_write') as mock_wipe, \
+                mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')):
+            wipe_swap_linux(['/dev/mapper/vg-swap'], '')
+            mock_wipe.assert_called_once_with('/dev/dm-0')
+
         # mkswap failure
         with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0):
             with mock.patch('bleachbit.Memory.get_swap_size_linux', return_value=1024 ** 2):

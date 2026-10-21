@@ -131,11 +131,11 @@ def enable_swap_linux(proc_swaps):
     started by systemd, and would turn on fstab swap that was off.
     """
     logger.debug(_("Re-enabling swap."))
-    active = [device for device, _size_kb, _priority in
-              _parse_swap_summary(get_proc_swaps())]
+    active = {os.path.realpath(device) for device, _size_kb, _priority in
+              _parse_swap_summary(get_proc_swaps())}
     errors = []
     for device, _size_kb, priority in _parse_swap_summary(proc_swaps):
-        if device in active:
+        if os.path.realpath(device) in active:
             continue
         args = [General.resolve_exe('swapon')]
         # Negative priorities are assigned by the kernel and cannot be set
@@ -338,8 +338,9 @@ def get_swap_size_linux(device, proc_swaps=None):
     """Return the size of the partition in bytes"""
     if proc_swaps is None:
         proc_swaps = get_proc_swaps()
+    real_device = os.path.realpath(device)
     for swap_dev, size_kb, _priority in _parse_swap_summary(proc_swaps):
-        if swap_dev == device:
+        if swap_dev == device or os.path.realpath(swap_dev) == real_device:
             return size_kb * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" %
                        (device, proc_swaps))
@@ -488,8 +489,12 @@ def wipe_swap_linux(devices, proc_swaps):
                 f' than expected ({safety_limit_bytes})')
         uuid = get_swap_uuid(device)
         label = get_swap_label(device)
-        # overwrite with zeros without truncating the device
-        wipe_write(device).close()
+        # overwrite with zeros without truncating the device; resolve /dev/
+        # symlinks (such as /dev/mapper/* for LVM) because wipe_write()
+        # refuses symlinks
+        wipe_target = (os.path.realpath(device)
+                       if device.startswith('/dev/') else device)
+        wipe_write(wipe_target).close()
         # reinitialize
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.debug(_("Reinitializing the swap device %s."), device)
