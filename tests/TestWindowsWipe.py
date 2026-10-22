@@ -199,6 +199,33 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             extents = get_extents(None)
         self.assertEqual(len(extents), run_count)
 
+    def test_get_extents_buffer_cap(self):
+        """get_extents() caps buffer growth and does not catch non-Windows errors"""
+        sizes = []
+
+        def always_more_data(_handle, _code, _input, out_size):
+            sizes.append(out_size)
+            # pylint: disable-next=possibly-used-before-assignment
+            raise pywintypes.error(234, 'DeviceIoControl',
+                                   'More data is available.')
+
+        with mock.patch('bleachbit.WindowsWipe.DeviceIoControl',
+                        side_effect=always_more_data):
+            with self.assertRaises(RuntimeError) as cm:
+                get_extents(None, filename='huge.bin')
+        self.assertEqual(
+            str(cm.exception),
+            "Failed to get retrieval pointers for file 'huge.bin'")
+        self.assertEqual(
+            sizes,
+            [4 * 1024, 32 * 1024, 256 * 1024,
+             2 * 1024**2, 16 * 1024**2, 128 * 1024**2])
+
+        with mock.patch('bleachbit.WindowsWipe.DeviceIoControl',
+                        side_effect=MemoryError):
+            with self.assertRaises(MemoryError):
+                get_extents(None, filename='huge.bin')
+
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
         path = self.write_file(filename='test.txt', text='test data')

@@ -81,7 +81,6 @@
 
 
 # standard library
-import sys
 import os
 import errno
 import struct
@@ -712,14 +711,13 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
     # Compressed/encrypted/sparse files tend to have more chopped up extents.
     retrieval_pointers_buf_size = 4 * 1024
 
-    while True:
+    while retrieval_pointers_buf_size <= 128 * 1024**2:
         try:
             rp_struct = DeviceIoControl(file_handle,
                                         FSCTL_GET_RETRIEVAL_POINTERS,
                                         input_struct,
                                         retrieval_pointers_buf_size)
-        except Exception:
-            err_info = sys.exc_info()[1]
+        except pywinerror as err_info:
             err_code = err_info.winerror
             if err_code == 38:     # when file size is 0.
                 # (38, 'DeviceIoControl', 'Reached the end of the file.')
@@ -736,6 +734,9 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
         else:
             # Call succeeded, break out from while loop.
             break
+    else:
+        raise RuntimeError(
+            f"Failed to get retrieval pointers for file '{filename}'")
 
     # At this point we have a FSCTL_GET_RETRIEVAL_POINTERS (rp) structure.
     # Process content of the first part of structure.
