@@ -89,6 +89,10 @@ clean:
 	@rm -f $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	@rm -f BleachBit-*.AppImage
 
+clean-appimage:
+	@rm -rf "$(APPIMAGE_APPDIR)"
+	@rm -f BleachBit-*.AppImage
+
 install:
 	# "binary"
 	mkdir -p $(DESTDIR)$(bindir)
@@ -297,6 +301,16 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	rm -rf "$(APPIMAGE_APPDIR)"
 	# Build translations (.mo files)
 	$(MAKE) -C po
+	# Generate Revision.py if it does not already exist
+	@if [ ! -f bleachbit/Revision.py ]; then \
+		rev=$$(git rev-parse --short=8 HEAD 2>/dev/null || echo ""); \
+		if [ -n "$$rev" ]; then \
+			echo "revision = \"$$rev\"" > bleachbit/Revision.py; \
+			if [ -n "$${BUILD_NUMBER:-$${GITHUB_RUN_NUMBER:-}}" ]; then \
+				echo "build_number = \"$${BUILD_NUMBER:-$${GITHUB_RUN_NUMBER}}\"" >> bleachbit/Revision.py; \
+			fi; \
+		fi; \
+	fi
 	# Install application into AppDir with prefix=/usr
 	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr
 	# Copy icon to hicolor theme so linuxdeploy can find it
