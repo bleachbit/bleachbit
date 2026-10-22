@@ -16,7 +16,7 @@ jobs:
     name: Delete caches for the closed PR
     runs-on: ubuntu-slim
     timeout-minutes: 5
-    if: github.repository == 'bleachbit/bleachbit' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
 
     permissions:
       actions: write # delete the PR branch caches
@@ -33,7 +33,7 @@ jobs:
     name: Delete caches of closed PRs
     runs-on: ubuntu-slim
     timeout-minutes: 10
-    if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request'
 
     permissions:
       actions: write # delete the caches
