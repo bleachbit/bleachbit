@@ -734,6 +734,9 @@ def run_net_service_command(service, start):
         msg = str(e).lower()
         if getattr(e, 'winerror', None) in ignore_codes or any(s in msg for s in ignore_msgs):
             return 0
+        if not start and service == 'cryptsvc' and getattr(e, 'winerror', None) == 5:
+            logger.warning('Failed to stop Windows service %s: %s', service, e)
+            return 0
         raise RuntimeError(f'Failed to {verb} service {service}: {e}') from e
 
     try:
