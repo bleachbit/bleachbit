@@ -907,3 +907,17 @@ class GUITestCase(common.BleachbitTestCase):
 
         mock_commit.assert_called_once()
         mock_destroy.assert_called_once()
+
+    def test_application_quit_before_window_is_initialized(self):
+        """Quitting during startup stops the application without a window."""
+        window = self.app._window
+        self.app._window = None
+        try:
+            with mock.patch('bleachbit.GuiApplication.options.commit') as mock_commit, \
+                    mock.patch('bleachbit.GuiApplication.Gtk.Application.quit') as mock_quit:
+                self.app.quit()
+        finally:
+            self.app._window = window
+
+        mock_commit.assert_called_once()
+        mock_quit.assert_called_once_with(self.app)
