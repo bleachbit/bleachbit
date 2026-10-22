@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
-"PO-Revision-Date: 2026-10-21 22:08+0000\n"
+"PO-Revision-Date: 2026-10-22 21:12+0000\n"
 "Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
@@ -473,23 +473,23 @@ msgstr "Ifuyla iskudanen"
 #: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../bleachbit/Cleaner.py
 msgid "Delete the temporary files"
-msgstr ""
+msgstr "Kkes ifuyla iskudanen"
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
-msgstr ""
+msgstr "Afecku n unadi"
 
 #: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/recoll.xml
 msgid "Index"
-msgstr ""
+msgstr "Amatar"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
+msgstr "Sfeḍ inagan n tuqqna, tansiwin URL yettwarzan d uzray n unadi"
 
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
-msgstr ""
+msgstr "Aseɣẓan n usefser n yiḍrisen"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/safari_windows.xml ../cleaners/epiphany.xml
@@ -499,12 +499,14 @@ msgstr ""
 #: ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
+"Sfeḍ tazarkatut Web, dayen ara yesneqsen akud ilaqen i wuskan n yisebtar "
+"yettwarzan yakan"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "A history of forms entered in websites"
-msgstr ""
+msgstr "Azray n yisefka yettwasekcmen deg tferka n yismal Web"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/brave.xml
@@ -512,24 +514,25 @@ msgstr ""
 #: ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr ""
+msgstr "Sfeḍ azray i yegbren ismal yettwarzan, isadaren d tenfulin"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Sync"
-msgstr ""
+msgstr "Amtawi"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Delete the sync data (including web apps) and sign out of the browser"
 msgstr ""
+"Kkes isefka n umtawi (gar-asen isnasen Web), syen ffeɣ seg tɣimit n yiminig"
 
 #: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 msgid "Search engines"
-msgstr ""
+msgstr "Imsaddayen n unadi"
 
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
@@ -538,35 +541,38 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"Ales awennez n uzray n useqdec n yimsaddayen n unadi, kkes imsaddayen n "
+"unadi ur d-yeddin ara d yiminig seg tazwara, ihi kra seg-sen ttwarennun s "
+"wudem awurman"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
 msgid "Game"
-msgstr ""
+msgstr "Urar"
 
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Amaẓrag n tebzimin n ifuyla imeslawen"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
-msgstr ""
+msgstr "Iɣmisen n unagraw"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Sfeḍ iɣmisen iqburen n unagraw"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr ""
+msgstr "Sfeḍ tazarkatut n yivaṭaren d yimujiten"
 
 #: ../cleaners/filezilla.xml ../cleaners/smartftp.xml
 #: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
-msgstr ""
+msgstr "Amsaɣ n usiweḍ n ifuyla"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
