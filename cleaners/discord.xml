@@ -14,6 +14,7 @@ later.  See the COPYING file in the top-level directory.
   <!-- Discord Stable -->
   <running type="exe" os="windows">Discord.exe</running>
   <running type="exe" os="linux">Discord</running>
+  <running type="exe" os="macos">Discord</running>
   <!-- Discord PTB -->
   <running type="exe" os="windows">DiscordPTB.exe</running>
   <running type="exe" os="linux">DiscordPTB</running>
@@ -29,6 +30,7 @@ later.  See the COPYING file in the top-level directory.
     <value os="linux">~/.config/discord</value>
     <value os="linux">~/snap/discord/current/.config/discord</value>
     <value os="linux">~/.var/app/com.discordapp.Discord/config/discord</value>
+    <value os="macos">~/Library/Application Support/discord</value>
     <!-- Discord PTB -->
     <value os="windows">%UserProfile%\AppData\Roaming\discordptb</value>
     <value os="linux">~/.config/discordptb</value>
