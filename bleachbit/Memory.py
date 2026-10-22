@@ -70,8 +70,8 @@ def parse_swapoff(swapoff):
     """Parse the output of swapoff and return the device name"""
     # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
     # Example output in English with LVM and hyphen: 'swapoff on /dev/mapper/lubuntu-swap_1'
-    # This matches swap devices and swap files
-    ret = re.search(r'^swapoff (\w* )?(/[\w/.-]+)$', swapoff)
+    # This matches swap devices and swap files (including spaces in the path)
+    ret = re.search(r'^swapoff (\w* )?(/[\w/. -]+)$', swapoff)
     if not ret:
         # no matches
         return None
@@ -100,13 +100,54 @@ def disable_swap_linux():
     return devices
 
 
-def enable_swap_linux():
-    """Enable Linux swap"""
+def _parse_swap_summary(proc_swaps):
+    """Return (device, size_kb, priority) for each swap area in 'swapon -s' output"""
+    if not proc_swaps:
+        return []
+    lines = proc_swaps.split('\n')
+    if not re.search(r'Filename\s+Type\s+Size', lines[0]):
+        raise RuntimeError(
+            "Unexpected first line in swap summary '%s'" % lines[0])
+    swap_re = re.compile(r'^(.+?)\s+\w+\s+([0-9]+)\s+[0-9]+\s+(-?[0-9]+)\s*$')
+    swaps = []
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        ret = swap_re.search(line)
+        if not ret:
+            raise RuntimeError(
+                "Unexpected line in swap summary '%s'" % line)
+        # /proc/swaps writes a space in a name as \040
+        device = re.sub(r'\\([0-7]{3})',
+                        lambda m: chr(int(m.group(1), 8)), ret.group(1))
+        swaps.append((device, int(ret.group(2)), int(ret.group(3))))
+    return swaps
+
+
+def enable_swap_linux(proc_swaps):
+    """Enable the Linux swap listed in proc_swaps that is now off
+
+    'swapon -a' would miss swap that is not in /etc/fstab, such as zram
+    started by systemd, and would turn on fstab swap that was off.
+    """
     logger.debug(_("Re-enabling swap."))
-    args = [General.resolve_exe('swapon'), "-a"]
-    (rc, _stdout, stderr) = General.run_external(args)
-    if 0 != rc:
-        raise RuntimeError(stderr.replace("\n", ""))
+    active = {os.path.realpath(device) for device, _size_kb, _priority in
+              _parse_swap_summary(get_proc_swaps())}
+    errors = []
+    for device, _size_kb, priority in _parse_swap_summary(proc_swaps):
+        if os.path.realpath(device) in active:
+            continue
+        args = [General.resolve_exe('swapon')]
+        # Negative priorities are assigned by the kernel and cannot be set
+        if priority >= 0:
+            args += ['-p', str(priority)]
+        args.append(device)
+        (rc, _stdout, stderr) = General.run_external(args)
+        if 0 != rc:
+            err = stderr.replace("\n", "").strip()
+            errors.append(f"{device}: {err}" if err else device)
+    if errors:
+        raise RuntimeError(' '.join(errors))
 
 
 def make_self_oom_target_linux(uid=None):
@@ -297,14 +338,10 @@ def get_swap_size_linux(device, proc_swaps=None):
     """Return the size of the partition in bytes"""
     if proc_swaps is None:
         proc_swaps = get_proc_swaps()
-    line = proc_swaps.split('\n')[0]
-    if not re.search(r'Filename\s+Type\s+Size', line):
-        raise RuntimeError("Unexpected first line in swap summary '%s'" % line)
-    size_re = re.compile(r"%s\s+\w+\s+([0-9]+)\s" % device)
-    for line in proc_swaps.split('\n')[1:]:
-        ret = size_re.search(line)
-        if ret:
-            return int(ret.group(1)) * 1024
+    real_device = os.path.realpath(device)
+    for swap_dev, size_kb, _priority in _parse_swap_summary(proc_swaps):
+        if swap_dev == device or os.path.realpath(swap_dev) == real_device:
+            return size_kb * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" %
                        (device, proc_swaps))
 
@@ -315,7 +352,7 @@ def get_swap_uuid(device):
     args = [General.resolve_exe('blkid'),
             device, '-s', 'UUID']
     (_rc, stdout, _stderr) = General.run_external(args)
-    uuid_re = re.compile(r"^%s: UUID=\"([a-z0-9-]+)\"" % device)
+    uuid_re = re.compile(r"^%s: UUID=\"([a-z0-9-]+)\"" % re.escape(device))
     for line in stdout.split('\n'):
         # example: /dev/sda5: UUID="ee0e85f6-6e5c-42b9-902f-776531938bbf"
         ret = uuid_re.search(line)
@@ -328,6 +365,14 @@ def get_swap_uuid(device):
     logger.debug(_("Found UUID for swap device %(device)s is %(uuid)s."),
                  {'device': device, 'uuid': uuid})
     return uuid
+
+
+def get_swap_label(device):
+    """Find the label for the swap device, or None"""
+    args = [General.resolve_exe('blkid'),
+            '-o', 'value', '-s', 'LABEL', device]
+    (_rc, stdout, _stderr) = General.run_external(args)
+    return stdout.rstrip('\n') or None
 
 
 def physical_free_darwin(run_vmstat=None):
@@ -443,8 +488,13 @@ def wipe_swap_linux(devices, proc_swaps):
                 f'swap device {device} is larger ({actual_size_bytes})'
                 f' than expected ({safety_limit_bytes})')
         uuid = get_swap_uuid(device)
-        # overwrite with zeros without truncating the device
-        wipe_write(device).close()
+        label = get_swap_label(device)
+        # overwrite with zeros without truncating the device; resolve /dev/
+        # symlinks (such as /dev/mapper/* for LVM) because wipe_write()
+        # refuses symlinks
+        wipe_target = (os.path.realpath(device)
+                       if device.startswith('/dev/') else device)
+        wipe_write(wipe_target).close()
         # reinitialize
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.debug(_("Reinitializing the swap device %s."), device)
@@ -452,6 +502,9 @@ def wipe_swap_linux(devices, proc_swaps):
         if uuid:
             args.append("-U")
             args.append(uuid)
+        if label:
+            args.append("-L")
+            args.append(label)
         (rc, _stdout, stderr) = General.run_external(args)
         if 0 != rc:
             raise RuntimeError(stderr.replace("\n", ""))
@@ -468,20 +521,29 @@ def wipe_memory():
             raise RuntimeError(f"wipe_memory: Command {cmd} not found")
     # cache the file because 'swapoff' changes it
     proc_swaps = get_proc_swaps()
-    devices = disable_swap_linux()
-    yield True  # process GTK+ idle loop
-    # TRANSLATORS: The variable is a device like /dev/sda2
-    logger.debug(_("Detected these swap devices: %s"), str(devices))
-    wipe_swap_linux(devices, proc_swaps)
-    yield True
-    # Prefer a separate systemd scope so that systemd's unit-level OOM
-    # policy cannot kill the parent when the child is OOM-killed. Fall back
-    # to a plain fork where systemd-run is unavailable.
-    rc = _run_memory_child_systemd_scope()
-    if rc is None:
-        rc = _run_memory_child_fork()
-    if rc not in (0, 9):
-        logger.warning(
-            _("The child memory-wiping process returned code %d."), rc)
-    enable_swap_linux()
+    # Turn swap back on also after an error, a partial swapoff or an abort
+    try:
+        devices = disable_swap_linux()
+        yield True  # process GTK+ idle loop
+        # TRANSLATORS: The variable is a device like /dev/sda2
+        logger.debug(_("Detected these swap devices: %s"), str(devices))
+        wipe_swap_linux(devices, proc_swaps)
+        yield True
+        # Prefer a separate systemd scope so that systemd's unit-level OOM
+        # policy cannot kill the parent when the child is OOM-killed. Fall back
+        # to a plain fork where systemd-run is unavailable.
+        rc = _run_memory_child_systemd_scope()
+        if rc is None:
+            rc = _run_memory_child_fork()
+        if rc not in (0, 9):
+            logger.warning(
+                _("The child memory-wiping process returned code %d."), rc)
+    except BaseException:
+        # Keep the original error if swapon fails too
+        try:
+            enable_swap_linux(proc_swaps)
+        except Exception as e:
+            logger.error('Error when re-enabling swap: %s', e)
+        raise
+    enable_swap_linux(proc_swaps)
     yield 0  # how much disk space was recovered

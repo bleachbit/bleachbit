@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
-"PO-Revision-Date: 2026-10-20 22:18+0000\n"
+"PO-Revision-Date: 2026-10-21 22:08+0000\n"
 "Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
@@ -183,7 +183,7 @@ msgstr "Ifuyla yettwasqedcen melmi kan"
 #: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
 #: ../cleaners/vlc.xml
 msgid "Delete the most recently used list"
-msgstr "Sfeḍ tabdart n yisemliyen yettwasqedcen melmi kan"
+msgstr "Sfeḍ tabdart n yisemliyen yettwasqedcen ugar melmi kan"
 
 #: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
 #: ../cleaners/apt.xml ../cleaners/snap.xml
@@ -282,7 +282,7 @@ msgstr "Azray n tferka"
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
 msgid "Saved form entries and search bar history"
-msgstr ""
+msgstr "Isefka n tferka yettwaḥerzen d uzray n tfeggagt n unadi"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
@@ -303,6 +303,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
+"Taffa n yisefka n yismawen n yiseqdacen d wawalen uffiren, akked tebdart n "
+"yismal ideg ur ilaq ara ad ttwaseklsen wawalen uffiren"
 
 #. Warning shown when the user selects the Passwords cleaning option.
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
@@ -351,7 +353,7 @@ msgstr "Isefka n usmel"
 #: ../cleaners/teamviewer.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
+msgstr "Kkes LocalStorage, IndexedDB d yisefka nniḍen i ḥerzen yismal Web"
 
 #: ../cleaners/librewolf.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -367,7 +369,7 @@ msgstr "Ismenyifen n usmel"
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Settings for individual sites"
-msgstr ""
+msgstr "Iɣewwaṛen n yal asmel Web yettwarzan"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -394,7 +396,7 @@ msgstr "Tabdart n isebtar web yettwarzan"
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 #: ../bleachbit/Action.py
 msgid "Vacuum"
-msgstr ""
+msgstr "Skussem taffiwin n yisefka"
 
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
 #: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
@@ -407,10 +409,12 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
+"Kkes aseftutes n taffa n yisefka akken ad tesneɣseḍ tallunt yettwasqedcen, "
+"ad tesnerniḍ arured n yinig, war ma tekkseḍ ula d yiwen usefku"
 
 #: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
 msgid "Shell"
-msgstr ""
+msgstr "Shell"
 
 #: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
 #: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
@@ -420,7 +424,7 @@ msgstr "Kkes azray n tladna"
 #: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/libreoffice.xml
 msgid "Office suite"
-msgstr ""
+msgstr "Tagrumma tawurmahilt"
 
 #. TRANSLATORS: Description of the Recent documents list cleaning option.
 #: ../cleaners/openoffice.xml ../cleaners/audacious.xml
@@ -428,11 +432,11 @@ msgstr ""
 #: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
 #: ../bleachbit/Cleaner.py
 msgid "Delete the list of recently used documents"
-msgstr ""
+msgstr "Sfeḍ tabdart n yisemliyen yettwasqedcen melmi kan"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
-msgstr ""
+msgstr "Taffa n yisefka"
 
 #: ../cleaners/rhythmbox.xml
 msgid ""
@@ -443,13 +447,13 @@ msgstr ""
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Debug logs"
-msgstr ""
+msgstr "Iɣmisen n useɣti"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/easytag.xml
 #: ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Delete the debug logs"
-msgstr ""
+msgstr "Sfeḍ iɣmisen n useɣti"
 
 #. TRANSLATORS: Name of a cleaning option for temporary files.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
@@ -459,7 +463,7 @@ msgstr ""
 #: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../bleachbit/Cleaner.py
 msgid "Temporary files"
-msgstr ""
+msgstr "Ifuyla iskudanen"
 
 #. TRANSLATORS: Description of the Temporary files cleaning option.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml

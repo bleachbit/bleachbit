@@ -25,6 +25,7 @@ from bleachbit.Memory import (
     disable_swap_linux,
     enable_swap_linux,
     get_proc_swaps,
+    get_swap_label,
     get_swap_size_linux,
     get_swap_uuid,
     make_self_oom_target_linux,
@@ -230,13 +231,29 @@ Swapouts:                              20258188.
             self.skipTest('blkid not found')
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
 
+    @common.skipIfWindows
+    def test_get_swap_label(self):
+        """Test for get_swap_label() with mocks"""
+        blkid = General.resolve_exe('blkid')
+        with mock.patch('bleachbit.Memory.General.run_external',
+                        return_value=(0, 'my swap\n', '')) as mock_run:
+            self.assertEqual(get_swap_label('/dev/sda5'), 'my swap')
+            self.assertEqual(mock_run.call_args.args[0], [
+                blkid, '-o', 'value', '-s', 'LABEL', '/dev/sda5'])
+        # No label
+        with mock.patch('bleachbit.Memory.General.run_external',
+                        return_value=(2, '', '')):
+            self.assertIsNone(get_swap_label('/dev/sda5'))
+
     def test_parse_swapoff(self):
         """Test for method parse_swapoff"""
         tests = (
             # Ubuntu 15.10 has format "swapoff /dev/sda3"
             ('swapoff /dev/sda3', '/dev/sda3'),
             ('swapoff for /dev/sda6', '/dev/sda6'),
-            ('swapoff on /dev/mapper/lubuntu-swap_1', '/dev/mapper/lubuntu-swap_1'))
+            ('swapoff on /dev/mapper/lubuntu-swap_1', '/dev/mapper/lubuntu-swap_1'),
+            ('swapoff /swap file', '/swap file'),
+            ('swapoff on /swap file', '/swap file'))
 
         for test in tests:
             self.assertEqual(parse_swapoff(test[0]), test[1])
@@ -269,18 +286,54 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_enable_swap_linux(self):
         """Test for enable_swap_linux() with mocks"""
-        # Success
+        header = 'Filename\t\t\t\tType\t\tSize\t\tUsed\t\tPriority\n'
+        before = header + \
+            '/dev/zram0\tpartition\t8388604\t0\t100\n' \
+            '/swap file\tfile\t1048572\t0\t-2\n' \
+            '/dev/sdb1\tpartition\t1048572\t0\t5\n'
+        # swapoff failed on /dev/sdb1, so it is still on
+        after = header + '/dev/sdb1\tpartition\t1048572\t0\t5\n'
+        swapon = General.resolve_exe('swapon')
+
+        # Success: what was on comes back with its priority, and not
+        # through 'swapon -a', which only reads /etc/fstab
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
-            with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
-                enable_swap_linux()
-                self.assertEqual(mock_run.call_args.args[0], [
-                                 General.resolve_exe('swapon'), '-a'])
+            with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=after):
+                with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
+                    enable_swap_linux(before)
+                    self.assertEqual(
+                        [call.args[0] for call in mock_run.call_args_list],
+                        [[swapon, '-p', '100', '/dev/zram0'],
+                         [swapon, '/swap file']])
+
+        # No swap was on, so none is turned on
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
+            with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header):
+                with mock.patch('bleachbit.Memory.General.run_external') as mock_run:
+                    enable_swap_linux(header)
+                    mock_run.assert_not_called()
+
+        # /proc/swaps, the fallback for 'swapon -s', writes a space as \040
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
+            with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header):
+                with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
+                    enable_swap_linux(
+                        header + '/swap\\040file\tfile\t1048572\t0\t-2\n')
+                    mock_run.assert_called_once_with([swapon, '/swap file'])
 
         # Failure
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
-            with mock.patch('bleachbit.Memory.General.run_external', return_value=(1, '', 'swapon failed')):
+            with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header):
+                with mock.patch('bleachbit.Memory.General.run_external', return_value=(1, '', 'swapon failed')):
+                    self.assertRaisesRegex(
+                        RuntimeError, '/dev/zram0: swapon failed',
+                        enable_swap_linux, before)
                 self.assertRaisesRegex(
-                    RuntimeError, 'swapon failed', enable_swap_linux)
+                    RuntimeError, 'Unexpected first line',
+                    enable_swap_linux, 'bad header\n')
+                self.assertRaisesRegex(
+                    RuntimeError, 'Unexpected line',
+                    enable_swap_linux, header + 'malformed line\n')
 
     @common.skipIfWindows
     def test_get_swap_size_linux_errors(self):
@@ -291,10 +344,16 @@ Swapouts:                              20258188.
             get_swap_size_linux, '/dev/sda1', 'bad header\n')
 
         # Missing device
-        proc_swaps = 'Filename\tType\tSize\tUsed\tPriority\n/dev/sda2\tpartition\t123\t0\t-2\n'
+        proc_swaps = (
+            'Filename\tType\tSize\tUsed\tPriority\n'
+            '/dev/sda2\tpartition\t123\t0\t-2\n'
+            '/swap\\040file\tfile\t456\t0\t-3\n'
+        )
         self.assertRaisesRegex(
             RuntimeError, 'cannot find size of swap device',
             get_swap_size_linux, '/dev/sda1', proc_swaps)
+        self.assertEqual(
+            get_swap_size_linux('/swap file', proc_swaps), 456 * 1024)
 
     @common.skipIfWindows
     def test_wipe_swap_linux(self):
@@ -327,6 +386,30 @@ Swapouts:                              20258188.
                             self.assertIn('-U', args)
                             self.assertIn('abc-123', args)
 
+        # Label preservation, for LABEL= in /etc/fstab
+        with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0):
+            with mock.patch('bleachbit.Memory.get_swap_size_linux', return_value=1024 ** 2):
+                with mock.patch('bleachbit.Memory.get_swap_uuid', return_value='abc-123'):
+                    with mock.patch('bleachbit.Memory.get_swap_label', return_value='swap'):
+                        with mock.patch('bleachbit.Memory.wipe_write'):
+                            with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
+                                wipe_swap_linux(['/dev/sda1'], '')
+                                args = mock_run.call_args[0][0]
+                                self.assertEqual(
+                                    args[args.index('-L') + 1], 'swap')
+
+        # /dev/mapper/* symlink is resolved before wipe_write(), which
+        # refuses symlinks
+        with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0), \
+                mock.patch('bleachbit.Memory.get_swap_size_linux', return_value=1024 ** 2), \
+                mock.patch('bleachbit.Memory.get_swap_uuid', return_value=None), \
+                mock.patch('bleachbit.Memory.get_swap_label', return_value=None), \
+                mock.patch('bleachbit.Memory.os.path.realpath', return_value='/dev/dm-0'), \
+                mock.patch('bleachbit.Memory.wipe_write') as mock_wipe, \
+                mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')):
+            wipe_swap_linux(['/dev/mapper/vg-swap'], '')
+            mock_wipe.assert_called_once_with('/dev/dm-0')
+
         # mkswap failure
         with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0):
             with mock.patch('bleachbit.Memory.get_swap_size_linux', return_value=1024 ** 2):
@@ -355,6 +438,62 @@ Swapouts:                              20258188.
         # Happy path via the systemd scope (fork fallback not used)
         self._assert_wipe_memory_happy_path(
             scope_return=0, fork_return=None, fork_called=False)
+
+    @common.skipUnlessLinux
+    def test_wipe_memory_reenables_swap(self):
+        """wipe_memory() turns swap back on after an error or an abort"""
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s), \
+                mock.patch('bleachbit.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Memory.get_proc_swaps', return_value=''):
+            # swapoff fails partway
+            with mock.patch('bleachbit.Memory.disable_swap_linux',
+                            side_effect=RuntimeError('swapoff failed')), \
+                    mock.patch('bleachbit.Memory.enable_swap_linux') as mock_enable:
+                self.assertRaisesRegex(
+                    RuntimeError, 'swapoff failed', next, wipe_memory())
+                mock_enable.assert_called_once()
+
+            with mock.patch('bleachbit.Memory.disable_swap_linux',
+                            return_value=['/dev/sda1']):
+                # Wiping fails, for example on the size limit
+                with mock.patch('bleachbit.Memory.wipe_swap_linux',
+                                side_effect=RuntimeError('too large')), \
+                        mock.patch('bleachbit.Memory.enable_swap_linux') as mock_enable:
+                    gen = wipe_memory()
+                    self.assertTrue(next(gen))
+                    self.assertRaisesRegex(
+                        RuntimeError, 'too large', next, gen)
+                    mock_enable.assert_called_once()
+
+                # The user aborts at either yield
+                for n_yields in (1, 2):
+                    with mock.patch('bleachbit.Memory.wipe_swap_linux'), \
+                            mock.patch('bleachbit.Memory.enable_swap_linux') as mock_enable:
+                        gen = wipe_memory()
+                        for _i in range(n_yields):
+                            self.assertTrue(next(gen))
+                        mock_enable.assert_not_called()
+                        gen.close()
+                        mock_enable.assert_called_once()
+
+                # swapon fails too, which must not hide the error or abort
+                swapon_failed = RuntimeError('swapon failed')
+                with mock.patch('bleachbit.Memory.wipe_swap_linux',
+                                side_effect=RuntimeError('too large')), \
+                        mock.patch('bleachbit.Memory.enable_swap_linux',
+                                   side_effect=swapon_failed), \
+                        self.assertLogs('bleachbit.Memory', level='ERROR'):
+                    gen = wipe_memory()
+                    self.assertTrue(next(gen))
+                    self.assertRaisesRegex(
+                        RuntimeError, 'too large', next, gen)
+                with mock.patch('bleachbit.Memory.wipe_swap_linux'), \
+                        mock.patch('bleachbit.Memory.enable_swap_linux',
+                                   side_effect=swapon_failed), \
+                        self.assertLogs('bleachbit.Memory', level='ERROR'):
+                    gen = wipe_memory()
+                    self.assertTrue(next(gen))
+                    gen.close()
 
     @common.skipIfWindows
     def test_memory_child_script(self):
@@ -537,5 +676,6 @@ Swapouts:                              20258188.
         """Test for disabling and enabling swap"""
         if not common.have_root():
             self.skipTest('not enough privileges')
+        proc_swaps = get_proc_swaps()
         disable_swap_linux()
-        enable_swap_linux()
+        enable_swap_linux(proc_swaps)
