@@ -113,11 +113,11 @@ def _enumerate_psutil_windows():
         log_func('process enumeration took %.1f seconds', elapsed)
 
 
-def _enumerate_proc_fs():
+def _enumerate_proc_fs(proc_dir='/proc'):
     """/proc filesystem strategy (Linux)"""
     from bleachbit.General import get_real_uid
     target_uid = get_real_uid()
-    for filename in glob.iglob("/proc/*/exe"):
+    for filename in glob.iglob(os.path.join(proc_dir, '*/exe')):
         pid_dir = os.path.dirname(filename)
         base = os.path.basename(pid_dir)
         if not base.isdigit():
@@ -170,11 +170,8 @@ def _enumerate_proc_fs():
         except OSError:
             argv0 = ''
 
-        seen = set()
-        for proc_name in (exe, comm, argv0):
-            if proc_name and proc_name not in seen:
-                seen.add(proc_name)
-                yield ProcessInfo(pid, proc_name, same_user)
+        for proc_name in {exe, comm, argv0} - {None, ''}:
+            yield ProcessInfo(pid, proc_name, same_user)
 
 
 def _enumerate_ps_aux():

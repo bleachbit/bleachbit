@@ -19,7 +19,7 @@ from unittest import mock
 # the test environment (and Windows) always should have it.
 import psutil
 
-from bleachbit import IS_WINDOWS
+from bleachbit import IS_LINUX, IS_WINDOWS
 from bleachbit.General import get_real_username, resolve_exe, sudo_mode
 from bleachbit.Process import (
     _enumerate_proc_fs,
@@ -35,17 +35,20 @@ class ProcessTestCase(common.BleachbitTestCase):
 
     def test_enumerate_processes(self):
         """Test enumerate_processes()"""
-        # FIXME: also check the private functions like _enumerate_proc_fs
-        processes = list(enumerate_processes())
-        self.assertGreater(len(processes), 0)
+        funcs = [enumerate_processes]
+        if IS_LINUX:
+            funcs.append(_enumerate_proc_fs)
+        for func in funcs:
+            processes = list(func())
+            self.assertGreater(len(processes), 0)
 
-        for proc in processes:
-            self.assertIsInstance(proc, ProcessInfo)
-            self.assertIsInstance(proc.pid, int)
-            self.assertGreaterEqual(proc.pid, 0, proc)
-            self.assertIsInstance(proc.name, str)
-            self.assertGreater(len(proc.name), 0)
-            self.assertIsInstance(proc.same_user, bool)
+            for proc in processes:
+                self.assertIsInstance(proc, ProcessInfo)
+                self.assertIsInstance(proc.pid, int)
+                self.assertGreaterEqual(proc.pid, 0, proc)
+                self.assertIsInstance(proc.name, str)
+                self.assertGreater(len(proc.name), 0)
+                self.assertIsInstance(proc.same_user, bool)
 
     @mock.patch('subprocess.check_output')
     @common.skipIfWindows
@@ -97,54 +100,34 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         with self.assertRaises(RuntimeError):
             list(_enumerate_ps_aux())
 
-    @common.skipUnlessLinux
+    @common.skipIfWindows
     def test_enumerate_proc_fs_comm_with_spaces(self):
         """/proc fallback keeps a comm field with spaces intact"""
-        stat_line = "1234 (Web Content) S 1 1234 1234 0 -1 4194304 0 0 0 0"
+        pid_dir = self.mkdir('1234')
+        # Regular file, not a symlink, so os.readlink raises OSError
+        self.write_file(os.path.join(pid_dir, 'exe'))
+        self.write_file(
+            os.path.join(pid_dir, 'stat'),
+            text="1234 (Web Content) S 1 1234 1234 0 -1 4194304 0 0 0 0")
 
-        # pylint: disable-next=unused-argument
-        def fake_open(path, *args, **kwargs):
-            if path == '/proc/1234/stat':
-                return mock.mock_open(read_data=stat_line)()
-            raise FileNotFoundError(path)
-
-        with mock.patch('glob.iglob', return_value=['/proc/1234/exe']), \
-                mock.patch('os.readlink', side_effect=PermissionError(13, 'denied')), \
-                mock.patch('builtins.open', side_effect=fake_open), \
-                mock.patch('os.stat') as mock_stat, \
-                mock.patch('bleachbit.General.get_real_uid', return_value=1000):
-            mock_stat.return_value.st_uid = 1000
-            result = list(_enumerate_proc_fs())
-
-        self.assertEqual(result, [ProcessInfo(1234, 'Web Content', True)])
+        result = list(_enumerate_proc_fs(self.tempdir))
+        self.assertEqual(
+            result, [ProcessInfo(1234, 'Web Content', not sudo_mode())])
 
     @common.skipUnlessLinux
     def test_enumerate_proc_fs_script_comm(self):
         """/proc fallback yields comm even when exe is readable (e.g. scripts)"""
-        stat_line = "1234 (dnf) S 1 1234 1234 0 -1 4194304 0 0 0 0"
-        cmdline_bytes = b"/usr/bin/python3\x00/usr/bin/dnf\x00upgrade\x00"
-
-        # pylint: disable-next=unused-argument
-        def fake_open(path, *args, **kwargs):
-            if path == '/proc/1234/stat':
-                return mock.mock_open(read_data=stat_line)()
-            if path == '/proc/1234/cmdline':
-                return mock.mock_open(read_data=cmdline_bytes)()
-            raise FileNotFoundError(path)
-
-        with mock.patch('glob.iglob', return_value=['/proc/1234/exe']), \
-                mock.patch('os.readlink', return_value='/usr/bin/python3.14'), \
-                mock.patch('builtins.open', side_effect=fake_open), \
-                mock.patch('os.stat') as mock_stat, \
-                mock.patch('bleachbit.General.get_real_uid', return_value=1000):
-            mock_stat.return_value.st_uid = 0
-            result = list(_enumerate_proc_fs())
-
-        self.assertEqual(result, [
-            ProcessInfo(1234, 'python3.14', False),
-            ProcessInfo(1234, 'dnf', False),
-            ProcessInfo(1234, 'python3', False),
-        ])
+        script = self.write_file(
+            'bb-test-script',
+            text=f'#!{sys.executable}\nimport time\ntime.sleep(60)\n')
+        os.chmod(script, 0o700)
+        with subprocess.Popen([script]) as proc:
+            try:
+                names = {p.name for p in _enumerate_proc_fs()
+                         if p.pid == proc.pid}
+            finally:
+                proc.terminate()
+        self.assertIn('bb-test-script', names)
 
     @common.also_with_sudo
     def test_is_process_running_self(self):
