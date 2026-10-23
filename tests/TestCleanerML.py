@@ -97,7 +97,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
     def test_dnf_running(self):
         """The DNF cleaner notices a running dnf"""
         cleaner = CleanerML('cleaners/dnf.xml').get_cleaner()
-        for name in ('dnf', 'dnf5', 'yum'):
+        for name in ('dnf', 'dnf4', 'dnf5', 'yum'):
             procs = (ProcessInfo(1234, name, False),)
             with mock.patch('bleachbit.Process.process_cache.get', return_value=procs):
                 self.assertTrue(cleaner.is_process_running(), name)

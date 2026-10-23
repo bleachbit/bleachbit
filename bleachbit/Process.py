@@ -124,13 +124,13 @@ def _enumerate_proc_fs():
             # skip /proc/self and /proc/thread-self
             continue
         pid = int(base)
-        name = None
+        exe = None
         try:
             # realpath() no longer raises on EACCES in Python 3.13+
             target = os.readlink(filename)
             # Google Chrome 74 on Ubuntu 19.04 showed up as
             # /opt/google/chrome/chrome (deleted)
-            name = os.path.basename(target).replace(' (deleted)', '')
+            exe = os.path.basename(target).replace(' (deleted)', '')
         except OSError:
             # 13 = permission denied
             pass
@@ -139,22 +139,28 @@ def _enumerate_proc_fs():
             # '/etc/password\x00 (deleted)'
             pass
 
-        if not name:
-            try:
-                with open(os.path.join(pid_dir, 'stat'), 'r',
-                          encoding='utf-8') as f:
-                    stat_content = f.read()
-                # comm is field 2, wrapped in parens, and may contain spaces
-                name = stat_content[stat_content.index('(') + 1:
-                                    stat_content.rindex(')')]
-            except (OSError, ValueError):
-                continue
+        # A shebang script (e.g. dnf) has exe='python3.x' and argv[0]='python3',
+        # so only comm names the script itself.
+        comm = None
+        try:
+            with open(os.path.join(pid_dir, 'stat'), 'r',
+                      encoding='utf-8') as f:
+                stat_content = f.read()
+            # comm is field 2, wrapped in parens, and may contain spaces
+            comm = stat_content[stat_content.index('(') + 1:
+                                stat_content.rindex(')')]
+        except (OSError, ValueError):
+            pass
+
+        if not exe and not comm:
+            continue
+
         try:
             same_user = os.stat(pid_dir).st_uid == target_uid
         except OSError:
             # the process exited between listing and stat
             same_user = False
-        yield ProcessInfo(pid, name, same_user)
+
         # argv[0] may differ from the exe name (e.g. a versioned binary
         # launched through a symlink)
         try:
@@ -163,8 +169,12 @@ def _enumerate_proc_fs():
                     f.read().split(b'\x00')[0].decode('utf-8', 'replace'))
         except OSError:
             argv0 = ''
-        if argv0 and argv0 != name:
-            yield ProcessInfo(pid, argv0, same_user)
+
+        seen = set()
+        for proc_name in (exe, comm, argv0):
+            if proc_name and proc_name not in seen:
+                seen.add(proc_name)
+                yield ProcessInfo(pid, proc_name, same_user)
 
 
 def _enumerate_ps_aux():
