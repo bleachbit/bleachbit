@@ -95,12 +95,13 @@ class CleanerMLTestCase(common.BleachbitTestCase):
 
     @common.skipUnlessLinux
     def test_dnf_running(self):
-        """The DNF cleaner notices a running dnf"""
-        cleaner = CleanerML('cleaners/dnf.xml').get_cleaner()
-        for name in ('dnf', 'dnf4', 'dnf5', 'yum'):
-            procs = (ProcessInfo(1234, name, False),)
-            with mock.patch('bleachbit.Process.process_cache.get', return_value=procs):
-                self.assertTrue(cleaner.is_process_running(), name)
+        """The DNF and yum cleaners notice a running dnf or yum"""
+        for path in ('cleaners/dnf.xml', 'cleaners/yum.xml'):
+            cleaner = CleanerML(path).get_cleaner()
+            for name in ('dnf', 'dnf4', 'dnf5', 'yum'):
+                procs = (ProcessInfo(1234, name, False),)
+                with mock.patch('bleachbit.Process.process_cache.get', return_value=procs):
+                    self.assertTrue(cleaner.is_process_running(), (path, name))
 
     def test_list_cleanerml_files(self):
         """Unit test for list_cleanerml_files()"""
