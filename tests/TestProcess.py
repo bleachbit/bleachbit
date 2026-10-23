@@ -39,16 +39,17 @@ class ProcessTestCase(common.BleachbitTestCase):
         if IS_LINUX:
             funcs.append(_enumerate_proc_fs)
         for func in funcs:
-            processes = list(func())
-            self.assertGreater(len(processes), 0)
+            with self.subTest(func=func.__name__):
+                processes = list(func())
+                self.assertGreater(len(processes), 0)
 
-            for proc in processes:
-                self.assertIsInstance(proc, ProcessInfo)
-                self.assertIsInstance(proc.pid, int)
-                self.assertGreaterEqual(proc.pid, 0, proc)
-                self.assertIsInstance(proc.name, str)
-                self.assertGreater(len(proc.name), 0)
-                self.assertIsInstance(proc.same_user, bool)
+                for proc in processes:
+                    self.assertIsInstance(proc, ProcessInfo)
+                    self.assertIsInstance(proc.pid, int)
+                    self.assertGreaterEqual(proc.pid, 0, proc)
+                    self.assertIsInstance(proc.name, str)
+                    self.assertGreater(len(proc.name), 0)
+                    self.assertIsInstance(proc.same_user, bool)
 
     @mock.patch('subprocess.check_output')
     @common.skipIfWindows
@@ -116,18 +117,25 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
 
     @common.skipUnlessLinux
     def test_enumerate_proc_fs_script_comm(self):
-        """/proc fallback yields comm even when exe is readable (e.g. scripts)"""
-        script = self.write_file(
-            'bb-test-script',
-            text=f'#!{sys.executable}\nimport time\ntime.sleep(60)\n')
-        os.chmod(script, 0o700)
-        with subprocess.Popen([script]) as proc:
+        """/proc fallback yields comm even when exe and argv[0] differ (e.g. scripts)"""
+        if not sys.executable:
+            self.skipTest('sys.executable is empty')
+        # 15 = PR_SET_NAME: change the name of the current process.
+        code = ("import ctypes, time\n"
+                "# PR_SET_NAME = 15\n"
+                "ctypes.CDLL(None).prctl(15, b'bb-test-comm', 0, 0, 0)\n"
+                "print('ready', flush=True)\n"
+                "time.sleep(60)\n")
+        with subprocess.Popen([sys.executable, '-c', code],
+                              stdout=subprocess.PIPE, text=True) as proc:
             try:
+                # wait until the child has renamed itself
+                self.assertEqual(proc.stdout.readline().strip(), 'ready')
                 names = {p.name for p in _enumerate_proc_fs()
                          if p.pid == proc.pid}
             finally:
                 proc.terminate()
-        self.assertIn('bb-test-script', names)
+        self.assertIn('bb-test-comm', names)
 
     @common.also_with_sudo
     def test_is_process_running_self(self):
