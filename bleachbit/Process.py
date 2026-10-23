@@ -117,7 +117,7 @@ def _enumerate_proc_fs(proc_dir='/proc'):
     """/proc filesystem strategy (Linux)"""
     from bleachbit.General import get_real_uid
     target_uid = get_real_uid()
-    for filename in glob.iglob(os.path.join(proc_dir, '*/exe')):
+    for filename in glob.iglob(os.path.join(glob.escape(proc_dir), '*/exe')):
         pid_dir = os.path.dirname(filename)
         base = os.path.basename(pid_dir)
         if not base.isdigit():
