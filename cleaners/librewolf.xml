@@ -18,7 +18,8 @@ LibreWolf 150.0.1-1 installed by .deb from its official repository uses
   <running type="exe" os="unix">librewolf</running>
   <running type="exe" os="unix">librewolf-bin</running>
   <running type="pathname">~/.librewolf/*/lock</running>
-  <running type="pathname">~/.librewolf/*/lock</running>
+  <running type="pathname">~/.config/librewolf/librewolf/*/lock</running>
+  <running type="pathname">~/.var/app/io.gitlab.librewolf-community/.librewolf/*/lock</running>
   <var name="base">
     <value os="windows">%AppData%\librewolf</value>
     <value os="unix">~/.librewolf</value>
