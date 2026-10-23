@@ -169,6 +169,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 mock.patch.dict(Cleaner.backends):
             list(load_cleaners())
             list(load_cleaners())
+            # pylint: disable-next=protected-access
+            self.assertEqual(len(Unix.locales._paths.children), 1)
             paths = list(Unix.locales.localization_paths(['en']))
         self.assertEqual(
             paths, [os.path.join(tempdir, 'share', 'locale', 'fr')])
