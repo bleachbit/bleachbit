@@ -85,6 +85,27 @@ def section2option(s):
     return ret
 
 
+def _langsecref_to_cleanerid(langsecref):
+    """Return the BleachBit cleaner ID for a langsecref (or section name)"""
+    # pre-defined, such as 3021
+    if langsecref in langsecref_map:
+        return langsecref_map[langsecref][0]
+    # custom, such as games
+    return 'winapp2_' + section2option(langsecref)
+
+
+def _split_sections(lines):
+    """Group lines so that each group after the first starts at a header"""
+    chunk = []
+    for line in lines:
+        if line.startswith('[') and chunk:
+            yield chunk
+            chunk = []
+        chunk.append(line)
+    if chunk:
+        yield chunk
+
+
 def _noop_progress(_fraction):
     """Default progress callback used when one is not provided."""
     return None
@@ -126,8 +147,11 @@ def winapp_expand_vars(pathname):
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     for pattern, sub_repl in _WINAPP_VAR_SUBS:
         if pattern.match(pathname):
-            expand2 = pattern.sub(sub_repl, pathname)
-            return [expand1, os.path.expandvars(expand2)]
+            expand2 = os.path.expandvars(pattern.sub(sub_repl, pathname))
+            # A 64-bit process sees the same directory through both
+            if expand2 != expand1:
+                return [expand1, expand2]
+            break
     return [expand1]
 
 
@@ -182,11 +206,15 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname, cb_progress=_noop_progress, load_now=True):
+    def __init__(self, pathname, cb_progress=_noop_progress, load_now=True,
+                 option_ids=None):
         """Create cleaners from a Winapp2.ini-style file
 
         Pass load_now=False to drive load_sections() yourself, which lets a
         GUI caller keep painting between sections.
+
+        Pass the option_ids of a file loaded earlier to keep the option IDs
+        of its sections, so the cleaners of both can be merged by ID.
         """
 
         self.cleaners = {}
@@ -196,16 +224,83 @@ class Winapp:
         self.errors = 0
         self.parser = configparser.RawConfigParser()
         encoding = detect_encoding(pathname) or 'utf_8_sig'
-        self.parser.read(pathname, encoding=encoding)
+        try:
+            self.parser.read(pathname, encoding=encoding)
+        except configparser.Error:
+            self.parser = self._read_by_section(pathname, encoding)
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
-        self.re_excludekey = re.compile(r'^excludekey\d+$')
+        self.re_excludekey = re.compile(r'^excludekey(\d+)?$')
         # An app's sections repeat Detect keys; cache the probes for this load
         self._detect_cache = {}
+        self.option_ids = self._assign_option_ids(option_ids or {})
         if not load_now:
             return
         for _dummy in self.load_sections(cb_progress):
             pass
+
+    def _read_by_section(self, pathname, encoding):
+        """Parse each section on its own, skipping the ones that fail
+
+        Used when a duplicate or a stray line fails the whole-file parse.
+        """
+        parser = configparser.RawConfigParser()
+        with open(pathname, encoding=encoding) as ini:
+            for chunk in _split_sections(ini):
+                chunk_parser = configparser.RawConfigParser()
+                try:
+                    chunk_parser.read_file(chunk, chunk[0].strip())
+                except configparser.Error as e:
+                    self.errors += 1
+                    logger.error('skipping section in %s: %s', pathname, e)
+                    continue
+                for section in chunk_parser.sections():
+                    if parser.has_section(section):
+                        # Merging could pair one entry's Detect with the
+                        # other's FileKeys, so keep the first
+                        self.errors += 1
+                        logger.error('skipping duplicate section %s in %s',
+                                     section, pathname)
+                        continue
+                    parser.add_section(section)
+                    for option, value in chunk_parser.items(section):
+                        parser.set(section, option, value)
+        return parser
+
+    def _assign_option_ids(self, option_ids):
+        """Map each (cleaner ID, section) to an option ID unique in its cleaner
+
+        Undetected sections count too, so IDs ignore what is installed.
+        A section already in option_ids keeps its ID.
+        """
+        option_ids = dict(option_ids)
+        taken = {(lid, option_id)
+                 for ((lid, _section), option_id) in option_ids.items()}
+        for section in self.parser.sections():
+            langsecref = self._langsecref(section)
+            if langsecref is None:
+                continue
+            lid = _langsecref_to_cleanerid(langsecref)
+            if (lid, section) in option_ids:
+                continue
+            base_id = option_id = section2option(section)
+            suffix = 2
+            while (lid, option_id) in taken:
+                # as 'Notepad++ *' after 'Notepad *'
+                option_id = f'{base_id}_{suffix}'
+                suffix += 1
+            taken.add((lid, option_id))
+            option_ids[(lid, section)] = option_id
+        return option_ids
+
+    def _langsecref(self, section):
+        """Return the langsecref (or section name) of a section, or None"""
+        # there are two ways to specify sections: langsecref= and section=
+        if self.parser.has_option(section, 'langsecref'):
+            return self.parser.get(section, 'langsecref')
+        if self.parser.has_option(section, 'section'):
+            return self.parser.get(section, 'section')
+        return None
 
     def load_sections(self, cb_progress=_noop_progress):
         """Parse each section, yielding so a GUI caller can keep painting"""
@@ -243,11 +338,7 @@ class Winapp:
     def section_to_cleanerid(self, langsecref):
         """Given a langsecref (or section name), find the internal
         BleachBit cleaner ID."""
-        # pre-defined, such as 3021
-        if langsecref in langsecref_map:
-            return langsecref_map[langsecref][0]
-        # custom, such as games
-        cleanerid = 'winapp2_' + section2option(langsecref)
+        cleanerid = _langsecref_to_cleanerid(langsecref)
         if cleanerid not in self.cleaners:
             # never seen before
             self.add_section(cleanerid, langsecref)
@@ -364,25 +455,21 @@ class Winapp:
                     # REG exclusion: extract the registry path
                     parts = excludekey_val.split('|')
                     if len(parts) >= 2:
-                        reg_excludekeys.append(parts[1])
+                        # allow a trailing backslash, as FILE and PATH do
+                        reg_excludekeys.append(parts[1].rstrip('\\'))
                 else:
                     file_excludekeys.append(nwholeregex)
-        # there are two ways to specify sections: langsecref= and section=
-        if self.parser.has_option(section, 'langsecref'):
-            # verify the langsecref number is known
-            # langsecref_num is 3021, games, etc.
-            langsecref_num = self.parser.get(section, 'langsecref')
-        elif self.parser.has_option(section, 'section'):
-            langsecref_num = self.parser.get(section, 'section')
-        else:
+        # langsecref_num is 3021, games, etc.
+        langsecref_num = self._langsecref(section)
+        if langsecref_num is None:
             logger.error(
                 'neither option LangSecRef nor Section found in section %s', section)
             return
         # find the BleachBit internal cleaner ID
         lid = self.section_to_cleanerid(langsecref_num)
+        option_id = self.option_ids[(lid, section)]
         option_name = section.replace('*', '').strip()
-        self.cleaners[lid].add_option(
-            section2option(section), option_name, '')
+        self.cleaners[lid].add_option(option_id, option_name, '')
         for option in section_options:
             if (
                 option
@@ -399,12 +486,14 @@ class Winapp:
             ):
                 continue
             if option.startswith('filekey'):
-                self.handle_filekey(lid, section, option, file_excludekeys)
+                self.handle_filekey(
+                    lid, section, option, file_excludekeys, option_id)
             elif option.startswith('regkey'):
-                self.handle_regkey(lid, section, option, reg_excludekeys)
+                self.handle_regkey(
+                    lid, section, option, reg_excludekeys, option_id)
             elif option == 'warning':
                 self.cleaners[lid].set_warning(
-                    section2option(section), self.parser.get(section, 'warning'))
+                    option_id, self.parser.get(section, 'warning'))
             else:
                 logger.warning(
                     'unknown option %s in section %s', option, section)
@@ -412,6 +501,7 @@ class Winapp:
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
         attrs = {'command': 'delete'}
+        dotfiles_path = None
         if recurse:
             search = 'walk.files'
             path = dirname
@@ -422,7 +512,14 @@ class Winapp:
                 attrs['regex'] = f'^{fnmatch_translate(filename)}$'
         else:
             search = 'glob'
-            path = os.path.join(dirname, filename)
+            if filename == '*.*':
+                # Windows matches every file, but glob wants a dot in the
+                # name and skips names that start with one
+                path = os.path.join(dirname, '*')
+                dotfiles_path = os.path.join(dirname, '.*')
+                attrs['type'] = 'f'
+            else:
+                path = os.path.join(dirname, filename)
             if path.find('*') == -1:
                 search = 'file'
         if excludekeys:
@@ -436,6 +533,8 @@ class Winapp:
         attrs['search'] = search
         attrs['path'] = path
         yield Delete(_ActionNode(attrs))
+        if dotfiles_path:
+            yield Delete(_ActionNode({**attrs, 'path': dotfiles_path}))
         if removeself:
             search = 'file'
             if dirname.find('*') > -1:
@@ -443,7 +542,7 @@ class Winapp:
             yield Delete(_ActionNode({'command': 'delete', 'search': search,
                                       'path': dirname, 'type': 'd'}))
 
-    def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
+    def handle_filekey(self, lid, ini_section, ini_option, excludekeys, option_id):
         """Parse a FileKey# option.
 
         Section is [Application Name] and option is the FileKey#"""
@@ -465,7 +564,6 @@ class Winapp:
             else:
                 logger.warning(
                     'unknown file option %s in section %s', element, ini_section)
-        option_id = section2option(ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
                 # If dirname is a drive letter it needs a special treatment on Windows:
@@ -475,7 +573,7 @@ class Winapp:
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
                     self.cleaners[lid].add_action(option_id, provider)
 
-    def handle_regkey(self, lid, ini_section, ini_option, reg_excludekeys):
+    def handle_regkey(self, lid, ini_section, ini_option, reg_excludekeys, option_id):
         """Parse a RegKey# option"""
         elements = self.parser.get(
             ini_section, ini_option).strip().split('|')
@@ -497,7 +595,7 @@ class Winapp:
             attrs['name'] = elements[1]
         provider = Winreg(_ActionNode(attrs))
         provider.excludekeys = reg_excludekeys
-        self.cleaners[lid].add_action(section2option(ini_section), provider)
+        self.cleaners[lid].add_action(option_id, provider)
 
     def get_cleaners(self):
         """Return the created cleaners"""
@@ -518,12 +616,30 @@ def list_winapp_files():
         yield fname
 
 
+def _merge_cleaner(cleaner, other):
+    """Add to cleaner the options of other that it does not have yet"""
+    added = set(other.options) - set(cleaner.options)
+    for option_id in added:
+        (name, description) = other.options[option_id]
+        cleaner.add_option(option_id, name, description)
+        warning = other.get_warning(option_id)
+        if warning:
+            cleaner.set_warning(option_id, warning)
+    for (option_id, action) in other.actions:
+        if option_id in added:
+            cleaner.add_action(option_id, action)
+
+
 def load_cleaners(cb_progress=_noop_progress):
     """Scan for winapp2.ini files and load them"""
     cb_progress(0.0)
+    loaded = {}
+    option_ids = {}
     for pathname in list_winapp_files():
         try:
-            inicleaner = Winapp(pathname, load_now=False)
+            inicleaner = Winapp(
+                pathname, load_now=False, option_ids=option_ids)
+            option_ids = inicleaner.option_ids
             yield True
             yield from inicleaner.load_sections(cb_progress)
         except Exception:
@@ -531,5 +647,10 @@ def load_cleaners(cb_progress=_noop_progress):
                 "Error reading winapp2.ini cleaner '%s'", pathname)
         else:
             for cleaner in inicleaner.get_cleaners():
-                Cleaner.backends[cleaner.id] = cleaner
+                if cleaner.id in loaded:
+                    # The personal file comes first, so its entries win
+                    _merge_cleaner(loaded[cleaner.id], cleaner)
+                else:
+                    loaded[cleaner.id] = cleaner
+                    Cleaner.backends[cleaner.id] = cleaner
         yield True
