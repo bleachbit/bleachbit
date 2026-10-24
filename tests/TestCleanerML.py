@@ -497,6 +497,20 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual(sorted(linux.options), [])
         self.assertEqual(linux.actions, [])
 
+    def test_duckduckgo_options_by_platform(self):
+        """The DuckDuckGo cleaner is only for macOS and has the cache"""
+        mac = self._load_real_cleaner_as('duckduckgo.xml', 'darwin')
+        self.assertEqual(sorted(mac.options), ['cache'])
+        # The framework adds an action of its own for the localizations.
+        self.assertEqual(
+            sum(1 for option_id, __action in mac.actions
+                if option_id == 'cache'), 3)
+        for platform in ('win32', 'linux'):
+            with self.subTest(platform=platform):
+                other = self._load_real_cleaner_as('duckduckgo.xml', platform)
+                self.assertEqual(sorted(other.options), [])
+                self.assertEqual(other.actions, [])
+
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
         self.assertIsString(pot_fragment("Foo", 'bar.xml'))
