@@ -120,7 +120,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ALBANIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_ALBANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ALBANIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ALBANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_ALBANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_ARABIC
@@ -174,7 +174,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ARABIC} "طرفية ${prodname} لتشخيص الأخطاء"
 	LangString SHORTCUT_NO_UAC ${LANG_ARABIC} "${prodname} (لا UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ARABIC} "تمزيق بواسطة ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ARABIC} "سيتم إلغاء تثبيت ${prodname} من المجلد التالي.$\r$\nانقر على 'إلغاء تثبيت' لبدأ إلغاء التثبيت.$\r$\nتحذير: سيحذف برنامج إلغاء التثبيت دليل التثبيت، الذي يتضمن أي ملفات (مثل المنظفات المخصّصة) قد تكون أضفتها أو عدلتها."
+	LangString UNINSTALL_TEXT ${LANG_ARABIC} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_ASTURIAN
@@ -228,7 +228,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ASTURIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_ASTURIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ASTURIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ASTURIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_ASTURIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_BASQUE
@@ -282,7 +282,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BASQUE} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_BASQUE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BASQUE} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_BASQUE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_BASQUE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_BELARUSIAN
@@ -336,7 +336,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BELARUSIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_BELARUSIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BELARUSIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_BELARUSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_BELARUSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_BOSNIAN
@@ -390,7 +390,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BOSNIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_BOSNIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BOSNIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_BOSNIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_BOSNIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_BULGARIAN
@@ -444,7 +444,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_BULGARIAN} "Терминал за премахване на дефекти от ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_BULGARIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_BULGARIAN} "Споделено с ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_BULGARIAN} "Приложението ${prodname} ще бъде премахнато от следната папка.$\r$\nИзберете „Деинсталиране“ за да започне премахването.$\r$\nВнимание: Процесът напълно премахва папката, включително файловете (като шаблони за почистване), които се добавяли или променяли."
+	LangString UNINSTALL_TEXT ${LANG_BULGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_CATALAN
@@ -498,7 +498,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CATALAN} "Terminal de depuració del ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_CATALAN} "${prodname} (Sense UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_CATALAN} "Destrueix amb ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_CATALAN} "El ${prodname} es desinstal·larà de la carpeta següent.$\r$\nFeu clic a Desinstal·la per iniciar la desinstal·lació.$\r$\nAVÍS: El desinstal·lador elimina completament el directori d'instal·lació, inclosos els fitxers (com ara els netejadors personalitzats) que hàgiu afegit o modificat."
+	LangString UNINSTALL_TEXT ${LANG_CATALAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_CROATIAN
@@ -552,7 +552,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CROATIAN} "Terminal za otklanjanje grešaka programa ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_CROATIAN} "${prodname} (bez UAC-a)."
 	LangString SHRED_SHELL_MENU ${LANG_CROATIAN} "Nepovratno izbriši pomoću programa ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_CROATIAN} "${prodname} deinstalirat će se iz sljedeće mape.$\r$\nKliknite Deinstaliraj za početak deinstalacije.$\r$\nUPOZORENJE: Deinstalacijski program potpuno uklanja instalacijsku mapu, uključujući sve datoteke koje ste dodali ili promijenili, primjerice prilagođene čistače."
+	LangString UNINSTALL_TEXT ${LANG_CROATIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_CZECH
@@ -606,7 +606,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_CZECH} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_CZECH} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_CZECH} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_CZECH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_CZECH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_DANISH
@@ -660,7 +660,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DANISH} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_DANISH} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_DANISH} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_DANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_DANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_DUTCH
@@ -714,7 +714,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DUTCH} "${prodname} Foutopsporing"
 	LangString SHORTCUT_NO_UAC ${LANG_DUTCH} "${prodname} (Geen UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_DUTCH} "Versnipperen met ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_DUTCH} "${prodname} wordt verwijderd uit de volgende map.$\r$\nKlik op Verwijderen om de deïnstallatie te starten.$\r$\nWAARSCHUWING: De deïnstallatie verwijdert de gehele installatiemap, inclusief alle bestanden (zoals aangepaste opschoonmachines) die u mogelijk hebt toegevoegd of gewijzigd."
+	LangString UNINSTALL_TEXT ${LANG_DUTCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_ESTONIAN
@@ -768,7 +768,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ESTONIAN} "Terminal veaotsinguks - ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_ESTONIAN} "${prodname} (Ilma UAC-ta)."
 	LangString SHRED_SHELL_MENU ${LANG_ESTONIAN} "Hävita ${prodname}iga"
-	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "${prodname} eemaldatakse järgnevast kaustast.$\r$\nProtsessi käivitamiseks klõpsa „Eemalda“.$\r$\nHOIATUS: Eemaldusprogramm eemaldab kausta tervikuna, sealhulgas kõik sinu poolt sinna lisatud või muudetud failid (näiteks omaloodud skriptid ja lisamoodulid)."
+	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_FINNISH
@@ -822,7 +822,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FINNISH} "${prodname} Päätteen virheenkorjaus"
 	LangString SHORTCUT_NO_UAC ${LANG_FINNISH} "${prodname} (Ei UAC:tä)."
 	LangString SHRED_SHELL_MENU ${LANG_FINNISH} "Silppua ${prodname}illä"
-	LangString UNINSTALL_TEXT ${LANG_FINNISH} "${prodname} poistetaan seuraavasta kansiosta.$\r$\nAloita asennuksen poisto napsauttamalla 'Poista asennus'.$\r$\nVAROITUS: Asennuksen poisto-ohjelma poistaa asennushakemiston kokonaan, mukaan lukien kaikki lisäämäsi tai muuttamasi tiedostot (kuten mukautetut puhdistusohjelmat)."
+	LangString UNINSTALL_TEXT ${LANG_FINNISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_FRENCH
@@ -876,7 +876,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FRENCH} "Terminal de débogage de ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_FRENCH} "${prodname} (pas d'UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_FRENCH} "Broyer avec ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_FRENCH} "${prodname} sera désinstallé du dossier suivant.$\r$\nCliquez sur désinstaller pour démarrer la désinstallation.$\r$\nAVERTISSEMENT : Le programme de désinstallation supprime complètement le répertoire d’installation, y compris tous les fichiers (tels que les nettoyeurs personnalisés) que vous avez ajoutés ou modifiés."
+	LangString UNINSTALL_TEXT ${LANG_FRENCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_GALICIAN
@@ -930,7 +930,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GALICIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_GALICIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GALICIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_GALICIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_GALICIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_GERMAN
@@ -984,7 +984,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GERMAN} "${prodname} Debugging-Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_GERMAN} "${prodname} (ohne UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GERMAN} "Mit ${prodname} schreddern"
-	LangString UNINSTALL_TEXT ${LANG_GERMAN} "${prodname} wird aus dem folgenden Ordner deinstalliert.$\r$\nKlicken Sie auf »Deinstallieren«, um die Deinstallation zu starten.$\r$\nWARNUNG: Das Deinstallationsprogramm entfernt das Installationsverzeichnis vollständig, einschließlich aller Dateien (z. B. benutzerdefinierte Reiniger), die Sie möglicherweise hinzugefügt oder geändert haben."
+	LangString UNINSTALL_TEXT ${LANG_GERMAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_GREEK
@@ -1038,7 +1038,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GREEK} "Τερματικό αποσφαλμάτωσης ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_GREEK} "${prodname} (χωρίς UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GREEK} "Τεμαχισμός με το ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_GREEK} "Το ${prodname} θα απεγκατασταθεί από τον ακόλουθο φάκελο.$\r$\nΠατήστε «Uninstall» για να ξεκινήσει η απεγκατάσταση.$\r$\nΠΡΟΕΙΔΟΠΟΙΗΣΗ: Το πρόγραμμα απεγκατάστασης αφαιρεί πλήρως τον κατάλογο εγκατάστασης, συμπεριλαμβανομένων τυχόν αρχείων, όπως προσαρμοσμένοι καθαριστές, που έχετε προσθέσει ή αλλάξει."
+	LangString UNINSTALL_TEXT ${LANG_GREEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_HEBREW
@@ -1092,7 +1092,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HEBREW} "מסוף ניפוי שגיאות של ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_HEBREW} "${prodname} (אין UAC - בקרת גישת משתמש)."
 	LangString SHRED_SHELL_MENU ${LANG_HEBREW} "גריסה עם ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_HEBREW} "${prodname} יוסר מהתיקייה הבאה.$\r$\nלחיצה על הסרה תסיר את ההתקנה.$\r$\nאזהרה: תוכנית ההסרה תסיר את תיקיית ההתקנה לחלוטין לרבות כל קבצים שאולי נוספו או נערכו (כגון מנקים שנכתבו ידנית)."
+	LangString UNINSTALL_TEXT ${LANG_HEBREW} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_HUNGARIAN
@@ -1146,7 +1146,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HUNGARIAN} "${prodname} hibakereső terminál"
 	LangString SHORTCUT_NO_UAC ${LANG_HUNGARIAN} "${prodname} (UAC nélkül)."
 	LangString SHRED_SHELL_MENU ${LANG_HUNGARIAN} "Megsemmisítés ezzel: ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "A ${prodname} a következő mappából lesz eltávolítva.$\r$\nKattintson az Eltávolítás gombra az eltávolítás megkezdéséhez.$\r$\nFIGYELEM: Az eltávolító program teljesen törli a telepítési könyvtárat, beleértve minden olyan fájlt is (például egyedi tisztítókat), amelyeket Ön hozzáadott vagy módosított."
+	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_INDONESIAN
@@ -1200,7 +1200,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_INDONESIAN} "Terminal Debugging ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_INDONESIAN} "${prodname} (Tanpa UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_INDONESIAN} "Hancurkan dengan ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} akan dihapus instalasinya dari folder berikut.$\r$\nKlik Uninstall untuk memulai penghapusan instalasi.$\r$\nPERINGATAN: Uninstaller sepenuhnya menghapus direktori instalasi, termasuk berkas apa pun (seperti pembersih khusus) yang mungkin telah Anda tambahkan atau ubah."
+	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_ITALIAN
@@ -1254,7 +1254,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ITALIAN} "Terminale debug ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_ITALIAN} "${prodname} (nessun UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "${prodname} verrà disinstallato dalla seguente cartella.$\r$\nPer avviare la disinstallazione seleziona 'Disinstalla'.$\r$\nATTENZIONE: il programma di disinstallazione rimuove completamente la cartella di installazione, inclusi qualsiasi file (ad esempio i pulitori personalizzati) che potrebbero essere stati aggiunti o modificati."
+	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_JAPANESE
@@ -1308,7 +1308,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_JAPANESE} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_JAPANESE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_JAPANESE} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_JAPANESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_JAPANESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_KOREAN
@@ -1362,7 +1362,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_KOREAN} "${prodname} 디버깅 터미널"
 	LangString SHORTCUT_NO_UAC ${LANG_KOREAN} "${prodname} (UAC 없음)."
 	LangString SHRED_SHELL_MENU ${LANG_KOREAN} "${prodname}으로 파쇄"
-	LangString UNINSTALL_TEXT ${LANG_KOREAN} "${prodname}이(가) 다음 폴더에서 제거됩니다.$\r$\n제거를 클릭하여 제거를 시작합니다.$\r$\n경고: 제거 프로그램은 사용자가 추가하거나 변경한 파일( 예: 사용자 지정 클리너)을 포함하여 설치 디렉터리를 완전히 제거합니다."
+	LangString UNINSTALL_TEXT ${LANG_KOREAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_LATVIAN
@@ -1416,7 +1416,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LATVIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_LATVIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_LATVIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_LATVIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_LATVIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_LITHUANIAN
@@ -1470,7 +1470,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_LITHUANIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_LITHUANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_LITHUANIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_LITHUANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_LITHUANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_MALAY
@@ -1524,7 +1524,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_MALAY} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_MALAY} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_MALAY} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_MALAY} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_MALAY} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_NORWEGIAN
@@ -1578,7 +1578,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_NORWEGIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_NORWEGIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_NORWEGIAN} "Sikker sletting med ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_NORWEGIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_NORWEGIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_POLISH
@@ -1632,7 +1632,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_POLISH} "Terminal debugowania ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_POLISH} "${prodname} (Bez UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Zniszcz za pomocą ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_POLISH} "${prodname} zostanie odinstalowany z następującego katalogu.$\r$\nNaciśnij przycisk Odinstaluj, aby rozpocząć deinstalację.$\r$\nUWAGA: Deinstalator usunie całkowicie katalog instalacji, wraz z wszystkimi plikami (takimi jak niestandardowe instrukcje czyszczące), które mogły zostać dodane lub zmienione."
+	LangString UNINSTALL_TEXT ${LANG_POLISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_PORTUGUESE
@@ -1686,7 +1686,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESE} "Terminal de depuração do ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESE} "${prodname} (Sem Controlo de Conta de Utilizador)."
 	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESE} "Triturar com ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_PORTUGUESE} "O produto ${prodname} será desinstalado da seguinte pasta.$\r$\nClique em Desinstalar para iniciar a desinstalação.$\r$\nAVISO: O desinstalador remove completamente a pasta de instalação, incluindo quaisquer ficheiros (como programas de limpeza personalizados) que possa ter adicionado ou alterado."
+	LangString UNINSTALL_TEXT ${LANG_PORTUGUESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_PORTUGUESEBR
@@ -1740,7 +1740,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESEBR} "Terminal de depuração do ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESEBR} "${prodname} (Sem Controle de Conta de Usuário)."
 	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESEBR} "Triturar com ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "O produto ${prodname} será desinstalado da seguinte pasta.$\r$\nClique em Desinstalar para iniciar a desinstalação.$\r$\nAVISO: O desinstalador remove completamente a pasta de instalação, incluindo quaisquer arquivos (como programas de limpeza personalizados) que você possa ter adicionado ou alterado."
+	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_ROMANIAN
@@ -1794,7 +1794,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ROMANIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_ROMANIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ROMANIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ROMANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_ROMANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_RUSSIAN
@@ -1848,7 +1848,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_RUSSIAN} "${prodname} — отладочная консоль"
 	LangString SHORTCUT_NO_UAC ${LANG_RUSSIAN} "${prodname} (без UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_RUSSIAN} "Уничтожить с помощью ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "${prodname} будет удалён из следующей папки.$\r$\nНажмите «Удалить», чтобы начать удаление.$\r$\nПРЕДУПРЕЖДЕНИЕ: Программа удаления полностью удаляет каталог установки, включая любые файлы (например, пользовательские очистители), которые вы могли добавить или изменить."
+	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_SERBIAN
@@ -1902,7 +1902,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SERBIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_SERBIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SERBIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SERBIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_SERBIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_SIMPCHINESE
@@ -1956,7 +1956,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SIMPCHINESE} "${prodname} 调试终端"
 	LangString SHORTCUT_NO_UAC ${LANG_SIMPCHINESE} "${prodname} （无 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_SIMPCHINESE} "用 ${prodname} 擦除"
-	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "将从下列文件夹卸载 ${prodname}。$\r$\n单击卸载启动卸载过程。$\r$\n警告：卸载程序彻底删除安装目录，包括任何可能已添加或更改的文件（如自定义清理器）。"
+	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_SLOVAK
@@ -2010,7 +2010,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SLOVAK} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_SLOVAK} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SLOVAK} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SLOVAK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_SLOVAK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_SLOVENIAN
@@ -2064,7 +2064,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SLOVENIAN} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_SLOVENIAN} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SLOVENIAN} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SLOVENIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_SLOVENIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_SPANISH
@@ -2118,7 +2118,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SPANISH} "Terminal de Depurador ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_SPANISH} "${prodname} (Sin UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SPANISH} "Fragmentado con ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SPANISH} "${prodname} será desinstalado desde la carpeta siguiente.$\r$\nPulse sobre Desinstalar para iniciar la desinstalación.$\r$\nAVISO: el desinstalador retira completamente el directorio de instalación, incluyendo cualquier archivo (tal como purga adaptada) que puede haber añadido o modificado."
+	LangString UNINSTALL_TEXT ${LANG_SPANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_SWEDISH
@@ -2172,7 +2172,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SWEDISH} "Felsökningsterminal för ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_SWEDISH} "${prodname} (utan UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Säkerhetsradera med ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "${prodname} kommer att avinstalleras från följande mapp.$\r$\nKlicka på Avinstallera för att starta avinstallationen.$\r$\nVARNING: Avinstalleraren tar bort hela installationsmappen, inklusive filer (till exempel anpassade rensningsdefinitioner) som du har lagt till eller ändrat."
+	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_THAI
@@ -2226,7 +2226,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_THAI} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_THAI} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_THAI} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_THAI} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_THAI} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_TRADCHINESE
@@ -2280,7 +2280,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TRADCHINESE} "${prodname} 除錯終端"
 	LangString SHORTCUT_NO_UAC ${LANG_TRADCHINESE} "${prodname}（無 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_TRADCHINESE} "用 ${prodname} 粉碎"
-	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "將從以下資料夾卸載 ${prodname}。$\r$\n點擊「卸載」啟動卸載作業。$\r$\n警告：卸載程序將徹底刪除安裝目錄，包含任何您已添加或更改的檔案（如自定義清理器）。"
+	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_TURKISH
@@ -2334,7 +2334,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TURKISH} "${prodname} Hata Ayıklama Uçbirimi"
 	LangString SHORTCUT_NO_UAC ${LANG_TURKISH} "${prodname} (UAC yok)."
 	LangString SHRED_SHELL_MENU ${LANG_TURKISH} "${prodname} ile parçala"
-	LangString UNINSTALL_TEXT ${LANG_TURKISH} "${prodname} şu klasörden kaldırılacaktır.$\r$\nKaldırmayı başlatmak için Kaldır'a tıklayın.$\r$\nUYARI: Kaldırıcı eklemiş ya da değiştirmiş olabileceğiniz (özel temizleyiciler gibi) tüm dosyaları içeren kurulum dizinini tümüyle kaldırır."
+	LangString UNINSTALL_TEXT ${LANG_TURKISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_UKRAINIAN
@@ -2388,7 +2388,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UKRAINIAN} "Термінал налагодження ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_UKRAINIAN} "${prodname} (Немає UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_UKRAINIAN} "Shred із ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "${prodname} буде видалено з наступної теки.$\r$\nНатисніть «Видалити», щоб розпочати процес видалення.$\r$\nУВАГА: програма видалення повністю очищує каталог встановлення, включаючи будь-які файли (наприклад, користувацькі очищувачі), які ви могли додати або змінити."
+	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_UZBEK
@@ -2442,7 +2442,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UZBEK} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_UZBEK} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_UZBEK} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_UZBEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_UZBEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
 !ifdef LANG_VIETNAMESE
@@ -2496,6 +2496,6 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_VIETNAMESE} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_VIETNAMESE} "${prodname} (No UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_VIETNAMESE} "Shred with ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_VIETNAMESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory, including any files (such as custom cleaners) that you may have added or changed."
+	LangString UNINSTALL_TEXT ${LANG_VIETNAMESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
 !endif
 
