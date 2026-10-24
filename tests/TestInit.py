@@ -14,11 +14,13 @@ Test cases for __init__
 
 import os
 import shutil
+import subprocess
 import tempfile
 import unittest
 
 import bleachbit
 from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS, get_share_dirs, get_share_path
+from bleachbit.General import get_executable
 from tests import common
 
 
@@ -73,6 +75,22 @@ class InitTestCase(common.BleachbitTestCase):
         for fn in ('app-menu.ui', 'protected_path.xml'):
             self.assertExists(get_share_path(fn))
         self.assertIsNone(get_share_path('nonexistent'))
+
+    def test_stdout_encoding_frozen_console(self):
+        """A frozen console build uses the encoding of a redirected stdout"""
+        script = '''
+import io
+import sys
+sys.frozen = 'console_exe'
+sys.stdout = io.TextIOWrapper(io.BytesIO(), encoding='cp1252')
+import bleachbit
+sys.stderr.write('encoding=' + bleachbit.stdout_encoding)
+'''
+        result = subprocess.run(
+            [get_executable(), '-c', script],
+            capture_output=True, text=True, timeout=30, check=False)
+        self.assertEqual(result.returncode, 0, f'stderr: {result.stderr}')
+        self.assertIn('encoding=cp1252', result.stderr)
 
     @common.skipUnlessWindows
     def test_harden_dll_search_path(self):
