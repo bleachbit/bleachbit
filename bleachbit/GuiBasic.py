@@ -173,7 +173,7 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
 
     dialog.show_all()
     ret = dialog.run()
-    if options.get('expert_mode'):
+    if ret == Gtk.ResponseType.ACCEPT and options.get('expert_mode'):
         options.set('delete_confirmation', cb_popup.get_active())
     dialog.destroy()
     return ret == Gtk.ResponseType.ACCEPT
