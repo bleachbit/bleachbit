@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
-"PO-Revision-Date: 2026-10-24 19:23+0000\n"
-"Last-Translator: Amadɣas <massiin@proton.me>\n"
+"PO-Revision-Date: 2026-10-24 23:30+0000\n"
+"Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
 "Language: kab\n"
@@ -895,7 +895,7 @@ msgstr ""
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
-msgstr ""
+msgstr "Tidaddanin"
 
 #. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
@@ -1187,7 +1187,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
-msgstr ""
+msgstr "Tanarit"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
@@ -1243,7 +1243,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr ""
+msgstr "Tisuqqilin"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
@@ -1364,7 +1364,7 @@ msgstr ""
 #. TRANSLATORS: Cleaner name shown in the list of applications.
 #: ../bleachbit/Cleaner.py
 msgid "System"
-msgstr ""
+msgstr "Anagraw"
 
 #. TRANSLATORS: Description of the System cleaner.
 #: ../bleachbit/Cleaner.py
@@ -1429,7 +1429,7 @@ msgstr ""
 #. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
-msgstr ""
+msgstr "Takatut"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
@@ -1691,13 +1691,13 @@ msgstr ""
 #. was skipped because it matches the keep list
 #: ../bleachbit/Command.py
 msgid "Skip"
-msgstr ""
+msgstr "Zgel"
 
 #. TRANSLATORS: Label in the log indicating a path will be deleted
 #. (for previews) or was actually deleted (clean mode).
 #: ../bleachbit/Command.py
 msgid "Delete"
-msgstr ""
+msgstr "Kkes"
 
 #. TRANSLATORS: Warning message shown in the progress log.
 #: ../bleachbit/Command.py
@@ -1971,7 +1971,7 @@ msgstr ""
 #. TRANSLATORS: Title of confirmation dialog for repairing folder permissions.
 #: ../bleachbit/GuiBasic.py ../bleachbit/GuiWindow.py
 msgid "Confirm"
-msgstr ""
+msgstr "Serggeg"
 
 #. TRANSLATORS: Option in combo box to choose to stop after a number
 #. of files have been generated.
@@ -2221,7 +2221,7 @@ msgstr ""
 #. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Languages"
-msgstr ""
+msgstr "Tutlayin"
 
 #. TRANSLATORS: Sidebar label for the "keep list" (whitelist) page of
 #. the preferences dialog. This page lists paths that will be preserved
@@ -2283,7 +2283,7 @@ msgstr ""
 #. TRANSLATORS: Label for the language selection dropdown.
 #: ../bleachbit/GuiPreferences.py
 msgid "Language:"
-msgstr ""
+msgstr "Tutlayt:"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2400,7 +2400,7 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add"
-msgstr ""
+msgstr "Rnu"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
@@ -2438,7 +2438,7 @@ msgstr ""
 #. 'Name' is a noun.
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GuiTreeModels.py
 msgid "Name"
-msgstr ""
+msgstr "Isem"
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
@@ -2463,7 +2463,7 @@ msgstr ""
 #. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
-msgstr ""
+msgstr "Afaylu"
 
 #. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2923,12 +2923,12 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Delete"
-msgstr ""
+msgstr "Kkes"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Filename"
-msgstr ""
+msgstr "Isem n ufaylu"
 
 #: ../bleachbit/Unix.py
 #, python-format
@@ -2974,12 +2974,12 @@ msgstr ""
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
 msgid "Applications"
-msgstr ""
+msgstr "Isnasen"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
