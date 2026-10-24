@@ -179,10 +179,12 @@ def _parse_po_string(token):
     return ast.literal_eval(token)
 
 
-def _parse_po_file(po_path):
+def _parse_po_file(po_path, expected_msgids=None):
     """Parse a PO file and return a mapping of msgctxt to translated text.
 
     Untranslated and fuzzy entries map to the msgid, as with msgfmt.
+    If expected_msgids is provided, entries whose msgid does not match
+    expected_msgids[msgctxt] are skipped so stale translations are not used.
     """
     entries = {}
     current_ctx = None
@@ -199,8 +201,9 @@ def _parse_po_file(po_path):
                 # A blank line ends the entry, so a following entry without
                 # msgctxt cannot overwrite it
                 if current_ctx and current_id is not None and current_str is not None:
-                    use_str = current_str and not fuzzy
-                    entries[current_ctx] = current_str if use_str else current_id
+                    if expected_msgids is None or expected_msgids.get(current_ctx) == current_id:
+                        use_str = current_str and not fuzzy
+                        entries[current_ctx] = current_str if use_str else current_id
                 current_ctx = current_id = current_str = state = None
                 fuzzy = False
                 continue
@@ -339,6 +342,7 @@ def write_nsis_langfile():
         raise RuntimeError(
             'No LANG_ENGLISH strings found in NSIS language file.')
     translations = {}
+    expected_msgids = {f'nsis:{k}': v for k, v in english_strings.items()}
 
     for locale, _lang_macro in LANGUAGE_MAP:
         if locale == 'en':
@@ -348,7 +352,7 @@ def write_nsis_langfile():
         if not os.path.exists(po_path):
             translations[locale] = {}
             continue
-        entries = _parse_po_file(po_path)
+        entries = _parse_po_file(po_path, expected_msgids)
         nsis_entries = {
             key[len('nsis:'):]: value
             for key, value in entries.items()
@@ -369,16 +373,11 @@ def write_nsis_langfile():
     for locale, lang_macro in LANGUAGE_MAP:
         lines.append(f'!ifdef {lang_macro}\n')
         locale_entries = translations.get(locale, {})
-        existing_entries = lang_strings.get(lang_macro, {})
         for key in sorted(english_strings):
             if locale == 'en':
                 text = english_strings[key]
             else:
-                translated = locale_entries.get(key, '')
-                if translated:
-                    text = translated
-                else:
-                    text = existing_entries.get(key, english_strings[key])
+                text = locale_entries.get(key) or english_strings[key]
             lines.append(
                 f'\tLangString {key} ${{{lang_macro}}} "{_escape_nsis_text(text)}"\n')
         lines.append('!endif\n\n')
@@ -479,13 +478,13 @@ class TestNsisEscaping(unittest.TestCase):
         self.assertEqual(_parse_po_string(''), '')
         self.assertEqual(_parse_po_string('  '), '')
 
-    def _parse_po_text(self, content):
+    def _parse_po_text(self, content, expected_msgids=None):
         """Write content to a temporary PO file and parse it."""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.po', delete=False, encoding='utf-8') as f:
             f.write(content)
             temp_path = f.name
         try:
-            return _parse_po_file(temp_path)
+            return _parse_po_file(temp_path, expected_msgids)
         finally:
             os.unlink(temp_path)
 
@@ -515,6 +514,23 @@ msgstr "Translated"
         self.assertEqual(self._parse_po_text(content),
                          {'nsis:FUZZY_KEY': 'English',
                           'nsis:GOOD_KEY': 'Translated'})
+
+    def test_parse_po_stale_msgid_skipped(self):
+        """Translations for an outdated msgid are skipped."""
+        content = '''msgctxt "nsis:CHANGED_KEY"
+msgid "Old English"
+msgstr "Old translation"
+
+msgctxt "nsis:CURRENT_KEY"
+msgid "Current English"
+msgstr "Current translation"
+'''
+        expected = {
+            'nsis:CHANGED_KEY': 'New English',
+            'nsis:CURRENT_KEY': 'Current English',
+        }
+        self.assertEqual(self._parse_po_text(content, expected),
+                         {'nsis:CURRENT_KEY': 'Current translation'})
 
     def test_parse_nsis_stops_at_autogen_marker(self):
         """Regression test: ensure header parsing stops at auto-generated marker."""
