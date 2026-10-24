@@ -31,6 +31,7 @@ import re
 import shutil
 import subprocess
 import sys
+import sysconfig
 import tempfile
 import time
 
@@ -78,6 +79,8 @@ SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 UPX_EXE = shutil.which('upx') or (ROOT_DIR + '\\upx\\upx.exe')
 UPX_OPTS = '--best --nrv2e'
 ADVZIP_EXE = shutil.which('advzip') or (ROOT_DIR + '\\advancecomp\\advzip.exe')
+# File name tag for each supported sysconfig.get_platform()
+ARCH_TAGS = {'win32': '', 'win-amd64': '-x64'}
 
 
 def get_build_settings():
@@ -116,6 +119,7 @@ def get_build_settings():
         'build_english': is_max_effort,  # build English-only installer
         'upx': upx_enabled,  # compress executables
         'upx_tag': '-upx' if upx_enabled else '',  # filename tag for UPX builds
+        'arch_tag': ARCH_TAGS[sysconfig.get_platform()],  # filename tag (x64)
         # recompress zips with advzip
         'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)),
         'recompress_lib': not is_fast,  # prune and repack library.zip
@@ -429,10 +433,10 @@ def _prune_assets(root, exts, keep_list, label='asset'):
 
 def environment_check():
     """Check the build environment"""
-    logger.info('Checking for 32-bit Python')
-    if bleachbit.ARCH_BITS != 32:
-        logger.error('Expected 32-bit Python but found %d-bit',
-                     bleachbit.ARCH_BITS)
+    logger.info('Checking the Python platform')
+    if sysconfig.get_platform() not in ARCH_TAGS:
+        logger.error('Expected x86 or x64 Python but found %s',
+                     sysconfig.get_platform())
         sys.exit(1)
 
     logger.info('Checking for translations')
@@ -675,25 +679,30 @@ def build():
     python_version = sys.version_info[:2]
     if python_version == (3, 4):
         # For Python 3.4, copy msvcr100.dll
-        dll_name = 'msvcr100.dll'
+        dll_names = ['msvcr100.dll']
     elif python_version >= (3, 10):
         # For Python 3.10, copy vcruntime140.dll
-        dll_name = 'vcruntime140.dll'
+        dll_names = ['vcruntime140.dll']
+        if bleachbit.ARCH_BITS == 64:
+            # x64 C++ code, such as pywin32, also imports this one
+            dll_names.append('vcruntime140_1.dll')
     else:
         logger.error('Unsupported Python version')
         sys.exit(1)
-    dll_dirs = (sys.prefix, r'c:\windows\system32', r'c:\windows\SysWOW64')
-    copied_dll = False
-    for dll_dir in dll_dirs:
-        dll_path = os.path.join(dll_dir, dll_name)
-        if os.path.exists(dll_path):
-            logger.info('Copying %s from %s', dll_name, dll_path)
-            shutil.copy(dll_path, 'dist')
-            copied_dll = True
-            break
-    if not copied_dll:
-        logger.error('%s not found', dll_name)
-        sys.exit(1)
+    # WOW64 gives a 32-bit Python the SysWOW64 copies through system32
+    dll_dirs = (sys.prefix, r'c:\windows\system32')
+    for dll_name in dll_names:
+        copied_dll = False
+        for dll_dir in dll_dirs:
+            dll_path = os.path.join(dll_dir, dll_name)
+            if os.path.exists(dll_path):
+                logger.info('Copying %s from %s', dll_name, dll_path)
+                shutil.copy(dll_path, 'dist')
+                copied_dll = True
+                break
+        if not copied_dll:
+            logger.error('%s not found', dll_name)
+            sys.exit(1)
 
     sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
 
@@ -716,6 +725,7 @@ def delete_unnecessary():
         r'_win32sysloader.pyd',
         r'perfmon.pyd',
         r'servicemanager.pyd',
+        r'share\icons\adwaita\cursors',  # unused, no cursor theme is set
         r'share\icons\highcontrast',
         r'win32evtlog.pyd',
     ]
@@ -741,7 +751,9 @@ def delete_icons():
         'emblem-readonly.png',  # keep list page in preferences
         'emblem-readonly.svg',  # keep list page in preferences
     ]
-    _prune_assets(r'dist\share\icons', ['*.png', '*.svg'],
+    # AdwaitaLegacy's git markers would keep the pruned dirs from being removed
+    _prune_assets(r'dist\share\icons',
+                  ['*.png', '*.svg', '.placeholder', '.empty'],
                   icon_keep_list, label='protected icon')
 
 
@@ -824,8 +836,8 @@ def upx():
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    # Skip vcruntime140.dll because CantPackException and already signed.
-    upx_skip = {'vcruntime140.dll'}
+    # Skip the VC runtime because CantPackException and already signed.
+    upx_skip = {'vcruntime140.dll', 'vcruntime140_1.dll'}
     upx_files = [f for f in upx_files
                  if os.path.basename(f).lower() not in upx_skip]
 
@@ -1056,7 +1068,8 @@ def package_portable(settings):
     keep_font_cache_in_portable('BleachBit-Portable')
 
     archive('BleachBit-Portable',
-            f'BleachBit-{get_version()}-portable{settings["upx_tag"]}.zip',
+            f'BleachBit-{get_version()}{settings["arch_tag"]}-portable'
+            f'{settings["upx_tag"]}.zip',
             settings, use_advzip=True)
 
 
@@ -1074,13 +1087,16 @@ def nsis(opts, exe_name, nsi_path, settings):
         # NSIS !packhdr requires backslashes and no quotes in the define
         upx_path = UPX_EXE.replace('/', '\\')
         cmd.insert(-1, f'/DUPX_EXE={upx_path}')
+    if settings['arch_tag']:
+        cmd.insert(-1, '/DX64')
     run_cmd(cmd)
     assert_exist(exe_name)
 
 
 def installer_name(settings, lang='', ext='exe'):
     """Return the installer filename for the given language and extension"""
-    return f'windows\\BleachBit-{get_version()}-setup{lang}{settings["upx_tag"]}.{ext}'
+    return (f'windows\\BleachBit-{get_version()}{settings["arch_tag"]}-setup'
+            f'{lang}{settings["upx_tag"]}.{ext}')
 
 
 def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
