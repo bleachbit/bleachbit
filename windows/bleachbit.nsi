@@ -513,6 +513,7 @@ Function .onInit
     StrCpy $R1 $PerMachineInstallationFolder
     ; BleachBit 2.2 and older did not record InstallLocation
     ${IfThen} $R1 == "" ${|} StrCpy $R1 $INSTDIR ${|}
+    SetShellVarContext all
     Call UninstallOld
   ${EndIf}
   ; A per-user installation is registered under HKCU instead. Not when
@@ -522,7 +523,13 @@ Function .onInit
   ${AndIf} $IsAdmin = 0
     StrCpy $R0 $PerUserUninstallString
     StrCpy $R1 $PerUserInstallationFolder
+    SetShellVarContext current
     Call UninstallOld
+  ${EndIf}
+  ${If} $MultiUser.InstallMode == "AllUsers"
+    SetShellVarContext all
+  ${Else}
+    SetShellVarContext current
   ${EndIf}
 
   new_install:
