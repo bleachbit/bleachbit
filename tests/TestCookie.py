@@ -53,6 +53,8 @@ DOMAIN_MATCHING_CASES = (
      'Leading dots in keep list should match subdomains'),
     ('.example.com', 'fooexample.com', False,
      'Canonical registrable domain mismatch'),
+    ('a_b.com', 'x.axb.com', False,
+     'Underscore is not a wildcard'),
 )
 
 
@@ -67,6 +69,8 @@ class CookieTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Set up test fixtures"""
         super().setUp()
+        # A directory per test, so fixed file names never collide
+        self.tempdir = self.mkdtemp()
         # tearDown reloads Options, so this doesn't leak between tests
         options.set('shred', True)
         # remove the shared cookie keep-list file after every test
@@ -450,6 +454,25 @@ class CookieTestCase(common.BleachbitTestCase):
                     self.assertEqual(result['total_kept'], 0, reason)
                     self.assertEqual(result['total_deleted'], 1)
 
+    def test_delete_cookies_long_keep_list(self):
+        """A keep list longer than SQLite's expression depth limit works"""
+        path = self._create_chrome_cookies_db()
+        keep_list = {f'd{i}.example' for i in range(1000)} | {'google.com'}
+        for really_delete in (False, True):
+            with self.subTest(really_delete=really_delete):
+                result = Cookie.delete_cookies(
+                    path, keep_list, really_delete=really_delete)
+                self.assertFalse(result['skipped'])
+                self.assertEqual(result['total_kept'], 1)
+                self.assertEqual(result['total_deleted'], 2)
+
+        conn = sqlite3.connect(path)
+        try:
+            hosts = conn.execute('SELECT host_key FROM cookies').fetchall()
+        finally:
+            conn.close()
+        self.assertEqual(hosts, [('google.com',)])
+
     def test_preview_cookies_deletion_no_keeplist(self):
         """Test previewing cookie deletion with no keep list"""
         # Create test cookies
@@ -504,26 +527,95 @@ class CookieTestCase(common.BleachbitTestCase):
         # Create empty Chrome database
         path = self._create_chrome_cookies_db([])
 
-        # Test deletion with keep list
-        result = Cookie.delete_cookies(
-            path, {'example.com'}, really_delete=True)
+        # Preview must not promise the whole file when nothing is deleted
+        for really_delete in (False, True):
+            with self.subTest(really_delete=really_delete):
+                result = Cookie.delete_cookies(
+                    path, {'example.com'}, really_delete=really_delete)
 
-        self.assertEqual(result['total_deleted'], 0)
-        self.assertEqual(result['total_kept'], 0)
-        self.assertFalse(result['skipped'])
-        self.assertFalse(result['whole_file_deleted'])
-        self.assertGreaterEqual(result['file_size_reduction'], 0)
+                self.assertEqual(result['total_deleted'], 0)
+                self.assertEqual(result['total_kept'], 0)
+                self.assertFalse(result['skipped'])
+                self.assertFalse(result['whole_file_deleted'])
+                self.assertEqual(result['file_size_reduction'], 0)
+        self.assertExists(path)
 
-    def _make_cookie_action(self):
+    def test_delete_cookies_raises_sqlite_error_when_cleaning(self):
+        """A SQLite error while cleaning propagates instead of being skipped"""
+        path = self._create_chrome_cookies_db()
+        conn = sqlite3.connect(path)
+        try:
+            conn.execute("CREATE TRIGGER no_delete BEFORE DELETE ON cookies "
+                         "BEGIN SELECT RAISE(ABORT, 'refused'); END")
+            conn.commit()
+        finally:
+            conn.close()
+
+        with self.assertRaises(sqlite3.Error):
+            Cookie.delete_cookies(path, {'google.com'}, really_delete=True)
+
+        conn = sqlite3.connect(path)
+        try:
+            count = conn.execute('SELECT COUNT(*) FROM cookies').fetchone()[0]
+        finally:
+            conn.close()
+        self.assertEqual(count, 3)
+
+    def test_cookie_action_raises_on_failure(self):
+        """A failed cookie clean reaches the Worker as an error"""
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, json.dumps(['example.com']), mode='w')
+        path = os.path.join(self.tempdir, 'unknown_table.db')
+        execute_sqlite3(path, 'CREATE TABLE something_else (id INTEGER)')
+
+        cmds = list(self._make_cookie_action(path).get_commands())
+        self.assertEqual(len(cmds), 1)
+        with self.assertRaises(ValueError):
+            list(cmds[0].execute(really_delete=True))
+        self.assertExists(path)
+
+    def test_list_unique_cookies_backends_change(self):
+        """Cookie discovery survives the cleaner list changing under it"""
+        from bleachbit import Cleaner
+        chrome = self._create_chrome_cookies_db([('chrome.example', 'n')])
+        firefox = self._create_firefox_cookies_db([('.firefox.example', 'n')])
+
+        def make_cleaner(path, on_get_paths=None):
+            def get_paths():
+                if on_get_paths:
+                    on_get_paths()
+                yield path
+            action = mock.Mock(action_key='cookie', get_paths=get_paths)
+            return mock.Mock(actions=[('cookies', action)])
+
+        # The GUI thread refills backends while discovery runs.
+        backends = {
+            'a': make_cleaner(chrome, lambda: Cleaner.backends.pop('b')),
+            'b': make_cleaner(firefox),
+        }
+        with mock.patch.dict(Cleaner.backends, backends, clear=True):
+            hosts = Cookie.list_unique_cookies()
+        self.assertEqual(hosts, ['.firefox.example', 'chrome.example'])
+
+    def _make_cookie_action(self, path=None):
         """Create a Cookie action instance with a mock XML element."""
+        if path is None:
+            path = os.path.join(self.tempdir, 'nonexistent')
         elem = mock.MagicMock()
         elem.getAttribute.return_value = ''
         elem.getAttribute.side_effect = lambda name: {
             'command': 'cookie',
             'search': 'file',
-            'path': os.path.join(self.tempdir, 'nonexistent'),
+            'path': path,
         }.get(name, '')
         return CookieAction(elem)
+
+    def _assert_cookie_action_skipped(self, action):
+        """An unreadable keep list logs an error and yields no commands"""
+        with self.assertLogs('bleachbit.Action', level='ERROR'):
+            self.assertEqual(list(action.get_commands()), [])
 
     def test_load_keep_list_file_not_found(self):
         """FileNotFoundError should return empty set (no keep list configured)"""
@@ -546,6 +638,14 @@ class CookieTestCase(common.BleachbitTestCase):
         result = load_keep_list()
         self.assertEqual(result, {'example.com', 'example.org'})
 
+    def test_load_keep_list_bom(self):
+        """A keep list saved with a UTF-8 BOM still loads"""
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, '\ufeff["example.com"]'.encode('utf-8'))
+        self.assertEqual(load_keep_list(), {'example.com'})
+
     def test_load_keep_list_json_decode_error(self):
         """Corrupted JSON should raise JSONDecodeError, not return empty set"""
         action = self._make_cookie_action()
@@ -555,8 +655,7 @@ class CookieTestCase(common.BleachbitTestCase):
         self.write_file(keep_path, '{invalid json', mode='w')
         with self.assertRaises(json.JSONDecodeError):
             load_keep_list()
-        with self.assertRaises(json.JSONDecodeError):
-            list(action.get_commands())
+        self._assert_cookie_action_skipped(action)
 
     def test_load_keep_list_unicode_decode_error(self):
         """UnicodeDecodeError should propagate, not return empty set"""
@@ -569,8 +668,7 @@ class CookieTestCase(common.BleachbitTestCase):
             f.write(b'\x80\x81\x82')
         with self.assertRaises(UnicodeDecodeError):
             load_keep_list()
-        with self.assertRaises(UnicodeDecodeError):
-            list(action.get_commands())
+        self._assert_cookie_action_skipped(action)
 
     def test_load_keep_list_permission_error(self):
         """PermissionError (a subtype of OSError) should propagate"""
@@ -588,8 +686,7 @@ class CookieTestCase(common.BleachbitTestCase):
         with mock.patch('builtins.open', _mock_open):
             with self.assertRaises(PermissionError):
                 load_keep_list()
-            with self.assertRaises(PermissionError):
-                list(action.get_commands())
+            self._assert_cookie_action_skipped(action)
 
     @common.skipIfWindows
     def test_load_keep_list_chmod(self):
@@ -603,8 +700,7 @@ class CookieTestCase(common.BleachbitTestCase):
         os.chmod(keep_path, 0o200)  # write-only
         with self.assertRaises(PermissionError):
             load_keep_list()
-        with self.assertRaises(PermissionError):
-            list(action.get_commands())
+        self._assert_cookie_action_skipped(action)
         os.chmod(keep_path, 0o600)  # restore read permission
 
 
