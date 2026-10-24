@@ -23,6 +23,8 @@ Test case for module Chaff
 """
 
 from unittest import mock
+import errno
+import hashlib
 import os
 from tempfile import mkdtemp
 from shutil import rmtree
@@ -142,6 +144,29 @@ class ChaffTestCase(common.BleachbitTestCase):
         msg = _generate_email(subject_model, model, number_of_sentences=2)
         self.assertEqual(msg['Subject'], '')
 
+    def test_random_datetime_time_of_day(self):
+        """The Sent time must vary instead of always being midnight"""
+        from bleachbit.Chaff import _get_random_datetime
+
+        times = {_get_random_datetime().split(', ')[-1].split(' ', 1)[1]
+                 for _i in range(100)}
+        self.assertGreater(len(times), 1)
+
+    @mock.patch('bleachbit.Chaff._load_model')
+    def test_generate_2600_write_error(self, _mock_load_model):
+        """The caller's list must name every file, including one whose write failed"""
+        output_dir = self.mkdtemp()
+        generated_file_names = []
+        enospc = OSError(errno.ENOSPC, 'No space left on device')
+        with mock.patch('bleachbit.Chaff._generate_2600_file',
+                        side_effect=['a', 'b', enospc]):
+            with self.assertRaises(OSError):
+                generate_2600(5, output_dir,
+                              generated_file_names=generated_file_names)
+        self.assertEqual(len(generated_file_names), 3)
+        self.assertEqual(sorted(generated_file_names),
+                         sorted(os.path.join(output_dir, fn) for fn in os.listdir(output_dir)))
+
     @mock.patch('bleachbit.Network.download_url_to_fn')
     def test_have_models(self, mock_download):
         """Test for function have_models()"""
@@ -150,11 +175,23 @@ class ChaffTestCase(common.BleachbitTestCase):
                 f.write(b'')
             return True
         mock_download.side_effect = fake_download
-        download_models()
-        rc = have_models()
-        self.assertTrue(
-            rc, "have_models() should return True when models are present")
-        self.assertIsInstance(rc, bool)
+        empty_sha512 = dict.fromkeys(
+            MODEL_BASENAMES, hashlib.sha512(b'').hexdigest())
+        with mock.patch.dict(MODEL_SHA512, empty_sha512):
+            download_models()
+            rc = have_models()
+            self.assertTrue(
+                rc, "have_models() should return True when models are present")
+            self.assertIsInstance(rc, bool)
+            corrupt_fn = os.path.join(DEFAULT_MODELS_DIR, MODEL_BASENAMES[0])
+            self.write_file(corrupt_fn, b'corrupt')
+            self.assertFalse(
+                have_models(), "have_models() should return False when a model is corrupt")
+            mock_download.reset_mock()
+            download_models()
+            mock_download.assert_called_once()
+            self.assertEqual(mock_download.call_args.args[1], corrupt_fn)
+            self.assertTrue(have_models())
         for basename in MODEL_BASENAMES:
             fn = os.path.join(DEFAULT_MODELS_DIR, basename)
             self.assertExists(fn)
