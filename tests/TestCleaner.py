@@ -13,6 +13,8 @@ import glob
 import logging
 import os
 import shutil
+import time
+import unittest
 from unittest import mock
 from xml.dom.minidom import parseString
 
@@ -520,6 +522,21 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         register_all_cleaners()
         backends.clear()
         register_all_cleaners()
+
+    @unittest.skipUnless(IS_WINDOWS, 'prefetch is Windows only')
+    def test_system_prefetch_keeps_recent(self):
+        """Prefetch deletes old .pf files and keeps recent ones"""
+        windir = self.mkdir('windir')
+        prefetch = self.mkdir(os.path.join(windir, 'Prefetch'))
+        self.write_file(os.path.join(prefetch, 'RECENT.EXE-11111111.pf'))
+        old = self.write_file(os.path.join(prefetch, 'OLD.EXE-22222222.pf'))
+        month_ago = time.time() - 30 * 24 * 60 * 60
+        os.utime(old, (month_ago, month_ago))
+        with mock.patch.dict(os.environ, {'windir': windir}):
+            deleted = {os.path.normcase(cmd.path)
+                       for cmd in System().get_commands('prefetch')
+                       if isinstance(cmd, Command.Delete)}
+        self.assertEqual(deleted, {os.path.normcase(old)})
 
     @common.skipIfWindows  # FIXME later: reevaluate
     @common.skipUnlessDestructive

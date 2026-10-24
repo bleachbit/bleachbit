@@ -618,7 +618,14 @@ class System(Cleaner):
 
         # prefetch
         if IS_WINDOWS and 'prefetch' == option_id:
+            # Keep files from the past week so Windows retains launch data.
+            cutoff = time.time() - 7 * 24 * 60 * 60
             for path in glob.iglob(os.path.expandvars('$windir\\Prefetch\\*.pf')):
+                try:
+                    if os.path.getmtime(path) >= cutoff:
+                        continue
+                except OSError:
+                    continue
                 yield Command.Delete(path)
 
         # recycle bin
