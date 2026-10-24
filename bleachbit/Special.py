@@ -70,7 +70,13 @@ def _sqlite_uri(pathname, mode=None):
     abs_path = os.path.abspath(pathname)
     if IS_WINDOWS:
         abs_path = abs_path.replace('\\', '/')
-    quoted = quote(abs_path, safe='/:')
+    # quote() encodes a str as UTF-8, which may not be the filesystem
+    # encoding and fails on undecodable (surrogate-escaped) bytes.
+    quoted = quote(os.fsencode(abs_path), safe='/:')
+    if quoted.startswith('//'):
+        # An empty authority keeps SQLite from reading the server of a UNC
+        # path as the URI authority, which it rejects.
+        quoted = '//' + quoted
     uri = f'file:{quoted}'
     if mode:
         uri += f'?mode={mode}'
@@ -304,6 +310,10 @@ def delete_chrome_history(path):
         ids_str = ",".join([str(id0) for id0 in ids_int])
         where = f"where id not in ({ids_str})"
     cmds = __shred_sqlite_char_columns('urls', cols, where, path)
+    if cmds:  # the urls table exists
+        # Reset the visit statistics of the bookmarked URLs kept above, as
+        # for Firefox. last_visit_time is NOT NULL.
+        cmds += "update urls set visit_count=0, typed_count=0, last_visit_time=0;"
     cmds += __shred_sqlite_char_columns('visits', path=path)
     # Google Chrome 79 no longer has lower_term in keyword_search_terms
     cols = ('term',)
@@ -508,12 +518,10 @@ def delete_mozilla_favicons(path):
     # duplication. This is because the first usage of bookmarks
     # is for refining further queries to favicons db and if we
     # first extract the bookmarks as a Python list and give them
-    # to the query we could cause an error in execute_sqlite3 since
-    # it splits the cmds string by ';' and bookmarked url could
-    # contain a ';'. Also if we have a Python list with urls we
-    # need to pay attention to escaping JavaScript strings in some
-    # bookmarks and probably other things. So the safer way for now
-    # is to not compose a query with Python list of extracted urls.
+    # to the query we need to pay attention to escaping JavaScript
+    # strings in some bookmarks and probably other things. So the
+    # safer way for now is to not compose a query with Python list
+    # of extracted urls.
 
     def row_factory(_cursor, row):
         return row[0]

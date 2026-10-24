@@ -432,6 +432,10 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
                 # id 2 is www.bleachbit.org which is a bookmark and should
                 # be cleaned
                 self.assertEqual(ids, [2])
+                # with its visit statistics reset
+                c.execute(
+                    'select visit_count, typed_count, last_visit_time from urls')
+                self.assertEqual(c.fetchall(), [(0, 0, 0)])
 
                 # these tables should always be empty after cleaning
                 self.assertTablesAreEmpty(filename, ['downloads', 'keyword_search_terms',
@@ -768,6 +772,29 @@ INSERT INTO "meta" VALUES('version','20');"""
         self.assertIn('%3F', uri)  # the path's '?' is encoded, not a delimiter
         # no mode -> no query string at all
         self.assertNotIn('?', _sqlite_uri('/tmp/plain.db'))
+
+    def test_sqlite_uri_unc(self):
+        """A UNC path gets an empty URI authority, which SQLite accepts"""
+        from bleachbit.Special import _sqlite_uri
+        if IS_WINDOWS:
+            self.assertEqual(_sqlite_uri(r'\\server\share\places.sqlite'),
+                             'file:////server/share/places.sqlite')
+            return
+        # POSIX keeps a leading '//', which gives the same URI shape.
+        filename = os.path.join(self.mkdtemp(), 'unc.sqlite')
+        FileUtilities.execute_sqlite3(filename, 'CREATE TABLE foo(id int)')
+        self.assertTrue(_sqlite_uri('/' + filename).startswith('file:////'))
+        self.assertTrue(Special.sqlite_table_exists('/' + filename, 'foo'))
+
+    @common.skipUnlessLinux
+    def test_sqlite_table_exists_undecodable_path(self):
+        """A path with bytes that are not valid UTF-8 still opens"""
+        dirname = os.path.join(os.fsencode(self.tempdir), b'caf\xe9')
+        os.mkdir(dirname)
+        filename = os.fsdecode(os.path.join(dirname, b'test.sqlite'))
+        FileUtilities.execute_sqlite3(filename, 'CREATE TABLE foo(id int)')
+        self.assertTrue(Special.sqlite_table_exists(filename, 'foo'))
+        self.assertTrue(Special._sqlite_is_valid_database(filename))
 
     def test_sqlite_table_exists(self):
         """Unit test for sqlite_table_exists()"""
