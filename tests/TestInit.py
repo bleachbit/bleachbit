@@ -13,6 +13,7 @@ Test cases for __init__
 # pylint: disable=protected-access
 
 import os
+import re
 import shutil
 import tempfile
 import unittest
@@ -73,6 +74,18 @@ class InitTestCase(common.BleachbitTestCase):
         for fn in ('app-menu.ui', 'protected_path.xml'):
             self.assertExists(get_share_path(fn))
         self.assertIsNone(get_share_path('nonexistent'))
+
+    def test_icon_lookup_covers_make_install(self):
+        """The icon path of a default make install is looked up"""
+        makefile = os.path.join(os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__))), 'Makefile')
+        with open(makefile, encoding='utf-8') as f:
+            text = f.read()
+        prefix = re.search(r'^prefix \?= (\S+)$', text, re.M).group(1)
+        self.assertRegex(text, r'(?m)^datadir \?= \$\(prefix\)/share$')
+        self.assertIn('bleachbit.png $(DESTDIR)$(datadir)/pixmaps/', text)
+        self.assertIn(prefix + '/share/pixmaps/bleachbit.png',
+                      getattr(bleachbit, '__icons'))
 
     @common.skipUnlessWindows
     def test_harden_dll_search_path(self):
