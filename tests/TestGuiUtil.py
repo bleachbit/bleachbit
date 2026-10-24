@@ -10,6 +10,7 @@ Test cases for GuiUtil module.
 
 
 import os
+import threading
 import time
 import unittest
 from pathlib import Path
@@ -23,7 +24,8 @@ from bleachbit.GtkShim import Gdk, Gtk, is_gtk_available
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GuiUtil import (clear_clipboard, flush_gtk_events,
-                                   get_clipboard_paths, get_font_size_from_name)
+                                   get_clipboard_paths, get_font_size_from_name,
+                                   threaded)
 
 CLIPBOARD_TIMEOUT_SECONDS = 5
 CLIPBOARD_SLEEP_SECONDS = 0.05
@@ -190,6 +192,28 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
                     Clipboard(), [Target(target_name)]))
 
     @common.skipIfWindows
+    def test_get_clipboard_paths_text_skips_relative_paths(self):
+        """Skip plain-text lines that are not absolute paths"""
+        text = '\n'.join(['Downloads', '../..', self.paths[0]])
+
+        class Target:
+            """Stand-in for the text/plain Gdk.Atom"""
+
+            def name(self):
+                """Return the target name"""
+                return 'text/plain'
+
+        class Clipboard:
+            """Mock clipboard for testing"""
+
+            def wait_for_text(self):
+                """Return relative and absolute paths as plain text"""
+                return text
+
+        self.assertEqual([self.paths[0]],
+                         get_clipboard_paths(Clipboard(), [Target()]))
+
+    @common.skipIfWindows
     def test_get_clipboard_paths_unusable_target_name(self):
         """Fall back to a fresh atom when a target's name cannot be decoded.
 
@@ -301,3 +325,23 @@ class GUIUtilFontTestCase(common.BleachbitTestCase):
         for font_name in tests:
             self.assertIsNone(get_font_size_from_name(font_name),
                               f"Font name '{font_name}' should return None")
+
+
+@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
+class GUIUtilThreadedTestCase(common.BleachbitTestCase):
+    """Test case for the threaded decorator"""
+
+    def test_threaded_starts_daemon_thread(self):
+        """A hung background task must not keep the process from exiting"""
+        is_daemon = []
+        done = threading.Event()
+
+        # pylint: disable-next=possibly-used-before-assignment
+        @threaded
+        def task():
+            is_daemon.append(threading.current_thread().daemon)
+            done.set()
+
+        task()
+        self.assertTrue(done.wait(5))
+        self.assertEqual([True], is_daemon)
