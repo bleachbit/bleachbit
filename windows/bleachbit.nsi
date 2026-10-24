@@ -362,7 +362,7 @@ Section "$(SECTION_CORE_NAME)" SectionCore
     !include FilesToInstall.nsh
 
     # uninstaller
-    WriteUninstaller "$INSTDIR\uninstall.exe"
+    WriteUninstaller "$INSTDIR\${UNINSTALL_FILENAME}"
 
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
@@ -491,17 +491,13 @@ Function .onInit
     !insertmacro CopySectionFromOuter ${SectionShred}
   ${EndIf}
 
-  ; Check whether application is already installed
-  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-     "UninstallString"
-
   ; If not already installed, skip uninstallation. The outer instance handles
   ; per-user installations, since HKCU in the elevated one can be the admin's
   ${If} $IsInnerInstance = 0
   ${AndIf} $IsAdmin = 0
-    StrCmp "$R0$PerUserUninstallString" "" new_install
+    StrCmp "$PerMachineUninstallString$PerUserUninstallString" "" new_install
   ${Else}
-    StrCmp $R0 "" new_install
+    StrCmp $PerMachineUninstallString "" new_install
   ${EndIf}
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
@@ -512,7 +508,8 @@ Function .onInit
   Abort
 
   uninstall_old:
-  ${If} $R0 != ""
+  ${If} $PerMachineUninstallString != ""
+    StrCpy $R0 $PerMachineUninstallString
     StrCpy $R1 $PerMachineInstallationFolder
     ; BleachBit 2.2 and older did not record InstallLocation
     ${IfThen} $R1 == "" ${|} StrCpy $R1 $INSTDIR ${|}
@@ -665,7 +662,7 @@ Section "Uninstall" SectionUninstall
 
     # Remove the uninstaller as the very last step.
     # If something goes wrong, let the user run it again.
-    Delete $INSTDIR\uninstall.exe
+    Delete "$INSTDIR\${UNINSTALL_FILENAME}"
     # Files the user added, like custom cleaners, are no reason to reboot
     ${If} ${RebootFlag}
         RMDir /REBOOTOK "$INSTDIR\."
