@@ -2143,7 +2143,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_INVALID_PARAMS ${LANG_SWEDISH} "Ogiltig parameterkombination."
 	LangString MULTIUSER_LOGON_SERVICE_NOT_RUNNING ${LANG_SWEDISH} "Det gick inte att höja behörigheten, den sekundära inloggningstjänsten körs inte."
 	LangString MULTIUSER_NEW_INSTALLATION_ALL_USERS ${LANG_SWEDISH} "Ny installation för alla användare."
-	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SWEDISH} "Ny installation för den nuvarande användaren."
+	LangString MULTIUSER_NEW_INSTALLATION_CURRENT_USER ${LANG_SWEDISH} "Ny installation för den aktuella användaren."
 	LangString MULTIUSER_NOT_INSTALLED ${LANG_SWEDISH} "Det finns ingen installation av $(^NameDA)."
 	LangString MULTIUSER_PAGE_TITLE ${LANG_SWEDISH} "Välj användare"
 	LangString MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS ${LANG_SWEDISH} "Avinstallera version {OLD_VERSION} och installera version {VERSION} för alla användare."
