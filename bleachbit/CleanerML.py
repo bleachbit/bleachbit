@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 Deletion stays allowed, so blocking registry deletion too would buy nothing.
 """
-UNTRUSTED_BLOCKED_COMMANDS = ('process',)
+UNTRUSTED_BLOCKED_COMMANDS = ('process', 'process.terminate')
 
 
 class _ETSimpleTextNode:

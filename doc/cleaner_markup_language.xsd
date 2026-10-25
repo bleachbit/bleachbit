@@ -149,6 +149,7 @@ later.  See the COPYING file in the top-level directory.
                             <xs:enumeration value="office_registrymodifications"/>
                             <xs:enumeration value="pacman.cache"/>
                             <xs:enumeration value="process"/>
+                            <xs:enumeration value="process.terminate"/>
                             <xs:enumeration value="shred"/>
                             <xs:enumeration value="snap.disabled"/>
                             <xs:enumeration value="sqlite.vacuum"/>
@@ -190,6 +191,7 @@ later.  See the COPYING file in the top-level directory.
                         </xs:simpleType>
                       </xs:attribute>
                       <xs:attribute name="section" type="xs:string"/>
+                      <xs:attribute name="same_user" type="trueOrFalse"/>
                       <!-- Only supported when search="deep" -->
                       <xs:attribute name="skip_open" type="trueOrFalse"/>
                     </xs:extension>

@@ -277,6 +277,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             '    <description>Opt</description>\n'
             '    <action command="delete" search="file" path="test-does-not-exist"/>\n'
             '    <action command="process" cmd="calc.exe"/>\n'
+            '    <action command="process.terminate" name="calc.exe"/>\n'
             '  </option>\n'
             '</cleaner>\n')
         fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-trust'),
@@ -286,12 +287,14 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         def action_classes(cleaner):
             return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
 
-        self.assertIn('Process', action_classes(
-            CleanerML(fn, trusted=True).cleaner))
+        trusted = action_classes(CleanerML(fn, trusted=True).cleaner)
+        self.assertIn('Process', trusted)
+        self.assertIn('ProcessTerminate', trusted)
 
-        # The delete action stays; only the process action is dropped
+        # The delete action stays; only the process actions are dropped
         untrusted = action_classes(CleanerML(fn, trusted=False).cleaner)
         self.assertNotIn('Process', untrusted)
+        self.assertNotIn('ProcessTerminate', untrusted)
         self.assertIn('Delete', untrusted)
 
     def test_untrusted_winreg_action_allowed(self):

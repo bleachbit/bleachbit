@@ -16,7 +16,7 @@ import re
 from itertools import product
 
 # first party imports
-from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
+from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod, Process as ProcessMod  # mod=module
 from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Cookie import load_keep_list
@@ -629,6 +629,33 @@ class Process(ActionProvider):
         yield Command.Function(path=None, func=run_process,
                                # TRANSLATORS: %s is the command line to be executed
                                label=_("Run external command: %s") % self.cmd)
+
+
+class ProcessTerminate(ActionProvider):
+
+    """Action to terminate a process by executable name"""
+    action_key = 'process.terminate'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+        self.name = action_element.getAttribute('name')
+        if not self.name:
+            raise RuntimeError("process.terminate requires 'name' attribute")
+        same_user_attr = action_element.getAttribute('same_user')
+        self.same_user = (General.boolstr_to_bool(same_user_attr)
+                          if same_user_attr else True)
+
+    def get_commands(self):
+        def terminate():
+            ProcessMod.terminate_process(self.name, self.same_user)
+            return 0
+        yield Command.Function(
+            path=None,
+            func=terminate,
+            # TRANSLATORS: Label in the log for an action that stops a running
+            # process. 'Terminate' is a verb. {name} is the executable name
+            # (for example, explorer.exe). Do not translate {name}.
+            label=_("Terminate process: {name}").format(name=self.name))
 
 
 class Shred(FileActionProvider):

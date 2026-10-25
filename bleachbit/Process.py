@@ -256,7 +256,15 @@ def terminate_process(exename, require_same_user):
                 continue
             try:
                 if IS_WINDOWS:
-                    _import_psutil().Process(proc.pid).kill()
+                    psutil = _import_psutil()
+                    try:
+                        p = psutil.Process(proc.pid)
+                        p.kill()
+                        p.wait(timeout=3)
+                    except psutil.TimeoutExpired:
+                        pass
+                    except psutil.Error:
+                        continue
                 else:
                     os.kill(proc.pid, signal.SIGTERM)
                 terminated.append(proc.pid)
