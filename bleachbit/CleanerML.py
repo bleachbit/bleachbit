@@ -401,19 +401,26 @@ def reject_world_writable(pathname):
 
 
 def list_cleanerml_files(local_only=False, system_only=False):
-    """List CleanerML files"""
+    """List CleanerML files
+
+    The directories come in order of precedence (local, system, personal)
+    and the files are sorted within each one.
+    """
     cleanerdirs = ()
-    if not system_only:
-        cleanerdirs += (bleachbit.personal_cleaners_dir, )
-        if bleachbit.local_cleaners_dir:
-            # If the application is installed, locale_cleaners_dir is None.
-            # If portable mode, local_cleaners_dir is under the directory of
-            # `bleachbit.py`.
-            cleanerdirs += (bleachbit.local_cleaners_dir, )
+    if not system_only and bleachbit.local_cleaners_dir:
+        # If the application is installed, locale_cleaners_dir is None.
+        # If portable mode, local_cleaners_dir is under the directory of
+        # `bleachbit.py`.
+        cleanerdirs += (bleachbit.local_cleaners_dir, )
     if not local_only and bleachbit.system_cleaners_dir:
         cleanerdirs += (bleachbit.system_cleaners_dir, )
+    # In portable mode on Windows, the personal directory is the local one.
+    if not system_only and bleachbit.personal_cleaners_dir not in cleanerdirs:
+        cleanerdirs += (bleachbit.personal_cleaners_dir, )
     check_world_writable = not IS_WINDOWS
-    for pathname in listdir(cleanerdirs):
+    pathnames = (pathname for cleanerdir in cleanerdirs
+                 for pathname in sorted(listdir(cleanerdir)))
+    for pathname in pathnames:
         if not pathname.lower().endswith('.xml'):
             continue
         if check_world_writable:
@@ -448,13 +455,16 @@ def is_trusted_cleaner(pathname):
 
 
 def load_cleaners(cb_progress=lambda x: None, allow_local=True):
-    """Scan for CleanerML and load them"""
+    """Scan for CleanerML and load them
+
+    When two files share a cleaner id, the first one listed wins, so a
+    personal cleaner cannot replace a bundled one.
+    """
     if IS_POSIX:
         from bleachbit import Unix
         # handle_localizations() adds to this tree on every load
         Unix.locales = Unix.Locales()
     cleanerml_files = list(list_cleanerml_files(system_only=not allow_local))
-    cleanerml_files.sort()
     if not cleanerml_files:
         logger.debug('No CleanerML files to load.')
         return
@@ -462,6 +472,7 @@ def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     cb_progress(0.0)
     files_done = 0
     not_usable = []
+    loaded = {}
     for pathname in cleanerml_files:
         try:
             xmlcleaner = CleanerML(
@@ -475,8 +486,12 @@ def load_cleaners(cb_progress=lambda x: None, allow_local=True):
             yield True
             continue
         cleaner = xmlcleaner.get_cleaner()
-        if cleaner.is_usable():
+        if cleaner.id in loaded:
+            logger.warning('Ignoring cleaner %s because %s has the same id',
+                           pathname, loaded[cleaner.id])
+        elif cleaner.is_usable():
             Cleaner.backends[cleaner.id] = cleaner
+            loaded[cleaner.id] = pathname
         else:
             if cleaner.id:
                 not_usable.append(cleaner.id)

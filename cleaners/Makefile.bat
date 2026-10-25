@@ -63,7 +63,7 @@ goto end
 :folder
 if "%2"=="" goto errorfolder
 
-for %%f in (.\%2\*.xml) do Makefile.bat -file %%f
+for %%f in (.\%2\*.xml) do call Makefile.bat -file %%f
 goto end
 
 :file
@@ -100,7 +100,7 @@ rem goto end
 
 if not "%cleaner-xsd%"=="" xmllint --noout --schema %cleaner-xsd% %2
 if not "%cleaner-xsd%"=="" goto end
-if exist ..\doc\cleaner_markup_language.xsd xmllint --noout --schema ..\bleachbit\doc\cleaner_markup_language.xsd %2
+if exist ..\doc\cleaner_markup_language.xsd xmllint --noout --schema ..\doc\cleaner_markup_language.xsd %2
 if exist ..\doc\cleaner_markup_language.xsd goto end
 if exist ..\bleachbit\doc\cleaner_markup_language.xsd xmllint --noout --schema ..\bleachbit\doc\cleaner_markup_language.xsd %2
 if exist ..\bleachbit\doc\cleaner_markup_language.xsd goto end

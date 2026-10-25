@@ -25,12 +25,13 @@ Scan directory tree for files to delete
 import logging
 import os
 import re
+import subprocess
 import time
 import unicodedata
 from collections import namedtuple
-from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC
+from bleachbit import FS_SCAN_RE_FLAGS, IS_FREEBSD, IS_LINUX, IS_MAC
 from . import Command
-from .FileUtilities import is_normal_directory, whitelisted
+from .FileUtilities import is_normal_directory, openfiles, whitelisted
 
 
 def normalized_walk(top, **kwargs):
@@ -49,8 +50,19 @@ def normalized_walk(top, **kwargs):
         yield from os.walk(top, **kwargs)
 
 
+def _is_open(path):
+    """Return whether a process holds path open, or True if that is unknown"""
+    try:
+        return openfiles.is_open(path)
+    except (OSError, subprocess.CalledProcessError) as e:
+        logging.getLogger(__name__).warning(
+            'Keeping %s because open files cannot be listed: %s', path, e)
+        return True
+
+
 Search = namedtuple(
-    'Search', ['command', 'regex', 'nregex', 'wholeregex', 'nwholeregex'])
+    'Search', ['command', 'regex', 'nregex', 'wholeregex', 'nwholeregex',
+               'skip_open'])
 Search.__new__.__defaults__ = (None,) * len(Search._fields)
 
 
@@ -84,6 +96,9 @@ class CompiledSearch:
         self.nregex = re_compile(search.nregex)
         self.wholeregex = re_compile(search.wholeregex)
         self.nwholeregex = re_compile(search.nwholeregex)
+        # open_files() supports only these platforms
+        self.skip_open = bool(search.skip_open) and (
+            IS_LINUX or IS_MAC or IS_FREEBSD)
 
     def match(self, dirpath, filename, path_prefix=None):
         if self.regex and not self.regex.search(filename):
@@ -142,6 +157,8 @@ class DeepScan:
                     for filename in filenames:
                         full_name = c.match(dirpath, filename, path_prefix)
                         if full_name is None:
+                            continue
+                        if c.skip_open and _is_open(full_name):
                             continue
                         # fixme: support other commands
                         if c.command == 'delete':
