@@ -84,6 +84,9 @@ class _ETActionElementAdapter:
     def getAttribute(self, name):
         return self._element.attrib.get(name, '')
 
+    def hasAttribute(self, name):
+        return name in self._element.attrib
+
 
 def _gettext_etree(element):
     """Return text like General.getText() would for minidom nodes."""

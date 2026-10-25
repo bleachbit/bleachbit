@@ -135,17 +135,20 @@ class FileActionProvider(ActionProvider):
         assert (isinstance(self.nwholeregex, (str, type(None))))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
-        if self.object_type not in ('', 'f', 'd'):
+        if self.object_type not in ('', 'f', 'd') or (
+                self.object_type == '' and action_element.hasAttribute('type') is True):
             raise RuntimeError(f"Invalid type='{self.object_type}'")
         self._set_paths(action_element.getAttribute('path'), path_vars)
         self.ds = None
+        skip_open = action_element.getAttribute('skip_open')
+        has_skip_open = bool(skip_open) or (
+            action_element.hasAttribute('skip_open') is True)
         if 'deep' == self.search:
-            skip_open = action_element.getAttribute('skip_open')
             self.ds = (self.paths[0], DeepScan.Search(
                 command=action_element.getAttribute('command'),
                 regex=self.regex, nregex=self.nregex,
                 wholeregex=self.wholeregex, nwholeregex=self.nwholeregex,
-                skip_open=bool(skip_open) and General.boolstr_to_bool(skip_open)))
+                skip_open=General.boolstr_to_bool(skip_open) if has_skip_open else False))
             if len(self.paths) != 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained
@@ -154,6 +157,9 @@ class FileActionProvider(ActionProvider):
                     # can have multiple values. They're a way to make CleanerML
                     # files more concise.
                     _("Deep scan does not support multi-value variables."))
+        elif has_skip_open:
+            raise RuntimeError(
+                "skip_open is only supported with search='deep'")
         # If the filter is not needed, bypass it for speed.
         self._use_fast_path = not any([self.object_type, self.regex, self.nregex,
                                        self.wholeregex, self.nwholeregex])

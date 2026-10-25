@@ -516,11 +516,17 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_type_invalid(self):
         """An unknown type must not silently disable the filter"""
-        for object_type in ('file', 'F'):
+        for object_type in ('', 'file', 'F'):
             action_str = f'<action command="delete" search="file" type="{object_type}" path="{self.tempdir}" />'
             with self.subTest(object_type=object_type), \
                     self.assertRaises(RuntimeError):
                 _action_str_to_results(action_str)
+
+    def test_skip_open_non_deep_invalid(self):
+        """skip_open is rejected when search is not deep"""
+        action_str = f'<action command="delete" search="file" skip_open="true" path="{self.tempdir}" />'
+        with self.assertRaises(RuntimeError):
+            _action_str_to_results(action_str)
 
     def test_walk_all_top(self):
         """Unit test for walk.all and walk.top"""
