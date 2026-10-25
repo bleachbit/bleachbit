@@ -20,7 +20,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="history">
     <label>Database</label>
     <description>Delete the database, which contains information such as play count and last played</description>
-    <warning>This option deletes ratings, internet radio stations, and podcast subscriptions.</warning>
+    <warning translators="Warning shown when the user selects the Database cleaning option in Rhythmbox. 'Song ratings' are star ratings given to music tracks by the user.">This option will delete song ratings, internet radio stations, and podcast subscriptions.</warning>
     <action command="delete" search="file" path="$XDG_DATA_HOME/rhythmbox/rhythmdb.xml"/>
   </option>
 </cleaner>
