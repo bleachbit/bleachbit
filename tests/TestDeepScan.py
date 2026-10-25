@@ -183,7 +183,8 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             Search(command='delete', regex=r'\.bbtestswp$', skip_open=True),
             Search(command='delete', regex=r'\.bbtestbak$')]}
         for exc in (FileNotFoundError('lsof'),
-                    subprocess.CalledProcessError(1, 'lsof')):
+                    subprocess.CalledProcessError(1, 'lsof'),
+                    UnicodeDecodeError('utf-8', b'\xff', 0, 1, 'invalid')):
             with self.subTest(exc=exc), \
                     mock.patch('bleachbit.FileUtilities.open_files', side_effect=exc), \
                     mock.patch.object(openfiles, 'last_scan_time', None):

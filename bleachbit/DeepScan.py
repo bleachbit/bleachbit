@@ -54,7 +54,7 @@ def _is_open(path):
     """Return whether a process holds path open, or True if that is unknown"""
     try:
         return openfiles.is_open(path)
-    except (OSError, subprocess.CalledProcessError) as e:
+    except (OSError, subprocess.CalledProcessError, UnicodeDecodeError) as e:
         logging.getLogger(__name__).warning(
             'Keeping %s because open files cannot be listed: %s', path, e)
         return True
