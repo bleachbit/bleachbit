@@ -40,7 +40,7 @@ from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
 from bleachbit.Language import (find_supported_language_code,
                                 get_active_language_code,
                                 get_supported_language_code_name_dict,
-                                setup_translation)
+                                native_locale_names, setup_translation)
 from bleachbit.Language import get_text as _, pget_text as _p
 from bleachbit.Options import options
 
@@ -705,10 +705,9 @@ class PreferencesDialog(InfoBarMixin):
 
         # populate data
         liststore = Gtk.ListStore('gboolean', str, str)
-        if supported_langs is None:
-            # There is no English fallback here, so let the failure propagate.
-            supported_langs = get_supported_language_code_name_dict()
-        for lang, native in supported_langs.items():
+        # Offer every locale the cleaner purges, not only BleachBit's
+        # own translations.
+        for lang, native in sorted(native_locale_names.items()):
             liststore.append([(options.get_language(lang)), lang, native])
 
         # create treeview

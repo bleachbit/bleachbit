@@ -14,6 +14,7 @@ from unittest import mock
 from tests import common
 
 from bleachbit.GtkShim import is_gtk_available
+from bleachbit.Options import options
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
@@ -56,3 +57,18 @@ class GuiBasicTestCase(common.BleachbitTestCase):
                 mock.patch.object(GuiBasic, 'logger') as mock_logger:
             open_url('https://example.com', prompt=False)
             mock_logger.error.assert_not_called()
+
+    def test_delete_confirmation_cancel_keeps_setting(self):
+        """Only Delete may save an unticked 'Confirm before delete'"""
+        # pylint: disable=possibly-used-before-assignment
+        gtk = GuiBasic.Gtk
+        options.set('expert_mode', True)
+        for response, expected in ((gtk.ResponseType.CANCEL, True),
+                                   (gtk.ResponseType.DELETE_EVENT, True),
+                                   (gtk.ResponseType.ACCEPT, False)):
+            with self.subTest(response=response):
+                options.set('delete_confirmation', True)
+                with mock.patch.object(gtk.Dialog, 'run', return_value=response), \
+                        mock.patch.object(gtk.CheckButton, 'get_active', return_value=False):
+                    GuiBasic.delete_confirmation_dialog(None, False)
+                self.assertEqual(options.get('delete_confirmation'), expected)
