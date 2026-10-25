@@ -160,6 +160,7 @@ def alert_popup(text, timeout_ms=3000):
     except AttributeError:
         ctypes.windll.user32.MessageBoxW(0, text, "bleachbit_nsis_test", 0x40)
     except Exception:
+        # the alert is best-effort, never fail the run over it
         pass
 
 
@@ -168,6 +169,7 @@ def beep():
     try:
         winsound.Beep(880, 300)
     except Exception:
+        # no sound device
         pass
 
 
@@ -410,6 +412,7 @@ def preflight(exe_path, keep=None):
                 if TITLE_RE.search(w.window_text() or ""):
                     w.close()
             except Exception:
+                # window closed under us; the loop rechecks
                 pass
         time.sleep(0.5)
     raise StuckError("leftover BleachBit window would not close")
@@ -460,6 +463,7 @@ class WizardDriver:
                 if t:
                     texts.append(t)
         except Exception:
+            # page changed mid-walk; return what was read
             pass
         return texts
 
@@ -548,6 +552,7 @@ class WizardDriver:
                             "Button", "RadioButton", "CheckBox"):
                         buttons.append(c)
             except Exception:
+                # page changed mid-walk; keep what was found
                 pass
             btn_joined = " ".join(
                 (b.window_text() or "").lower() for b in buttons)
@@ -615,8 +620,8 @@ class WizardDriver:
                         if b.is_checked():
                             b.click()
                             log(f"  unchecked {b.window_text()!r}")
-                    except Exception:
-                        pass
+                    except Exception as e:
+                        log(f"  could not uncheck {t!r}: {e}")
                     break
 
             labels = {(b.window_text() or "").strip().lower(): b
@@ -1349,6 +1354,7 @@ def main():
             RESULTS_DIR.mkdir(exist_ok=True)
             (RESULTS_DIR / "crash.log").write_text(tb, encoding="utf-8")
         except Exception:
+            # still printed below
             pass
         print(tb)
         sys.exit(1)

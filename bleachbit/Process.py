@@ -150,6 +150,7 @@ def _enumerate_proc_fs(proc_dir='/proc'):
             comm = stat_content[stat_content.index('(') + 1:
                                 stat_content.rindex(')')]
         except (OSError, ValueError):
+            # process exited or stat is unreadable; exe may still match
             pass
 
         if not exe and not comm:
@@ -262,6 +263,7 @@ def terminate_process(exename, require_same_user):
                         p.kill()
                         p.wait(timeout=3)
                     except psutil.TimeoutExpired:
+                        # killed but still exiting
                         pass
                     except psutil.Error:
                         continue
