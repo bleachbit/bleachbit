@@ -596,6 +596,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             ('apt', 'aptitude'),
             ('rhythmbox', 'rhythmbox'),
             ('slack', 'slack'),
+            ('transmission', 'transmission-daemon'),
             ('transmission', 'transmission-gtk'),
             ('transmission', 'transmission-qt'),
         )

@@ -11,6 +11,7 @@ later.  See the COPYING file in the top-level directory.
 <cleaner id="transmission" os="linux">
   <label>Transmission</label>
   <description>File transfer client</description>
+  <running type="exe" same_user="true">transmission-daemon</running>
   <running type="exe" same_user="true">transmission-gtk</running>
   <running type="exe" same_user="true">transmission-qt</running>
   <option id="blocklists">
