@@ -136,14 +136,28 @@ class DeepScan:
         yield_time = time.time()
         # Overlapping searches and nested tops can match a file twice
         matched = set()
+        compiled = {top: [CompiledSearch(s) for s in searches]
+                    for (top, searches) in self.searches.items()}
+        # Keep an open file any skip_open search matches, even when another
+        # search or top reaches it first
+        guards = [(directory_prefix(top), c)
+                  for (top, searches) in compiled.items()
+                  for c in searches if c.skip_open]
 
-        for (top, searches) in self.searches.items():
+        def keep_open(dirpath, filename, path_prefix):
+            for (top_prefix, c) in guards:
+                if (path_prefix.startswith(top_prefix)
+                        and c.match(dirpath, filename, path_prefix)
+                        and _is_open(path_prefix + filename)):
+                    return True
+            return False
+
+        for (top, compiled_searches) in compiled.items():
             # This skips top-level directories that are in the keep list
             # to reduce unnecessary work. The root is only protected from
             # deletion, and the walk below prunes /proc, /sys and /run.
             if top != '/' and whitelisted(top):
                 continue
-            compiled_searches = [CompiledSearch(s) for s in searches]
             for (dirpath, dirnames, filenames) in normalized_walk(top):
                 # Prune keep-list dirs, symlinks, and reparse points:
                 # os.walk's followlinks=False skips POSIX links but not
@@ -160,9 +174,9 @@ class DeepScan:
                         full_name = c.match(dirpath, filename, path_prefix)
                         if full_name is None or full_name in matched:
                             continue
-                        if c.skip_open and _is_open(full_name):
-                            continue
                         matched.add(full_name)
+                        if keep_open(dirpath, filename, path_prefix):
+                            continue
                         # fixme: support other commands
                         if c.command == 'delete':
                             yield Command.Delete(full_name)
