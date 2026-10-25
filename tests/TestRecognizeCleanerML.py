@@ -31,6 +31,11 @@ class RecognizeCleanerMLTestCase(common.BleachbitTestCase):
 
     def test_init_without_salt(self):
         """Unit test for __init__ when hashsalt is not set in options"""
+        # Earlier tests may have initialized and persisted hashsalt in the
+        # shared test options directory. Stop any pending write and clear the
+        # in-memory value so this test always exercises first-time setup.
+        options.cancel_pending_flush()
+        options.config.remove_option('bleachbit', 'hashsalt')
         self.assertFalse(options.has_option('hashsalt'))
         # Create a CleanerML file so list_cleanerml_files() returns a file,
         # which exercises __recognized().
