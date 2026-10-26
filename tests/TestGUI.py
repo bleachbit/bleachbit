@@ -1084,6 +1084,50 @@ class GUITestCase(common.BleachbitTestCase):
         gui.on_window_state_event(
             gui, types.SimpleNamespace(new_window_state=Gdk.WindowState(0)))
 
+    def test_unmaximize_restores_saved_size(self):
+        """A maximized start must restore the remembered size on Windows"""
+        if not bleachbit.IS_WINDOWS:
+            self.skipTest('Windows snapshots the restore size at maximize()')
+        gui = self.get_window()
+        info = get_window_info(gui)
+        width, height = 820, 640
+        if info.width < width + 80 or info.height < height + 80:
+            width, height = 640, 480
+        x, y = info.x + 40, info.y + 40
+        options.set('remember_geometry', True)
+        options.set('window_fullscreen', False)
+        options.set('window_maximized', True)
+        options.set('window_x', x)
+        options.set('window_y', y)
+        options.set('window_width', width)
+        options.set('window_height', height)
+
+        def restore_window():
+            if gui.get_window() is None:
+                return
+            if gui.is_maximized():
+                gui.unmaximize()
+            gui.resize(800, 600)
+            self.refresh_gui()
+        self.addCleanup(restore_window)
+
+        gui.on_show(gui)
+        deadline = time.monotonic() + 2
+        while time.monotonic() < deadline and not gui.is_maximized():
+            self.refresh_gui(0.02)
+        self.assertTrue(gui.is_maximized())
+        gui.unmaximize()
+        deadline = time.monotonic() + 2
+        while time.monotonic() < deadline and gui.is_maximized():
+            self.refresh_gui(0.02)
+        self.assertFalse(gui.is_maximized())
+        alloc = gui.get_size()
+        self.assertEqual((alloc.width, alloc.height), (width, height))
+        self.assertEqual(options.get('window_width'), width)
+        self.assertEqual(options.get('window_height'), height)
+        pos = gui.get_position()
+        self.assertEqual((pos.root_x, pos.root_y), (x, y))
+
     def test_refresh_supersedes_running_registration(self):
         """A new refresh stops the registration still running"""
         gui = self.get_window()

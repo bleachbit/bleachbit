@@ -1397,11 +1397,30 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 # TRANSLATORS: Hint shown when starting in fullscreen mode.
                 _("Press F11 to exit fullscreen mode.") + '\n')
         elif options.get("window_maximized"):
-            self.maximize()
+            # maximize() asks Windows for the restore rectangle immediately.
+            # resize() above is still queued, so that snapshot is the default
+            # 800x600 and a later restore overwrites the remembered size.
+            # Configure events are processed before idle handlers, so
+            # maximizing on the next idle sees the restored size.
+            if IS_WINDOWS:
+                GLib.idle_add(self._maximize_after_restore)
+            else:
+                self.maximize()
 
         # Apply Windows 10 theme if on Windows and enabled
         if IS_WINDOWS:
             self.set_windows10_theme()
+
+    def _maximize_after_restore(self):
+        """Maximize once the restored size has been applied.
+
+        The map-time state event clears the saved maximized flag before
+        this runs, so the flag must not be read again here.
+        """
+        if self.get_window() is None:
+            return False
+        self.maximize()
+        return False
 
     def check_orphaned_wipe_files(self):
         """Check for orphaned wipe files and offer to delete them.
