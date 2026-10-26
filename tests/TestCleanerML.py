@@ -590,6 +590,38 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual(sorted(linux.options), [])
         self.assertEqual(linux.actions, [])
 
+    def test_waterfox_options_by_platform(self):
+        """The Waterfox cleaner has the macOS cache only on macOS"""
+        mac_cache = os.path.normpath(
+            os.path.expanduser('~/Library/Caches/Waterfox/Profiles/*/'))
+
+        def cache_paths(platform):
+            cleaner = self._load_real_cleaner_as('waterfox.xml', platform)
+            return [os.path.normpath(path)
+                    for option_id, action in cleaner.actions
+                    if option_id == 'cache'
+                    for path in action.paths]
+
+        self.assertIn(mac_cache, cache_paths('darwin'))
+        self.assertNotIn(mac_cache, cache_paths('win32'))
+        self.assertNotIn(mac_cache, cache_paths('linux'))
+
+    @common.skipIfWindows
+    def test_waterfox_macos_profile_var(self):
+        """On macOS the profile variable finds the Waterfox profile"""
+        home = os.path.join(self.tempdir, 'waterfox-home')
+        profile = os.path.join(
+            home, 'Library', 'Application Support', 'Waterfox', 'Profiles',
+            'abcd1234.default-release')
+        os.makedirs(profile)
+        with mock.patch.dict(os.environ, {'HOME': home}):
+            cleaner = self._load_real_cleaner_as('waterfox.xml', 'darwin')
+        paths = [os.path.normpath(path)
+                 for option_id, action in cleaner.actions
+                 if option_id == 'cookies'
+                 for path in action.paths]
+        self.assertIn(os.path.join(profile, 'cookies.sqlite'), paths)
+
     @common.skipUnlessLinux
     def test_running_process_names(self):
         """Cleaners notice their application by its Linux process name"""
