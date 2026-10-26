@@ -1,46 +1,50 @@
-- When user confirmed while preview was still running, the preview
-  continued while deletion interleaved. Now, the preview is stopped
-  when the user confirms. #bug
+- When the user confirmed while the preview was still running, the
+  preview kept running and interleaved with the deletion. Now, the
+  preview is stopped when the user confirms. #bug
 - Prevent cleaner reload and worker running simultaneously. OTA
   winapp2.ini update or closing the preferences dialog could interrupt
   a preview or cleaning in progress: registration empties the cleaner
   list while the worker still reads it, which throws errors. #bug
-- Refuse to delete if another operation starts during the confirmation.
-  Example: user clicks delete, confirmation appears, background OTA
-  winapp2.ini update refreshes the cleaner list. #bug
+- Refuse to delete if another operation starts during the
+  confirmation. Example: user clicks delete, the confirmation
+  appears, and a background OTA winapp2.ini update refreshes the
+  cleaner list. #bug
 - Prevent shredding files or wiping empty space while the worker is
-  busy. They could be triggered by the application menu or DnD.
-  The race condition had potential side effects such as the abort
-  button cancelling only one of the two operations. #bug
-- In case worker fails to start, re-enable the window and hide the
+  busy. They could be triggered by the application menu or
+  drag-and-drop. The race condition had potential side effects such
+  as the abort button cancelling only one of the two operations. #bug
+- If the worker fails to start, re-enable the window and hide the
   progress bar. #bug
 - Fix a race in "Shred Settings and Quit" when "Exit after cleaning"
   was enabled. The application exited before rebuilding the minimal
   configuration file: either the old settings were written back
-  (settings restored), or the clean file was never written (no file). In
-  portable mode, the missing file makes the next launch behave as
-  installed mode and write settings to the user profile.
+  (settings restored), or the clean file was never written (no file).
+  In portable mode, the missing file makes the next launch behave
+  like installed mode and write settings to the user profile. #bug
+- Enforce delete confirmation for shredding when expert mode is off,
+  even if confirmation was previously disabled. This prevents a
+  bypass if the user enables expert mode, disables delete
+  confirmation, then turns expert mode back off. #bug
+- Stop the operation when the window is closed. #bug
+- Do not ask to confirm deletion when a drag-and-drop contains no
+  valid files, which can happen when dragging from the Linux
+  trash. #bug
+- Skip relative paths when shredding plain text from the clipboard.
+  (The clipboard feature originates in 253019af to fix issue #303.)
   #bug
-- Enforce delete confirmation for shredding when expert mode is
-  off, even if confirmation was previously disabled. This prevents a
-  bypass if the user enables expert mode, disables delete confirmation,
-  then turns expert mode back off. #bug
-- Abort operation when window is closed. #bug
-- Do not ask to confirm deletion when a drag and drop contains no
-  valid files, which can happen when dragging from the Linux trash. #bug
-- Skip relative paths when shredding plain text from the clipboard. #bug
-  By the way, the clipboard feature originates in 253019af to fix issue #303.
-- If user toggled an option with a warning that raced with a cleaner reload,
-  the wrong option could be toggled instead. #bug
-- When the user clicked an option with a warning but did not accept it
-  (cancelled the dialog, or it was blocked by Expert Mode), the parent
-  checkbox became checked even though no child was enabled. #bug
-- Prevent a hung or slow update check from keeping the process running after the window closes. #bug
+- If the user toggled an option with a warning that raced with a
+  cleaner reload, the wrong option could be toggled instead. #bug
+- When the user clicked an option with a warning but did not accept
+  it (cancelled the dialog, or it was blocked by Expert Mode), the
+  parent checkbox became checked even though no child was enabled.
+  #bug
+- Prevent a hung or slow update check from keeping the process
+  running after the window closes. #bug
 
 Behavior changes:
-- --gui paths  now opens a separate instance when one is already running instead of dropping the paths.
-  Users will see two windows.
-- bleachbit --gui --no-delete-confirmation paths  without expert
-  mode will now prompt
-- Windows context menu to shred files will prompt, unless expert mode is enabled and
-  delete confirmation is disabled.
+- --gui paths now opens a separate instance when one is already
+  running instead of dropping the paths. Users will see two windows.
+- bleachbit --gui --no-delete-confirmation paths without expert mode
+  will now prompt.
+- Windows context menu to shred files will prompt, unless expert mode
+  is enabled and delete confirmation is disabled.
