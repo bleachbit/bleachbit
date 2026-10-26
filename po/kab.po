@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
-"PO-Revision-Date: 2026-10-20 22:18+0000\n"
+"PO-Revision-Date: 2026-10-26 01:03+0000\n"
 "Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
@@ -183,7 +183,7 @@ msgstr "Ifuyla yettwasqedcen melmi kan"
 #: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
 #: ../cleaners/vlc.xml
 msgid "Delete the most recently used list"
-msgstr "Sfeḍ tabdart n yisemliyen yettwasqedcen melmi kan"
+msgstr "Sfeḍ tabdart n yisemliyen yettwasqedcen ugar melmi kan"
 
 #: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
 #: ../cleaners/apt.xml ../cleaners/snap.xml
@@ -282,7 +282,7 @@ msgstr "Azray n tferka"
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
 msgid "Saved form entries and search bar history"
-msgstr ""
+msgstr "Isefka n tferka yettwaḥerzen d uzray n tfeggagt n unadi"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
@@ -303,6 +303,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
+"Taffa n yisefka n yismawen n yiseqdacen d wawalen uffiren, akked tebdart n "
+"yismal ideg ur ilaq ara ad ttwaseklsen wawalen uffiren"
 
 #. Warning shown when the user selects the Passwords cleaning option.
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/helium.xml
@@ -351,7 +353,7 @@ msgstr "Isefka n usmel"
 #: ../cleaners/teamviewer.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
+msgstr "Kkes LocalStorage, IndexedDB d yisefka nniḍen i ḥerzen yismal Web"
 
 #: ../cleaners/librewolf.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -367,7 +369,7 @@ msgstr "Ismenyifen n usmel"
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Settings for individual sites"
-msgstr ""
+msgstr "Iɣewwaṛen n yal asmel Web yettwarzan"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -394,7 +396,7 @@ msgstr "Tabdart n isebtar web yettwarzan"
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 #: ../bleachbit/Action.py
 msgid "Vacuum"
-msgstr ""
+msgstr "Skussem taffiwin n yisefka"
 
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
 #: ../cleaners/helium.xml ../cleaners/safari.xml ../cleaners/safari_windows.xml
@@ -407,10 +409,12 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
+"Kkes aseftutes n taffa n yisefka akken ad tesneɣseḍ tallunt yettwasqedcen, "
+"ad tesnerniḍ arured n yinig, war ma tekkseḍ ula d yiwen usefku"
 
 #: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
 msgid "Shell"
-msgstr ""
+msgstr "Shell"
 
 #: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
 #: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
@@ -420,7 +424,7 @@ msgstr "Kkes azray n tladna"
 #: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/libreoffice.xml
 msgid "Office suite"
-msgstr ""
+msgstr "Tagrumma tawurmahilt"
 
 #. TRANSLATORS: Description of the Recent documents list cleaning option.
 #: ../cleaners/openoffice.xml ../cleaners/audacious.xml
@@ -428,11 +432,11 @@ msgstr ""
 #: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
 #: ../bleachbit/Cleaner.py
 msgid "Delete the list of recently used documents"
-msgstr ""
+msgstr "Sfeḍ tabdart n yisemliyen yettwasqedcen melmi kan"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
-msgstr ""
+msgstr "Taffa n yisefka"
 
 #: ../cleaners/rhythmbox.xml
 msgid ""
@@ -443,13 +447,13 @@ msgstr ""
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Debug logs"
-msgstr ""
+msgstr "Iɣmisen n useɣti"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/easytag.xml
 #: ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Delete the debug logs"
-msgstr ""
+msgstr "Sfeḍ iɣmisen n useɣti"
 
 #. TRANSLATORS: Name of a cleaning option for temporary files.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
@@ -459,7 +463,7 @@ msgstr ""
 #: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../bleachbit/Cleaner.py
 msgid "Temporary files"
-msgstr ""
+msgstr "Ifuyla iskudanen"
 
 #. TRANSLATORS: Description of the Temporary files cleaning option.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
@@ -469,23 +473,23 @@ msgstr ""
 #: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../bleachbit/Cleaner.py
 msgid "Delete the temporary files"
-msgstr ""
+msgstr "Kkes ifuyla iskudanen"
 
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
-msgstr ""
+msgstr "Afecku n unadi"
 
 #: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/recoll.xml
 msgid "Index"
-msgstr ""
+msgstr "Amatar"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
+msgstr "Sfeḍ inagan n tuqqna, tansiwin URL yettwarzan d uzray n unadi"
 
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
-msgstr ""
+msgstr "Aseɣẓan n usefser n yiḍrisen"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/safari_windows.xml ../cleaners/epiphany.xml
@@ -495,12 +499,14 @@ msgstr ""
 #: ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
+"Sfeḍ tazarkatut Web, dayen ara yesneqsen akud ilaqen i wuskan n yisebtar "
+"yettwarzan yakan"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "A history of forms entered in websites"
-msgstr ""
+msgstr "Azray n yisefka yettwasekcmen deg tferka n yismal Web"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/brave.xml
@@ -508,24 +514,25 @@ msgstr ""
 #: ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr ""
+msgstr "Sfeḍ azray i yegbren ismal yettwarzan, isadaren d tenfulin"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Sync"
-msgstr ""
+msgstr "Amtawi"
 
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Delete the sync data (including web apps) and sign out of the browser"
 msgstr ""
+"Kkes isefka n umtawi (gar-asen isnasen Web), syen ffeɣ seg tɣimit n yiminig"
 
 #: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 msgid "Search engines"
-msgstr ""
+msgstr "Imsaddayen n unadi"
 
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
@@ -534,35 +541,38 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"Ales awennez n uzray n useqdec n yimsaddayen n unadi, kkes imsaddayen n "
+"unadi ur d-yeddin ara d yiminig seg tazwara, ihi kra seg-sen ttwarennun s "
+"wudem awurman"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
 msgid "Game"
-msgstr ""
+msgstr "Urar"
 
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Amaẓrag n tebzimin n ifuyla imeslawen"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
-msgstr ""
+msgstr "Iɣmisen n unagraw"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Sfeḍ iɣmisen iqburen n unagraw"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr ""
+msgstr "Sfeḍ tazarkatut n yivaṭaren d yimujiten"
 
 #: ../cleaners/filezilla.xml ../cleaners/smartftp.xml
 #: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
-msgstr ""
+msgstr "Amsaɣ n usiweḍ n ifuyla"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -596,66 +606,68 @@ msgstr ""
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Amgirred n umtawi"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
-msgstr ""
+msgstr "Taxtiṛit-a tettɛeṭṭil."
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr ""
+msgstr "Tissi n umṣada i yiseɣẓanen n Windows"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
-msgstr ""
+msgstr "Tinfulin"
 
 #: ../cleaners/thumbnails.xml
 msgid "Icons for files on the system"
-msgstr ""
+msgstr "Tignitin i yifuyla yellan deg unagraw"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
-msgstr ""
+msgstr "Tawennaṭ n ufellaru"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 msgid "Run"
-msgstr ""
+msgstr "Selkem"
 
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
 msgid "Search history"
-msgstr ""
+msgstr "Azray n unadi"
 
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
 msgid "Delete the search history"
-msgstr ""
+msgstr "Sfeḍ azray n unadi"
 
 #: ../cleaners/konqueror.xml
 msgid "Current session"
-msgstr ""
+msgstr "Tiɣimit tamirant"
 
 #: ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr ""
+msgstr "Kkes tiɣimit tamirant"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
-msgstr ""
+msgstr "Asefrak n ifuyla"
 
 #. TRANSLATORS: Name of a cleaning option for the history of recently used files.
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
 msgid "Recent documents list"
-msgstr ""
+msgstr "Tabdart n yisemliyen yettwasqedcen melmi kan"
 
 #: ../cleaners/windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
+"Taxtiṛit-a ad terr idigan yettwasentḍen deg « Addaf arurad » ɣer waddad-nsen "
+"n lexṣas."
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
@@ -663,68 +675,71 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
+msgstr "Kkes azemz n useqdec, ideg n usfaylu d yisefka nniḍen ɣef yikaramen"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
 msgstr ""
+"Taxtiṛit-a ad terr idigan n tegnitin n ufellaru ɣer waddad-nsen n lexṣas."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr ""
+msgstr "Taxtiṛit-a ad tessenkker Anaram n ifuyla n Windows tikkelt nniḍen."
 
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
-msgstr ""
+msgstr "Amgel-anfafad"
 
 #: ../cleaners/windows_defender.xml
 msgid "Quarantine"
-msgstr ""
+msgstr "Aɛzal"
 
 #: ../cleaners/thunderbird.xml
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
+"Tukksa n umatar ad terr tawila n tgejda deg tebdart n yiznan ɣer waddad-is n "
+"lexṣas."
 
 #: ../cleaners/thunderbird.xml
 msgid "Session restore"
-msgstr ""
+msgstr "Tiririt n tɣimit"
 
 #: ../cleaners/thunderbird.xml
 msgid "Restores the previous session when the browser next starts"
-msgstr ""
+msgstr "Ad d-terr tiɣimit yezrin mi ara yekker yiminig tikkelt i d-iteddun"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr ""
+msgstr "Kkes ifuyla ur yesri ara useɣẓan tura"
 
 #: ../cleaners/apt.xml
 msgid "Package lists"
-msgstr ""
+msgstr "Tibdarin n yikemmas"
 
 #. Cleaner description: the category of application. 'Container' means a software container that packages and runs applications in isolation, not a physical shipping container.
 #: ../cleaners/docker.xml
 msgid "Container platform"
-msgstr ""
+msgstr "Tiɣeṛɣeṛt n yinagbaren"
 
 #. Label for Claude coding assistant
 #: ../cleaners/docker.xml ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "Amallal n tigzi taragmawant"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/docker.xml ../cleaners/claude.xml
 msgid "Delete the conversation history"
-msgstr ""
+msgstr "Sfeḍ azray n idiwenniyen"
 
 #: ../cleaners/android_studio.xml
 msgid "Development environment"
-msgstr ""
+msgstr "Tawennaṭ n usnefli"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Tazarkatut n Gradle"
 
 #: ../cleaners/android_studio.xml
 msgid "Delete downloaded dependencies and build artifacts"
@@ -736,97 +751,102 @@ msgstr ""
 
 #: ../cleaners/android_studio.xml
 msgid "IDE cache"
-msgstr ""
+msgstr "Tazarkatut n IDE"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
-msgstr ""
+msgstr "Amaẓrag"
 
 #: ../cleaners/x11.xml
 msgid "Windowing system"
-msgstr ""
+msgstr "Anagraw n usexdem n yisfuyla"
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
-msgstr ""
+msgstr "Amaẓrag udlif"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Yensa"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Kkes ikemmas yensan"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr ""
+msgstr "Ameskan n yisemliyen"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr ""
+msgstr "Ikaramen yugnen ad uɣalen ɣer waddad-nsen n lexṣas."
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
 msgid "File history"
-msgstr ""
+msgstr "Azray n ifuyla"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
 msgid "Delete the file history used for /restore"
-msgstr ""
+msgstr "Sfeḍ azray n ifuyla yettwasqedcen i /restore"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Ad tesruḥeḍ timahilin « Kemmel seg wanda i teḥbseḍ », « Kemmel » d « Uɣal "
+"ɣer deffir » i tɣimiyin yezrin"
 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Tuṭṭfiwin n waddad n Shell"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr ""
+msgstr "Aḍummu lqayen"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr ""
+msgstr "Sfeḍ ifuyla yettwazuzren deg waṭas n yidigan deg uḍebsi"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr ""
+msgstr "Sekyed taskant akken ad twaliḍ ma llan ifuyla i tebɣiḍ ad tḥerzeḍ."
 
 #: ../cleaners/deepscan.xml
 msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Taxtiṛit-a tettɛeṭṭil. Sekyed taskant, nadi deg-s ɣef yifuyla i tebɣiḍ ad "
+"tḥerzeḍ, am wid i d-yeddan d yisnasen."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr ""
+msgstr "Ifuyla n usemselsi n VIM deg umaɣnu n useqdac"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
-msgstr ""
+msgstr "Ifuyla n usemselsi n VIM deg unagraw meṛṛa"
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
-msgstr ""
+msgstr "Ikalasen"
 
 #: ../cleaners/zoom.xml
 msgid "Delete the audio and video recordings"
-msgstr ""
+msgstr "Kkes ikalasen n umesli d uvidyu"
 
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
 msgstr ""
+"Kkes amatar n unadi, d taffa n yisefka i yegbren awalen d yifuyla ideg llan"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
-msgstr ""
+msgstr "Isebdaden"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
@@ -880,7 +900,7 @@ msgstr ""
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
-msgstr ""
+msgstr "Tidaddanin"
 
 #. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
@@ -1172,7 +1192,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
-msgstr ""
+msgstr "Tanarit"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
@@ -1228,7 +1248,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr ""
+msgstr "Tisuqqilin"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
@@ -1349,7 +1369,7 @@ msgstr ""
 #. TRANSLATORS: Cleaner name shown in the list of applications.
 #: ../bleachbit/Cleaner.py
 msgid "System"
-msgstr ""
+msgstr "Anagraw"
 
 #. TRANSLATORS: Description of the System cleaner.
 #: ../bleachbit/Cleaner.py
@@ -1414,7 +1434,7 @@ msgstr ""
 #. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
-msgstr ""
+msgstr "Takatut"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
@@ -1676,13 +1696,13 @@ msgstr ""
 #. was skipped because it matches the keep list
 #: ../bleachbit/Command.py
 msgid "Skip"
-msgstr ""
+msgstr "Zgel"
 
 #. TRANSLATORS: Label in the log indicating a path will be deleted
 #. (for previews) or was actually deleted (clean mode).
 #: ../bleachbit/Command.py
 msgid "Delete"
-msgstr ""
+msgstr "Kkes"
 
 #. TRANSLATORS: Warning message shown in the progress log.
 #: ../bleachbit/Command.py
@@ -1956,7 +1976,7 @@ msgstr ""
 #. TRANSLATORS: Title of confirmation dialog for repairing folder permissions.
 #: ../bleachbit/GuiBasic.py ../bleachbit/GuiWindow.py
 msgid "Confirm"
-msgstr ""
+msgstr "Serggeg"
 
 #. TRANSLATORS: Option in combo box to choose to stop after a number
 #. of files have been generated.
@@ -2206,7 +2226,7 @@ msgstr ""
 #. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Languages"
-msgstr ""
+msgstr "Tutlayin"
 
 #. TRANSLATORS: Sidebar label for the "keep list" (whitelist) page of
 #. the preferences dialog. This page lists paths that will be preserved
@@ -2268,7 +2288,7 @@ msgstr ""
 #. TRANSLATORS: Label for the language selection dropdown.
 #: ../bleachbit/GuiPreferences.py
 msgid "Language:"
-msgstr ""
+msgstr "Tutlayt:"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2385,7 +2405,7 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add"
-msgstr ""
+msgstr "Rnu"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
@@ -2423,7 +2443,7 @@ msgstr ""
 #. 'Name' is a noun.
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GuiTreeModels.py
 msgid "Name"
-msgstr ""
+msgstr "Isem"
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
@@ -2448,7 +2468,7 @@ msgstr ""
 #. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
-msgstr ""
+msgstr "Afaylu"
 
 #. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2908,12 +2928,12 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Delete"
-msgstr ""
+msgstr "Kkes"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Filename"
-msgstr ""
+msgstr "Isem n ufaylu"
 
 #: ../bleachbit/Unix.py
 #, python-format
@@ -2959,12 +2979,12 @@ msgstr ""
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
 msgid "Applications"
-msgstr ""
+msgstr "Isnasen"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py

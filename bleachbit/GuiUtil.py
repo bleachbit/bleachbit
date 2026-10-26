@@ -128,8 +128,16 @@ def get_clipboard_paths(clipboard=None, targets=None):
         # Plain text pasted from a text editor
         text = clipboard.wait_for_text()
         if text:
-            shred_paths = [p.strip()
-                           for p in text.splitlines() if p.strip()]
+            for line in text.splitlines():
+                path = line.strip()
+                if not path:
+                    continue
+                if not os.path.isabs(path):
+                    # It would resolve against the working directory
+                    logger.warning(
+                        'Skipping relative path from clipboard: %s', path)
+                    continue
+                shred_paths.append(path)
     return shred_paths
 
 
@@ -143,11 +151,12 @@ def get_font_size_from_name(font_name):
         number_part = font_name.split()[-1]
     except IndexError:
         return None
-    if '.' in number_part:
-        return int(float(number_part))
     try:
-        size_int = int(number_part)
-    except ValueError:
+        if '.' in number_part:
+            size_int = int(float(number_part))
+        else:
+            size_int = int(number_part)
+    except (ValueError, OverflowError):
         return None
     if size_int < 1:
         return None
@@ -280,7 +289,7 @@ def notify(msg):
         from bleachbit.Mac import notify_macos
         notify_macos(msg)
         return
-    if importlib.util.find_spec('plyer'):
+    if IS_WINDOWS and importlib.util.find_spec('plyer'):
         # On Windows, use Plyer.
         notify_plyer(msg)
         return
@@ -349,6 +358,7 @@ def notify_plyer(msg):
 def threaded(func):
     """Decoration to create a threaded function"""
     def wrapper(*args):
-        thread = threading.Thread(target=func, args=args)
+        # Daemon, so a hung network request cannot hold up the exit
+        thread = threading.Thread(target=func, args=args, daemon=True)
         thread.start()
     return wrapper

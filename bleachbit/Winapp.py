@@ -76,6 +76,9 @@ class _ActionNode:
     def getAttribute(self, name):
         return self._attrs.get(name, '')
 
+    def hasAttribute(self, name):
+        return name in self._attrs
+
 
 def section2option(s):
     """Normalize section name to appropriate option name"""

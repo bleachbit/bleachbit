@@ -16,7 +16,7 @@ import re
 from itertools import product
 
 # first party imports
-from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
+from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod, Process as ProcessMod  # mod=module
 from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Cookie import load_keep_list
@@ -135,13 +135,20 @@ class FileActionProvider(ActionProvider):
         assert (isinstance(self.nwholeregex, (str, type(None))))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
+        if self.object_type not in ('', 'f', 'd') or (
+                self.object_type == '' and action_element.hasAttribute('type') is True):
+            raise RuntimeError(f"Invalid type='{self.object_type}'")
         self._set_paths(action_element.getAttribute('path'), path_vars)
         self.ds = None
+        skip_open = action_element.getAttribute('skip_open')
+        has_skip_open = bool(skip_open) or (
+            action_element.hasAttribute('skip_open') is True)
         if 'deep' == self.search:
             self.ds = (self.paths[0], DeepScan.Search(
                 command=action_element.getAttribute('command'),
                 regex=self.regex, nregex=self.nregex,
-                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
+                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex,
+                skip_open=General.boolstr_to_bool(skip_open) if has_skip_open else False))
             if len(self.paths) != 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained
@@ -150,6 +157,9 @@ class FileActionProvider(ActionProvider):
                     # can have multiple values. They're a way to make CleanerML
                     # files more concise.
                     _("Deep scan does not support multi-value variables."))
+        elif has_skip_open:
+            raise RuntimeError(
+                "skip_open is only supported with search='deep'")
         # If the filter is not needed, bypass it for speed.
         self._use_fast_path = not any([self.object_type, self.regex, self.nregex,
                                        self.wholeregex, self.nwholeregex])
@@ -611,7 +621,7 @@ class Process(ActionProvider):
                 (rc, stdout, stderr) = General.run_external(args, wait=self.wait)
             except Exception as e:
                 raise RuntimeError(
-                    f'Exception in external command\nCommand: {args}\nError: {str(e)}') from e
+                    f'Exception in external command\nCommand: {self.cmd}\nError: {str(e)}') from e
             if self.wait and 0 != rc:
                 logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
                                args, rc, stdout, stderr)
@@ -619,6 +629,33 @@ class Process(ActionProvider):
         yield Command.Function(path=None, func=run_process,
                                # TRANSLATORS: %s is the command line to be executed
                                label=_("Run external command: %s") % self.cmd)
+
+
+class ProcessTerminate(ActionProvider):
+
+    """Action to terminate a process by executable name"""
+    action_key = 'process.terminate'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+        self.name = action_element.getAttribute('name')
+        if not self.name:
+            raise RuntimeError("process.terminate requires 'name' attribute")
+        same_user_attr = action_element.getAttribute('same_user')
+        self.same_user = (General.boolstr_to_bool(same_user_attr)
+                          if same_user_attr else True)
+
+    def get_commands(self):
+        def terminate():
+            ProcessMod.terminate_process(self.name, self.same_user)
+            return 0
+        yield Command.Function(
+            path=None,
+            func=terminate,
+            # TRANSLATORS: Label in the log for an action that stops a running
+            # process. 'Terminate' is a verb. {name} is the executable name
+            # (for example, explorer.exe). Do not translate {name}.
+            label=_("Terminate process: {name}").format(name=self.name))
 
 
 class Shred(FileActionProvider):

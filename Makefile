@@ -49,7 +49,7 @@ INSTALL_DEPS_ARGS ?=
 # MSYS make does not inherit OS, hence uname.
 UNAME_S := $(shell uname -s 2>/dev/null)
 ifneq (,$(filter MSYS% MINGW% CYGWIN%,$(UNAME_S)))
-PYLINT_ARGS ?= --ignored-modules=bleachbit.GtkShim,certifi,fcntl,gi,gi.repository,plyer,pwd,py2exe,win32com.shell
+PYLINT_ARGS ?= --ignored-modules=bleachbit.GtkShim,certifi,fcntl,gi,gi.repository,PIL,plyer,pwd,py2exe,pywinauto,win32com.shell
 else
 PYLINT_ARGS ?=
 endif

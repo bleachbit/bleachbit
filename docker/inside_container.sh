@@ -84,7 +84,7 @@ case "$DISTRO_NAME" in
             cp -a "$artifact" /artifacts/
         done
         ;;
-    py314-pytest)
+    py315-pytest)
         if [[ -n "${SKIP_TESTS:-}" ]]; then
             echo "SKIP_TESTS is set, so skipping pytest." >&2
             exit 0
