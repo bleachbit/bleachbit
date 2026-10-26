@@ -14,14 +14,17 @@ later.  See the COPYING file in the top-level directory.
   <running type="exe" os="unix" same_user="true">waterfox</running>
   <running type="exe" os="unix" same_user="true">waterfox-bin</running>
   <running type="exe" os="windows" same_user="true">waterfox.exe</running>
-  <running type="pathname">~/.waterfox/*.default/lock</running>
+  <running type="pathname">~/.waterfox/*/lock</running>
+  <running type="pathname">~/.var/app/net.waterfox.waterfox/.waterfox/*/lock</running>
   <var name="base">
     <value os="windows">%AppData%\Waterfox</value>
+    <value os="macos">~/Library/Application Support/Waterfox</value>
     <value os="unix">~/.waterfox</value>
     <value os="linux">~/.var/app/net.waterfox.waterfox/.waterfox</value>
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\Waterfox\Profiles\*</value>
+    <value search="glob" os="macos">~/Library/Application Support/Waterfox/Profiles/*</value>
     <value search="glob" os="unix">~/.waterfox/*</value>
     <value search="glob" os="linux">~/.var/app/net.waterfox.waterfox/.waterfox/*</value>
   </var>
@@ -40,6 +43,7 @@ redundant. It also contains the cache2 and OfflineCache directories.
 -->
     <action command="delete" search="walk.all" path="~/.cache/waterfox/"/>
     <action command="delete" search="walk.all" path="~/.var/app/net.waterfox.waterfox/cache"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/Waterfox/Profiles/*/" os="macos"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\OfflineCache"/>

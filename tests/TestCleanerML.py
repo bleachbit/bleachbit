@@ -27,6 +27,7 @@ from bleachbit.CleanerML import (
     load_cleaners,
     pot_fragment)
 from bleachbit.General import os_match as general_os_match
+from bleachbit.Process import ProcessInfo, process_cache
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -59,6 +60,16 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         # really delete
         self.run_all(xmlcleaner, True)
 
+    def test_android_studio_macos_vars(self):
+        """On macOS, the macos and unix values must not repeat a path"""
+        with mock.patch(
+                'bleachbit.CleanerML.general_os_match',
+                lambda os_str, _platform: general_os_match(os_str, 'darwin')):
+            xmlc = CleanerML('cleaners/android_studio.xml')
+        for var_name in ('gradle_home', 'android_home', 'as_cache', 'as_logs'):
+            values = xmlc.vars.get(var_name, [])
+            self.assertEqual(len(values), len(set(values)), var_name)
+
     def test_boolstr_to_bool(self):
         """Unit test for boolstr_to_bool()"""
         tests = [('True', True),
@@ -68,6 +79,37 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             self.assertEqual(boolstr_to_bool(arg), output)
             self.assertEqual(boolstr_to_bool(arg.lower()), output)
             self.assertEqual(boolstr_to_bool(arg.upper()), output)
+
+    def test_claude_session_keeps_memory(self):
+        """Claude > Session keeps the per-project auto-memory"""
+        project = os.path.join(self.tempdir, '.claude',
+                               'projects', '-tmp-proj')
+        transcript = os.path.join(project, 'abc.jsonl')
+        memory = os.path.join(project, 'memory', 'MEMORY.md')
+        common.touch_file(transcript)
+        common.touch_file(memory)
+        env = {'HOME': self.tempdir, 'USERPROFILE': self.tempdir}
+        with mock.patch.dict(os.environ, env):
+            cleaner = CleanerML('cleaners/claude.xml').get_cleaner()
+        paths = [path for option_id, action in cleaner.actions
+                 if option_id == 'session' for path in action.get_paths()]
+        self.assertIn(transcript, paths)
+        self.assertNotIn(memory, paths)
+        self.assertNotIn(os.path.dirname(memory), paths)
+
+    def test_claude_memory(self):
+        """Claude > Auto memory deletes only the per-project auto-memory"""
+        home = self.mkdtemp(prefix='bleachbit-claude-memory')
+        project = os.path.join(home, '.claude', 'projects', '-tmp-proj')
+        common.touch_file(os.path.join(project, 'abc.jsonl'))
+        memory = os.path.join(project, 'memory', 'MEMORY.md')
+        common.touch_file(memory)
+        env = {'HOME': home, 'USERPROFILE': home}
+        with mock.patch.dict(os.environ, env):
+            cleaner = CleanerML('cleaners/claude.xml').get_cleaner()
+        paths = [path for option_id, action in cleaner.actions
+                 if option_id == 'memory' for path in action.get_paths()]
+        self.assertEqual([memory, os.path.dirname(memory)], paths)
 
     def test_create_pot(self):
         """Unit test for create_pot()"""
@@ -91,6 +133,35 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual(
             [r'C:\Windows\Sysnative', r'C:\Windows\SysWOW64'],
             variables['WindowsSystem'])
+
+    @common.skipUnlessLinux
+    def test_dnf_running(self):
+        """The DNF and yum cleaners notice a running dnf or yum"""
+        for path in ('cleaners/dnf.xml', 'cleaners/yum.xml'):
+            cleaner = CleanerML(path).get_cleaner()
+            for name in ('dnf', 'dnf4', 'dnf5', 'yum'):
+                procs = (ProcessInfo(1234, name, False),)
+                with mock.patch('bleachbit.Process.process_cache.get', return_value=procs):
+                    self.assertTrue(cleaner.is_process_running(), (path, name))
+
+    @common.skipUnlessLinux
+    def test_geary_paths_listed_once(self):
+        """Geary lists each path once under the default XDG directories"""
+        env = {'HOME': self.tempdir,
+               'XDG_CACHE_HOME': os.path.join(self.tempdir, '.cache'),
+               'XDG_DATA_HOME': os.path.join(self.tempdir, '.local', 'share')}
+        common.touch_file(os.path.join(
+            env['XDG_CACHE_HOME'], 'geary', 'a.bin'))
+        common.touch_file(os.path.join(
+            env['XDG_DATA_HOME'], 'geary', 'acct', 'attachments', 'x.bin'))
+        with mock.patch.dict(os.environ, env):
+            cleaner = CleanerML('cleaners/geary.xml').get_cleaner()
+        for option_id in ('cache', 'attachments'):
+            with self.subTest(option_id=option_id):
+                paths = [path for oid, action in cleaner.actions
+                         if oid == option_id for path in action.get_paths()]
+                self.assertTrue(paths)
+                self.assertEqual(len(paths), len(set(paths)))
 
     def test_list_cleanerml_files(self):
         """Unit test for list_cleanerml_files()"""
@@ -128,6 +199,36 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
 
+    def test_load_cleaners_same_id(self):
+        """A personal cleaner does not replace a bundled one with the same id
+
+        Swap the directory names so the result cannot come from sorting paths.
+        """
+        xml_str = ('<cleaner id="test_same_id"><label>{label}</label>'
+                   '<option id="o"><label>O</label><description>D</description>'
+                   '<action command="delete" search="file" path="{base}/nonexistent"/>'
+                   '</option></cleaner>')
+        self.addCleanup(Cleaner.backends.pop, 'test_same_id', None)
+        for personal_name, system_name in (('a', 'b'), ('b', 'a')):
+            with self.subTest(personal=personal_name, system=system_name):
+                base = self.mkdtemp(prefix='bleachbit-cleanerml-same-id')
+                dirs = {'personal': os.path.join(base, personal_name),
+                        'system': os.path.join(base, system_name)}
+                for label, dirname in dirs.items():
+                    os.mkdir(dirname, 0o700)
+                    fn = os.path.join(dirname, 'same_id.xml')
+                    self.write_file(fn, text=xml_str.format(
+                        label=label, base=base))
+                    os.chmod(fn, 0o600)
+                with mock.patch.multiple(bleachbit,
+                                         personal_cleaners_dir=dirs['personal'],
+                                         system_cleaners_dir=dirs['system'],
+                                         local_cleaners_dir=None), \
+                        self.assertLogs('bleachbit.CleanerML', level='WARNING'):
+                    list(load_cleaners())
+                self.assertEqual(
+                    'system', Cleaner.backends['test_same_id'].name)
+
     def test_load_cleaners_invalid_utf8(self):
         """Unit test for load_cleaners() with invalid UTF-8 encoding"""
         pcd = bleachbit.personal_cleaners_dir
@@ -138,6 +239,31 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         list(load_cleaners())
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
+
+    @common.skipUnlessLinux
+    def test_load_cleaners_twice_localizations(self):
+        """Reloading cleaners does not add the localization rules again"""
+        from bleachbit import Unix
+        tempdir = self.mkdtemp(prefix='bleachbit-cleanerml-loc')
+        os.makedirs(os.path.join(tempdir, 'share', 'locale', 'fr'))
+        cleaners_dir = os.path.join(tempdir, 'cleaners')
+        os.mkdir(cleaners_dir)
+        self.write_file(os.path.join(cleaners_dir, 'loc.xml'), text=(
+            '<cleaner id="loctest" os="linux"><label>x</label><localizations>'
+            f'<path location="{tempdir}/share"><path location="locale" filter="*"/></path>'
+            '</localizations></cleaner>'))
+        with mock.patch.object(bleachbit, 'personal_cleaners_dir', cleaners_dir), \
+                mock.patch.object(bleachbit, 'local_cleaners_dir', None), \
+                mock.patch.object(bleachbit, 'system_cleaners_dir', None), \
+                mock.patch.object(Unix, 'locales', Unix.Locales()), \
+                mock.patch.dict(Cleaner.backends):
+            list(load_cleaners())
+            list(load_cleaners())
+            # pylint: disable-next=protected-access
+            self.assertEqual(len(Unix.locales._paths.children), 1)
+            paths = list(Unix.locales.localization_paths(['en']))
+        self.assertEqual(
+            paths, [os.path.join(tempdir, 'share', 'locale', 'fr')])
 
     def test_untrusted_process_action(self):
         """A process action is ignored for an untrusted cleaner"""
@@ -151,6 +277,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             '    <description>Opt</description>\n'
             '    <action command="delete" search="file" path="test-does-not-exist"/>\n'
             '    <action command="process" cmd="calc.exe"/>\n'
+            '    <action command="process.terminate" name="calc.exe"/>\n'
             '  </option>\n'
             '</cleaner>\n')
         fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-trust'),
@@ -160,12 +287,14 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         def action_classes(cleaner):
             return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
 
-        self.assertIn('Process', action_classes(
-            CleanerML(fn, trusted=True).cleaner))
+        trusted = action_classes(CleanerML(fn, trusted=True).cleaner)
+        self.assertIn('Process', trusted)
+        self.assertIn('ProcessTerminate', trusted)
 
-        # The delete action stays; only the process action is dropped
+        # The delete action stays; only the process actions are dropped
         untrusted = action_classes(CleanerML(fn, trusted=False).cleaner)
         self.assertNotIn('Process', untrusted)
+        self.assertNotIn('ProcessTerminate', untrusted)
         self.assertIn('Delete', untrusted)
 
     def test_untrusted_winreg_action_allowed(self):
@@ -461,6 +590,38 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual(sorted(linux.options), [])
         self.assertEqual(linux.actions, [])
 
+    def test_waterfox_options_by_platform(self):
+        """The Waterfox cleaner has the macOS cache only on macOS"""
+        mac_cache = os.path.normpath(
+            os.path.expanduser('~/Library/Caches/Waterfox/Profiles/*/'))
+
+        def cache_paths(platform):
+            cleaner = self._load_real_cleaner_as('waterfox.xml', platform)
+            return [os.path.normpath(path)
+                    for option_id, action in cleaner.actions
+                    if option_id == 'cache'
+                    for path in action.paths]
+
+        self.assertIn(mac_cache, cache_paths('darwin'))
+        self.assertNotIn(mac_cache, cache_paths('win32'))
+        self.assertNotIn(mac_cache, cache_paths('linux'))
+
+    @common.skipIfWindows
+    def test_waterfox_macos_profile_var(self):
+        """On macOS the profile variable finds the Waterfox profile"""
+        home = os.path.join(self.tempdir, 'waterfox-home')
+        profile = os.path.join(
+            home, 'Library', 'Application Support', 'Waterfox', 'Profiles',
+            'abcd1234.default-release')
+        os.makedirs(profile)
+        with mock.patch.dict(os.environ, {'HOME': home}):
+            cleaner = self._load_real_cleaner_as('waterfox.xml', 'darwin')
+        paths = [os.path.normpath(path)
+                 for option_id, action in cleaner.actions
+                 if option_id == 'cookies'
+                 for path in action.paths]
+        self.assertIn(os.path.join(profile, 'cookies.sqlite'), paths)
+
     def test_seamonkey_options_by_platform(self):
         """The SeaMonkey cleaner has the macOS paths only on macOS"""
         caches = '~/Library/Caches/SeaMonkey/Profiles/*/'
@@ -491,6 +652,28 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                     self.assertIn(mac_path, paths('darwin', option))
                     self.assertNotIn(mac_path, paths('win32', option))
                     self.assertNotIn(mac_path, paths('linux', option))
+
+    @common.skipUnlessLinux
+    def test_running_process_names(self):
+        """Cleaners notice their application by its Linux process name"""
+        cases = (
+            ('android_studio', 'studio'),
+            ('apt', 'apt'),
+            ('apt', 'aptitude'),
+            ('rhythmbox', 'rhythmbox'),
+            ('slack', 'slack'),
+            ('transmission', 'transmission-daemon'),
+            ('transmission', 'transmission-gtk'),
+            ('transmission', 'transmission-qt'),
+        )
+        self.addCleanup(process_cache.invalidate)
+        for cleaner_id, exe_name in cases:
+            with self.subTest(cleaner_id=cleaner_id, exe_name=exe_name):
+                cleaner = CleanerML(f'cleaners/{cleaner_id}.xml').get_cleaner()
+                process_cache.invalidate()
+                with mock.patch('bleachbit.Process.enumerate_processes',
+                                return_value=[ProcessInfo(1234, exe_name, True)]):
+                    self.assertTrue(cleaner.is_process_running())
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
@@ -542,3 +725,42 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.run_all(xmlc, True)
         self.assertNotExists(test_log_path_a)
         self.assertNotExists(test_log_path_b)
+
+    def test_xlate_cb_source_text(self):
+        """The .pot callback gets the source text, not its translation"""
+        xml_str = f"""<cleaner id="xlate">
+    <label translate="true">Label</label>
+    <description>Description</description>
+    <option id="option1">
+        <label>Option label</label>
+        <description>Option description</description>
+        <warning>Option warning</warning>
+        <action search="file" command="delete" path="{self.tempdir}/nonexistent"/>
+    </option>
+</cleaner>
+"""
+        cml_path = os.path.join(self.tempdir, 'xlate.xml')
+        self.write_file(cml_path, xml_str.encode(sys.getdefaultencoding()))
+        strings = []
+        with mock.patch('bleachbit.CleanerML._', lambda s: 'translated ' + s):
+            xmlc = CleanerML(cml_path,
+                             lambda s, translators=None: strings.append(s))
+        self.assertEqual(['Label', 'Description', 'Option label',
+                          'Option description', 'Option warning'], strings)
+        self.assertEqual('translated Label', xmlc.cleaner.name)
+
+    @common.skipUnlessWindows
+    def test_vuze_program_files(self):
+        """Vuze actions under Program Files stay in the Vuze folder"""
+        roots = (r'C:\Program Files (x86)', r'C:\Program Files')
+        env = {'ProgramFiles': roots[0], 'ProgramW6432': roots[1]}
+        with mock.patch.dict(os.environ, env):
+            cleaner = CleanerML('cleaners/vuze.xml').get_cleaner()
+        vuze_dirs = tuple(root + '\\Vuze\\' for root in roots)
+        checked = 0
+        for _option_id, action in cleaner.actions:
+            for path in getattr(action, 'paths', ()):
+                if path.startswith(roots):
+                    self.assertTrue(path.startswith(vuze_dirs), path)
+                    checked += 1
+        self.assertGreater(checked, 0)

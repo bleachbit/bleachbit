@@ -46,7 +46,10 @@ def _settings_paths(path):
     # pylint: disable-next=protected-access
     is_link = stat.S_ISLNK(FileUtilities._file_type(path) or 0)
     if is_link and os.path.isdir(path):
-        return [os.path.join(path, name) for name in os.listdir(path)]
+        try:
+            return [os.path.join(path, name) for name in os.listdir(path)]
+        except OSError:
+            return []
     return [path]
 
 
@@ -65,8 +68,12 @@ class Bleachbit(Gtk.Application):
             application_id_suffix += xdist_worker
         application_id = '{}{}'.format(
             'org.gnome.Bleachbit', application_id_suffix)
+        flags = Gio.ApplicationFlags.FLAGS_NONE
+        if shred_paths:
+            # The paths would never reach an already running instance
+            flags |= Gio.ApplicationFlags.NON_UNIQUE
         Gtk.Application.__init__(
-            self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
+            self, application_id=application_id, flags=flags)
         GLib.set_prgname('org.bleachbit.BleachBit')
 
         self._font_check_prompt_scheduled = False
@@ -239,6 +246,8 @@ class Bleachbit(Gtk.Application):
         if not path:
             # user cancelled
             return
+        if self._window.refuse_if_busy():
+            return
 
         backends['_gui'] = Cleaner.create_wipe_empty_space_cleaner(path)
 
@@ -353,13 +362,16 @@ class Bleachbit(Gtk.Application):
         dialog.destroy()
 
     def do_activate(self):
-        if not self._window:
+        is_first_activation = not self._window
+        if is_first_activation:
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
         self._window.present()
         if self._shred_paths:
-            GLib.idle_add(GUI.shred_paths, self._window,
-                          self._shred_paths, priority=GLib.PRIORITY_LOW)
+            # A later activation must not shred the same paths again
+            if is_first_activation:
+                GLib.idle_add(GUI.shred_paths, self._window,
+                              self._shred_paths, priority=GLib.PRIORITY_LOW)
             # When we shred paths and auto exit with the Windows Explorer context menu command we close the
             # application in GUI.shred_paths, because if it is closed from here there are problems.
             # Most probably this is something related with how GTK handles idle quit calls.

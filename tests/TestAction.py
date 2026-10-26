@@ -24,7 +24,7 @@ from xml.sax.saxutils import quoteattr
 
 # first party imports
 from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, FS_CASE_SENSITIVE, logger
-from bleachbit.Action import ActionProvider, ChromeOrphanedFrameworkVersions, Command, Delete, has_glob, expand_multi_var
+from bleachbit.Action import ActionProvider, ChromeOrphanedFrameworkVersions, Command, Delete, Process, has_glob, expand_multi_var
 from bleachbit.CleanerML import CleanerML
 from bleachbit.FileUtilities import close_delete_parent_lock
 from tests import common
@@ -109,7 +109,7 @@ class ActionTestCase(common.BleachbitTestCase):
         for cmd in provider.get_commands():
             self.assertIsInstance(
                 cmd, (Command.Delete, Command.Ini, Command.Json, Command.Function))
-            if 'process' != command and not has_glob(filename) and expect_exists:
+            if command not in ('process', 'process.terminate') and not has_glob(filename) and expect_exists:
                 # process does not have a filename
                 self.assertLExists(filename)
             # preview
@@ -124,7 +124,7 @@ class ActionTestCase(common.BleachbitTestCase):
                 self.assertLExists(filename)
                 os.remove(filename)
                 self.assertNotLExists(filename)
-            elif command in 'process':
+            elif command in ('process', 'process.terminate'):
                 pass
             elif command in ('ini', 'json'):
                 self.assertLExists(filename)
@@ -342,6 +342,17 @@ class ActionTestCase(common.BleachbitTestCase):
         self._test_action_str(action_str)
         self.assertNotExists(fn)
 
+    def test_process_unbalanced_quote(self):
+        """A command line that cannot be split raises RuntimeError"""
+        action_node = parseString(
+            '<action command="process" cmd="foo &quot;bar" />').childNodes[0]
+        cmd = next(Process(action_node).get_commands())
+        with mock.patch('bleachbit.Action.General.run_external') as mock_run:
+            with self.assertRaises(RuntimeError) as context:
+                cmd.func()
+        mock_run.assert_not_called()
+        self.assertIn('No closing quotation', str(context.exception))
+
     def test_process_unicode_stderr(self):
         """
         Test what happens when we have return code != 0 and unicode string in stderr.
@@ -361,6 +372,27 @@ class ActionTestCase(common.BleachbitTestCase):
                         "test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
                 else:
                     MockHandleError.assert_not_called()
+
+    def test_process_terminate(self):
+        """Unit test for process.terminate action"""
+        with mock.patch('bleachbit.Process.terminate_process', return_value=[1234]) as mock_term:
+            self._test_action_str(
+                '<action command="process.terminate" name="explorer.exe" />')
+            mock_term.assert_called_once_with('explorer.exe', True)
+
+        with mock.patch('bleachbit.Process.terminate_process', return_value=[]) as mock_term:
+            self._test_action_str(
+                '<action command="process.terminate" name="explorer.exe" same_user="false" />')
+            mock_term.assert_called_once_with('explorer.exe', False)
+
+        for bad_action in (
+            '<action command="process.terminate" />',
+            '<action command="process.terminate" name="" />',
+            '<action command="process.terminate" name="explorer.exe" same_user="1" />',
+        ):
+            with self.subTest(bad_action=bad_action), \
+                    self.assertRaises(RuntimeError):
+                _action_str_to_results(bad_action)
 
     def test_regex(self):
         """Unit test for regex option"""
@@ -513,6 +545,20 @@ class ActionTestCase(common.BleachbitTestCase):
         action_str = f'<action command="delete" search="file" type="d" path="{dirname}" />'
         self._test_action_str(action_str)
         self.assertNotExists(dirname)
+
+    def test_type_invalid(self):
+        """An unknown type must not silently disable the filter"""
+        for object_type in ('', 'file', 'F'):
+            action_str = f'<action command="delete" search="file" type="{object_type}" path="{self.tempdir}" />'
+            with self.subTest(object_type=object_type), \
+                    self.assertRaises(RuntimeError):
+                _action_str_to_results(action_str)
+
+    def test_skip_open_non_deep_invalid(self):
+        """skip_open is rejected when search is not deep"""
+        action_str = f'<action command="delete" search="file" skip_open="true" path="{self.tempdir}" />'
+        with self.assertRaises(RuntimeError):
+            _action_str_to_results(action_str)
 
     def test_walk_all_top(self):
         """Unit test for walk.all and walk.top"""

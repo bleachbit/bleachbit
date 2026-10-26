@@ -118,8 +118,10 @@ class Worker:
                     filename = FileUtilities.extended_path_undo(filename)
                 # Do not show traceback.
                 logger.error(_("File not found: %s"), filename)
-            elif isinstance(e, OSError) and e.errno == errno.EACCES:
-                # EACCES (Error ACCESS) means access denied.
+            elif isinstance(e, OSError) and e.errno in (
+                    errno.EACCES, errno.ELOOP, errno.ENOTDIR):
+                # EACCES means access denied; ELOOP and ENOTDIR also occur when
+                # O_NOFOLLOW refuses a symlink swapped in for a file or dir.
                 # Do not show traceback.
                 if e.strerror == "Access denied in delete_locked_file()":
                     # This comes from Windows.delete_locked_file()

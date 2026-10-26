@@ -155,9 +155,6 @@ VIFileVersion ${File_VERSION}
   ; NsisMultiUser sets the directory.
   ;InstallDir "$PROGRAMFILES\${prodname}"
 
-  ;Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\${prodname}" ""
-
   ;Request application privileges for Windows Vista
   ; NsisMultiUser sets this, when needed.
   ;RequestExecutionLevel admin
@@ -183,6 +180,7 @@ VIFileVersion ${File_VERSION}
 !include UAC.nsh
 !include NsisMultiUser.nsh
 !include LogicLib.nsh
+!include Sections.nsh
 !include StdUtils.nsh
 !include WinVer.nsh
 
@@ -364,7 +362,7 @@ Section "$(SECTION_CORE_NAME)" SectionCore
     !include FilesToInstall.nsh
 
     # uninstaller
-    WriteUninstaller "$INSTDIR\uninstall.exe"
+    WriteUninstaller "$INSTDIR\${UNINSTALL_FILENAME}"
 
     SetOutPath "$INSTDIR\"
     CreateDirectory "$SMPROGRAMS\${prodname}"
@@ -436,9 +434,10 @@ SectionEnd
 !ifndef NoSectionShred
   Section "$(SECTION_INTEGRATE_SHRED_NAME)" SectionShred
     ; Register Windows Explorer Shell Extension (Shredder)
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
-    WriteRegStr HKCR "${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
+    ; New keys under HKCR go to HKLM, which a per-user install cannot write
+    WriteRegStr SHCTX "Software\Classes\${SHRED_REGEX_KEY}" "" '$(SHRED_SHELL_MENU)'
+    WriteRegStr SHCTX "Software\Classes\${SHRED_REGEX_KEY}" "Icon" "$INSTDIR\bleachbit.exe,0"
+    WriteRegStr SHCTX "Software\Classes\${SHRED_REGEX_KEY}\command" "" '"$INSTDIR\bleachbit.exe" --context-menu "%1"'
   SectionEnd
 !endif
 
@@ -451,6 +450,19 @@ SectionEnd
 
 ;--------------------------------
 ;Installer Functions
+
+!macro SelectSectionIfExists SECTION PATH
+  ${If} ${FileExists} "${PATH}"
+    !insertmacro SelectSection ${SECTION}
+  ${Else}
+    !insertmacro UnselectSection ${SECTION}
+  ${EndIf}
+!macroend
+
+!macro CopySectionFromOuter SECTION
+  !insertmacro UAC_AsUser_GetSection Flags ${SECTION} $0
+  SectionSetFlags ${SECTION} $0
+!macroend
 
 Function .onInit
 
@@ -467,12 +479,26 @@ Function .onInit
     !insertmacro MUI_LANGDLL_DISPLAY
   ${EndIf}
 
-  ; Check whether application is already installed
-  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
-     "UninstallString"
+  ; The outer instance already uninstalled the old version and preselected
+  ; its components
+  ${If} $IsInnerInstance = 1
+    !insertmacro CopySectionFromOuter ${SectionStart}
+    !insertmacro CopySectionFromOuter ${SectionDesktop}
+    !insertmacro CopySectionFromOuter ${SectionQuickLaunch}
+    !ifndef NoTranslations
+      !insertmacro CopySectionFromOuter ${SectionTranslations}
+    !endif
+    !insertmacro CopySectionFromOuter ${SectionShred}
+  ${EndIf}
 
-  ; If not already installed, skip uninstallation
-  StrCmp $R0 "" new_install
+  ; If not already installed, skip uninstallation. The outer instance handles
+  ; per-user installations, since HKCU in the elevated one can be the admin's
+  ${If} $IsInnerInstance = 0
+  ${AndIf} $IsAdmin = 0
+    StrCmp "$PerMachineUninstallString$PerUserUninstallString" "" new_install
+  ${Else}
+    StrCmp $PerMachineUninstallString "" new_install
+  ${EndIf}
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
     "$(ALREADY_INSTALLED)" \
@@ -482,12 +508,29 @@ Function .onInit
   Abort
 
   uninstall_old:
-  ; If installing in silent mode, also uninstall in silent mode
-  Var /GLOBAL uninstaller_cmd
-  StrCpy $uninstaller_cmd '$R0 _?=$INSTDIR'
-  IfSilent 0 +2
-  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
-  ExecWait $uninstaller_cmd ; Actually run the uninstaller
+  ${If} $PerMachineUninstallString != ""
+    StrCpy $R0 $PerMachineUninstallString
+    StrCpy $R1 $PerMachineInstallationFolder
+    ; BleachBit 2.2 and older did not record InstallLocation
+    ${IfThen} $R1 == "" ${|} StrCpy $R1 $INSTDIR ${|}
+    SetShellVarContext all
+    Call UninstallOld
+  ${EndIf}
+  ; A per-user installation is registered under HKCU instead. Not when
+  ; elevated: any process of the user can write that command
+  ${If} $PerUserUninstallString != ""
+  ${AndIf} $IsInnerInstance = 0
+  ${AndIf} $IsAdmin = 0
+    StrCpy $R0 $PerUserUninstallString
+    StrCpy $R1 $PerUserInstallationFolder
+    SetShellVarContext current
+    Call UninstallOld
+  ${EndIf}
+  ${If} $MultiUser.InstallMode == "AllUsers"
+    SetShellVarContext all
+  ${Else}
+    SetShellVarContext current
+  ${EndIf}
 
   new_install:
   Return
@@ -498,6 +541,105 @@ Function .onInit
     ExecShell "open" "https://www.bleachbit.org/goto/old-windows?ver=${VERSION}&os=$R0&lang=$LANGUAGE"
     Abort
 
+FunctionEnd
+
+
+; Run the old uninstaller command $R0 on the installation in $R1
+Function UninstallOld
+  Var /GLOBAL uninstaller_cmd
+  Call ReadOldComponents
+  StrCpy $uninstaller_cmd $R0
+  ; Run a copy so the old uninstaller can delete itself. In place it leaves
+  ; uninstall.exe behind and asks for a reboot to remove the folder
+  StrCpy $2 '"$R1\${UNINSTALL_FILENAME}"'
+  StrLen $3 $2
+  StrCpy $4 $R0 $3
+  ${If} $4 == $2
+    InitPluginsDir
+    ClearErrors
+    CopyFiles /SILENT "$R1\${UNINSTALL_FILENAME}" "$PLUGINSDIR"
+    ${IfNot} ${Errors}
+      StrCpy $4 $R0 "" $3
+      StrCpy $uninstaller_cmd '"$PLUGINSDIR\${UNINSTALL_FILENAME}"$4'
+    ${EndIf}
+  ${EndIf}
+  ; If installing in silent mode, also uninstall in silent mode
+  IfSilent 0 +2
+  StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
+  ; _?= must come last: NSIS reads the rest of the line as the folder
+  StrCpy $uninstaller_cmd "$uninstaller_cmd _?=$R1"
+  ; Files in use get deleted at the next reboot, taking the new ones with them
+  close_bleachbit:
+  Call FindRunningBleachBit
+  ${If} $0 != ""
+    MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "$(BLEACHBIT_RUNNING)" /SD IDCANCEL IDRETRY close_bleachbit
+    Abort
+  ${EndIf}
+  ClearErrors
+  ExecWait $uninstaller_cmd ; Actually run the uninstaller
+  ; Catch files still in use, e.g. by another user's BleachBit. Errors mean
+  ; the uninstaller failed or was cancelled and queued nothing
+  ${IfNot} ${Errors}
+    ${If} ${FileExists} "$R1\${prodname}.exe"
+    ${OrIf} ${FileExists} "$R1\${prodname}_console.exe"
+      MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(MUI_UNTEXT_FINISH_INFO_REBOOT)" /SD IDNO IDNO +2
+      Reboot
+      Abort
+    ${EndIf}
+  ${EndIf}
+FunctionEnd
+
+
+; Preselect the optional components the old installation in $R1 has, before
+; its uninstaller removes them. Only the first one counts. Clobbers $0.
+Function ReadOldComponents
+  Var /GLOBAL old_components_read
+  ${If} $old_components_read = 1
+    Return
+  ${EndIf}
+  StrCpy $old_components_read 1
+  !insertmacro SelectSectionIfExists ${SectionStart} "$SMPROGRAMS\${prodname}\${prodname}.lnk"
+  !insertmacro SelectSectionIfExists ${SectionDesktop} "$DESKTOP\BleachBit.lnk"
+  !insertmacro SelectSectionIfExists ${SectionQuickLaunch} "$QUICKLAUNCH\BleachBit.lnk"
+  !ifndef NoTranslations
+    !insertmacro SelectSectionIfExists ${SectionTranslations} "$R1\share\locale\*.*"
+  !endif
+  ; HKCR covers both the per-machine and the per-user key
+  ReadRegStr $0 HKCR "${SHRED_REGEX_KEY}" ""
+  ${If} $0 == ""
+    !insertmacro UnselectSection ${SectionShred}
+  ${EndIf}
+FunctionEnd
+
+
+; Set $0 to the path of a BleachBit exe running from the folder in $R1, or to
+; "" if there is none. Clobbers $1-$7.
+Function FindRunningBleachBit
+  StrCpy $0 ""
+  System::Alloc 16384 ; room for 4096 process IDs
+  Pop $1
+  System::Call 'kernel32::K32EnumProcesses(p r1, i 16384, *i .r2) i .r3'
+  ${If} $3 <> 0
+    IntOp $2 $2 - 4
+    ${ForEach} $3 0 $2 + 4
+      IntPtrOp $4 $1 + $3
+      System::Call '*$4(i .r4)'
+      ; PROCESS_QUERY_LIMITED_INFORMATION, which also opens elevated processes
+      System::Call 'kernel32::OpenProcess(i 0x1000, i 0, i r4) p .r5'
+      ${If} $5 <> 0
+        System::Call 'kernel32::QueryFullProcessImageName(p r5, i 0, t .r6, *i ${NSIS_MAX_STRLEN}) i .r7'
+        System::Call 'kernel32::CloseHandle(p r5)'
+        ${If} $7 <> 0
+          ${If} $6 == "$R1\${prodname}.exe"
+          ${OrIf} $6 == "$R1\${prodname}_console.exe"
+            StrCpy $0 $6
+            ${ExitFor}
+          ${EndIf}
+        ${EndIf}
+      ${EndIf}
+    ${Next}
+  ${EndIf}
+  System::Free $1
 FunctionEnd
 
 
@@ -523,12 +665,17 @@ Section "Uninstall" SectionUninstall
     Delete "$QUICKLAUNCH\BleachBit.lnk"
     Delete "$SMSTARTUP\BleachBit.lnk"
     # Remove Windows Explorer Shell Extension (Shredder)
-    DeleteRegKey HKCR "${SHRED_REGEX_KEY}"
+    DeleteRegKey SHCTX "Software\Classes\${SHRED_REGEX_KEY}"
 
     # Remove the uninstaller as the very last step.
     # If something goes wrong, let the user run it again.
-    Delete $INSTDIR\uninstall.exe
-    RMDir /REBOOTOK "$INSTDIR\."
+    Delete "$INSTDIR\${UNINSTALL_FILENAME}"
+    # Files the user added, like custom cleaners, are no reason to reboot
+    ${If} ${RebootFlag}
+        RMDir /REBOOTOK "$INSTDIR\."
+    ${Else}
+        RMDir "$INSTDIR\."
+    ${EndIf}
 
     # Remove the uninstaller from registry as the very last step.
     # If something goes wrong, let the user run it again.

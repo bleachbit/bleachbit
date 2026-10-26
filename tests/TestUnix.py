@@ -13,6 +13,7 @@ Test case for module Unix
 
 from unittest import mock
 import os
+import posixpath
 import random
 import re
 import subprocess
@@ -44,6 +45,7 @@ from bleachbit.Unix import (
     get_trash_paths,
     is_broken_xdg_desktop,
     is_unix_display_protocol_wayland,
+    is_unregistered_mime,
     journald_clean,
     JOURNALD_REGEX,
     orphaned_framework_versions,
@@ -134,6 +136,12 @@ class UnixTestCase(common.BleachbitTestCase):
             self.assertEqual(locales, mock_locales)
             mock_run_external.assert_called_once_with(
                 [General.resolve_exe('locale'), '-a'])
+
+    def test_find_available_locales_missing_utility(self):
+        """find_available_locales() without a locale binary (musl)"""
+        with mock.patch('bleachbit.Unix.General.run_external',
+                        side_effect=FileNotFoundError(2, 'No such file', 'locale')):
+            self.assertEqual(find_available_locales(), [])
 
     @mock.patch('locale.getlocale')
     @mock.patch('bleachbit.Unix.find_available_locales')
@@ -335,6 +343,12 @@ class UnixTestCase(common.BleachbitTestCase):
             mock_logger.assert_called()
             mock_logger.reset_mock()
 
+    def test_is_unregistered_mime_without_gio(self):
+        """is_unregistered_mime() when GtkShim has no Gio (no display)"""
+        with mock.patch('bleachbit.GtkShim.Gio', None, create=True):
+            self.assertFalse(is_unregistered_mime(
+                'application/x-bleachbit-test'))
+
     def test_is_broken_xdg_desktop_wine(self):
         """Unit test for certain Wine .desktop file
 
@@ -505,9 +519,13 @@ PrefersNonDefaultGPU=false""")
                 mock.patch.dict(os.environ, {'XDG_DATA_HOME': os.path.join(home, 'data')}), \
                 mock.patch('bleachbit.Unix.get_mount_points', return_value=mount_points), \
                 mock.patch('os.lstat', side_effect=fake_lstat):
-            paths = [cmd.path for cmd in get_trash_paths()]
+            found = {cmd.path: cmd.top for cmd in get_trash_paths()}
 
-        self.assertCountEqual(paths, [snap_file, sticky_file, good_file])
+        self.assertEqual(found, {
+            snap_file: os.path.join(home, 'snap'),
+            sticky_file: sticky,
+            good_file: good,
+        })
 
     @common.skipIfWindows
     def test_get_trash_paths_home_trash_links(self):
@@ -609,6 +627,18 @@ PrefersNonDefaultGPU=false""")
         self.assertFalse(result)
 
     @mock.patch('bleachbit.FileUtilities.exe_exists')
+    def test_desktop_env_options(self, mock_exe_exists):
+        """env options are not taken for a missing command"""
+        mock_exe_exists.side_effect = lambda exe: exe == 'env'
+        for exec_val in ('env -u GTK_IM_MODULE firefox %u',
+                         'env -i PATH=/usr/bin firefox',
+                         'env -C /opt/app ./run'):
+            fake_config = FakeConfig({"Desktop Entry": {"Exec": exec_val}})
+            result = _is_broken_xdg_desktop_application(
+                fake_config, "foo.desktop")
+            self.assertFalse(result, exec_val)
+
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
     def test_desktop_missing_wine(self, mock_exe_exists):
         """Unit test for .desktop file without Wine installed"""
         mock_exe_exists.side_effect = [
@@ -635,11 +665,29 @@ PrefersNonDefaultGPU=false""")
     def test_desktop_env_missing_windows_exe(self, mock_exe_exists, mock_path_exists):
         """Unit test for .desktop file with env pointing to missing Windows application"""
         fake_config = FakeConfig({"Desktop Entry": {
-                                 "Exec": "env WINEPREFIX=/some/path wine_exe does_not_exist.exe"}})
+                                 "Exec": r"env WINEPREFIX=/some/path wine_exe 'C:\does_not_exist.exe'"}})
         mock_exe_exists.return_value = True  # for env and wine
         mock_path_exists.return_value = False  # for does_not_exist.exe
         result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
         self.assertTrue(result)
+        mock_path_exists.assert_called_once_with(
+            os.path.join('/some/path', 'drive_c/does_not_exist.exe'))
+
+    @mock.patch('os.path.exists')
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
+    def test_desktop_wine_not_drive_c(self, mock_exe_exists, mock_path_exists):
+        """Wine arguments that are not C: paths are not looked up"""
+        mock_exe_exists.return_value = True
+        mock_path_exists.return_value = False
+        for exec_val in (
+                'env WINEPREFIX=/some/path wine start /ProgIDOpen txtfile %f',
+                'env WINEPREFIX=/some/path wine start /unix /some/path/app.exe',
+                r"env WINEPREFIX=/some/path wine 'D:\Games\foo.exe'"):
+            fake_config = FakeConfig({"Desktop Entry": {"Exec": exec_val}})
+            result = _is_broken_xdg_desktop_application(
+                fake_config, "foo.desktop")
+            self.assertFalse(result, exec_val)
+        mock_path_exists.assert_not_called()
 
     def test_desktop_missing_keys(self):
         """Unit test for .desktop file missing keys"""
@@ -664,6 +712,19 @@ PrefersNonDefaultGPU=false""")
                 result = is_broken_xdg_desktop(tf.name)
                 self.assertTrue(result, f"Failed case: {description}")
             os.unlink(tf.name)
+
+    def test_desktop_hidden_override(self):
+        """Hidden=true entries override a system entry and are not broken"""
+        test_cases = (
+            "[Desktop Entry]\nHidden=true\n",
+            "[Desktop Entry]\nType=Application\nName=Test\nHidden=true\n",
+        )
+        for content in test_cases:
+            filename = self.write_file('hidden.desktop', text=content)
+            self.assertFalse(is_broken_xdg_desktop(filename), content)
+        filename = self.write_file(
+            'hidden.desktop', text="[Desktop Entry]\nHidden=false\n")
+        self.assertTrue(is_broken_xdg_desktop(filename))
 
     @common.skipIfWindows
     def test_journald_clean(self):
@@ -694,6 +755,18 @@ PrefersNonDefaultGPU=false""")
                           'Archived and active journals take up 100.0M on disk.')
         for neg in negative_cases:
             self.assertFalse(regex.match(neg))
+
+    @common.skipIfWindows
+    def test_journald_clean_mock(self):
+        """journald_clean() parses journalctl's 1024-based sizes"""
+        output = '\n'.join((
+            'Vacuuming done, freed 0B of archived journals from /run/log/journal.',
+            'Vacuuming done, freed 128.0K of archived journals from /var/log/journal/123abc.',
+            'Vacuuming done, freed 8.0M of archived journals from /var/log/journal/456def.',
+        ))
+        with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
+            self.assertEqual(journald_clean(), 128 * 1024 + 8 * 1024 ** 2)
 
     def test_get_purgeable_locales(self):
         """Unit test for method get_purgeable_locales()"""
@@ -747,6 +820,18 @@ PrefersNonDefaultGPU=false""")
             counter += 1
         self.assertGreater(counter, 0, 'Zero files deleted by localization cleaner. ' +
                                        'This may be an error unless you really deleted all the files.')
+
+    def test_localization_paths_overlapping_rules(self):
+        """A path matched by two rules is yielded once"""
+        locales = Locales(vfs=ListVFS(['/usr/share/qt/translations/qt_de.qm']))
+        configpath = parseString(
+            '<path location="/usr/share/qt/translations">'
+            r'<regexfilter prefix=".*_" postfix="\.qm"/>'
+            r'<regexfilter prefix="q[\w_]*" postfix="\.qm"/>'
+            '</path>').firstChild
+        locales.add_xml(configpath)
+        self.assertEqual(list(locales.localization_paths(['en'])),
+                         ['/usr/share/qt/translations/qt_de.qm'])
 
     @common.skipIfWindows
     def test_fakelocalizationdirs(self):
@@ -820,6 +905,8 @@ PrefersNonDefaultGPU=false""")
             '/var/log/dmesg.0',
             '/var/log/dmesg.1.gz',
             '/var/log/foo.gz',
+            '/var/log/foo.log-2023060112',
+            '/var/log/foo.log.1.lz4',
             '/var/log/foo.old',
             '/var/log/foo/bar.0',
             '/var/log/foo/bar.gz',
@@ -833,12 +920,18 @@ PrefersNonDefaultGPU=false""")
             '/var/log/samba/log.smbd-20250126.gz',
             '/var/log/syslog.1',
             '/var/log/syslog.2.xz',
+            '/var/log/syslog.2.zst',
+            '/var/log/Xorg.0.log.old',
             '/var/log/cups/access_log.9'
 
         ]
         expected_keep = [
+            '/var/log/ceph/ceph-osd.0.log',
             '/var/log/dmesg',
+            '/var/log/journal/abc/user-1968200001.journal',
+            '/var/log/mariadb-10.11/error.log',
             '/var/log/packages/foo.0',
+            '/var/log/php8.1-fpm.log',
             '/var/log/removed_packages/foo.0',
             '/var/log/removed_scripts/foo.0',
             '/var/log/samba/log.192.168.0.1',
@@ -846,7 +939,8 @@ PrefersNonDefaultGPU=false""")
             '/var/log/scripts/foo.0',
             '/var/log/syslog',
             '/var/log/sysstat/sar24',
-            '/var/log/whitelisted/foo.0'
+            '/var/log/whitelisted/foo.0',
+            '/var/log/Xorg.0.log'
         ]
         mock_cid.return_value = iter(expected_delete + expected_keep)
         result = list(rotated_logs())
@@ -965,6 +1059,8 @@ PrefersNonDefaultGPU=false""")
         mock_getsizedir.reset_mock()
         self.assertEqual(dnf_clean(), 25 * 1024 ** 2)
         self.assertEqual(mock_getsizedir.call_count, 1)
+        # Fail instead of waiting when another dnf holds the lock
+        self.assertIn('--setopt=exit_on_lock=True', mock_run.call_args[0][0])
 
         mock_run.return_value = (
             0, 'Removed 12 files, 3 directories '
@@ -1043,6 +1139,7 @@ PrefersNonDefaultGPU=false""")
         mock_run.return_value = (0, 'Nothing to do.', 'stderr')
         bytes_freed = dnf_autoremove()
         self.assertEqual(bytes_freed, 0)
+        self.assertIn('--setopt=exit_on_lock=True', mock_run.call_args[0][0])
 
         mock_run.return_value = (
             0, 'Remove  112 Packages\nFreed space: 299 M\n', 'stderr')
@@ -1372,6 +1469,16 @@ class UnreadableVFS(ListVFS):
         return super().listdir(path)
 
 
+class DotVFS(ListVFS):
+    """ListVFS that resolves '.' components like a real filesystem"""
+
+    def listdir(self, path):
+        return super().listdir(posixpath.normpath(path))
+
+    def isdir(self, path):
+        return super().isdir(posixpath.normpath(path))
+
+
 class LocalizationsTestCase(common.BleachbitTestCase):
 
     """Test case for localizations in Unix module"""
@@ -1466,6 +1573,15 @@ class LocalizationsTestCase(common.BleachbitTestCase):
                 self._path_matches_recognized(neg_path, recognized),
                 f'Path should NOT be matched by localizations.xml: {neg_path}'
             )
+
+    def test_localization_keeps_x11_utf8(self):
+        """X11/locale/en_US.UTF-8 serves every UTF-8 locale, so keep it"""
+        vfs = DotVFS(['/usr/share/X11/locale/en_US.UTF-8/XLC_LOCALE',
+                      '/usr/share/X11/locale/zh_TW/XLC_LOCALE'])
+        recognized = {posixpath.normpath(path)
+                      for path in self._get_recognized_paths(vfs)}
+        self.assertIn('/usr/share/X11/locale/zh_TW', recognized)
+        self.assertNotIn('/usr/share/X11/locale/en_US.UTF-8', recognized)
 
     def test_localization_paths_unreadable_dir(self):
         """A directory that cannot be listed is skipped, not fatal

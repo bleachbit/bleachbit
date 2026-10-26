@@ -432,6 +432,10 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
                 # id 2 is www.bleachbit.org which is a bookmark and should
                 # be cleaned
                 self.assertEqual(ids, [2])
+                # with its visit statistics reset
+                c.execute(
+                    'select visit_count, typed_count, last_visit_time from urls')
+                self.assertEqual(c.fetchall(), [(0, 0, 0)])
 
                 # these tables should always be empty after cleaning
                 self.assertTablesAreEmpty(filename, ['downloads', 'keyword_search_terms',
@@ -769,6 +773,29 @@ INSERT INTO "meta" VALUES('version','20');"""
         # no mode -> no query string at all
         self.assertNotIn('?', _sqlite_uri('/tmp/plain.db'))
 
+    def test_sqlite_uri_unc(self):
+        """A UNC path gets an empty URI authority, which SQLite accepts"""
+        from bleachbit.Special import _sqlite_uri
+        if IS_WINDOWS:
+            self.assertEqual(_sqlite_uri(r'\\server\share\places.sqlite'),
+                             'file:////server/share/places.sqlite')
+            return
+        # POSIX keeps a leading '//', which gives the same URI shape.
+        filename = os.path.join(self.mkdtemp(), 'unc.sqlite')
+        FileUtilities.execute_sqlite3(filename, 'CREATE TABLE foo(id int)')
+        self.assertTrue(_sqlite_uri('/' + filename).startswith('file:////'))
+        self.assertTrue(Special.sqlite_table_exists('/' + filename, 'foo'))
+
+    @common.skipUnlessLinux
+    def test_sqlite_table_exists_undecodable_path(self):
+        """A path with bytes that are not valid UTF-8 still opens"""
+        dirname = os.path.join(os.fsencode(self.tempdir), b'caf\xe9')
+        os.mkdir(dirname)
+        filename = os.fsdecode(os.path.join(dirname, b'test.sqlite'))
+        FileUtilities.execute_sqlite3(filename, 'CREATE TABLE foo(id int)')
+        self.assertTrue(Special.sqlite_table_exists(filename, 'foo'))
+        self.assertTrue(Special._sqlite_is_valid_database(filename))
+
     def test_sqlite_table_exists(self):
         """Unit test for sqlite_table_exists()"""
         # Create test files with different filenames
@@ -841,24 +868,40 @@ INSERT INTO "meta" VALUES('version','20');"""
                 Special.sqlite_table_exists(non_existing, 'cookies'))
 
     def test_sqlite_table_exists_other_operational_error(self):
-        """sqlite_table_exists returns False for OperationalError other
-        than SQLITE_CANTOPEN (e.g. SQLITE_BUSY)."""
+        """sqlite_table_exists raises OperationalError other than SQLITE_CANTOPEN"""
         filename = os.path.join(
             self.tempdir, 'test_other_op_error.sqlite')
         sql = "CREATE TABLE foo(id int)"
         FileUtilities.execute_sqlite3(filename, sql)
         self.assertExists(filename)
 
-        # SQLITE_BUSY (5) — should still return False, not raise
+        # SQLITE_BUSY (5)
         busy_exc = sqlite3.OperationalError('database is locked')
         busy_exc.sqlite_errorcode = 5
 
         with mock.patch('sqlite3.connect',
                         side_effect=busy_exc):
-            self.assertFalse(
-                Special.sqlite_table_exists(filename, 'foo'))
+            with self.assertRaises(sqlite3.OperationalError):
+                Special.sqlite_table_exists(filename, 'foo')
 
         os.unlink(filename)
+
+    def test_sqlite_locked(self):
+        """A database locked by another connection is reported as locked"""
+        filename = os.path.join(self.tempdir, 'locked.sqlite')
+        FileUtilities.execute_sqlite3(filename, 'CREATE TABLE foo(id int)')
+        holder = sqlite3.connect(filename, isolation_level=None)
+        try:
+            holder.execute('PRAGMA locking_mode=EXCLUSIVE')
+            holder.execute('BEGIN EXCLUSIVE')
+            with self.assertRaisesRegex(sqlite3.OperationalError,
+                                        'database is locked'):
+                Special.sqlite_table_exists(filename, 'foo')
+            with self.assertRaisesRegex(sqlite3.OperationalError,
+                                        'database is locked'):
+                Special._sqlite_is_valid_database(filename)
+        finally:
+            holder.close()
 
     def test_sqlite_is_valid_database(self):
         """Unit test for _sqlite_is_valid_database()"""

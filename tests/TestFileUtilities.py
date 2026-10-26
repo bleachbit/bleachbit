@@ -25,6 +25,7 @@ import sys
 import tempfile
 import time
 import unittest.mock
+import urllib.parse
 import warnings
 
 # third-party import
@@ -46,7 +47,6 @@ from bleachbit.FileUtilities import (
     delete_file,
     delete,
     detect_encoding,
-    ego_owner,
     exe_exists,
     execute_sqlite3,
     exists_in_path,
@@ -65,6 +65,7 @@ from bleachbit.FileUtilities import (
     is_hard_link,
     is_normal_directory,
     listdir,
+    open_files_linux,
     open_files_lsof,
     open_files_psutil,
     open_files_freebsd,
@@ -1012,7 +1013,7 @@ State=AAAA/wA...
                 inside = self.write_file(os.path.join(sub, 'inside'), b'abc')
                 self.assertTrue(delete(inside, shred=shred, top=top))
                 self.assertNotExists(inside)
-                self.assertTrue(delete(sub, shred=shred, top=top))
+                self.assertTrue(delete(sub + os.sep, shred=shred, top=top))
                 self.assertNotExists(sub)
 
     @common.skipIfWindows
@@ -1021,15 +1022,47 @@ State=AAAA/wA...
         top = self.mkdir('delete-top-error')
         path = self.write_file(os.path.join(top, 'file'))
 
-        def denied(name, **_kwargs):
-            raise PermissionError(errno.EACCES, 'Permission denied', name)
-
-        with unittest.mock.patch('os.remove', side_effect=denied):
-            with self.assertRaises(PermissionError) as cm:
-                delete(path, shred=False, top=top)
-        self.assertEqual(cm.exception.errno, errno.EACCES)
-        self.assertEqual(cm.exception.filename, path)
+        for err_filename in (os.path.basename(path), None, 3):
+            with self.subTest(err_filename=err_filename):
+                err = PermissionError(
+                    errno.EACCES, 'Permission denied', err_filename)
+                with unittest.mock.patch('os.remove', side_effect=err):
+                    with self.assertRaises(PermissionError) as cm:
+                        delete(path, shred=False, top=top)
+                self.assertEqual(cm.exception.errno, errno.EACCES)
+                self.assertEqual(cm.exception.filename, path)
         self.assertExists(path)
+
+        for bad_path in (os.path.join(self.tempdir, 'outside'), 'relative',
+                         os.sep):
+            with self.subTest(bad_path=bad_path):
+                with self.assertRaises(OSError) as cm:
+                    delete(bad_path, top=top)
+                self.assertEqual(cm.exception.errno, errno.EINVAL)
+                self.assertEqual(cm.exception.filename, bad_path)
+        self.assertEqual(list(children_below(self.tempdir, top=top)), [])
+
+    def test_delete_shred_overwrite_fails(self):
+        """delete() warns when shredding cannot overwrite the contents"""
+        path = self.write_file('test_delete_shred_overwrite_fails', b'secret')
+        e = PermissionError(errno.EPERM, 'Operation not permitted', path)
+        with unittest.mock.patch('bleachbit.FileUtilities.wipe_contents', side_effect=e):
+            with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
+                self.assertTrue(delete(path, shred=True))
+        self.assertIn('Could not overwrite', cm.output[0])
+        # Without the \\?\ prefix on Windows
+        self.assertIn(f'of {path}:', cm.output[0])
+        self.assertNotExists(path)
+
+        # When os.remove() also fails (e.g. a locked file), do not emit a
+        # duplicate overwrite warning before raising the removal error.
+        path2 = self.write_file('test_delete_shred_both_fail', b'secret')
+        with unittest.mock.patch('bleachbit.FileUtilities.wipe_contents', side_effect=e), \
+                unittest.mock.patch('os.remove', side_effect=e), \
+                unittest.mock.patch('bleachbit.FileUtilities.logger.warning') as mock_warn:
+            with self.assertRaises(PermissionError):
+                delete(path2, shred=True)
+            mock_warn.assert_not_called()
 
     def test_delete_windows_lstat_denied(self):
         """delete() on Windows still works where os.lstat() is denied
@@ -1352,10 +1385,13 @@ State=AAAA/wA...
 
         # Make sure shredding does not leave a renamed directory like
         # in https://github.com/bleachbit/bleachbit/issues/783
-        for allow_shred in (False, True):
-            self.assertFalse(delete(dirname, allow_shred=allow_shred))
-            self.assertExists(fn)
-            self.assertExists(dirname)
+        for top in (None, self.tempdir):
+            for allow_shred in (False, True):
+                with self.subTest(top=top, allow_shred=allow_shred):
+                    self.assertFalse(delete(
+                        dirname, shred=True, allow_shred=allow_shred, top=top))
+                    self.assertExists(fn)
+                    self.assertExists(dirname)
         os.remove(fn)
         self.assertTrue(is_dir_empty(dirname))
 
@@ -1389,6 +1425,8 @@ State=AAAA/wA...
                     with self.assertRaises(OSError) as cm:
                         delete(dirname, shred=True, top=top)
                 left = cm.exception.filename
+                self.assertEqual(cm.exception.filename2, dirname)
+                self.assertEqual(os.path.dirname(left), self.tempdir)
                 self.assertNotEqual(os.path.basename(left), 'renamed_dir')
                 self.assertExists(os.path.join(left, 'a_file'))
                 self.assertNotExists(dirname)
@@ -1448,6 +1486,18 @@ State=AAAA/wA...
                 self.assertDirectoryCount(tmp_dir, 2)
                 self.assertTrue(is_hard_link(link))
                 self.assertTrue(is_hard_link(target))
+                if IS_POSIX:
+                    symlink = os.path.join(tmp_dir, f'symlink-{shred}')
+                    os.symlink(link, symlink)
+                    dir_fd = os.open(tmp_dir, os.O_RDONLY | os.O_DIRECTORY)
+                    try:
+                        self.assertTrue(
+                            is_hard_link(os.path.basename(link), dir_fd))
+                        self.assertFalse(
+                            is_hard_link(os.path.basename(symlink), dir_fd))
+                    finally:
+                        os.close(dir_fd)
+                    os.unlink(symlink)
 
                 self.assertTrue(delete(link, shred=shred))
                 self.assertNotExists(link)
@@ -1678,21 +1728,6 @@ State=AAAA/wA...
                 'charset_normalizer module is not available', cm.output[0])
             os.unlink(temp.name)
 
-    @common.skipIfWindows
-    def test_ego_owner(self):
-        """Unit test for ego_owner()"""
-        # pylint: disable=no-member
-        self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
-
-        own_fn = self.mkstemp()
-        self.assertTrue(ego_owner(own_fn))
-
-        # A path that vanished must not raise
-        os.unlink(own_fn)
-        self.assertFalse(ego_owner(own_fn))
-        self.assertFalse(
-            ego_owner(os.path.join(self.tempdir, 'does_not_exist')))
-
     def test_execute_sqlite3(self):
         """Unit test for execute_sqlite3()"""
         db_path = self.mkstemp(suffix='.sqlite')
@@ -1714,6 +1749,26 @@ State=AAAA/wA...
         gc_collect()
         os.unlink(db_path)
         self.assertNotExists(db_path)
+
+    def test_execute_sqlite3_semicolon_in_literal(self):
+        """execute_sqlite3() keeps a ';' inside a literal, such as a path"""
+        db_path = self.mkstemp(suffix='.sqlite')
+        attach_path = os.path.join(self.mkdtemp(), 'a;b.sqlite')
+
+        execute_sqlite3(
+            db_path,
+            "CREATE TABLE test (name TEXT);"
+            "INSERT INTO test (name) VALUES ('x;y');"
+            f"ATTACH DATABASE '{attach_path}' AS other;"
+            "CREATE TABLE other.test (name TEXT)")
+
+        with contextlib.closing(sqlite3.connect(db_path)) as conn:
+            rows = conn.execute('SELECT name FROM test').fetchall()
+        self.assertEqual(rows, [('x;y',)])
+        self.assertExists(attach_path)
+
+        with self.assertRaises(sqlite3.OperationalError):
+            execute_sqlite3(db_path, "INSERT INTO test (name) VALUES ('x")
 
     def test_execute_sqlite3_open_error_translation(self):
         """Unit test for execute_sqlite3() open-error translation
@@ -2256,13 +2311,29 @@ State=AAAA/wA...
         openfiles.scan()
         self.assertFalse(openfiles.is_open(filename))
 
+    def test_open_files_linux_maps_unescape(self):
+        """open_files_linux() decodes octal escapes in /proc/*/maps"""
+        maps_data = (
+            b'7f0000-7f1000 r--s 00000000 08:01 123 /tmp/a\\040b\\012c\n'
+            b'7f1000-7f2000 rw-p 00000000 00:00 0 [heap]\n'
+        )
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.glob.iglob',
+                side_effect=[iter(['/proc/1/fd/3']), iter(['/proc/1/maps'])]), \
+                unittest.mock.patch(
+                    'bleachbit.FileUtilities.open', create=True,
+                    new=unittest.mock.mock_open(read_data=maps_data)):
+            self.assertEqual(list(open_files_linux()),
+                             ['/proc/1/fd/3', '/tmp/a b\nc'])
+
     @common.skipUnlessLinux
     def test_open_files_mapped(self):
         """OpenFiles counts a file that is mapped but no longer open"""
         if sys.version_info < (3, 13):
             self.skipTest('mmap needs trackfd=False to not keep a descriptor')
+        # The kernel escapes a newline in /proc/*/maps as \012
         filename = self.write_file(
-            'bleachbit-test-open-files-mapped', b'x' * 4096)
+            'bleachbit-test-open-files-mapped a\nb', b'x' * 4096)
         with open(filename, 'rb') as f:
             mapped = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ,
                                trackfd=False)
@@ -2285,6 +2356,37 @@ State=AAAA/wA...
                 this_drive = os.path.splitdrive(drive)[0]
                 self.assertEqual(same_partition(home, drive),
                                  home_drive == this_drive)
+
+    def test_same_partition_device(self):
+        """same_partition() compares devices, not only sizes or free space"""
+        devices = {'/a': 1, '/b': 2, '/c': 3, '/d': 4}
+        blocks = {'/a': (1000, 500), '/b': (1000, 400), '/c': (1000, 500),
+                  '/d': (1000, 499)}
+
+        def fake_stat(path):
+            return unittest.mock.Mock(st_dev=devices[path])
+
+        def fake_statvfs(path):
+            f_blocks, f_bfree = blocks[path]
+            return unittest.mock.Mock(f_blocks=f_blocks, f_bfree=f_bfree)
+
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', False), \
+                unittest.mock.patch('os.stat', side_effect=fake_stat), \
+                unittest.mock.patch('os.statvfs', side_effect=fake_statvfs, create=True):
+            self.assertTrue(same_partition('/a', '/a'))
+            # different file systems of the same size
+            self.assertFalse(same_partition('/a', '/b'))
+            # btrfs subvolumes of one file system
+            self.assertTrue(same_partition('/a', '/c'))
+            # and one whose free space changed between the calls
+            self.assertTrue(same_partition('/a', '/d'))
+
+        # Free space on C: changes between the two lookups
+        changing_free_space = unittest.mock.Mock(side_effect=[1000, 996])
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', True), \
+                unittest.mock.patch('bleachbit.FileUtilities.free_space', changing_free_space), \
+                unittest.mock.patch('os.stat', return_value=unittest.mock.Mock(st_dev=7)):
+            self.assertTrue(same_partition('C:\\Temp', 'C:\\'))
 
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""
@@ -2312,6 +2414,15 @@ State=AAAA/wA...
         self.assertEqual(uris_to_paths(['file:']), [])
         self.assertEqual(uris_to_paths(['file://']), [])
         self.assertEqual(uris_to_paths(['file:///']), [os.path.normpath('/')])
+
+    @common.skipIfWindows
+    def test_uris_to_paths_undecodable(self):
+        """A file URI for a name that is not valid UTF-8 gives the name on disk"""
+        path = os.path.join(os.fsencode(self.tempdir), b'caf\xe9.txt')
+        uri = 'file://' + urllib.parse.quote(path)
+        # url2pathname() before Python 3.14
+        with unittest.mock.patch('urllib.request.url2pathname', urllib.parse.unquote):
+            self.assertEqual(uris_to_paths([uri]), [os.fsdecode(path)])
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""

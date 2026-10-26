@@ -280,13 +280,19 @@ def browse_files(_, title):
 
 def browse_folder(_, title):
     """Ask the user to select a folder.  Return full path."""
-    flags = 0x0010  # SHBrowseForFolder path input
+    # BIF_RETURNONLYFSDIRS | BIF_EDITBOX (path input)
+    flags = 0x0001 | 0x0010
     # pylint: disable-next=possibly-used-before-assignment
     pidl = shell.SHBrowseForFolder(None, None, title, flags)[0]
     if pidl is None:
         # user cancelled
         return None
-    return shell.SHGetPathFromIDListW(pidl)
+    try:
+        return shell.SHGetPathFromIDListW(pidl)
+    except pywintypes.com_error:
+        # a virtual folder such as This PC, or a path over MAX_PATH
+        logger.exception('exception in browse_folder()')
+        return None
 
 
 def cleanup_nonce():
@@ -854,8 +860,10 @@ def elevate_privileges(uac):
     except pywintypes.error as e:
         if 1223 == e.winerror:
             logger.debug('user denied the UAC dialog')
-            return False
-        raise
+        else:
+            # e.g., a policy that denies elevation, or Appinfo disabled
+            logger.warning('failed to elevate privileges: %s', e)
+        return False
 
     logger.debug('ShellExecuteEx=%s', rc)
 

@@ -5,12 +5,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
-"PO-Revision-Date: 2026-10-13 17:23+0000\n"
+"PO-Revision-Date: 2026-10-26 09:58+0000\n"
 "Last-Translator: \"David D.\" <dadu042@users.noreply.hosted.weblate.org>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
-">\n"
+"Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2766,6 +2766,13 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"BleachBit peut ne pas avoir l’accès complet au disque. Sans lui, macOS "
+"bloque l’accès à certains fichiers et certains nettoyeurs ne fonctionneront "
+"pas.\n"
+"\n"
+"Pour résoudre ce problème, ouvrez les paramètres système > Confidentialité "
+"et sécurité > Accès complet au disque, activez BleachBit, puis redémarrez "
+"BleachBit."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -2912,13 +2919,15 @@ msgid ""
 "BleachBit detected a permissions issue with its configuration folder (%s). "
 "Would you like to repair it?"
 msgstr ""
+"BleachBit a détecté un problème d’autorisations avec son dossier de "
+"configuration (%s). Souhaitez-vous le réparer ?"
 
 #. TRANSLATORS: Message shown in the log after repairing
 #. folder permissions. %s is the folder path.
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid "Repaired permissions for %s."
-msgstr ""
+msgstr "Autorisations réparées pour %s."
 
 #. TRANSLATORS: Message shown in the log when repairing
 #. folder permissions did not fully succeed. %s is the
@@ -2926,7 +2935,7 @@ msgstr ""
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid "Could not fully repair permissions for %s."
-msgstr ""
+msgstr "Impossible de réparer complètement les autorisations pour %s."
 
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
@@ -3255,6 +3264,8 @@ msgstr "Le chemin d’accès à écraser doit être un répertoire existant : %s
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Effacer l’espace libre ici n’est pas sûr car tout utilisateur peut changer "
+"ce dossier : %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
