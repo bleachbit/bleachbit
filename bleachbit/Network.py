@@ -87,9 +87,9 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
     msg = _('Downloading URL failed: %s') % url
 
     def do_error(msg2):
+        delete(fn, ignore_missing=True)  # delete any partial download
         if on_error:
             on_error(msg, msg2)
-        delete(fn, ignore_missing=True)  # delete any partial download
 
     try:
         response = fetch_url(url, max_retries=max_retries,

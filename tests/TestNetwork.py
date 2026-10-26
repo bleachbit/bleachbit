@@ -198,6 +198,15 @@ class NetworkTestCase(common.BleachbitTestCase):
         on_error.assert_called_once()
         self.assertNotExists(fn)
 
+        # Partial file must still be deleted when on_error raises (e.g. update_winapp2)
+        on_error_raising = Mock(side_effect=RuntimeError('download failed'))
+        with patch('bleachbit.Network.fetch_url', return_value=fake_response), \
+                patch('bleachbit.Network.open_for_overwrite', side_effect=disk_full):
+            with self.assertRaises(RuntimeError):
+                download_url_to_fn(
+                    'https://example.invalid/x', fn, on_error=on_error_raising)
+        self.assertNotExists(fn)
+
     def test_get_gtk_version(self):
         """Unit test for get_gtk_version()"""
         gtk_ver = get_gtk_version()
