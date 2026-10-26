@@ -718,6 +718,33 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                           'Option description', 'Option warning'], strings)
         self.assertEqual('translated Label', xmlc.cleaner.name)
 
+    def test_vuze_macos_profile(self):
+        """The Vuze profile and cache are in the macOS folders only on macOS"""
+        profile = '~/Library/Application Support/Vuze'
+        expected = {
+            'backup': [profile],
+            'cache': [profile + '/cache', profile + '/ipfilter.cache',
+                      '~/Library/Caches/com.azureus.vuze'],
+            'logs': [profile + '/logs'],
+            'stats': [profile + '/stats'],
+            'temp': [profile + '/tmp'],
+        }
+
+        def paths(platform, option):
+            cleaner = self._load_real_cleaner_as('vuze.xml', platform)
+            return [os.path.normpath(path)
+                    for option_id, action in cleaner.actions
+                    if option_id == option
+                    for path in action.paths]
+
+        for option, patterns in expected.items():
+            for pattern in patterns:
+                mac_path = os.path.normpath(os.path.expanduser(pattern))
+                with self.subTest(option=option, path=pattern):
+                    self.assertIn(mac_path, paths('darwin', option))
+                    self.assertNotIn(mac_path, paths('win32', option))
+                    self.assertNotIn(mac_path, paths('linux', option))
+
     @common.skipUnlessWindows
     def test_vuze_program_files(self):
         """Vuze actions under Program Files stay in the Vuze folder"""
