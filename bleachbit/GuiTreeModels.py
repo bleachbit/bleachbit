@@ -14,6 +14,21 @@ from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
 
+def _find_row(model, row, cleaner_id, option_id=None):
+    """Return an iter for the row, by its ids if the tree was rebuilt"""
+    if row.valid():
+        return model.get_iter(row.get_path())
+    for cleaner in model:
+        if cleaner[2] != cleaner_id:
+            continue
+        if option_id is None:
+            return cleaner.iter
+        for option in cleaner.iterchildren():
+            if option[2] == option_id:
+                return option.iter
+    return None
+
+
 class TreeDisplayModel:
     """Displays the info model in a view"""
 
@@ -111,10 +126,9 @@ class TreeDisplayModel:
                     return
                 if remember_choice:
                     options.remember_warning_preference(warning_key)
-                if not row.valid():
-                    # A refresh rebuilt the tree during the dialog
+                path = _find_row(model, row, cleaner_id, option_id)
+                if path is None:
                     return
-                path = row.get_path()
         model[path][1] = value
         model[path][4] = ""
 
@@ -129,12 +143,17 @@ class TreeDisplayModel:
     def _toggle(self, path, model, parent_window):
         """Toggle a cleaner or option and its children or parent"""
         is_toggled_on = not model[path][1]  # Is the new state enabled?
-        # A refresh can rebuild the tree during the warning dialog
-        row = Gtk.TreeRowReference.new(model, Gtk.TreePath(path))
+        i = model.get_iter(path)
+        parent = model.iter_parent(i)
+        # The tree can re-sort or be rebuilt during a warning dialog
+        row = Gtk.TreeRowReference.new(model, model.get_path(i))
+        ids = (model[parent][2], model[i][2]) if parent else (model[i][2],)
+        children = [(Gtk.TreeRowReference.new(model, child.path), child[2])
+                    for child in model[i].iterchildren()]
         self.set_cleaner(path, model, parent_window, is_toggled_on)
-        if not row.valid():
+        i = _find_row(model, row, *ids)
+        if i is None:
             return
-        i = model.get_iter(row.get_path())
         parent = model.iter_parent(i)
         if parent and is_toggled_on and model[i][1]:
             # If child is enabled, then also enable the parent.
@@ -150,15 +169,16 @@ class TreeDisplayModel:
             if not any_sibling_enabled:
                 model[parent][1] = False
         # If toggled and has children, then do the same for each child.
-        child = model.iter_children(i)
-        while child:
-            self.set_cleaner(child, model, parent_window, is_toggled_on)
-            if not row.valid():
-                return
-            child = model.iter_next(child)
+        for child_row, option_id in children:
+            child = _find_row(model, child_row, ids[0], option_id)
+            if child is not None:
+                self.set_cleaner(child, model, parent_window, is_toggled_on)
         # If the parent was just enabled but all children were blocked
         # by expert mode, leave the parent unchecked.
         if not parent and is_toggled_on:
+            i = _find_row(model, row, *ids)
+            if i is None:
+                return
             child = model.iter_children(i)
             any_child_enabled = False
             while child:

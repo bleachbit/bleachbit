@@ -1494,8 +1494,8 @@ class GUITestCase(common.BleachbitTestCase):
                     tdm.col1_toggled_cb(None, "0:0", model, None)
                 self.assertFalse(model[parent_iter][1])
 
-    def test_toggle_ignored_when_tree_rebuilt_during_warning(self):
-        """A toggle confirmed after the tree was rebuilt changes no row"""
+    def test_toggle_follows_option_when_tree_rebuilt_during_warning(self):
+        """A toggle confirmed after the tree was rebuilt checks that option"""
         model = Gtk.TreeStore(
             GObject.TYPE_STRING,   # 0: name
             GObject.TYPE_BOOLEAN,  # 1: active
@@ -1538,7 +1538,55 @@ class GUITestCase(common.BleachbitTestCase):
         checked = [row[2] for row in model if row[1]]
         checked += [child[2] for row in model
                     for child in row.iterchildren() if child[1]]
-        self.assertEqual([], checked)
+        self.assertEqual(["warned", "risky"], checked)
+
+    def test_cascade_survives_tree_change_during_warning(self):
+        """Enabling a cleaner checks every option after a warning dialog"""
+        model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_BOOLEAN,
+                              GObject.TYPE_PYOBJECT, GObject.TYPE_STRING,
+                              GObject.TYPE_STRING)
+        option_ids = ["cache", "history", "password", "session", "vacuum"]
+
+        def fill(checked):
+            model.clear()
+            parent_iter = model.append(
+                None, ("Chromium", "chromium" in checked, "chromium", "", ""))
+            for option_id in option_ids:
+                model.append(parent_iter, (option_id, option_id in checked,
+                                           option_id, "", ""))
+
+        def rebuild(*_args):
+            # Like refresh_rows(), which restores the saved states
+            checked = {row[2] for row in model if row[1]}
+            checked.update(row[2] for row in model[0].iterchildren() if row[1])
+            fill(checked)
+            return True, False
+
+        def resort(*_args):
+            model.swap(model.get_iter("0:2"), model.get_iter("0:4"))
+            return True, False
+
+        def warning(option_id):
+            return "Be careful." if option_id == "password" else None
+
+        # pylint: disable-next=possibly-used-before-assignment
+        tdm = TreeDisplayModel()
+        with mock.patch('bleachbit.GuiTreeModels.options') as mock_options, \
+                mock.patch('bleachbit.GuiTreeModels.backends',
+                           {"chromium": mock.Mock(get_warning=warning)}), \
+                mock.patch('bleachbit.GuiBasic.warning_confirm_dialog',
+                           side_effect=rebuild) as dialog:
+            mock_options.get.return_value = True  # expert_mode on
+            mock_options.get_warning_preference.return_value = False
+            for change in (rebuild, resort):
+                with self.subTest(change=change.__name__):
+                    fill(set())
+                    dialog.side_effect = change
+                    tdm.col1_toggled_cb(None, "0", model, None)
+                    self.assertTrue(model[0][1])
+                    unchecked = [row[2] for row in model[0].iterchildren()
+                                 if not row[1]]
+                    self.assertEqual([], unchecked)
 
     def test_on_quit_commits_pending_options(self):
         """Regression test: quitting via on_quit() (Ctrl+Q/Ctrl+W, and
