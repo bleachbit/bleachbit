@@ -1449,7 +1449,11 @@ def listdir(directory):
 
 
 def same_partition(dir1, dir2):
-    """Are both directories on the same partition?"""
+    """Are both directories on the same partition?
+
+    On POSIX, directories on different subvolumes of the same storage
+    pool (such as btrfs) are also treated as sharing a partition.
+    """
     if IS_WINDOWS:
         try:
             # st_dev is the volume serial number
@@ -1468,10 +1472,12 @@ def same_partition(dir1, dir2):
         return True
     # Subvolumes of one btrfs file system have their own device numbers
     # but share its blocks, and free blocks can change between the calls.
+    # Pseudo-filesystems report f_blocks == 0 and do not share a pool.
     # pylint: disable=no-member
     stat1 = os.statvfs(dir1)
     stat2 = os.statvfs(dir2)
-    return stat1.f_blocks == stat2.f_blocks and \
+    return stat1.f_blocks > 0 and \
+        stat1.f_blocks == stat2.f_blocks and \
         abs(stat1.f_bfree - stat2.f_bfree) <= stat1.f_blocks // 1000
 
 
