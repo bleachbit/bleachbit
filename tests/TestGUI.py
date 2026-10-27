@@ -1281,6 +1281,45 @@ class GUITestCase(common.BleachbitTestCase):
         refresh_rows.assert_called_once_with()
         self.assertTrue(gui.run_button_get_sensitive())
 
+    def test_refresh_waits_for_warning_dialog(self):
+        """A refresh asked for in a warning dialog starts after the toggle"""
+        gui = self.get_window()
+        model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_BOOLEAN,
+                              GObject.TYPE_PYOBJECT, GObject.TYPE_STRING,
+                              GObject.TYPE_STRING)
+        parent_iter = model.append(None, ("Warned", False, "warned", "", ""))
+        for option_id in ("plain", "risky", "after"):
+            model.append(parent_iter, (option_id, False, option_id, "", ""))
+
+        def refresh_and_confirm(*_args):
+            # e.g. a winapp2 download lands while the dialog is open
+            gui.cb_refresh_operations()
+            self.refresh_gui()
+            self.assertTrue(gui.run_button_get_sensitive())
+            return True, False
+
+        def warning(option_id):
+            return "Be careful." if option_id == "risky" else None
+
+        # pylint: disable-next=possibly-used-before-assignment
+        tdm = TreeDisplayModel()
+        with mock.patch.object(gui.tree_store, 'refresh_rows',
+                               wraps=gui.tree_store.refresh_rows) as refresh_rows:
+            with mock.patch('bleachbit.GuiTreeModels.options') as mock_options, \
+                    mock.patch('bleachbit.GuiTreeModels.backends',
+                               {"warned": mock.Mock(get_warning=warning)}), \
+                    mock.patch('bleachbit.GuiBasic.warning_confirm_dialog',
+                               side_effect=refresh_and_confirm):
+                mock_options.get.return_value = True  # expert_mode on
+                mock_options.get_warning_preference.return_value = False
+                tdm.col1_toggled_cb(None, "0", model, gui)
+            self.assertFalse(gui.run_button_get_sensitive())
+            self.refresh_gui()
+        refresh_rows.assert_called_once_with()
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertEqual([True, True, True],
+                         [row[1] for row in model[parent_iter].iterchildren()])
+
     def test_registration_done_leaves_running_worker_alone(self):
         """Finishing a reload re-enables the window only when nothing runs"""
         gui = self.get_window()
