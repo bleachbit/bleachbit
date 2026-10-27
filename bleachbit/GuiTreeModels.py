@@ -4,6 +4,8 @@
 # This work is licensed under the terms of the GNU GPL, version 3 or
 # later.  See the COPYING file in the top-level directory.
 
+import contextlib
+
 from bleachbit import GuiBasic
 from bleachbit.Cleaner import backends
 from bleachbit.GUI import logger
@@ -118,6 +120,14 @@ class TreeDisplayModel:
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
+        # A reload during a warning dialog would empty backends mid-way
+        hold_refresh = getattr(parent_window, 'hold_refresh',
+                               contextlib.nullcontext)
+        with hold_refresh():
+            self._toggle(path, model, parent_window)
+
+    def _toggle(self, path, model, parent_window):
+        """Toggle a cleaner or option and its children or parent"""
         is_toggled_on = not model[path][1]  # Is the new state enabled?
         # A refresh can rebuild the tree during the warning dialog
         row = Gtk.TreeRowReference.new(model, Gtk.TreePath(path))
