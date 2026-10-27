@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
 "PO-Revision-Date: 2026-10-27 22:05+0000\n"
-"Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
 "Language: kab\n"
@@ -958,16 +958,16 @@ msgstr ""
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
-msgstr ""
+msgstr "Afecku n usfaḍ n ifuyla ur nettwasran ara"
 
 #: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
-msgstr ""
+msgstr "Slelli tallunt, ḥrez tudert-ik·im tusligt"
 
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Agurzil"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -976,11 +976,16 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"BleachBit yeslelli tallunt deg uḍebsi, iḥerrez tudert tusligt s tukksa s "
+"tɣawla n ifuyla ur nettwasran ara, am tazarkatut, inagan n tuqqna, azray n "
+"yiminig, ifuyla iskudanen d yiɣmisen n unagraw. Yezmer daɣen ad yesnger "
+"ifuyla, ad yesfeḍ tallunt tilellit n uḍebsi akken ur ttili ara tiririt n "
+"yisefka."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Askar ubrik n lexṣas, yeskan-d ifuyla ur nettwasran ara i yettwafen"
 
 #. TRANSLATORS: Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -990,16 +995,19 @@ msgid ""
 "Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
 "to abort the upgrade."
 msgstr ""
+"${prodname} yettwasbedd yakan.\n"
+"Sit ɣef 'OK' akken ad tekkseḍ lqem aqbur uqbel asali n uswir, neɣ sit ɣef "
+"'Sefsex' akken ad tesfesxeḍ asali n uswir."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
-msgstr ""
+msgstr "Rzu ɣer usmel Web n ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
 msgid "${prodname} ${VERSION} Setup"
-msgstr ""
+msgstr "Asbeddi n ${prodname} ${VERSION}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT1"
@@ -1007,12 +1015,16 @@ msgid ""
 "The next step is building the font cache, during which a black console "
 "window may appear."
 msgstr ""
+"Asurif i d-iteddun d lebni n tzarkatut n tsefsiyin. Deg wakud-a, yezmer ad d-"
+"iban usfaylu aberkan n tdiwent."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
 msgstr ""
+"Yettfakka s umata deg yiwet n tesdat, maca tikwal yezmer ad yaweḍ ar mraw n "
+"tesdatin."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
@@ -1020,18 +1032,20 @@ msgid ""
 "You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
+"Ilaq ad teqqneḍ s umiḍan yellan d aɛeggal n ugraw n yinedbalen akken ad "
+"tkemmleḍ."
 
 #. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "Ilaq isefka n usesteb n unedbal."
 
 #. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed to uninstall.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
-msgstr ""
+msgstr "Tlaq tseglut n unedbal akken ad tekkseḍ aseɣẓan."
 
 #. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
@@ -1039,13 +1053,13 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
-msgstr ""
+msgstr "I &yal win i yesseqdacen aselkim-a (akk iseqdacen)"
 
 #. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
-msgstr ""
+msgstr "I yal win i yesseqdacen aselkim-a (akk iseqdacen)"
 
 #. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key. {USER} is a placeholder that will be replaced with the Windows username.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
@@ -1053,48 +1067,49 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
-msgstr ""
+msgstr "I &nekki ({USER})"
 
 #. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_CURRENT_USER but without the & accelerator. {USER} is a placeholder that will be replaced with the Windows username.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "I nekki ({USER})"
 
 #. TRANSLATORS: Error message shown in dialog box during installation on Windows. {ERROR} is a placeholder that will be replaced with the error details.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "D awezɣi asali n tseglut, tuccḍa {ERROR}."
 
 #. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "Anagraw n wammud ur isefrak ara asali n tseglut."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
-msgstr ""
+msgstr "Lqem {VERSION} yettwasbedd i akk iseqdacen deg \"{FOLDER}\"."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
-msgstr ""
+msgstr "Lqem {VERSION} yettwasbedd i useqdac amiran deg \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
 msgstr ""
+"Fren ma tebɣiḍ ad tesbeddeḍ $(^NameDA) i akk iseqdacen neɣ i useqdac amiran."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "Fren iseqdacen i wumi ara tesbeddeḍ $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
