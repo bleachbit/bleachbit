@@ -1070,6 +1070,18 @@ State=AAAA/wA...
                 delete(path2, shred=True)
             mock_warn.assert_not_called()
 
+    def test_delete_shred_overwrite_fails_below_top(self):
+        """The overwrite warning names the whole path of a file under top"""
+        top = self.mkdtemp()
+        sub = self.mkdir(os.path.join(top, 'sub'))
+        path = self.write_file(os.path.join(sub, 'secret'), b'secret')
+        e = PermissionError(errno.EPERM, 'Operation not permitted', path)
+        with unittest.mock.patch('bleachbit.FileUtilities.wipe_contents', side_effect=e), \
+                self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
+            self.assertTrue(delete(path, shred=True, top=top))
+        self.assertIn(f'of {path}:', cm.output[0])
+        self.assertNotExists(path)
+
     def test_delete_windows_lstat_denied(self):
         """delete() on Windows still works where os.lstat() is denied
 
