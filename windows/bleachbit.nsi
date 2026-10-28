@@ -614,10 +614,14 @@ Function ReadOldComponents
   !ifndef NoTranslations
     !insertmacro SelectSectionIfExists ${SectionTranslations} "$R1\share\locale\*.*"
   !endif
-  ; HKCR covers both the per-machine and the per-user key
-  ReadRegStr $0 HKCR "${SHRED_REGEX_KEY}" ""
-  ${If} $0 == ""
-    !insertmacro UnselectSection ${SectionShred}
+  ; HKCR covers both the per-machine and the per-user key, but older
+  ; per-user installations could not write theirs, so only a per-machine
+  ; one shows whether Shred was deselected
+  ${If} $R0 == $PerMachineUninstallString
+    ReadRegStr $0 HKCR "${SHRED_REGEX_KEY}" ""
+    ${If} $0 == ""
+      !insertmacro UnselectSection ${SectionShred}
+    ${EndIf}
   ${EndIf}
 FunctionEnd
 
