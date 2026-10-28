@@ -567,7 +567,9 @@ class WizardDriver:
                 self.flags.add("saw_reboot")
             if "already installed" in joined:
                 self.flags.add("saw_already_installed")
-            locked_page = "error opening file for writing" in joined
+            # the installer asks to close BleachBit before any file is written
+            locked_page = ("error opening file for writing" in joined
+                           or "bleachbit is running" in joined)
             if locked_page:
                 self.flags.add("saw_locked_file")
                 if self.locked_callback and not self._locked_cb_fired:
