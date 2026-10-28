@@ -198,6 +198,32 @@ class NetworkTestCase(common.BleachbitTestCase):
         on_error.assert_called_once()
         self.assertNotExists(fn)
 
+    def test_download_url_to_fn_write_error_raising_callback(self):
+        """A write failure drops the truncated file before on_error raises"""
+        fn = self.write_file(
+            os.path.join(self.mkdtemp(), 'winapp2.ini'), b'old')
+        fake_response = Mock()
+        fake_response.status_code = 200
+        fake_response.content = b'complete'
+        on_error = Mock(side_effect=RuntimeError('boom'))
+
+        def disk_full(path, mode):
+            with open(path, mode):
+                pass  # truncated, as open_for_overwrite() does
+            full = MagicMock()
+            full.__enter__.return_value = full
+            full.__exit__.return_value = False
+            full.write.side_effect = OSError(
+                errno.ENOSPC, 'No space left on device')
+            return full
+
+        with patch('bleachbit.Network.fetch_url', return_value=fake_response), \
+                patch('bleachbit.Network.open_for_overwrite', side_effect=disk_full), \
+                self.assertRaises(RuntimeError):
+            download_url_to_fn(
+                'https://example.invalid/x', fn, on_error=on_error)
+        self.assertNotExists(fn)
+
     def test_get_gtk_version(self):
         """Unit test for get_gtk_version()"""
         gtk_ver = get_gtk_version()

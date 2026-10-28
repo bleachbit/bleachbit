@@ -118,10 +118,18 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
             return False
     try:
         General.makedirs(os.path.dirname(fn))
-        with open_for_overwrite(fn, 'wb') as f:
+        f = open_for_overwrite(fn, 'wb')
+    except OSError as exc:
+        logger.exception(msg)
+        do_error(f'{type(exc).__name__}: {exc}')
+        return False
+    try:
+        with f:
             f.write(response.content)
     except OSError as exc:
         logger.exception(msg)
+        # The file is truncated by now, and on_error may raise
+        delete(fn, ignore_missing=True)
         do_error(f'{type(exc).__name__}: {exc}')
         return False
     return True
