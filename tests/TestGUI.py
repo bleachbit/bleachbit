@@ -1162,6 +1162,28 @@ class GUITestCase(common.BleachbitTestCase):
         worker_done.assert_not_called()
         self.assertExists(file_to_clean)
 
+    def test_on_destroy_from_inside_worker_step(self):
+        """A stop from inside the step, as on Ctrl+C, still closes the worker"""
+        gui = self.get_window()
+        self.addCleanup(gui.set_sensitive, True)
+        closed = []
+
+        def run(_worker):
+            try:
+                yield True
+                gui.on_destroy(gui)
+                yield True
+            finally:
+                closed.append(True)
+
+        with mock.patch('bleachbit.Worker.Worker.run', run), \
+                common.capture_glib_exceptions() as glib_errors:
+            gui.preview_or_run_operations(False, {'system': ['tmp']})
+            self.refresh_gui()
+        self.assertEqual([], glib_errors)
+        self.assertIsNone(gui._worker_source)
+        self.assertEqual([True], closed)
+
     def test_cb_run_option(self):
         gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)
