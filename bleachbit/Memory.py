@@ -124,23 +124,51 @@ def _parse_swap_summary(proc_swaps):
     return swaps
 
 
+def _fstab_swap_options(fstab='/etc/fstab'):
+    """Return the options of each swap area in fstab, by its real path"""
+    try:
+        with open(fstab, encoding='utf-8', errors='surrogateescape') as f:
+            lines = f.readlines()
+    except OSError:
+        return {}
+    options = {}
+    for line in lines:
+        fields = line.split()
+        if len(fields) < 4 or fields[0][0] == '#' or fields[2] != 'swap':
+            continue
+        # fstab writes a space in a name as \040
+        spec = re.sub(r'\\([0-7]{3})',
+                      lambda m: chr(int(m.group(1), 8)), fields[0])
+        tag, _sep, value = spec.partition('=')
+        if tag in ('UUID', 'LABEL', 'PARTUUID', 'PARTLABEL'):
+            spec = f'/dev/disk/by-{tag.lower()}/{value}'
+        options[os.path.realpath(spec)] = fields[3]
+    return options
+
+
 def enable_swap_linux(proc_swaps):
     """Enable the Linux swap listed in proc_swaps that is now off
 
     'swapon -a' would miss swap that is not in /etc/fstab, such as zram
-    started by systemd, and would turn on fstab swap that was off.
+    started by systemd, and would turn on fstab swap that was off. The
+    options of an fstab entry, such as discard, are passed along as it
+    would.
     """
     logger.debug(_("Re-enabling swap."))
     active = {os.path.realpath(device) for device, _size_kb, _priority in
               _parse_swap_summary(get_proc_swaps())}
+    fstab_options = _fstab_swap_options()
     errors = []
     for device, _size_kb, priority in _parse_swap_summary(proc_swaps):
-        if os.path.realpath(device) in active:
+        real_device = os.path.realpath(device)
+        if real_device in active:
             continue
         args = [General.resolve_exe('swapon')]
         # Negative priorities are assigned by the kernel and cannot be set
         if priority >= 0:
             args += ['-p', str(priority)]
+        if real_device in fstab_options:
+            args += ['-o', fstab_options[real_device]]
         args.append(device)
         (rc, _stdout, stderr) = General.run_external(args)
         if 0 != rc:
