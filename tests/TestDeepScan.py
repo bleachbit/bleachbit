@@ -380,9 +380,10 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """Delete files in a test environment"""
 
         # make some files
-        f_del = self.write_file('foo.txt.bbtestbak')
-        f_keep = self.write_file('foo.txt')
-        subdir = os.path.join(self.tempdir, 'sub')
+        base = self.mkdtemp()
+        f_del = self.write_file(os.path.join(base, 'foo.txt.bbtestbak'))
+        f_keep = self.write_file(os.path.join(base, 'foo.txt'))
+        subdir = os.path.join(base, 'sub')
         os.mkdir(subdir)
         f_del2 = self.write_file(os.path.join(subdir, 'bar.ini.bbtestbak'))
         f_del3 = self.write_file(os.path.join(subdir, 'bar.ini.bbtestBAK'))
@@ -395,7 +396,7 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # run deep scan
         def run_deep_scan(regex):
             astr = '<action command="{}" search="deep" cache="false" path="{}" {}/>'.format(
-                command, self.tempdir, regex)
+                command, base, regex)
             cleaner = TestCleaner.action_to_cleaner(astr)
             from bleachbit.Worker import backends, Worker
             backends['test'] = cleaner
@@ -406,8 +407,10 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             list(worker.run())
             del backends['test']
 
-        # validate results
-        run_deep_scan(r'regex="\.bbtestbak$" wholeregex="sub.*\.bbtestbak$"')
+        # validate results; 'sub' as a path component, as a random
+        # temporary directory name can contain it too
+        run_deep_scan(r'regex="\.bbtestbak$" '
+                      r'wholeregex="[/\\]sub[/\\][^/\\]*\.bbtestbak$"')
         self.assertExists(f_del)
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
@@ -420,12 +423,6 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         run_deep_scan(r'regex="\.bbtestbak$"')
         self.assertFalse(os.path.exists(f_del))
         self.assertExists(f_keep)
-
-        # cleanup
-        os.unlink(f_keep)
-        if FS_CASE_SENSITIVE:
-            os.unlink(f_del3)
-        os.rmdir(subdir)
 
     def test_delete(self):
         self._test_delete('delete')
