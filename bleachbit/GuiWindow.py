@@ -893,6 +893,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 allow_local = False
             else:
                 self.recognized_cleanerml = True
+            if self._worker_source is not None:
+                # A shred or wipe started inside the dialog's main loop
+                self._refresh_pending = True
+                return False
         # reload cleaners from disk
         self.progressbar.show()
         # The tree shows stale rows until backends is refilled
