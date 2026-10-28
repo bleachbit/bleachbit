@@ -323,6 +323,9 @@ def get_supported_language_codes():
                     supported_langs.append(lang)
             except FileNotFoundError:
                 logger.debug('no compiled translation for language %s', lang)
+            except Exception as e:
+                # a damaged catalog must not stop the startup
+                logger.warning('Skipping the %s translation: %s', lang, e)
     return supported_langs
 
 
