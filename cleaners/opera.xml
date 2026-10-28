@@ -63,7 +63,7 @@ Unlike Chromium, Opera does not support multiple profiles.
     <!-- suggestions.cache was found on Opera 56 but not on Google Chrome 69 -->
     <action command="delete" search="file" path="$$profile$$/suggestions_cache.json"/>
     <!-- Linux-specific -->
-    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/opera/"/>
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/opera/" os="unix"/>
     <!-- Opera will complain if you delete ~/snap/opera/common/.cache/gdk-pixbuf-loaders.cache -->
     <action command="delete" search="walk.all" path="~/snap/opera/common/.cache/mesa_shader_cache_db"/>
     <action command="delete" search="walk.all" path="~/snap/opera/common/.cache/mesa_shader_cache"/>

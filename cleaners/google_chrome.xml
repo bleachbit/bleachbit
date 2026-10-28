@@ -80,9 +80,9 @@ later.  See the COPYING file in the top-level directory.
     <action command="json" search="file" path="$$base$$/Local State" address="HostReferralList"/>
     <action command="json" search="file" path="$$base$$/Local State" address="StartupDNSPrefetchList"/>
     <!-- Linux-specific -->
-    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome/"/>
-    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-beta/"/>
-    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-unstable/"/>
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome/" os="unix"/>
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-beta/" os="unix"/>
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-unstable/" os="unix"/>
     <action command="delete" search="walk.files" path="~/.var/app/com.google.Chrome/cache/"/>
     <action command="delete" search="walk.files" path="~/.var/app/com.google.ChromeDev/cache/"/>
     <!-- macOS-specific -->
