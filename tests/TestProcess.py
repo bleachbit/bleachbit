@@ -104,14 +104,15 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
     @common.skipIfWindows
     def test_enumerate_proc_fs_comm_with_spaces(self):
         """/proc fallback keeps a comm field with spaces intact"""
-        pid_dir = self.mkdir('1234')
+        proc_dir = self.mkdtemp()
+        pid_dir = self.mkdir(os.path.join(proc_dir, '1234'))
         # Regular file, not a symlink, so os.readlink raises OSError
         self.write_file(os.path.join(pid_dir, 'exe'))
         self.write_file(
             os.path.join(pid_dir, 'stat'),
             text="1234 (Web Content) S 1 1234 1234 0 -1 4194304 0 0 0 0")
 
-        result = list(_enumerate_proc_fs(self.tempdir))
+        result = list(_enumerate_proc_fs(proc_dir))
         self.assertEqual(
             result, [ProcessInfo(1234, 'Web Content', not sudo_mode())])
 

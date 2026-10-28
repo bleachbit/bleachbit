@@ -161,9 +161,11 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     @common.skipIfWindows
     def test_scan_skip_open(self):
         """skip_open leaves files that a process holds open"""
-        open_fn = self.write_file('open.bbtestswp', b'x')
-        closed_fn = self.write_file('closed.bbtestswp', b'x')
-        searches = {self.tempdir: [
+        root = self.mkdtemp()
+        open_fn = self.write_file(os.path.join(root, 'open.bbtestswp'), b'x')
+        closed_fn = self.write_file(
+            os.path.join(root, 'closed.bbtestswp'), b'x')
+        searches = {root: [
             Search(command='delete', regex=r'\.bbtestswp$', skip_open=True)]}
         # Open for reading so FreeBSD reports the path, as in test_open_files
         with open(open_fn, 'rb'):
@@ -175,11 +177,12 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     @common.skipIfWindows
     def test_scan_skip_open_unlisted(self):
         """skip_open keeps files when open files cannot be listed"""
-        self.write_file('a.bbtestswp', b'x')
+        root = self.mkdtemp()
+        self.write_file(os.path.join(root, 'a.bbtestswp'), b'x')
         # A second match catches a failed listing cached as empty
-        self.write_file('b.bbtestswp', b'x')
-        bak_fn = self.write_file('c.bbtestbak', b'x')
-        searches = {self.tempdir: [
+        self.write_file(os.path.join(root, 'b.bbtestswp'), b'x')
+        bak_fn = self.write_file(os.path.join(root, 'c.bbtestbak'), b'x')
+        searches = {root: [
             Search(command='delete', regex=r'\.bbtestswp$', skip_open=True),
             Search(command='delete', regex=r'\.bbtestbak$')]}
         for exc in (FileNotFoundError('lsof'),
