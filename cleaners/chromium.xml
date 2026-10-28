@@ -69,7 +69,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="json" search="file" path="$$base$$/Local State" address="HostReferralList"/>
     <action command="json" search="file" path="$$base$$/Local State" address="StartupDNSPrefetchList"/>
     <!-- Linux-specific -->
-    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/chromium/"/>
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/chromium/" os="unix"/>
     <action command="delete" search="walk.all" path="$$profile$$/Cache"/>
     <action command="delete" search="walk.all" path="~/.var/app/org.chromium.Chromium/cache/"/>
     <action command="delete" search="walk.all" path="~/.var/app/io.github.ungoogled_software.ungoogled_chromium/cache/"/>

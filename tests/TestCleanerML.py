@@ -826,6 +826,28 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 'vivaldi', 'cache', 'linux'))
 
     @common.skipIfWindows
+    def test_xdg_cache_rules_are_unix_only(self):
+        """The XDG cache rules of Chromium-based browsers are Unix-only"""
+        cache_home = self.mkdtemp(prefix='bleachbit-xdg-cache')
+        folders = {
+            'brave': 'BraveSoftware/Brave-Browser',
+            'chromium': 'chromium',
+            'google_chrome': 'google-chrome',
+            'opera': 'opera',
+            'vivaldi': 'vivaldi',
+        }
+        with common.set_temporary_env('XDG_CACHE_HOME', cache_home):
+            for cleaner_id, folder in folders.items():
+                with self.subTest(cleaner_id=cleaner_id):
+                    entry = os.path.join(
+                        cache_home, folder, 'Cache', 'f_000001')
+                    common.touch_file(entry)
+                    self.assertIn(entry, self._bundled_option_paths(
+                        cleaner_id, 'cache', 'linux'))
+                    self.assertNotIn(entry, self._bundled_option_paths(
+                        cleaner_id, 'cache', 'win32'))
+
+    @common.skipIfWindows
     def test_site_data_keeps_extension_state(self):
         """Chromium-based site data leaves the extension StateStore alone"""
         config = self.mkdtemp(prefix='bleachbit-extension-state')
