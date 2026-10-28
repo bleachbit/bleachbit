@@ -2314,7 +2314,7 @@ State=AAAA/wA...
         self.assertFalse(openfiles.is_open(filename))
 
     def test_open_files_linux_maps_unescape(self):
-        """open_files_linux() decodes octal escapes in /proc/*/maps"""
+        """/proc/*/maps escapes only a newline, so only that is decoded"""
         maps_data = (
             b'7f0000-7f1000 r--s 00000000 08:01 123 /tmp/a\\040b\\012c\n'
             b'7f1000-7f2000 rw-p 00000000 00:00 0 [heap]\n'
@@ -2326,7 +2326,7 @@ State=AAAA/wA...
                     'bleachbit.FileUtilities.open', create=True,
                     new=unittest.mock.mock_open(read_data=maps_data)):
             self.assertEqual(list(open_files_linux()),
-                             ['/proc/1/fd/3', '/tmp/a b\nc'])
+                             ['/proc/1/fd/3', '/tmp/a\\040b\nc'])
 
     @common.skipUnlessLinux
     def test_open_files_mapped(self):

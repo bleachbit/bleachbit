@@ -135,7 +135,9 @@ def open_files_linux():
                     fields = line.split(maxsplit=5)
                     if len(fields) == 6 and fields[4] != b'0' and \
                             fields[5].startswith(b'/'):
-                        mapped.add(_unescape_octal(fields[5].rstrip(b'\n')))
+                        # maps escapes only a newline, unlike mountinfo
+                        name = fields[5].rstrip(b'\n')
+                        mapped.add(os.fsdecode(name.replace(b'\\012', b'\n')))
         except OSError:
             # The process exited, or it belongs to another user
             continue
