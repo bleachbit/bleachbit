@@ -63,6 +63,21 @@ class MemoryTestCase(common.BleachbitTestCase):
                                     return_value=(1234, waitpid_status)):
                         self.assertEqual(_run_memory_child_fork(), expected)
 
+    def _run_fork_child_path(self, **uid_patch):
+        """Run _run_memory_child_fork() as the forked child and return the
+        make_self_oom_target_linux mock."""
+        # os._exit() never returns, so the mock raises instead
+        with mock.patch('bleachbit.Memory.General.get_real_uid', **uid_patch):
+            with mock.patch('bleachbit.Memory.make_self_oom_target_linux') as mock_oom:
+                with mock.patch('bleachbit.Memory.fill_memory_linux') as mock_fill:
+                    with mock.patch('os.fork', return_value=0):
+                        with mock.patch('os._exit', side_effect=SystemExit) as mock_exit:
+                            with self.assertRaises(SystemExit):
+                                _run_memory_child_fork()
+        mock_fill.assert_called_once()
+        mock_exit.assert_called_once_with(0)
+        return mock_oom
+
     def _assert_wipe_memory_happy_path(self, scope_return, fork_return,
                                        fork_called):
         """Exercise wipe_memory() through its mocked happy path and verify
@@ -635,15 +650,8 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_run_memory_child_fork_child_path(self):
         """_run_memory_child_fork() child path calls the right functions and exits"""
-        with mock.patch('bleachbit.Memory.General.get_real_uid', return_value=1000):
-            with mock.patch('bleachbit.Memory.make_self_oom_target_linux') as mock_oom:
-                with mock.patch('bleachbit.Memory.fill_memory_linux') as mock_fill:
-                    with mock.patch('os.fork', return_value=0):
-                        with mock.patch('os._exit') as mock_exit:
-                            _run_memory_child_fork()
-                            mock_oom.assert_called_once_with(1000)
-                            mock_fill.assert_called_once()
-                            mock_exit.assert_called_once_with(0)
+        mock_oom = self._run_fork_child_path(return_value=1000)
+        mock_oom.assert_called_once_with(1000)
 
     @common.skipIfWindows
     def test_run_memory_child_fork_normal_exit(self):
@@ -663,13 +671,8 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_run_memory_child_fork_uid_exception(self):
         """_run_memory_child_fork() falls back to None when get_real_uid fails"""
-        with mock.patch('bleachbit.Memory.General.get_real_uid', side_effect=Exception('boom')):
-            with mock.patch('bleachbit.Memory.make_self_oom_target_linux') as mock_oom:
-                with mock.patch('bleachbit.Memory.fill_memory_linux'):
-                    with mock.patch('os.fork', return_value=0):
-                        with mock.patch('os._exit'):
-                            _run_memory_child_fork()
-                            mock_oom.assert_called_once_with(None)
+        mock_oom = self._run_fork_child_path(side_effect=Exception('boom'))
+        mock_oom.assert_called_once_with(None)
 
     @common.skipIfWindows
     def test_swap_off_swap_on(self):
