@@ -307,8 +307,9 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def test_volume_from_file_junction(self):
         """volume_from_file() looks up the volume past a junction"""
-        target = self.mkdir('junction_target')
-        link = os.path.join(self.tempdir, 'junction_link')
+        base = self.mkdtemp()
+        target = self.mkdir(os.path.join(base, 'junction_target'))
+        link = os.path.join(base, 'junction_link')
         self._create_win_junction(target, link)
         self.write_file(os.path.join(target, 'x'), b'x')
         with mock.patch('bleachbit.WindowsWipe.GetVolumePathName',
@@ -373,9 +374,10 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def test_wipe_extent_by_defrag_existing_name(self):
         """wipe_extent_by_defrag() does not reuse a file or link at its path"""
-        existing = self.write_file('zero_fill_file', b'keepme')
-        target = self.write_file('zero_fill_target', b'')
-        link = os.path.join(self.tempdir, 'zero_fill_link')
+        base = self.mkdtemp()
+        existing = self.write_file(os.path.join(base, 'file'), b'keepme')
+        target = self.write_file(os.path.join(base, 'target'), b'')
+        link = os.path.join(base, 'link')
         self._create_win_file_symlink(target, link)
         os.remove(target)
 

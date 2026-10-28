@@ -619,11 +619,11 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     @common.skipIfWindows
     def test_children_below(self):
         """children_below() lists non-directories and never enters a link"""
-        top = self.mkdir('children-below')
+        top = self.mkdtemp()
         real_file = self.write_file(os.path.join(top, 'file'), b'abc')
         nested = self.mkdir(os.path.join(top, 'sub', 'nested'))
         nested_file = self.write_file(os.path.join(nested, 'nested-file'))
-        outside = self.mkdir('children-below-outside')
+        outside = self.mkdtemp()
         self.write_file(os.path.join(outside, 'outside-file'))
         dir_link = os.path.join(top, 'dir-link')
         os.symlink(outside, dir_link)
@@ -959,9 +959,11 @@ State=AAAA/wA...
             options.set('shred', shred)
             for ext, content, clean in cases:
                 with self.subTest(ext=ext, shred=shred):
+                    config_dir = self.mkdtemp()
                     target = self.write_file(
-                        f'symlink-target-{shred}.{ext}', text=content)
-                    link = os.path.join(self.tempdir, f'symlink-{shred}.{ext}')
+                        os.path.join(config_dir, 'target.' + ext),
+                        text=content)
+                    link = os.path.join(config_dir, 'link.' + ext)
                     os.symlink(target, link)
                     with self.assertRaises(OSError):
                         clean(link)
@@ -996,8 +998,8 @@ State=AAAA/wA...
     @common.skipIfWindows
     def test_delete_top_refuses_link(self):
         """delete() with top does not go through a symlinked directory"""
-        top = self.mkdir('delete-top')
-        outside = self.mkdir('delete-top-outside')
+        top = self.mkdtemp()
+        outside = self.mkdtemp()
         secret = self.write_file(os.path.join(outside, 'secret'), b'secret')
         # Stands in for a directory swapped for a link after it was listed
         os.symlink(outside, os.path.join(top, 'link'))

@@ -719,11 +719,12 @@ PrefersNonDefaultGPU=false""")
             "[Desktop Entry]\nHidden=true\n",
             "[Desktop Entry]\nType=Application\nName=Test\nHidden=true\n",
         )
+        desktop = os.path.join(self.mkdtemp(), 'hidden.desktop')
         for content in test_cases:
-            filename = self.write_file('hidden.desktop', text=content)
+            filename = self.write_file(desktop, text=content)
             self.assertFalse(is_broken_xdg_desktop(filename), content)
         filename = self.write_file(
-            'hidden.desktop', text="[Desktop Entry]\nHidden=false\n")
+            desktop, text="[Desktop Entry]\nHidden=false\n")
         self.assertTrue(is_broken_xdg_desktop(filename))
 
     @common.skipIfWindows

@@ -598,9 +598,10 @@ class GUITestCase(common.BleachbitTestCase):
     @common.skipIfWindows
     def test_shred_quit_linked_options_dir(self):
         """Shred settings through a linked options dir, keeping the link"""
-        target = self.mkdir('shred-quit-target')
+        base = self.mkdtemp()
+        target = self.mkdir(os.path.join(base, 'target'))
         self.write_file(os.path.join(target, 'bleachbit.ini'))
-        link = os.path.join(self.tempdir, 'shred-quit-link')
+        link = os.path.join(base, 'link')
         os.symlink(target, link)
 
         with mock.patch.object(bleachbit, 'options_dir', link), \
