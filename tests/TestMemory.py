@@ -17,6 +17,7 @@ from tests import common
 from bleachbit import General, logger
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.Memory import (
+    _fstab_swap_options,
     _memory_child_script,
     _parse_meminfo_free,
     _run_memory_child_fork,
@@ -294,6 +295,20 @@ Swapouts:                              20258188.
         # swapoff failed on /dev/sdb1, so it is still on
         after = header + '/dev/sdb1\tpartition\t1048572\t0\t5\n'
         swapon = General.resolve_exe('swapon')
+        no_fstab = mock.patch('bleachbit.Memory._fstab_swap_options',
+                              return_value={})
+        no_fstab.start()
+        self.addCleanup(no_fstab.stop)
+
+        # An fstab entry comes back with its options, as 'swapon -a' does
+        fstab = {os.path.realpath('/dev/sdb1'): 'sw,discard,pri=5'}
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s), \
+                mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header), \
+                mock.patch('bleachbit.Memory._fstab_swap_options', return_value=fstab), \
+                mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
+            enable_swap_linux(after)
+            mock_run.assert_called_once_with(
+                [swapon, '-p', '5', '-o', 'sw,discard,pri=5', '/dev/sdb1'])
 
         # Success: what was on comes back with its priority, and not
         # through 'swapon -a', which only reads /etc/fstab
@@ -334,6 +349,24 @@ Swapouts:                              20258188.
                 self.assertRaisesRegex(
                     RuntimeError, 'Unexpected line',
                     enable_swap_linux, header + 'malformed line\n')
+
+    def test_fstab_swap_options(self):
+        """_fstab_swap_options() maps each swap area to its options"""
+        fstab = self.write_file(os.path.join(self.mkdtemp(), 'fstab'), text=(
+            '# comment\n'
+            'UUID=1234 / ext4 defaults 0 1\n'
+            'UUID=abcd none swap sw,discard,pri=5 0 0\n'
+            '/dev/sdb2 none swap defaults 0 0\n'
+            '/swap\\040file none swap sw 0 0\n'
+            'LABEL=fast none swap discard=pages 0 0\n'
+            'malformed line\n'))
+        self.assertEqual({
+            os.path.realpath('/dev/disk/by-uuid/abcd'): 'sw,discard,pri=5',
+            os.path.realpath('/dev/sdb2'): 'defaults',
+            os.path.realpath('/swap file'): 'sw',
+            os.path.realpath('/dev/disk/by-label/fast'): 'discard=pages'},
+            _fstab_swap_options(fstab))
+        self.assertEqual({}, _fstab_swap_options(fstab + '.missing'))
 
     @common.skipIfWindows
     def test_get_swap_size_linux_errors(self):
