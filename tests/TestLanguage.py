@@ -64,6 +64,18 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.skipTest('missing translations')
         self.assertIn('es', slangs)
 
+    def test_get_supported_language_codes_damaged_catalog(self):
+        """A damaged catalog of one language is skipped, not raised"""
+        locale_dir = self.mkdtemp()
+        for lang, content in (('de', b''), ('fr', b'not a catalog')):
+            messages_dir = self.mkdir(
+                os.path.join(locale_dir, lang, 'LC_MESSAGES'))
+            self.write_file(
+                os.path.join(messages_dir, 'bleachbit.mo'), content)
+        with mock.patch('bleachbit.locale_dir', locale_dir), \
+                self.assertLogs('bleachbit.Language', level='WARNING'):
+            self.assertEqual(['en', 'en_US'], get_supported_language_codes())
+
     def test_find_supported_language_code(self):
         """Test find_supported_language_code()
 
