@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
-"PO-Revision-Date: 2026-07-16 07:01+0000\n"
-"Last-Translator: Libre <6n0n1m0s@proton.me>\n"
+"PO-Revision-Date: 2026-10-29 12:10+0000\n"
+"Last-Translator: みつめ <imisstsu@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/bleachbit/main/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Launchpad-Export-Date: 2021-12-14 04:36+0000\n"
 
 #. Cleaner description: the category of application.
@@ -731,7 +731,7 @@ msgstr "Listas de paquetes"
 #. Cleaner description: the category of application. 'Container' means a software container that packages and runs applications in isolation, not a physical shipping container.
 #: ../cleaners/docker.xml
 msgid "Container platform"
-msgstr ""
+msgstr "Plataforma de contenedores"
 
 #. Label for Claude coding assistant
 #: ../cleaners/docker.xml ../cleaners/claude.xml
@@ -744,30 +744,25 @@ msgid "Delete the conversation history"
 msgstr "Eliminar el historial de conversación"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Development environment"
-msgstr "Entorno de escritorio"
+msgstr "Entorno de desarrollo"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Caché de Gradle"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Delete downloaded podcasts"
 msgid "Delete downloaded dependencies and build artifacts"
-msgstr "Eliminar los pódcast descargados"
+msgstr "Eliminar las dependencias descargadas y los artefactos de compilación"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
 msgstr ""
+"Será necesario volver a descargar las dependencias en la próxima compilación."
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "DNS cache"
 msgid "IDE cache"
-msgstr "Caché de DNS"
+msgstr "Caché del IDE"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
@@ -898,6 +893,8 @@ msgstr "Versiones antiguas"
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Eliminar archivos de programa de versiones anteriores que quedaron tras las "
+"actualizaciones"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -1424,10 +1421,9 @@ msgstr "Se ignora el limpiador porque todos tienen acceso de escritura: %s"
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Se ignora el limpiador porque todos tienen acceso de escritura: %s"
+msgstr "Se ignora el limpiador porque su directorio es escribible por todos: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -2786,6 +2782,13 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"Es posible que BleachBit no tenga Acceso total al disco. Sin él, macOS "
+"bloquea el acceso a algunos archivos y algunos limpiadores no funcionarán.\n"
+"\n"
+"\n"
+"\n"
+"Para solucionarlo, abre Ajustes del Sistema > Privacidad y seguridad > "
+"Acceso total al disco, activa BleachBit y reinicia BleachBit."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -2930,13 +2933,15 @@ msgid ""
 "BleachBit detected a permissions issue with its configuration folder (%s). "
 "Would you like to repair it?"
 msgstr ""
+"BleachBit detectó un problema de permisos en su carpeta de configuración (%s)"
+". ¿Desea repararlo?"
 
 #. TRANSLATORS: Message shown in the log after repairing
 #. folder permissions. %s is the folder path.
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid "Repaired permissions for %s."
-msgstr ""
+msgstr "Se repararon los permisos de %s."
 
 #. TRANSLATORS: Message shown in the log when repairing
 #. folder permissions did not fully succeed. %s is the
@@ -2944,7 +2949,7 @@ msgstr ""
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid "Could not fully repair permissions for %s."
-msgstr ""
+msgstr "No se pudieron reparar completamente los permisos de %s."
 
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
@@ -3270,13 +3275,13 @@ msgstr "La ruta para limpiar debe ser una carpeta existente: %s"
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Sobrescribir el espacio libre aquí no es seguro porque cualquier usuario "
+"puede modificar esta carpeta: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
-msgstr "Creando un archivo temporal nuevo para limpiar el espacio libre."
+msgstr "Creando un archivo temporal nuevo para sobrescribir el espacio vacío."
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -3357,7 +3362,7 @@ msgstr "Acceso denegado: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "La base de datos está bloqueada: %s"
 
 #. TRANSLATORS: The special keyword {operation_option} will be
 #. replaced by a cleaner and option such as 'firefox.cache'.
