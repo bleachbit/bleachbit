@@ -793,6 +793,13 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # PyGObject drops the source after printing the error
             if worker_run is self._worker_run:
                 self._worker_source = None
+                backends.pop('_gui', None)
+                self._gui_cleaner_cleanup_pending = None
+                self.progressbar.hide()
+                self.set_sensitive(True)
+                if self._refresh_pending:
+                    self._refresh_pending = False
+                    self.cb_refresh_operations()
             raise
 
     def _stop_worker(self):
@@ -904,7 +911,14 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             if generation != self._register_generation:
                 rc.close()
                 return False
-            return next(rc)
+            try:
+                return next(rc)
+            except Exception:
+                if generation == self._register_generation:
+                    self.progressbar.hide()
+                    if self._worker_source is None:
+                        self.set_sensitive(True)
+                raise
 
         GLib.idle_add(pump)
         return False

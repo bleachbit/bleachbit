@@ -667,20 +667,34 @@ class GUITestCase(common.BleachbitTestCase):
             backends.pop('_gui', None)
 
     def test_failed_worker_is_not_left_running(self):
-        """A worker that raises is not treated as still running"""
+        """A worker that raises restores the UI and cleans up worker state"""
         gui = self.get_window()
         self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(backends.pop, '_gui', None)
 
         def failing_run(_worker):
             yield True
             raise RuntimeError('worker failed')
 
+        backends['_gui'] = Cleaner()
+        gui._gui_cleaner_cleanup_pending = object()
         with mock.patch('bleachbit.Worker.Worker.run', failing_run), \
+                mock.patch.object(gui.tree_store, 'refresh_rows',
+                                  wraps=gui.tree_store.refresh_rows) as refresh_rows, \
                 common.capture_glib_exceptions() as glib_errors:
             gui.preview_or_run_operations(False, {'system': ['tmp']})
+            gui.cb_refresh_operations()
+            self.assertTrue(gui._refresh_pending)
             self.refresh_gui()
         self.assertEqual([RuntimeError], [error[0] for error in glib_errors])
         self.assertIsNone(gui._worker_source)
+        self.assertNotIn('_gui', backends)
+        self.assertIsNone(gui._gui_cleaner_cleanup_pending)
+        self.assertFalse(gui._refresh_pending)
+        refresh_rows.assert_called_once_with()
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+        self.assertFalse(gui.progressbar.get_visible())
 
     def test_shred_paths_confirm_stops_running_preview(self):
         """Confirming a shred stops the preview that is still running"""
@@ -1201,6 +1215,20 @@ class GUITestCase(common.BleachbitTestCase):
                 self.assertRaises(RuntimeError):
             gui.cb_register_cleaners_done()
         self.assertTrue(gui.run_button_get_sensitive())
+
+        def failing_register(*_args, **_kwargs):
+            yield True
+            raise RuntimeError('registration failed')
+
+        with mock.patch('bleachbit.GuiWindow.register_cleaners',
+                        side_effect=failing_register), \
+                common.capture_glib_exceptions() as glib_errors:
+            gui.cb_refresh_operations()
+            self.refresh_gui()
+        self.assertEqual([RuntimeError], [error[0] for error in glib_errors])
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+        self.assertFalse(gui.progressbar.get_visible())
 
     def test_run_operations(self):
         gui = self.get_window()
