@@ -170,7 +170,7 @@ if bleachbit.IS_WINDOWS:
     import win32gui
     import win32service
     import winreg
-    from win32com.shell import shell
+    from win32com.shell import shell, shellcon
 
     # pylint: disable-next=ungrouped-imports
     from bleachbit import Windows
@@ -1349,7 +1349,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             # pylint: disable-next=possibly-used-before-assignment
             self.assertIsNone(Windows.browse_folder(None, 'title'))
         flags = mock_shell.SHBrowseForFolder.call_args.args[3]
-        self.assertTrue(flags & 0x0001)  # BIF_RETURNONLYFSDIRS
+        # pylint: disable-next=possibly-used-before-assignment
+        expected_flags = shellcon.BIF_RETURNONLYFSDIRS | shellcon.BIF_EDITBOX
+        self.assertEqual(flags, expected_flags)
 
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
