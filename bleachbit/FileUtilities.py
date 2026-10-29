@@ -1635,7 +1635,8 @@ def _is_system_critical_posix(path):
     Applies even when the keep list is empty, so a bad cleaner file cannot
     delete the filesystem root or a mounted pseudo-filesystem. Real cleaners
     legitimately act under /var and /dev/shm, so only the root itself and
-    virtual filesystems are off limits.
+    virtual filesystems are off limits. Under /run, only the drives udisks2
+    mounts in /run/media hold user data.
     """
     if not isinstance(path, str) or not path.startswith('/'):
         return False
@@ -1644,6 +1645,8 @@ def _is_system_critical_posix(path):
     norm = os.path.normpath('/' + path.lstrip('/'))
     if norm == '/':
         return True
+    if path_startswith(norm, '/run/media'):
+        return False
     for prefix in ('/proc', '/sys', '/run'):
         if norm == prefix or path_startswith(norm, prefix):
             return True
