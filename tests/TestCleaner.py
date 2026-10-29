@@ -286,6 +286,23 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertNotExists(dirname)
 
     @common.skipIfWindows
+    def test_create_simple_cleaner_inner_directory_link(self):
+        """Shredding a folder keeps the target of a link inside it"""
+        target = self.mkdir('csc-inner-target')
+        target_file = os.path.join(target, 'file.txt')
+        common.touch_file(target_file)
+        root = self.mkdir('csc-inner')
+        link = os.path.join(root, 'link')
+        os.symlink(target, link)
+
+        cleaner = create_simple_cleaner([root])
+        for cmd in cleaner.get_commands('files'):
+            list(cmd.execute(True))
+
+        self.assertNotExists(root)
+        self.assertExists(target_file)
+
+    @common.skipIfWindows
     def test_create_simple_cleaner_directory_link(self):
         """Shredding a link to a directory removes only the link"""
         target = self.mkdir('csc-link-target')
