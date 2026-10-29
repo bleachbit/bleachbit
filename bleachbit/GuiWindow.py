@@ -749,6 +749,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Preview operations or run operations (delete files)"""
 
         assert isinstance(really_delete, bool)
+        if self._worker_source is not None:
+            self.refuse_if_busy()
+            return
         from bleachbit import Worker
         self.start_time = None
         if not operations:
@@ -975,7 +978,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         # preview
         if not really_delete:
-            self.preview_or_run_operations(False, operations)
+            if not self.refuse_if_busy():
+                self.preview_or_run_operations(False, operations)
             return
 
         # block cleaning of warning options without expert mode

@@ -929,10 +929,31 @@ class GUITestCase(common.BleachbitTestCase):
                 mock.patch.object(gui, 'preview_or_run_operations') as start:
             gui.cb_run_option(None, True, self._NEW_CLEANER_ID,
                               self._NEW_OPTION_ID)
+            gui.cb_run_option(None, False, self._NEW_CLEANER_ID,
+                              self._NEW_OPTION_ID)
             gui.run_operations(None)
             self.refresh_gui()
         start.assert_not_called()
-        self.assertEqual(2, show_infobar.call_count)
+        self.assertEqual(3, show_infobar.call_count)
+        self.assertTrue(gui.run_button_get_sensitive())
+
+    def test_preview_or_run_operations_refused_while_worker_runs(self):
+        """Starting a second operation does not replace a running worker"""
+        gui = self.get_window()
+        self._setup_new_cleaner(gui)
+        operations = {self._NEW_CLEANER_ID: [self._NEW_OPTION_ID]}
+        gui.preview_or_run_operations(False, operations)
+        first_worker = gui.worker
+        first_source = gui._worker_source
+        first_start_time = gui.start_time
+        with mock.patch.object(gui, 'show_infobar') as show_infobar:
+            gui.preview_or_run_operations(True, operations)
+        show_infobar.assert_called_once()
+        self.assertIs(gui.worker, first_worker)
+        self.assertEqual(gui._worker_source, first_source)
+        self.assertEqual(gui.start_time, first_start_time)
+        self.refresh_gui()
+        self.assertIsNone(gui._worker_source)
         self.assertTrue(gui.run_button_get_sensitive())
 
     def test_shred_instance_shreds_its_paths_once(self):
