@@ -2575,13 +2575,18 @@ State=AAAA/wA...
             self.skipTest('POSIX only')
         options.set_whitelist_paths([])
         for path in ('/', '//', '/proc', '/proc/cpuinfo', '/sys/',
-                     '/sys/kernel', '/run', '/run/user/0'):
+                     '/sys/kernel', '/run', '/run/systemd/x', '/run/lock',
+                     '/run/media', '/run/media/', '/run/user',
+                     '/run/media/../systemd', '/run/mediax/x'):
             self.assertTrue(whitelisted(path),
                             f"{path} should be protected")
-        # Real cleaners legitimately act under /var, /dev/shm, /etc
+        # Real cleaners legitimately act under /var, /dev/shm, /etc, and
+        # udisks2 mounts removable drives under /run/media (#2485)
         for path in ('/home/user/file', '/tmp/scratch', '/opt/data/x',
                      '/etc/passwd', '/var/log/syslog', '/dev/shm/x',
-                     '/procfile', '/sysfs2/x', ''):
+                     '/procfile', '/sysfs2/x', '',
+                     '/run/media/user/exthdd/604-shred-test',
+                     '/run/media/user', '/run/user/1000/doc/x'):
             self.assertFalse(whitelisted(path),
                              f"{path} should not be protected")
 
