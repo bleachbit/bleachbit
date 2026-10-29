@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-17 17:59-0600\n"
-"PO-Revision-Date: 2026-10-29 12:10+0000\n"
-"Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-29 22:35+0000\n"
+"Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
 "Language: kab\n"
@@ -1265,13 +1265,15 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
-msgstr ""
+msgstr "Umuɣ n usenker"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
 "Install language files to use ${prodname} in your preferred local language."
 msgstr ""
+"Sbedd ifuyla n tutlayt akken ad tesqedceḍ ${prodname} s tutlayt tadigant i "
+"tḥemmleḍ."
 
 #. TRANSLATORS: Name of the translations section in the Windows installer: user selects which translations to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1282,25 +1284,25 @@ msgstr "Tisuqqilin"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add an uninstall program."
-msgstr ""
+msgstr "Rnu ahil n tukksa n useɣẓan."
 
 #. TRANSLATORS: Shortcut name for a desktop shortcut that opens a debugging terminal.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
-msgstr ""
+msgstr "Ixf n useɣti n ${prodname}"
 
 #. TRANSLATORS: Shortcut name for a desktop shortcut that runs without UAC elevation (admin privileges).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
-msgstr ""
+msgstr "${prodname} (war UAC)."
 
 #. TRANSLATORS: Context menu item in Windows Explorer for securely shredding files.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
-msgstr ""
+msgstr "Senger s ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
@@ -1311,6 +1313,10 @@ msgid ""
 "including any files (such as custom cleaners) that you may have added or "
 "changed."
 msgstr ""
+"${prodname} ad yettwakkes seg ukaram-a.\n"
+"Sit ɣef « Kkes » akken ad tebdu tukksa.\n"
+"ƔUR-K·m: Ahil n tukksa ad yekkes akaram n usbeddi meṛṛa, ula d ifuyla (am "
+"yifecka n usfaḍ yugnen) i terniḍ neɣ i tbeddleḍ."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1319,7 +1325,7 @@ msgstr ""
 #. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variables."
-msgstr ""
+msgstr "Aḍummu lqayen ur isefrak ara imuttiyen igetazalen."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -1328,7 +1334,7 @@ msgstr ""
 #: ../bleachbit/Action.py
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" yettwaseqdec s ubrid n ufaylu amagnu=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1338,24 +1344,24 @@ msgstr ""
 #: ../bleachbit/Action.py
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" mačči d tamudemt glob"
 
 #. TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
 #. It shows in the log of actions performed.
 #: ../bleachbit/Action.py
 msgid "Clean cookies"
-msgstr ""
+msgstr "Sfeḍ inagan n tuqqna"
 
 #. TRANSLATORS: %s is the command line to be executed
 #: ../bleachbit/Action.py
 #, python-format
 msgid "Run external command: %s"
-msgstr ""
+msgstr "Selkem taladna tazɣarayt: %s"
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Smiren Shell n Windows"
 
 #: ../bleachbit/Bootstrap.py
 msgid ""
@@ -1365,6 +1371,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Akken ad tselkmeḍ asnas s ugrudem udlif deg Wayland s tseglut n root, sireg "
+"addaf s tladna-a:\n"
+"xhost si:localuser:root\n"
+"I wugar n telɣut ɣef xhost, wali https://docs.bleachbit.org/doc/frequently-"
+"asked-questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1372,13 +1383,15 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
+"Tuccḍa deg twuri handle_cleaner_option() i usulay n ufecku n usfaḍ = "
+"{cleaner_id}, taxtiṛit XML={option_xml}"
 
 #. TRANSLATORS: Warning printed to the log. %s expands to the
 #. path of the XML cleaner file that was skipped
 #: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "Afecku n usfaḍ ad yettwazgel acku yal aseqdac yezmer ad yaru deg-s: %s"
 
 #. TRANSLATORS: Warning printed to the log. %s expands to the
 #. path of the XML cleaner file whose directory is world
@@ -1387,13 +1400,15 @@ msgstr ""
 #, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr ""
+"Afecku n usfaḍ ad yettwazgel acku yal aseqdac yezmer ad yaru deg ukaram-is: "
+"%s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
 #: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
+msgstr "Tuccḍa deg tɣuri n ufecku n usfaḍ: %s"
 
 #. TRANSLATORS: Cleaner name shown in the list of applications.
 #: ../bleachbit/Cleaner.py
@@ -1403,7 +1418,7 @@ msgstr "Anagraw"
 #. TRANSLATORS: Description of the System cleaner.
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
-msgstr ""
+msgstr "Anagraw s umata"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1414,18 +1429,18 @@ msgstr ""
 #. https://specifications.freedesktop.org/menu/latest/index.html#introduction
 #: ../bleachbit/Cleaner.py
 msgid "Broken desktop files"
-msgstr ""
+msgstr "Ifuyla n ufellaru yerẓen"
 
 #. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
-msgstr ""
+msgstr "Kkes inekcumen yerẓen deg wumuɣen n yisnasen d yiseɣwan n ifuyla yerẓen"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
 #: ../bleachbit/Cleaner.py
 msgid "Localizations"
-msgstr ""
+msgstr "Ifuyla n tsuqilt"
 
 #. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
