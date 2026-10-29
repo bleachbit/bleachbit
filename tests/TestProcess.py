@@ -20,11 +20,13 @@ from unittest import mock
 import psutil
 
 from bleachbit import IS_LINUX, IS_WINDOWS
-from bleachbit.General import get_real_username, resolve_exe, sudo_mode
+from bleachbit.General import (get_real_uid, get_real_username, resolve_exe,
+                               sudo_mode)
 from bleachbit.Process import (
     _enumerate_proc_fs,
     _enumerate_ps_aux,
     enumerate_processes,
+    is_pid_running,
     is_process_running,
     ProcessInfo,
 )
@@ -208,10 +210,6 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
             (True, exe, False),  # Check the actual process name
             (True, exe, True),  # Check the actual process name
         ]
-        # These processes may be running but not by the current user.
-        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
-                         'gdm3', 'snapd', 'systemd-journald')
-        tests += [(False, name, True) for name in non_user_exes]
         # These do not exist.
         tests += [
             (False, 'does-not-exist', True),
@@ -221,6 +219,11 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
             with self.subTest(exename=exename, require_same_user=require_same_user):
                 self.assertEqual(is_process_running(exename, require_same_user), expected,
                                  f'is_running({exename}, {require_same_user})')
+        # PID 1 belongs to root, or to this user inside a container. By PID,
+        # since its name is shared with the user's own systemd instance
+        init_same_user = os.stat('/proc/1').st_uid == get_real_uid()
+        self.assertTrue(is_pid_running(1, False))
+        self.assertEqual(is_pid_running(1, True), init_same_user)
 
     @common.skipUnlessMac
     @common.also_with_sudo
