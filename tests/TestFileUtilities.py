@@ -70,6 +70,7 @@ from bleachbit.FileUtilities import (
     open_files_psutil,
     open_files_freebsd,
     OpenFiles,
+    _linux_mount,
     same_partition,
     truncate_file,
     uris_to_paths,
@@ -2377,6 +2378,8 @@ State=AAAA/wA...
             return unittest.mock.Mock(f_blocks=f_blocks, f_bfree=f_bfree)
 
         with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', False), \
+                unittest.mock.patch('bleachbit.FileUtilities._linux_mount',
+                                    return_value=None), \
                 unittest.mock.patch('os.stat', side_effect=fake_stat), \
                 unittest.mock.patch('os.statvfs', side_effect=fake_statvfs, create=True):
             self.assertTrue(same_partition('/a', '/a'))
@@ -2403,6 +2406,52 @@ State=AAAA/wA...
                 unittest.mock.patch('os.stat', return_value=unittest.mock.Mock(st_dev=0)):
             self.assertTrue(same_partition('Z:\\Temp', 'z:\\'))
             self.assertFalse(same_partition('Y:\\Temp', 'Z:\\'))
+
+    @common.skipUnlessLinux
+    def test_linux_mount(self):
+        """_linux_mount() finds the mount of a path in mountinfo"""
+        mountinfo = self.write_file(
+            os.path.join(self.mkdtemp(), 'mountinfo'), text=(
+                '22 1 0:21 / / rw shared:1 - btrfs /dev/sda2 rw,subvol=/@\n'
+                '30 22 0:21 /@home /home rw - btrfs /dev/sda2 rw,subvol=/@h\n'
+                '31 22 0:30 / /tmp rw - tmpfs tmpfs rw\n'
+                '32 22 8:17 / /mnt/my\\040disk rw - ext4 /dev/sdb1 rw\n'
+                'garbage line\n'))
+        for path, expected in (
+                ('/home/user', ('btrfs', '/dev/sda2')),
+                ('/', ('btrfs', '/dev/sda2')),
+                ('/homework', ('btrfs', '/dev/sda2')),
+                ('/tmp/x', ('tmpfs', 'tmpfs')),
+                ('/mnt/my disk/f', ('ext4', '/dev/sdb1'))):
+            with self.subTest(path=path):
+                self.assertEqual(_linux_mount(path, mountinfo), expected)
+        self.assertIsNone(_linux_mount('/x', mountinfo + '.missing'))
+
+    def test_same_partition_linux_mounts(self):
+        """same_partition() tells btrfs subvolumes from other file systems"""
+        mounts = {'/a': ('btrfs', '/dev/sda2'), '/b': ('btrfs', '/dev/sda2'),
+                  '/c': ('ext4', '/dev/sdb1'), '/d': ('tmpfs', 'tmpfs'),
+                  '/e': ('tmpfs', 'tmpfs'), '/f': ('zfs', 'pool/home'),
+                  '/g': ('zfs', 'pool/tmp'), '/h': ('zfs', 'other/tmp')}
+        devices = {path: i for i, path in enumerate(sorted(mounts))}
+
+        def fake_stat(path):
+            return unittest.mock.Mock(st_dev=devices[path])
+
+        patch = unittest.mock.patch
+        with patch('bleachbit.FileUtilities.IS_WINDOWS', False), \
+                patch('bleachbit.FileUtilities.IS_LINUX', True), \
+                patch('bleachbit.FileUtilities._linux_mount',
+                      side_effect=mounts.get), \
+                patch('os.stat', side_effect=fake_stat):
+            # subvolumes of one btrfs file system
+            self.assertTrue(same_partition('/a', '/b'))
+            self.assertFalse(same_partition('/a', '/c'))
+            # two tmpfs mounts
+            self.assertFalse(same_partition('/d', '/e'))
+            # datasets of one zfs pool
+            self.assertTrue(same_partition('/f', '/g'))
+            self.assertFalse(same_partition('/f', '/h'))
 
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""

@@ -1450,6 +1450,56 @@ def listdir(directory):
         yield os.path.join(dirname, filename)
 
 
+def _unescape_mountinfo(field):
+    """Decode the \\ooo escapes of /proc/self/mountinfo"""
+    return re.sub(r'\\([0-7]{3})',
+                  lambda m: chr(int(m.group(1), 8)), field)
+
+
+def _linux_mount(path, mountinfo='/proc/self/mountinfo'):
+    """Return (fstype, source) of the mount holding path, or None"""
+    path = os.path.realpath(path)
+    try:
+        with open(mountinfo, encoding='utf-8',
+                  errors='surrogateescape') as f:
+            lines = f.readlines()
+    except OSError:
+        return None
+    best = None
+    best_len = -1
+    for line in lines:
+        fields = line.split()
+        try:
+            sep = fields.index('-')
+        except ValueError:
+            continue
+        if sep < 5 or len(fields) < sep + 3:
+            continue
+        mount_point = _unescape_mountinfo(fields[4])
+        if (path != mount_point and mount_point != '/'
+                and not path.startswith(mount_point + '/')):
+            continue
+        # A later line with the same mount point is the visible mount
+        if len(mount_point) >= best_len:
+            best_len = len(mount_point)
+            best = (fields[sep + 1], _unescape_mountinfo(fields[sep + 2]))
+    return best
+
+
+def _same_linux_storage(mount1, mount2):
+    """Whether two mounts share their blocks, as btrfs subvolumes do"""
+    (fstype1, source1), (fstype2, source2) = mount1, mount2
+    if fstype1 != fstype2:
+        return False
+    if fstype1 == 'zfs':
+        # datasets of one pool
+        return source1.split('/')[0] == source2.split('/')[0]
+    if source1.startswith('/'):
+        return os.path.realpath(source1) == os.path.realpath(source2)
+    # tmpfs and other pseudo file systems name no device
+    return False
+
+
 def same_partition(dir1, dir2):
     """Are both directories on the same partition?
 
@@ -1477,8 +1527,13 @@ def same_partition(dir1, dir2):
         return ntpath.splitdrive(dir1)[0].upper() == ntpath.splitdrive(dir2)[0].upper()
     if os.stat(dir1).st_dev == os.stat(dir2).st_dev:
         return True
-    # Subvolumes of one btrfs file system have their own device numbers
-    # but share its blocks, and free blocks can change between the calls.
+    if IS_LINUX:
+        mount1 = _linux_mount(dir1)
+        mount2 = _linux_mount(dir2)
+        if mount1 is not None and mount2 is not None:
+            return _same_linux_storage(mount1, mount2)
+    # Volumes of one APFS container have their own device numbers but
+    # share its blocks, and free blocks can change between the calls.
     # Pseudo-filesystems report f_blocks == 0 and do not share a pool.
     # pylint: disable=no-member
     stat1 = os.statvfs(dir1)
