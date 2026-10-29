@@ -406,20 +406,21 @@ def reject_world_writable(pathname):
 def list_cleanerml_files(local_only=False, system_only=False):
     """List CleanerML files
 
-    The directories come in order of precedence (local, system, personal)
+    The directories come in order of precedence (personal, local, system)
     and the files are sorted within each one.
     """
     cleanerdirs = ()
-    if not system_only and bleachbit.local_cleaners_dir:
+    if not system_only and bleachbit.personal_cleaners_dir:
+        cleanerdirs += (bleachbit.personal_cleaners_dir, )
+    if not system_only and bleachbit.local_cleaners_dir \
+            and bleachbit.local_cleaners_dir not in cleanerdirs:
         # If the application is installed, locale_cleaners_dir is None.
         # If portable mode, local_cleaners_dir is under the directory of
         # `bleachbit.py`.
         cleanerdirs += (bleachbit.local_cleaners_dir, )
-    if not local_only and bleachbit.system_cleaners_dir:
+    if not local_only and bleachbit.system_cleaners_dir \
+            and bleachbit.system_cleaners_dir not in cleanerdirs:
         cleanerdirs += (bleachbit.system_cleaners_dir, )
-    # In portable mode on Windows, the personal directory is the local one.
-    if not system_only and bleachbit.personal_cleaners_dir not in cleanerdirs:
-        cleanerdirs += (bleachbit.personal_cleaners_dir, )
     check_world_writable = not IS_WINDOWS
     pathnames = (pathname for cleanerdir in cleanerdirs
                  for pathname in sorted(listdir(cleanerdir)))
@@ -460,8 +461,9 @@ def is_trusted_cleaner(pathname):
 def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     """Scan for CleanerML and load them
 
-    When two files share a cleaner id, the first one listed wins, so a
-    personal cleaner cannot replace a bundled one.
+    When two files share a cleaner id, the first one listed wins, so personal
+    cleaners take precedence over local cleaners, which take precedence over
+    system cleaners.
     """
     if IS_POSIX:
         from bleachbit import Unix
