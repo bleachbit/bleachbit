@@ -2356,6 +2356,7 @@ State=AAAA/wA...
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():
                 this_drive = os.path.splitdrive(drive)[0]
+                self.assertTrue(same_partition(drive, drive))
                 self.assertEqual(same_partition(home, drive),
                                  home_drive == this_drive)
 
@@ -2392,6 +2393,13 @@ State=AAAA/wA...
                 unittest.mock.patch('bleachbit.FileUtilities.free_space', changing_free_space), \
                 unittest.mock.patch('os.stat', return_value=unittest.mock.Mock(st_dev=7)):
             self.assertTrue(same_partition('C:\\Temp', 'C:\\'))
+
+        # Volumes with st_dev == 0 (such as zero-serial RAM disks) fall back
+        # to comparing drive roots instead of colliding at 0 == 0.
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', True), \
+                unittest.mock.patch('os.stat', return_value=unittest.mock.Mock(st_dev=0)):
+            self.assertTrue(same_partition('Z:\\Temp', 'z:\\'))
+            self.assertFalse(same_partition('Y:\\Temp', 'Z:\\'))
 
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""
