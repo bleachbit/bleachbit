@@ -51,6 +51,9 @@ copy_tree() {
 
 prep_redhat() {
     run_optional_tests
+    # Stamp Revision.py so the sdist tarball carries the revision;
+    # git may be absent, so `make stamp` falls back to $REVISION.
+    make stamp
     python3 setup.py sdist --dist-dir /tmp/dist
     rpmdev-setuptree
     shopt -s nullglob
@@ -72,6 +75,9 @@ case "$DISTRO_NAME" in
         ln -sf debian.control control
         ln -sf debian.changelog changelog
         popd >/dev/null
+        # Stamp Revision.py for debian/rules' check-revision; git is
+        # absent, so `make stamp` falls back to $REVISION.
+        make stamp
         dpkg-buildpackage -us -uc -b
         cd /tmp
         shopt -s nullglob

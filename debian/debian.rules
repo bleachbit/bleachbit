@@ -51,7 +51,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/bleachbit.
-	$(MAKE) stamp
+	$(MAKE) check-revision
 	$(MAKE) DESTDIR=$(CURDIR)/debian/bleachbit prefix=/usr install
 	find debian/bleachbit/usr/share/bleachbit -name "*.pyc" -exec rm -f '{}' ';'
 

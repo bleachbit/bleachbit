@@ -140,7 +140,7 @@ make delete_windows_files
 
 
 %install
-make stamp
+make check-revision
 make install PYTHON=%{pyexe} DESTDIR=%{buildroot} prefix=%{_prefix}
 
 %if %{is_redhat_family}
