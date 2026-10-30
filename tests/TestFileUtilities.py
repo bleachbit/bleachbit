@@ -37,11 +37,13 @@ from tests.common import pytest
 # local import
 from bleachbit.FileUtilities import (
     _mount_points_below,
+    _posix_keep_list_spelling,
     _remove_windows_readonly,
     _truncate_locked_file,
     bytes_to_human,
     children_below,
     children_in_directory,
+    clear_path_spellings,
     clean_ini,
     clean_json,
     delete_file,
@@ -2573,6 +2575,53 @@ State=AAAA/wA...
         self.assertFalse(whitelisted(path))
 
     @common.skipIfWindows
+    def test_whitelisted_posix_spelling_cache(self):
+        """Normalize keep entries once, and refresh after edits or a new run."""
+        clear_path_spellings()
+        self.addCleanup(clear_path_spellings)
+        keep = '/home/keep//folder/'
+        options.set_whitelist_paths([('folder', keep)])
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities._posix_keep_list_spelling',
+                wraps=_posix_keep_list_spelling) as spelling:
+            for _ in range(3):
+                self.assertTrue(whitelisted('/home/keep/folder/child'))
+            self.assertEqual(
+                1, spelling.call_args_list.count(unittest.mock.call(keep)))
+            options.set_whitelist_paths([('file', keep)])
+            self.assertFalse(whitelisted('/home/keep/folder/child'))
+            self.assertEqual(
+                2, spelling.call_args_list.count(unittest.mock.call(keep)))
+            options.set_whitelist_paths([('folder', '')])
+            self.assertTrue(whitelisted('/home/elsewhere'))
+            self.assertFalse(whitelisted('relative/path'))
+            options.set_whitelist_paths([])
+            self.assertFalse(whitelisted('/home/keep/folder'))
+            options.set_whitelist_paths([('folder', '/home/other/')])
+            self.assertFalse(whitelisted('/home/keep/folder/child'))
+            self.assertTrue(whitelisted('/home/other/child'))
+            clear_path_spellings()
+            self.assertTrue(whitelisted('/home/other/child'))
+            self.assertEqual(
+                2, spelling.call_args_list.count(unittest.mock.call('/home/other/')))
+
+    @common.skipIfWindows
+    def test_whitelisted_posix_symlink_retarget(self):
+        """Cached keep spellings must not freeze symlink targets."""
+        first = self.write_file('first')
+        second = self.write_file('second')
+        kept_link = os.path.join(self.tempdir, 'kept_link')
+        other_link = os.path.join(self.tempdir, 'other_link')
+        os.symlink(first, kept_link)
+        os.symlink(first, other_link)
+        options.set_whitelist_paths([('file', kept_link)])
+        self.assertTrue(whitelisted(other_link))
+        os.unlink(kept_link)
+        os.symlink(second, kept_link)
+        self.assertFalse(whitelisted(other_link))
+        self.assertTrue(whitelisted(kept_link))
+
+    @common.skipIfWindows
     def test_whitelisted_posix_normpath(self):
         """Keep list matches paths spelled with '//' or a trailing '/'"""
         options.set_whitelist_paths(
@@ -2700,7 +2749,6 @@ State=AAAA/wA...
             created.append(True)
             self.assertTrue(whitelisted(long_keep_file))
             # the next run asks again, for the entry and the directory
-            from bleachbit.FileUtilities import clear_path_spellings
             clear_path_spellings()
             self.assertTrue(whitelisted(fr'{temp}\keep\file0.txt'))
             temp_calls = [call.args[0] for call in mock_long.call_args_list

@@ -1566,6 +1566,24 @@ def _posix_keep_list_spelling(path):
     return path
 
 
+_posix_keep_list_cache = {'entries': (), 'spellings': ()}
+
+
+def _posix_keep_list(keep_paths):
+    """Cache normalized spellings for the current POSIX keep list."""
+    entries = tuple(keep_paths)
+    if entries != _posix_keep_list_cache['entries']:
+        spellings = []
+        for keep_type, keep_path in entries:
+            # normpath('') is '.', but an empty folder entry matches everything
+            if keep_path:
+                keep_path = _posix_keep_list_spelling(keep_path)
+            spellings.append((keep_type, keep_path))
+        _posix_keep_list_cache['entries'] = entries
+        _posix_keep_list_cache['spellings'] = tuple(spellings)
+    return _posix_keep_list_cache['spellings']
+
+
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     """Check whether this POSIX path is whitelisted"""
     if _is_system_critical_posix(path):
@@ -1581,10 +1599,7 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
         # resolve symlink
         return whitelisted_posix(os.path.realpath(path), False, _followed_link=True)
     path = _posix_keep_list_spelling(path)
-    for (keep_type, keep_path) in keep_paths:
-        # normpath('') is '.', but an empty folder entry matches everything
-        if keep_path:
-            keep_path = _posix_keep_list_spelling(keep_path)
+    for (keep_type, keep_path) in _posix_keep_list(keep_paths):
         if keep_type == 'file':
             if path_equal(path, keep_path):
                 return True
@@ -1706,6 +1721,8 @@ def clear_path_spellings():
     _long_dir_names.clear()
     _keep_list_cache['entries'] = ()
     _keep_list_cache['spellings'] = {}
+    _posix_keep_list_cache['entries'] = ()
+    _posix_keep_list_cache['spellings'] = ()
 
 
 def whitelisted_windows(path):
