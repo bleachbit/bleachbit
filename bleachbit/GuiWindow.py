@@ -4,6 +4,7 @@
 # This work is licensed under the terms of the GNU GPL, version 3 or
 # later.  See the COPYING file in the top-level directory.
 
+import contextlib
 import logging
 import os
 import sys
@@ -64,6 +65,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _restore_size = None
     _restore_size_retried = False
     _maximize_deadline = 0.0
+    _refresh_holds = 0
     _worker_run = None
     _worker_source = None
     recognized_cleanerml = False
@@ -881,8 +883,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Callback to refresh the list of cleaners and header bar labels"""
         if getattr(self, '_destroyed', False) or self.in_destruction():
             return False
-        if self._worker_source is not None:
-            # Registration empties backends, which the worker still reads
+        if self._worker_source is not None or self._refresh_holds:
+            # Registration empties backends, which the worker or a toggle
+            # waiting on its warning dialog still reads
             self._refresh_pending = True
             return False
         bleachbit.log_startup_time('refresh started')
@@ -928,6 +931,18 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         GLib.idle_add(pump)
         return False
+
+    @contextlib.contextmanager
+    def hold_refresh(self):
+        """Defer cb_refresh_operations() until the block is done"""
+        self._refresh_holds += 1
+        try:
+            yield
+        finally:
+            self._refresh_holds -= 1
+            if self._refresh_pending and not self._refresh_holds:
+                self._refresh_pending = False
+                self.cb_refresh_operations()
 
     def cb_register_cleaners_done(self):
         """Called from register_cleaners()"""
