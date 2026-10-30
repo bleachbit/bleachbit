@@ -208,9 +208,16 @@ jobs:
         shell: pwsh
         run: .\windows\python-gtk3-install.ps1
 
+      - name: Cache PsExec
+        # zizmor: ignore[cache-poisoning] the install script checks the hash of a restored copy
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: psexec
+          key: win-psexec-${{ hashFiles('windows/install-psexec.ps1') }}
+
       - name: Install PsExec
         shell: pwsh
-        run: choco install psexec --version=2.43 -y
+        run: .\windows\install-psexec.ps1
 
       - name: Generate Revision.py
         uses: $/.github/actions/generate-revision
@@ -246,14 +253,14 @@ jobs:
         id: nonadmin
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          set PATH=%GITHUB_WORKSPACE%\psexec;%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
           call windows\run-psexec-nonadmin-tests.bat
 
       - name: Run low-integrity tests
         id: lowintegrity
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          set PATH=%GITHUB_WORKSPACE%\psexec;%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
           call windows\run-psexec-low-integrity-tests.bat
 
       - name: Collect low-integrity coverage
