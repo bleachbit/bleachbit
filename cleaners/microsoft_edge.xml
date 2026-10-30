@@ -45,6 +45,9 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/GPUCache"/>
     <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network Persistent State" os="unix"/>
     <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network/Network Persistent State" os="windows"/>
+    <!-- Linux-specific -->
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/microsoft-edge-beta/"/>
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/microsoft-edge/"/>
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
@@ -97,6 +100,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
     <action command="delete" search="file" path="$$profile$$/Reporting and NEL-journal"/>
     <action command="delete" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Reporting and NEL-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Reporting and NEL"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
@@ -137,7 +142,6 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
   </option>
   <option id="sync">
@@ -145,7 +149,13 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the sync data (including web apps) and sign out of the browser</description>
     <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
     <!-- Sync Data Backup not seen in Chromium 65 -->
-    <action command="json" search="file" path="$$base$$/Local State" address="profile"/>
+    <!-- "profile" in Local State lists every profile, so clear only the account fields -->
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/gaia_given_name"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/gaia_id"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/gaia_name"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/hosted_domain"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/is_consented_primary_account"/>
+    <action command="json" search="file" path="$$base$$/Local State" address="profile/info_cache/Default/user_name"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="account_info"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="google_services"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="sync"/>
@@ -156,6 +166,8 @@ later.  See the COPYING file in the top-level directory.
     <warning>This option will delete your saved passwords.</warning>
     <action command="delete" search="file" path="$$profile$$/Login Data"/>
     <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account-journal"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
@@ -169,6 +181,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Network Action Predictor"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Reporting and NEL"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/MediaDeviceSalts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
