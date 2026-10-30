@@ -46,7 +46,6 @@ from bleachbit.FileUtilities import (
     clear_path_spellings,
     clean_ini,
     clean_json,
-    clear_path_spellings,
     delete_file,
     delete,
     detect_encoding,
