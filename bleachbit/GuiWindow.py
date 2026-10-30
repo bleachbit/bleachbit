@@ -807,6 +807,11 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                     self._refresh_pending = False
                     self.cb_refresh_operations()
             raise
+        finally:
+            # A stop from inside this step, as on Ctrl+C, could not close
+            # the running generator
+            if worker_run is self._worker_run and self._worker_source is None:
+                worker_run.close()
 
     def _stop_worker(self):
         """Stop the running worker without letting it finish"""
@@ -814,7 +819,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             return
         GLib.source_remove(self._worker_source)
         self._worker_source = None
-        self._worker_run.close()
+        if not self._worker_run.gi_running:
+            self._worker_run.close()
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
@@ -904,6 +910,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 allow_local = False
             else:
                 self.recognized_cleanerml = True
+            if self._worker_source is not None:
+                # A shred or wipe started inside the dialog's main loop
+                self._refresh_pending = True
+                return False
         # reload cleaners from disk
         self.progressbar.show()
         # The tree shows stale rows until backends is refilled
