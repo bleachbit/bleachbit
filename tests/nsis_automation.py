@@ -421,7 +421,8 @@ def preflight(exe_path, keep=None):
 class WizardDriver:
     """Steps through any NSIS #32770 wizard whose title mentions BleachBit."""
 
-    def __init__(self, shots_dir, idle_timeout=90, first_timeout=120,
+    # The installer's fc-cache step can take ten minutes, as its text says
+    def __init__(self, shots_dir, idle_timeout=660, first_timeout=120,
                  cancel_locked=False, locked_callback=None, proc=None,
                  scope="all_users"):
         self.shots_dir = shots_dir
@@ -567,7 +568,9 @@ class WizardDriver:
                 self.flags.add("saw_reboot")
             if "already installed" in joined:
                 self.flags.add("saw_already_installed")
-            locked_page = "error opening file for writing" in joined
+            # the installer asks to close BleachBit before any file is written
+            locked_page = ("error opening file for writing" in joined
+                           or "bleachbit is running" in joined)
             if locked_page:
                 self.flags.add("saw_locked_file")
                 if self.locked_callback and not self._locked_cb_fired:
@@ -967,7 +970,7 @@ def wait_for(pred, desc, timeout=60):
     return False
 
 
-def run_silent(exe_path, extra_args=(), keep=None, timeout=300):
+def run_silent(exe_path, extra_args=(), keep=None, timeout=900):
     """Run an installer with /S; return its exit code (None on timeout)."""
     exe_path = Path(exe_path)
     if not exe_path.is_file():
