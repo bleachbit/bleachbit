@@ -373,12 +373,28 @@ jobs:
       - name: Run tests
         env:
           PYTHONWARNINGS: error
+          PYTEST_COVERAGE: 1
         run: |
           touch ~/.zshrc # for test_expanduser
           make tests-pytest tests-nsis PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
 
+      - name: Generate lcov coverage
+        if: github.repository == 'bleachbit/bleachbit'
+        run: |
+          .venv/bin/python -m coverage report
+          .venv/bin/python -m coverage lcov -o coverage.lcov
+
+      - name: Upload coverage to Coveralls
+        if: github.repository == 'bleachbit/bleachbit'
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
+        with:
+          file: coverage.lcov
+          flag-name: macos
+          parallel: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
   coveralls-finish:
-    needs: [linux, windows-test]
+    needs: [linux, windows-test, macos]
     if: github.repository == 'bleachbit/bleachbit'
     # This took 11s on ubuntu-slim (2026-07-27).
     runs-on: ubuntu-slim
@@ -388,5 +404,5 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           parallel-finished: true
-          carryforward: "linux,windows"
+          carryforward: "linux,windows,macos"
           github-token: ${{ secrets.GITHUB_TOKEN }}
