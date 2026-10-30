@@ -1,0 +1,15 @@
+rm bleachbit/Revision.py
+make stamp
+faketime 'next year + 1 day' python3 bleachbit.py --list-cleaners | head
+
+faketime '100 years ago' python3 bleachbit.py --list-cleaners | head
+
+faketime 'next year + 1 day' python3 bleachbit.py
+
+rm bleachbit/Revision.py
+make appimage # automatically calls stamp
+faketime 'next year + 1 day' ./BleachBit*.AppImage -l | head
+
+SKIP_TESTS=1 ./docker/build.sh debian
+
+SKIP_TESTS=1 ./docker/build.sh fedora
