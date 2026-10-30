@@ -90,7 +90,7 @@ class UpdateTestCase(common.BleachbitTestCase):
             resp.text = xml_text
             resp.content = xml_text.encode()
             mock_fetch.return_value = resp
-            self.assertEqual(check_updates(True, False, None, None), [])
+            self.assertIsNone(check_updates(True, False, None, None))
 
     def test_check_updates_encoding_declaration(self):
         """Update XML with an encoding declaration still parses"""
@@ -135,14 +135,14 @@ class UpdateTestCase(common.BleachbitTestCase):
                              [('9.9', 'https://999')])
 
     def test_check_updates_oserror(self):
-        """An OSError from fetch_url (e.g. missing CA bundle) returns []"""
+        """An OSError from fetch_url (e.g. missing CA bundle) returns None"""
         with patch('bleachbit.Update.fetch_url',
                    side_effect=OSError('Could not find a suitable TLS CA certificate bundle')):
-            self.assertEqual(check_updates(True, True, print, None), [])
+            self.assertIsNone(check_updates(True, True, print, None))
 
     def test_check_updates_real_network(self):
         """Unit test for function check_updates() using real network"""
-        for update in check_updates(True, False, None, None):
+        for update in check_updates(True, False, None, None) or []:
             if not update:
                 continue
             ver, url = update
@@ -155,9 +155,7 @@ class UpdateTestCase(common.BleachbitTestCase):
         preserve_url = bleachbit.update_check_url
         for url in ('http://localhost/doesnotexist', 'https://httpstat.us/500'):
             bleachbit.update_check_url = url
-            self.assertEqual(
-                check_updates(True, False, None, None),
-                [])
+            self.assertIsNone(check_updates(True, False, None, None))
         bleachbit.update_check_url = preserve_url
 
     def test_update_url(self):

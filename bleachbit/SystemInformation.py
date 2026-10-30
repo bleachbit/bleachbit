@@ -10,6 +10,7 @@ Show system information
 """
 
 # standard library
+import datetime
 import logging
 import locale
 import os
@@ -22,8 +23,14 @@ from collections import OrderedDict
 import bleachbit
 from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.General import get_executable, get_real_uid
+from bleachbit.Language import get_text as _
 
 logger = logging.getLogger(__name__)
+
+# Show the outdated-build notice when the build is older than this many
+# days and no online update check confirmed it is current. The notice
+# wording says "more than a year old", so keep this near one year.
+NOTICE_AFTER_DAYS = 365
 
 
 def get_gtk_info():
@@ -158,6 +165,59 @@ def get_version(four_parts=False):
     return f'{bleachbit.APP_VERSION}.{build_number}'
 
 
+def get_build_date():
+    """Return the build date stamped into Revision.py, or None.
+
+    Official builds stamp build_date (ISO 8601, UTC) into
+    bleachbit/Revision.py. A missing or malformed value means the date
+    is unknown, such as a development checkout or a distro source build.
+    """
+    try:
+        from bleachbit import Revision
+    except ImportError:
+        return None
+    raw = getattr(Revision, 'build_date', None)
+    if not isinstance(raw, str):
+        return None
+    try:
+        return datetime.date.fromisoformat(raw)
+    except ValueError:
+        logger.warning('ignoring malformed build_date: %r', raw)
+        return None
+
+
+def get_build_age_days():
+    """Return the age of this build in days, or None if unknown.
+
+    A build date in the future (clock skew) counts as zero days.
+    """
+    build_date = get_build_date()
+    if build_date is None:
+        return None
+    return max(0, (datetime.date.today() - build_date).days)
+
+
+def get_outdated_build_notice():
+    """Return the outdated-build notice, or None when it does not apply.
+
+    The build is outdated when its age exceeds NOTICE_AFTER_DAYS. The
+    caller decides whether to show the notice: it is the offline
+    fallback for when no online update check confirmed the build is
+    current. The notice says "may be outdated" because the application
+    keeps working either way.
+    """
+    age_days = get_build_age_days()
+    if age_days is None or age_days <= NOTICE_AFTER_DAYS:
+        return None
+    # TRANSLATORS: Notice shown when the installed version is more than
+    # a year old and a newer version may exist. The application still
+    # works; this only suggests checking for a newer version. Keep the
+    # URL unchanged.
+    return _('This version of BleachBit is more than a year old. '
+             'We regularly release improvements and bug fixes. '
+             'You can check for a newer version at https://www.bleachbit.org.')
+
+
 def _escape_invalid_unicode(value):
     return str(value).encode('utf-8', errors='backslashreplace').decode('utf-8')
 
@@ -175,6 +235,10 @@ def get_system_information():
         info['Git revision'] = revision
     except ImportError:
         logger.debug('no Revision module, so no git revision to report')
+
+    build_date = get_build_date()
+    if build_date is not None:
+        info['Build date'] = build_date.isoformat()
 
     info.update(get_gtk_info())
 

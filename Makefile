@@ -8,7 +8,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh
 
-.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint require-lint-tools delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
+.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint require-lint-tools delete_windows_files pretty stamp appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -275,6 +275,21 @@ pretty:
 		echo "WARNING: Missing xmllint. APT users, try: sudo apt install libxml2-utils"; \
 	fi
 
+stamp:
+	# Rebuild bleachbit/Revision.py so official builds know their git
+	# revision (when built from a checkout), CI build number, and build
+	# date (for the outdated-build notice).
+	@rev=$$(git rev-parse --short=8 HEAD 2>/dev/null || echo ""); \
+	{ \
+		if [ -n "$$rev" ]; then \
+			echo "revision = \"$$rev\""; \
+		fi; \
+		if [ -n "$${BUILD_NUMBER:-$${GITHUB_RUN_NUMBER:-}}" ]; then \
+			echo "build_number = \"$${BUILD_NUMBER:-$${GITHUB_RUN_NUMBER}}\""; \
+		fi; \
+		echo "build_date = \"$$(date -u +%F)\""; \
+	} > bleachbit/Revision.py
+
 # AppImage build
 APPIMAGE_BUILD_DIR ?= appimage-build
 APPIMAGE_APPDIR := $(abspath $(APPIMAGE_BUILD_DIR))
@@ -301,16 +316,8 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	rm -rf "$(APPIMAGE_APPDIR)"
 	# Build translations (.mo files)
 	$(MAKE) -C po
-	# Generate Revision.py if it does not already exist
-	@if [ ! -f bleachbit/Revision.py ]; then \
-		rev=$$(git rev-parse --short=8 HEAD 2>/dev/null || echo ""); \
-		if [ -n "$$rev" ]; then \
-			echo "revision = \"$$rev\"" > bleachbit/Revision.py; \
-			if [ -n "$${BUILD_NUMBER:-$${GITHUB_RUN_NUMBER:-}}" ]; then \
-				echo "build_number = \"$${BUILD_NUMBER:-$${GITHUB_RUN_NUMBER}}\"" >> bleachbit/Revision.py; \
-			fi; \
-		fi; \
-	fi
+	# Stamp revision, build number, and build date into Revision.py
+	$(MAKE) stamp
 	# Install application into AppDir with prefix=/usr
 	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr
 	# Copy icon to hicolor theme so linuxdeploy can find it
