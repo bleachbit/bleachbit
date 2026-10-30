@@ -1296,25 +1296,44 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.menu_button.set_menu_model(builder.get_object('app-menu'))
         self._app_menu_generation = generation
 
+    _TILING_STATES = (Gdk.WindowState.TILED |
+                      Gdk.WindowState.TOP_TILED |
+                      Gdk.WindowState.RIGHT_TILED |
+                      Gdk.WindowState.BOTTOM_TILED |
+                      Gdk.WindowState.LEFT_TILED)
+
+    @staticmethod
+    def _parse_window_state(state):
+        """Return (maximized, fullscreen) for a Gdk.WindowState bitmask"""
+        is_tiled = state & GUI._TILING_STATES != 0
+        fullscreen = (state & Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
+        maximized = state & Gdk.WindowState.MAXIMIZED != 0
+        return maximized, fullscreen
+
     def on_configure_event(self, _widget, _event):
         (x, y) = self.get_position()
         (width, height) = self.get_size()
 
+        window = self.get_window()
+        if window is not None:
+            maximized, fullscreen = self._parse_window_state(
+                window.get_state())
+        else:
+            maximized = False
+            fullscreen = False
+
         # fixup maximized window position:
         # on Windows if a window is maximized on a secondary monitor it is moved off the screen
-        if IS_WINDOWS:
-            window = self.get_window()
-            if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
-                g = get_window_info(self)
-                if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
-                    logger.debug("Maximized window %s+%s: %s",
-                                 (x, y), (width, height), str(g))
-                    self.move(g.x, g.y)
-                    return True
+        if IS_WINDOWS and maximized:
+            g = get_window_info(self)
+            if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
+                logger.debug("Maximized window %s+%s: %s",
+                             (x, y), (width, height), str(g))
+                self.move(g.x, g.y)
+                return True
 
         # Keep the normal geometry for when the window is restored.
-        # on_window_state_event() keeps these two up to date.
-        if options.get("window_maximized") or options.get("window_fullscreen"):
+        if maximized or fullscreen:
             return False
 
         # save window position and size
@@ -1333,18 +1352,14 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
           full screen nor maximized.
 
         Because of this issue, we check the tiling state.
-        """
-        tiling_states = (Gdk.WindowState.TILED |
-                         Gdk.WindowState.TOP_TILED |
-                         Gdk.WindowState.RIGHT_TILED |
-                         Gdk.WindowState.BOTTOM_TILED |
-                         Gdk.WindowState.LEFT_TILED)
 
-        is_tiled = event.new_window_state & tiling_states != 0
-        fullscreen = (event.new_window_state &
-                      Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
+        The options saved here restore the state on the next start.
+        on_configure_event() instead reads the live Gdk.Window state,
+        so it is not affected by these reporting quirks.
+        """
+        maximized, fullscreen = self._parse_window_state(
+            event.new_window_state)
         options.set("window_fullscreen", fullscreen)
-        maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized)
         if IS_WINDOWS:
             logger.debug(

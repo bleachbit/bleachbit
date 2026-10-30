@@ -1073,16 +1073,22 @@ class GUITestCase(common.BleachbitTestCase):
         gui = self.get_window()
         options.set('window_width', 800)
         options.set('window_height', 600)
+        options.set('window_maximized', False)
+        options.set('window_fullscreen', False)
+        gdk_window = gui.get_window()
         for state in (Gdk.WindowState.MAXIMIZED, Gdk.WindowState.FULLSCREEN):
             with self.subTest(state=state):
-                gui.on_window_state_event(
-                    gui, types.SimpleNamespace(new_window_state=state))
-                with mock.patch.object(gui, 'get_size', return_value=(1920, 1080)):
+                with mock.patch.object(gdk_window, 'get_state', return_value=state), \
+                        mock.patch.object(gui, 'get_size', return_value=(1920, 1080)):
                     gui.on_configure_event(gui, None)
                 self.assertEqual(options.get('window_width'), 800)
                 self.assertEqual(options.get('window_height'), 600)
-        gui.on_window_state_event(
-            gui, types.SimpleNamespace(new_window_state=Gdk.WindowState(0)))
+        tiled_fullscreen = Gdk.WindowState.FULLSCREEN | Gdk.WindowState.TILED
+        with mock.patch.object(gdk_window, 'get_state', return_value=tiled_fullscreen), \
+                mock.patch.object(gui, 'get_size', return_value=(960, 1080)):
+            gui.on_configure_event(gui, None)
+        self.assertEqual(options.get('window_width'), 960)
+        self.assertEqual(options.get('window_height'), 1080)
 
     def test_unmaximize_restores_saved_size(self):
         """A maximized start must restore the remembered size on Windows"""
