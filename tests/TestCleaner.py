@@ -17,16 +17,22 @@ from unittest import mock
 from xml.dom.minidom import parseString
 
 import bleachbit
+import bleachbit.FileUtilities
+import bleachbit.Options
 from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, IS_MAC
 from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, System, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
-from bleachbit.FileUtilities import extended_path_undo
+from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.PathUtils import path_startswith
 from bleachbit.Process import ProcessInfo
 
 from tests import common
+from tests.common import pytest
 
 if IS_WINDOWS:
+    # pylint: disable-next=ungrouped-imports
+    from bleachbit import Windows
+    # pylint: disable-next=ungrouped-imports
     from tests.TestWindows import WindowsLinksMixIn
 else:
     WindowsLinksMixIn = object
@@ -717,6 +723,61 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with mock.patch('bleachbit.Cleaner.Windows', windows):
             commands = list(System().get_commands('recycle_bin'))
         self.assertIsInstance(commands[-1], Command.Function)
+
+    @pytest.mark.no_xdist
+    @pytest.mark.xdist_group('recycle-bin')
+    @common.skipUnlessWindows
+    @common.skipUnlessDestructive
+    def test_recycle_bin_keep_list_destructive(self):
+        """Real bin cleaning preserves kept items, then empties without them."""
+        # pylint: disable=possibly-used-before-assignment
+        self.addCleanup(Windows.empty_recycle_bin, None, True)
+
+        def recycle(path):
+            before = set(Windows.get_recycle_bin())
+            Windows.move_to_recycle_bin(path)
+            added = set(Windows.get_recycle_bin()) - before
+            self.assertTrue(added)
+            recycled = min(added, key=len)
+            metadata = os.path.join(
+                os.path.dirname(recycled), '$I' + os.path.basename(recycled)[2:])
+            self.addCleanup(
+                bleachbit.FileUtilities.delete, metadata, ignore_missing=True)
+            return recycled
+
+        kept = recycle(self.write_file('recycle kept.txt'))
+        other = recycle(self.write_file('recycle other.txt'))
+        container = self.mkdir('recycle container')
+        temp_root = os.path.join(container, 'AppData', 'Local', 'Temp')
+        os.makedirs(temp_root)
+        self.write_file(os.path.join(temp_root, 'discard.txt'))
+        recycled_container = recycle(container)
+        recycled_temp = os.path.join(
+            recycled_container, 'AppData', 'Local', 'Temp')
+        kept_metadata = os.path.join(
+            os.path.dirname(kept), '$I' + os.path.basename(kept)[2:])
+        self.assertExists(kept_metadata)
+
+        # The shell enumerates ordinary paths even for extended keep entries.
+        bleachbit.Options.options.set_whitelist_paths(
+            [('file', extended_path(kept))])
+        commands = list(System().get_commands('recycle_bin'))
+        self.assertFalse(any(isinstance(cmd, Command.Function)
+                             for cmd in commands))
+        for cmd in commands:
+            list(cmd.execute(really_delete=True))
+        self.assertExists(kept)
+        self.assertExists(kept_metadata)
+        self.assertNotExists(other)
+        self.assertExists(recycled_temp)
+
+        bleachbit.Options.options.set_whitelist_paths([])
+        commands = list(System().get_commands('recycle_bin'))
+        self.assertIsInstance(commands[-1], Command.Function)
+        for cmd in commands:
+            list(cmd.execute(really_delete=True))
+        self.assertEqual([], list(Windows.get_recycle_bin()))
+        self.assertNotExists(recycled_container)
 
     def test_system_options_platform(self):
         """Test that System cleaner options match the current platform"""
