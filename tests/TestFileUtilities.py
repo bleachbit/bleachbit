@@ -24,6 +24,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import unicodedata
 import unittest.mock
 import urllib.parse
 import warnings
@@ -80,7 +81,7 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_LINUX, IS_POSIX, IS_WINDOWS
+from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 
 
 if IS_WINDOWS:
@@ -2629,6 +2630,111 @@ State=AAAA/wA...
         os.symlink(second, kept_link)
         self.assertFalse(whitelisted(other_link))
         self.assertTrue(whitelisted(kept_link))
+
+    @unittest.skipUnless(IS_MAC, 'Requires native macOS Unicode path handling')
+    def test_whitelisted_macos_decomposed_symlink(self):
+        """Normalize resolved file and folder keeps, including descendants."""
+        self.addCleanup(clear_path_spellings)
+        root = self.mkdtemp()
+        for kind in ('file', 'folder'):
+            target = os.path.join(root, unicodedata.normalize(
+                'NFD', kind + '-r\u00e9sum\u00e9'))
+            if kind == 'folder':
+                self.mkdir(target)
+                child = self.write_file(os.path.join(
+                    target, unicodedata.normalize('NFD', 'caf\u00e9')))
+            else:
+                self.write_file(target)
+                child = target
+            kept = os.path.join(root, unicodedata.normalize(
+                'NFD', kind + '-gard\u00e9'))
+            candidate = os.path.join(root, kind + '-candidate')
+            descendant = os.path.join(root, kind + '-descendant')
+            outside = os.path.join(root, kind + '-outside')
+            os.symlink(target, kept)
+            os.symlink(target, candidate)
+            os.symlink(child, descendant)
+            os.symlink(self.write_file(target + '2'), outside)
+            self.assertTrue(os.path.samefile(
+                target, unicodedata.normalize('NFC', target)))
+            self.assertNotEqual(os.path.realpath(kept), unicodedata.normalize(
+                'NFC', os.path.realpath(kept)))
+            for keep_path in (target, kept):
+                for form in ('NFD', 'NFC'):
+                    with self.subTest(kind=kind, keep=keep_path, form=form):
+                        options.set_whitelist_paths([
+                            (kind, unicodedata.normalize(form, keep_path))])
+                        for path in (keep_path, candidate, descendant):
+                            with self.subTest(path=path):
+                                self.assertTrue(whitelisted(path), path)
+                        self.assertFalse(whitelisted(root))
+                        self.assertFalse(whitelisted(target + '2'))
+                        self.assertFalse(whitelisted(outside))
+
+    @unittest.skipUnless(IS_MAC, 'Requires native macOS Unicode path handling')
+    def test_whitelisted_macos_decomposed_symlink_retarget(self):
+        """Neither keep-link nor candidate-link targets are cached in a run."""
+        self.addCleanup(clear_path_spellings)
+        root = self.mkdtemp()
+        for kind in ('file', 'folder'):
+            with self.subTest(kind=kind):
+                targets = []
+                candidates = []
+                for index in range(2):
+                    target = os.path.join(root, unicodedata.normalize(
+                        'NFD', f'{kind}-{index}-r\u00e9sum\u00e9'))
+                    if kind == 'folder':
+                        self.mkdir(target)
+                        child = self.write_file(os.path.join(
+                            target, unicodedata.normalize('NFD', 'caf\u00e9')))
+                    else:
+                        self.write_file(target)
+                        child = target
+                    candidate = os.path.join(root, f'{kind}-candidate-{index}')
+                    os.symlink(child, candidate)
+                    targets.append(target)
+                    candidates.append(candidate)
+                kept = os.path.join(root, kind + '-kept')
+                os.symlink(targets[0], kept)
+                options.set_whitelist_paths([(kind, kept)])
+                self.assertTrue(whitelisted(candidates[0]))
+                self.assertFalse(whitelisted(candidates[1]))
+                os.unlink(kept)
+                os.symlink(targets[1], kept)
+                self.assertFalse(whitelisted(candidates[0]))
+                self.assertTrue(whitelisted(candidates[1]))
+                os.unlink(candidates[0])
+                os.symlink(os.readlink(candidates[1]), candidates[0])
+                self.assertTrue(whitelisted(candidates[0]))
+                os.unlink(candidates[1])
+                os.symlink(targets[0], candidates[1])
+                self.assertFalse(whitelisted(candidates[1]))
+
+    @unittest.skipUnless(IS_MAC, 'Requires native macOS Unicode path handling')
+    def test_whitelisted_macos_decomposed_spelling_cache(self):
+        """Cached NFD keep spellings match both native NFD and NFC paths."""
+        clear_path_spellings()
+        self.addCleanup(clear_path_spellings)
+        keep = self.mkdir(unicodedata.normalize('NFD', 'gard\u00e9'))
+        child = self.write_file(os.path.join(keep, 'child'))
+        options.set_whitelist_paths([('folder', keep)])
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities._posix_keep_list_spelling',
+                wraps=_posix_keep_list_spelling) as spelling:
+            for _ in range(3):
+                for form in ('NFD', 'NFC'):
+                    self.assertTrue(whitelisted(
+                        unicodedata.normalize(form, child)))
+            self.assertEqual(
+                1, spelling.call_args_list.count(unittest.mock.call(keep)))
+            options.set_whitelist_paths([('file', keep)])
+            self.assertFalse(whitelisted(child))
+            self.assertEqual(
+                2, spelling.call_args_list.count(unittest.mock.call(keep)))
+            clear_path_spellings()
+            self.assertTrue(whitelisted(unicodedata.normalize('NFC', keep)))
+            self.assertEqual(
+                3, spelling.call_args_list.count(unittest.mock.call(keep)))
 
     @common.skipIfWindows
     def test_whitelisted_posix_normpath(self):

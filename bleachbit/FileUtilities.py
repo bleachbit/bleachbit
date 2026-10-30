@@ -1603,7 +1603,8 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
         if keep_type == 'file':
             if path_equal(path, keep_path):
                 return True
-            if _followed_link and path_equal(path, os.path.realpath(keep_path)):
+            if _followed_link and path_equal(
+                    path, _posix_keep_list_spelling(os.path.realpath(keep_path))):
                 return True
         if keep_type == 'folder':
             if keep_path == os.sep and os.path.isabs(path):
@@ -1613,7 +1614,8 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
             if path_startswith(path, keep_path):
                 return True
             if _followed_link:
-                real_pathname = os.path.realpath(keep_path)
+                real_pathname = _posix_keep_list_spelling(
+                    os.path.realpath(keep_path))
                 if path_equal(path, real_pathname) or path_startswith(path, real_pathname):
                     return True
     return False
