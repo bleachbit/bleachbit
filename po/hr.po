@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 17:59-0600\n"
+"POT-Creation-Date: 2026-10-30 08:29-0600\n"
 "PO-Revision-Date: 2026-06-26 22:05+0200\n"
 "Last-Translator: Brendigo <info@brendigo.com>\n"
 "Language-Team: Croatian <info@brendigo.com>\n"
@@ -452,6 +452,13 @@ msgstr ""
 "Izbriši bazu podataka koja sadržava podatke kao što su broj reprodukcija i "
 "vrijeme posljednje reprodukcije"
 
+#. Warning shown when the user selects the Database cleaning option in Rhythmbox. 'Song ratings' are star ratings given to music tracks by the user.
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"This option will delete song ratings, internet radio stations, and podcast "
+"subscriptions."
+msgstr ""
+
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Debug logs"
@@ -807,6 +814,22 @@ msgstr "Povijest datoteka"
 msgid "Delete the file history used for /restore"
 msgstr "Izbriši povijest datoteka koju koristi /restore"
 
+#. Claude Code's automatically saved notes, reused in later sessions. Memory refers to saved information, not RAM.
+#: ../cleaners/claude.xml
+msgid "Auto memory"
+msgstr ""
+
+#: ../cleaners/claude.xml
+msgid ""
+"Delete the notes Claude Code automatically saves about you and your projects"
+msgstr ""
+
+#: ../cleaners/claude.xml
+msgid ""
+"Claude Code would forget the information it automatically saved about you "
+"and your projects"
+msgstr ""
+
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
@@ -1020,6 +1043,24 @@ msgstr ""
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
 msgstr "Posjetite web-stranicu programa ${prodname}"
+
+#. TRANSLATORS: Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.
+#: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:ALREADY_INSTALLED"
+#| msgid ""
+#| "${prodname} is already installed.\n"
+#| "Click 'OK' to uninstall the old version before upgrading, or click "
+#| "'Cancel' to abort the upgrade."
+msgctxt "nsis:BLEACHBIT_RUNNING"
+msgid ""
+"${prodname} is running.\n"
+"Close it and click 'Retry' to continue, or click 'Cancel' to abort the "
+"installation."
+msgstr ""
+"${prodname} je već instaliran.\n"
+"Kliknite „U redu” za deinstalaciju stare verzije prije nadogradnje ili "
+"„Odustani” za prekid nadogradnje."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
@@ -1325,13 +1366,19 @@ msgid "Shred with ${prodname}"
 msgstr "Nepovratno izbriši pomoću programa ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:UNINSTALL_TEXT"
+#| msgid ""
+#| "${prodname} will be uninstalled from the following folder.\n"
+#| "Click Uninstall to start the uninstallation.\n"
+#| "WARNING: The uninstaller completely removes the installation directory, "
+#| "including any files (such as custom cleaners) that you may have added or "
+#| "changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
 "Click Uninstall to start the uninstallation.\n"
-"WARNING: The uninstaller completely removes the installation directory, "
-"including any files (such as custom cleaners) that you may have added or "
-"changed."
+"Files you added to this folder, such as custom cleaners, are kept."
 msgstr ""
 "${prodname} deinstalirat će se iz sljedeće mape.\n"
 "Kliknite Deinstaliraj za početak deinstalacije.\n"
@@ -1378,6 +1425,14 @@ msgstr "Očisti kolačiće"
 #, python-format
 msgid "Run external command: %s"
 msgstr "Pokreni vanjsku naredbu: %s"
+
+#. TRANSLATORS: Label in the log for an action that stops a running
+#. process. 'Terminate' is a verb. {name} is the executable name
+#. (for example, explorer.exe). Do not translate {name}.
+#: ../bleachbit/Action.py
+#, python-brace-format
+msgid "Terminate process: {name}"
+msgstr ""
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1803,7 +1858,7 @@ msgstr "Izbriši ključ registra"
 
 #. TRANSLATORS: Button label on (1) the headerbar and (2) the chaff dialog.
 #. 'Abort' is a verb.
-#: ../bleachbit/Constant.py
+#: ../bleachbit/Constant.py ../bleachbit/GuiWindow.py
 msgid "Abort"
 msgstr "Prekini"
 
@@ -1839,6 +1894,14 @@ msgstr ""
 msgid "This option requires expert mode. Enable it in Preferences."
 msgstr "Ova mogućnost zahtijeva stručni način rada. Omogućite ga u Postavkama."
 
+#. TRANSLATORS: Warning in the log when shredding a file could not
+#. overwrite its contents. %(path)s is the file path; %(error)s is
+#. the reason, such as 'Permission denied'.
+#: ../bleachbit/FileUtilities.py
+#, python-format
+msgid "Could not overwrite the contents of %(path)s: %(error)s"
+msgstr ""
+
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1856,6 +1919,13 @@ msgstr "Preskače se točka montiranja: %s"
 #, python-format
 msgid "Device or resource is busy: %s"
 msgstr "Uređaj ili resurs je zauzet: %s"
+
+#. TRANSLATORS: Log message where %s is the pathname.
+#: ../bleachbit/FileUtilities.py
+#, fuzzy, python-format
+#| msgid "Directory is not empty: %s"
+msgid "Directory was left renamed to: %s"
+msgstr "Mapa nije prazna: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -2770,27 +2840,6 @@ msgstr ""
 msgid "%(cleaner)s - %(option)s"
 msgstr "%(cleaner)s - %(option)s"
 
-#. TRANSLATORS: Button label on the headerbar and context menu item
-#. in the treeview.
-#. 'Preview' is a verb.
-#: ../bleachbit/GuiWindow.py
-msgid "Preview"
-msgstr "Pretpregled"
-
-#. TRANSLATORS: Button label on the headerbar and context menu item
-#. in the treeview.
-#. 'Clean' is a verb.
-#: ../bleachbit/GuiWindow.py
-msgid "Clean"
-msgstr "Očisti"
-
-#. TRANSLATORS: Button in tree view's context menu to open the cookie
-#. manager.
-#. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
-#: ../bleachbit/GuiWindow.py
-msgid "Manage cookies to keep…"
-msgstr "Upravljaj kolačićima za zadržavanje…"
-
 #. TRANSLATORS: Error message shown in the log on the main window.
 #. %s is the file path.
 #: ../bleachbit/GuiWindow.py
@@ -2798,6 +2847,12 @@ msgstr "Upravljaj kolačićima za zadržavanje…"
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr ""
 "Konfiguracijska datoteka vraća se na zadane vrijednosti jer je oštećena: %s"
+
+#. TRANSLATORS: Error message shown in the infobar when the user
+#. starts an operation while another one is running.
+#: ../bleachbit/GuiWindow.py
+msgid "Wait for the current operation to finish."
+msgstr ""
 
 #. TRANSLATORS: Error message shown when a cleaner option
 #. cannot be used because expert mode is disabled.
@@ -2821,6 +2876,27 @@ msgstr "Morate odabrati radnju"
 #: ../bleachbit/GuiWindow.py
 msgid "Done."
 msgstr "Gotovo."
+
+#. TRANSLATORS: Button label on the headerbar and context menu item
+#. in the treeview.
+#. 'Preview' is a verb.
+#: ../bleachbit/GuiWindow.py
+msgid "Preview"
+msgstr "Pretpregled"
+
+#. TRANSLATORS: Button label on the headerbar and context menu item
+#. in the treeview.
+#. 'Clean' is a verb.
+#: ../bleachbit/GuiWindow.py
+msgid "Clean"
+msgstr "Očisti"
+
+#. TRANSLATORS: Button in tree view's context menu to open the cookie
+#. manager.
+#. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+#: ../bleachbit/GuiWindow.py
+msgid "Manage cookies to keep…"
+msgstr "Upravljaj kolačićima za zadržavanje…"
 
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).

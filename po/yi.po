@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 17:59-0600\n"
+"POT-Creation-Date: 2026-10-30 08:29-0600\n"
 "PO-Revision-Date: 2020-04-05 02:23+0000\n"
 "Last-Translator: bernard stafford <Unknown>\n"
 "Language-Team: Yiddish <yi@li.org>\n"
@@ -452,6 +452,13 @@ msgstr ""
 "ויסמעקן די דייטאַבייס, וואָס כּולל אינפֿאָרמאַציע אַזאַ ווי שפּילן ציילן און לעצטע "
 "פּלייַעד"
 
+#. Warning shown when the user selects the Database cleaning option in Rhythmbox. 'Song ratings' are star ratings given to music tracks by the user.
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"This option will delete song ratings, internet radio stations, and podcast "
+"subscriptions."
+msgstr ""
+
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Debug logs"
@@ -813,6 +820,22 @@ msgstr "פאָרעם געשיכטע"
 msgid "Delete the file history used for /restore"
 msgstr "ויסמעקן די רשימה פון לעצטנס געוויינט דאָקומענטן"
 
+#. Claude Code's automatically saved notes, reused in later sessions. Memory refers to saved information, not RAM.
+#: ../cleaners/claude.xml
+msgid "Auto memory"
+msgstr ""
+
+#: ../cleaners/claude.xml
+msgid ""
+"Delete the notes Claude Code automatically saves about you and your projects"
+msgstr ""
+
+#: ../cleaners/claude.xml
+msgid ""
+"Claude Code would forget the information it automatically saved about you "
+"and your projects"
+msgstr ""
+
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
@@ -1022,6 +1045,15 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
+msgstr ""
+
+#. TRANSLATORS: Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.
+#: windows/NsisInclude/NsisMultiUserLang.nsh
+msgctxt "nsis:BLEACHBIT_RUNNING"
+msgid ""
+"${prodname} is running.\n"
+"Close it and click 'Retry' to continue, or click 'Cancel' to abort the "
+"installation."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1320,9 +1352,7 @@ msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
 "Click Uninstall to start the uninstallation.\n"
-"WARNING: The uninstaller completely removes the installation directory, "
-"including any files (such as custom cleaners) that you may have added or "
-"changed."
+"Files you added to this folder, such as custom cleaners, are kept."
 msgstr ""
 
 #. TRANSLATORS: Multi-value variables are explained
@@ -1368,6 +1398,14 @@ msgstr "קיכלעך"
 #, python-format
 msgid "Run external command: %s"
 msgstr "לויפן פונדרויסנדיק באַפֿעל: %s"
+
+#. TRANSLATORS: Label in the log for an action that stops a running
+#. process. 'Terminate' is a verb. {name} is the executable name
+#. (for example, explorer.exe). Do not translate {name}.
+#: ../bleachbit/Action.py
+#, python-brace-format
+msgid "Terminate process: {name}"
+msgstr ""
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1806,7 +1844,7 @@ msgstr "ויסמעקן רעגיסטרי שליסל"
 
 #. TRANSLATORS: Button label on (1) the headerbar and (2) the chaff dialog.
 #. 'Abort' is a verb.
-#: ../bleachbit/Constant.py
+#: ../bleachbit/Constant.py ../bleachbit/GuiWindow.py
 msgid "Abort"
 msgstr "אַבאָרט."
 
@@ -1836,6 +1874,14 @@ msgstr ""
 msgid "This option requires expert mode. Enable it in Preferences."
 msgstr ""
 
+#. TRANSLATORS: Warning in the log when shredding a file could not
+#. overwrite its contents. %(path)s is the file path; %(error)s is
+#. the reason, such as 'Permission denied'.
+#: ../bleachbit/FileUtilities.py
+#, python-format
+msgid "Could not overwrite the contents of %(path)s: %(error)s"
+msgstr ""
+
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1853,6 +1899,13 @@ msgstr "סקיפּפּינג בארג פונט: %s"
 #, python-format
 msgid "Device or resource is busy: %s"
 msgstr "מיטל אָדער מיטל איז פאַרנומען: %s"
+
+#. TRANSLATORS: Log message where %s is the pathname.
+#: ../bleachbit/FileUtilities.py
+#, fuzzy, python-format
+#| msgid "Directory is not empty: %s"
+msgid "Directory was left renamed to: %s"
+msgstr "וועגווייַזער איז נישט ליידיק: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -2784,6 +2837,40 @@ msgstr ""
 "\n"
 "%(warning)s"
 
+#. TRANSLATORS: Error message shown in the log on the main window.
+#. %s is the file path.
+#: ../bleachbit/GuiWindow.py
+#, python-format
+msgid "Resetting the configuration file because it is corrupt: %s"
+msgstr "רעסעטטינג די קאָנפיגוראַטיאָן טעקע ווייַל עס איז פאַרדאָרבן: %s"
+
+#. TRANSLATORS: Error message shown in the infobar when the user
+#. starts an operation while another one is running.
+#: ../bleachbit/GuiWindow.py
+msgid "Wait for the current operation to finish."
+msgstr ""
+
+#. TRANSLATORS: Error message shown when a cleaner option
+#. cannot be used because expert mode is disabled.
+#. %(cleaner)s is the cleaner name, %(option)s is the option name.
+#: ../bleachbit/GuiWindow.py
+#, python-format
+msgid ""
+"%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled."
+msgstr ""
+
+#. TRANSLATORS: Error message shown in the infobar when the user clicks
+#. the preview or clean button without selecting any cleaner options.
+#: ../bleachbit/GuiWindow.py
+msgid "You must select an operation"
+msgstr "איר מוזן סעלעקטירן אַן אָפּעראַציע"
+
+#. TRANSLATORS: Status message shown on the progress bar and in a popup
+#. notification.
+#: ../bleachbit/GuiWindow.py
+msgid "Done."
+msgstr "געשען."
+
 #. TRANSLATORS: Button label on the headerbar and context menu item
 #. in the treeview.
 #. 'Preview' is a verb.
@@ -2806,34 +2893,6 @@ msgstr "ריין"
 #| msgid "Cookies"
 msgid "Manage cookies to keep…"
 msgstr "קיכלעך"
-
-#. TRANSLATORS: Error message shown in the log on the main window.
-#. %s is the file path.
-#: ../bleachbit/GuiWindow.py
-#, python-format
-msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr "רעסעטטינג די קאָנפיגוראַטיאָן טעקע ווייַל עס איז פאַרדאָרבן: %s"
-
-#. TRANSLATORS: Error message shown when a cleaner option
-#. cannot be used because expert mode is disabled.
-#. %(cleaner)s is the cleaner name, %(option)s is the option name.
-#: ../bleachbit/GuiWindow.py
-#, python-format
-msgid ""
-"%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled."
-msgstr ""
-
-#. TRANSLATORS: Error message shown in the infobar when the user clicks
-#. the preview or clean button without selecting any cleaner options.
-#: ../bleachbit/GuiWindow.py
-msgid "You must select an operation"
-msgstr "איר מוזן סעלעקטירן אַן אָפּעראַציע"
-
-#. TRANSLATORS: Status message shown on the progress bar and in a popup
-#. notification.
-#: ../bleachbit/GuiWindow.py
-msgid "Done."
-msgstr "געשען."
 
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
