@@ -24,6 +24,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import unicodedata
 import unittest.mock
 import urllib.parse
 import warnings
@@ -37,11 +38,13 @@ from tests.common import pytest
 # local import
 from bleachbit.FileUtilities import (
     _mount_points_below,
+    _posix_keep_list_spelling,
     _remove_windows_readonly,
     _truncate_locked_file,
     bytes_to_human,
     children_below,
     children_in_directory,
+    clear_path_spellings,
     clean_ini,
     clean_json,
     delete_file,
@@ -78,7 +81,7 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_LINUX, IS_POSIX, IS_WINDOWS
+from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 
 
 if IS_WINDOWS:
@@ -1904,6 +1907,15 @@ State=AAAA/wA...
             # unextended paths shouldn't be shortened any more
             self.assertEqual(extended_path_undo(short), short)
 
+    @common.skipUnlessWindows
+    def test_extended_path_undo_unc_case(self):
+        """Extended UNC prefixes are case insensitive."""
+        path = r'\\server\share\folder\file.txt'
+        for prefix in ('unc', 'UNC', 'Unc'):
+            with self.subTest(prefix=prefix):
+                self.assertEqual(
+                    path, extended_path_undo(fr'\\?\{prefix}\{path[2:]}'))
+
     def test_free_space(self):
         """Unit test for free_space()"""
 
@@ -2557,6 +2569,174 @@ State=AAAA/wA...
                              f"{path} should not be protected")
 
     @common.skipIfWindows
+    def test_whitelisted_posix_root_folder(self):
+        """Keeping the filesystem root also keeps its descendants."""
+        path = self.write_file('root_keep_test')
+        link = os.path.join(self.tempdir, 'root_keep_link')
+        os.symlink(path, link)
+        for root in ('/', '/./', '///'):
+            with self.subTest(root=root):
+                options.set_whitelist_paths([('folder', root)])
+                self.assertTrue(whitelisted(self.tempdir))
+                self.assertTrue(whitelisted(path))
+                self.assertTrue(whitelisted(link))
+                self.assertFalse(whitelisted('relative/path'))
+        options.set_whitelist_paths([('file', '/')])
+        self.assertFalse(whitelisted(path))
+
+    @common.skipIfWindows
+    def test_whitelisted_posix_spelling_cache(self):
+        """Normalize keep entries once, and refresh after edits or a new run."""
+        clear_path_spellings()
+        self.addCleanup(clear_path_spellings)
+        keep = '/home/keep//folder/'
+        options.set_whitelist_paths([('folder', keep)])
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities._posix_keep_list_spelling',
+                wraps=_posix_keep_list_spelling) as spelling:
+            for _ in range(3):
+                self.assertTrue(whitelisted('/home/keep/folder/child'))
+            self.assertEqual(
+                1, spelling.call_args_list.count(unittest.mock.call(keep)))
+            options.set_whitelist_paths([('file', keep)])
+            self.assertFalse(whitelisted('/home/keep/folder/child'))
+            self.assertEqual(
+                2, spelling.call_args_list.count(unittest.mock.call(keep)))
+            options.set_whitelist_paths([('folder', '')])
+            self.assertTrue(whitelisted('/home/elsewhere'))
+            self.assertFalse(whitelisted('relative/path'))
+            options.set_whitelist_paths([])
+            self.assertFalse(whitelisted('/home/keep/folder'))
+            options.set_whitelist_paths([('folder', '/home/other/')])
+            self.assertFalse(whitelisted('/home/keep/folder/child'))
+            self.assertTrue(whitelisted('/home/other/child'))
+            clear_path_spellings()
+            self.assertTrue(whitelisted('/home/other/child'))
+            self.assertEqual(
+                2, spelling.call_args_list.count(unittest.mock.call('/home/other/')))
+
+    @common.skipIfWindows
+    def test_whitelisted_posix_symlink_retarget(self):
+        """Cached keep spellings must not freeze symlink targets."""
+        first = self.write_file('first')
+        second = self.write_file('second')
+        kept_link = os.path.join(self.tempdir, 'kept_link')
+        other_link = os.path.join(self.tempdir, 'other_link')
+        os.symlink(first, kept_link)
+        os.symlink(first, other_link)
+        options.set_whitelist_paths([('file', kept_link)])
+        self.assertTrue(whitelisted(other_link))
+        os.unlink(kept_link)
+        os.symlink(second, kept_link)
+        self.assertFalse(whitelisted(other_link))
+        self.assertTrue(whitelisted(kept_link))
+
+    @unittest.skipUnless(IS_MAC, 'Requires native macOS Unicode path handling')
+    def test_whitelisted_macos_decomposed_symlink(self):
+        """Normalize resolved file and folder keeps, including descendants."""
+        self.addCleanup(clear_path_spellings)
+        root = self.mkdtemp()
+        for kind in ('file', 'folder'):
+            target = os.path.join(root, unicodedata.normalize(
+                'NFD', kind + '-r\u00e9sum\u00e9'))
+            if kind == 'folder':
+                self.mkdir(target)
+                child = self.write_file(os.path.join(
+                    target, unicodedata.normalize('NFD', 'caf\u00e9')))
+            else:
+                self.write_file(target)
+                child = target
+            kept = os.path.join(root, unicodedata.normalize(
+                'NFD', kind + '-gard\u00e9'))
+            candidate = os.path.join(root, kind + '-candidate')
+            descendant = os.path.join(root, kind + '-descendant')
+            outside = os.path.join(root, kind + '-outside')
+            os.symlink(target, kept)
+            os.symlink(target, candidate)
+            os.symlink(child, descendant)
+            os.symlink(self.write_file(target + '2'), outside)
+            self.assertTrue(os.path.samefile(
+                target, unicodedata.normalize('NFC', target)))
+            self.assertNotEqual(os.path.realpath(kept), unicodedata.normalize(
+                'NFC', os.path.realpath(kept)))
+            for keep_path in (target, kept):
+                for form in ('NFD', 'NFC'):
+                    with self.subTest(kind=kind, keep=keep_path, form=form):
+                        options.set_whitelist_paths([
+                            (kind, unicodedata.normalize(form, keep_path))])
+                        for path in (keep_path, candidate, descendant):
+                            with self.subTest(path=path):
+                                self.assertTrue(whitelisted(path), path)
+                        self.assertFalse(whitelisted(root))
+                        self.assertFalse(whitelisted(target + '2'))
+                        self.assertFalse(whitelisted(outside))
+
+    @unittest.skipUnless(IS_MAC, 'Requires native macOS Unicode path handling')
+    def test_whitelisted_macos_decomposed_symlink_retarget(self):
+        """Neither keep-link nor candidate-link targets are cached in a run."""
+        self.addCleanup(clear_path_spellings)
+        root = self.mkdtemp()
+        for kind in ('file', 'folder'):
+            with self.subTest(kind=kind):
+                targets = []
+                candidates = []
+                for index in range(2):
+                    target = os.path.join(root, unicodedata.normalize(
+                        'NFD', f'{kind}-{index}-r\u00e9sum\u00e9'))
+                    if kind == 'folder':
+                        self.mkdir(target)
+                        child = self.write_file(os.path.join(
+                            target, unicodedata.normalize('NFD', 'caf\u00e9')))
+                    else:
+                        self.write_file(target)
+                        child = target
+                    candidate = os.path.join(root, f'{kind}-candidate-{index}')
+                    os.symlink(child, candidate)
+                    targets.append(target)
+                    candidates.append(candidate)
+                kept = os.path.join(root, kind + '-kept')
+                os.symlink(targets[0], kept)
+                options.set_whitelist_paths([(kind, kept)])
+                self.assertTrue(whitelisted(candidates[0]))
+                self.assertFalse(whitelisted(candidates[1]))
+                os.unlink(kept)
+                os.symlink(targets[1], kept)
+                self.assertFalse(whitelisted(candidates[0]))
+                self.assertTrue(whitelisted(candidates[1]))
+                os.unlink(candidates[0])
+                os.symlink(os.readlink(candidates[1]), candidates[0])
+                self.assertTrue(whitelisted(candidates[0]))
+                os.unlink(candidates[1])
+                os.symlink(targets[0], candidates[1])
+                self.assertFalse(whitelisted(candidates[1]))
+
+    @unittest.skipUnless(IS_MAC, 'Requires native macOS Unicode path handling')
+    def test_whitelisted_macos_decomposed_spelling_cache(self):
+        """Cached NFD keep spellings match both native NFD and NFC paths."""
+        clear_path_spellings()
+        self.addCleanup(clear_path_spellings)
+        keep = self.mkdir(unicodedata.normalize('NFD', 'gard\u00e9'))
+        child = self.write_file(os.path.join(keep, 'child'))
+        options.set_whitelist_paths([('folder', keep)])
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities._posix_keep_list_spelling',
+                wraps=_posix_keep_list_spelling) as spelling:
+            for _ in range(3):
+                for form in ('NFD', 'NFC'):
+                    self.assertTrue(whitelisted(
+                        unicodedata.normalize(form, child)))
+            self.assertEqual(
+                1, spelling.call_args_list.count(unittest.mock.call(keep)))
+            options.set_whitelist_paths([('file', keep)])
+            self.assertFalse(whitelisted(child))
+            self.assertEqual(
+                2, spelling.call_args_list.count(unittest.mock.call(keep)))
+            clear_path_spellings()
+            self.assertTrue(whitelisted(unicodedata.normalize('NFC', keep)))
+            self.assertEqual(
+                3, spelling.call_args_list.count(unittest.mock.call(keep)))
+
+    @common.skipIfWindows
     def test_whitelisted_posix_normpath(self):
         """Keep list matches paths spelled with '//' or a trailing '/'"""
         options.set_whitelist_paths(
@@ -2643,6 +2823,76 @@ State=AAAA/wA...
         options.set_whitelist_paths([('folder', long_dir)])
         self.assert_is_whitelisted(short_dir)
         self.assert_is_whitelisted(short_file)
+        self.assert_is_whitelisted(extended_path(short_file))
+
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_extended_paths(self):
+        """Extended and ordinary paths honor the same keep entries."""
+        folder = self.mkdir('extended keep folder')
+        kept_file = self.write_file(os.path.join(folder, 'kept.txt'))
+        other_file = self.write_file('not kept.txt')
+        for kind, keep_path, candidate in (
+                ('file', kept_file, kept_file),
+                ('folder', folder, kept_file),
+                ('folder', os.path.splitdrive(folder)[0] + os.sep, kept_file),
+                ('file', r'\\server\share\kept.txt', r'\\server\share\kept.txt'),
+                ('folder', r'\\server\share\kept', r'\\server\share\kept\file.txt')):
+            spellings = [candidate, extended_path(candidate)]
+            keep_spellings = [keep_path, extended_path(keep_path)]
+            if candidate.startswith('\\\\'):
+                spellings.append(extended_path(candidate).replace(
+                    '\\unc\\', '\\UNC\\', 1))
+                keep_spellings.append(extended_path(keep_path).replace(
+                    '\\unc\\', '\\UNC\\', 1))
+            for entry, path in itertools.product(keep_spellings, spellings):
+                with self.subTest(kind=kind, entry=entry, path=path):
+                    options.set_whitelist_paths([(kind, entry)])
+                    self.assert_is_whitelisted(path)
+                    if kind == 'file':
+                        self.assertFalse(whitelisted(
+                            extended_path(other_file)))
+                    elif keep_path == folder:
+                        self.assertFalse(whitelisted(
+                            extended_path(folder + '2\\file.txt')))
+
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_directory_cache_case(self):
+        """Case variants share the native long-directory lookup."""
+        # pylint: disable=c-extension-no-member
+        long_dir = win32api.GetLongPathName(
+            self.mkdir('long directory cache name'))
+        short_dir = win32api.GetShortPathName(long_dir)
+        if short_dir == long_dir:
+            self.skipTest('8.3 names are disabled on this volume')
+        short_file = self.write_file(os.path.join(short_dir, 'kept.txt'))
+        options.set_whitelist_paths([('folder', long_dir)])
+        with unittest.mock.patch.dict(
+                'bleachbit.FileUtilities._long_dir_names', clear=True), \
+                unittest.mock.patch(
+                    'bleachbit.FileUtilities.win32file.GetLongPathName',
+                    wraps=win32file.GetLongPathName) as native_long:
+            self.assert_is_whitelisted(short_file)
+            self.assertEqual(1, native_long.call_count)
+
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_unsettled_entry_appears(self):
+        """A missing 8.3 entry is retried when its directory reappears."""
+        # pylint: disable=c-extension-no-member
+        long_dir = win32api.GetLongPathName(
+            self.mkdir('future keep directory'))
+        short_dir = win32api.GetShortPathName(long_dir)
+        if short_dir == long_dir:
+            self.skipTest('8.3 names are disabled on this volume')
+        os.rmdir(long_dir)
+        clear_path_spellings()
+        self.addCleanup(clear_path_spellings)
+        options.set_whitelist_paths([('folder', short_dir)])
+        candidate = os.path.join(long_dir, 'kept.txt')
+        self.assertFalse(whitelisted(candidate))
+        os.mkdir(long_dir)
+        self.assertEqual(short_dir, win32api.GetShortPathName(long_dir))
+        self.write_file(candidate)
+        self.assert_is_whitelisted(candidate)
 
     @common.skipUnlessWindows
     def test_whitelisted_windows_spelling_cache(self):
@@ -2684,7 +2934,6 @@ State=AAAA/wA...
             created.append(True)
             self.assertTrue(whitelisted(long_keep_file))
             # the next run asks again, for the entry and the directory
-            from bleachbit.FileUtilities import clear_path_spellings
             clear_path_spellings()
             self.assertTrue(whitelisted(fr'{temp}\keep\file0.txt'))
             temp_calls = [call.args[0] for call in mock_long.call_args_list

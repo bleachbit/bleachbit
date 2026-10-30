@@ -626,6 +626,7 @@ class System(Cleaner):
             # This method allows shredding
             recycled_any = False
             kept_any = False
+            metadata_paths = set()
             for path in Windows.get_recycle_bin():
                 recycled_any = True
                 # whitelisted() also spares temp roots, which the bin may hold
@@ -633,7 +634,22 @@ class System(Cleaner):
                 temp_root = FileUtilities._windows_preserved_temp_dir(path)
                 if FileUtilities.whitelisted(path) and not temp_root:
                     kept_any = True
+                metadata = Windows.get_recycle_bin_metadata(path)
+                if metadata and FileUtilities.whitelisted(metadata):
+                    kept_any = True
                 yield Command.Delete(path)
+                if metadata:
+                    metadata_paths.add(os.path.normcase(metadata))
+                    yield Command.DeleteRecycleBinMetadata(metadata, path)
+
+            for metadata, payload in Windows.get_recycle_bin_orphaned_metadata():
+                if os.path.normcase(metadata) in metadata_paths:
+                    continue
+                recycled_any = True
+                if (FileUtilities.whitelisted(metadata)
+                        or FileUtilities.whitelisted(payload)):
+                    kept_any = True
+                yield Command.DeleteRecycleBinMetadata(metadata, payload)
 
             # Windows 10 refreshes the recycle bin icon when the user
             # opens the recycle bin folder.

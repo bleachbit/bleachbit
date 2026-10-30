@@ -17,16 +17,22 @@ from unittest import mock
 from xml.dom.minidom import parseString
 
 import bleachbit
+import bleachbit.FileUtilities
+import bleachbit.Options
 from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, IS_MAC
 from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, System, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
-from bleachbit.FileUtilities import extended_path_undo
+from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.PathUtils import path_startswith
 from bleachbit.Process import ProcessInfo
 
 from tests import common
+from tests.common import pytest
 
 if IS_WINDOWS:
+    # pylint: disable-next=ungrouped-imports
+    from bleachbit import Windows
+    # pylint: disable-next=ungrouped-imports
     from tests.TestWindows import WindowsLinksMixIn
 else:
     WindowsLinksMixIn = object
@@ -690,6 +696,8 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         other = self.write_file(os.path.join(bin_dir, 'other.txt'))
         windows = mock.Mock()
         windows.get_recycle_bin.return_value = [kept, other]
+        windows.get_recycle_bin_metadata.return_value = None
+        windows.get_recycle_bin_orphaned_metadata.return_value = []
 
         def get_commands():
             with mock.patch('bleachbit.Cleaner.IS_WINDOWS', True), \
@@ -713,10 +721,128 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         windows = mock.Mock()
         windows.get_recycle_bin.return_value = [
             os.path.join(recycled, 'AppData', 'Local', 'Temp'), recycled]
+        windows.get_recycle_bin_metadata.return_value = None
+        windows.get_recycle_bin_orphaned_metadata.return_value = []
         options.set_whitelist_paths([])
         with mock.patch('bleachbit.Cleaner.Windows', windows):
             commands = list(System().get_commands('recycle_bin'))
         self.assertIsInstance(commands[-1], Command.Function)
+
+    @pytest.mark.no_xdist
+    @pytest.mark.xdist_group('recycle-bin')
+    @common.skipUnlessWindows
+    @common.skipUnlessDestructive
+    def test_recycle_bin_keep_list_destructive(self):
+        """Real bin cleaning preserves kept items, then empties without them."""
+        # pylint: disable=possibly-used-before-assignment
+        self.addCleanup(Windows.empty_recycle_bin, None, True)
+
+        def recycle(path):
+            before = set(Windows.get_recycle_bin())
+            Windows.move_to_recycle_bin(path)
+            added = set(Windows.get_recycle_bin()) - before
+            self.assertTrue(added)
+            recycled = min(added, key=len)
+            metadata = os.path.join(
+                os.path.dirname(recycled), '$I' + os.path.basename(recycled)[2:])
+            self.addCleanup(
+                bleachbit.FileUtilities.delete, metadata, ignore_missing=True)
+            return recycled
+
+        kept = recycle(self.write_file('recycle kept.txt'))
+        other = recycle(self.write_file('recycle other.txt'))
+        kept_folder = self.mkdir('recycle kept folder')
+        self.write_file(os.path.join(kept_folder, 'kept child.txt'))
+        recycled_folder = recycle(kept_folder)
+        kept_child = os.path.join(recycled_folder, 'kept child.txt')
+        folder_metadata = os.path.join(
+            os.path.dirname(recycled_folder), '$I' + os.path.basename(recycled_folder)[2:])
+        other_metadata = os.path.join(
+            os.path.dirname(other), '$I' + os.path.basename(other)[2:])
+        container = self.mkdir('recycle container')
+        temp_root = os.path.join(container, 'AppData', 'Local', 'Temp')
+        os.makedirs(temp_root)
+        self.write_file(os.path.join(temp_root, 'discard.txt'))
+        recycled_container = recycle(container)
+        recycled_temp = os.path.join(
+            recycled_container, 'AppData', 'Local', 'Temp')
+        kept_metadata = os.path.join(
+            os.path.dirname(kept), '$I' + os.path.basename(kept)[2:])
+        self.assertExists(kept_metadata)
+
+        # The shell enumerates ordinary paths even for extended keep entries.
+        bleachbit.Options.options.set_whitelist_paths(
+            [('file', extended_path(kept)), ('file', kept_child)])
+        commands = list(System().get_commands('recycle_bin'))
+        self.assertFalse(any(isinstance(cmd, Command.Function)
+                             for cmd in commands))
+        for cmd in commands:
+            list(cmd.execute(really_delete=False))
+        for path in (kept, other, kept_metadata, other_metadata,
+                     kept_child, folder_metadata):
+            self.assertExists(path)
+        for cmd in commands:
+            list(cmd.execute(really_delete=True))
+        self.assertExists(kept)
+        self.assertExists(kept_metadata)
+        self.assertExists(kept_child)
+        self.assertExists(folder_metadata)
+        self.assertNotExists(other)
+        self.assertNotExists(other_metadata)
+        self.assertExists(recycled_temp)
+
+        bleachbit.Options.options.set_whitelist_paths([])
+        commands = list(System().get_commands('recycle_bin'))
+        self.assertIsInstance(commands[-1], Command.Function)
+        for cmd in commands:
+            list(cmd.execute(really_delete=True))
+        self.assertEqual([], list(Windows.get_recycle_bin()))
+        self.assertNotExists(kept_metadata)
+        self.assertNotExists(folder_metadata)
+        self.assertNotExists(recycled_container)
+
+    @pytest.mark.no_xdist
+    @pytest.mark.xdist_group('recycle-bin')
+    @common.skipUnlessWindows
+    @common.skipUnlessDestructive
+    def test_recycle_bin_orphaned_metadata_destructive(self):
+        """Clean metadata left by earlier runs, but honor payload keep entries."""
+        # pylint: disable=possibly-used-before-assignment
+        self.addCleanup(Windows.empty_recycle_bin, None, True)
+        before = set(Windows.get_recycle_bin())
+        Windows.move_to_recycle_bin(self.write_file('old orphan metadata.txt'))
+        recycled = min(set(Windows.get_recycle_bin()) - before, key=len)
+        metadata = os.path.join(
+            os.path.dirname(recycled), '$I' + os.path.basename(recycled)[2:])
+        self.addCleanup(
+            bleachbit.FileUtilities.delete, metadata, ignore_missing=True)
+        bleachbit.FileUtilities.delete(recycled)
+        self.assertExists(metadata)
+
+        for kept_path in (recycled, metadata):
+            bleachbit.Options.options.set_whitelist_paths(
+                [('file', kept_path)])
+            for cmd in System().get_commands('recycle_bin'):
+                list(cmd.execute(really_delete=True))
+            self.assertExists(metadata)
+
+        bleachbit.Options.options.set_whitelist_paths([])
+        commands = list(System().get_commands('recycle_bin'))
+        for cmd in commands:
+            list(cmd.execute(really_delete=False))
+        self.assertExists(metadata)
+        for cmd in commands:
+            list(cmd.execute(really_delete=True))
+        self.assertNotExists(metadata)
+
+    @pytest.mark.no_xdist
+    @pytest.mark.xdist_group('recycle-bin')
+    @common.skipUnlessWindows
+    @common.skipUnlessDestructive
+    def test_recycle_bin_metadata_shred_destructive(self):
+        """Real bin metadata cleanup also works with shredding enabled."""
+        bleachbit.Options.options.set('shred', True)
+        self.test_recycle_bin_keep_list_destructive()
 
     def test_system_options_platform(self):
         """Test that System cleaner options match the current platform"""

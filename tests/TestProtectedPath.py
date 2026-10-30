@@ -361,6 +361,25 @@ class ProtectedPathTestCase(RelativeSuffixAssertions, common.BleachbitTestCase):
         self.assertIsNone(check_protected_path(
             '/home/test/bleachbit/.github/workflows'))
 
+    def test_check_protected_path_relative_finite_depth(self):
+        """Relative entries protect exactly their configured number of levels."""
+        for protected in ('.git', os.path.join('metadata', 'store')):
+            for depth in (0, 1, 2, None):
+                entry = {
+                    'path': protected, 'depth': depth, 'case_sensitive': True}
+                protected_path_module._protected_paths_cache = [entry]
+                base = os.path.join(
+                    os.path.expanduser('~'), 'bleachbit-depth-test', protected)
+                for levels in range(4):
+                    path = os.path.join(base, *(['child'] * levels))
+                    with self.subTest(
+                            protected=protected, depth=depth, levels=levels):
+                        expected = entry if depth is None or levels <= depth else None
+                        self.assertEqual(check_protected_path(path), expected)
+                self.assertIsNone(check_protected_path(base + '.old'))
+                self.assertIsNone(check_protected_path(
+                    os.path.join(base + '.old', 'child')))
+
     @requirePPXML
     def test_check_protected_path_desktop_suffix(self):
         """Ensure Desktop.old variants do not match Desktop protected entry"""

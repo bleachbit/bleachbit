@@ -31,7 +31,7 @@ from unittest import mock
 from tests import common
 import bleachbit.Command
 from bleachbit import FileUtilities, IS_WINDOWS
-from bleachbit.Command import Delete, Function, Shred, Truncate
+from bleachbit.Command import Delete, DeleteRecycleBinMetadata, Function, Shred, Truncate
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
@@ -75,6 +75,77 @@ class CommandTestCase(common.BleachbitTestCase):
             self.assertIsNone(ret['size'])
             self.assertEqual(ret['path'], path)
             self.assertExists(path)
+
+    def test_recycle_bin_metadata(self):
+        """Metadata is previewed, but removed only after its payload is gone."""
+        payload = self.write_file('payload')
+        metadata = self.write_file('metadata')
+        cmd = DeleteRecycleBinMetadata(metadata, payload)
+        preview = list(cmd.execute(False))
+        self.assertEqual([metadata], [ret['path'] for ret in preview])
+        self.assertExists(payload)
+        self.assertExists(metadata)
+        self.assertEqual([], list(cmd.execute(True)))
+        os.remove(payload)
+        results = list(cmd.execute(True))
+        self.assertEqual([metadata], [ret['path'] for ret in results])
+        self.assertNotExists(metadata)
+        self.assertEqual([], list(cmd.execute(True)))
+
+    def test_recycle_bin_metadata_kept_payload(self):
+        """An explicit keep entry also protects an orphaned restore record."""
+        payload = os.path.join(self.tempdir, 'missing payload')
+        metadata = self.write_file('kept metadata')
+        for kept_path in (payload, metadata):
+            options.set_whitelist_paths([('file', kept_path)])
+            results = list(DeleteRecycleBinMetadata(
+                metadata, payload).execute(True))
+            self.assertEqual(0, results[0]['n_deleted'])
+            self.assertExists(metadata)
+
+    def test_recycle_bin_metadata_reappearing_payload(self):
+        """Recheck payload presence at execution, not just at enumeration."""
+        payload = os.path.join(self.tempdir, 'reappearing payload')
+        metadata = self.write_file('reappearing metadata')
+        cmd = DeleteRecycleBinMetadata(metadata, payload)
+        self.write_file(payload)
+        self.assertEqual([], list(cmd.execute(True)))
+        self.assertExists(payload)
+        self.assertExists(metadata)
+
+    def test_recycle_bin_metadata_payload_stat_error(self):
+        """A failed existence check must not be mistaken for a missing payload."""
+        payload = self.write_file('inaccessible payload')
+        metadata = self.write_file('inaccessible metadata')
+        with mock.patch('bleachbit.Command.os.lstat',
+                        side_effect=PermissionError('Access denied')):
+            with self.assertRaises(PermissionError):
+                list(DeleteRecycleBinMetadata(metadata, payload).execute(True))
+        self.assertExists(payload)
+        self.assertExists(metadata)
+
+    def test_recycle_bin_metadata_nonempty_folder(self):
+        """A folder left behind by a kept child retains restore information."""
+        payload = self.mkdir('payload folder')
+        child = self.write_file(os.path.join(payload, 'kept child'))
+        metadata = self.write_file('folder metadata')
+        options.set_whitelist_paths([('file', child)])
+        list(Delete(payload).execute(True))
+        self.assertEqual([], list(
+            DeleteRecycleBinMetadata(metadata, payload).execute(True)))
+        self.assertExists(child)
+        self.assertExists(metadata)
+
+    def test_recycle_bin_metadata_shred(self):
+        """Restore records obey the global shred preference."""
+        payload = os.path.join(self.tempdir, 'shredded payload')
+        metadata = self.write_file('shredded metadata')
+        options.set('shred', True)
+        with mock.patch('bleachbit.FileUtilities.wipe_contents',
+                        wraps=FileUtilities.wipe_contents) as wipe:
+            list(DeleteRecycleBinMetadata(metadata, payload).execute(True))
+        self.assertTrue(wipe.called)
+        self.assertNotExists(metadata)
 
     def test_delete_dir_left_renamed(self):
         """Delete raises for a directory it could not rename back"""

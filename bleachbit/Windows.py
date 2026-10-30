@@ -1162,6 +1162,46 @@ def get_known_folder_path(folder_name):
     return path
 
 
+def get_recycle_bin_metadata(path):
+    """Return the metadata sibling of a top-level recycled payload, if any."""
+    path = FileUtilities.extended_path_undo(os.path.normpath(path))
+    drive, tail = os.path.splitdrive(path)
+    parts = tail.split(os.sep)
+    if not drive or len(parts) != 4:
+        return None
+    if (parts[0] == ''
+            and parts[1].lower() == '$recycle.bin'
+            and parts[2][:2].lower() == 's-'
+            and parts[3][:2].lower() == '$r'):
+        return os.path.join(os.path.dirname(path), '$I' + parts[3][2:])
+    return None
+
+
+def get_recycle_bin_orphaned_metadata():
+    """Yield (metadata, payload) for this user's old orphaned bin records."""
+    sid = win32security.ConvertSidToStringSid(_current_user_sid())
+    for drive in get_fixed_drives():
+        bin_dir = os.path.join(drive, '$Recycle.Bin')
+        user_dir = os.path.join(bin_dir, sid)
+        if (not FileUtilities.is_normal_directory(bin_dir)
+                or not FileUtilities.is_normal_directory(user_dir)):
+            continue
+        try:
+            with os.scandir(FileUtilities.extended_path(user_dir)) as entries:
+                for entry in entries:
+                    if (entry.name[:2].lower() != '$i'
+                            or not entry.is_file(follow_symlinks=False)):
+                        continue
+                    payload = os.path.join(user_dir, '$R' + entry.name[2:])
+                    try:
+                        os.lstat(FileUtilities.extended_path(payload))
+                    except FileNotFoundError:
+                        yield os.path.join(user_dir, entry.name), payload
+        except OSError:
+            logger.debug('Cannot inspect recycle-bin metadata in %s',
+                         user_dir, exc_info=True)
+
+
 def get_recycle_bin():
     """Yield a list of files in the recycle bin"""
     pidl = shell.SHGetSpecialFolderLocation(0, shellcon.CSIDL_BITBUCKET)
