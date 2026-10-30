@@ -100,7 +100,7 @@ case "$DISTRO_NAME" in
         fi
         # Run all tests with unittest.
         run_optional_tests
-        # Mirror how build_and_test.yaml calls pytest
+        # Mirror how tests.yml calls pytest
         PYTHONWARNINGS=error xvfb-run -a bash -c \
             "python -m pytest -n logical --dist=loadgroup -m 'not no_xdist' tests/ && \
              python -m pytest -m no_xdist tests/"
