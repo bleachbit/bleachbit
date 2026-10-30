@@ -1613,7 +1613,7 @@ Version: 2023-02-223
 !ifdef LANG_POLISH
 	LangString ALREADY_INSTALLED ${LANG_POLISH} "${prodname} jest już zainstalowany.$\r$\nKliknij 'OK', aby odinstalować starszą wersję przed aktualizacją, albo kliknij $\"Anuluj' aby przerwać aktualizację."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_POLISH} "Odwiedź stronę ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_POLISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_POLISH} "${prodname} jest uruchomiony.$\r$\nZamknij go i kliknij „Ponów”, aby kontynuować, albo kliknij „Anuluj”, aby przerwać instalację."
 	LangString INSTALLER_CAPTION ${LANG_POLISH} "Instalator ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_POLISH} "Następnym krokiem jest zbudowanie pamięci podręcznej czcionek, podczas której może pojawić się czarne okno konsoli."
 	LangString MULTIPRINT2 ${LANG_POLISH} "Zwykle kończy się w ciągu jednej minuty, ale czasami zajmuje to do dziesięciu minut."
@@ -1662,7 +1662,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_POLISH} "Terminal debugowania ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_POLISH} "${prodname} (Bez UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Zniszcz za pomocą ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_POLISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_POLISH} "${prodname} zostanie odinstalowany z poniższego folderu.$\r$\nKliknij „Odinstaluj”, aby rozpocząć proces odinstalowywania.$\r$\nPliki dodane do tego folderu, na przykład własne skrypty czyszczące, zostaną zachowane."
 !endif
 
 !ifdef LANG_PORTUGUESE
@@ -1943,7 +1943,7 @@ Version: 2023-02-223
 !ifdef LANG_SIMPCHINESE
 	LangString ALREADY_INSTALLED ${LANG_SIMPCHINESE} "${prodname} 已安装。$\r$\n单击“好”在升级前卸载旧版本，或单击“取消”终止升级。"
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SIMPCHINESE} "访问 ${prodname} 网站"
-	LangString BLEACHBIT_RUNNING ${LANG_SIMPCHINESE} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_SIMPCHINESE} "${prodname} 正在运行。$\r$\n关闭它并单击“重试”继续，或单击“取消”终止安装。"
 	LangString INSTALLER_CAPTION ${LANG_SIMPCHINESE} "${prodname} ${VERSION} 安装包"
 	LangString MULTIPRINT1 ${LANG_SIMPCHINESE} "下一步是构建字体缓存，在此期间可能看到黑色的控制台窗口。"
 	LangString MULTIPRINT2 ${LANG_SIMPCHINESE} "通常在一分钟内完成，但有时会最多花十分钟。"
@@ -1992,7 +1992,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SIMPCHINESE} "${prodname} 调试终端"
 	LangString SHORTCUT_NO_UAC ${LANG_SIMPCHINESE} "${prodname} （无 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_SIMPCHINESE} "用 ${prodname} 擦除"
-	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "将从下列文件夹卸载 ${prodname}。$\r$\n单击卸载启动卸载过程。$\r$\n你添加到这个文件夹的文件，比如清理规则，将被保留。"
 !endif
 
 !ifdef LANG_SLOVAK
@@ -2273,7 +2273,7 @@ Version: 2023-02-223
 !ifdef LANG_TRADCHINESE
 	LangString ALREADY_INSTALLED ${LANG_TRADCHINESE} "${prodname} 已安裝。$\r$\n點擊「確定」在升級前卸載舊版本，或點擊「取消」終止升級。"
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TRADCHINESE} "訪問 ${prodname} 網站"
-	LangString BLEACHBIT_RUNNING ${LANG_TRADCHINESE} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_TRADCHINESE} "${prodname} 正在執行。$\r$\n關閉它後點擊「重試」繼續，或點擊「取消」終止安裝。"
 	LangString INSTALLER_CAPTION ${LANG_TRADCHINESE} "${prodname} ${VERSION} 安裝包"
 	LangString MULTIPRINT1 ${LANG_TRADCHINESE} "下一步是構建字體緩存，在此期間可能出現黑色的控制台視窗。"
 	LangString MULTIPRINT2 ${LANG_TRADCHINESE} "通常會在一分鐘內完成，但有時會最多花十分鐘。"
@@ -2322,7 +2322,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TRADCHINESE} "${prodname} 除錯終端"
 	LangString SHORTCUT_NO_UAC ${LANG_TRADCHINESE} "${prodname}（無 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_TRADCHINESE} "用 ${prodname} 粉碎"
-	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "將從以下資料夾卸載 ${prodname}。$\r$\n點擊「卸載」啟動卸載作業。$\r$\n您先前於此資料夾新增的檔案（例如自定義清理器）將會被保留。"
 !endif
 
 !ifdef LANG_TURKISH
