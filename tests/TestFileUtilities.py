@@ -46,6 +46,7 @@ from bleachbit.FileUtilities import (
     clear_path_spellings,
     clean_ini,
     clean_json,
+    clear_path_spellings,
     delete_file,
     delete,
     detect_encoding,
@@ -1906,6 +1907,15 @@ State=AAAA/wA...
             # unextended paths shouldn't be shortened any more
             self.assertEqual(extended_path_undo(short), short)
 
+    @common.skipUnlessWindows
+    def test_extended_path_undo_unc_case(self):
+        """Extended UNC prefixes are case insensitive."""
+        path = r'\\server\share\folder\file.txt'
+        for prefix in ('unc', 'UNC', 'Unc'):
+            with self.subTest(prefix=prefix):
+                self.assertEqual(
+                    path, extended_path_undo(fr'\\?\{prefix}\{path[2:]}'))
+
     def test_free_space(self):
         """Unit test for free_space()"""
 
@@ -2708,6 +2718,76 @@ State=AAAA/wA...
         options.set_whitelist_paths([('folder', long_dir)])
         self.assert_is_whitelisted(short_dir)
         self.assert_is_whitelisted(short_file)
+        self.assert_is_whitelisted(extended_path(short_file))
+
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_extended_paths(self):
+        """Extended and ordinary paths honor the same keep entries."""
+        folder = self.mkdir('extended keep folder')
+        kept_file = self.write_file(os.path.join(folder, 'kept.txt'))
+        other_file = self.write_file('not kept.txt')
+        for kind, keep_path, candidate in (
+                ('file', kept_file, kept_file),
+                ('folder', folder, kept_file),
+                ('folder', os.path.splitdrive(folder)[0] + os.sep, kept_file),
+                ('file', r'\\server\share\kept.txt', r'\\server\share\kept.txt'),
+                ('folder', r'\\server\share\kept', r'\\server\share\kept\file.txt')):
+            spellings = [candidate, extended_path(candidate)]
+            keep_spellings = [keep_path, extended_path(keep_path)]
+            if candidate.startswith('\\\\'):
+                spellings.append(extended_path(candidate).replace(
+                    '\\unc\\', '\\UNC\\', 1))
+                keep_spellings.append(extended_path(keep_path).replace(
+                    '\\unc\\', '\\UNC\\', 1))
+            for entry, path in itertools.product(keep_spellings, spellings):
+                with self.subTest(kind=kind, entry=entry, path=path):
+                    options.set_whitelist_paths([(kind, entry)])
+                    self.assert_is_whitelisted(path)
+                    if kind == 'file':
+                        self.assertFalse(whitelisted(
+                            extended_path(other_file)))
+                    elif keep_path == folder:
+                        self.assertFalse(whitelisted(
+                            extended_path(folder + '2\\file.txt')))
+
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_directory_cache_case(self):
+        """Case variants share the native long-directory lookup."""
+        # pylint: disable=c-extension-no-member
+        long_dir = win32api.GetLongPathName(
+            self.mkdir('long directory cache name'))
+        short_dir = win32api.GetShortPathName(long_dir)
+        if short_dir == long_dir:
+            self.skipTest('8.3 names are disabled on this volume')
+        short_file = self.write_file(os.path.join(short_dir, 'kept.txt'))
+        options.set_whitelist_paths([('folder', long_dir)])
+        with unittest.mock.patch.dict(
+                'bleachbit.FileUtilities._long_dir_names', clear=True), \
+                unittest.mock.patch(
+                    'bleachbit.FileUtilities.win32file.GetLongPathName',
+                    wraps=win32file.GetLongPathName) as native_long:
+            self.assert_is_whitelisted(short_file)
+            self.assertEqual(1, native_long.call_count)
+
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_unsettled_entry_appears(self):
+        """A missing 8.3 entry is retried when its directory reappears."""
+        # pylint: disable=c-extension-no-member
+        long_dir = win32api.GetLongPathName(
+            self.mkdir('future keep directory'))
+        short_dir = win32api.GetShortPathName(long_dir)
+        if short_dir == long_dir:
+            self.skipTest('8.3 names are disabled on this volume')
+        os.rmdir(long_dir)
+        clear_path_spellings()
+        self.addCleanup(clear_path_spellings)
+        options.set_whitelist_paths([('folder', short_dir)])
+        candidate = os.path.join(long_dir, 'kept.txt')
+        self.assertFalse(whitelisted(candidate))
+        os.mkdir(long_dir)
+        self.assertEqual(short_dir, win32api.GetShortPathName(long_dir))
+        self.write_file(candidate)
+        self.assert_is_whitelisted(candidate)
 
     @common.skipUnlessWindows
     def test_whitelisted_windows_spelling_cache(self):

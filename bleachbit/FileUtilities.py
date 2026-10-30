@@ -1239,7 +1239,7 @@ def extended_path_undo(path):
     For example: \\c:\foo\bar.txt -> c:\foo\bar.txt
     """
     if IS_WINDOWS:
-        if path.startswith(r'\\?\unc'):
+        if path[:8].lower() == '\\\\?\\unc\\':
             return '\\' + path[7:]
         if path.startswith(r'\\?'):
             return path[4:]
@@ -1663,12 +1663,13 @@ def _windows_spelling(path):
     native System32 through Sysnative. The second value is False when a
     short name has no long name yet, e.g. because the path does not exist.
     """
-    path = os.path.normpath(path)
+    path = extended_path_undo(os.path.normpath(path))
     settled = True
     if '~' in path:
         dirname, basename = os.path.split(path)
         if '~' in dirname:
-            long_dir = _long_dir_names.get(dirname)
+            dirname_key = dirname.lower()
+            long_dir = _long_dir_names.get(dirname_key)
             if long_dir is None:
                 long_dir = _windows_long_path(dirname)
                 if long_dir is None:
@@ -1676,7 +1677,7 @@ def _windows_spelling(path):
                 else:
                     if len(_long_dir_names) >= 1000:
                         _long_dir_names.clear()
-                    _long_dir_names[dirname] = long_dir
+                    _long_dir_names[dirname_key] = long_dir
             if long_dir is not None:
                 path = os.path.join(long_dir, basename)
         if '~' in basename:
