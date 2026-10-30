@@ -953,7 +953,7 @@ Version: 2023-02-223
 !ifdef LANG_GERMAN
 	LangString ALREADY_INSTALLED ${LANG_GERMAN} "${prodname} ist bereits installiert.$\r$\nKlicken Sie auf »OK«, um die alte Version vor dem Upgrade zu deinstallieren, oder klicken Sie auf »Abbrechen«, um das Upgrade abzubrechen."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GERMAN} "Besuchen Sie die Webseite von ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_GERMAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_GERMAN} "${prodname} läuft.$\r$\nSchließen Sie das Fenster und klicken Sie auf „Erneut versuchen“, um fortzufahren, oder klicken Sie auf „Abbrechen“, um die Installation abzubrechen."
 	LangString INSTALLER_CAPTION ${LANG_GERMAN} "Einrichtung von ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_GERMAN} "Der nächste Schritt ist das Erstellen des Schriftarten-Caches. Dabei kann ein schwarzes Konsolenfenster erscheinen."
 	LangString MULTIPRINT2 ${LANG_GERMAN} "Normalerweise dauert es nur eine Minute, aber manchmal kann es bis zu zehn Minuten dauern."
@@ -1002,7 +1002,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_GERMAN} "${prodname} Debugging-Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_GERMAN} "${prodname} (ohne UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_GERMAN} "Mit ${prodname} schreddern"
-	LangString UNINSTALL_TEXT ${LANG_GERMAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_GERMAN} "${prodname} wird aus dem folgenden Ordner deinstalliert.$\r$\nKlicken Sie auf »Deinstallieren«, um die Deinstallation zu starten.$\r$\nDateien, die Sie diesem Ordner hinzugefügt haben, wie z. B. benutzerdefinierte Reiniger, bleiben erhalten."
 !endif
 
 !ifdef LANG_GREEK
