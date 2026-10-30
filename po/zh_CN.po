@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 08:29-0600\n"
-"PO-Revision-Date: 2026-10-18 16:50+0000\n"
+"PO-Revision-Date: 2026-10-30 17:15+0000\n"
 "Last-Translator: Hosted Weblate user 54392 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -443,7 +443,7 @@ msgstr "删除包含播放次数和上次播放等信息的数据库"
 msgid ""
 "This option will delete song ratings, internet radio stations, and podcast "
 "subscriptions."
-msgstr ""
+msgstr "此选项会删除歌曲评分、互联网电台和播客订阅。"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
@@ -785,18 +785,18 @@ msgstr "用于 /restore 的文件历史"
 #. Claude Code's automatically saved notes, reused in later sessions. Memory refers to saved information, not RAM.
 #: ../cleaners/claude.xml
 msgid "Auto memory"
-msgstr ""
+msgstr "自动记忆"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Delete the notes Claude Code automatically saves about you and your projects"
-msgstr ""
+msgstr "删除 Claude Code 自动保存的关于你和你的项目的附注"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Claude Code would forget the information it automatically saved about you "
 "and your projects"
-msgstr ""
+msgstr "Claude Code 会忘记它保存的关于你和你的项目的信息"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -1004,20 +1004,14 @@ msgstr "访问 ${prodname} 网站"
 
 #. TRANSLATORS: Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.\n"
-#| "Click 'OK' to uninstall the old version before upgrading, or click "
-#| "'Cancel' to abort the upgrade."
 msgctxt "nsis:BLEACHBIT_RUNNING"
 msgid ""
 "${prodname} is running.\n"
 "Close it and click 'Retry' to continue, or click 'Cancel' to abort the "
 "installation."
 msgstr ""
-"${prodname} 已安装。\n"
-"单击“好”在升级前卸载旧版本，或单击“取消”终止升级。"
+"${prodname} 正在运行。\n"
+"关闭它并单击“重试”继续，或单击“取消”终止安装。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
@@ -1305,14 +1299,6 @@ msgid "Shred with ${prodname}"
 msgstr "用 ${prodname} 擦除"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:UNINSTALL_TEXT"
-#| msgid ""
-#| "${prodname} will be uninstalled from the following folder.\n"
-#| "Click Uninstall to start the uninstallation.\n"
-#| "WARNING: The uninstaller completely removes the installation directory, "
-#| "including any files (such as custom cleaners) that you may have added or "
-#| "changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
@@ -1321,8 +1307,7 @@ msgid ""
 msgstr ""
 "将从下列文件夹卸载 ${prodname}。\n"
 "单击卸载启动卸载过程。\n"
-"警告：卸载程序彻底删除安装目录，包括任何可能已添加或更改的文件（如自定义清理"
-"器）。"
+"你添加到这个文件夹的文件，比如清理规则，将被保留。"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1370,7 +1355,7 @@ msgstr "执行外部命令：%s"
 #: ../bleachbit/Action.py
 #, python-brace-format
 msgid "Terminate process: {name}"
-msgstr ""
+msgstr "终止进程：{name}"
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1827,7 +1812,7 @@ msgstr "此选项需要专家模式。在“首选项”中启用它。"
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Could not overwrite the contents of %(path)s: %(error)s"
-msgstr ""
+msgstr "无法覆盖 %(path)s 的内容: %(error)s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1849,10 +1834,9 @@ msgstr "设备或资源繁忙：%s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
-#, fuzzy, python-format
-#| msgid "Directory is not empty: %s"
+#, python-format
 msgid "Directory was left renamed to: %s"
-msgstr "目录非空：%s"
+msgstr "目录被重命名为：%s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -2759,7 +2743,7 @@ msgstr "正在重置损坏的配置文件：%s"
 #. starts an operation while another one is running.
 #: ../bleachbit/GuiWindow.py
 msgid "Wait for the current operation to finish."
-msgstr ""
+msgstr "等待当前操作完成。"
 
 #. TRANSLATORS: Error message shown when a cleaner option
 #. cannot be used because expert mode is disabled.
