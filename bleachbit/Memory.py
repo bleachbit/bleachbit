@@ -319,19 +319,16 @@ def _run_memory_child_fork():
         make_self_oom_target_linux(real_uid)
         fill_memory_linux()
         os._exit(0)
-    else:
-        # The else is load-bearing: tests mock os._exit, so without it the
-        # child path would fall through into the parent's waitpid().
-        # TRANSLATORS: This is a debugging message that the parent process
-        # is waiting for the child process. %(parent_pid)d is the parent
-        # process ID; %(child_pid)d is the child process ID.
-        logger.debug(_("The function wipe_memory() with process ID %(parent_pid)d is "
-                       "waiting for child process ID %(child_pid)d."),
-                     {'parent_pid': os.getpid(), 'child_pid': child_pid})
-        status = os.waitpid(child_pid, 0)[1]
-        if os.WIFSIGNALED(status):
-            return os.WTERMSIG(status)
-        return os.WEXITSTATUS(status)
+    # TRANSLATORS: This is a debugging message that the parent process
+    # is waiting for the child process. %(parent_pid)d is the parent
+    # process ID; %(child_pid)d is the child process ID.
+    logger.debug(_("The function wipe_memory() with process ID %(parent_pid)d is "
+                   "waiting for child process ID %(child_pid)d."),
+                 {'parent_pid': os.getpid(), 'child_pid': child_pid})
+    status = os.waitpid(child_pid, 0)[1]
+    if os.WIFSIGNALED(status):
+        return os.WTERMSIG(status)
+    return os.WEXITSTATUS(status)
 
 
 def get_swap_size_linux(device, proc_swaps=None):
