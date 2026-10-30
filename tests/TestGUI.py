@@ -77,7 +77,6 @@ class GUITestCase(common.BleachbitTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        super().tearDownClass()
         options.get_tree = cls.options_get_tree
         cls._lang_env.__exit__(None, None, None)
         window = cls.get_window()
@@ -90,6 +89,7 @@ class GUITestCase(common.BleachbitTestCase):
             window.destroy()
             cls.clear_window()
             cls.refresh_gui()
+        super().tearDownClass()
 
     @classmethod
     def get_window(cls):
@@ -1083,6 +1083,12 @@ class GUITestCase(common.BleachbitTestCase):
                     gui.on_configure_event(gui, None)
                 self.assertEqual(options.get('window_width'), 800)
                 self.assertEqual(options.get('window_height'), 600)
+        with mock.patch.object(gui, '_maximize_pending', True), \
+                mock.patch.object(gdk_window, 'get_state', return_value=Gdk.WindowState(0)), \
+                mock.patch.object(gui, 'get_size', return_value=(640, 480)):
+            gui.on_configure_event(gui, None)
+        self.assertEqual(options.get('window_width'), 800)
+        self.assertEqual(options.get('window_height'), 600)
         tiled_fullscreen = Gdk.WindowState.FULLSCREEN | Gdk.WindowState.TILED
         with mock.patch.object(gdk_window, 'get_state', return_value=tiled_fullscreen), \
                 mock.patch.object(gui, 'get_size', return_value=(960, 1080)):
@@ -1091,15 +1097,20 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual(options.get('window_height'), 1080)
 
     def test_unmaximize_restores_saved_size(self):
-        """A maximized start must restore the remembered size on Windows"""
-        if not bleachbit.IS_WINDOWS:
-            self.skipTest('Windows snapshots the restore size at maximize()')
+        """A maximized start must restore the remembered size"""
         gui = self.get_window()
+        screen = gui.get_screen()
+        if hasattr(screen, 'supports_net_wm_hint') and not screen.supports_net_wm_hint(
+                Gdk.atom_intern('_NET_WM_STATE_MAXIMIZED_VERT', False)):
+            self.skipTest('Window manager does not support maximize')
+        deadline = time.monotonic() + 0.1
+        while time.monotonic() < deadline:
+            self.refresh_gui(0.02)
         info = get_window_info(gui)
         width, height = 820, 640
-        if info.width < width + 80 or info.height < height + 80:
+        if info.width < width + 120 or info.height < height + 120:
             width, height = 640, 480
-        x, y = info.x + 40, info.y + 40
+        x, y = info.x + 60, info.y + 60
         options.set('remember_geometry', True)
         options.set('window_fullscreen', False)
         options.set('window_maximized', True)
@@ -1114,6 +1125,9 @@ class GUITestCase(common.BleachbitTestCase):
             if gui.is_maximized():
                 gui.unmaximize()
             gui.resize(800, 600)
+            deadline = time.monotonic() + 0.5
+            while time.monotonic() < deadline and gui.get_size() != (800, 600):
+                self.refresh_gui(0.02)
             self.refresh_gui()
         self.addCleanup(restore_window)
 
@@ -1122,6 +1136,8 @@ class GUITestCase(common.BleachbitTestCase):
         while time.monotonic() < deadline and not gui.is_maximized():
             self.refresh_gui(0.02)
         self.assertTrue(gui.is_maximized())
+        self.assertEqual(options.get('window_width'), width)
+        self.assertEqual(options.get('window_height'), height)
         gui.unmaximize()
         deadline = time.monotonic() + 2
         while time.monotonic() < deadline and gui.is_maximized():
@@ -1131,8 +1147,9 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual((alloc.width, alloc.height), (width, height))
         self.assertEqual(options.get('window_width'), width)
         self.assertEqual(options.get('window_height'), height)
-        pos = gui.get_position()
-        self.assertEqual((pos.root_x, pos.root_y), (x, y))
+        if 'Wayland' not in type(screen.get_display()).__name__:
+            pos = gui.get_position()
+            self.assertEqual((pos.root_x, pos.root_y), (x, y))
 
     def test_refresh_supersedes_running_registration(self):
         """A new refresh stops the registration still running"""

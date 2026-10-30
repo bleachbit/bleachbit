@@ -59,6 +59,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _app_menu_generation = None
     _quit_after_worker = False
     _refresh_pending = False
+    _maximize_pending = False
+    _restore_size = None
+    _restore_size_retried = False
+    _maximize_deadline = 0.0
     _worker_run = None
     _worker_source = None
     recognized_cleanerml = False
@@ -1333,7 +1337,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 return True
 
         # Keep the normal geometry for when the window is restored.
-        if maximized or fullscreen:
+        if maximized or fullscreen or self._maximize_pending:
             return False
 
         # save window position and size
@@ -1387,6 +1391,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             Windows.splash_thread.join(0)
 
         # restore window position, size and state
+        self._maximize_pending = False
+        self._restore_size = None
+        self._restore_size_retried = False
         if not options.get('remember_geometry'):
             return
         if options.has_option("window_x") and options.has_option("window_y") and \
@@ -1404,23 +1411,22 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                g.y <= r.y < g.y + g.height:
                 logger.debug("closest monitor %s, prior window geometry = %s+%s",
                              str(g), (r.x, r.y), (r.width, r.height))
+                self._restore_size = (r.width, r.height)
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
+                self.check_resize()
         if options.get("window_fullscreen"):
             self.fullscreen()
             self.append_text(
                 # TRANSLATORS: Hint shown when starting in fullscreen mode.
                 _("Press F11 to exit fullscreen mode.") + '\n')
         elif options.get("window_maximized"):
-            # maximize() asks Windows for the restore rectangle immediately.
-            # resize() above is still queued, so that snapshot is the default
-            # 800x600 and a later restore overwrites the remembered size.
-            # Configure events are processed before idle handlers, so
-            # maximizing on the next idle sees the restored size.
-            if IS_WINDOWS:
-                GLib.idle_add(self._maximize_after_restore)
-            else:
-                self.maximize()
+            # maximize() asks the window manager for the restore rectangle
+            # immediately. Defer maximizing to the next idle so the restored
+            # size configure event has already landed.
+            self._maximize_pending = True
+            self._maximize_deadline = time.monotonic() + 0.5
+            GLib.idle_add(self._maximize_after_restore)
 
         # Apply Windows 10 theme if on Windows and enabled
         if IS_WINDOWS:
@@ -1433,7 +1439,18 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         this runs, so the flag must not be read again here.
         """
         if self.get_window() is None:
+            self._maximize_pending = False
             return False
+        self.check_resize()
+        if self._restore_size is not None and self.get_size() != self._restore_size:
+            if not self._restore_size_retried:
+                self._restore_size_retried = True
+                self.resize(*self._restore_size)
+                self.check_resize()
+            if (self.get_size() != self._restore_size and
+                    time.monotonic() < self._maximize_deadline):
+                return True
+        self._maximize_pending = False
         self.maximize()
         return False
 
