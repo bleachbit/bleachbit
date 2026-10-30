@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 08:29-0600\n"
-"PO-Revision-Date: 2026-10-29 22:35+0000\n"
+"PO-Revision-Date: 2026-10-30 20:28+0000\n"
 "Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
@@ -808,12 +808,16 @@ msgstr ""
 msgid ""
 "Delete the notes Claude Code automatically saves about you and your projects"
 msgstr ""
+"Kkes tizmilin i iḥerrez Claude Code s wudem awurman fell-ak·im d yisenfaṛen-"
+"ik·im"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Claude Code would forget the information it automatically saved about you "
 "and your projects"
 msgstr ""
+"Claude Code ad yettu talɣut i yeḥrez s wudem awurman fell-ak·im d yisenfaṛen-"
+"ik·im"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -1029,21 +1033,15 @@ msgstr "Rzu ɣer usmel Web n ${prodname}"
 
 #. TRANSLATORS: Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.\n"
-#| "Click 'OK' to uninstall the old version before upgrading, or click "
-#| "'Cancel' to abort the upgrade."
 msgctxt "nsis:BLEACHBIT_RUNNING"
 msgid ""
 "${prodname} is running.\n"
 "Close it and click 'Retry' to continue, or click 'Cancel' to abort the "
 "installation."
 msgstr ""
-"${prodname} yettwasbedd yakan.\n"
-"Sit ɣef 'OK' akken ad tekkseḍ lqem aqbur uqbel asali n uswir, neɣ sit ɣef "
-"'Sefsex' akken ad tesfesxeḍ asali n uswir."
+"${prodname} itteddu.\n"
+"Mdel-it, sit ɣef 'Ɛreḍ tikkelt nniḍen' akken ad tkemmleḍ, neɣ sit ɣef "
+"'Sefsex' akken ad tesfesxeḍ asbeddi."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
@@ -1300,7 +1298,7 @@ msgstr "Inegzumen"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create a shortcut in the Start menu."
-msgstr ""
+msgstr "Snulfu-d anegzum deg wumuɣ n usenker."
 
 #. TRANSLATORS: Name of the start menu section in the Windows installer: user selects which start menu items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1346,14 +1344,6 @@ msgid "Shred with ${prodname}"
 msgstr "Senger s ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:UNINSTALL_TEXT"
-#| msgid ""
-#| "${prodname} will be uninstalled from the following folder.\n"
-#| "Click Uninstall to start the uninstallation.\n"
-#| "WARNING: The uninstaller completely removes the installation directory, "
-#| "including any files (such as custom cleaners) that you may have added or "
-#| "changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
@@ -1362,8 +1352,7 @@ msgid ""
 msgstr ""
 "${prodname} ad yettwakkes seg ukaram-a.\n"
 "Sit ɣef « Kkes » akken ad tebdu tukksa.\n"
-"ƔUR-K·m: Ahil n tukksa ad yekkes akaram n usbeddi meṛṛa, ula d ifuyla (am "
-"yifecka n usfaḍ yugnen) i terniḍ neɣ i tbeddleḍ."
+"Ifuyla i terniḍ ɣer ukaram-a, am yifecka n usfaḍ yugnen, ad qqimen."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1411,7 +1400,7 @@ msgstr "Selkem taladna tazɣarayt: %s"
 #: ../bleachbit/Action.py
 #, python-brace-format
 msgid "Terminate process: {name}"
-msgstr ""
+msgstr "Ḥbes akala: {name}"
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1501,12 +1490,12 @@ msgstr "Ifuyla n tsuqilt"
 #. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
-msgstr ""
+msgstr "Kkes ifuyla n tutlayin ur tebɣiḍ ara"
 
 #. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
-msgstr ""
+msgstr "Swel taxtiṛit-a deg yismenyifen."
 
 #. TRANSLATORS: 'Rotated logs' refers to old system log files.
 #. Linux systems often have a scheduled job to rotate the logs
@@ -1514,22 +1503,22 @@ msgstr ""
 #. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
-msgstr ""
+msgstr "Iɣmisen iqburen"
 
 #. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
-msgstr ""
+msgstr "Kkes iɣmisen iqburen n unagraw"
 
 #. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
-msgstr ""
+msgstr "Taqecwalt"
 
 #. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
-msgstr ""
+msgstr "Sfeḍ taqecwalt"
 
 #. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
@@ -1539,38 +1528,38 @@ msgstr "Takatut"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Wipe the swap and free memory"
-msgstr ""
+msgstr "Sfeḍ tallunt n usemselsi d tkatut tilellit"
 
 #. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
-msgstr ""
+msgstr "Taxtiṛit-a d tarmitant, tezmer ad d-tawi uguren i unagraw."
 
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "Tazarkatut n DNS"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
 msgid "Prefetch"
-msgstr ""
+msgstr "Taɣuri tuzwirt (Prefetch)"
 
 #. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
-msgstr ""
+msgstr "Taqecwalt"
 
 #. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
-msgstr ""
+msgstr "Sfeḍ taqecwalt"
 
 #. TRANSLATORS: Name for cleaning option. 'Update' is an adjective to
 #. describe the kind of uninstallers.
 #: ../bleachbit/Cleaner.py
 msgid "Update uninstallers"
-msgstr ""
+msgstr "Ahilen n tukksa n yimucceḍen"
 
 #. TRANSLATORS: Description of cleaning option.
 #: ../bleachbit/Cleaner.py
@@ -1578,11 +1567,13 @@ msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
+"Kkes ahilen n tukksa n yimucceḍen n Microsoft, gar-asen iseɣtiyen, ikemmas n "
+"tenfa d yimucceḍen n Internet Explorer"
 
 #. TRANSLATORS: Warning shown when selecting an option.
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "Taxtiṛit-a tezmer ad tsewḥel tukksa n kra n yimucceḍen."
 
 #. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
