@@ -2557,6 +2557,22 @@ State=AAAA/wA...
                              f"{path} should not be protected")
 
     @common.skipIfWindows
+    def test_whitelisted_posix_root_folder(self):
+        """Keeping the filesystem root also keeps its descendants."""
+        path = self.write_file('root_keep_test')
+        link = os.path.join(self.tempdir, 'root_keep_link')
+        os.symlink(path, link)
+        for root in ('/', '/./', '///'):
+            with self.subTest(root=root):
+                options.set_whitelist_paths([('folder', root)])
+                self.assertTrue(whitelisted(self.tempdir))
+                self.assertTrue(whitelisted(path))
+                self.assertTrue(whitelisted(link))
+                self.assertFalse(whitelisted('relative/path'))
+        options.set_whitelist_paths([('file', '/')])
+        self.assertFalse(whitelisted(path))
+
+    @common.skipIfWindows
     def test_whitelisted_posix_normpath(self):
         """Keep list matches paths spelled with '//' or a trailing '/'"""
         options.set_whitelist_paths(
