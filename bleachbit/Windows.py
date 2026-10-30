@@ -280,8 +280,8 @@ def browse_files(_, title):
 
 def browse_folder(_, title):
     """Ask the user to select a folder.  Return full path."""
-    # BIF_RETURNONLYFSDIRS | BIF_EDITBOX (path input)
-    flags = 0x0001 | 0x0010
+    # pylint: disable-next=possibly-used-before-assignment
+    flags = shellcon.BIF_RETURNONLYFSDIRS | shellcon.BIF_EDITBOX
     # pylint: disable-next=possibly-used-before-assignment
     pidl = shell.SHBrowseForFolder(None, None, title, flags)[0]
     if pidl is None:

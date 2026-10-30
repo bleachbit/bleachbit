@@ -59,6 +59,11 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _app_menu_generation = None
     _quit_after_worker = False
     _refresh_pending = False
+    _maximize_pending = False
+    _geometry_ready = False
+    _restore_size = None
+    _restore_size_retried = False
+    _maximize_deadline = 0.0
     _worker_run = None
     _worker_source = None
     recognized_cleanerml = False
@@ -162,6 +167,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                                   min(geometry.height, 600))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.connect("configure-event", self.on_configure_event)
+        self.connect("size-allocate", self.on_size_allocate)
         self.connect("window-state-event", self.on_window_state_event)
         self.connect("delete-event", self.on_delete_event)
         self.connect("destroy", self.on_destroy)
@@ -466,6 +472,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # setting change still waiting on the delayed flush timer
         # (see Options.__schedule_flush) would otherwise be lost if the
         # process exits before that timer fires.
+        self._save_window_geometry()
         options.commit()
         if Gtk.main_level() > 0:
             Gtk.main_quit()
@@ -745,6 +752,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Preview operations or run operations (delete files)"""
 
         assert isinstance(really_delete, bool)
+        if self._worker_source is not None:
+            self.refuse_if_busy()
+            return
         from bleachbit import Worker
         self.start_time = None
         if not operations:
@@ -789,6 +799,13 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # PyGObject drops the source after printing the error
             if worker_run is self._worker_run:
                 self._worker_source = None
+                backends.pop('_gui', None)
+                self._gui_cleaner_cleanup_pending = None
+                self.progressbar.hide()
+                self.set_sensitive(True)
+                if self._refresh_pending:
+                    self._refresh_pending = False
+                    self.cb_refresh_operations()
             raise
 
     def _stop_worker(self):
@@ -900,7 +917,14 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             if generation != self._register_generation:
                 rc.close()
                 return False
-            return next(rc)
+            try:
+                return next(rc)
+            except Exception:
+                if generation == self._register_generation:
+                    self.progressbar.hide()
+                    if self._worker_source is None:
+                        self.set_sensitive(True)
+                raise
 
         GLib.idle_add(pump)
         return False
@@ -957,7 +981,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         # preview
         if not really_delete:
-            self.preview_or_run_operations(False, operations)
+            if not self.refuse_if_busy():
+                self.preview_or_run_operations(False, operations)
             return
 
         # block cleaning of warning options without expert mode
@@ -1296,28 +1321,71 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.menu_button.set_menu_model(builder.get_object('app-menu'))
         self._app_menu_generation = generation
 
+    _TILING_STATES = (Gdk.WindowState.TILED |
+                      Gdk.WindowState.TOP_TILED |
+                      Gdk.WindowState.RIGHT_TILED |
+                      Gdk.WindowState.BOTTOM_TILED |
+                      Gdk.WindowState.LEFT_TILED)
+
+    @staticmethod
+    def _parse_window_state(state):
+        """Return (maximized, fullscreen) for a Gdk.WindowState bitmask"""
+        is_tiled = state & GUI._TILING_STATES != 0
+        fullscreen = (state & Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
+        maximized = state & Gdk.WindowState.MAXIMIZED != 0
+        return maximized, fullscreen
+
     def on_configure_event(self, _widget, _event):
         (x, y) = self.get_position()
         (width, height) = self.get_size()
 
+        window = self.get_window()
+        if window is not None:
+            maximized, fullscreen = self._parse_window_state(
+                window.get_state())
+        else:
+            maximized = False
+            fullscreen = False
+
         # fixup maximized window position:
         # on Windows if a window is maximized on a secondary monitor it is moved off the screen
-        if IS_WINDOWS:
-            window = self.get_window()
-            if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
-                g = get_window_info(self)
-                if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
-                    logger.debug("Maximized window %s+%s: %s",
-                                 (x, y), (width, height), str(g))
-                    self.move(g.x, g.y)
-                    return True
+        if IS_WINDOWS and maximized:
+            g = get_window_info(self)
+            if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
+                logger.debug("Maximized window %s+%s: %s",
+                             (x, y), (width, height), str(g))
+                self.move(g.x, g.y)
+                return True
 
         # Keep the normal geometry for when the window is restored.
-        # on_window_state_event() keeps these two up to date.
-        if options.get("window_maximized") or options.get("window_fullscreen"):
+        if maximized or fullscreen or self._maximize_pending:
             return False
 
-        # save window position and size
+        # Only the position: see on_size_allocate() for the size.
+        options.set("window_x", x)
+        options.set("window_y", y)
+        return False
+
+    def on_size_allocate(self, _widget, _allocation):
+        """Save the window size
+
+        With client-side decorations, get_size() subtracts the decoration
+        extents of the previous window state until GTK lays out the window
+        again. After unmaximize, configure-event and idle callbacks can
+        see the size inflated by the shadow width, and no further
+        configure-event follows when the extents are corrected.
+        """
+        self._save_window_geometry()
+
+    def _save_window_geometry(self):
+        window = self.get_window()
+        if window is None or not self._geometry_ready:
+            return False
+        maximized, fullscreen = self._parse_window_state(window.get_state())
+        if maximized or fullscreen or self._maximize_pending:
+            return False
+        (x, y) = self.get_position()
+        (width, height) = self.get_size()
         options.set("window_x", x)
         options.set("window_y", y)
         options.set("window_width", width)
@@ -1333,18 +1401,14 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
           full screen nor maximized.
 
         Because of this issue, we check the tiling state.
-        """
-        tiling_states = (Gdk.WindowState.TILED |
-                         Gdk.WindowState.TOP_TILED |
-                         Gdk.WindowState.RIGHT_TILED |
-                         Gdk.WindowState.BOTTOM_TILED |
-                         Gdk.WindowState.LEFT_TILED)
 
-        is_tiled = event.new_window_state & tiling_states != 0
-        fullscreen = (event.new_window_state &
-                      Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
+        The options saved here restore the state on the next start.
+        on_configure_event() instead reads the live Gdk.Window state,
+        so it is not affected by these reporting quirks.
+        """
+        maximized, fullscreen = self._parse_window_state(
+            event.new_window_state)
         options.set("window_fullscreen", fullscreen)
-        maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized)
         if IS_WINDOWS:
             logger.debug(
@@ -1353,6 +1417,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
     def on_delete_event(self, _widget, _event):
         # commit options to disk
+        self._save_window_geometry()
         options.close()
         return False
 
@@ -1372,7 +1437,14 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             Windows.splash_thread.join(0)
 
         # restore window position, size and state
+        # GTK allocates the window before this handler runs, so saving
+        # waits until the remembered geometry has been read.
+        self._geometry_ready = False
+        self._maximize_pending = False
+        self._restore_size = None
+        self._restore_size_retried = False
         if not options.get('remember_geometry'):
+            self._geometry_ready = True
             return
         if options.has_option("window_x") and options.has_option("window_y") and \
            options.has_option("window_width") and options.has_option("window_height"):
@@ -1389,19 +1461,49 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                g.y <= r.y < g.y + g.height:
                 logger.debug("closest monitor %s, prior window geometry = %s+%s",
                              str(g), (r.x, r.y), (r.width, r.height))
+                self._restore_size = (r.width, r.height)
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
+                self.check_resize()
         if options.get("window_fullscreen"):
             self.fullscreen()
             self.append_text(
                 # TRANSLATORS: Hint shown when starting in fullscreen mode.
                 _("Press F11 to exit fullscreen mode.") + '\n')
         elif options.get("window_maximized"):
-            self.maximize()
+            # maximize() asks the window manager for the restore rectangle
+            # immediately. Defer maximizing to the next idle so the restored
+            # size configure event has already landed.
+            self._maximize_pending = True
+            self._maximize_deadline = time.monotonic() + 0.5
+            GLib.idle_add(self._maximize_after_restore)
+        self._geometry_ready = True
 
         # Apply Windows 10 theme if on Windows and enabled
         if IS_WINDOWS:
             self.set_windows10_theme()
+
+    def _maximize_after_restore(self):
+        """Maximize once the restored size has been applied.
+
+        The map-time state event clears the saved maximized flag before
+        this runs, so the flag must not be read again here.
+        """
+        if self.get_window() is None:
+            self._maximize_pending = False
+            return False
+        self.check_resize()
+        if self._restore_size is not None and self.get_size() != self._restore_size:
+            if not self._restore_size_retried:
+                self._restore_size_retried = True
+                self.resize(*self._restore_size)
+                self.check_resize()
+            if (self.get_size() != self._restore_size and
+                    time.monotonic() < self._maximize_deadline):
+                return True
+        self._maximize_pending = False
+        self.maximize()
+        return False
 
     def check_orphaned_wipe_files(self):
         """Check for orphaned wipe files and offer to delete them.

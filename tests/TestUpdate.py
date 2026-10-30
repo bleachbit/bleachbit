@@ -134,6 +134,12 @@ class UpdateTestCase(common.BleachbitTestCase):
             self.assertEqual(check_updates(True, True, print, None),
                              [('9.9', 'https://999')])
 
+    def test_check_updates_oserror(self):
+        """An OSError from fetch_url (e.g. missing CA bundle) returns []"""
+        with patch('bleachbit.Update.fetch_url',
+                   side_effect=OSError('Could not find a suitable TLS CA certificate bundle')):
+            self.assertEqual(check_updates(True, True, print, None), [])
+
     def test_check_updates_real_network(self):
         """Unit test for function check_updates() using real network"""
         for update in check_updates(True, False, None, None):

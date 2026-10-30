@@ -77,7 +77,6 @@ class GUITestCase(common.BleachbitTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        super().tearDownClass()
         options.get_tree = cls.options_get_tree
         cls._lang_env.__exit__(None, None, None)
         window = cls.get_window()
@@ -90,6 +89,7 @@ class GUITestCase(common.BleachbitTestCase):
             window.destroy()
             cls.clear_window()
             cls.refresh_gui()
+        super().tearDownClass()
 
     @classmethod
     def get_window(cls):
@@ -668,20 +668,34 @@ class GUITestCase(common.BleachbitTestCase):
             backends.pop('_gui', None)
 
     def test_failed_worker_is_not_left_running(self):
-        """A worker that raises is not treated as still running"""
+        """A worker that raises restores the UI and cleans up worker state"""
         gui = self.get_window()
         self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(backends.pop, '_gui', None)
 
         def failing_run(_worker):
             yield True
             raise RuntimeError('worker failed')
 
+        backends['_gui'] = Cleaner()
+        gui._gui_cleaner_cleanup_pending = object()
         with mock.patch('bleachbit.Worker.Worker.run', failing_run), \
+                mock.patch.object(gui.tree_store, 'refresh_rows',
+                                  wraps=gui.tree_store.refresh_rows) as refresh_rows, \
                 common.capture_glib_exceptions() as glib_errors:
             gui.preview_or_run_operations(False, {'system': ['tmp']})
+            gui.cb_refresh_operations()
+            self.assertTrue(gui._refresh_pending)
             self.refresh_gui()
         self.assertEqual([RuntimeError], [error[0] for error in glib_errors])
         self.assertIsNone(gui._worker_source)
+        self.assertNotIn('_gui', backends)
+        self.assertIsNone(gui._gui_cleaner_cleanup_pending)
+        self.assertFalse(gui._refresh_pending)
+        refresh_rows.assert_called_once_with()
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+        self.assertFalse(gui.progressbar.get_visible())
 
     def test_shred_paths_confirm_stops_running_preview(self):
         """Confirming a shred stops the preview that is still running"""
@@ -916,10 +930,31 @@ class GUITestCase(common.BleachbitTestCase):
                 mock.patch.object(gui, 'preview_or_run_operations') as start:
             gui.cb_run_option(None, True, self._NEW_CLEANER_ID,
                               self._NEW_OPTION_ID)
+            gui.cb_run_option(None, False, self._NEW_CLEANER_ID,
+                              self._NEW_OPTION_ID)
             gui.run_operations(None)
             self.refresh_gui()
         start.assert_not_called()
-        self.assertEqual(2, show_infobar.call_count)
+        self.assertEqual(3, show_infobar.call_count)
+        self.assertTrue(gui.run_button_get_sensitive())
+
+    def test_preview_or_run_operations_refused_while_worker_runs(self):
+        """Starting a second operation does not replace a running worker"""
+        gui = self.get_window()
+        self._setup_new_cleaner(gui)
+        operations = {self._NEW_CLEANER_ID: [self._NEW_OPTION_ID]}
+        gui.preview_or_run_operations(False, operations)
+        first_worker = gui.worker
+        first_source = gui._worker_source
+        first_start_time = gui.start_time
+        with mock.patch.object(gui, 'show_infobar') as show_infobar:
+            gui.preview_or_run_operations(True, operations)
+        show_infobar.assert_called_once()
+        self.assertIs(gui.worker, first_worker)
+        self.assertEqual(gui._worker_source, first_source)
+        self.assertEqual(gui.start_time, first_start_time)
+        self.refresh_gui()
+        self.assertIsNone(gui._worker_source)
         self.assertTrue(gui.run_button_get_sensitive())
 
     def test_shred_instance_shreds_its_paths_once(self):
@@ -1069,21 +1104,147 @@ class GUITestCase(common.BleachbitTestCase):
             self.assertEqual(gui.stop_button.get_label(), '[Abort]')
         gui.update_headerbar_labels()
 
-    def test_configure_keeps_normal_size(self):
+    def test_size_allocate_keeps_normal_size(self):
         """A maximized or fullscreen size must not replace the saved size"""
         gui = self.get_window()
         options.set('window_width', 800)
         options.set('window_height', 600)
+        options.set('window_maximized', False)
+        options.set('window_fullscreen', False)
+        gdk_window = gui.get_window()
         for state in (Gdk.WindowState.MAXIMIZED, Gdk.WindowState.FULLSCREEN):
             with self.subTest(state=state):
-                gui.on_window_state_event(
-                    gui, types.SimpleNamespace(new_window_state=state))
-                with mock.patch.object(gui, 'get_size', return_value=(1920, 1080)):
-                    gui.on_configure_event(gui, None)
+                with mock.patch.object(gdk_window, 'get_state', return_value=state), \
+                        mock.patch.object(gui, 'get_size', return_value=(1920, 1080)):
+                    gui.on_size_allocate(gui, None)
                 self.assertEqual(options.get('window_width'), 800)
                 self.assertEqual(options.get('window_height'), 600)
-        gui.on_window_state_event(
-            gui, types.SimpleNamespace(new_window_state=Gdk.WindowState(0)))
+        with mock.patch.object(gui, '_maximize_pending', True), \
+                mock.patch.object(gdk_window, 'get_state', return_value=Gdk.WindowState(0)), \
+                mock.patch.object(gui, 'get_size', return_value=(640, 480)):
+            gui.on_size_allocate(gui, None)
+        self.assertEqual(options.get('window_width'), 800)
+        self.assertEqual(options.get('window_height'), 600)
+        tiled_fullscreen = Gdk.WindowState.FULLSCREEN | Gdk.WindowState.TILED
+        with mock.patch.object(gdk_window, 'get_state', return_value=tiled_fullscreen), \
+                mock.patch.object(gui, 'get_size', return_value=(960, 1080)):
+            gui.on_size_allocate(gui, None)
+        self.assertEqual(options.get('window_width'), 960)
+        self.assertEqual(options.get('window_height'), 1080)
+
+    def test_configure_saves_only_position(self):
+        """configure-event must not save a size inflated by stale decorations"""
+        gui = self.get_window()
+        self.refresh_gui()
+        options.set('window_width', 800)
+        options.set('window_height', 600)
+        with mock.patch.object(gui.get_window(), 'get_state',
+                               return_value=Gdk.WindowState(0)), \
+                mock.patch.object(gui, 'get_position', return_value=(70, 80)), \
+                mock.patch.object(gui, 'get_size', return_value=(654, 494)):
+            gui.on_configure_event(gui, None)
+        self.assertEqual(options.get('window_x'), 70)
+        self.assertEqual(options.get('window_y'), 80)
+        self.assertEqual(options.get('window_width'), 800)
+        self.assertEqual(options.get('window_height'), 600)
+
+    def test_save_geometry_skips_unready_window(self):
+        """Geometry is not saved before on_show() or after the window is gone"""
+        gui = self.get_window()
+        self.refresh_gui()
+        options.set('window_width', 800)
+        options.set('window_height', 600)
+        with mock.patch.object(gui.get_window(), 'get_state',
+                               return_value=Gdk.WindowState(0)), \
+                mock.patch.object(gui, 'get_size', return_value=(640, 480)):
+            with mock.patch.object(gui, '_geometry_ready', False):
+                gui.on_size_allocate(gui, None)
+            with mock.patch.object(gui, 'get_window', return_value=None):
+                gui.on_size_allocate(gui, None)
+        self.assertEqual(options.get('window_width'), 800)
+        self.assertEqual(options.get('window_height'), 600)
+
+    def test_exit_saves_geometry(self):
+        gui = self.get_window()
+        self.refresh_gui()
+        for handler, method in ((gui.on_delete_event, 'close'),
+                                (gui.on_quit, 'commit')):
+            with self.subTest(method=method):
+                options.set('window_width', 800)
+                options.set('window_height', 600)
+                with mock.patch.object(gui.get_window(), 'get_state',
+                                       return_value=Gdk.WindowState(0)), \
+                        mock.patch.object(gui, 'get_size', return_value=(640, 480)), \
+                        mock.patch.object(options, method) as flush, \
+                        mock.patch('bleachbit.GuiWindow.Gtk.main_level', return_value=1), \
+                        mock.patch('bleachbit.GuiWindow.Gtk.main_quit'):
+                    handler(gui, None)
+                    self.assertEqual(options.get('window_width'), 640)
+                    self.assertEqual(options.get('window_height'), 480)
+                    flush.assert_called_once_with()
+
+    def test_unmaximize_restores_saved_size(self):
+        """A maximized start must restore the remembered size"""
+        gui = self.get_window()
+        screen = gui.get_screen()
+        if hasattr(screen, 'supports_net_wm_hint') and not screen.supports_net_wm_hint(
+                Gdk.atom_intern('_NET_WM_STATE_MAXIMIZED_VERT', False)):
+            self.skipTest('Window manager does not support maximize')
+        deadline = time.monotonic() + 0.1
+        while time.monotonic() < deadline:
+            self.refresh_gui(0.02)
+        monitor = gui.get_display().get_monitor_at_window(gui.get_window())
+        info = monitor.get_workarea()
+        width, height = 820, 640
+        if info.width < width + 120 or info.height < height + 120:
+            width, height = 640, 480
+        x, y = info.x + 60, info.y + 60
+        options.set('remember_geometry', True)
+        options.set('window_fullscreen', False)
+        options.set('window_maximized', True)
+        options.set('window_x', x)
+        options.set('window_y', y)
+        options.set('window_width', width)
+        options.set('window_height', height)
+
+        def restore_window():
+            if gui.get_window() is None:
+                return
+            if gui.is_maximized():
+                gui.unmaximize()
+            gui.resize(800, 600)
+            deadline = time.monotonic() + 0.5
+            while time.monotonic() < deadline and gui.get_size() != (800, 600):
+                self.refresh_gui(0.02)
+            self.refresh_gui()
+        self.addCleanup(restore_window)
+
+        gui.on_show(gui)
+        deadline = time.monotonic() + 2
+        while time.monotonic() < deadline and not gui.is_maximized():
+            self.refresh_gui(0.02)
+        self.assertTrue(gui.is_maximized())
+        self.assertEqual(options.get('window_width'), width)
+        self.assertEqual(options.get('window_height'), height)
+        gui.unmaximize()
+        deadline = time.monotonic() + 2
+        while time.monotonic() < deadline and (
+                gui.is_maximized() or gui.get_size() != (width, height) or
+                (options.get('window_width'), options.get('window_height')) != (width, height)):
+            self.refresh_gui(0.02)
+        self.assertFalse(gui.is_maximized())
+        alloc = gui.get_size()
+        minimum = gui.get_preferred_size()[0]
+        self.assertEqual(
+            (alloc.width, alloc.height), (width, height),
+            f'state={gui.get_window().get_state()}, '
+            f'minimum={(minimum.width, minimum.height)}, '
+            f'allocation={(gui.get_allocated_width(), gui.get_allocated_height())}')
+        self.assertEqual(options.get('window_width'), width)
+        self.assertEqual(options.get('window_height'), height)
+        if 'Wayland' not in type(screen.get_display()).__name__:
+            pos = gui.get_position()
+            self.assertEqual((pos.root_x, pos.root_y), (x, y))
 
     def test_refresh_supersedes_running_registration(self):
         """A new refresh stops the registration still running"""
@@ -1135,6 +1296,20 @@ class GUITestCase(common.BleachbitTestCase):
                 self.assertRaises(RuntimeError):
             gui.cb_register_cleaners_done()
         self.assertTrue(gui.run_button_get_sensitive())
+
+        def failing_register(*_args, **_kwargs):
+            yield True
+            raise RuntimeError('registration failed')
+
+        with mock.patch('bleachbit.GuiWindow.register_cleaners',
+                        side_effect=failing_register), \
+                common.capture_glib_exceptions() as glib_errors:
+            gui.cb_refresh_operations()
+            self.refresh_gui()
+        self.assertEqual([RuntimeError], [error[0] for error in glib_errors])
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+        self.assertFalse(gui.progressbar.get_visible())
 
     def test_run_operations(self):
         gui = self.get_window()

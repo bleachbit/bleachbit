@@ -18,6 +18,7 @@ import glob
 import json
 import locale
 import logging
+import ntpath
 import os
 import os.path
 import re
@@ -1449,11 +1450,20 @@ def listdir(directory):
 
 
 def same_partition(dir1, dir2):
-    """Are both directories on the same partition?"""
+    """Are both directories on the same partition?
+
+    On POSIX, directories on different subvolumes of the same storage
+    pool (such as btrfs) are also treated as sharing a partition.
+    """
     if IS_WINDOWS:
         try:
-            # st_dev is the volume serial number
-            return os.stat(dir1).st_dev == os.stat(dir2).st_dev
+            # st_dev is the 64-bit volume ID from FILE_ID_INFO (or 32-bit
+            # serial on FAT), or 0 when the volume reports none (such as a
+            # zero-serial RAM disk).
+            dev1 = os.stat(dir1).st_dev
+            dev2 = os.stat(dir2).st_dev
+            if dev1 or dev2:
+                return dev1 == dev2
         except OSError as e:
             # 5 = access denied: Microsoft Office 2010 Starter Edition has a
             #     virtual drive that gives access denied.
@@ -1461,17 +1471,19 @@ def same_partition(dir1, dir2):
             #     https://bugs.launchpad.net/bleachbit/+bug/1474848
             #     https://github.com/az0/bleachbit/issues/27
             # 1326 = logon failure: disconnected network drive.
-            if getattr(e, 'winerror', None) in (5, 1326):
-                return dir1[0] == dir2[0]
-            raise
+            if getattr(e, 'winerror', None) not in (5, 1326):
+                raise
+        return ntpath.splitdrive(dir1)[0].upper() == ntpath.splitdrive(dir2)[0].upper()
     if os.stat(dir1).st_dev == os.stat(dir2).st_dev:
         return True
     # Subvolumes of one btrfs file system have their own device numbers
     # but share its blocks, and free blocks can change between the calls.
+    # Pseudo-filesystems report f_blocks == 0 and do not share a pool.
     # pylint: disable=no-member
     stat1 = os.statvfs(dir1)
     stat2 = os.statvfs(dir2)
-    return stat1.f_blocks == stat2.f_blocks and \
+    return stat1.f_blocks > 0 and \
+        stat1.f_blocks == stat2.f_blocks and \
         abs(stat1.f_bfree - stat2.f_bfree) <= stat1.f_blocks // 1000
 
 

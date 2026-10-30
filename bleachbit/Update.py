@@ -116,7 +116,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     try:
         response = fetch_url(url,
                              headers=get_update_request_headers())
-    except RequestException as e:
+    except (RequestException, OSError) as e:
         logger.error(
             _('Error when opening a network connection to check for updates. Please verify the network is working and that a firewall is not blocking this application. Error message: {}').format(e))
         logger.debug('URL %s has IP address %s', url, get_ip_for_url(url))

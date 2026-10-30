@@ -2351,19 +2351,22 @@ State=AAAA/wA...
         self.assertTrue(same_partition(home, home))
         if IS_POSIX:
             self.assertFalse(same_partition(home, '/dev'))
+            if os.path.isdir('/proc') and os.path.isdir('/sys'):
+                self.assertFalse(same_partition('/proc', '/sys'))
         elif IS_WINDOWS:
             home_drive = os.path.splitdrive(home)[0]
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():
                 this_drive = os.path.splitdrive(drive)[0]
+                self.assertTrue(same_partition(drive, drive))
                 self.assertEqual(same_partition(home, drive),
                                  home_drive == this_drive)
 
     def test_same_partition_device(self):
         """same_partition() compares devices, not only sizes or free space"""
-        devices = {'/a': 1, '/b': 2, '/c': 3, '/d': 4}
+        devices = {'/a': 1, '/b': 2, '/c': 3, '/d': 4, '/proc': 5, '/sys': 6}
         blocks = {'/a': (1000, 500), '/b': (1000, 400), '/c': (1000, 500),
-                  '/d': (1000, 499)}
+                  '/d': (1000, 499), '/proc': (0, 0), '/sys': (0, 0)}
 
         def fake_stat(path):
             return unittest.mock.Mock(st_dev=devices[path])
@@ -2382,6 +2385,9 @@ State=AAAA/wA...
             self.assertTrue(same_partition('/a', '/c'))
             # and one whose free space changed between the calls
             self.assertTrue(same_partition('/a', '/d'))
+            # pseudo-filesystems with f_blocks == 0
+            self.assertTrue(same_partition('/proc', '/proc'))
+            self.assertFalse(same_partition('/proc', '/sys'))
 
         # Free space on C: changes between the two lookups
         changing_free_space = unittest.mock.Mock(side_effect=[1000, 996])
@@ -2389,6 +2395,13 @@ State=AAAA/wA...
                 unittest.mock.patch('bleachbit.FileUtilities.free_space', changing_free_space), \
                 unittest.mock.patch('os.stat', return_value=unittest.mock.Mock(st_dev=7)):
             self.assertTrue(same_partition('C:\\Temp', 'C:\\'))
+
+        # Volumes with st_dev == 0 (such as zero-serial RAM disks) fall back
+        # to comparing drive roots instead of colliding at 0 == 0.
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_WINDOWS', True), \
+                unittest.mock.patch('os.stat', return_value=unittest.mock.Mock(st_dev=0)):
+            self.assertTrue(same_partition('Z:\\Temp', 'z:\\'))
+            self.assertFalse(same_partition('Y:\\Temp', 'Z:\\'))
 
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""
