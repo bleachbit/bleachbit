@@ -15,8 +15,8 @@ import os
 
 import bleachbit
 from bleachbit import FileUtilities, IS_MAC
-from bleachbit.Special import (
-    SQLITE_PROBE_TIMEOUT, sqlite_table_exists, _sqlite_uri)
+from bleachbit.FileUtilities import SQLITE_BUSY_TIMEOUT
+from bleachbit.Special import sqlite_table_exists, _sqlite_uri
 
 logger = logging.getLogger(__name__)
 
@@ -132,7 +132,7 @@ def list_cookies(path):
     (table_name, host_column) = detect_browser(path)
     uri = _sqlite_uri(path)
     with contextlib.closing(sqlite3.connect(
-            uri, uri=True, timeout=SQLITE_PROBE_TIMEOUT)) as conn:
+            uri, uri=True, timeout=SQLITE_BUSY_TIMEOUT)) as conn:
         cursor = conn.cursor()
         cursor.execute(f"SELECT distinct {host_column} FROM {table_name}")
         return cursor.fetchall()
@@ -199,7 +199,8 @@ def delete_cookies(path, keep_list, really_delete=False):
     uri = _sqlite_uri(path, None if really_delete else 'ro')
 
     try:
-        with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
+        with contextlib.closing(sqlite3.connect(
+                uri, uri=True, timeout=SQLITE_BUSY_TIMEOUT)) as conn:
             cursor = conn.cursor()
             if shred_enabled:
                 cursor.execute('PRAGMA secure_delete = ON;')

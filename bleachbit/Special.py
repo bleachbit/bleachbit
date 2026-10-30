@@ -33,6 +33,7 @@ from urllib.parse import quote, urlparse, urlunparse
 
 # local application imports
 from bleachbit import FileUtilities, IS_WINDOWS
+from bleachbit.FileUtilities import SQLITE_BUSY_TIMEOUT
 from bleachbit.General import reject_xml_dtd
 from bleachbit.Options import options
 
@@ -40,11 +41,6 @@ logger = logging.getLogger(__name__)
 
 # SQLite primary result code for "unable to open database file".
 SQLITE_CANTOPEN = 14
-
-# A browser keeps its databases locked for as long as it runs, so waiting
-# out sqlite3's default five seconds cannot succeed. Allow only enough for
-# another process to finish a write it has already started.
-SQLITE_PROBE_TIMEOUT = 0.2
 
 
 def __get_chrome_history(path, fn='History'):
@@ -118,7 +114,7 @@ def sqlite_table_exists(pathname, table):
     try:
         uri = _sqlite_readonly_uri(pathname)
         with contextlib.closing(sqlite3.connect(
-                uri, uri=True, timeout=SQLITE_PROBE_TIMEOUT)) as conn:
+                uri, uri=True, timeout=SQLITE_BUSY_TIMEOUT)) as conn:
             if conn.execute(cmd, (table,)).fetchone():
                 return True
     except sqlite3.OperationalError as exc:
@@ -148,7 +144,7 @@ def _sqlite_is_valid_database(pathname):
     try:
         uri = _sqlite_readonly_uri(pathname)
         with contextlib.closing(sqlite3.connect(
-                uri, uri=True, timeout=SQLITE_PROBE_TIMEOUT)) as conn:
+                uri, uri=True, timeout=SQLITE_BUSY_TIMEOUT)) as conn:
             conn.execute('select 1 from sqlite_master limit 1;')
             return True
     except (sqlite3.DatabaseError, sqlite3.OperationalError) as exc:
@@ -189,7 +185,7 @@ def _get_sqlite_values(path, sql, row_factory=None, parameters=()):
     import sqlite3
     with contextlib.closing(sqlite3.connect(
             _sqlite_readonly_uri(path), uri=True,
-            timeout=SQLITE_PROBE_TIMEOUT)) as conn:
+            timeout=SQLITE_BUSY_TIMEOUT)) as conn:
         if row_factory is not None:
             conn.row_factory = row_factory
         cursor = conn.execute(sql, parameters)
