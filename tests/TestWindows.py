@@ -53,6 +53,7 @@ from bleachbit.Windows import (
     get_font_conf_file,
     get_known_folder_path,
     get_recycle_bin,
+    get_recycle_bin_metadata,
     get_windows_system_paths,
     get_windows_version,
     elevate_privileges,
@@ -350,6 +351,22 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
             self.assertLExists(extended_path(f))
+
+    def test_get_recycle_bin_metadata(self):
+        """Only top-level recycled payloads have associated restore records."""
+        payload = r'C:\$Recycle.Bin\S-1-5-21-1\$RABCDEF.txt'
+        metadata = r'C:\$Recycle.Bin\S-1-5-21-1\$IABCDEF.txt'
+        for path in (payload, payload.swapcase(), extended_path(payload)):
+            with self.subTest(path=path):
+                self.assertEqual(
+                    os.path.normcase(metadata),
+                    os.path.normcase(get_recycle_bin_metadata(path)))
+        for path in (r'C:\Users\me\$RABCDEF.txt', payload + r'\child',
+                     r'C:\Users\me\$Recycle.Bin\S-1-5-21-1\$RABCDEF.txt',
+                     r'C:\$Recycle.Bin\S-1-5-21-1\$RROOT\sub\$RABCDEF.txt',
+                     metadata, '$RABCDEF.txt'):
+            with self.subTest(path=path):
+                self.assertIsNone(get_recycle_bin_metadata(path))
 
     @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')

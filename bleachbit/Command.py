@@ -132,6 +132,34 @@ class Delete:
         yield ret
 
 
+class DeleteRecycleBinMetadata(Delete):
+
+    """Delete a recycle-bin record only after its payload has disappeared."""
+
+    def __init__(self, path, payload):
+        super().__init__(path)
+        self.payload = payload
+
+    def execute(self, really_delete):
+        if FileUtilities.whitelisted(self.payload):
+            yield ret_keep_list(self.path)
+            return
+        if really_delete:
+            try:
+                os.lstat(FileUtilities.extended_path(self.payload))
+            except FileNotFoundError:
+                pass
+            else:
+                # This also preserves restore information for kept descendants
+                # and for payloads whose deletion failed or awaits a reboot.
+                return
+        try:
+            os.lstat(FileUtilities.extended_path(self.path))
+        except FileNotFoundError:
+            return
+        yield from super().execute(really_delete)
+
+
 class Function:
 
     """Execute a simple Python function"""
