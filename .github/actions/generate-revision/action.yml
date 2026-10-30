@@ -18,5 +18,6 @@ runs:
         {
           echo "revision = \"$rev\""
           echo "build_number = \"$BUILD_NUMBER\""
+          echo "build_date = \"$(date -u +%F)\""
         } > bleachbit/Revision.py
         echo "revision=$rev" >> "$GITHUB_OUTPUT"

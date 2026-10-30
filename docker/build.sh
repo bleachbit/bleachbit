@@ -49,6 +49,10 @@ RUN_ENV=(--env HOME="$HOME_IN_CONTAINER" --env DISTRO_NAME="$DISTRO")
 if [[ -n "${SKIP_TESTS:-}" ]]; then
     RUN_ENV+=(--env SKIP_TESTS="$SKIP_TESTS")
 fi
+# `make stamp` falls back to this when the container lacks git or .git
+# (e.g., the rpmbuild tree extracted from the sdist tarball).
+REVISION=$(cd "$ROOT_DIR" && git rev-parse --short=8 HEAD 2>/dev/null || true)
+RUN_ENV+=(--env REVISION="$REVISION")
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 IMAGE=""

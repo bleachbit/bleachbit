@@ -11,7 +11,7 @@ import sys
 from importlib.util import find_spec
 
 import bleachbit
-from bleachbit import General, IS_MAC, IS_POSIX, IS_WINDOWS
+from bleachbit import General, IS_MAC, IS_POSIX, IS_WINDOWS, SystemInformation
 from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -443,5 +443,15 @@ def get_startup_messages(auto_exit):
                   'access to some files, and some cleaners will not work.\n\n'
                   'To fix this, open System Settings > Privacy & Security > Full Disk '
                   'Access, turn on BleachBit, and then restart BleachBit.'), True))
+
+    # The outdated-build notice is the offline fallback used only when
+    # the online update check cannot report whether a newer version
+    # exists: the check is disabled here, or (when it does run) it
+    # fails and GuiWindow.check_online_updates adds the notice then.
+    if (auto_exit or not bleachbit.online_update_notification_enabled
+            or not options.get('check_online_updates')):
+        notice = SystemInformation.get_outdated_build_notice()
+        if notice:
+            ret_msgs.append((notice, False))
 
     return ret_msgs

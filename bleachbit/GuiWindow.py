@@ -11,7 +11,7 @@ import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, Language, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, Language, SystemInformation, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
@@ -1623,23 +1623,27 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # TRANSLATORS: Error message shown when checking for updates fails.
         # %s is the error details.
         log_msg = _("Error when checking for updates: %s")
+        updates = None
         try:
             from bleachbit import Update
-        except ImportError as e:
-            logger.error(log_msg, e)
-            return
-        try:
             updates = Update.check_updates(options.get('check_beta'),
                                            options.get('update_winapp2'),
                                            self.append_text,
                                            lambda: GLib.idle_add(self.cb_refresh_operations))
-
+        except ImportError as e:
+            logger.error(log_msg, e)
         except Exception as e:
             logger.exception(log_msg, e)
-        else:
+        if updates is not None:
             self._available_updates = updates
 
             def update_button_state():
                 if updates and self.textbuffer is not None:
                     self.update_button.show()
             GLib.idle_add(update_button_state)
+        else:
+            # The online update check failed, so fall back to the
+            # offline outdated-build notice.
+            notice = SystemInformation.get_outdated_build_notice()
+            if notice:
+                GLib.idle_add(self.append_text, notice + '\n')

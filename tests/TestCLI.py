@@ -11,7 +11,6 @@ Test case for module CLI
 
 # standard imports
 import copy
-import datetime
 import errno
 import io
 import locale
@@ -166,8 +165,7 @@ class CLITestCase(common.BleachbitTestCase):
             'bleachbit.CLI',
             'bleachbit.CleanerML',
             'ERROR',
-            'DEBUG',
-            datetime.datetime.now().strftime('%Y-%m-%d')
+            'DEBUG'
         ]
 
         for delimiter in (' ', '='):
@@ -193,6 +191,14 @@ class CLITestCase(common.BleachbitTestCase):
                 for stderr_forbidden_text in stderror_forbidden_texts:
                     self.assertNotIn(stderr_forbidden_text, stderr,
                                      f"The text '{stderr_forbidden_text}' was found in stderr")
+
+                # The file handler stamps each record with a timestamp
+                # such as "2026-10-30 18:57:15,591", which must not leak
+                # into stderr. Match the timestamp rather than the bare
+                # date because the console output may legitimately
+                # contain a date (e.g. "Build date = 2026-10-30").
+                self.assertNotRegex(
+                    stderr, r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}')
 
                 for required_text in file_required_texts:
                     self.assertIn(required_text, log_content,

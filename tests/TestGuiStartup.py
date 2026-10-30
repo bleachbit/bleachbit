@@ -63,6 +63,41 @@ class GuiStartupTestCase(common.BleachbitTestCase):
             any('Access the application menu' in msg for msg, _ in messages))
         self.assertFalse(stub_options.get('first_start'))
 
+    def test_outdated_build_notice_when_check_disabled(self):
+        """An old build warns when the online update check is disabled"""
+        stub_options = StubOptions()
+        stub_options.values['check_online_updates'] = False
+        with mock.patch.object(GuiStartup, 'options', stub_options), \
+                mock.patch.object(GuiStartup, 'unset_sslkeylogfile', return_value=False), \
+                mock.patch('bleachbit.SystemInformation.get_outdated_build_notice',
+                           return_value='OUTDATED BUILD NOTICE'):
+            messages = GuiStartup.get_startup_messages(auto_exit=False)
+        self.assertIn(('OUTDATED BUILD NOTICE', False), messages)
+
+    def test_outdated_build_notice_when_check_enabled(self):
+        """An old build does not warn while the online check is pending"""
+        stub_options = StubOptions()
+        stub_options.values['check_online_updates'] = True
+        with mock.patch.object(GuiStartup, 'options', stub_options), \
+                mock.patch.object(GuiStartup, 'unset_sslkeylogfile', return_value=False), \
+                mock.patch('bleachbit.online_update_notification_enabled', True), \
+                mock.patch('bleachbit.SystemInformation.get_outdated_build_notice',
+                           return_value='OUTDATED BUILD NOTICE'):
+            messages = GuiStartup.get_startup_messages(auto_exit=False)
+        self.assertNotIn(('OUTDATED BUILD NOTICE', False), messages)
+
+    def test_outdated_build_notice_when_auto_exit(self):
+        """--exit skips the online check, so an old build still warns"""
+        stub_options = StubOptions()
+        stub_options.values['check_online_updates'] = True
+        with mock.patch.object(GuiStartup, 'options', stub_options), \
+                mock.patch.object(GuiStartup, 'unset_sslkeylogfile', return_value=False), \
+                mock.patch('bleachbit.online_update_notification_enabled', True), \
+                mock.patch('bleachbit.SystemInformation.get_outdated_build_notice',
+                           return_value='OUTDATED BUILD NOTICE'):
+            messages = GuiStartup.get_startup_messages(auto_exit=True)
+        self.assertIn(('OUTDATED BUILD NOTICE', False), messages)
+
     def test_has_selected_warning_option(self):
         """Test the function _has_selected_warning_option()"""
         # Register cleaners to populate backends

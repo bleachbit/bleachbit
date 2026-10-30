@@ -9,14 +9,18 @@
 Test case for module SystemInformation
 """
 
+import datetime
 import os
 import re
+import types
 from unittest import mock
 
 
 from tests import common
 from bleachbit import IS_POSIX, FS_SCAN_RE_FLAGS
-from bleachbit.SystemInformation import get_system_information, get_version, anonymize_system_information
+from bleachbit.SystemInformation import (NOTICE_AFTER_DAYS, anonymize_system_information,
+                                         get_build_age_days, get_build_date, get_outdated_build_notice,
+                                         get_system_information, get_version)
 
 
 class SystemInformationTestCase(common.BleachbitTestCase):
@@ -59,6 +63,14 @@ class SystemInformationTestCase(common.BleachbitTestCase):
             ret = get_system_information()
         self.assertIn('platform.mac_ver() = 99.0\n', ret)
 
+    def test_get_system_information_revision(self):
+        """Test that Git revision appears in get_system_information when Revision module exists."""
+        fake_revision_mod = mock.MagicMock()
+        fake_revision_mod.revision = 'abcd1234'
+        with mock.patch.dict('sys.modules', {'bleachbit.Revision': fake_revision_mod}):
+            ret = get_system_information()
+        self.assertIn('Git revision = abcd1234\n', ret)
+
     @common.skipUnlessWindows
     def test_get_system_information_invalid_unicode_userprofile(self):
         invalid_userprofile = 'C:\\Users\\invalid\ud803'
@@ -85,6 +97,63 @@ class SystemInformationTestCase(common.BleachbitTestCase):
         self.assertIsString(ret)
         # check it is in a.b.c.d format
         self.assertRegex(ret, r'^\d+\.\d+\.\d+\.\d+$')
+
+    def test_get_build_date(self):
+        """Test get_build_date() with and without a Revision stamp"""
+        # No Revision module: date unknown.
+        with mock.patch('bleachbit.Revision', None, create=True):
+            self.assertIsNone(get_build_date())
+        # Revision without build_date: date unknown.
+        fake_revision = types.ModuleType('bleachbit.Revision')
+        with mock.patch('bleachbit.Revision', fake_revision, create=True):
+            self.assertIsNone(get_build_date())
+        # build_date of the wrong type: date unknown.
+        fake_revision.build_date = 20261026
+        with mock.patch('bleachbit.Revision', fake_revision, create=True):
+            self.assertIsNone(get_build_date())
+        # Malformed build_date: date unknown.
+        fake_revision.build_date = 'not a date'
+        with mock.patch('bleachbit.Revision', fake_revision, create=True):
+            self.assertIsNone(get_build_date())
+        # Valid ISO build_date.
+        fake_revision.build_date = '2026-10-26'
+        with mock.patch('bleachbit.Revision', fake_revision, create=True):
+            self.assertEqual(get_build_date(), datetime.date(2026, 10, 26))
+
+    def test_get_build_age_days(self):
+        """Test get_build_age_days() including unknown and future dates"""
+        with mock.patch('bleachbit.SystemInformation.get_build_date', return_value=None):
+            self.assertIsNone(get_build_age_days())
+        old_date = datetime.date.today() - datetime.timedelta(days=10)
+        with mock.patch('bleachbit.SystemInformation.get_build_date', return_value=old_date):
+            self.assertEqual(get_build_age_days(), 10)
+        # A build date in the future (clock skew) counts as fresh.
+        future_date = datetime.date.today() + datetime.timedelta(days=10)
+        with mock.patch('bleachbit.SystemInformation.get_build_date', return_value=future_date):
+            self.assertEqual(get_build_age_days(), 0)
+
+    def test_get_outdated_build_notice(self):
+        """Test get_outdated_build_notice() around the age threshold"""
+        with mock.patch('bleachbit.SystemInformation.get_build_date', return_value=None):
+            self.assertIsNone(get_outdated_build_notice())
+        # At the threshold there is no notice yet.
+        threshold = datetime.date.today() - datetime.timedelta(days=NOTICE_AFTER_DAYS)
+        with mock.patch('bleachbit.SystemInformation.get_build_date', return_value=threshold):
+            self.assertIsNone(get_outdated_build_notice())
+        # One day past the threshold the notice appears.
+        old = threshold - datetime.timedelta(days=1)
+        with mock.patch('bleachbit.SystemInformation.get_build_date', return_value=old):
+            notice = get_outdated_build_notice()
+            self.assertIsString(notice)
+            self.assertIn('more than a year', notice)
+            self.assertIn('bleachbit.org', notice)
+
+    def test_get_system_information_build_date(self):
+        """A stamped build date appears in the system information"""
+        build_date = datetime.date(2026, 10, 26)
+        with mock.patch('bleachbit.SystemInformation.get_build_date', return_value=build_date):
+            ret = get_system_information()
+        self.assertIn('Build date = 2026-10-26', ret)
 
     @common.skipIfWindows
     def test_anonymize_system_information_posix_non_root(self):

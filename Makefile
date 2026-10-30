@@ -8,7 +8,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh
 
-.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint require-lint-tools delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
+.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint require-lint-tools delete_windows_files pretty stamp check-revision appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -87,6 +87,10 @@ clean:
 	@rm -vrf docker-artifacts # Docker build outputs
 	@rm -rf "$(APPIMAGE_APPDIR)"
 	@rm -f $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
+	@rm -f BleachBit-*.AppImage
+
+clean-appimage:
+	@rm -rf "$(APPIMAGE_APPDIR)"
 	@rm -f BleachBit-*.AppImage
 
 install:
@@ -271,6 +275,34 @@ pretty:
 		echo "WARNING: Missing xmllint. APT users, try: sudo apt install libxml2-utils"; \
 	fi
 
+stamp:
+	# Rebuild bleachbit/Revision.py so official builds know their git
+	# revision (from .git, else the REVISION environment variable), CI
+	# build number, and build date (for the outdated-build notice).
+	@rev=$$(git rev-parse --short=8 HEAD 2>/dev/null || echo "$${REVISION:-}"); \
+	{ \
+		if [ -n "$$rev" ]; then \
+			echo "revision = \"$$rev\""; \
+		fi; \
+		if [ -n "$${BUILD_NUMBER:-$${GITHUB_RUN_NUMBER:-}}" ]; then \
+			echo "build_number = \"$${BUILD_NUMBER:-$${GITHUB_RUN_NUMBER}}\""; \
+		fi; \
+		echo "build_date = \"$$(date -u +%F)\""; \
+	} > bleachbit/Revision.py
+
+check-revision:
+	# Official package builds must install a Revision.py stamped with
+	# the git revision and build date, so fail loudly here rather than
+	# ship an unidentified build. Tarballs get it from `make stamp` at
+	# sdist time; builds without .git use the REVISION env var.
+	@grep -q '^revision = "' bleachbit/Revision.py 2>/dev/null && \
+		grep -q '^build_date = "' bleachbit/Revision.py || { \
+		echo "ERROR: bleachbit/Revision.py is not stamped with a git revision and build date." >&2; \
+		echo "Create the source tarball from a git checkout (see sdist.sh or 'make stamp')," >&2; \
+		echo "or set the REVISION environment variable and run 'make stamp'." >&2; \
+		exit 1; \
+	}
+
 # AppImage build
 APPIMAGE_BUILD_DIR ?= appimage-build
 APPIMAGE_APPDIR := $(abspath $(APPIMAGE_BUILD_DIR))
@@ -297,6 +329,8 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	rm -rf "$(APPIMAGE_APPDIR)"
 	# Build translations (.mo files)
 	$(MAKE) -C po
+	# Stamp revision, build number, and build date into Revision.py
+	$(MAKE) stamp
 	# Install application into AppDir with prefix=/usr
 	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr
 	# Copy icon to hicolor theme so linuxdeploy can find it
