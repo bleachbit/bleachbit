@@ -160,15 +160,20 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
     progress_cb = _make_progress_cb(
         stop_mode, stop_value, output_folder, on_progress)
 
+    # Filled as files are created, so it survives a generation error
+    generated_file_names = []
+    error_msg = None
     try:
         if inspiration == 0:
-            generated_file_names = generate_2600(
+            generate_2600(
                 file_count, output_folder, on_progress=progress_cb,
-                should_stop=should_stop)
+                should_stop=should_stop,
+                generated_file_names=generated_file_names)
         elif inspiration == 1:
-            generated_file_names = generate_emails(
+            generate_emails(
                 file_count, output_folder, on_progress=progress_cb,
-                should_stop=should_stop)
+                should_stop=should_stop,
+                generated_file_names=generated_file_names)
         else:
             raise ValueError(f'Invalid inspiration {inspiration}')
     except Exception as exc:
@@ -176,10 +181,9 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
         # TRANSLATORS: Error message shown when chaff file generation fails.
         # The placeholder is for the technical error details.
         error_msg = _("Error generating chaff: {error}").format(error=str(exc))
-        on_progress(1.0, is_done=True, error=error_msg)
-        return
     try:
-        if delete_when_finished and not abort_event.is_set():
+        # Abort stops only the generation, and closing the dialog sets it too
+        if delete_when_finished:
             # TRANSLATORS: Progress message shown while deleting chaff files.
             # 'Deleting files' is a present participle.
             # To indicate an ongoing operation, include the ellipsis as literal
@@ -187,8 +191,6 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
             on_progress(0, msg=_('Deleting files\u2026'))
             count = len(generated_file_names)
             for i, fn in enumerate(generated_file_names):
-                if abort_event.is_set():
-                    break
                 os.unlink(fn)
                 on_progress(1.0 * (i + 1) / count)
     except Exception as exc:
@@ -197,9 +199,7 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
         # The placeholder is for the technical error details.
         error_msg = _("Error deleting chaff files: {error}").format(
             error=str(exc))
-        on_progress(1.0, is_done=True, error=error_msg)
-        return
-    on_progress(1.0, is_done=True)
+    on_progress(1.0, is_done=True, error=error_msg)
 
 
 class ChaffDialog(InfoBarMixin, Gtk.Dialog):
@@ -439,8 +439,13 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
 
         # Start download in background thread
         def _worker():
-            success = download_models_thread(on_download_error)
-            on_thread_complete(success)
+            success = False
+            try:
+                success = download_models_thread(on_download_error)
+            except Exception:
+                logger.exception('Error downloading chaff models')
+            finally:
+                on_thread_complete(success)
 
         thread = threading.Thread(target=_worker)
         thread.start()
@@ -458,10 +463,14 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
                               Gtk.MessageType.ERROR)
             return
 
+        # Made before any download so closing the dialog can cancel it
+        self._abort_event = threading.Event()
         from bleachbit.Chaff import have_models
         if not have_models():
             # Download models first, then proceed to file generation
             def on_download_complete(success):
+                if self._abort_event.is_set():
+                    return
                 if success:
                     self._start_file_generation(
                         stop_mode, stop_value, inspiration, output_dir, delete_when_finished)
@@ -478,7 +487,6 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
     def _start_file_generation(self, stop_mode, stop_value, inspiration,
                                output_dir, delete_when_finished):
         """Start generating files after download is complete."""
-        self._abort_event = threading.Event()
 
         def _on_progress(fraction, msg, is_done, error=None):
             """Update progress bar from GLib main loop"""

@@ -5,9 +5,10 @@
 # later.  See the COPYING file in the top-level directory.
 
 import bz2
-from datetime import datetime
+from datetime import datetime, timedelta
 import email.generator
 from email.mime.text import MIMEText
+import hashlib
 import json
 import logging
 import os
@@ -156,8 +157,10 @@ def _get_random_datetime(min_year=2011, max_year=2012):
     date = datetime.strptime(
         f'{random.randint(1, 365)} {random.randint(min_year, max_year)}',
         '%j %Y')
-    # Saturday, September 15, 2012 2:20 PM
-    return date.strftime('%A, %B %d, %Y %I:%M %p')
+    date += timedelta(minutes=random.randrange(24 * 60))
+    # Saturday, September 15, 2012 2:20 PM: no zero padding, unlike %d and %I
+    hour = date.hour % 12 or 12
+    return date.strftime(f'%A, %B {date.day}, %Y {hour}:%M %p')
 
 
 def _get_random_content(content_model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON):
@@ -187,6 +190,15 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
     return message
 
 
+def _is_model_valid(fn, basename):
+    """Check that the model file exists and matches its SHA-512"""
+    try:
+        with open(fn, 'rb') as f:
+            return hashlib.sha512(f.read()).hexdigest() == MODEL_SHA512[basename]
+    except OSError:
+        return False
+
+
 def download_models(models_dir=DEFAULT_MODELS_DIR,
                     on_error=None):
     """Download models
@@ -198,9 +210,11 @@ def download_models(models_dir=DEFAULT_MODELS_DIR,
     from bleachbit.Network import download_url_to_fn
     for basename in (MODEL_BASENAMES):
         fn = os.path.join(models_dir, basename)
-        if os.path.exists(fn):
+        if _is_model_valid(fn, basename):
             logger.debug('File %s already exists', fn)
             continue
+        if os.path.exists(fn):
+            logger.warning('Downloading %s again because it is corrupt', fn)
         this_file_success = False
         for url_template in URL_TEMPLATES:
             url = url_template % basename
@@ -220,7 +234,8 @@ def generate_emails(number_of_emails,
                     number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON,
                     on_progress=None,
                     should_stop=None,
-                    *_kwargs):
+                    *_kwargs,
+                    generated_file_names=None):
     logger.debug('Loading two email models')
     subject_model_path = os.path.join(
         models_dir, 'clinton_subject_model.json.bz2')
@@ -229,15 +244,17 @@ def generate_emails(number_of_emails,
     subject_model = load_subject_model(subject_model_path)
     content_model = load_content_model(content_model_path)
     logger.debug('Generating %s emails', f'{number_of_emails:,}')
-    generated_file_names = []
+    if generated_file_names is None:
+        generated_file_names = []
     cumulative_size = 0
     for i in range(1, number_of_emails + 1):
         with tempfile.NamedTemporaryFile(mode='w+', prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
+            # Before writing, so the caller can delete it if the write fails
+            generated_file_names.append(email_output_file.name)
             email_generator = email.generator.Generator(email_output_file)
             msg = _generate_email(
                 subject_model, content_model, number_of_sentences=number_of_sentences)
             email_generator.write(msg.as_string())
-            generated_file_names.append(email_output_file.name)
             cumulative_size += email_output_file.tell()
         if on_progress:
             on_progress(1.0 * i / number_of_emails,
@@ -264,18 +281,21 @@ def generate_2600(file_count,
                   output_dir,
                   model_dir=DEFAULT_MODELS_DIR,
                   on_progress=None,
-                  should_stop=None):
+                  should_stop=None,
+                  generated_file_names=None):
     logger.debug('Loading 2600 model')
     model_path = os.path.join(model_dir, '2600_model.json.bz2')
     model = _load_model(model_path)
     logger.debug('Generating %s files', f'{file_count:,}')
-    generated_file_names = []
+    if generated_file_names is None:
+        generated_file_names = []
     cumulative_size = 0
     for i in range(1, file_count + 1):
         with tempfile.NamedTemporaryFile(mode='w+', encoding='utf-8', prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
+            # Before writing, so the caller can delete it if the write fails
+            generated_file_names.append(output_file.name)
             txt = _generate_2600_file(model)
             output_file.write(txt)
-            generated_file_names.append(output_file.name)
             cumulative_size += output_file.tell()
         if on_progress:
             on_progress(1.0 * i / file_count,
@@ -292,6 +312,6 @@ def have_models():
     Used to check whether download is needed."""
     for basename in (MODEL_BASENAMES):
         fn = os.path.join(DEFAULT_MODELS_DIR, basename)
-        if not os.path.exists(fn):
+        if not _is_model_valid(fn, basename):
             return False
     return True
