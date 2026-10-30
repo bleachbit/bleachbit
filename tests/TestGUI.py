@@ -1103,7 +1103,7 @@ class GUITestCase(common.BleachbitTestCase):
             self.assertEqual(gui.stop_button.get_label(), '[Abort]')
         gui.update_headerbar_labels()
 
-    def test_configure_keeps_normal_size(self):
+    def test_size_allocate_keeps_normal_size(self):
         """A maximized or fullscreen size must not replace the saved size"""
         gui = self.get_window()
         options.set('window_width', 800)
@@ -1115,21 +1115,72 @@ class GUITestCase(common.BleachbitTestCase):
             with self.subTest(state=state):
                 with mock.patch.object(gdk_window, 'get_state', return_value=state), \
                         mock.patch.object(gui, 'get_size', return_value=(1920, 1080)):
-                    gui.on_configure_event(gui, None)
+                    gui.on_size_allocate(gui, None)
                 self.assertEqual(options.get('window_width'), 800)
                 self.assertEqual(options.get('window_height'), 600)
         with mock.patch.object(gui, '_maximize_pending', True), \
                 mock.patch.object(gdk_window, 'get_state', return_value=Gdk.WindowState(0)), \
                 mock.patch.object(gui, 'get_size', return_value=(640, 480)):
-            gui.on_configure_event(gui, None)
+            gui.on_size_allocate(gui, None)
         self.assertEqual(options.get('window_width'), 800)
         self.assertEqual(options.get('window_height'), 600)
         tiled_fullscreen = Gdk.WindowState.FULLSCREEN | Gdk.WindowState.TILED
         with mock.patch.object(gdk_window, 'get_state', return_value=tiled_fullscreen), \
                 mock.patch.object(gui, 'get_size', return_value=(960, 1080)):
-            gui.on_configure_event(gui, None)
+            gui.on_size_allocate(gui, None)
         self.assertEqual(options.get('window_width'), 960)
         self.assertEqual(options.get('window_height'), 1080)
+
+    def test_configure_saves_only_position(self):
+        """configure-event must not save a size inflated by stale decorations"""
+        gui = self.get_window()
+        self.refresh_gui()
+        options.set('window_width', 800)
+        options.set('window_height', 600)
+        with mock.patch.object(gui.get_window(), 'get_state',
+                               return_value=Gdk.WindowState(0)), \
+                mock.patch.object(gui, 'get_position', return_value=(70, 80)), \
+                mock.patch.object(gui, 'get_size', return_value=(654, 494)):
+            gui.on_configure_event(gui, None)
+        self.assertEqual(options.get('window_x'), 70)
+        self.assertEqual(options.get('window_y'), 80)
+        self.assertEqual(options.get('window_width'), 800)
+        self.assertEqual(options.get('window_height'), 600)
+
+    def test_save_geometry_skips_unready_window(self):
+        """Geometry is not saved before on_show() or after the window is gone"""
+        gui = self.get_window()
+        self.refresh_gui()
+        options.set('window_width', 800)
+        options.set('window_height', 600)
+        with mock.patch.object(gui.get_window(), 'get_state',
+                               return_value=Gdk.WindowState(0)), \
+                mock.patch.object(gui, 'get_size', return_value=(640, 480)):
+            with mock.patch.object(gui, '_geometry_ready', False):
+                gui.on_size_allocate(gui, None)
+            with mock.patch.object(gui, 'get_window', return_value=None):
+                gui.on_size_allocate(gui, None)
+        self.assertEqual(options.get('window_width'), 800)
+        self.assertEqual(options.get('window_height'), 600)
+
+    def test_exit_saves_geometry(self):
+        gui = self.get_window()
+        self.refresh_gui()
+        for handler, method in ((gui.on_delete_event, 'close'),
+                                (gui.on_quit, 'commit')):
+            with self.subTest(method=method):
+                options.set('window_width', 800)
+                options.set('window_height', 600)
+                with mock.patch.object(gui.get_window(), 'get_state',
+                                       return_value=Gdk.WindowState(0)), \
+                        mock.patch.object(gui, 'get_size', return_value=(640, 480)), \
+                        mock.patch.object(options, method) as flush, \
+                        mock.patch('bleachbit.GuiWindow.Gtk.main_level', return_value=1), \
+                        mock.patch('bleachbit.GuiWindow.Gtk.main_quit'):
+                    handler(gui, None)
+                    self.assertEqual(options.get('window_width'), 640)
+                    self.assertEqual(options.get('window_height'), 480)
+                    flush.assert_called_once_with()
 
     def test_unmaximize_restores_saved_size(self):
         """A maximized start must restore the remembered size"""
@@ -1141,7 +1192,8 @@ class GUITestCase(common.BleachbitTestCase):
         deadline = time.monotonic() + 0.1
         while time.monotonic() < deadline:
             self.refresh_gui(0.02)
-        info = get_window_info(gui)
+        monitor = gui.get_display().get_monitor_at_window(gui.get_window())
+        info = monitor.get_workarea()
         width, height = 820, 640
         if info.width < width + 120 or info.height < height + 120:
             width, height = 640, 480
@@ -1175,11 +1227,18 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual(options.get('window_height'), height)
         gui.unmaximize()
         deadline = time.monotonic() + 2
-        while time.monotonic() < deadline and gui.is_maximized():
+        while time.monotonic() < deadline and (
+                gui.is_maximized() or gui.get_size() != (width, height) or
+                (options.get('window_width'), options.get('window_height')) != (width, height)):
             self.refresh_gui(0.02)
         self.assertFalse(gui.is_maximized())
         alloc = gui.get_size()
-        self.assertEqual((alloc.width, alloc.height), (width, height))
+        minimum = gui.get_preferred_size()[0]
+        self.assertEqual(
+            (alloc.width, alloc.height), (width, height),
+            f'state={gui.get_window().get_state()}, '
+            f'minimum={(minimum.width, minimum.height)}, '
+            f'allocation={(gui.get_allocated_width(), gui.get_allocated_height())}')
         self.assertEqual(options.get('window_width'), width)
         self.assertEqual(options.get('window_height'), height)
         if 'Wayland' not in type(screen.get_display()).__name__:

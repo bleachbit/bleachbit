@@ -60,6 +60,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _quit_after_worker = False
     _refresh_pending = False
     _maximize_pending = False
+    _geometry_ready = False
     _restore_size = None
     _restore_size_retried = False
     _maximize_deadline = 0.0
@@ -166,6 +167,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                                   min(geometry.height, 600))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.connect("configure-event", self.on_configure_event)
+        self.connect("size-allocate", self.on_size_allocate)
         self.connect("window-state-event", self.on_window_state_event)
         self.connect("delete-event", self.on_delete_event)
         self.connect("destroy", self.on_destroy)
@@ -470,6 +472,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # setting change still waiting on the delayed flush timer
         # (see Options.__schedule_flush) would otherwise be lost if the
         # process exits before that timer fires.
+        self._save_window_geometry()
         options.commit()
         if Gtk.main_level() > 0:
             Gtk.main_quit()
@@ -1358,7 +1361,31 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         if maximized or fullscreen or self._maximize_pending:
             return False
 
-        # save window position and size
+        # Only the position: see on_size_allocate() for the size.
+        options.set("window_x", x)
+        options.set("window_y", y)
+        return False
+
+    def on_size_allocate(self, _widget, _allocation):
+        """Save the window size
+
+        With client-side decorations, get_size() subtracts the decoration
+        extents of the previous window state until GTK lays out the window
+        again. After unmaximize, configure-event and idle callbacks can
+        see the size inflated by the shadow width, and no further
+        configure-event follows when the extents are corrected.
+        """
+        self._save_window_geometry()
+
+    def _save_window_geometry(self):
+        window = self.get_window()
+        if window is None or not self._geometry_ready:
+            return False
+        maximized, fullscreen = self._parse_window_state(window.get_state())
+        if maximized or fullscreen or self._maximize_pending:
+            return False
+        (x, y) = self.get_position()
+        (width, height) = self.get_size()
         options.set("window_x", x)
         options.set("window_y", y)
         options.set("window_width", width)
@@ -1390,6 +1417,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
     def on_delete_event(self, _widget, _event):
         # commit options to disk
+        self._save_window_geometry()
         options.close()
         return False
 
@@ -1409,10 +1437,14 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             Windows.splash_thread.join(0)
 
         # restore window position, size and state
+        # GTK allocates the window before this handler runs, so saving
+        # waits until the remembered geometry has been read.
+        self._geometry_ready = False
         self._maximize_pending = False
         self._restore_size = None
         self._restore_size_retried = False
         if not options.get('remember_geometry'):
+            self._geometry_ready = True
             return
         if options.has_option("window_x") and options.has_option("window_y") and \
            options.has_option("window_width") and options.has_option("window_height"):
@@ -1445,6 +1477,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self._maximize_pending = True
             self._maximize_deadline = time.monotonic() + 0.5
             GLib.idle_add(self._maximize_after_restore)
+        self._geometry_ready = True
 
         # Apply Windows 10 theme if on Windows and enabled
         if IS_WINDOWS:
