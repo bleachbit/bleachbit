@@ -76,6 +76,8 @@ class Worker:
         self.is_aborted = False
         if not self.operations:
             raise RuntimeError("No work to do")
+        # A folder can have been replaced since the last run
+        FileUtilities.clear_path_spellings()
 
     def abort(self):
         """Stop the preview/cleaning operation"""

@@ -274,6 +274,13 @@ class WorkerTestCase(common.BleachbitTestCase):
         self.assertIsNone(process_cache.last_scan_time)
         self.assertEqual(process_cache.processes, ())
 
+    def test_init_clears_path_spellings(self):
+        """A new worker forgets the path spellings of the last run"""
+        with mock.patch(
+                'bleachbit.FileUtilities.clear_path_spellings') as mock_clear:
+            Worker(CLI.CliCallback(), False, {'test': ['option1']})
+        mock_clear.assert_called_once_with()
+
     def test_format_minutes_remaining(self):
         """Test format_minutes_remaining() for issue #2305"""
         # The placeholder is substituted normally.
