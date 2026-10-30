@@ -89,30 +89,9 @@ jobs:
           persist-credentials: false
 
       - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            appstream \
-            dbus \
-            dbus-x11 \
-            gettext \
-            gir1.2-gtk-3.0 \
-            gir1.2-notify-0.7 \
-            gnome-keyring \
-            libcairo2-dev \
-            libgirepository1.0-dev \
-            libnotify-bin \
-            libxml2-utils \
-            notification-daemon \
-            p7zip-full \
-            python3-venv \
-            xvfb \
-            ${{ matrix.python-extra-dep }}
-          # for tests.TestLanguage
-          sudo locale-gen es_ES.UTF-8
-          sudo locale-gen pl_PL.UTF-8
-          sudo locale-gen en_AU.UTF-8
-          sudo update-locale
+        env:
+          PYTHON_EXTRA_DEP: ${{ matrix.python-extra-dep }}
+        run: ./scripts/ci-linux-deps.sh
 
       - name: Set up Python ${{ matrix.python-version }}
         if: ${{ matrix.use-setup-python }}
@@ -143,10 +122,12 @@ jobs:
           restore-keys: pip-linux-${{ matrix.ubuntu-version }}-
 
       - name: Install Python dependencies
+        env:
+          PYGOBJECT_VERSION: ${{ matrix.pygobject-version }}
         run: |
           pip install -r requirements.txt -r requirements-test.txt
-          if [[ "${{ matrix.pygobject-version }}" != "" ]]; then
-            pip install "PyGObject${{ matrix.pygobject-version }}"
+          if [[ "$PYGOBJECT_VERSION" != "" ]]; then
+            pip install "PyGObject$PYGOBJECT_VERSION"
           fi
 
       - name: Generate Revision.py
@@ -163,19 +144,8 @@ jobs:
         env:
           # `tests-pytest` collects coverage only when this is non-empty
           PYTEST_COVERAGE: ${{ matrix.python-version == '3.14' && '1' || '' }}
-        run: |
-          export DISPLAY=":1.0"
-          export $(dbus-launch)
-          sudo Xvfb :1 -screen 0 800x600x24 &
-          sleep 5
-          if [[ "${{ matrix.python-version }}" == "3.9" ]]; then
-            suite="make -C po tests && make tests-pytest && make tests-nsis"
-          elif [[ "${{ matrix.python-version }}" == "3.12" || "${{ matrix.python-version }}" == "3.15" ]]; then
-            suite="make tests-pytest"
-          else
-            suite="make -C cleaners tests && make tests-pytest && make tests-nsis && make tests-with-sudo"
-          fi
-          dbus-run-session -- bash -c "/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c '$suite'"
+          PYTHON_VERSION: ${{ matrix.python-version }}
+        run: ./scripts/ci-linux-tests.sh "$PYTHON_VERSION"
 
       - name: Generate lcov coverage
         if: matrix.python-version == '3.14' && github.repository == 'bleachbit/bleachbit'
