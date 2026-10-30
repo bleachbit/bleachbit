@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 08:29-0600\n"
+"POT-Creation-Date: 2026-10-30 14:03-0600\n"
 "PO-Revision-Date: 2014-05-01 17:56+0000\n"
 "Last-Translator: Mehdi Moayedi <mehdimcitp@gmail.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
@@ -3058,6 +3058,17 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Filename"
+msgstr ""
+
+#. TRANSLATORS: Notice shown when the installed version is more than
+#. a year old and a newer version may exist. The application still
+#. works; this only suggests checking for a newer version. Keep the
+#. URL unchanged.
+#: ../bleachbit/SystemInformation.py
+msgid ""
+"This version of BleachBit is more than a year old. We regularly release "
+"improvements and bug fixes. You can check for a newer version at https://"
+"www.bleachbit.org."
 msgstr ""
 
 #: ../bleachbit/Unix.py

@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-10-30 08:29-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-30 14:03-0600\n"
 "PO-Revision-Date: 2026-10-30 17:15+0000\n"
 "Last-Translator: Matthaiks <kityn@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/"
-"pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
+">\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3152,6 +3152,17 @@ msgstr "Usuń"
 msgctxt "column_label"
 msgid "Filename"
 msgstr "Nazwa pliku"
+
+#. TRANSLATORS: Notice shown when the installed version is more than
+#. a year old and a newer version may exist. The application still
+#. works; this only suggests checking for a newer version. Keep the
+#. URL unchanged.
+#: ../bleachbit/SystemInformation.py
+msgid ""
+"This version of BleachBit is more than a year old. We regularly release "
+"improvements and bug fixes. You can check for a newer version at https://"
+"www.bleachbit.org."
+msgstr ""
 
 #: ../bleachbit/Unix.py
 #, python-format
