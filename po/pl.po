@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 08:29-0600\n"
-"PO-Revision-Date: 2026-10-18 16:50+0000\n"
+"PO-Revision-Date: 2026-10-30 17:15+0000\n"
 "Last-Translator: Matthaiks <kityn@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
-">\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/"
+"pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -459,6 +459,8 @@ msgid ""
 "This option will delete song ratings, internet radio stations, and podcast "
 "subscriptions."
 msgstr ""
+"Ta opcja spowoduje usunięcie ocen utworów, internetowych stacji radiowych "
+"oraz subskrypcji podcastów."
 
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
@@ -810,18 +812,22 @@ msgstr "Usuwa historię plików użytą do /restore"
 #. Claude Code's automatically saved notes, reused in later sessions. Memory refers to saved information, not RAM.
 #: ../cleaners/claude.xml
 msgid "Auto memory"
-msgstr ""
+msgstr "Pamięć automatyczna"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Delete the notes Claude Code automatically saves about you and your projects"
 msgstr ""
+"Usuń notatki, które Claude Code automatycznie zapisuje na Twój temat oraz na "
+"temat Twoich projektów"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Claude Code would forget the information it automatically saved about you "
 "and your projects"
 msgstr ""
+"Claude Code usuwałby informacje, które automatycznie zapisał na Twój temat "
+"oraz na temat Twoich projektów"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -1036,21 +1042,15 @@ msgstr "Odwiedź stronę ${prodname}"
 
 #. TRANSLATORS: Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.\n"
-#| "Click 'OK' to uninstall the old version before upgrading, or click "
-#| "'Cancel' to abort the upgrade."
 msgctxt "nsis:BLEACHBIT_RUNNING"
 msgid ""
 "${prodname} is running.\n"
 "Close it and click 'Retry' to continue, or click 'Cancel' to abort the "
 "installation."
 msgstr ""
-"${prodname} jest już zainstalowany.\n"
-"Kliknij 'OK', aby odinstalować starszą wersję przed aktualizacją, albo "
-"kliknij \"Anuluj' aby przerwać aktualizację."
+"${prodname} jest uruchomiony.\n"
+"Zamknij go i kliknij „Ponów”, aby kontynuować, albo kliknij „Anuluj”, aby "
+"przerwać instalację."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
@@ -1360,25 +1360,16 @@ msgid "Shred with ${prodname}"
 msgstr "Zniszcz za pomocą ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:UNINSTALL_TEXT"
-#| msgid ""
-#| "${prodname} will be uninstalled from the following folder.\n"
-#| "Click Uninstall to start the uninstallation.\n"
-#| "WARNING: The uninstaller completely removes the installation directory, "
-#| "including any files (such as custom cleaners) that you may have added or "
-#| "changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
 "Click Uninstall to start the uninstallation.\n"
 "Files you added to this folder, such as custom cleaners, are kept."
 msgstr ""
-"${prodname} zostanie odinstalowany z następującego katalogu.\n"
-"Naciśnij przycisk Odinstaluj, aby rozpocząć deinstalację.\n"
-"UWAGA: Deinstalator usunie całkowicie katalog instalacji, wraz z wszystkimi "
-"plikami (takimi jak niestandardowe instrukcje czyszczące), które mogły "
-"zostać dodane lub zmienione."
+"${prodname} zostanie odinstalowany z poniższego folderu.\n"
+"Kliknij „Odinstaluj”, aby rozpocząć proces odinstalowywania.\n"
+"Pliki dodane do tego folderu, na przykład własne skrypty czyszczące, zostaną "
+"zachowane."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1426,7 +1417,7 @@ msgstr "Uruchom komendę zewnętrzną: %s"
 #: ../bleachbit/Action.py
 #, python-brace-format
 msgid "Terminate process: {name}"
-msgstr ""
+msgstr "Zakończ proces: {name}"
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1896,7 +1887,7 @@ msgstr "Ta opcja wymaga trybu eksperta. Włącz ją w Preferencjach."
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Could not overwrite the contents of %(path)s: %(error)s"
-msgstr ""
+msgstr "Nie udało się nadpisać zawartości %(path)s: %(error)s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1918,10 +1909,9 @@ msgstr "Urządzenie lub zasób jest zajęty: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
-#, fuzzy, python-format
-#| msgid "Directory is not empty: %s"
+#, python-format
 msgid "Directory was left renamed to: %s"
-msgstr "Katalog nie jest pusty: %s"
+msgstr "Katalog pozostał pod zmienioną nazwą: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -2847,7 +2837,7 @@ msgstr "Resetowanie pliku konfiguracyjnego, ponieważ jest uszkodzony: %s"
 #. starts an operation while another one is running.
 #: ../bleachbit/GuiWindow.py
 msgid "Wait for the current operation to finish."
-msgstr ""
+msgstr "Poczekaj na zakończenie bieżącej operacji."
 
 #. TRANSLATORS: Error message shown when a cleaner option
 #. cannot be used because expert mode is disabled.
