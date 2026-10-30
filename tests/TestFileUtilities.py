@@ -1776,6 +1776,23 @@ State=AAAA/wA...
         with self.assertRaises(sqlite3.OperationalError):
             execute_sqlite3(db_path, "INSERT INTO test (name) VALUES ('x")
 
+    def test_execute_sqlite3_locked(self):
+        """execute_sqlite3() fails fast on a locked database"""
+        db_path = os.path.join(self.mkdtemp(), 'locked.sqlite')
+        execute_sqlite3(db_path, 'CREATE TABLE test (id int)')
+        holder = sqlite3.connect(db_path, isolation_level=None)
+        try:
+            holder.execute('PRAGMA locking_mode=EXCLUSIVE')
+            holder.execute('BEGIN EXCLUSIVE')
+            for cmd in ('DELETE FROM test', 'vacuum'):
+                start = time.monotonic()
+                with self.assertRaisesRegex(sqlite3.OperationalError,
+                                            'database is locked'):
+                    execute_sqlite3(db_path, cmd)
+                self.assertLess(time.monotonic() - start, 3)
+        finally:
+            holder.close()
+
     def test_execute_sqlite3_open_error_translation(self):
         """Unit test for execute_sqlite3() open-error translation
 

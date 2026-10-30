@@ -69,6 +69,11 @@ _IO_REPARSE_TAG_NAME_SURROGATE = 0x20000000
 # AF_UNIX sockets and app execution aliases, which Win32 cannot open
 _UNOPENABLE_REPARSE_TAGS = (0x80000023, 0x8000001B)
 
+# A browser keeps its databases locked for as long as it runs, so waiting
+# out sqlite3's default five seconds cannot succeed. Allow only enough for
+# another process to finish a write it has already started.
+SQLITE_BUSY_TIMEOUT = 0.2
+
 
 def _remove_windows_readonly(path):
     """Clear Windows read-only attribute so deletion/wiping succeeds
@@ -1162,7 +1167,7 @@ def execute_sqlite3(path, cmds):
     assert isinstance(path, str)
     assert isinstance(cmds, str)
     try:
-        conn = sqlite3.connect(path)
+        conn = sqlite3.connect(path, timeout=SQLITE_BUSY_TIMEOUT)
     except sqlite3.OperationalError as exc:
         # sqlite3 raises a cryptic "unable to open database file" for a
         # variety of causes (permission denied, read-only parent directory,

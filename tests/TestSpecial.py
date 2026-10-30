@@ -18,6 +18,7 @@ import os
 import re
 import shutil
 import sqlite3
+import time
 from unittest import mock
 
 # first party imports
@@ -900,6 +901,23 @@ INSERT INTO "meta" VALUES('version','20');"""
             with self.assertRaisesRegex(sqlite3.OperationalError,
                                         'database is locked'):
                 Special._sqlite_is_valid_database(filename)
+        finally:
+            holder.close()
+
+    def test_chrome_favicons_history_locked(self):
+        """delete_chrome_favicons fails fast on a locked History"""
+        chrome_dir = os.path.join(self.dir_base, 'google-chrome', 'Default')
+        holder = sqlite3.connect(
+            os.path.join(chrome_dir, 'History'), isolation_level=None)
+        try:
+            holder.execute('PRAGMA locking_mode=EXCLUSIVE')
+            holder.execute('BEGIN EXCLUSIVE')
+            start = time.monotonic()
+            with self.assertRaisesRegex(sqlite3.OperationalError,
+                                        'database is locked'):
+                Special.delete_chrome_favicons(
+                    os.path.join(chrome_dir, 'Favicons'))
+            self.assertLess(time.monotonic() - start, 3)
         finally:
             holder.close()
 
