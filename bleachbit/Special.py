@@ -187,7 +187,9 @@ def get_sqlite_int(path, sql, parameters=()):
 def _get_sqlite_values(path, sql, row_factory=None, parameters=()):
     """Run SQL on database in 'path' and return the integers"""
     import sqlite3
-    with contextlib.closing(sqlite3.connect(_sqlite_readonly_uri(path), uri=True)) as conn:
+    with contextlib.closing(sqlite3.connect(
+            _sqlite_readonly_uri(path), uri=True,
+            timeout=SQLITE_PROBE_TIMEOUT)) as conn:
         if row_factory is not None:
             conn.row_factory = row_factory
         cursor = conn.execute(sql, parameters)
