@@ -13,6 +13,7 @@ Test case for module DeepScan
 import os
 import shutil
 import subprocess
+import tempfile
 import unicodedata
 import unittest
 from unittest import mock
@@ -78,6 +79,16 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_DeepScan(self):
         """Unit test for class DeepScan.  Preview real files."""
         path = os.path.expanduser('~')
+        # Other workers create and delete files in the checkout (sdist) and
+        # in their temp folders, which are under the home folder on Windows
+        temp_root = tempfile.gettempdir()
+        if os.environ.get('PYTEST_XDIST_WORKER'):
+            # the controller's folder holds every worker's folder
+            temp_root = os.path.dirname(temp_root)
+        source_dir = os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__)))
+        options.set_whitelist_paths(
+            [('folder', source_dir), ('folder', temp_root)])
         searches = {path: []}
         for regex in ('^Makefile$', '~$', 'bak$', '^Thumbs.db$', '^Thumbs.db:encryptable$'):
             searches[path].append(Search(command='delete', regex=regex))
