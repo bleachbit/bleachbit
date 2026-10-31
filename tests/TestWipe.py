@@ -42,6 +42,22 @@ else:
     from bleachbit.General import WindowsError
 
 
+class _CountingWrite:
+    """write() stub that only counts calls
+
+    A Mock records every call, which is slow for a wipe loop that writes
+    until a size limit.
+    """
+
+    def __init__(self, return_value):
+        self.call_count = 0
+        self.return_value = return_value
+
+    def __call__(self, _data):
+        self.call_count += 1
+        return self.return_value
+
+
 class WipeTestCase(common.BleachbitTestCase):
 
     def test_detect_orphaned_wipe_files(self):
@@ -648,7 +664,7 @@ class WipeTestCase(common.BleachbitTestCase):
         for fs_type in ('vfat', 'FAT32'):
             with self.subTest(fs_type=fs_type):
                 mock_file1 = self._make_mock_file()
-                mock_file1.write.return_value = 65536
+                mock_file1.write = _CountingWrite(65536)
                 mock_file2 = self._make_mock_file()
                 mock_file2.write.side_effect = IOError(
                     errno.ENOSPC, 'No space left on device')
