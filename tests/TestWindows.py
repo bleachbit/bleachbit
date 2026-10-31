@@ -605,7 +605,6 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         tests = ('regular', 'unicode-emdash-u\u2014', 'long' + 'x' * 100)
         for test in tests:
             pathname = self.mkstemp(suffix=test)
-            time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
             logger.debug('delete_locked_file(%s) ', pathname)
             if not shell.IsUserAnAdmin():
@@ -1312,8 +1311,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertEqual(paths, ())
 
         # Put files in the clipboard in supported format
-        args = ('powershell.exe', 'Set-Clipboard',
-                '-Path', r'c:\windows\*.exe')
+        args = ('powershell.exe', '-NoProfile', '-NonInteractive',
+                'Set-Clipboard', '-Path', r'c:\windows\*.exe')
         (ext_rc, _stdout, _stderr) = General.run_external(args)
         # It may print "Requested Clipboard operation did not succeed" to stderr.
         self.assertEqual(

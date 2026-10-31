@@ -3000,7 +3000,10 @@ State=AAAA/wA...
 
         It is called frequently, so the speed is important."""
         d = '/usr/bin'
-        keep_list = [('file', '/home/foo'), ('folder', '/home/folder')]
+        # Not under /home: macOS automounts it, which makes realpath() of
+        # the keep list slow
+        keep_list = [('file', os.path.join(self.tempdir, 'foo')),
+                     ('folder', os.path.join(self.tempdir, 'folder'))]
         if IS_WINDOWS:
             d = os.path.expandvars(r'%windir%\system32')
             keep_list = [('file', r'c:\filename'), ('folder', r'c:\\folder')]

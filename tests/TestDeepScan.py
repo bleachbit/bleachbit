@@ -10,10 +10,10 @@ Test case for module DeepScan
 """
 
 # standard imports
+import itertools
 import os
 import shutil
 import subprocess
-import tempfile
 import unicodedata
 import unittest
 from unittest import mock
@@ -77,27 +77,58 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self._test_encoding(test)
 
     def test_DeepScan(self):
-        """Unit test for class DeepScan.  Preview real files."""
-        path = os.path.expanduser('~')
-        # Other workers create and delete files in the checkout (sdist) and
-        # in their temp folders, which are under the home folder on Windows
-        temp_root = tempfile.gettempdir()
-        if os.environ.get('PYTEST_XDIST_WORKER'):
-            # the controller's folder holds every worker's folder
-            temp_root = os.path.dirname(temp_root)
-        source_dir = os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__)))
-        options.set_whitelist_paths(
-            [('folder', source_dir), ('folder', temp_root)])
-        searches = {path: []}
-        for regex in ('^Makefile$', '~$', 'bak$', '^Thumbs.db$', '^Thumbs.db:encryptable$'):
-            searches[path].append(Search(command='delete', regex=regex))
-        ds = DeepScan(searches)
-        for cmd in ds.scan():
-            if cmd is True:
-                # it's yielding control to the GTK idle loop
-                continue
-            self.assertLExists(cmd.path)
+        """Unit test for class DeepScan on the kinds of files a home has"""
+        # Not the real home: on CI it holds tool caches and the folders
+        # other workers write to, so its size and contents vary
+        root = self.mkdtemp()
+        sub = os.path.join(root, 'sub')
+        deeper = os.path.join(sub, 'ɡælɪk.dir')
+        os.makedirs(deeper)
+        expected = {
+            self.write_file(os.path.join(root, 'Makefile')),
+            self.write_file(os.path.join(root, 'notes.txt~')),
+            self.write_file(os.path.join(root, 'backup.bak')),
+            self.write_file(os.path.join(sub, 'Thumbs.db')),
+            self.write_file(os.path.join(deeper, 'ɡælɪk.bak')),
+        }
+        for near_miss in ('Makefile.am', '~notes.txt', 'bak.txt'):
+            self.write_file(os.path.join(root, near_miss))
+        self.write_file(os.path.join(sub, 'Thumbs.db.old'))
+        if not IS_WINDOWS:
+            # Windows does not allow a colon in a file name
+            expected.add(self.write_file(
+                os.path.join(sub, 'Thumbs.db:encryptable')))
+            # Not followed, so the files under sub are reported once
+            os.symlink(sub, os.path.join(root, 'link_to_sub'))
+            # A dangling link still matches
+            broken = os.path.join(root, 'broken.bak')
+            os.symlink(os.path.join(root, 'missing'), broken)
+            expected.add(broken)
+            if os.geteuid() != 0:
+                # A folder that cannot be listed is skipped
+                locked = os.path.join(root, 'locked')
+                os.mkdir(locked)
+                self.write_file(os.path.join(locked, 'hidden.bak'))
+                os.chmod(locked, 0)
+                self.addCleanup(os.chmod, locked, 0o700)
+        searches = {root: [
+            Search(command='delete', regex=regex)
+            for regex in ('^Makefile$', '~$', 'bak$', '^Thumbs.db$',
+                          '^Thumbs.db:encryptable$')]}
+        found = []
+        idle_yields = 0
+        with mock.patch('bleachbit.DeepScan.time') as mock_time:
+            # A clock that jumps on every read makes each folder look slow,
+            # so the scan also hands control to the GTK idle loop
+            mock_time.time.side_effect = itertools.count()
+            for cmd in DeepScan(searches).scan():
+                if cmd is True:
+                    idle_yields += 1
+                    continue
+                self.assertLExists(cmd.path)
+                found.append(cmd.path)
+        self.assertCountEqual(expected, found)
+        self.assertGreater(idle_yields, 0)
 
     def test_compiled_search_path_prefix(self):
         """CompiledSearch.match should preserve root path semantics."""

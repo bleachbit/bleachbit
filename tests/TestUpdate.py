@@ -149,14 +149,21 @@ class UpdateTestCase(common.BleachbitTestCase):
             self.assertIsInstance(ver, (type(None), str))
             self.assertIsInstance(url, (type(None), str))
 
-    def test_check_updates_bad_url(self):
-        """Unit test for function check_updates() with bad network address"""
-        # expect connection failure
-        preserve_url = bleachbit.update_check_url
-        for url in ('http://localhost/doesnotexist', 'https://httpstat.us/500'):
-            bleachbit.update_check_url = url
+    # Keep the retries but skip the backoff waits between them
+    @patch('urllib3.util.retry.Retry.sleep')
+    def test_check_updates_bad_url(self, _mock_sleep):
+        """check_updates() returns None on a server error or refused connection"""
+        self.addCleanup(setattr, bleachbit, 'update_check_url',
+                        bleachbit.update_check_url)
+        with common.status_server() as url:
+            bleachbit.update_check_url = url.format(500)
             self.assertIsNone(check_updates(True, False, None, None))
-        bleachbit.update_check_url = preserve_url
+            # Refuse at the socket, so the rest of the stack still runs;
+            # Windows is slow to refuse a real localhost connection
+            with patch('urllib3.util.connection.create_connection',
+                       side_effect=ConnectionRefusedError) as mock_connect:
+                self.assertIsNone(check_updates(True, False, None, None))
+            mock_connect.assert_called()
 
     def test_update_url(self):
         """Check that the real update URL returns XML"""
