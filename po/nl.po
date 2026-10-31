@@ -6,13 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 14:03-0600\n"
-"PO-Revision-Date: 2026-10-24 16:49+0000\n"
+"PO-Revision-Date: 2026-10-31 21:13+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/bleachbit/main/nl/"
-">\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/bleachbit/main/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -456,6 +456,8 @@ msgid ""
 "This option will delete song ratings, internet radio stations, and podcast "
 "subscriptions."
 msgstr ""
+"Met deze optie worden de waarderingen van nummers, internetradiostations en "
+"podcastabonnementen verwijderd."
 
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
@@ -808,18 +810,22 @@ msgstr "Verwijder de bestandsgeschiedenis die is gebruikt voor /restore"
 #. Claude Code's automatically saved notes, reused in later sessions. Memory refers to saved information, not RAM.
 #: ../cleaners/claude.xml
 msgid "Auto memory"
-msgstr ""
+msgstr "Autom. in geheugen"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Delete the notes Claude Code automatically saves about you and your projects"
 msgstr ""
+"Verwijder de notities die Claude Code automatisch over u en uw projecten "
+"opslaat"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Claude Code would forget the information it automatically saved about you "
 "and your projects"
 msgstr ""
+"Claude Code zou de informatie vergeten die het automatisch over u en uw "
+"projecten heeft opgeslagen"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -1036,21 +1042,15 @@ msgstr "Bezoek de website van ${prodname}"
 
 #. TRANSLATORS: Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.\n"
-#| "Click 'OK' to uninstall the old version before upgrading, or click "
-#| "'Cancel' to abort the upgrade."
 msgctxt "nsis:BLEACHBIT_RUNNING"
 msgid ""
 "${prodname} is running.\n"
 "Close it and click 'Retry' to continue, or click 'Cancel' to abort the "
 "installation."
 msgstr ""
-"${prodname} is al geïnstalleerd.\n"
-"Klik op 'OK' om de oude versie te verwijderen voordat u een upgrade "
-"uitvoert, of klik op 'Annuleren' om de upgrade af te breken."
+"${prodname} is actief.\n"
+"Sluit het en klik op 'Opnieuw' om verder te gaan, of klik op 'Annuleren' om "
+"de installatie af te breken."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
@@ -1360,14 +1360,6 @@ msgid "Shred with ${prodname}"
 msgstr "Versnipperen met ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:UNINSTALL_TEXT"
-#| msgid ""
-#| "${prodname} will be uninstalled from the following folder.\n"
-#| "Click Uninstall to start the uninstallation.\n"
-#| "WARNING: The uninstaller completely removes the installation directory, "
-#| "including any files (such as custom cleaners) that you may have added or "
-#| "changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
@@ -1376,9 +1368,8 @@ msgid ""
 msgstr ""
 "${prodname} wordt verwijderd uit de volgende map.\n"
 "Klik op Verwijderen om de deïnstallatie te starten.\n"
-"WAARSCHUWING: De deïnstallatie verwijdert de gehele installatiemap, "
-"inclusief alle bestanden (zoals aangepaste opschoonmachines) die u mogelijk "
-"hebt toegevoegd of gewijzigd."
+"Bestanden die u aan deze map hebt toegevoegd, zoals aangepaste "
+"schoonmaakmachines, worden bewaard."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1426,7 +1417,7 @@ msgstr "Voer de volgende externe opdracht uit: %s"
 #: ../bleachbit/Action.py
 #, python-brace-format
 msgid "Terminate process: {name}"
-msgstr ""
+msgstr "Proces beëindigen: {name}"
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1898,7 +1889,7 @@ msgstr "Deze optie vereist expertmodus. Schakel het in bij Voorkeuren."
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Could not overwrite the contents of %(path)s: %(error)s"
-msgstr ""
+msgstr "Kan de inhoud van %(path)s niet overschrijven: %(error)s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1920,10 +1911,9 @@ msgstr "Apparaat of bron is bezig: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
-#, fuzzy, python-format
-#| msgid "Directory is not empty: %s"
+#, python-format
 msgid "Directory was left renamed to: %s"
-msgstr "Map is niet leeg: %s"
+msgstr "Map is hernoemd gehouden: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -2872,7 +2862,7 @@ msgstr ""
 #. starts an operation while another one is running.
 #: ../bleachbit/GuiWindow.py
 msgid "Wait for the current operation to finish."
-msgstr ""
+msgstr "Wacht tot de huidige bewerking is voltooid."
 
 #. TRANSLATORS: Error message shown when a cleaner option
 #. cannot be used because expert mode is disabled.
@@ -3202,6 +3192,9 @@ msgid ""
 "improvements and bug fixes. You can check for a newer version at https://"
 "www.bleachbit.org."
 msgstr ""
+"Deze versie van BleachBit is meer dan een jaar oud. We brengen regelmatig "
+"verbeteringen en bugfixes uit. U kunt controleren op een nieuwere versie op "
+"https://www.bleachbit.org."
 
 #: ../bleachbit/Unix.py
 #, python-format
