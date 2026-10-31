@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 14:03-0600\n"
-"PO-Revision-Date: 2026-10-20 09:20+0000\n"
+"PO-Revision-Date: 2026-10-31 00:47+0000\n"
 "Last-Translator: Dan <kefir2105@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
 "uk/>\n"
@@ -454,6 +454,8 @@ msgid ""
 "This option will delete song ratings, internet radio stations, and podcast "
 "subscriptions."
 msgstr ""
+"Цей параметр видалить оцінки пісень, інтернет-радіостанції та підписки на "
+"подкасти."
 
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
@@ -806,18 +808,22 @@ msgstr "Видалити історію файлів, що використов�
 #. Claude Code's automatically saved notes, reused in later sessions. Memory refers to saved information, not RAM.
 #: ../cleaners/claude.xml
 msgid "Auto memory"
-msgstr ""
+msgstr "Автопам’ять"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Delete the notes Claude Code automatically saves about you and your projects"
 msgstr ""
+"Видалити нотатки, які Claude Code автоматично зберігає про вас та ваші "
+"проєкти"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Claude Code would forget the information it automatically saved about you "
 "and your projects"
 msgstr ""
+"Claude Code забуде інформацію, яку він автоматично зберіг про вас та ваші "
+"проєкти"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -1033,21 +1039,15 @@ msgstr "Відвідати вебсайт ${prodname}"
 
 #. TRANSLATORS: Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.\n"
-#| "Click 'OK' to uninstall the old version before upgrading, or click "
-#| "'Cancel' to abort the upgrade."
 msgctxt "nsis:BLEACHBIT_RUNNING"
 msgid ""
 "${prodname} is running.\n"
 "Close it and click 'Retry' to continue, or click 'Cancel' to abort the "
 "installation."
 msgstr ""
-"${prodname} уже встановлено.\n"
-"Натисніть «Гаразд», щоби видалити стару версію перед оновленням, або "
-"«Скасувати», аби перервати процес оновлення."
+"${prodname} працює.\n"
+"Закрийте його та натисніть «Спробувати ще раз», щоб продовжити, або "
+"натисніть «Скасувати», аби припинити встановлення."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
@@ -1347,14 +1347,6 @@ msgid "Shred with ${prodname}"
 msgstr "Shred із ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:UNINSTALL_TEXT"
-#| msgid ""
-#| "${prodname} will be uninstalled from the following folder.\n"
-#| "Click Uninstall to start the uninstallation.\n"
-#| "WARNING: The uninstaller completely removes the installation directory, "
-#| "including any files (such as custom cleaners) that you may have added or "
-#| "changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
@@ -1362,10 +1354,9 @@ msgid ""
 "Files you added to this folder, such as custom cleaners, are kept."
 msgstr ""
 "${prodname} буде видалено з наступної теки.\n"
-"Натисніть «Видалити», щоб розпочати процес видалення.\n"
-"УВАГА: програма видалення повністю очищує каталог встановлення, включаючи "
-"будь-які файли (наприклад, користувацькі очищувачі), які ви могли додати або "
-"змінити."
+"Натисніть «Видалити», щоб розпочати видалення.\n"
+"Файли, які ви додали до цієї теки, наприклад, власні засоби очищення, будуть "
+"збережені."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1415,7 +1406,7 @@ msgstr "Виконати наступну команду: %s"
 #: ../bleachbit/Action.py
 #, python-brace-format
 msgid "Terminate process: {name}"
-msgstr ""
+msgstr "Завершити процес: {name}"
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1884,7 +1875,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Could not overwrite the contents of %(path)s: %(error)s"
-msgstr ""
+msgstr "Не вдалося перезаписати вміст %(path)s: %(error)s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1906,10 +1897,9 @@ msgstr "Пристрій або ресурс зайнятий: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
-#, fuzzy, python-format
-#| msgid "Directory is not empty: %s"
+#, python-format
 msgid "Directory was left renamed to: %s"
-msgstr "Тека не порожня: %s"
+msgstr "Каталог було перейменовано на: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -2851,7 +2841,7 @@ msgstr "Скидання конфігураційного файлу через 
 #. starts an operation while another one is running.
 #: ../bleachbit/GuiWindow.py
 msgid "Wait for the current operation to finish."
-msgstr ""
+msgstr "Дочекайтеся завершення поточної операції."
 
 #. TRANSLATORS: Error message shown when a cleaner option
 #. cannot be used because expert mode is disabled.
@@ -3176,6 +3166,9 @@ msgid ""
 "improvements and bug fixes. You can check for a newer version at https://"
 "www.bleachbit.org."
 msgstr ""
+"Цій версії BleachBit вже більше року. Ми регулярно випускаємо оновлення та "
+"виправлення помилок. Перевірити наявність нової версії можна на сайті "
+"https://www.bleachbit.org."
 
 #: ../bleachbit/Unix.py
 #, python-format
