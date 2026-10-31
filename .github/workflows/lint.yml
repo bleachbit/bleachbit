@@ -40,25 +40,32 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Cache pip packages
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.cache/pip
-          key: pip-lint-${{ hashFiles('requirements.txt', 'requirements-test.txt', 'requirements-lint.txt') }}
-          restore-keys: pip-lint-
-
       # python3-gi lets astroid build the Gtk classes, so pylint checks the GUI
       # code against them. shellcheck is already on the image.
       - name: Install system dependencies
+        id: system-deps
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends appstream gir1.2-gtk-3.0 gir1.2-notify-0.7 python3-gi python3-venv
+          echo "python-version=$(python3 -c 'import sys; print("%d.%d" % sys.version_info[:2])')" >> "$GITHUB_OUTPUT"
+
+      # No patch version in the key: the venv links to the system Python, so
+      # it keeps working across patch updates of the image
+      - name: Cache the lint environment
+        id: cache-venv
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .venv
+          key: lint-venv-${{ runner.os }}-${{ steps.system-deps.outputs.python-version }}-${{ hashFiles('requirements.txt', 'requirements-test.txt', 'requirements-lint.txt') }}
 
       - name: Install Python dependencies
+        if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
           python3 -m venv --system-site-packages .venv
           .venv/bin/python -m pip install -r requirements.txt -r requirements-test.txt -r requirements-lint.txt
-          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
+      - name: Use the lint environment
+        run: echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
       # Without it, pylint reports bleachbit.Revision as an unresolved import
       - name: Generate Revision.py
