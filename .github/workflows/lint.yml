@@ -16,6 +16,7 @@ on:
       - 'requirements.txt'
       - 'requirements-test.txt'
       - 'requirements-lint.txt'
+      - 'windows/requirements.txt'
   pull_request:
     branches:
       - '**'
@@ -31,7 +32,64 @@ concurrency:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint (Linux)
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # python3-gi lets astroid build the Gtk classes, so pylint checks the GUI
+      # code against them. shellcheck is already on the image.
+      - name: Install system dependencies
+        id: system-deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends appstream gir1.2-gtk-3.0 gir1.2-notify-0.7 python3-gi python3-venv
+          echo "python-version=$(python3 -c 'import sys; print("%d.%d" % sys.version_info[:2])')" >> "$GITHUB_OUTPUT"
+
+      # No patch version in the key: the venv links to the system Python, so
+      # it keeps working across patch updates of the image
+      - name: Cache the lint environment
+        id: cache-venv
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .venv
+          key: lint-venv-${{ runner.os }}-${{ steps.system-deps.outputs.python-version }}-${{ hashFiles('requirements.txt', 'requirements-test.txt', 'requirements-lint.txt') }}
+
+      - name: Install Python dependencies
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+        run: |
+          python3 -m venv --system-site-packages .venv
+          .venv/bin/python -m pip install -r requirements.txt -r requirements-test.txt -r requirements-lint.txt
+
+      - name: Use the lint environment
+        run: echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
+      # Without it, pylint reports bleachbit.Revision as an unresolved import
+      - name: Generate Revision.py
+        uses: $/.github/actions/generate-revision
+
+      - name: Run lint
+        run: make require-lint-tools lint
+
+      - name: Show results
+        if: always()
+        run: |
+          shopt -s nullglob
+          for f in all.*.log; do
+            echo "::group::$f"
+            cat "$f"
+            echo "::endgroup::"
+          done
+
+  # The Lint job installs only what it needs, so this keeps the Ubuntu path of
+  # scripts/install-deps.sh checked.
+  install-deps:
+    name: Install deps (Ubuntu)
+    # Not ubuntu-slim: the install is about 9x slower there
     runs-on: ubuntu-26.04
     timeout-minutes: 20
 
@@ -52,22 +110,8 @@ jobs:
           make install-deps-dev INSTALL_DEPS_ARGS=--venv
           echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
-      # Without it, pylint reports bleachbit.Revision as an unresolved import
-      - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
-
-      - name: Run lint
-        run: make require-lint-tools lint
-
-      - name: Show results
-        if: always()
-        run: |
-          shopt -s nullglob
-          for f in all.*.log; do
-            echo "::group::$f"
-            cat "$f"
-            echo "::endgroup::"
-          done
+      - name: Check the lint tools
+        run: make require-lint-tools
 
   # The Linux job ignores pywin32, and with it every win32 call. Here pywin32
   # installs, so extension-pkg-allow-list in .pylintrc checks those calls.
@@ -78,6 +122,7 @@ jobs:
 
     env:
       MSYS_BIN: C:\msys64\usr\bin
+      PYTHON_VERSION: '3.14'
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -86,21 +131,31 @@ jobs:
 
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.14'
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Cache pip packages
+      # No patch version in the key: runners can carry different ones
+      - name: Cache the lint environment
+        id: cache-venv
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~\AppData\Local\pip\Cache
-          key: pip-lint-win-${{ hashFiles('requirements.txt', 'requirements-lint.txt') }}
-          restore-keys: pip-lint-win-
+          path: .venv
+          key: lint-venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('requirements.txt', 'requirements-lint.txt', 'windows/requirements.txt') }}
 
       # requirements.txt is only so psutil and requests resolve. The rest of
-      # windows/requirements.txt is not needed to lint.
+      # windows/requirements.txt is not needed to lint, but its pins apply.
       - name: Install dependencies
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+        shell: bash
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt -r requirements-lint.txt pywin32
+          python -m venv .venv
+          .venv/Scripts/python -m pip install -r requirements.txt -r requirements-lint.txt pywin32 -c windows/requirements.txt
+
+      # A restored venv still points at the Python of the runner that made it
+      - name: Use the lint environment
+        shell: bash
+        run: |
+          .venv/Scripts/python -c "" 2>/dev/null || python -m venv --upgrade .venv
+          echo "$GITHUB_WORKSPACE\.venv\Scripts" >> "$GITHUB_PATH"
 
       # Without it, pylint reports bleachbit.Revision as an unresolved import
       - name: Generate Revision.py
