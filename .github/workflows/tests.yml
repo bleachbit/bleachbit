@@ -326,10 +326,16 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-          cache-dependency-path: requirements.txt
+          cache-dependency-path: |
+            requirements.txt
+            requirements-test.txt
 
+      # Not install-deps-dev: the lint requirements and Homebrew tools it
+      # adds are not used by the tests
       - name: Install dependencies
-        run: make install-deps-dev INSTALL_DEPS_ARGS=--venv
+        run: |
+          make install-deps INSTALL_DEPS_ARGS=--venv
+          .venv/bin/python -m pip install -r requirements-test.txt
 
       - name: Generate Revision.py
         uses: $/.github/actions/generate-revision
