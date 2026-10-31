@@ -2383,7 +2383,7 @@ Version: 2023-02-223
 !ifdef LANG_UKRAINIAN
 	LangString ALREADY_INSTALLED ${LANG_UKRAINIAN} "${prodname} уже встановлено.$\r$\nНатисніть «Гаразд», щоби видалити стару версію перед оновленням, або «Скасувати», аби перервати процес оновлення."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_UKRAINIAN} "Відвідати вебсайт ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_UKRAINIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_UKRAINIAN} "${prodname} працює.$\r$\nЗакрийте його та натисніть «Спробувати ще раз», щоб продовжити, або натисніть «Скасувати», аби припинити встановлення."
 	LangString INSTALLER_CAPTION ${LANG_UKRAINIAN} "Встановити ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_UKRAINIAN} "Наступним кроком є створення кешу шрифтів, під час якого може з’явитися чорне вікно консолі."
 	LangString MULTIPRINT2 ${LANG_UKRAINIAN} "Зазвичай це займає одну хвилину, але іноді може тривати до десяти хвилин."
@@ -2432,7 +2432,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_UKRAINIAN} "Термінал налагодження ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_UKRAINIAN} "${prodname} (Немає UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_UKRAINIAN} "Shred із ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "${prodname} буде видалено з наступної теки.$\r$\nНатисніть «Видалити», щоб розпочати видалення.$\r$\nФайли, які ви додали до цієї теки, наприклад, власні засоби очищення, будуть збережені."
 !endif
 
 !ifdef LANG_UZBEK
