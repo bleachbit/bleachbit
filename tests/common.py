@@ -193,6 +193,28 @@ def set_temporary_env(env_var, env_value):
             os.environ[env_var] = original_value
 
 
+def program_files_envs():
+    """Yield (env, expected Program Files folders) for each Windows layout"""
+    pf = r'C:\Program Files'
+    pf86 = r'C:\Program Files (x86)'
+    layouts = (
+        # 32-bit process on 64-bit Windows
+        ({'ProgramFiles': pf86, 'ProgramW6432': pf,
+          'ProgramFiles(x86)': pf86}, [pf86, pf]),
+        # 64-bit process
+        ({'ProgramFiles': pf, 'ProgramW6432': pf,
+          'ProgramFiles(x86)': pf86}, [pf, pf86]),
+        # 32-bit Windows
+        ({'ProgramFiles': pf}, [pf]),
+    )
+    for folders, expected in layouts:
+        env = {'WinDir': r'C:\Windows'}
+        for name, value in folders.items():
+            env[name] = value
+            env['Common' + name] = value + r'\Common Files'
+        yield env, expected
+
+
 def get_volatile_dir():
     """Return the volatile system temporary directory for TOCTOU tolerance.
 

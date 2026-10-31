@@ -1342,6 +1342,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             '</fontconfig>\n')
         self.assertFalse(has_fontconfig_cache(font_conf))
 
+    @mock.patch('bleachbit.Windows.ARCH_BITS', 32)
     def test_has_fontconfig_cache_any_version(self):
         """A cache file of any fontconfig cache version is found"""
         cache_dir = self.mkdir('fc_cache')
@@ -1353,6 +1354,23 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.write_file(os.path.join(cache_dir, 'x-le32d8.cache-9'))
         self.assertTrue(has_fontconfig_cache(font_conf))
 
+    def test_has_fontconfig_cache_other_arch(self):
+        """A cache file of the other architecture is not counted"""
+        for bits, own, other in ((32, 'le32d8', 'le64'),
+                                 (64, 'le64', 'le32d8')):
+            fonts_dir = self.mkdtemp()
+            cache_dir = self.mkdir(os.path.join(fonts_dir, 'cache'))
+            font_conf = self.write_file(
+                os.path.join(fonts_dir, 'fonts.conf'),
+                text='<?xml version="1.0"?>\n'
+                f'<fontconfig><cachedir>{cache_dir}</cachedir></fontconfig>\n')
+            with mock.patch('bleachbit.Windows.ARCH_BITS', bits):
+                self.write_file(os.path.join(cache_dir, f'x-{other}.cache-9'))
+                self.assertFalse(has_fontconfig_cache(font_conf))
+                self.write_file(os.path.join(cache_dir, f'x-{own}.cache-9'))
+                self.assertTrue(has_fontconfig_cache(font_conf))
+
+    @mock.patch('bleachbit.Windows.ARCH_BITS', 32)
     def test_has_fontconfig_cache_install_relative(self):
         """A cachedir starting with / is under the folder holding etc/fonts"""
         fonts_dir = self.mkdir(os.path.join('fc_prefix', 'etc', 'fonts'))

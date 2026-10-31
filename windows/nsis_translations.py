@@ -86,6 +86,7 @@ TRANSLATION_HINTS = {
     'ALREADY_INSTALLED': 'Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.',
     'BLEACHBIT_RUNNING': 'Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.',
     'OLD_WINDOWS_WARNING': 'Dialog shown when the installer detects an old version of Windows. Instructs the user to click OK to download a compatible version or Cancel to exit.',
+    'X64_UNSUPPORTED': 'Dialog shown when the 64-bit installer runs on Windows that cannot run 64-bit (x64) programs, such as 32-bit Windows. Instructs the user to click OK to download a compatible version or Cancel to exit.',
     'MULTIUSER_ADMIN_CREDENTIALS_REQUIRED': 'Message shown on the installation mode page description when admin rights are needed.',
     'MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED': 'Message shown on the installation mode page description when admin rights are needed to uninstall.',
     'MULTIUSER_ALL_USERS_UMUI': 'Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.',
