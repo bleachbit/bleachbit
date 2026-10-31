@@ -1,4 +1,4 @@
-name: Build and Test
+name: Windows build
 
 on:
   push:
@@ -40,158 +40,7 @@ concurrency:
   # tags finish: their artifacts get deployed.
   cancel-in-progress: ${{ github.ref_name != 'master' && github.ref_type != 'tag' }}
 
-# Each Ubuntu image is paired with a Python version that is as close to
-# "natural" (the image's pre-installed system Python) as possible, while still
-# covering the range 3.9 to 3.15:
-#   ubuntu-22.04 natural Python 3.10, tested 3.9  (older, via setup-python)
-#   ubuntu-24.04 natural Python 3.12, tested 3.12 (natural, system venv)
-#   ubuntu-26.04 natural Python 3.14, tested 3.14 (natural, system venv)
-#   ubuntu-26.04 natural Python 3.14, tested 3.15 (newer, via setup-python)
-# The "natural" entries skip actions/setup-python and use the system Python
-# through a virtualenv: because Ubuntu 24.04+ enforces PEP 668, not allowing
-# override system packages.
 jobs:
-  linux:
-    name: linux (${{ matrix.python-version }})
-    runs-on: ${{ matrix.ubuntu-version }}
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - python-version: '3.9'
-            ubuntu-version: ubuntu-22.04
-            python-extra-dep: ''
-            pygobject-version: '<3.51.0'
-            use-setup-python: true
-          - python-version: '3.12'
-            ubuntu-version: ubuntu-24.04
-            python-extra-dep: 'libgirepository-2.0-dev python3-gi python3-gi-cairo'
-            pygobject-version: ''
-            use-setup-python: false
-          - python-version: '3.14'
-            ubuntu-version: ubuntu-26.04
-            python-extra-dep: 'libgirepository-2.0-dev python3-gi python3-gi-cairo'
-            pygobject-version: ''
-            use-setup-python: false
-          - python-version: '3.15'
-            ubuntu-version: ubuntu-26.04
-            python-extra-dep: 'libgirepository-2.0-dev'
-            pygobject-version: '>=3.51.0'
-            use-setup-python: true
-
-    env:
-      COVERAGE: "coverage run"
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            appstream \
-            dbus \
-            dbus-x11 \
-            gettext \
-            gir1.2-gtk-3.0 \
-            gir1.2-notify-0.7 \
-            gnome-keyring \
-            libcairo2-dev \
-            libgirepository1.0-dev \
-            libnotify-bin \
-            libxml2-utils \
-            notification-daemon \
-            p7zip-full \
-            python3-venv \
-            xvfb \
-            ${{ matrix.python-extra-dep }}
-          # for tests.TestLanguage
-          sudo locale-gen es_ES.UTF-8
-          sudo locale-gen pl_PL.UTF-8
-          sudo locale-gen en_AU.UTF-8
-          sudo update-locale
-
-      - name: Set up Python ${{ matrix.python-version }}
-        if: ${{ matrix.use-setup-python }}
-        # zizmor: ignore[cache-poisoning] test-only job, nothing cached here is published
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: |
-            requirements.txt
-            requirements-test.txt
-
-      - name: Use system Python ${{ matrix.python-version }} via virtualenv
-        if: ${{ !matrix.use-setup-python }}
-        run: |
-          # --system-site-packages so the apt python3-gi is visible: without it
-          # is_gtk_available() is False and every GTK test silently skips
-          python3 -m venv --system-site-packages "$HOME/venv"
-          echo "$HOME/venv/bin" >> "$GITHUB_PATH"
-
-      - name: Cache pip packages
-        if: ${{ !matrix.use-setup-python }}
-        # zizmor: ignore[cache-poisoning] test-only job, nothing cached here is published
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.cache/pip
-          key: pip-linux-${{ matrix.ubuntu-version }}-${{ hashFiles('requirements.txt', 'requirements-test.txt') }}
-          restore-keys: pip-linux-${{ matrix.ubuntu-version }}-
-
-      - name: Install Python dependencies
-        run: |
-          pip install -r requirements.txt -r requirements-test.txt
-          if [[ "${{ matrix.pygobject-version }}" != "" ]]; then
-            pip install "PyGObject${{ matrix.pygobject-version }}"
-          fi
-
-      - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
-
-      - name: Generate translations
-        run: make -C po local
-
-      - name: Mount test ISO read-only
-        run: ./scripts/mount_test_iso.sh
-
-      - name: Run tests (regular and sudo)
-        timeout-minutes: 20
-        env:
-          # `tests-pytest` collects coverage only when this is non-empty
-          PYTEST_COVERAGE: ${{ matrix.python-version == '3.14' && '1' || '' }}
-        run: |
-          export DISPLAY=":1.0"
-          export $(dbus-launch)
-          sudo Xvfb :1 -screen 0 800x600x24 &
-          sleep 5
-          if [[ "${{ matrix.python-version }}" == "3.9" ]]; then
-            suite="make -C po tests && make tests-pytest && make tests-nsis"
-          elif [[ "${{ matrix.python-version }}" == "3.12" || "${{ matrix.python-version }}" == "3.15" ]]; then
-            suite="make tests-pytest"
-          else
-            suite="make -C cleaners tests && make tests-pytest && make tests-nsis && make tests-with-sudo"
-          fi
-          dbus-run-session -- bash -c "/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c '$suite'"
-
-      - name: Generate lcov coverage
-        if: matrix.python-version == '3.14' && github.repository == 'bleachbit/bleachbit'
-        run: |
-          coverage report
-          coverage lcov -o coverage.lcov
-
-      - name: Upload coverage to Coveralls
-        if: matrix.python-version == '3.14' && github.repository == 'bleachbit/bleachbit'
-        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
-        with:
-          file: coverage.lcov
-          flag-name: linux
-          parallel: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
   windows-build:
     # When a tag is pushed at the same time as a branch push, they trigger racing
     # builds with the same SHA but different build numbers, so different filenames
@@ -229,7 +78,7 @@ jobs:
             pygobject-*-win32.whl
             nsis-*-setup.exe
             advancecomp.zip
-          key: win-build-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
+          key: win-build-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/install-build-tools.ps1', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
 
       - name: Cache pip packages
         # Skipped for tags: requirements are version-pinned but not hash-pinned,
@@ -252,32 +101,10 @@ jobs:
         shell: pwsh
         run: .\windows\python-gtk3-install.ps1
 
-      - name: Install NSIS
+      - name: Install NSIS and AdvanceCOMP
+        # AdvanceCOMP (advzip) is used in the NSIS build setup for releases (tags).
         shell: pwsh
-        run: |
-          if (-not (Test-Path nsis-3.13-setup.exe)) {
-            Invoke-WebRequest -Uri "https://download.bleachbit.org/dependency/nsis-3.13-setup.exe" -OutFile nsis-3.13-setup.exe
-          }
-          $hash = (Get-FileHash nsis-3.13-setup.exe -Algorithm SHA256).Hash
-          if ($hash -ne 'db9a1038bbc0e53fef24f423fd609979bd578e942f1be1198db186d1c42652a3') {
-            throw "SHA256 mismatch=$hash"
-          }
-          Start-Process -FilePath .\nsis-3.13-setup.exe -ArgumentList '/S' -Wait
-
-      - name: Install AdvanceCOMP (advzip)
-        # This is used in the NSIS build setup for releases (tags).
-        if: github.ref_type == 'tag'
-        shell: pwsh
-        run: |
-          if (-not (Test-Path advancecomp.zip)) {
-            Invoke-WebRequest -Uri "https://github.com/amadvance/advancecomp/releases/download/v2.6/advancecomp-2.6-windows-x64.zip" -OutFile advancecomp.zip
-          }
-          $hash = (Get-FileHash advancecomp.zip -Algorithm SHA256).Hash
-          if ($hash -ne '39478E2810D2E6FECEA321D11A8E8AAD678E9E52F83C684D85DCB70342607704') {
-            throw "SHA256 mismatch=$hash"
-          }
-          7z x advancecomp.zip -oadvancecomp -y
-          Get-ChildItem .\advancecomp\
+        run: .\windows\install-build-tools.ps1 -AdvanceComp:($env:GITHUB_REF_TYPE -eq 'tag')
 
       - name: Generate Revision.py
         uses: $/.github/actions/generate-revision
@@ -339,137 +166,6 @@ jobs:
           path: |
             BleachBit-*-setup-English.exe
 
-  windows-test:
-    name: windows-test
-    timeout-minutes: 30
-    runs-on: windows-latest
-
-    env:
-      PYTHON_HOME: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3
-      PYTHON_EXE: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3\python.exe
-      MSYS_BIN: C:\msys64\usr\bin
-      PIP_CACHE_DIR: ${{ github.workspace }}\.pip-cache
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Cache the installed environment
-        # zizmor: ignore[cache-poisoning] test-only job, windows-deploy ships windows-build output
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          # Cache the downloaded archives AND the unpacked+pip-installed tree, so
-          # a warm run skips both the slow Expand-Archive and the pip installs.
-          # No restore-keys: a partial-key hit would restore a tree with stale
-          # dependencies that the install script would then skip re-installing.
-          # This job doesn't mutate the tree, so caching it here is safe.
-          path: |
-            gtk*-x86-windows.7z
-            gtk-themes.zip
-            pygobject-*-win32.whl
-            vcpkg_installed
-          key: win-test-env-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
-
-      - name: Cache pip packages
-        # zizmor: ignore[cache-poisoning] test-only job, windows-deploy ships windows-build output
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ github.workspace }}\.pip-cache
-          # This job installs requirements.txt + windows/requirements.txt
-          # + requirements-test.txt, so the cache key includes all three.
-          key: pip-win-test-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
-          restore-keys: pip-win-
-
-      - name: Install Python and GTK
-        shell: pwsh
-        run: .\windows\python-gtk3-install.ps1
-
-      - name: Install PsExec
-        shell: pwsh
-        run: choco install psexec --version=2.43 -y
-
-      - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
-
-      - name: Generate translations
-        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
-        run: |
-          set PATH=%MSYS_BIN%;%PATH%
-          make PYTHON="%PYTHON_EXE%" -C po local
-
-      - name: Install test dependencies
-        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
-        run: '"%PYTHON_HOME%\Scripts\pip3.exe" install --disable-pip-version-check -r requirements-test.txt'
-
-      - name: Mount virtual CD-ROM for testing
-        shell: pwsh
-        run: .\scripts\mount_test_iso.ps1
-
-      # Suites run as separate steps (not a matrix); ids let the coverage
-      # steps below check each suite's outcome before reporting.
-      - name: Run admin tests
-        id: admin
-        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
-        env:
-          DESTRUCTIVE_TESTS: T
-          PYTHONWARNINGS: error
-          COVERAGE_FILE: .coverage.admin
-          # Test files go on the runner's work drive instead of the system
-          # drive that holds the default %TEMP%
-          TEMP: ${{ runner.temp }}
-          TMP: ${{ runner.temp }}
-        run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\;%PATH%
-          make tests-pytest PYTHON="%PYTHON_EXE%" PYTEST_COVERAGE=1 PYTEST_ARGS=tests
-
-      - name: Run non-admin tests
-        id: nonadmin
-        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
-        run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
-          call windows\run-psexec-nonadmin-tests.bat
-
-      - name: Run low-integrity tests
-        id: lowintegrity
-        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
-        run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
-          call windows\run-psexec-low-integrity-tests.bat
-
-      - name: Collect low-integrity coverage
-        if: github.repository == 'bleachbit/bleachbit'
-        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
-        run: copy /Y "%USERPROFILE%\AppData\LocalLow\.coverage.psexec" .coverage.psexec
-
-      - name: Combine coverage
-        if: &all_suites_passed steps.admin.outcome == 'success' && steps.nonadmin.outcome == 'success' && steps.lowintegrity.outcome == 'success' && github.repository == 'bleachbit/bleachbit'
-        shell: pwsh
-        run: |
-          Get-ChildItem .coverage* -Force -ErrorAction SilentlyContinue | Format-Table Name, Length
-          $files = @('.coverage.admin', '.coverage.nonadmin', '.coverage.psexec') |
-            Where-Object { Test-Path $_ }
-          if ($files.Count -eq 0) {
-            Write-Host "::error::No coverage files found"
-            exit 1
-          }
-          & $env:PYTHON_EXE -m coverage combine --data-file=.coverage @files
-          & $env:PYTHON_EXE -m coverage report --data-file=.coverage
-
-      - name: Generate lcov coverage
-        if: *all_suites_passed
-        shell: pwsh
-        run: "& $env:PYTHON_EXE -m coverage lcov -o coverage.lcov --data-file=.coverage"
-
-      - name: Upload coverage to Coveralls
-        if: *all_suites_passed
-        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
-        with:
-          file: coverage.lcov
-          flag-name: windows
-          parallel: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
   windows-deploy:
     needs: [windows-build]
     # Eligible for deployment:
@@ -488,6 +184,13 @@ jobs:
       VERSION: ${{ needs.windows-build.outputs.version }}
 
     steps:
+      # Only the deploy script, from the same commit as this workflow
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: windows/deploy-ci.ps1
+          sparse-checkout-cone-mode: false
+
       - name: Download build artifacts
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -508,56 +211,5 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
           AWS_ENDPOINT_URL: ${{ secrets.AWS_ENDPOINT_URL }}
-        run: |
-          # Sanitize
-          $ref = ($env:GITHUB_REF_NAME -replace '[^A-Za-z0-9._/-]','_')
-          $ver = ($env:VERSION         -replace '[^A-Za-z0-9._-]','_')
-          $run = $env:GITHUB_RUN_NUMBER
-          $runId = $env:GITHUB_RUN_ID
-          $attempt = $env:GITHUB_RUN_ATTEMPT
-          $event = ($env:GITHUB_EVENT_NAME -replace '[^A-Za-z0-9._-]','_')
-          $actor = ($env:GITHUB_TRIGGERING_ACTOR -replace '[^A-Za-z0-9._@-]','_')
-          $sha = $env:GITHUB_SHA.Substring(0,8)
-          # Three-part version (APP_VERSION without the run number suffix)
-          $ver3 = (($ver -split '\.')[0..2] -join '.')
-          $branch = ''
-          $tag = ''
-          if ($env:GITHUB_REF_TYPE -eq 'tag') { $tag = $ref } else { $branch = $ref }
-          $dest = "s3://${{ secrets.AWS_BUCKET_NAME }}/"
-          "## Windows CI builds`n" >> $env:GITHUB_STEP_SUMMARY
-          Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-setup-English.exe, BleachBit-*-portable.zip -File |
-            ForEach-Object {
-              $file = $_.FullName
-              $name = $_.Name
-              $sha256 = (Get-FileHash -Algorithm SHA256 $file).Hash.ToLower()
-              $sha1   = (Get-FileHash -Algorithm SHA1   $file).Hash.ToLower()
-              $md5    = (Get-FileHash -Algorithm MD5    $file).Hash.ToLower()
-              $artifactType = if ($name -like '*-setup-English.exe') { 'installer-english' } `
-                              elseif ($name -like '*-setup.exe') { 'installer' } `
-                              elseif ($name -like '*-portable.zip') { 'portable' } `
-                              else { 'unknown' }
-              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,size=$($_.Length),artifact_type=$artifactType,frontend=gtk"
-              $url = "https://download.bleachbit.org/ci/$name"
-              Write-Output ("{0,15:N0} bytes  {1}  ->  {2}" -f $_.Length, $name, $url)
-              aws s3 cp $file "$dest" --metadata "$meta"
-              if ($LASTEXITCODE -ne 0) { throw "upload of $name failed with exit code $LASTEXITCODE" }
-              "- [$name]($url) ({0:N0} bytes)" -f $_.Length >> $env:GITHUB_STEP_SUMMARY
-            }
-          $filter = if ($tag) { "tag=$tag" } else { "branch=$branch" }
-          $indexUrl = "https://download.bleachbit.org/ci/#$filter"
-          Write-Output "Index: $indexUrl"
-          "`n[All builds for this $($filter.Split('=')[0])]($indexUrl)" >> $env:GITHUB_STEP_SUMMARY
-
-  coveralls-finish:
-    needs: [linux, windows-test]
-    if: github.repository == 'bleachbit/bleachbit'
-    # This took 11s on ubuntu-slim (2026-07-27).
-    runs-on: ubuntu-slim
-    timeout-minutes: 3
-    steps:
-      - name: Coveralls finished
-        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
-        with:
-          parallel-finished: true
-          carryforward: "linux,windows"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+        run: .\windows\deploy-ci.ps1

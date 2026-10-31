@@ -66,8 +66,10 @@ make pretty  # format .py and .xml files
 ```
 
 More resources:
-* [![Build and Test](https://github.com/bleachbit/bleachbit/actions/workflows/build_and_test.yaml/badge.svg?branch=master)](https://github.com/bleachbit/bleachbit/actions/workflows/build_and_test.yaml)
-* [![Run tests on macOS](https://github.com/bleachbit/bleachbit/actions/workflows/test_macos.yaml/badge.svg?branch=master)](https://github.com/bleachbit/bleachbit/actions/workflows/test_macos.yaml)
+
+* [![Tests](https://img.shields.io/github/actions/workflow/status/bleachbit/bleachbit/tests.yml?branch=master&label=Tests)](https://github.com/bleachbit/bleachbit/actions/workflows/tests.yml)
+* [![Windows build](https://img.shields.io/github/actions/workflow/status/bleachbit/bleachbit/build_and_test.yaml?branch=master&label=Windows%20build)](https://github.com/bleachbit/bleachbit/actions/workflows/build_and_test.yaml)
+* [![Coverage](https://img.shields.io/coverallsCoverage/github/bleachbit/bleachbit?branch=master)](https://coveralls.io/github/bleachbit/bleachbit?branch=master)
 * [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
 * [Winapp2.ini Repository](https://github.com/bleachbit/winapp2.ini)
