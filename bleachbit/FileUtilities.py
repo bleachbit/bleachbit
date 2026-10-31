@@ -836,12 +836,13 @@ def _truncate_locked_file(path):
         return False
 
 
-def _delete_file_impl(path, shred, dir_fd=None):
+def _delete_file_impl(path, shred, dir_fd=None, full_path=None):
     """"Delete a file
 
     - File must exist.
     - Not for use with directories.
     - Does not check the user's preferences.
+    - full_path names the file in messages when path is relative to dir_fd.
 
     Returns True.
     """
@@ -870,7 +871,7 @@ def _delete_file_impl(path, shred, dir_fd=None):
             # overwrite its contents. %(path)s is the file path; %(error)s is
             # the reason, such as 'Permission denied'.
             logger.warning(_("Could not overwrite the contents of %(path)s: %(error)s"),
-                           {'path': extended_path_undo(path),
+                           {'path': extended_path_undo(full_path or path),
                             'error': overwrite_err.strerror or overwrite_err})
         return True
     # Code below is shred == False
@@ -898,9 +899,9 @@ def _delete_file_impl(path, shred, dir_fd=None):
     return True
 
 
-def delete_file(path, shred, dir_fd=None):
+def delete_file(path, shred, dir_fd=None, full_path=None):
     return _run_with_delete_lock(
-        path, lambda: _delete_file_impl(path, shred, dir_fd))
+        path, lambda: _delete_file_impl(path, shred, dir_fd, full_path))
 
 
 def truncate_file(path):
@@ -1071,7 +1072,7 @@ def _delete(path, name, do_shred, ignore_missing, dir_fd=None):
                     raise OSError(e.errno, e.strerror, left, None, path) from e
         return True
     if stat.S_ISREG(mode):
-        delete_file(name, do_shred, dir_fd=dir_fd)
+        delete_file(name, do_shred, dir_fd=dir_fd, full_path=path)
         return True
     # TRANSLATORS: Log message where %s is the pathname.
     logger.info(_("Special file type cannot be deleted: %s"), path)
