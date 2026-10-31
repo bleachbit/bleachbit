@@ -329,6 +329,18 @@ auto_hide = True
         finally:
             o.cancel_pending_flush()
 
+    def test_get_language_invalid_value(self):
+        """An invalid language value must match what get_languages() keeps"""
+        self._write_private_options_file(
+            "[preserve_languages]\nen = True\nzz = ['False']\n")
+        o = bleachbit.Options.Options()
+        try:
+            with self.assertLogs('bleachbit.Options', level='WARNING'):
+                self.assertTrue(o.get_language('zz'))
+            self.assertIn('zz', o.get_languages())
+        finally:
+            o.cancel_pending_flush()
+
     def test_duplicate_key_keeps_later_sections(self):
         """A duplicate key must not stop the read before the keep list"""
         self._write_private_options_file('''[bleachbit]

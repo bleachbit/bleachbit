@@ -496,10 +496,7 @@ class Options:
                 return self.config.get(section, option)
             except ValueError:
                 # The GUI resets a corrupt file only after reading some options
-                if override_key not in self._invalid_logged:
-                    self._invalid_logged.add(override_key)
-                    logger.warning(
-                        'Ignoring invalid value of option %s', option)
+                self.__warn_invalid(section, option)
 
         if section == 'bleachbit':
             default = _get_default_value(option)
@@ -507,6 +504,12 @@ class Options:
                 return default
 
         return None
+
+    def __warn_invalid(self, section, option):
+        """Log an invalid value once"""
+        if (section, option) not in self._invalid_logged:
+            self._invalid_logged.add((section, option))
+            logger.warning('Ignoring invalid value of option %s', option)
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
@@ -518,7 +521,12 @@ class Options:
             self.__auto_preserve_languages()
         if not self.config.has_option('preserve_languages', langid):
             return False
-        return self.config.getboolean('preserve_languages', langid)
+        try:
+            return self.config.getboolean('preserve_languages', langid)
+        except ValueError:
+            # get_languages() keeps every listed language
+            self.__warn_invalid('preserve_languages', langid)
+            return True
 
     def get_languages(self):
         """Return a list of all selected languages"""
