@@ -23,14 +23,31 @@ logger = logging.getLogger(__name__)
 COOKIE_KEEP_LIST_FILENAME = "cookie_keep_list.json"
 
 
-def _estimate_in_memory_size(conn, table_name, delete_query, params):
+def _keep_host_func(keep_list):
+    """Return a function telling whether a cookie host is kept.
+
+    A host is kept when it is a kept domain or one of its subdomains.
+    Doing this in SQL takes a term per domain, and a long keep list then
+    exceeds SQLite's expression depth limit.
+    """
+    domains = {str(d).lstrip('.').lower() for d in keep_list}
+
+    def keep_host(host):
+        if not isinstance(host, str):
+            return False
+        labels = host.lstrip('.').lower().split('.')
+        return any('.'.join(labels[i:]) in domains for i in range(len(labels)))
+    return keep_host
+
+
+def _estimate_in_memory_size(conn, table_name, delete_query, keep_host):
     """Return estimated database size (bytes) after deleting rows in-memory.
 
     Args:
         conn: SQLite database connection
         table_name (str): Name of the table being modified
         delete_query (str): SQL DELETE query to execute
-        params (tuple): Parameters for the DELETE query
+        keep_host (function): The keep_host() SQL function the query calls
 
     Returns:
         int or None: Estimated size in bytes after deletion, or None if estimation fails
@@ -40,9 +57,10 @@ def _estimate_in_memory_size(conn, table_name, delete_query, params):
         # In FreeBSD, sqlite3 is a separate package
         import sqlite3
         mem_conn = sqlite3.connect(':memory:')
+        mem_conn.create_function('keep_host', 1, keep_host)
         conn.backup(mem_conn)
         mem_cursor = mem_conn.cursor()
-        mem_cursor.execute(delete_query, params)
+        mem_cursor.execute(delete_query)
         mem_conn.commit()
 
         mem_conn.isolation_level = None
@@ -148,7 +166,8 @@ def load_keep_list():
     path = os.path.join(bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
     domains = set()
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        # utf-8-sig accepts a BOM added by an editor
+        with open(path, 'r', encoding='utf-8-sig') as f:
             data = json.load(f)
     except FileNotFoundError:
         return domains
@@ -209,26 +228,17 @@ def delete_cookies(path, keep_list, really_delete=False):
             total_before = cursor.execute(
                 f"SELECT COUNT(*) FROM {table_name}").fetchone()[0]
 
-            # Build predicate for domain-level keep semantics
             # Match exact domain and any subdomain (both Firefox and Chromium)
-            domains = [str(d).lstrip('.').lower() for d in keep_list]
-            or_clauses = []
-            params = []
-            for d in domains:
-                or_clauses.append(f"{host_column} = ?")
-                params.append(d)
-                or_clauses.append(f"{host_column} LIKE ?")
-                params.append(f"%.{d}")
-            keep_predicate = '(' + ' OR '.join(or_clauses) + ')'
+            keep_host = _keep_host_func(keep_list)
+            conn.create_function('keep_host', 1, keep_host)
 
             # Count cookies that will be kept
             kept_count = cursor.execute(
-                f"SELECT COUNT(*) FROM {table_name} WHERE {keep_predicate}",
-                tuple(params)
+                f"SELECT COUNT(*) FROM {table_name} WHERE keep_host({host_column})"
             ).fetchone()[0]
 
             deleted_count = total_before - kept_count
-            delete_query = f"DELETE FROM {table_name} WHERE NOT {keep_predicate}"
+            delete_query = f"DELETE FROM {table_name} WHERE NOT keep_host({host_column})"
 
             ratio_estimate = 0
 
@@ -238,28 +248,17 @@ def delete_cookies(path, keep_list, really_delete=False):
                     conn.close()
                     if shred_enabled:
                         _delete_auxiliary_journal_files(path, True)
-                    try:
-                        FileUtilities.delete(path, shred_enabled)
-                        return {
-                            "total_deleted": deleted_count,
-                            "total_kept": 0,
-                            "skipped": False,
-                            "whole_file_deleted": True,
-                            "file_size_reduction": original_size,
-                        }
-                    except OSError as e:
-                        logger.error(
-                            "Failed to delete cookie database %s: %s", path, e)
-                        return {
-                            "total_deleted": 0,
-                            "total_kept": 0,
-                            "skipped": True,
-                            "whole_file_deleted": False,
-                            "file_size_reduction": 0,
-                        }
+                    FileUtilities.delete(path, shred_enabled)
+                    return {
+                        "total_deleted": deleted_count,
+                        "total_kept": 0,
+                        "skipped": False,
+                        "whole_file_deleted": True,
+                        "file_size_reduction": original_size,
+                    }
 
                 # Perform actual deletion: delete anything NOT matching keep predicate
-                cursor.execute(delete_query, tuple(params))
+                cursor.execute(delete_query)
                 # Commit deletion before VACUUM
                 conn.commit()
                 # Run VACUUM in autocommit mode to avoid 'cannot VACUUM from within a transaction'
@@ -282,7 +281,7 @@ def delete_cookies(path, keep_list, really_delete=False):
                 memory_estimate = None
             else:
                 # Preview mode or nothing to delete
-                if kept_count == 0:
+                if kept_count == 0 and deleted_count > 0:
                     # No cookies being kept: entire file would be deleted
                     size_reduction = original_size
                     estimation_method = 'whole_file'
@@ -296,7 +295,7 @@ def delete_cookies(path, keep_list, really_delete=False):
                     if deleted_count > 0 and shred_enabled:
                         # In-memory method is accurate when shredding is enabled
                         memory_size = _estimate_in_memory_size(
-                            conn, table_name, delete_query, tuple(params))
+                            conn, table_name, delete_query, keep_host)
                         if memory_size is not None:
                             memory_estimate = max(
                                 0, original_size - memory_size)
@@ -320,6 +319,8 @@ def delete_cookies(path, keep_list, really_delete=False):
             }
 
     except sqlite3.Error as e:
+        if really_delete:
+            raise
         logger.error("SQLite error processing %s: %s", path, e)
         return {
             "total_deleted": 0,
@@ -346,7 +347,8 @@ def list_unique_cookies():
     cookie_files = set()
     # Import backends here to avoid a circular import.
     from bleachbit.Cleaner import backends as cleaner_backends
-    for cleaner in cleaner_backends.values():
+    # This runs in a thread while the GUI may clear and refill backends.
+    for cleaner in list(cleaner_backends.values()):
         actions = getattr(cleaner, 'actions', ())
         for option_id, action in actions:
             if getattr(action, 'action_key', None) != 'cookie':
