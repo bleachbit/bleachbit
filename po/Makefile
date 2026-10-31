@@ -69,12 +69,14 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 		--add-comments=TRANSLATORS \
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
+		--package-name=$(APP) \
 		--add-location=file \
 		$(PY_SRC)
 	xgettext -o $(POTFILE) \
 		--join-existing \
 		--add-comments=TRANSLATORS \
 		--default-domain=$(APP) \
+		--package-name=$(APP) \
 		--add-location=file \
 		--language=Glade \
 		$(UI_SRC)
