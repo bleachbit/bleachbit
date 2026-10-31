@@ -122,6 +122,7 @@ jobs:
 
     env:
       MSYS_BIN: C:\msys64\usr\bin
+      PYTHON_VERSION: '3.14'
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -130,19 +131,31 @@ jobs:
 
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.14'
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Cache pip packages
+      # No patch version in the key: runners can carry different ones
+      - name: Cache the lint environment
+        id: cache-venv
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~\AppData\Local\pip\Cache
-          key: pip-lint-win-${{ hashFiles('requirements.txt', 'requirements-lint.txt', 'windows/requirements.txt') }}
-          restore-keys: pip-lint-win-
+          path: .venv
+          key: lint-venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('requirements.txt', 'requirements-lint.txt', 'windows/requirements.txt') }}
 
       # requirements.txt is only so psutil and requests resolve. The rest of
       # windows/requirements.txt is not needed to lint, but its pins apply.
       - name: Install dependencies
-        run: python -m pip install -r requirements.txt -r requirements-lint.txt pywin32 -c windows/requirements.txt
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          python -m venv .venv
+          .venv/Scripts/python -m pip install -r requirements.txt -r requirements-lint.txt pywin32 -c windows/requirements.txt
+
+      # A restored venv still points at the Python of the runner that made it
+      - name: Use the lint environment
+        shell: bash
+        run: |
+          .venv/Scripts/python -c "" 2>/dev/null || python -m venv --upgrade .venv
+          echo "$GITHUB_WORKSPACE\.venv\Scripts" >> "$GITHUB_PATH"
 
       # Without it, pylint reports bleachbit.Revision as an unresolved import
       - name: Generate Revision.py
