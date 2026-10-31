@@ -149,7 +149,9 @@ class UpdateTestCase(common.BleachbitTestCase):
             self.assertIsInstance(ver, (type(None), str))
             self.assertIsInstance(url, (type(None), str))
 
-    def test_check_updates_bad_url(self):
+    # Keep the retries but skip the backoff waits between them
+    @patch('urllib3.util.retry.Retry.sleep')
+    def test_check_updates_bad_url(self, _mock_sleep):
         """Unit test for function check_updates() with bad network address"""
         # expect connection failure
         preserve_url = bleachbit.update_check_url

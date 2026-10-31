@@ -119,7 +119,9 @@ class NetworkTestCase(common.BleachbitTestCase):
             self.assertEqual(unset_sslkeylogfile(True), IS_WINDOWS)
             self.assertFalse(unset_sslkeylogfile(True))
 
-    def test_download_url_to_fn(self):
+    # Keep the retries but skip the backoff waits between them
+    @patch('urllib3.util.retry.Retry.sleep')
+    def test_download_url_to_fn(self, _mock_sleep):
         """Unit test for function download_url_to_fn()"""
         # Test different HTTP status codes
         # 200: success
@@ -357,7 +359,8 @@ class NetworkTestCase(common.BleachbitTestCase):
         with self.assertRaises(requests.exceptions.RetryError):
             fetch_url(url, max_retries=1, timeout=5)
 
-    def test_fetch_url_invalid(self):
+    @patch('urllib3.util.retry.Retry.sleep')
+    def test_fetch_url_invalid(self, _mock_sleep):
         """Unit test for fetch_url() with invalid URL"""
         url = 'https://test.invalid'
         with self.assertRaises(requests.exceptions.RequestException):
