@@ -135,9 +135,11 @@ install: $(MOFILES)
 
 tests: require-gettext
 	@echo "* Checking .po files with msgfmt --check"
+	@# msgfmt has no option to make warnings fatal, so fail on any output
 	@rc=0; \
 	for f in $(POFILES); do \
-		msgfmt --check --check-format --no-hash -o /dev/null "$$f" 2>&1 || rc=1; \
+		out=`msgfmt --check --check-format --no-hash -o /dev/null "$$f" 2>&1` || rc=1; \
+		if [ -n "$$out" ]; then echo "$$out"; rc=1; fi; \
 	done; \
 	exit $$rc
 
