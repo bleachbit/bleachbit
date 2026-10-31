@@ -32,7 +32,7 @@ concurrency:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint (Linux)
     runs-on: ubuntu-26.04
     timeout-minutes: 20
 
