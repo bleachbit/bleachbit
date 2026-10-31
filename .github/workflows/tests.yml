@@ -161,6 +161,9 @@ jobs:
           flag-name: linux
           parallel: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          # The PR head, so the statuses do not also land on the test
+          # merge commit and show up twice on the PR
+          git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
 
   windows-test:
     name: windows-test
@@ -302,6 +305,7 @@ jobs:
           flag-name: windows
           parallel: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
 
   # GitHub charges much more for macOS runner than Linux or Windows, so be
   # careful to manage costs
@@ -382,6 +386,7 @@ jobs:
           flag-name: macos
           parallel: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
 
   coveralls-finish:
     needs: [linux, windows-test, macos]
@@ -396,3 +401,4 @@ jobs:
           parallel-finished: true
           carryforward: "linux,windows,macos"
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
