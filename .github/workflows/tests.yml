@@ -248,6 +248,10 @@ jobs:
           DESTRUCTIVE_TESTS: T
           PYTHONWARNINGS: error
           COVERAGE_FILE: .coverage.admin
+          # Test files go on the runner's work drive instead of the system
+          # drive that holds the default %TEMP%
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\;%PATH%
           make tests-pytest PYTHON="%PYTHON_EXE%" PYTEST_COVERAGE=1 PYTEST_ARGS=tests
