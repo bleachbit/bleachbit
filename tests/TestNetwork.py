@@ -9,13 +9,11 @@ Test case for module Network
 """
 
 # standard imports
+import contextlib
 import errno
-import http.server
 import ipaddress
 import logging
 import os
-import socketserver
-import threading
 import unittest
 import warnings
 from unittest.mock import MagicMock, Mock, patch
@@ -55,41 +53,6 @@ def response_to_error_msg(response):
            f"Response content: {response.text}"
 
 
-class _StatusCodeHandler(http.server.BaseHTTPRequestHandler):
-    """Reply with the HTTP status code named in the request path.
-
-    A request for /status/404 responds with 404. Serving the codes
-    locally keeps the tests off external services.
-    """
-
-    # do_GET is the handler name required by http.server
-    # pylint: disable-next=invalid-name
-    def do_GET(self):
-        try:
-            status_code = int(self.path.rsplit('/', 1)[-1])
-        except ValueError:
-            status_code = 400
-        body = b'BleachBit test server\n'
-        self.send_response(status_code)
-        self.send_header('Content-Type', 'text/plain')
-        self.send_header('Content-Length', str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
-
-    def log_message(self, *args):
-        """Silence the default per-request logging to stderr."""
-
-
-class _LocalHTTPServer(http.server.ThreadingHTTPServer):
-    """Threading HTTP server that skips the reverse DNS lookup."""
-
-    def server_bind(self):
-        # HTTPServer.server_bind() calls socket.getfqdn(), a reverse DNS
-        # lookup that can stall on the macOS CI runner
-        socketserver.TCPServer.server_bind(self)
-        self.server_name, self.server_port = self.server_address[:2]
-
-
 class NetworkTestCase(common.BleachbitTestCase):
     """Test case for module Network"""
     status_generator_url = None
@@ -97,21 +60,11 @@ class NetworkTestCase(common.BleachbitTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls._httpd = _LocalHTTPServer(('127.0.0.1', 0), _StatusCodeHandler)
-        # tearDownClass is skipped when setUpClass raises
-        cls.addClassCleanup(cls._httpd.server_close)
-        cls._server_thread = threading.Thread(
-            target=cls._httpd.serve_forever, daemon=True)
-        cls._server_thread.start()
-        host, port = cls._httpd.server_address
-        cls.status_generator_url = f'http://{host}:{port}/status/{{}}'
+        # A class cleanup also runs when setUpClass raises
+        stack = contextlib.ExitStack()
+        cls.addClassCleanup(stack.close)
+        cls.status_generator_url = stack.enter_context(common.status_server())
         logger.info('Local status server: %s', cls.status_generator_url)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls._httpd.shutdown()
-        cls._server_thread.join(timeout=5)
-        super().tearDownClass()
 
     def test_unset_sslkeylogfile(self):
         """Test the function unset_sslkeylogfile()."""

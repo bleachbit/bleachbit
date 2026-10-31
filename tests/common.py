@@ -13,11 +13,14 @@ Common code for unit tests
 # pylint: disable=protected-access
 
 import contextlib
+import http.server
 import os
 import re
 import shutil
+import socketserver
 import sys
 import tempfile
+import threading
 import time
 import unittest
 import warnings
@@ -630,6 +633,56 @@ def put_env(key, val):
 def skipIfMac(f):
     """Skip unit test if running on macOS"""
     return unittest.skipIf(bleachbit.IS_MAC, 'running on macOS')(f)
+
+
+class StatusCodeHandler(http.server.BaseHTTPRequestHandler):
+    """Reply with the HTTP status code named in the request path.
+
+    A request for /status/404 responds with 404. Serving the codes
+    locally keeps the tests off external services.
+    """
+
+    # do_GET is the handler name required by http.server
+    # pylint: disable-next=invalid-name
+    def do_GET(self):
+        try:
+            status_code = int(self.path.rsplit('/', 1)[-1])
+        except ValueError:
+            status_code = 400
+        body = b'BleachBit test server\n'
+        self.send_response(status_code)
+        self.send_header('Content-Type', 'text/plain')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, *args):
+        """Silence the default per-request logging to stderr."""
+
+
+class LocalHTTPServer(http.server.ThreadingHTTPServer):
+    """Threading HTTP server that skips the reverse DNS lookup."""
+
+    def server_bind(self):
+        # HTTPServer.server_bind() calls socket.getfqdn(), a reverse DNS
+        # lookup that can stall on the macOS CI runner
+        socketserver.TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address[:2]
+
+
+@contextlib.contextmanager
+def status_server():
+    """Serve /status/<code> on 127.0.0.1 and yield its URL template"""
+    httpd = LocalHTTPServer(('127.0.0.1', 0), StatusCodeHandler)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    try:
+        host, port = httpd.server_address[:2]
+        yield f'http://{host}:{port}/status/{{}}'
+    finally:
+        httpd.shutdown()
+        thread.join(timeout=5)
+        httpd.server_close()
 
 
 def skipIfWindows(f):
