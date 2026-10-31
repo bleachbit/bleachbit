@@ -1698,6 +1698,27 @@ class GUITestCase(common.BleachbitTestCase):
         mock_commit.assert_called_once()
         mock_destroy.assert_called_once()
 
+    def test_invalid_geometry_in_config(self):
+        """A corrupt window position is dropped before the window is shown"""
+        from bleachbit.GuiWindow import GUI
+        # set(), not an override: the per-test reload reverts it
+        options.set('remember_geometry', True)
+        options.config.set('bleachbit', 'window_x', 'abc')
+        for key in ('window_y', 'window_width', 'window_height'):
+            options.config.set('bleachbit', key, '100')
+        with common.capture_glib_exceptions() as glib_errors, \
+                self.assertLogs('bleachbit.GUI', level='ERROR') as removed:
+            window = GUI(application=self.app, title='test', auto_exit=False)
+            self.refresh_gui()
+            window.destroy()
+            self.refresh_gui()
+        self.assertEqual(glib_errors, [])
+        # The geometry is saved again on destroy, so check the removal itself
+        self.assertEqual([r.args['options'] for r in removed.records],
+                         ['window_x'])
+        self.assertNotEqual(
+            options.config.get('bleachbit', 'window_x', fallback=None), 'abc')
+
     def test_ctrl_c_while_window_is_built(self):
         """Ctrl+C during GUI() destroys the window without showing it"""
         window = self.app._window
