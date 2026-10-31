@@ -187,6 +187,32 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertEqual(paths, [closed_fn])
 
     @common.skipIfWindows
+    def test_scan_skip_open_other_search(self):
+        """An open file stays when a search without skip_open matches it too"""
+        top = self.mkdtemp()
+        # Other tests scan the whole class tempdir
+        self.addCleanup(shutil.rmtree, top)
+        subdir = self.mkdir(os.path.join(top, 'sub'))
+        open_fn = self.write_file(os.path.join(subdir, 'open.bbtestswp'), b'x')
+        closed_fn = self.write_file(
+            os.path.join(subdir, 'closed.bbtestswp'), b'x')
+        plain = Search(command='delete', regex=r'\.bbtestswp$')
+        guard = Search(command='delete', regex=r'\.bbtestswp$', skip_open=True)
+        cases = (
+            {top: [plain, guard]},
+            {top: [guard, plain]},
+            {subdir: [plain], top: [guard]},
+            {top: [guard], subdir: [plain]},
+        )
+        with open(open_fn, 'rb'):
+            openfiles.scan()
+            for searches in cases:
+                with self.subTest(searches=searches):
+                    paths = [cmd.path for cmd in DeepScan(
+                        searches).scan() if cmd is not True]
+                    self.assertEqual(paths, [closed_fn])
+
+    @common.skipIfWindows
     def test_scan_skip_open_unlisted(self):
         """skip_open keeps files when open files cannot be listed"""
         root = self.mkdtemp()
@@ -230,6 +256,46 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ]
             self.assertEqual(1, len(paths))
             self.assertTrue(whitelisted(paths[0]))
+
+    def test_scan_yields_each_file_once(self):
+        """Overlapping searches and nested tops yield a file only once"""
+        top = self.mkdtemp()
+        # Other tests scan the whole class tempdir
+        self.addCleanup(shutil.rmtree, top)
+        subdir = self.mkdir(os.path.join(top, 'sub'))
+        filename = self.write_file(os.path.join(subdir, 'foo.bbtestbak'))
+        searches = {
+            top: [
+                Search(command='delete', regex=r'\.bbtestbak$'),
+                Search(command='delete', regex=r'^foo\.'),
+            ],
+            subdir: [Search(command='delete', regex=r'\.bbtestbak$')],
+        }
+        paths = [
+            cmd.path
+            for cmd in DeepScan(searches).scan()
+            if cmd is not True
+        ]
+        self.assertEqual(paths, [filename])
+
+    @common.skipIfWindows
+    def test_scan_root(self):
+        """DeepScan walks the root, which is only protected from deletion"""
+        walked = []
+
+        def fake_walk(top, **_kwargs):
+            walked.append(top)
+            yield top, [], ['foo.bbtestbak']
+
+        searches = {'/': [Search(command='delete', regex=r'\.bbtestbak$')]}
+        with mock.patch('bleachbit.DeepScan.normalized_walk', fake_walk):
+            paths = [
+                cmd.path
+                for cmd in DeepScan(searches).scan()
+                if cmd is not True
+            ]
+        self.assertEqual(walked, ['/'])
+        self.assertEqual(paths, ['/foo.bbtestbak'])
 
     @common.skipUnlessWindows
     def test_scan_does_not_follow_junction(self):
