@@ -104,13 +104,13 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         else:
             logger.warning("Could not get GTK settings to apply dark mode")
 
-        if options.is_corrupt():
+        invalid = options.remove_invalid_values()
+        if invalid:
             logger.error(
                 # TRANSLATORS: Error message shown in the log on the main window.
-                # %s is the file path.
-                _('Resetting the configuration file because it is corrupt: %s'),
-                bleachbit.options_file)
-            bleachbit.Options.init_configuration()
+                # %(file)s is the file path, %(options)s a list of option names.
+                _('Removed invalid values from the configuration file %(file)s: %(options)s'),
+                {'file': bleachbit.options_file, 'options': ', '.join(invalid)})
 
         GLib.idle_add(self.cb_refresh_operations)
 

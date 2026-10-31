@@ -495,7 +495,7 @@ class Options:
                     return self.config.getint(section, option)
                 return self.config.get(section, option)
             except ValueError:
-                # The GUI resets a corrupt file only after reading some options
+                # The GUI removes invalid values only after reading some options
                 self.__warn_invalid(section, option)
 
         if section == 'bleachbit':
@@ -632,23 +632,24 @@ class Options:
             logger.exception('Error in get_tree()')
             return False
 
-    def is_corrupt(self):
-        """Perform a self-check for corruption of the configuration"""
-        # no boolean key must raise an exception
-        for boolean_key in boolean_keys:
-            try:
-                if self.config.has_option('bleachbit', boolean_key):
-                    self.config.getboolean('bleachbit', boolean_key)
-            except ValueError:
-                return True
-        # no int key must raise an exception
-        for int_key in int_keys:
-            try:
-                if self.config.has_option('bleachbit', int_key):
-                    self.config.getint('bleachbit', int_key)
-            except ValueError:
-                return True
-        return False
+    def remove_invalid_values(self):
+        """Remove the general options get() cannot parse and return them"""
+        invalid = []
+        with self._flush_lock:
+            for key in sorted(boolean_keys | int_keys):
+                if not self.config.has_option('bleachbit', key):
+                    continue
+                try:
+                    if key in boolean_keys:
+                        self.config.getboolean('bleachbit', key)
+                    else:
+                        self.config.getint('bleachbit', key)
+                except ValueError:
+                    self.config.remove_option('bleachbit', key)
+                    invalid.append(key)
+            if invalid:
+                self.__schedule_flush()
+        return invalid
 
     def reset_overrides(self):
         """Clear all overrides"""

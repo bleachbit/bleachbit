@@ -288,32 +288,42 @@ auto_hide = True
         with open(filename, 'rb') as f:
             self.assertEqual(f.read(), b'keepme')
 
-    def test_is_corrupt(self):
-        """Test is_corrupt()"""
-        def _test_is_corrupt(contents, expect_is_corrupt):
+    def test_remove_invalid_values(self):
+        """Test remove_invalid_values()"""
+        def _test_remove_invalid(contents, expected):
             with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f:
                 f.write(contents)
             o = bleachbit.Options.Options()
             try:
-                self.assertEqual(o.is_corrupt(), expect_is_corrupt)
+                self.assertEqual(o.remove_invalid_values(), expected)
+                self.assertEqual(o.remove_invalid_values(), [])
+                return o
             finally:
                 # cancel any real flush timer restore() may have scheduled
                 o.cancel_pending_flush()
 
         # test blank
-        _test_is_corrupt('', False)
-        _test_is_corrupt('[bleachbit]\n', False)
+        _test_remove_invalid('', [])
+        _test_remove_invalid('[bleachbit]\n', [])
 
         # test valid but non-standard boolean
-        _test_is_corrupt('[bleachbit]\nshred=f\n', False)
+        _test_remove_invalid('[bleachbit]\nshred=f\n', [])
 
         # test invalid boolean
         # https://github.com/bleachbit/bleachbit/issues/560#issuecomment-497361700
-        _test_is_corrupt("[bleachbit]\nshred=['True']\n", True)
+        # https://github.com/bleachbit/bleachbit/issues/1305
+        o = _test_remove_invalid(
+            "[bleachbit]\nshred=['True']\ndebug=['False']\n"
+            "window_x=left\nauto_hide=False\n"
+            "[tree]\nsystem.cache=True\n",
+            ['debug', 'shred', 'window_x'])
+        # the rest of the file is kept
+        self.assertFalse(o.get('auto_hide'))
+        self.assertTrue(o.get_tree('system', 'cache'))
         os.remove(bleachbit.options_file)
 
     def test_get_invalid_value(self):
-        """A corrupt value must not raise before the GUI can reset the file"""
+        """A corrupt value must not raise before the GUI can remove it"""
         self._write_private_options_file(
             '[bleachbit]\ndark_mode = Tru\nwindow_x = left\n')
         o = bleachbit.Options.Options()
@@ -325,7 +335,8 @@ auto_hide = True
                 # some options are read once per file, so warn only once
                 self.assertTrue(o.get('dark_mode'))
             self.assertEqual(len(log_context.output), 2)
-            self.assertTrue(o.is_corrupt())
+            self.assertEqual(o.remove_invalid_values(),
+                             ['dark_mode', 'window_x'])
         finally:
             o.cancel_pending_flush()
 
