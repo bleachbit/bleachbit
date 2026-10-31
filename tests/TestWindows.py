@@ -1312,8 +1312,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertEqual(paths, ())
 
         # Put files in the clipboard in supported format
-        args = ('powershell.exe', 'Set-Clipboard',
-                '-Path', r'c:\windows\*.exe')
+        args = ('powershell.exe', '-NoProfile', '-NonInteractive',
+                'Set-Clipboard', '-Path', r'c:\windows\*.exe')
         (ext_rc, _stdout, _stderr) = General.run_external(args)
         # It may print "Requested Clipboard operation did not succeed" to stderr.
         self.assertEqual(

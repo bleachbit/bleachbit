@@ -80,7 +80,9 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
     def _copy_paths_to_windows_clipboard(self):
         """Copy test paths using the shell clipboard, like Explorer."""
         pattern = os.path.join(self.tempdir, 'clipboard-path-*')
-        args = ('powershell.exe', 'Set-Clipboard', '-Path', pattern)
+        # The user profile only slows down startup
+        args = ('powershell.exe', '-NoProfile', '-NonInteractive',
+                'Set-Clipboard', '-Path', pattern)
         rc, _stdout, stderr = General.run_external(args)
         self.assertEqual(0, rc, stderr)
 
