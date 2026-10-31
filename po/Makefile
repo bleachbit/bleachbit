@@ -69,12 +69,14 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 		--add-comments=TRANSLATORS \
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
+		--package-name=$(APP) \
 		--add-location=file \
 		$(PY_SRC)
 	xgettext -o $(POTFILE) \
 		--join-existing \
 		--add-comments=TRANSLATORS \
 		--default-domain=$(APP) \
+		--package-name=$(APP) \
 		--add-location=file \
 		--language=Glade \
 		$(UI_SRC)
@@ -133,9 +135,11 @@ install: $(MOFILES)
 
 tests: require-gettext
 	@echo "* Checking .po files with msgfmt --check"
+	@# msgfmt has no option to make warnings fatal, so fail on any output
 	@rc=0; \
 	for f in $(POFILES); do \
-		msgfmt --check --check-format --no-hash -o /dev/null "$$f" 2>&1 || rc=1; \
+		out=`msgfmt --check --check-format --no-hash -o /dev/null "$$f" 2>&1` || rc=1; \
+		if [ -n "$$out" ]; then echo "$$out"; rc=1; fi; \
 	done; \
 	exit $$rc
 
