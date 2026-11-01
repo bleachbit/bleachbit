@@ -1,6 +1,6 @@
 # Lint dependencies (make lint / make pretty)
 # pylint 4.0 requires Python >=3.10, so 3.9 is stuck on the last 3.3.x release.
-pylint==4.1.2; python_version>='3.10'
+pylint==4.1.3; python_version>='3.10'
 pylint==3.3.9; python_version<'3.10'
-pyflakes==4.0.2
+pyflakes==4.0.3
 autopep8==2.3.2
