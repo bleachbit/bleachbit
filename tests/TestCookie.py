@@ -8,20 +8,23 @@
 Test case for module Cookie
 """
 
+import contextlib
 import hashlib
 import json
 import os
 import sqlite3
 import unittest
 import shutil
+from concurrent.futures import ThreadPoolExecutor
 from unittest import mock
 
 import bleachbit
 from bleachbit import Cookie
 from bleachbit.Action import Cookie as CookieAction
-from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME, load_keep_list
+from bleachbit.Cookie import (
+    COOKIE_KEEP_LIST_FILENAME, _estimate_in_memory_size, load_keep_list)
 from bleachbit.Options import options
-from bleachbit.FileUtilities import execute_sqlite3
+from bleachbit.FileUtilities import SQLITE_BUSY_TIMEOUT, execute_sqlite3
 from tests import common
 
 
@@ -433,6 +436,44 @@ class CookieTestCase(common.BleachbitTestCase):
         conn.close()
 
         self.assertEqual(len(all_cookies), 3)  # All cookies still there
+
+    def test_estimate_in_memory_size_locked(self):
+        """A lock acquired before backup must not make preview retry forever."""
+        path = self._create_chrome_cookies_db()
+
+        def estimate():
+            with contextlib.closing(sqlite3.connect(
+                    path, timeout=SQLITE_BUSY_TIMEOUT)) as source:
+                return _estimate_in_memory_size(
+                    source, 'cookies',
+                    'DELETE FROM cookies WHERE host_key != ?', ('google.com',))
+
+        with contextlib.closing(sqlite3.connect(path)) as holder, \
+                ThreadPoolExecutor(max_workers=1) as executor:
+            holder.execute('BEGIN EXCLUSIVE')
+            future = executor.submit(estimate)
+            try:
+                self.assertIsNone(future.result(timeout=3))
+            finally:
+                holder.rollback()
+
+    def test_preview_cookies_backup_unavailable(self):
+        """Preview falls back to a ratio when the in-memory backup fails."""
+        path = self._create_chrome_cookies_db()
+        original_hash = self._get_file_hash(path)
+        with mock.patch.object(Cookie, '_estimate_in_memory_size',
+                               return_value=None) as estimate:
+            result = Cookie.delete_cookies(path, {'google.com'})
+
+        estimate.assert_called_once()
+        self.assertEqual(result['total_deleted'], 2)
+        self.assertEqual(result['total_kept'], 1)
+        self.assertFalse(result['skipped'])
+        self.assertEqual(result['file_size_estimation_method'], 'ratio')
+        self.assertIsNone(result['file_size_reduction_in_memory'])
+        self.assertEqual(result['file_size_reduction'],
+                         result['file_size_reduction_ratio'])
+        self.assertEqual(original_hash, self._get_file_hash(path))
 
     def test_keeplist_domain_matching_matrix(self):
         """Table-driven coverage for keep list domain semantics"""

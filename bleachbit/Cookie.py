@@ -12,6 +12,7 @@ import contextlib
 import json
 import logging
 import os
+import time
 
 import bleachbit
 from bleachbit import FileUtilities, IS_MAC
@@ -40,7 +41,14 @@ def _estimate_in_memory_size(conn, table_name, delete_query, params):
         # In FreeBSD, sqlite3 is a separate package
         import sqlite3
         mem_conn = sqlite3.connect(':memory:')
-        conn.backup(mem_conn)
+        deadline = time.monotonic() + SQLITE_BUSY_TIMEOUT
+
+        def check_backup_timeout(status, _remaining, _total):
+            if status in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED) \
+                    and time.monotonic() >= deadline:
+                raise sqlite3.OperationalError('database is locked')
+
+        conn.backup(mem_conn, progress=check_backup_timeout, sleep=0.05)
         mem_cursor = mem_conn.cursor()
         mem_cursor.execute(delete_query, params)
         mem_conn.commit()
