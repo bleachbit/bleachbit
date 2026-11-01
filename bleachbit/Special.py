@@ -84,6 +84,40 @@ def _sqlite_readonly_uri(pathname):
     return _sqlite_uri(pathname, 'ro')
 
 
+def _sqlite_connect_readonly(pathname):
+    """Open a SQLite database for read-only queries.
+
+    A mode=ro open cannot materialize the -shm/-wal files a WAL-mode
+    database needs. Some SQLite builds (e.g., Apple SQLite on macOS)
+    then fail with SQLITE_CANTOPEN once the last writer closes cleanly,
+    so retry with mode=rw and let SQLite create the sidecars; callers
+    still issue only reads.
+    """
+    import sqlite3
+    conn = None
+    try:
+        conn = sqlite3.connect(
+            _sqlite_readonly_uri(pathname), uri=True,
+            timeout=SQLITE_BUSY_TIMEOUT)
+        # The first read materializes the WAL index, so a deferred
+        # SQLITE_CANTOPEN surfaces here rather than at the caller's own
+        # query.
+        conn.execute('select 1 from sqlite_master limit 1;')
+        return conn
+    except sqlite3.OperationalError as exc:
+        if conn is not None:
+            conn.close()
+        # Retry only for the WAL sidecar failure: a locked database
+        # must report the lock without a second probe.
+        if ('unable to open database file' not in str(exc)
+                or not os.path.exists(pathname)):
+            raise
+    conn = sqlite3.connect(
+        _sqlite_uri(pathname, 'rw'), uri=True, timeout=SQLITE_BUSY_TIMEOUT)
+    conn.execute('select 1 from sqlite_master limit 1;')
+    return conn
+
+
 def _quote_sqlite_identifier(name):
     """Return a safely-quoted SQLite identifier."""
     if not isinstance(name, str):
@@ -112,9 +146,8 @@ def sqlite_table_exists(pathname, table):
     import sqlite3
     cmd = "select name from sqlite_master where type='table' and name=?;"
     try:
-        uri = _sqlite_readonly_uri(pathname)
-        with contextlib.closing(sqlite3.connect(
-                uri, uri=True, timeout=SQLITE_BUSY_TIMEOUT)) as conn:
+        with contextlib.closing(
+                _sqlite_connect_readonly(pathname)) as conn:
             if conn.execute(cmd, (table,)).fetchone():
                 return True
     except sqlite3.OperationalError as exc:
@@ -142,9 +175,8 @@ def _sqlite_is_valid_database(pathname):
     """Return boolean indicating whether pathname points to a readable SQLite database."""
     import sqlite3
     try:
-        uri = _sqlite_readonly_uri(pathname)
-        with contextlib.closing(sqlite3.connect(
-                uri, uri=True, timeout=SQLITE_BUSY_TIMEOUT)) as conn:
+        with contextlib.closing(
+                _sqlite_connect_readonly(pathname)) as conn:
             conn.execute('select 1 from sqlite_master limit 1;')
             return True
     except (sqlite3.DatabaseError, sqlite3.OperationalError) as exc:
@@ -182,10 +214,8 @@ def get_sqlite_int(path, sql, parameters=()):
 
 def _get_sqlite_values(path, sql, row_factory=None, parameters=()):
     """Run SQL on database in 'path' and return the integers"""
-    import sqlite3
-    with contextlib.closing(sqlite3.connect(
-            _sqlite_readonly_uri(path), uri=True,
-            timeout=SQLITE_BUSY_TIMEOUT)) as conn:
+    with contextlib.closing(
+            _sqlite_connect_readonly(path)) as conn:
         if row_factory is not None:
             conn.row_factory = row_factory
         cursor = conn.execute(sql, parameters)

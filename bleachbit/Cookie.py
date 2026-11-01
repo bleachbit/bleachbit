@@ -17,7 +17,8 @@ import time
 import bleachbit
 from bleachbit import FileUtilities, IS_MAC
 from bleachbit.FileUtilities import SQLITE_BUSY_TIMEOUT
-from bleachbit.Special import sqlite_table_exists, _sqlite_uri
+from bleachbit.Special import (
+    _sqlite_connect_readonly, _sqlite_uri, sqlite_table_exists)
 
 logger = logging.getLogger(__name__)
 
@@ -208,13 +209,16 @@ def delete_cookies(path, keep_list, really_delete=False):
     if original_size <= 0:
         raise RuntimeError(f"cookies database is empty: {path}")
 
-    # Set up connection. Preview opens read-only; the percent-encoded URI
-    # keeps a '?' in the path from defeating the mode.
-    uri = _sqlite_uri(path, None if really_delete else 'ro')
-
+    # Set up connection. Preview opens read-only (with a read-write
+    # fallback for WAL databases whose -shm file is gone); the
+    # percent-encoded URI keeps a '?' in the path from defeating the mode.
     try:
-        with contextlib.closing(sqlite3.connect(
-                uri, uri=True, timeout=SQLITE_BUSY_TIMEOUT)) as conn:
+        if really_delete:
+            conn = sqlite3.connect(
+                _sqlite_uri(path), uri=True, timeout=SQLITE_BUSY_TIMEOUT)
+        else:
+            conn = _sqlite_connect_readonly(path)
+        with contextlib.closing(conn) as conn:
             cursor = conn.cursor()
             if shred_enabled:
                 cursor.execute('PRAGMA secure_delete = ON;')
