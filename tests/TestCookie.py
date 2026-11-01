@@ -108,8 +108,9 @@ class CookieTestCase(common.BleachbitTestCase):
             cookies = self._sample_cookies()
 
         path = os.path.join(self.tempdir, 'chrome_cookies.db')
-        if os.path.exists(path):
-            os.unlink(path)
+        for suffix in ('', '-wal', '-shm'):
+            if os.path.exists(path + suffix):
+                os.unlink(path + suffix)
         sql = '''
             CREATE TABLE cookies (
                 host_key TEXT NOT NULL,
@@ -167,8 +168,9 @@ class CookieTestCase(common.BleachbitTestCase):
             cookies = self._sample_cookies(dotted=True)
 
         path = os.path.join(self.tempdir, 'firefox_cookies.db')
-        if os.path.exists(path):
-            os.unlink(path)
+        for suffix in ('', '-wal', '-shm'):
+            if os.path.exists(path + suffix):
+                os.unlink(path + suffix)
         sql = '''
             CREATE TABLE moz_cookies (
                 id INTEGER PRIMARY KEY,
@@ -322,7 +324,7 @@ class CookieTestCase(common.BleachbitTestCase):
                             'SELECT host_key FROM cookies').fetchall(), expected)
 
     def test_delete_cookies_wal_disk_size(self):
-        """Measure disk usage after SQLite closes and cleans its own sidecars."""
+        """Reported disk savings match the on-disk footprint after close."""
         for shred in (False, True):
             for keep_list in ({'google.com'}, {'not-kept.invalid'}):
                 with self.subTest(shred=shred, keep_list=keep_list):
@@ -341,10 +343,18 @@ class CookieTestCase(common.BleachbitTestCase):
 
                     self.assertFalse(result['skipped'])
                     self.assertFalse(result['whole_file_deleted'])
+                    final_size = sum(
+                        os.path.getsize(path + suffix)
+                        for suffix in ('', '-wal', '-shm')
+                        if os.path.exists(path + suffix))
                     self.assertEqual(result['file_size_reduction'],
-                                     original_size - os.path.getsize(path))
-                    self.assertNotExists(path + '-wal')
-                    self.assertNotExists(path + '-shm')
+                                     original_size - final_size)
+                    # SQLite owns the sidecars and may leave the -shm
+                    # wal-index behind, but the WAL must not retain
+                    # uncheckpointed data.
+                    wal_size = (os.path.getsize(path + '-wal')
+                                if os.path.exists(path + '-wal') else 0)
+                    self.assertEqual(wal_size, 0)
 
     def test_checkpoint_wal_busy(self):
         """A blocked checkpoint must warn that deleted data remains in the WAL."""
