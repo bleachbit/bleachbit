@@ -104,17 +104,22 @@ def _sqlite_connect_readonly(pathname):
         # query.
         conn.execute('select 1 from sqlite_master limit 1;')
         return conn
-    except sqlite3.OperationalError as exc:
+    except sqlite3.Error as exc:
         if conn is not None:
             conn.close()
         # Retry only for the WAL sidecar failure: a locked database
         # must report the lock without a second probe.
-        if ('unable to open database file' not in str(exc)
+        if (not isinstance(exc, sqlite3.OperationalError)
+                or 'unable to open database file' not in str(exc)
                 or not os.path.exists(pathname)):
             raise
     conn = sqlite3.connect(
         _sqlite_uri(pathname, 'rw'), uri=True, timeout=SQLITE_BUSY_TIMEOUT)
-    conn.execute('select 1 from sqlite_master limit 1;')
+    try:
+        conn.execute('select 1 from sqlite_master limit 1;')
+    except sqlite3.Error:
+        conn.close()
+        raise
     return conn
 
 
