@@ -81,6 +81,8 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # Not the real home: on CI it holds tool caches and the folders
         # other workers write to, so its size and contents vary
         root = self.mkdtemp()
+        # Other tests scan the whole class tempdir.
+        self.addCleanup(shutil.rmtree, root)
         sub = os.path.join(root, 'sub')
         deeper = os.path.join(sub, 'ɡælɪk.dir')
         os.makedirs(deeper)
