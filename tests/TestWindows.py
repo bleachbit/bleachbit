@@ -604,21 +604,51 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """Unit test for delete_locked_file"""
         tests = ('regular', 'unicode-emdash-u\u2014', 'long' + 'x' * 100)
         for test in tests:
-            pathname = self.mkstemp(suffix=test)
-            self.assertExists(pathname)
-            logger.debug('delete_locked_file(%s) ', pathname)
-            if not shell.IsUserAnAdmin():
-                # pylint: disable-next=possibly-used-before-assignment
-                with self.assertRaises(WindowsError):
-                    delete_locked_file(pathname)
-            else:
-                try:
-                    delete_locked_file(pathname)
-                except WindowsError:
-                    logger.exception(
-                        'delete_locked_file() threw an error, which may be a false positive')
-            self.assertExists(pathname)
-        logger.info('reboot Windows and check the three files are deleted')
+            with self.subTest(suffix=test):
+                pathname = self.mkstemp(suffix=test)
+                self.assertExists(pathname)
+                logger.debug('delete_locked_file(%s) ', pathname)
+                with open(pathname, 'rb'), mock.patch.object(
+                        ctypes.windll.kernel32, 'MoveFileExW',
+                        wraps=ctypes.windll.kernel32.MoveFileExW) as move_file:
+                    with self.assertRaises(PermissionError) as locked:
+                        os.remove(pathname)
+                    self.assertEqual(locked.exception.winerror, 32)
+                    if not shell.IsUserAnAdmin():
+                        # pylint: disable-next=possibly-used-before-assignment
+                        with self.assertRaises(WindowsError) as denied:
+                            delete_locked_file(pathname)
+                        self.assertEqual(denied.exception.errno, errno.EACCES)
+                    else:
+                        delete_locked_file(pathname)
+                    move_file.assert_called_once_with(pathname, None, 4)
+                self.assertExists(pathname)
+
+    def test_delete_locked_file_errors(self):
+        pathname = self.mkstemp()
+        for error_code in (5, 32, 123):
+            with self.subTest(winerror=error_code):
+                error = ctypes.WinError(error_code)
+                with mock.patch.object(
+                        ctypes.windll.kernel32, 'MoveFileExW', return_value=0) as move_file, \
+                        mock.patch('bleachbit.Windows.ctypes.WinError', return_value=error):
+                    with self.assertRaises(OSError) as caught:
+                        delete_locked_file(pathname)
+                move_file.assert_called_once_with(pathname, None, 4)
+                if isinstance(error, PermissionError):
+                    self.assertEqual(caught.exception.errno, errno.EACCES)
+                    self.assertEqual(caught.exception.filename, pathname)
+                    self.assertIs(caught.exception.__cause__, error)
+                else:
+                    self.assertIs(caught.exception, error)
+                self.assertExists(pathname)
+
+    def test_delete_locked_file_missing(self):
+        pathname = self.mkstemp()
+        os.remove(pathname)
+        with mock.patch.object(ctypes.windll.kernel32, 'MoveFileExW') as move_file:
+            delete_locked_file(pathname)
+        move_file.assert_not_called()
 
     # FileAttributeTagInfo of a plain directory
     _DIRECTORY_TAG_INFO = {'FileAttributes': 0x10, 'ReparseTag': 0}
