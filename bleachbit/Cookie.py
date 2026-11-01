@@ -87,9 +87,13 @@ def _checkpoint_wal(conn, path):
     prev_isolation = conn.isolation_level
     try:
         conn.isolation_level = None
-        conn.execute('PRAGMA wal_checkpoint(TRUNCATE)')
+        busy, _, _ = conn.execute('PRAGMA wal_checkpoint(TRUNCATE)').fetchone()
+        if busy:
+            logger.warning(
+                'WAL checkpoint is busy for %s; deleted cookie data may remain in the WAL',
+                path)
     except sqlite3.Error as exc:
-        logger.debug('WAL checkpoint failed for %s: %s', path, exc)
+        logger.warning('WAL checkpoint failed for %s: %s', path, exc)
     finally:
         conn.isolation_level = prev_isolation
 
@@ -239,9 +243,11 @@ def delete_cookies(path, keep_list, really_delete=False):
             delete_query = f"DELETE FROM {table_name} WHERE NOT {keep_predicate}"
 
             ratio_estimate = 0
+            delete_whole_file = kept_count == 0 and cursor.execute(
+                'PRAGMA journal_mode').fetchone()[0] != 'wal'
 
             if really_delete and deleted_count > 0:
-                if kept_count == 0:
+                if delete_whole_file:
                     # No cookies are being kept: delete the whole database file
                     conn.close()
                     if shred_enabled:
@@ -281,8 +287,7 @@ def delete_cookies(path, keep_list, really_delete=False):
                     conn.isolation_level = prev_isolation
                 if shred_enabled:
                     _checkpoint_wal(conn, path)
-                    conn.close()
-                    _delete_auxiliary_journal_files(path, True)
+                conn.close()
                 new_size = _get_db_disk_size(path)
                 size_reduction = original_size - new_size
                 estimation_method = 'actual'
@@ -290,7 +295,7 @@ def delete_cookies(path, keep_list, really_delete=False):
                 memory_estimate = None
             else:
                 # Preview mode or nothing to delete
-                if kept_count == 0:
+                if delete_whole_file:
                     # No cookies being kept: entire file would be deleted
                     size_reduction = original_size
                     estimation_method = 'whole_file'
