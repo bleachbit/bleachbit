@@ -22,6 +22,8 @@ from bleachbit.Special import sqlite_table_exists, _sqlite_uri
 logger = logging.getLogger(__name__)
 
 COOKIE_KEEP_LIST_FILENAME = "cookie_keep_list.json"
+SQLITE_BUSY = 5
+SQLITE_LOCKED = 6
 
 
 def _estimate_in_memory_size(conn, table_name, delete_query, params):
@@ -44,7 +46,7 @@ def _estimate_in_memory_size(conn, table_name, delete_query, params):
         deadline = time.monotonic() + SQLITE_BUSY_TIMEOUT
 
         def check_backup_timeout(status, _remaining, _total):
-            if status in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED) \
+            if status in (SQLITE_BUSY, SQLITE_LOCKED) \
                     and time.monotonic() >= deadline:
                 raise sqlite3.OperationalError('database is locked')
 
