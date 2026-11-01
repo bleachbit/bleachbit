@@ -29,6 +29,8 @@ import logging
 import os
 import re
 import shutil
+import socket
+import ssl
 import subprocess
 import sys
 import tempfile
@@ -576,6 +578,97 @@ def clean_dist_locale():
     os.rmdir(tmpd)
 
 
+# certifi's Mozilla-derived bundle has ~120 roots, but BleachBit needs
+# only the few that anchor the services it contacts, so the bundle is
+# slimmed at build time.  This affects only the frozen Windows app:
+# Network.py uses dist\cacert.pem under sys.frozen, while source runs
+# and other platforms keep the full certifi/OS trust store.  A smaller
+# bundle saves ~200 KB and limits the impact if an unused CA is
+# compromised (e.g., eMudhra).
+#
+# Names are the CN from each root's "# Subject:" comment in cacert.pem.
+# Current chains (October 2026):
+#   *.bleachbit.org (Cloudflare): WE1 -> GTS Root R4
+#   sourceforge.net: YE2 -> Root YE -> ISRG Root X2
+#   *.dl.sourceforge.net mirrors: YR1 -> Root YR -> ISRG Root X1
+# Cloudflare may also issue from Let's Encrypt or SSL.com; the rest are
+# cheap insurance for CA rotation at these services.
+CA_BUNDLE_KEEP = (
+    'ISRG Root X1',
+    'ISRG Root X2',
+    'GTS Root R1',
+    'GTS Root R3',
+    'GTS Root R4',
+    'SSL.com TLS RSA Root CA 2022',
+    'SSL.com TLS ECC Root CA 2022',
+    'DigiCert Global Root G2',
+    'DigiCert Global Root G3',
+    'USERTrust RSA Certification Authority',
+    'USERTrust ECC Certification Authority',
+    'GlobalSign Root R46',
+    'Amazon Root CA 1',
+)
+
+# Hosts the slimmed bundle must verify; covers each required root above.
+CA_BUNDLE_CHECK_HOSTS = (
+    'update.bleachbit.org',
+    'download.bleachbit.org',
+    'sourceforge.net',
+    'downloads.sourceforge.net',
+    'master.dl.sourceforge.net',
+)
+
+
+def verify_cabundle(path):
+    """Check the slimmed CA bundle verifies the hosts BleachBit needs"""
+    context = ssl.create_default_context(cafile=path)
+    for host in CA_BUNDLE_CHECK_HOSTS:
+        try:
+            with socket.create_connection((host, 443), timeout=30) as sock, \
+                    context.wrap_socket(sock, server_hostname=host):
+                pass
+        except OSError as e:
+            logger.error('CA bundle verification failed for %s: %s', host, e)
+            sys.exit(1)
+        logger.info('CA bundle verifies %s', host)
+
+
+@count_size_improvement
+def slim_cabundle():
+    """Reduce dist\\cacert.pem to the CA roots BleachBit needs
+
+    Fails the build if a kept root is missing from certifi or a needed
+    host does not verify, so a CA change is caught here instead of by
+    users.  assert_execute_comms_check() later is the end-to-end check.
+    """
+    path = os.path.join('dist', 'cacert.pem')
+    with open(path, encoding='utf-8') as f:
+        bundle = f.read()
+    # Each root is a section of comment lines ("# Issuer:", "# Subject:",
+    # etc.) followed by its PEM block; keep whole sections so the file
+    # format is unchanged.
+    sections = re.split(r'\n(?=# Issuer:)', bundle)
+    kept = []
+    found = set()
+    for section in sections:
+        match = re.search(r'^# Subject:.*?\bCN=(.*?)(?= [A-Z]+=|\s*$)',
+                          section, flags=re.M)
+        if match and match.group(1).strip() in CA_BUNDLE_KEEP:
+            kept.append(section.strip())
+            found.add(match.group(1).strip())
+    missing = sorted(set(CA_BUNDLE_KEEP) - found)
+    if missing:
+        logger.error('%s does not contain kept CAs: %s',
+                     certifi.where(), ', '.join(missing))
+        sys.exit(1)
+    with open(path, 'w', encoding='utf-8', newline='\n') as f:
+        f.write('\n\n'.join(kept) + '\n')
+    logger.info('Kept %d of %d CA roots in %s',
+                len(kept), bundle.count('-----BEGIN CERTIFICATE-----'),
+                path)
+    verify_cabundle(path)
+
+
 def build():
     """Build the application"""
     logger.info('Deleting directories build and dist')
@@ -640,6 +733,7 @@ def build():
     logger.info('Copying CA bundle')
     copy_file(certifi.where(),
               os.path.join('dist', 'cacert.pem'))
+    slim_cabundle()
 
     dist_locale_dir = r'dist\share\locale'
     shutil.rmtree(dist_locale_dir, ignore_errors=True)
