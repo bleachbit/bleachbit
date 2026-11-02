@@ -238,6 +238,19 @@ def should_show_dark_mode_warning(before_dark: Optional[bool], after_dark: Optio
     return before_dark is None or after_dark is None or before_dark == after_dark
 
 
+def apply_dark_mode(dark_mode):
+    """Ask GTK for the dark theme variant when it is not already in use
+
+    Every set reloads the theme CSS, even to the same value.
+    """
+    settings = Gtk.Settings.get_default()
+    if settings is None:
+        logger.warning("Could not get GTK settings to apply dark mode")
+        return
+    if settings.get_property('gtk-application-prefer-dark-theme') != dark_mode:
+        settings.set_property('gtk-application-prefer-dark-theme', dark_mode)
+
+
 def flush_gtk_events(max_iterations: int = 5):
     """Process pending GTK events to allow style updates to land."""
     iterations = 0

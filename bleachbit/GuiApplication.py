@@ -17,7 +17,7 @@ from bleachbit.GtkShim import (
     require_gtk,
 )
 from bleachbit.GUI import logger
-from bleachbit.GuiUtil import get_clipboard_paths
+from bleachbit.GuiUtil import apply_dark_mode, get_clipboard_paths
 from bleachbit.GuiWindow import GUI
 from bleachbit.Language import get_text as _, get_active_language_code
 from bleachbit.Options import options
@@ -75,6 +75,8 @@ class Bleachbit(Gtk.Application):
         Gtk.Application.__init__(
             self, application_id=application_id, flags=flags)
         GLib.set_prgname('org.bleachbit.BleachBit')
+        # Before any widget exists, so nothing gets styled twice
+        apply_dark_mode(options.get('dark_mode'))
 
         self._font_check_prompt_scheduled = False
 

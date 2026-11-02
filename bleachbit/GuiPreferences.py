@@ -34,8 +34,8 @@ from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiInfoBar import InfoBarMixin
 from bleachbit.GuiCookie import CookieManagerPane
-from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
-                               load_icon_or_fallback,
+from bleachbit.GuiUtil import (apply_dark_mode, detect_dark_background,
+                               flush_gtk_events, load_icon_or_fallback,
                                should_show_dark_mode_warning)
 from bleachbit.Language import (find_supported_language_code,
                                 get_active_language_code,
@@ -223,12 +223,7 @@ class PreferencesDialog(InfoBarMixin):
             if IS_WINDOWS and options.get('win10_theme'):
                 self.cb_set_windows10_theme()
 
-            settings = self.dialog.get_settings()
-            if settings:
-                settings.set_property(
-                    'gtk-application-prefer-dark-theme', options.get('dark_mode'))
-            else:
-                logger.warning("Could not get GTK settings to apply dark mode")
+            apply_dark_mode(options.get('dark_mode'))
 
             flush_gtk_events()
             after_dark = detect_dark_background(theme_widget)

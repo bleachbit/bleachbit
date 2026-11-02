@@ -98,14 +98,6 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # if stderr was redirected - keep redirecting it
             sys.stderr = self.gtklog
 
-        dark_mode = options.get('dark_mode')
-        settings = self.get_settings() or Gtk.Settings.get_default()
-        if settings:
-            settings.set_property(
-                'gtk-application-prefer-dark-theme', dark_mode)
-        else:
-            logger.warning("Could not get GTK settings to apply dark mode")
-
         if options.is_corrupt():
             logger.error(
                 # TRANSLATORS: Error message shown in the log on the main window.
