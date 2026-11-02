@@ -14,8 +14,9 @@ import stat
 import sys
 from unittest import mock
 
-from bleachbit.Log import init_log
+from bleachbit.Log import DelayLog, init_log
 from tests import common
+from tests.common import pytest
 
 
 class LogTestCase(common.BleachbitTestCase):
@@ -63,3 +64,34 @@ class LogTestCase(common.BleachbitTestCase):
         self.assertEqual(mode, 0o700)
         with open(debug_log_path, encoding='utf-8') as f:
             self.assertIn('previous content', f.read())
+
+    def test_init_log_debug_log_unwritable(self):
+        """A --debug-log path that cannot be opened is skipped"""
+        for debug_log_path in (os.path.join(self.tempdir, 'missing', 'debug.log'),
+                               self.tempdir):
+            with mock.patch.object(sys, 'argv', ['bleachbit', '--debug-log', debug_log_path]):
+                logger = init_log()
+            new_handlers = [h for h in logger.handlers
+                            if h not in self.saved_handlers]
+            self.assertFalse(any(isinstance(h, logging.FileHandler)
+                                 for h in new_handlers))
+
+    @pytest.mark.no_xdist
+    def test_init_log_debug_log_undecodable_path(self):
+        """A line with an undecodable path reaches the debug log"""
+        debug_log_path = os.path.join(self.mkdtemp(), 'debug.log')
+        with mock.patch.object(sys, 'argv', ['bleachbit', '--debug-log', debug_log_path]):
+            logger = init_log()
+        logger.info('path: %s', 'caf\udce9 \u4e2d')
+        for handler in logger.handlers:
+            handler.flush()
+        with open(debug_log_path, encoding='utf-8') as f:
+            self.assertIn('path: caf\\udce9 \u4e2d', f.read())
+
+    def test_delay_log_read_once(self):
+        """DelayLog keeps nothing written after the GUI has read it"""
+        delay_log = DelayLog()
+        delay_log.write('early\n')
+        self.assertEqual(list(delay_log.read()), ['early\n'])
+        delay_log.write('late\n')
+        self.assertEqual(delay_log.queue, [])
