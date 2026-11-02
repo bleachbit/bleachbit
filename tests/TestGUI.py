@@ -1297,6 +1297,17 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertTrue(gui.run_button_get_sensitive())
         self.assertFalse(gui.stop_button.get_sensitive())
 
+    def test_refresh_rows_sorts_once(self):
+        """refresh_rows() fills the store unsorted and leaves it sorted by id"""
+        gui = self.get_window()
+        model = gui.view.get_model()
+        gui.tree_store.refresh_rows()
+        self.assertEqual((3, Gtk.SortType.ASCENDING),
+                         model.get_sort_column_id())
+        ids = [row[2].lower() for row in model]
+        self.assertGreater(len(ids), 1)
+        self.assertEqual(sorted(ids), ids)
+
     def test_refresh_waits_for_running_worker(self):
         """A refresh asked for while a worker runs starts after it is done"""
         gui = self.get_window()
