@@ -13,6 +13,7 @@ Create cleaners from CleanerML (markup language)
 import logging
 import os
 import sys
+import time
 import xml.etree.ElementTree
 
 # local import
@@ -30,6 +31,9 @@ if IS_WINDOWS:
     from bleachbit.Windows import read_registry_key
 
 logger = logging.getLogger(__name__)
+
+# Longest a CleanerML load runs before yielding to the GUI main loop
+_YIELD_SECONDS = 0.05
 
 """Actions blocked for untrusted (user-writable) cleaners.
 
@@ -479,6 +483,7 @@ def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     files_done = 0
     not_usable = []
     loaded = {}
+    deadline = time.monotonic() + _YIELD_SECONDS
     for pathname in cleanerml_files:
         try:
             xmlcleaner = CleanerML(
@@ -487,25 +492,23 @@ def load_cleaners(cb_progress=lambda x: None, allow_local=True):
             # TRANSLATORS: Error message printed to the log.
             # %s expands to the path of the XML cleaner file
             logger.exception(_("Error reading cleaner: %s"), pathname)
-            files_done += 1
-            cb_progress(1.0 * files_done / total_files)
-            yield True
-            continue
-        cleaner = xmlcleaner.get_cleaner()
-        if cleaner.id in loaded:
-            logger.warning('Ignoring cleaner %s because %s has the same id',
-                           pathname, loaded[cleaner.id])
-        elif cleaner.is_usable():
-            Cleaner.backends[cleaner.id] = cleaner
-            loaded[cleaner.id] = pathname
         else:
-            if cleaner.id:
+            cleaner = xmlcleaner.get_cleaner()
+            if cleaner.id in loaded:
+                logger.warning('Ignoring cleaner %s because %s has the same id',
+                               pathname, loaded[cleaner.id])
+            elif cleaner.is_usable():
+                Cleaner.backends[cleaner.id] = cleaner
+                loaded[cleaner.id] = pathname
+            elif cleaner.id:
                 not_usable.append(cleaner.id)
             else:
                 not_usable.append(os.path.basename(pathname))
         files_done += 1
         cb_progress(1.0 * files_done / total_files)
-        yield True
+        if time.monotonic() >= deadline:
+            yield True
+            deadline = time.monotonic() + _YIELD_SECONDS
     if not_usable:
         logger.debug(
             "%d cleaners are not usable on this OS because they have no actions: %s", len(not_usable), ', '.join(not_usable))
