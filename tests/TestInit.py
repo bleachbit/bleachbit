@@ -16,8 +16,10 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
+from unittest import mock
 
 import bleachbit
 from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS, get_share_dirs, get_share_path
@@ -60,6 +62,35 @@ class InitTestCase(common.BleachbitTestCase):
             if IS_POSIX:
                 self.assertTrue(os.path.samefile(
                     test_output, os.path.expanduser(test_input)))
+
+    def test_seconds_since_process_start(self):
+        """Process age is known on Windows and Linux and is a small number"""
+        seconds = bleachbit._seconds_since_process_start()
+        if IS_WINDOWS or sys.platform.startswith('linux'):
+            self.assertIsNotNone(seconds)
+        if seconds is not None:
+            self.assertGreaterEqual(seconds, 0)
+            self.assertLess(seconds, 24 * 3600)
+
+    def test_log_startup_time(self):
+        """The first milestone logs the package import and arms the exit one"""
+        clock = bleachbit._startup_clock
+        saved = (clock.t0, clock.enabled, clock.rebased)
+        clock.enabled = True
+        clock.rebased = False
+        try:
+            with mock.patch('bleachbit.atexit.register') as register, \
+                    self.assertLogs('bleachbit', level='INFO') as cm:
+                bleachbit.log_startup_time('test milestone')
+        finally:
+            clock.t0, clock.enabled, clock.rebased = saved
+        register.assert_called_once_with(clock._log, 'atexit done')
+        times = [re.fullmatch(r'INFO:bleachbit:startup (.+): ([0-9.]+) ms', line)
+                 for line in cm.output]
+        self.assertEqual([m.group(1) for m in times],
+                         ['package imported', 'test milestone'])
+        self.assertLessEqual(
+            float(times[0].group(2)), float(times[1].group(2)))
 
     def test_get_share_dirs(self):
         """Unit test for get_share_dirs()"""
