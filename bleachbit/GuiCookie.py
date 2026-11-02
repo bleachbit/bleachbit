@@ -59,9 +59,7 @@ class CookieManagerPane(Gtk.Box):
                 url=URL_COOKIE_MGR))
         notice_label.set_line_wrap(True)
         notice_label.set_xalign(0)
-        notice_label.connect(
-            "activate-link",
-            lambda _label, url: open_url(url, parent_window=None, prompt=True))
+        notice_label.connect("activate-link", self.on_activate_link)
         notice_box.pack_start(notice_label, False, False, 0)
         self.pack_start(notice_box, False, False, 0)
 
@@ -100,7 +98,21 @@ class CookieManagerPane(Gtk.Box):
 
         self.keep_list_path = os.path.join(
             bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
-        self.saved_domains = load_keep_list()
+        try:
+            self.saved_domains = load_keep_list()
+        except (OSError, ValueError) as exc:
+            # Start empty, so the next save replaces the unreadable file.
+            logger.error("Failed to load cookie keep list %s: %s",
+                         self.keep_list_path, exc)
+            self.saved_domains = set()
+            # TRANSLATORS: Shown in the manage cookies dialog when the saved
+            # list is damaged or cannot be opened.
+            error_label = Gtk.Label(label=_(
+                "The list of cookies to keep cannot be read, so cookies are "
+                "not cleaned. Changing the selection saves a new list."))
+            error_label.set_line_wrap(True)
+            error_label.set_xalign(0)
+            self.pack_start(error_label, False, False, 0)
         self._is_loading = False
 
         # Create cookie list store: checkbox, domain
@@ -123,7 +135,7 @@ class CookieManagerPane(Gtk.Box):
         # TRANSLATORS: Column header in the manage cookies dialog.
         # 'Host' is a noun meaning the website hostname (domain name) of the cookie.
         column_domain = Gtk.TreeViewColumn(_("Host"), renderer_text, text=1)
-        column_domain.set_sort_column_id(1)
+        # Not sortable: a TreeModelFilter cannot sort, and rows are added sorted.
         column_domain.set_resizable(True)
         column_domain.set_expand(True)
         self.treeview.append_column(column_domain)
@@ -173,6 +185,12 @@ class CookieManagerPane(Gtk.Box):
             logger.error("Failed to save cookie keep list %s: %s",
                          self.keep_list_path, exc)
             return False
+
+    def on_activate_link(self, _label, url):
+        """Open the documentation link after asking the user"""
+        open_url(url, parent_window=None, prompt=True)
+        # Otherwise GTK opens the link too, even after Cancel
+        return True
 
     def update_stat_label(self):
         """Update the stat label: how many selected"""
@@ -300,7 +318,8 @@ class CookieManagerPane(Gtk.Box):
             discovered = []
             try:
                 discovered = list_unique_cookies()
-            except (OSError, RuntimeError, ValueError) as exc:  # pragma: no cover - defensive logging
+            except Exception as exc:  # pragma: no cover - defensive logging
+                # Anything else would leave the page loading forever.
                 logger.error("Failed to enumerate cookies: %s", exc)
             duration = time.monotonic() - start
             if duration >= COOKIE_DISCOVERY_WARN_THRESHOLD:
@@ -321,7 +340,9 @@ class CookieManagerPane(Gtk.Box):
         self.select_all_btn.set_sensitive(True)
         self.deselect_all_btn.set_sensitive(True)
 
-        all_hosts = {h.strip() for h in discovered if h}
+        # Normalize like load_keep_list() so a saved '.example.com' still
+        # matches its row.
+        all_hosts = {h.strip().lstrip('.').lower() for h in discovered if h}
         all_hosts.update(self.saved_domains)
         sorted_hosts = sorted(all_hosts, key=lambda host: host.lower())
 
