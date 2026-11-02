@@ -8,20 +8,24 @@
 Test case for module Cookie
 """
 
+import contextlib
 import hashlib
 import json
 import os
 import sqlite3
 import unittest
 import shutil
+from concurrent.futures import ThreadPoolExecutor
 from unittest import mock
 
 import bleachbit
 from bleachbit import Cookie
 from bleachbit.Action import Cookie as CookieAction
-from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME, load_keep_list
+from bleachbit.Cookie import (
+    COOKIE_KEEP_LIST_FILENAME, _checkpoint_wal, _estimate_in_memory_size,
+    load_keep_list)
 from bleachbit.Options import options
-from bleachbit.FileUtilities import execute_sqlite3
+from bleachbit.FileUtilities import SQLITE_BUSY_TIMEOUT, execute_sqlite3
 from tests import common
 
 
@@ -104,8 +108,9 @@ class CookieTestCase(common.BleachbitTestCase):
             cookies = self._sample_cookies()
 
         path = os.path.join(self.tempdir, 'chrome_cookies.db')
-        if os.path.exists(path):
-            os.unlink(path)
+        for suffix in ('', '-wal', '-shm'):
+            if os.path.exists(path + suffix):
+                os.unlink(path + suffix)
         sql = '''
             CREATE TABLE cookies (
                 host_key TEXT NOT NULL,
@@ -163,8 +168,9 @@ class CookieTestCase(common.BleachbitTestCase):
             cookies = self._sample_cookies(dotted=True)
 
         path = os.path.join(self.tempdir, 'firefox_cookies.db')
-        if os.path.exists(path):
-            os.unlink(path)
+        for suffix in ('', '-wal', '-shm'):
+            if os.path.exists(path + suffix):
+                os.unlink(path + suffix)
         sql = '''
             CREATE TABLE moz_cookies (
                 id INTEGER PRIMARY KEY,
@@ -270,6 +276,107 @@ class CookieTestCase(common.BleachbitTestCase):
         self.assertFalse(result['skipped'])
         self.assertFalse(result['whole_file_deleted'])
         self.assertGreaterEqual(result['file_size_reduction'], 0)
+
+    def test_delete_cookies_wal_with_open_reader(self):
+        """SQLite must own WAL/SHM cleanup while another connection is open."""
+        for keep_list in ({'google.com'}, {'not-kept.invalid'}):
+            for pinned in (False, True):
+                with self.subTest(keep_list=keep_list, pinned=pinned):
+                    path = self._create_chrome_cookies_db()
+                    with contextlib.closing(sqlite3.connect(
+                            path, isolation_level=None)) as reader:
+                        self.assertEqual(reader.execute(
+                            'PRAGMA journal_mode=WAL').fetchone()[0], 'wal')
+                        if pinned:
+                            reader.execute('BEGIN')
+                        before = reader.execute(
+                            'SELECT host_key FROM cookies ORDER BY host_key').fetchall()
+
+                        preview = Cookie.delete_cookies(path, keep_list)
+                        self.assertEqual(
+                            preview['file_size_estimation_method'], 'in_memory')
+                        with mock.patch('bleachbit.Cookie.FileUtilities.delete') as delete:
+                            result = Cookie.delete_cookies(
+                                path, keep_list, really_delete=True)
+
+                        delete.assert_not_called()
+                        expected = [
+                            (host,) for host in ('google.com',) if host in keep_list]
+                        self.assertFalse(result['skipped'])
+                        self.assertFalse(result['whole_file_deleted'])
+                        self.assertEqual(result['total_kept'], len(expected))
+                        self.assertEqual(
+                            result['total_deleted'], 3 - len(expected))
+                        self.assertExists(path)
+                        self.assertExists(path + '-shm')
+                        self.assertEqual(reader.execute(
+                            'SELECT host_key FROM cookies ORDER BY host_key').fetchall(),
+                            before if pinned else expected)
+
+                        with contextlib.closing(sqlite3.connect(path)) as fresh:
+                            self.assertEqual(fresh.execute(
+                                'SELECT host_key FROM cookies').fetchall(), expected)
+                            self.assertEqual(fresh.execute(
+                                'PRAGMA integrity_check').fetchone()[0], 'ok')
+
+                    with contextlib.closing(sqlite3.connect(path)) as reopened:
+                        self.assertEqual(reopened.execute(
+                            'SELECT host_key FROM cookies').fetchall(), expected)
+
+    def test_delete_cookies_wal_disk_size(self):
+        """Reported disk savings match the on-disk footprint after close."""
+        for shred in (False, True):
+            for keep_list in ({'google.com'}, {'not-kept.invalid'}):
+                with self.subTest(shred=shred, keep_list=keep_list):
+                    options.set('shred', shred)
+                    path = self._create_chrome_cookies_db()
+                    with contextlib.closing(sqlite3.connect(path)) as conn:
+                        conn.execute('PRAGMA journal_mode=WAL')
+                    Cookie.detect_browser(path)
+                    original_size = sum(
+                        os.path.getsize(path + suffix)
+                        for suffix in ('', '-wal', '-shm')
+                        if os.path.exists(path + suffix))
+
+                    result = Cookie.delete_cookies(
+                        path, keep_list, really_delete=True)
+
+                    self.assertFalse(result['skipped'])
+                    self.assertFalse(result['whole_file_deleted'])
+                    final_size = sum(
+                        os.path.getsize(path + suffix)
+                        for suffix in ('', '-wal', '-shm')
+                        if os.path.exists(path + suffix))
+                    self.assertEqual(result['file_size_reduction'],
+                                     original_size - final_size)
+                    # SQLite owns the sidecars and may leave the -shm
+                    # wal-index behind, but the WAL must not retain
+                    # uncheckpointed data.
+                    wal_size = (os.path.getsize(path + '-wal')
+                                if os.path.exists(path + '-wal') else 0)
+                    self.assertEqual(wal_size, 0)
+
+    def test_checkpoint_wal_busy(self):
+        """A blocked checkpoint must warn that deleted data remains in the WAL."""
+        path = self._create_chrome_cookies_db()
+        with contextlib.closing(sqlite3.connect(path)) as reader, \
+                contextlib.closing(sqlite3.connect(
+                    path, timeout=SQLITE_BUSY_TIMEOUT)) as writer:
+            reader.execute('PRAGMA journal_mode=WAL')
+            reader.execute('BEGIN')
+            reader.execute('SELECT * FROM cookies').fetchall()
+            writer.execute(
+                'DELETE FROM cookies WHERE host_key = ?', ('example.com',))
+            writer.commit()
+            isolation = writer.isolation_level
+
+            with self.assertLogs(Cookie.logger, level='WARNING') as logs:
+                _checkpoint_wal(writer, path)
+
+            self.assertIn('WAL', logs.output[0])
+            self.assertIn(path, logs.output[0])
+            self.assertEqual(writer.isolation_level, isolation)
+            self.assertGreater(os.path.getsize(path + '-wal'), 0)
 
     def test_non_sqlite_file_with_keeplist_raises(self):
         """Non-SQLite file should raise ValueError and not be deleted"""
@@ -433,6 +540,44 @@ class CookieTestCase(common.BleachbitTestCase):
         conn.close()
 
         self.assertEqual(len(all_cookies), 3)  # All cookies still there
+
+    def test_estimate_in_memory_size_locked(self):
+        """A lock acquired before backup must not make preview retry forever."""
+        path = self._create_chrome_cookies_db()
+
+        def estimate():
+            with contextlib.closing(sqlite3.connect(
+                    path, timeout=SQLITE_BUSY_TIMEOUT)) as source:
+                return _estimate_in_memory_size(
+                    source, 'cookies',
+                    'DELETE FROM cookies WHERE host_key != ?', ('google.com',))
+
+        with contextlib.closing(sqlite3.connect(path)) as holder, \
+                ThreadPoolExecutor(max_workers=1) as executor:
+            holder.execute('BEGIN EXCLUSIVE')
+            future = executor.submit(estimate)
+            try:
+                self.assertIsNone(future.result(timeout=3))
+            finally:
+                holder.rollback()
+
+    def test_preview_cookies_backup_unavailable(self):
+        """Preview falls back to a ratio when the in-memory backup fails."""
+        path = self._create_chrome_cookies_db()
+        original_hash = self._get_file_hash(path)
+        with mock.patch.object(Cookie, '_estimate_in_memory_size',
+                               return_value=None) as estimate:
+            result = Cookie.delete_cookies(path, {'google.com'})
+
+        estimate.assert_called_once()
+        self.assertEqual(result['total_deleted'], 2)
+        self.assertEqual(result['total_kept'], 1)
+        self.assertFalse(result['skipped'])
+        self.assertEqual(result['file_size_estimation_method'], 'ratio')
+        self.assertIsNone(result['file_size_reduction_in_memory'])
+        self.assertEqual(result['file_size_reduction'],
+                         result['file_size_reduction_ratio'])
+        self.assertEqual(original_hash, self._get_file_hash(path))
 
     def test_keeplist_domain_matching_matrix(self):
         """Table-driven coverage for keep list domain semantics"""

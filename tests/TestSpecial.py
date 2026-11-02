@@ -787,6 +787,24 @@ INSERT INTO "meta" VALUES('version','20');"""
         self.assertTrue(_sqlite_uri('/' + filename).startswith('file:////'))
         self.assertTrue(Special.sqlite_table_exists('/' + filename, 'foo'))
 
+    def test_sqlite_connect_readonly_closes_invalid_database(self):
+        """Failed validation closes both read-only and fallback connections."""
+        for fallback in (False, True):
+            with self.subTest(fallback=fallback):
+                filename = self.write_file(
+                    f'invalid_database_{fallback}.sqlite', b'not a SQLite database')
+                with contextlib.closing(sqlite3.connect(filename)) as conn:
+                    connections = [conn]
+                    if fallback:
+                        connections.insert(0, sqlite3.OperationalError(
+                            'unable to open database file'))
+                    with mock.patch('sqlite3.connect', side_effect=connections):
+                        with self.assertRaises(sqlite3.DatabaseError):
+                            Special._sqlite_connect_readonly(filename)
+                    with self.assertRaises(sqlite3.ProgrammingError):
+                        conn.execute('SELECT 1')
+                os.unlink(filename)
+
     @common.skipUnlessLinux
     def test_sqlite_table_exists_undecodable_path(self):
         """A path with bytes that are not valid UTF-8 still opens"""
