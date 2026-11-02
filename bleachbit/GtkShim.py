@@ -326,6 +326,7 @@ def _check_gtk_available():
             gi = _gi
         except ImportError:
             return False, 'PyGObject (gi) module not installed'
+        log_startup_time('gi imported')
 
         # Check display availability before GTK imports (on POSIX)
         display_available, display_reason = _check_display_available()
@@ -377,6 +378,7 @@ def _import_gtk_libraries():
         try:
             with _patched_argv(_fix_arg):
                 from gi.repository import Gtk as _Gtk
+                log_startup_time('Gtk imported')
                 from gi.repository import Gdk as _Gdk
                 from gi.repository import GObject as _GObject
                 from gi.repository import GLib as _GLib

@@ -13,7 +13,7 @@ import os
 import re
 import sys
 
-from bleachbit import IS_POSIX, IS_WINDOWS, logger
+from bleachbit import IS_POSIX, IS_WINDOWS, logger, log_startup_time
 
 # pylint: disable=invalid-name
 _bootstrapped = False
@@ -89,7 +89,9 @@ def _bootstrap_posix():
 def _bootstrap_windows():
     """Bootstrap for Windows"""
     from bleachbit import Windows
+    log_startup_time('Windows imported')
     Windows.setup_environment()
+    log_startup_time('environment set up')
 
     # Use our `font.conf` (see commit 3385952b37d78).
     os.environ.pop('FONTCONFIG_FILE', None)
@@ -169,13 +171,15 @@ def bootstrap():
         except Exception:
             bleachbit.logger.warning(
                 'could not harden the DLL search path', exc_info=True)
+        log_startup_time('DLL search path hardened')
     _apply_fontconfig_backend_preference()
+    log_startup_time('options loaded')
     _suppress_pygobject_asyncio_deprecations()
+    log_startup_time('GtkShim imported')
     if IS_WINDOWS:
         _bootstrap_windows()
     elif IS_POSIX:
         _bootstrap_posix()
-    from bleachbit import log_startup_time
     log_startup_time('bootstrap done')
 
 

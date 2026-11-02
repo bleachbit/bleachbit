@@ -470,6 +470,7 @@ def load_cleaners(cb_progress=lambda x: None, allow_local=True):
         # handle_localizations() adds to this tree on every load
         Unix.locales = Unix.Locales()
     cleanerml_files = list(list_cleanerml_files(system_only=not allow_local))
+    bleachbit.log_startup_time('CleanerML files listed')
     if not cleanerml_files:
         logger.debug('No CleanerML files to load.')
         return

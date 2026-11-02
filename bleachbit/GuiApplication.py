@@ -90,11 +90,16 @@ class Bleachbit(Gtk.Application):
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
             atexit.register(Windows.cleanup_nonce)
+            # atexit runs last in, first out
+            atexit.register(bleachbit.log_startup_time,
+                            'nonce cleanup started')
         bleachbit.log_startup_time('application created')
 
     def run(self, *args, **kwargs):
         """Run the GTK application."""
-        return Gtk.Application.run(self, *args, **kwargs)
+        rc = Gtk.Application.run(self, *args, **kwargs)
+        bleachbit.log_startup_time('main loop exited')
+        return rc
 
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
@@ -296,6 +301,7 @@ class Bleachbit(Gtk.Application):
         dialog.destroy()
 
     def do_startup(self):
+        bleachbit.log_startup_time('startup signal')
         Gtk.Application.do_startup(self)
         bleachbit.log_startup_time('GTK startup done')
         self.build_app_menu()
@@ -307,6 +313,7 @@ class Bleachbit(Gtk.Application):
             # quit() covers a raise swallowed by a GTK callback
             Gtk.Application.quit(self)
             raise KeyboardInterrupt
+        bleachbit.log_startup_time('quit requested')
         if init_configuration:
             # After "shred settings and quit", rebuild the minimal configuration.
             # which is important for portable mode.
@@ -319,6 +326,7 @@ class Bleachbit(Gtk.Application):
             # app within a few seconds).
             options.commit()
         self._window.destroy()
+        bleachbit.log_startup_time('window destroyed')
 
     def get_system_information_dialog(self):
         """Show system information dialog"""
