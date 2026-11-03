@@ -426,15 +426,68 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         """Abort stops the generation, and the files are still deleted"""
         output_dir = self.mkdtemp()
         abort_event = threading.Event()
+        stop_results = []
 
         def fake_generate_2600(*_args, should_stop, generated_file_names, **_kwargs):
             for _i in range(3):
                 generated_file_names.append(self.mkstemp(dir=output_dir))
             abort_event.set()
-            self.assertTrue(should_stop(generated_file_names, 0))
+            stop_results.append(should_stop(generated_file_names, 0))
 
         with patch('bleachbit.GuiChaff.generate_2600', side_effect=fake_generate_2600):
             # pylint: disable-next=possibly-used-before-assignment
             make_files_thread(STOP_MODE_FILE_COUNT, 10, 0, output_dir, True,
                               lambda *_args, **_kwargs: None, abort_event)
+        self.assertEqual(stop_results, [True])
         self.assertEqual(os.listdir(output_dir), [])
+
+    def test_make_files_thread_missing_file_deletes_rest(self):
+        """An already removed file must not prevent cleanup of the other files"""
+        output_dir = self.mkdtemp()
+        progress_kwargs = []
+
+        def fake_generate(*_args, generated_file_names, **_kwargs):
+            for _i in range(3):
+                generated_file_names.append(self.mkstemp(dir=output_dir))
+            os.unlink(generated_file_names[0])
+
+        for inspiration, generator in enumerate(('generate_2600', 'generate_emails')):
+            with self.subTest(inspiration=inspiration), \
+                    patch(f'bleachbit.GuiChaff.{generator}', side_effect=fake_generate):
+                make_files_thread(
+                    STOP_MODE_FILE_COUNT, 3, inspiration, output_dir, True,
+                    lambda _fraction, **kwargs: progress_kwargs.append(kwargs),
+                    threading.Event())
+                self.assertEqual(os.listdir(output_dir), [])
+                self.assertTrue(progress_kwargs[-1]['is_done'])
+                self.assertIsNone(progress_kwargs[-1]['error'])
+
+    def test_make_files_thread_cleanup_error_continues(self):
+        """Cleanup continues after an unlink failure and reports both errors"""
+        output_dir = self.mkdtemp()
+        generated_paths = []
+        progress_kwargs = []
+        real_unlink = os.unlink
+
+        def fake_generate(*_args, generated_file_names, **_kwargs):
+            for _i in range(3):
+                generated_file_names.append(self.mkstemp(dir=output_dir))
+            generated_paths.extend(generated_file_names)
+            raise OSError(errno.ENOSPC, 'No space left on device')
+
+        def fail_first_unlink(fn):
+            if fn == generated_paths[0]:
+                raise PermissionError(errno.EACCES, 'Permission denied', fn)
+            real_unlink(fn)
+
+        with patch('bleachbit.GuiChaff.generate_2600', side_effect=fake_generate), \
+                patch('bleachbit.GuiChaff.os.unlink', side_effect=fail_first_unlink):
+            make_files_thread(
+                STOP_MODE_FILE_COUNT, 3, 0, output_dir, True,
+                lambda _fraction, **kwargs: progress_kwargs.append(kwargs),
+                threading.Event())
+        self.assertEqual(os.listdir(output_dir), [
+                         os.path.basename(generated_paths[0])])
+        self.assertTrue(progress_kwargs[-1]['is_done'])
+        self.assertIn('No space left on device', progress_kwargs[-1]['error'])
+        self.assertIn('Permission denied', progress_kwargs[-1]['error'])
