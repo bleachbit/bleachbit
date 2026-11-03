@@ -188,7 +188,7 @@ class CookieManagerPane(Gtk.Box):
 
     def on_activate_link(self, _label, url):
         """Open the documentation link after asking the user"""
-        open_url(url, parent_window=None, prompt=True)
+        open_url(url, parent_window=self.get_toplevel(), prompt=True)
         # Otherwise GTK opens the link too, even after Cancel
         return True
 

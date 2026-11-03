@@ -83,12 +83,41 @@ class GuiCookieTestCase(common.BleachbitTestCase):
 
     def test_activate_link_stops_default_handler(self):
         """The 'Learn more' link must not also be opened by GTK"""
+        with mock.patch('bleachbit.GuiCookie.threading.Thread'):
+            pane = CookieManagerPane()
+        # pylint: disable-next=possibly-used-before-assignment
+        window = Gtk.Window()
+        window.add(pane)
+        self.addCleanup(window.destroy)
+        url = 'https://docs.bleachbit.org/'
         with mock.patch('bleachbit.GuiCookie.open_url') as open_url:
-            # pylint: disable-next=possibly-used-before-assignment
-            handled = CookieManagerPane.on_activate_link(
-                None, None, 'https://docs.bleachbit.org/')
+            handled = pane.on_activate_link(None, url)
         self.assertTrue(handled)
-        open_url.assert_called_once()
+        open_url.assert_called_once_with(
+            url, parent_window=window, prompt=True)
+
+    @unittest.skipIf(common.have_root(), 'root users do not get a confirmation')
+    def test_activate_link_confirmation_parent(self):
+        """The real confirmation dialog must be transient for Preferences."""
+        with mock.patch('bleachbit.GuiCookie.threading.Thread'):
+            pane = CookieManagerPane()
+        window = Gtk.Window()
+        window.add(pane)
+        self.addCleanup(window.destroy)
+        dialog_properties = []
+
+        def cancel_dialog(dialog):
+            dialog_properties.append(
+                (dialog.get_transient_for(), dialog.get_modal()))
+            return Gtk.ResponseType.CANCEL
+
+        with mock.patch.object(Gtk.Dialog, 'run', cancel_dialog), \
+                mock.patch('bleachbit.GuiBasic.Gtk.show_uri_on_window') as show_uri:
+            handled = pane.on_activate_link(
+                None, 'https://docs.bleachbit.org/')
+        self.assertTrue(handled)
+        self.assertEqual(dialog_properties, [(window, True)])
+        show_uri.assert_not_called()
 
     def test_unreadable_keep_list(self):
         """A corrupt keep list leaves the page usable, and a save replaces it"""
