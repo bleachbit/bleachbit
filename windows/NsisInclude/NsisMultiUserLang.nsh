@@ -1167,7 +1167,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HUNGARIAN} "${prodname} hibakereső terminál"
 	LangString SHORTCUT_NO_UAC ${LANG_HUNGARIAN} "${prodname} (UAC nélkül)."
 	LangString SHRED_SHELL_MENU ${LANG_HUNGARIAN} "Megsemmisítés ezzel: ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "A(z) $ el lesz távolítva a következő mappából.$\r$\nAz eltávolítás megkezdéséhez kattintson az „Eltávolítás” gombra.$\r$\nAz Ön által ebbe a mappába helyezett fájlok, például az egyéni tisztítóprogramok, megmaradnak."
+	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "A(z) ${prodname} el lesz távolítva a következő mappából.$\r$\nAz eltávolítás megkezdéséhez kattintson az „Eltávolítás” gombra.$\r$\nAz Ön által ebbe a mappába helyezett fájlok, például az egyéni tisztítóprogramok, megmaradnak."
 !endif
 
 !ifdef LANG_INDONESIAN
