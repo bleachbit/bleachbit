@@ -622,6 +622,7 @@ CA_BUNDLE_CHECK_HOSTS = (
 def verify_cabundle(path):
     """Check the slimmed CA bundle verifies the hosts BleachBit needs"""
     context = ssl.create_default_context(cafile=path)
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
     for host in CA_BUNDLE_CHECK_HOSTS:
         try:
             with socket.create_connection((host, 443), timeout=30) as sock, \
