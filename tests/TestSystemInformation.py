@@ -17,6 +17,7 @@ from unittest import mock
 
 
 from tests import common
+import bleachbit
 from bleachbit import IS_POSIX, FS_SCAN_RE_FLAGS
 from bleachbit.SystemInformation import (NOTICE_AFTER_DAYS, anonymize_system_information,
                                          get_build_age_days, get_build_date, get_outdated_build_notice,
@@ -100,9 +101,15 @@ class SystemInformationTestCase(common.BleachbitTestCase):
 
     def test_get_build_date(self):
         """Test get_build_date() with and without a Revision stamp"""
-        # No Revision module: date unknown.
-        with mock.patch('bleachbit.Revision', None, create=True):
-            self.assertIsNone(get_build_date())
+        # No Revision module: date unknown. The from-import returns an
+        # existing package attribute without importing, so drop it too.
+        saved = bleachbit.__dict__.pop('Revision', None)
+        try:
+            with mock.patch.dict('sys.modules', {'bleachbit.Revision': None}):
+                self.assertIsNone(get_build_date())
+        finally:
+            if saved is not None:
+                bleachbit.Revision = saved
         # Revision without build_date: date unknown.
         fake_revision = types.ModuleType('bleachbit.Revision')
         with mock.patch('bleachbit.Revision', fake_revision, create=True):
