@@ -16,13 +16,21 @@ on:
       - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
     paths: &paths
       - '**'
+      - '!.github/**'
+      - '.github/actions/**'
+      - '.github/workflows/test_macos.yaml'
+      - '!**.md'
       - '!bleachbit.spec'
       - '!debian/**'
       - '!doc/**'
+      - 'doc/example_cleaner.xml'
+      - '!docker/**'
       - '!po/**'
       - 'po/Makefile'
-      - '!README.md'
+      - '!scripts/**'
+      - 'scripts/install-deps.sh'
       - '!windows/**'
+      - 'windows/NsisUtilities.py'
   pull_request:
     paths: *paths
   workflow_dispatch:
