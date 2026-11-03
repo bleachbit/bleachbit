@@ -615,6 +615,8 @@ def get_env(key):
 
 def have_root():
     """Return true if we have root privileges on POSIX systems"""
+    if not bleachbit.IS_POSIX:
+        return False
     return sudo_mode() or os.getuid() == 0
 
 

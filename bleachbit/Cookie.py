@@ -171,7 +171,7 @@ def load_keep_list():
     if isinstance(data, list):
         for item in data:
             if isinstance(item, str) and item:
-                domains.add(item.lstrip('.').lower())
+                domains.add(item.strip().lstrip('.').lower())
     return domains
 
 

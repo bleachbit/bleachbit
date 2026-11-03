@@ -199,6 +199,11 @@ class CommonTestCase(common.BleachbitTestCase):
         self.assertEqual(preset_dir, self._run_conftest(preset_dir))
         self.assertExists(preset_file)
 
+    @common.skipUnlessWindows
+    def test_have_root_windows(self):
+        """Windows does not have POSIX root privileges"""
+        self.assertFalse(common.have_root())
+
     def test_get_put_env(self):
         """Unit test for get_env() and put_env()"""
         self.assertIsNone(common.get_env('PUTENV_TEST'))

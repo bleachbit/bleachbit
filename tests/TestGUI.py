@@ -697,6 +697,36 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertFalse(gui.stop_button.get_sensitive())
         self.assertFalse(gui.progressbar.get_visible())
 
+    def test_interrupted_worker_is_not_left_running(self):
+        gui = self.get_window()
+        self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(backends.pop, '_gui', None)
+
+        def interrupted_run(_worker):
+            yield True
+            raise KeyboardInterrupt
+
+        backends['_gui'] = Cleaner()
+        gui._gui_cleaner_cleanup_pending = object()
+        with mock.patch('bleachbit.Worker.Worker.run', interrupted_run), \
+                mock.patch.object(gui.tree_store, 'refresh_rows',
+                                  wraps=gui.tree_store.refresh_rows) as refresh_rows:
+            gui.preview_or_run_operations(False, {'system': ['tmp']})
+            GLib.source_remove(gui._worker_source)
+            gui.cb_refresh_operations()
+            self.assertTrue(gui._step_worker(gui._worker_run))
+            with self.assertRaises(KeyboardInterrupt):
+                gui._step_worker(gui._worker_run)
+            self.refresh_gui()
+        self.assertIsNone(gui._worker_source)
+        self.assertNotIn('_gui', backends)
+        self.assertIsNone(gui._gui_cleaner_cleanup_pending)
+        self.assertFalse(gui._refresh_pending)
+        refresh_rows.assert_called_once_with()
+        self.assertTrue(gui.run_button_get_sensitive())
+        self.assertFalse(gui.stop_button.get_sensitive())
+        self.assertFalse(gui.progressbar.get_visible())
+
     def test_shred_paths_confirm_stops_running_preview(self):
         """Confirming a shred stops the preview that is still running"""
         dirname = self.mkdtemp(prefix='bleachbit-test-shred-confirm')

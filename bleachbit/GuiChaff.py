@@ -181,24 +181,30 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
         # TRANSLATORS: Error message shown when chaff file generation fails.
         # The placeholder is for the technical error details.
         error_msg = _("Error generating chaff: {error}").format(error=str(exc))
-    try:
-        # Abort stops only the generation, and closing the dialog sets it too
-        if delete_when_finished:
-            # TRANSLATORS: Progress message shown while deleting chaff files.
-            # 'Deleting files' is a present participle.
-            # To indicate an ongoing operation, include the ellipsis as literal
-            # Unicode (…) or as Unicode escape (\u2026).
-            on_progress(0, msg=_('Deleting files\u2026'))
-            count = len(generated_file_names)
-            for i, fn in enumerate(generated_file_names):
+    # Abort stops only the generation, and closing the dialog sets it too
+    if delete_when_finished:
+        # TRANSLATORS: Progress message shown while deleting chaff files.
+        # 'Deleting files' is a present participle.
+        # To indicate an ongoing operation, include the ellipsis as literal
+        # Unicode (…) or as Unicode escape (\u2026).
+        on_progress(0, msg=_('Deleting files\u2026'))
+        count = len(generated_file_names)
+        deletion_error = None
+        for i, fn in enumerate(generated_file_names):
+            try:
                 os.unlink(fn)
-                on_progress(1.0 * (i + 1) / count)
-    except Exception as exc:
-        logger.exception('Error deleting chaff files')
-        # TRANSLATORS: Error message shown when deleting chaff files fails.
-        # The placeholder is for the technical error details.
-        error_msg = _("Error deleting chaff files: {error}").format(
-            error=str(exc))
+            except FileNotFoundError:
+                pass
+            except OSError as exc:
+                logger.exception('Error deleting chaff files')
+                if deletion_error is None:
+                    # TRANSLATORS: Error message shown when deleting chaff files fails.
+                    # The placeholder is for the technical error details.
+                    deletion_error = _("Error deleting chaff files: {error}").format(
+                        error=str(exc))
+            on_progress(1.0 * (i + 1) / count)
+        if deletion_error:
+            error_msg = '\n'.join(filter(None, (error_msg, deletion_error)))
     on_progress(1.0, is_done=True, error=error_msg)
 
 

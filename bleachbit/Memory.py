@@ -142,7 +142,11 @@ def _fstab_swap_options(fstab='/etc/fstab'):
         tag, _sep, value = spec.partition('=')
         if tag in ('UUID', 'LABEL', 'PARTUUID', 'PARTLABEL'):
             spec = f'/dev/disk/by-{tag.lower()}/{value}'
-        options[os.path.realpath(spec)] = fields[3]
+        try:
+            real_spec = os.path.realpath(spec)
+        except ValueError:
+            continue
+        options[real_spec] = fields[3]
     return options
 
 
@@ -167,10 +171,16 @@ def enable_swap_linux(proc_swaps):
         # Negative priorities are assigned by the kernel and cannot be set
         if priority >= 0:
             args += ['-p', str(priority)]
+        fallback_args = args + [device]
         if real_device in fstab_options:
             args += ['-o', fstab_options[real_device]]
         args.append(device)
         (rc, _stdout, stderr) = General.run_external(args)
+        if rc != 0 and real_device in fstab_options:
+            logger.warning(
+                'Could not re-enable swap %s with fstab options: %s. '
+                'Retrying without fstab options.', device, stderr.strip())
+            (rc, _stdout, stderr) = General.run_external(fallback_args)
         if 0 != rc:
             err = stderr.replace("\n", "").strip()
             errors.append(f"{device}: {err}" if err else device)
@@ -344,9 +354,15 @@ def _run_memory_child_fork():
         real_uid = None
     child_pid = os.fork()
     if 0 == child_pid:
-        make_self_oom_target_linux(real_uid)
-        fill_memory_linux()
-        os._exit(0)
+        exit_code = 1
+        try:
+            make_self_oom_target_linux(real_uid)
+            fill_memory_linux()
+            exit_code = 0
+        except BaseException:
+            logger.exception('Error in memory-wiping child process')
+        finally:
+            os._exit(exit_code)
     # TRANSLATORS: This is a debugging message that the parent process
     # is waiting for the child process. %(parent_pid)d is the parent
     # process ID; %(child_pid)d is the child process ID.
