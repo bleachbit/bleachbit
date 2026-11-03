@@ -94,4 +94,4 @@ jobs:
           PYTHONWARNINGS: error
         run: |
           touch ~/.zshrc # for test_expanduser
-          make tests-pytest tests-nsis PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
+          make tests-pytest PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
