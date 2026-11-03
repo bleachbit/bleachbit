@@ -344,9 +344,15 @@ def _run_memory_child_fork():
         real_uid = None
     child_pid = os.fork()
     if 0 == child_pid:
-        make_self_oom_target_linux(real_uid)
-        fill_memory_linux()
-        os._exit(0)
+        exit_code = 1
+        try:
+            make_self_oom_target_linux(real_uid)
+            fill_memory_linux()
+            exit_code = 0
+        except BaseException:
+            logger.exception('Error in memory-wiping child process')
+        finally:
+            os._exit(exit_code)
     # TRANSLATORS: This is a debugging message that the parent process
     # is waiting for the child process. %(parent_pid)d is the parent
     # process ID; %(child_pid)d is the child process ID.
