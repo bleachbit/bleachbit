@@ -19,6 +19,7 @@ Supported distributions:
 Optional environment overrides:
   FEDORA_VERSION   Set Fedora macro used by the spec file
   SUSE_VERSION     Set openSUSE suse_version macro
+  REVISION         Short git revision when the tree has no .git
 
 Artifacts are written to `./docker-artifacts/<distro>` on the host.
 EOF
@@ -51,7 +52,7 @@ if [[ -n "${SKIP_TESTS:-}" ]]; then
 fi
 # `make stamp` falls back to this when the container lacks git or .git
 # (e.g., the rpmbuild tree extracted from the sdist tarball).
-REVISION=$(cd "$ROOT_DIR" && git rev-parse --short=8 HEAD 2>/dev/null || true)
+REVISION=${REVISION:-$(cd "$ROOT_DIR" && git rev-parse --short=8 HEAD 2>/dev/null || true)}
 RUN_ENV+=(--env REVISION="$REVISION")
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
