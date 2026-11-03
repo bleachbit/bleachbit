@@ -1338,6 +1338,47 @@ class GUITestCase(common.BleachbitTestCase):
         worker_done.assert_not_called()
         self.assertExists(file_to_clean)
 
+    def test_on_destroy_from_inside_worker_step(self):
+        """A stop from inside the step, as on Ctrl+C, still closes the worker"""
+        gui = self.get_window()
+        self.addCleanup(gui.set_sensitive, True)
+        closed = []
+
+        def run(_worker):
+            try:
+                yield True
+                gui.on_destroy(gui)
+                yield True
+            finally:
+                closed.append(True)
+
+        with mock.patch('bleachbit.Worker.Worker.run', run), \
+                common.capture_glib_exceptions() as glib_errors:
+            gui.preview_or_run_operations(False, {'system': ['tmp']})
+            self.refresh_gui()
+        self.assertEqual([], glib_errors)
+        self.assertIsNone(gui._worker_source)
+        self.assertEqual([True], closed)
+
+    def test_refresh_waits_for_worker_started_in_dialog(self):
+        """A worker started by the CleanerML dialog's loop delays the reload"""
+        gui = self.get_window()
+        gui.recognized_cleanerml = False
+        self.addCleanup(setattr, gui, 'recognized_cleanerml', True)
+        self.addCleanup(setattr, gui, '_refresh_pending', False)
+
+        def start_worker(_parent):
+            gui._worker_source = 1
+
+        with mock.patch('bleachbit.RecognizeCleanerML.RecognizeCleanerML',
+                        side_effect=start_worker), \
+                mock.patch('bleachbit.GuiWindow.register_cleaners') as register, \
+                mock.patch.object(gui, '_worker_source', None):
+            self.assertFalse(gui.cb_refresh_operations())
+            self.assertTrue(gui._refresh_pending)
+            self.assertTrue(gui.recognized_cleanerml)
+        register.assert_not_called()
+
     def test_cb_run_option(self):
         gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)
