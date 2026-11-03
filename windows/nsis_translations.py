@@ -20,11 +20,13 @@ or run manually via CLI flags."""
 
 import argparse
 import ast
+import io
 import os
 import re
 import sys
 import tempfile
 import unittest
+import unittest.mock
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PO_DIR = os.path.join(ROOT_DIR, 'po')
@@ -238,6 +240,25 @@ def _parse_po_file(po_path, expected_msgids=None):
     return entries
 
 
+_PLACEHOLDER_RE = re.compile(r'\$\{[A-Za-z_][A-Za-z0-9_]*\}')
+
+
+def _checked_translation(locale, key, text, english):
+    """Return text, or english when its ${...} placeholders differ.
+
+    A translator can drop or mangle a placeholder (Hungarian once shipped
+    "$" for "${prodname}"), and tests/TestTranslations.py only reports it
+    after the .po is on master. Fall back the way msgfmt does for fuzzy.
+    """
+    expected = sorted(_PLACEHOLDER_RE.findall(english))
+    actual = sorted(_PLACEHOLDER_RE.findall(text))
+    if expected == actual:
+        return text
+    print(f'WARNING: {locale} {key}: placeholders {actual} differ from '
+          f'English {expected}, using the English text', file=sys.stderr)
+    return english
+
+
 def _parse_nsis_lang_strings(nsh_path):
     """Extract header lines and LangString definitions from an NSIS file."""
     header_lines = []
@@ -353,11 +374,12 @@ def write_nsis_langfile():
             translations[locale] = {}
             continue
         entries = _parse_po_file(po_path, expected_msgids)
-        nsis_entries = {
-            key[len('nsis:'):]: value
-            for key, value in entries.items()
-            if key.startswith('nsis:')
-        }
+        nsis_entries = {}
+        for key, value in entries.items():
+            if key.startswith('nsis:'):
+                key = key[len('nsis:'):]
+                nsis_entries[key] = _checked_translation(
+                    locale, key, value, english_strings[key])
         translations[locale] = nsis_entries
 
     lines = list(header_lines)
@@ -531,6 +553,19 @@ msgstr "Current translation"
         }
         self.assertEqual(self._parse_po_text(content, expected),
                          {'nsis:CURRENT_KEY': 'Current translation'})
+
+    def test_checked_translation_falls_back_on_placeholder_mismatch(self):
+        """A translation missing or mangling a placeholder yields English"""
+        english = '${prodname} is installed in ${VERSION}.'
+        good = '${VERSION}: ${prodname} ok'
+        self.assertEqual(_checked_translation('de', 'X', good, english), good)
+        for bad in ('A(z) $ el lesz ${VERSION}', '${proname} ${VERSION}',
+                    '${prodname} ${prodname} ${VERSION}', 'no placeholders'):
+            with self.subTest(bad=bad), \
+                    unittest.mock.patch('sys.stderr', new=io.StringIO()) as err:
+                self.assertEqual(
+                    _checked_translation('hu', 'X', bad, english), english)
+                self.assertIn('hu X', err.getvalue())
 
     def test_parse_nsis_stops_at_autogen_marker(self):
         """Regression test: ensure header parsing stops at auto-generated marker."""
