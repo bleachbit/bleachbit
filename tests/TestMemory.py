@@ -436,7 +436,7 @@ Swapouts:                              20258188.
                 with mock.patch('bleachbit.Memory._', side_effect=lambda s: s), \
                         mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header), \
                         mock.patch('bleachbit.Memory._fstab_swap_options',
-                                   side_effect=lambda: _fstab_swap_options(fstab)), \
+                                   side_effect=lambda fstab=fstab: _fstab_swap_options(fstab)), \
                         mock.patch('bleachbit.Memory.General.run_external',
                                    return_value=(0, '', '')) as mock_run:
                     enable_swap_linux(header + (
