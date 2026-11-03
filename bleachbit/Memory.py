@@ -359,7 +359,7 @@ def _run_memory_child_fork():
             make_self_oom_target_linux(real_uid)
             fill_memory_linux()
             exit_code = 0
-        except BaseException:
+        except Exception:
             logger.exception('Error in memory-wiping child process')
         finally:
             os._exit(exit_code)
