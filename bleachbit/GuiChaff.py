@@ -194,6 +194,7 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
             try:
                 os.unlink(fn)
             except FileNotFoundError:
+                # already gone
                 pass
             except OSError as exc:
                 logger.exception('Error deleting chaff files')
