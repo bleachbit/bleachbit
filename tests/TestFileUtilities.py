@@ -2649,13 +2649,14 @@ State=AAAA/wA...
     @common.skipIfWindows
     def test_whitelisted_posix_root_folder(self):
         """Keeping the filesystem root also keeps its descendants."""
-        path = self.write_file('root_keep_test')
-        link = os.path.join(self.tempdir, 'root_keep_link')
+        base = self.mkdtemp()
+        path = self.write_file(os.path.join(base, 'root_keep_test'))
+        link = os.path.join(base, 'root_keep_link')
         os.symlink(path, link)
         for root in ('/', '/./', '///'):
             with self.subTest(root=root):
                 options.set_whitelist_paths([('folder', root)])
-                self.assertTrue(whitelisted(self.tempdir))
+                self.assertTrue(whitelisted(base))
                 self.assertTrue(whitelisted(path))
                 self.assertTrue(whitelisted(link))
                 self.assertFalse(whitelisted('relative/path'))
@@ -2696,10 +2697,11 @@ State=AAAA/wA...
     @common.skipIfWindows
     def test_whitelisted_posix_symlink_retarget(self):
         """Cached keep spellings must not freeze symlink targets."""
-        first = self.write_file('first')
-        second = self.write_file('second')
-        kept_link = os.path.join(self.tempdir, 'kept_link')
-        other_link = os.path.join(self.tempdir, 'other_link')
+        base = self.mkdtemp()
+        first = self.write_file(os.path.join(base, 'first'))
+        second = self.write_file(os.path.join(base, 'second'))
+        kept_link = os.path.join(base, 'kept_link')
+        other_link = os.path.join(base, 'other_link')
         os.symlink(first, kept_link)
         os.symlink(first, other_link)
         options.set_whitelist_paths([('file', kept_link)])
@@ -2956,8 +2958,8 @@ State=AAAA/wA...
     def test_whitelisted_windows_unsettled_entry_appears(self):
         """A missing 8.3 entry is retried when its directory reappears."""
         # pylint: disable=c-extension-no-member
-        long_dir = win32api.GetLongPathName(
-            self.mkdir('future keep directory'))
+        long_dir = win32api.GetLongPathName(self.mkdir(
+            os.path.join(self.mkdtemp(), 'future keep directory')))
         short_dir = win32api.GetShortPathName(long_dir)
         if short_dir == long_dir:
             self.skipTest('8.3 names are disabled on this volume')
