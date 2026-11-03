@@ -421,6 +421,34 @@ Swapouts:                              20258188.
             _fstab_swap_options(fstab))
         self.assertEqual({}, _fstab_swap_options(fstab + '.missing'))
 
+    @common.skipUnlessLinux
+    def test_fstab_swap_options_invalid_path(self):
+        header = 'Filename\tType\tSize\tUsed\tPriority\n'
+        swapon = General.resolve_exe('swapon')
+        directory = self.mkdtemp()
+        for nul in ('\x00', r'\000'):
+            with self.subTest(nul=nul):
+                fstab = self.write_file(os.path.join(directory, 'fstab'), text=(
+                    '/first-swap none swap defaults 0 0\n'
+                    f'/bad{nul}swap none swap sw 0 0\n'
+                    f'UUID=bad{nul}uuid none swap sw 0 0\n'
+                    '/last-swap none swap sw,discard 0 0\n'))
+                with mock.patch('bleachbit.Memory._', side_effect=lambda s: s), \
+                        mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header), \
+                        mock.patch('bleachbit.Memory._fstab_swap_options',
+                                   side_effect=lambda: _fstab_swap_options(fstab)), \
+                        mock.patch('bleachbit.Memory.General.run_external',
+                                   return_value=(0, '', '')) as mock_run:
+                    enable_swap_linux(header + (
+                        '/first-swap\tfile\t1024\t0\t-2\n'
+                        '/last-swap\tfile\t1024\t0\t-3\n'))
+                    self.assertEqual(mock_run.call_args_list, [
+                        mock.call([swapon, '-o', 'defaults', '/first-swap']),
+                        mock.call([swapon, '-o', 'sw,discard', '/last-swap'])])
+                self.assertEqual(_fstab_swap_options(fstab), {
+                    os.path.realpath('/first-swap'): 'defaults',
+                    os.path.realpath('/last-swap'): 'sw,discard'})
+
     @common.skipIfWindows
     def test_get_swap_size_linux_errors(self):
         """Test for get_swap_size_linux() error paths"""

@@ -142,7 +142,11 @@ def _fstab_swap_options(fstab='/etc/fstab'):
         tag, _sep, value = spec.partition('=')
         if tag in ('UUID', 'LABEL', 'PARTUUID', 'PARTLABEL'):
             spec = f'/dev/disk/by-{tag.lower()}/{value}'
-        options[os.path.realpath(spec)] = fields[3]
+        try:
+            real_spec = os.path.realpath(spec)
+        except ValueError:
+            continue
+        options[real_spec] = fields[3]
     return options
 
 
