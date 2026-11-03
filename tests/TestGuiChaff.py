@@ -491,3 +491,46 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         self.assertTrue(progress_kwargs[-1]['is_done'])
         self.assertIn('No space left on device', progress_kwargs[-1]['error'])
         self.assertIn('Permission denied', progress_kwargs[-1]['error'])
+
+    @common.skipUnlessWindows
+    def test_make_files_thread_locked_file_deletes_rest(self):
+        """A native Windows delete lock must not stop cleanup of other files"""
+        def check_cleanup(inspiration, generator, outcome):
+            output_dir = self.mkdtemp()
+            generated_paths = [self.mkstemp(
+                dir=output_dir) for _i in range(3)]
+            abort_event = threading.Event()
+            progress_kwargs = []
+
+            def fake_generate(*_args, generated_file_names, **_kwargs):
+                generated_file_names.extend(generated_paths)
+                if outcome == 'abort':
+                    abort_event.set()
+                elif outcome == 'error':
+                    raise OSError(errno.ENOSPC, 'No space left on device')
+
+            # Windows open() shares read/write access, but not delete access.
+            with open(generated_paths[0], 'rb'):
+                with self.assertRaises(PermissionError) as locked_error:
+                    os.unlink(generated_paths[0])
+                self.assertEqual(locked_error.exception.winerror, 32)
+                with patch(f'bleachbit.GuiChaff.{generator}', side_effect=fake_generate), \
+                        self.assertLogs('bleachbit.GuiChaff', level='ERROR'):
+                    make_files_thread(
+                        STOP_MODE_FILE_COUNT, 3, inspiration, output_dir, True,
+                        lambda _fraction, **kwargs: progress_kwargs.append(
+                            kwargs),
+                        abort_event)
+                self.assertEqual(os.listdir(output_dir), [
+                                 os.path.basename(generated_paths[0])])
+                self.assertTrue(progress_kwargs[-1]['is_done'])
+                self.assertIn(str(locked_error.exception),
+                              progress_kwargs[-1]['error'])
+                if outcome == 'error':
+                    self.assertIn('No space left on device',
+                                  progress_kwargs[-1]['error'])
+
+        for inspiration, generator in enumerate(('generate_2600', 'generate_emails')):
+            for outcome in ('complete', 'abort', 'error'):
+                with self.subTest(inspiration=inspiration, outcome=outcome):
+                    check_cleanup(inspiration, generator, outcome)
