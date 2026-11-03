@@ -795,7 +795,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Run the worker up to its next yield"""
         try:
             return next(worker_run)
-        except Exception:
+        except (Exception, KeyboardInterrupt):
             # PyGObject drops the source after printing the error
             if worker_run is self._worker_run:
                 self._worker_source = None
