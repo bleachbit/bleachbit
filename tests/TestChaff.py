@@ -31,7 +31,7 @@ from shutil import rmtree
 from urllib.parse import urlparse
 
 from tests import common
-from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models, MODEL_BASENAMES, MODEL_SHA512, DEFAULT_MODELS_DIR
+from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models, MODEL_BASENAMES, MODEL_SHA512
 from bleachbit.FileUtilities import getsize
 
 
@@ -172,31 +172,36 @@ class ChaffTestCase(common.BleachbitTestCase):
     @mock.patch('bleachbit.Network.download_url_to_fn')
     def test_have_models(self, mock_download):
         """Test for function have_models()"""
+        models_dir = self.mkdtemp()
+
         def fake_download(_url, fn, **_kwargs):
+            self.assertEqual(os.path.dirname(fn), models_dir)
             with open(fn, 'wb') as f:
                 f.write(b'')
             return True
         mock_download.side_effect = fake_download
         empty_sha512 = dict.fromkeys(
             MODEL_BASENAMES, hashlib.sha512(b'').hexdigest())
-        with mock.patch.dict(MODEL_SHA512, empty_sha512):
-            download_models()
+        with mock.patch('bleachbit.Chaff.DEFAULT_MODELS_DIR', models_dir), \
+                mock.patch.dict(MODEL_SHA512, empty_sha512):
+            self.assertFalse(have_models())
+            download_models(models_dir=models_dir)
             rc = have_models()
             self.assertTrue(
                 rc, "have_models() should return True when models are present")
             self.assertIsInstance(rc, bool)
-            corrupt_fn = os.path.join(DEFAULT_MODELS_DIR, MODEL_BASENAMES[0])
+            corrupt_fn = os.path.join(models_dir, MODEL_BASENAMES[0])
             self.write_file(corrupt_fn, b'corrupt')
             self.assertFalse(
                 have_models(), "have_models() should return False when a model is corrupt")
             mock_download.reset_mock()
-            download_models()
+            download_models(models_dir=models_dir)
             mock_download.assert_called_once()
             self.assertEqual(mock_download.call_args.args[1], corrupt_fn)
             self.assertTrue(have_models())
-        for basename in MODEL_BASENAMES:
-            fn = os.path.join(DEFAULT_MODELS_DIR, basename)
-            self.assertExists(fn)
-            os.remove(fn)
-        self.assertFalse(
-            have_models(), "have_models() should return False when any model is missing")
+            for basename in MODEL_BASENAMES:
+                fn = os.path.join(models_dir, basename)
+                self.assertExists(fn)
+                os.remove(fn)
+            self.assertFalse(
+                have_models(), "have_models() should return False when any model is missing")
