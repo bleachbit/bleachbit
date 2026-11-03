@@ -678,7 +678,7 @@ Version: 2023-02-223
 !ifdef LANG_DUTCH
 	LangString ALREADY_INSTALLED ${LANG_DUTCH} "${prodname} is al geïnstalleerd.$\r$\nKlik op 'OK' om de oude versie te verwijderen voordat u een upgrade uitvoert, of klik op 'Annuleren' om de upgrade af te breken."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_DUTCH} "Bezoek de website van ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_DUTCH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_DUTCH} "${prodname} is actief.$\r$\nSluit het en klik op 'Opnieuw' om verder te gaan, of klik op 'Annuleren' om de installatie af te breken."
 	LangString INSTALLER_CAPTION ${LANG_DUTCH} "Installatie van ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_DUTCH} "De volgende stap is het bouwen van de lettertypecache. Hierbij kan een zwart consolevenster verschijnen."
 	LangString MULTIPRINT2 ${LANG_DUTCH} "Het eindigt meestal in één minuut, maar soms duurt het wel tien minuten."
@@ -727,7 +727,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_DUTCH} "${prodname} Foutopsporing"
 	LangString SHORTCUT_NO_UAC ${LANG_DUTCH} "${prodname} (Geen UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_DUTCH} "Versnipperen met ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_DUTCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_DUTCH} "${prodname} wordt verwijderd uit de volgende map.$\r$\nKlik op Verwijderen om de deïnstallatie te starten.$\r$\nBestanden die u aan deze map hebt toegevoegd, zoals aangepaste schoonmaakmachines, worden bewaard."
 !endif
 
 !ifdef LANG_ESTONIAN
@@ -1118,7 +1118,7 @@ Version: 2023-02-223
 !ifdef LANG_HUNGARIAN
 	LangString ALREADY_INSTALLED ${LANG_HUNGARIAN} "A(z) ${prodname} már telepítve van.$\r$\nKattintson az „OK” gombra a régi verzió eltávolításához a frissítés előtt, vagy a frissítés megszakításához kattintson a „Mégse” gombra."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_HUNGARIAN} "A(z) ${prodname} weboldalának meglátogatása"
-	LangString BLEACHBIT_RUNNING ${LANG_HUNGARIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_HUNGARIAN} "A(z) ${prodname} már fut.$\r$\nZárja be, majd a folytatáshoz kattintson az „Újrapróbálás” gombra, vagy a telepítés megszakításához kattintson a „Mégse” gombra."
 	LangString INSTALLER_CAPTION ${LANG_HUNGARIAN} "${prodname} ${VERSION} telepítő"
 	LangString MULTIPRINT1 ${LANG_HUNGARIAN} "A következő lépés a betűkészlet-gyorsítótár létrehozása, amelynek során egy fekete konzolablak jelenhet meg."
 	LangString MULTIPRINT2 ${LANG_HUNGARIAN} "Ez általában egy percen belül befejeződik, de néha akár tíz percig is eltarthat."
@@ -1167,7 +1167,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_HUNGARIAN} "${prodname} hibakereső terminál"
 	LangString SHORTCUT_NO_UAC ${LANG_HUNGARIAN} "${prodname} (UAC nélkül)."
 	LangString SHRED_SHELL_MENU ${LANG_HUNGARIAN} "Megsemmisítés ezzel: ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "A(z) $ el lesz távolítva a következő mappából.$\r$\nAz eltávolítás megkezdéséhez kattintson az „Eltávolítás” gombra.$\r$\nAz Ön által ebbe a mappába helyezett fájlok, például az egyéni tisztítóprogramok, megmaradnak."
 !endif
 
 !ifdef LANG_INDONESIAN
@@ -1723,7 +1723,7 @@ Version: 2023-02-223
 !ifdef LANG_PORTUGUESEBR
 	LangString ALREADY_INSTALLED ${LANG_PORTUGUESEBR} "${prodname} já está instalado.$\r$\nClique $\"OK$\" para desinstalar a versão antiga antes de atualizar, ou clique $\"Cancelar$\" para cancelar a atualização."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PORTUGUESEBR} "Visitar site do ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_PORTUGUESEBR} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_PORTUGUESEBR} "${prodname} está em execução.$\r$\nFeche-o e clique em 'Repetir' para continuar ou clique em 'Cancelar' para cancelar a instalação."
 	LangString INSTALLER_CAPTION ${LANG_PORTUGUESEBR} "Instalação do ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_PORTUGUESEBR} "O próximo passo é criar o cache de fontes, uma janela preta do console pode aparecer durante este processo."
 	LangString MULTIPRINT2 ${LANG_PORTUGUESEBR} "Isto geralmente leva cerca de um minuto, mas as vezes pode levar até 10 minutos."
@@ -1772,7 +1772,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_PORTUGUESEBR} "Terminal de depuração do ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_PORTUGUESEBR} "${prodname} (Sem Controle de Conta de Usuário)."
 	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESEBR} "Triturar com ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "${prodname} será desinstalado da seguinte pasta.$\r$\nClique em Desinstalar para iniciar a desinstalação.$\r$\nOs arquivos adicionados a esta pasta, como limpadores personalizados, serão mantidos."
 !endif
 
 !ifdef LANG_ROMANIAN
