@@ -733,7 +733,7 @@ Version: 2023-02-223
 !ifdef LANG_ESTONIAN
 	LangString ALREADY_INSTALLED ${LANG_ESTONIAN} "${prodname} on juba paigaldatud.$\r$\nVana versiooni eemaldamiseks enne paigaldust klõpsa „OK/Sobib“ või uuenduse katkestamiseks klõpsa „Katkesta“."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ESTONIAN} "Vaata veebisaiti - ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_ESTONIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_ESTONIAN} "${prodname} töös.$\r$\nSulge ta ja jätkamiseks klõpsa „Proovi uuesti“ või paigalduse katkestamiseks klõpsa „Katkesta“."
 	LangString INSTALLER_CAPTION ${LANG_ESTONIAN} "Paigaldus ja seadistus - ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_ESTONIAN} "Järgmises sammus luuakse kirjatüüpide vahemälu, mille käigus võib korraks avaneda must konsooliaken."
 	LangString MULTIPRINT2 ${LANG_ESTONIAN} "Tavaliselt on kestus ühe minuti jagu, kuid mõnel juhul võib kuluda kuni kümme minutit."
@@ -782,7 +782,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ESTONIAN} "Terminal veaotsinguks - ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_ESTONIAN} "${prodname} (Ilma UAC-ta)."
 	LangString SHRED_SHELL_MENU ${LANG_ESTONIAN} "Hävita ${prodname}iga"
-	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "${prodname} eemaldatakse järgnevast kaustast.$\r$\nProtsessi käivitamiseks klõpsa „Eemalda“.$\r$\nSinu poolt siia kausta lisatud failid, nagu näiteks sinu koostatud kustutajad, jäävad alles."
 !endif
 
 !ifdef LANG_FINNISH
