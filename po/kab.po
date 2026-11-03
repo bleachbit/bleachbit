@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 14:03-0600\n"
-"PO-Revision-Date: 2026-10-30 20:28+0000\n"
+"PO-Revision-Date: 2026-10-31 21:13+0000\n"
 "Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
@@ -1578,12 +1578,13 @@ msgstr "Taxtiṛit-a tezmer ad tsewḥel tukksa n kra n yimucceḍen."
 #. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
-msgstr ""
+msgstr "Tacfawt"
 
 #. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
+"Tacfawt n twennaṭ n ufellaru i yettwasqedcen i temhalin n unɣal d usenteḍ"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
@@ -1591,22 +1592,22 @@ msgstr ""
 #. Short label meaning "Custom locations".
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 msgid "Custom"
-msgstr ""
+msgstr "Asfaḍ udmawan"
 
 #. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
-msgstr ""
+msgstr "Kkes ifuyla d yikaramen i d-yesbadu useqdac"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Tallunt tilemt"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Wipe empty space to hide deleted files"
-msgstr ""
+msgstr "Sfeḍ tallunt tilemt akken ad teffreḍ ifuyla yettwakksen"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -1614,7 +1615,7 @@ msgstr ""
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Sfeḍ tallunt tilemt deg %s"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Native' refers to the .xml cleaners designed for this application,
@@ -1624,7 +1625,7 @@ msgstr ""
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners…"
-msgstr ""
+msgstr "Asali n yifecka n usfaḍ ineṣliyen…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
@@ -1632,25 +1633,25 @@ msgstr ""
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr ""
+msgstr "Akter n yifecka n usfaḍ seg ufaylu Winapp2.ini…"
 
 #. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, python-format
 msgid "Wipe empty space %s"
-msgstr ""
+msgstr "Sfeḍ tallunt tilemt %s"
 
 #. TRANSLATORS: Error shown on CLI, and %s is the name of a cleaning action
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr ""
+msgstr "Mačči d afecku n usfaḍ ameɣtu: %s"
 
 #. TRANSLATORS: Error shown on CLI, and %s is the name of a cleaning action
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr ""
+msgstr "Isekkilen wildcard ur ttwasirgen ara deg --except: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1659,54 +1660,55 @@ msgstr ""
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
 msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
-msgstr ""
+msgstr "aseqdec: %prog [tixtiṛiyin] cleaner.option1 [cleaner.option2 ...]"
 
 #. TRANSLATORS: Help for the --list-cleaners command on the CLI,
 #. and 'list' is a verb
 #: ../bleachbit/CLI.py
 msgid "list cleaners"
-msgstr ""
+msgstr "Sken-d tabdart n yifecka n usfaḍ"
 
 #. TRANSLATORS: Help for the --preview command on the CLI,
 #. and 'preview' is a verb
 #: ../bleachbit/CLI.py
 msgid "preview files to be deleted and other changes"
-msgstr ""
+msgstr "Sken-d taskant n yifuyla ara yettwakksen d yisenfal-nniḍen"
 
 #. TRANSLATORS: Help for the --clean command on the CLI
 #: ../bleachbit/CLI.py
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
+"Selkem ifecka n usfaḍ akken ad tekkseḍ ifuyla u ad tgeḍ isenfal-nniḍen imezga"
 
 #. TRANSLATORS: Help for the --shred command on the CLI,
 #. and 'shred' is a verb
 #: ../bleachbit/CLI.py
 msgid "shred specific files or folders"
-msgstr ""
+msgstr "Senger ifuyla neɣ ikaramen i d-tesbaduḍ"
 
 #. TRANSLATORS: Help for the --wipe-empty-space
 #. command on the CLI, and 'wipe' is a verb
 #: ../bleachbit/CLI.py
 msgid "wipe empty space in the given paths"
-msgstr ""
+msgstr "Sfeḍ tallunt tilemt deg yiberdan i d-yettunefken"
 
 #. TRANSLATORS: Help for the --overwrite option on the CLI,
 #. and 'overwrite' is a verb
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
-msgstr ""
+msgstr "Ales tira ɣef yifuyla akken ad teffreḍ agbur-nsen"
 
 #. TRANSLATORS: Help for the --gui option on the CLI,
 #. and 'launch' is a verb
 #: ../bleachbit/CLI.py
 msgid "launch the graphical interface"
-msgstr ""
+msgstr "Senker agrudem udlif"
 
 #. TRANSLATORS: Help for the --preset option on the CLI,
 #. and 'use' is a verb, referring to enabling options set earlier.
 #: ../bleachbit/CLI.py
 msgid "use options set in the graphical interface"
-msgstr ""
+msgstr "Seqdec tixtiṛiyin i yettusbadun deg ugrudem udlif"
 
 #. TRANSLATORS: Help for the --all-but-warning option on the CLI,
 #. and 'enable' is a verb.
