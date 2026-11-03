@@ -368,6 +368,41 @@ Swapouts:                              20258188.
                     RuntimeError, 'Unexpected line',
                     enable_swap_linux, header + 'malformed line\n')
 
+    @common.skipUnlessLinux
+    def test_enable_swap_linux_fstab_fallback(self):
+        header = 'Filename\tType\tSize\tUsed\tPriority\n'
+        swapon = General.resolve_exe('swapon')
+        fstab = {os.path.realpath('/swapfile'): 'sw,discard'}
+        for priority in (-2, 5):
+            for retry_rc in (0, 1):
+                with self.subTest(priority=priority, retry_rc=retry_rc):
+                    base_args = [swapon]
+                    if priority >= 0:
+                        base_args += ['-p', str(priority)]
+                    with mock.patch('bleachbit.Memory._', side_effect=lambda s: s), \
+                            mock.patch('bleachbit.Memory.get_proc_swaps', return_value=header), \
+                            mock.patch('bleachbit.Memory._fstab_swap_options', return_value=fstab), \
+                            mock.patch('bleachbit.Memory.logger.warning') as mock_warning, \
+                            mock.patch('bleachbit.Memory.General.run_external', side_effect=[
+                                (1, '', "invalid option -- 'o'"),
+                                (retry_rc, '', 'retry failed\n'),
+                                (0, '', '')]) as mock_run:
+                        before = header + (
+                            f'/swapfile\tfile\t1024\t0\t{priority}\n'
+                            '/other-swap\tfile\t1024\t0\t-2\n')
+                        if retry_rc:
+                            with self.assertRaisesRegex(
+                                    RuntimeError, '^/swapfile: retry failed$'):
+                                enable_swap_linux(before)
+                        else:
+                            enable_swap_linux(before)
+                        self.assertEqual(mock_run.call_args_list, [
+                            mock.call(
+                                base_args + ['-o', 'sw,discard', '/swapfile']),
+                            mock.call(base_args + ['/swapfile']),
+                            mock.call([swapon, '/other-swap'])])
+                        mock_warning.assert_called_once()
+
     def test_fstab_swap_options(self):
         """_fstab_swap_options() maps each swap area to its options"""
         fstab = self.write_file(os.path.join(self.mkdtemp(), 'fstab'), text=(

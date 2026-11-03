@@ -167,10 +167,16 @@ def enable_swap_linux(proc_swaps):
         # Negative priorities are assigned by the kernel and cannot be set
         if priority >= 0:
             args += ['-p', str(priority)]
+        fallback_args = args + [device]
         if real_device in fstab_options:
             args += ['-o', fstab_options[real_device]]
         args.append(device)
         (rc, _stdout, stderr) = General.run_external(args)
+        if rc != 0 and real_device in fstab_options:
+            logger.warning(
+                'Could not re-enable swap %s with fstab options: %s. '
+                'Retrying without fstab options.', device, stderr.strip())
+            (rc, _stdout, stderr) = General.run_external(fallback_args)
         if 0 != rc:
             err = stderr.replace("\n", "").strip()
             errors.append(f"{device}: {err}" if err else device)
