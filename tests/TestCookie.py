@@ -691,6 +691,24 @@ class CookieTestCase(common.BleachbitTestCase):
         result = load_keep_list()
         self.assertEqual(result, {'example.com', 'example.org'})
 
+    def test_load_keep_list_whitespace_preserves_cookies(self):
+        """Padded saved domains must preserve their cookies when cleaning."""
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        self.write_file(keep_path, text=json.dumps(
+            [' \t.Google.COM\n', 'github.com']))
+        path = self._create_chrome_cookies_db()
+        keep_list = load_keep_list()
+
+        result = Cookie.delete_cookies(path, keep_list, really_delete=True)
+
+        with contextlib.closing(sqlite3.connect(path)) as conn:
+            hosts = {row[0] for row in conn.execute(
+                'SELECT host_key FROM cookies')}
+        self.assertEqual(hosts, {'google.com', 'github.com'})
+        self.assertEqual(result['total_kept'], 2)
+        self.assertEqual(keep_list, {'google.com', 'github.com'})
+
     def test_load_keep_list_json_decode_error(self):
         """Corrupted JSON should raise JSONDecodeError, not return empty set"""
         action = self._make_cookie_action()
