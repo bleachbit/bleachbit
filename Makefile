@@ -16,7 +16,6 @@ datadir ?= $(prefix)/share
 
 INSTALL = install
 INSTALL_DATA = $(INSTALL) -m 644
-INSTALL_SCRIPT = $(INSTALL) -m 755
 
 # if not specified, do not check coverage
 PYTHON ?= python3
@@ -24,6 +23,10 @@ PYTHON ?= python3
 # mangles unquoted, so use this instead of $(PYTHON).
 PYTHON_CMD := "$(PYTHON)"
 COVERAGE ?= $(PYTHON_CMD)
+# Interpreter for the installed launcher, picked the way pip does: absolute,
+# and the real binary behind a pyenv shim. An `env python3` shebang would
+# take whatever PATH has at run time, often a venv without PyGObject.
+PYTHON_SHEBANG ?= $(shell $(PYTHON_CMD) -c 'import sys; print(sys.executable)')
 
 # pytest runner used by `tests-pytest`. Extra arguments go in PYTEST_ARGS
 PYTEST ?= $(PYTHON_CMD) -m pytest
@@ -96,7 +99,12 @@ clean-appimage:
 install:
 	# "binary"
 	mkdir -p $(DESTDIR)$(bindir)
-	$(INSTALL_SCRIPT) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
+	@case "$(PYTHON_SHEBANG)" in \
+		'') echo "error: $(PYTHON) not found"; exit 1;; \
+		*[[:space:]]*) echo "error: a shebang cannot hold the space in $(PYTHON_SHEBANG), set PYTHON_SHEBANG"; exit 1;; \
+	esac
+	{ printf '#!%s\n' "$(PYTHON_SHEBANG)"; tail -n +2 bleachbit.py; } > $(DESTDIR)$(bindir)/bleachbit
+	chmod 755 $(DESTDIR)$(bindir)/bleachbit
 
 	# application launcher
 	mkdir -p $(DESTDIR)$(datadir)/applications
@@ -331,8 +339,9 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	$(MAKE) -C po
 	# Stamp revision, build number, and build date into Revision.py
 	$(MAKE) stamp
-	# Install application into AppDir with prefix=/usr
-	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr
+	# Install application into AppDir with prefix=/usr.
+	# The AppImage runs the Python of the host, not of the build container.
+	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr PYTHON_SHEBANG=/usr/bin/python3
 	# Copy icon to hicolor theme so linuxdeploy can find it
 	mkdir -p "$(APPIMAGE_APPDIR)/usr/share/icons/hicolor/256x256/apps"
 	cp bleachbit.png "$(APPIMAGE_APPDIR)/usr/share/icons/hicolor/256x256/apps/bleachbit.png"
