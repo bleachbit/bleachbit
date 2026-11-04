@@ -17,7 +17,7 @@ from bleachbit.GtkShim import (
     require_gtk,
 )
 from bleachbit.GUI import logger
-from bleachbit.GuiUtil import get_clipboard_paths
+from bleachbit.GuiUtil import apply_dark_mode, get_clipboard_paths
 from bleachbit.GuiWindow import GUI
 from bleachbit.Language import get_text as _, get_active_language_code
 from bleachbit.Options import options
@@ -75,6 +75,8 @@ class Bleachbit(Gtk.Application):
         Gtk.Application.__init__(
             self, application_id=application_id, flags=flags)
         GLib.set_prgname('org.bleachbit.BleachBit')
+        # Before any widget exists, so nothing gets styled twice
+        apply_dark_mode(options.get('dark_mode'))
 
         self._font_check_prompt_scheduled = False
 
@@ -90,11 +92,16 @@ class Bleachbit(Gtk.Application):
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
             atexit.register(Windows.cleanup_nonce)
+            # atexit runs last in, first out
+            atexit.register(bleachbit.log_startup_time,
+                            'nonce cleanup started')
         bleachbit.log_startup_time('application created')
 
     def run(self, *args, **kwargs):
         """Run the GTK application."""
-        return Gtk.Application.run(self, *args, **kwargs)
+        rc = Gtk.Application.run(self, *args, **kwargs)
+        bleachbit.log_startup_time('main loop exited')
+        return rc
 
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
@@ -296,6 +303,7 @@ class Bleachbit(Gtk.Application):
         dialog.destroy()
 
     def do_startup(self):
+        bleachbit.log_startup_time('startup signal')
         Gtk.Application.do_startup(self)
         bleachbit.log_startup_time('GTK startup done')
         self.build_app_menu()
@@ -307,6 +315,7 @@ class Bleachbit(Gtk.Application):
             # quit() covers a raise swallowed by a GTK callback
             Gtk.Application.quit(self)
             raise KeyboardInterrupt
+        bleachbit.log_startup_time('quit requested')
         if init_configuration:
             # After "shred settings and quit", rebuild the minimal configuration.
             # which is important for portable mode.
@@ -319,6 +328,7 @@ class Bleachbit(Gtk.Application):
             # app within a few seconds).
             options.commit()
         self._window.destroy()
+        bleachbit.log_startup_time('window destroyed')
 
     def get_system_information_dialog(self):
         """Show system information dialog"""

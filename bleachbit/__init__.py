@@ -8,6 +8,7 @@
 Code that is commonly shared throughout BleachBit
 """
 
+import atexit
 import os
 import re
 import sys
@@ -31,17 +32,80 @@ stdout_encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
 
 logger = Log.init_log()
 
-_startup_t0 = time.monotonic()
-_startup_profile = os.getenv(
-    'BLEACHBIT_STARTUP_PROFILE') in ('1', 'true', 'True')
+
+def _seconds_since_process_start():
+    """Return seconds since the process was created, or None if unknown"""
+    try:
+        if os.name == 'nt':
+            import ctypes
+            from ctypes import wintypes
+            # Private so the prototypes below stay local to this function
+            kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+            kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+            kernel32.GetProcessTimes.argtypes = [wintypes.HANDLE] + \
+                [ctypes.POINTER(wintypes.FILETIME)] * 4
+            times = (wintypes.FILETIME * 4)()
+            if not kernel32.GetProcessTimes(
+                    kernel32.GetCurrentProcess(), *map(ctypes.byref, times)):
+                return None
+            now = wintypes.FILETIME()
+            getattr(kernel32, 'GetSystemTimePreciseAsFileTime',
+                    kernel32.GetSystemTimeAsFileTime)(ctypes.byref(now))
+
+            def as_int(filetime):
+                return (filetime.dwHighDateTime << 32) | filetime.dwLowDateTime
+            return (as_int(now) - as_int(times[0])) / 1e7
+        if sys.platform.startswith('linux'):
+            with open('/proc/self/stat', encoding='ascii') as stat_file:
+                fields = stat_file.read().rsplit(')', 1)[1].split()
+            # field 22 of /proc/PID/stat, clock ticks since boot
+            started = int(fields[19]) / os.sysconf('SC_CLK_TCK')
+            return time.clock_gettime(time.CLOCK_BOOTTIME) - started
+    except (OSError, AttributeError, IndexError, ValueError) as e:
+        logger.debug('could not read the process start time: %s', e)
+    return None
+
+
+class _StartupClock:
+    """Milestone timer behind log_startup_time()"""
+
+    def __init__(self):
+        self.t0 = time.monotonic()
+        self.imported = self.t0
+        self.enabled = os.getenv(
+            'BLEACHBIT_STARTUP_PROFILE') in ('1', 'true', 'True')
+        self.rebased = False
+
+    def _log(self, name, when=None):
+        if when is None:
+            when = time.monotonic()
+        logger.info('startup %s: %.1f ms', name, (when - self.t0) * 1000)
+
+    def log(self, name):
+        if not self.enabled:
+            return
+        if not self.rebased:
+            self.rebased = True
+            since_start = _seconds_since_process_start()
+            if since_start is not None:
+                self.t0 = time.monotonic() - since_start
+            self._log('package imported', self.imported)
+            # Registered after logging's own handler, so it runs before it
+            atexit.register(self._log, 'atexit done')
+        self._log(name)
+
+
+_startup_clock = _StartupClock()
 
 
 def log_startup_time(name):
-    """Log time since package import when BLEACHBIT_STARTUP_PROFILE is set"""
-    if not _startup_profile:
-        return
-    logger.info('startup %s: %.1f ms', name,
-                (time.monotonic() - _startup_t0) * 1000)
+    """Log milestones when BLEACHBIT_STARTUP_PROFILE is set
+
+    Times count from process creation where the OS reports it, else from
+    the package import. The first call is after bootstrap() hardened the
+    DLL search path, so ctypes loads only then.
+    """
+    _startup_clock.log(name)
 
 
 # Setting below value to false disables update notification (useful

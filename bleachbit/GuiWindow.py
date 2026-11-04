@@ -98,14 +98,6 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # if stderr was redirected - keep redirecting it
             sys.stderr = self.gtklog
 
-        dark_mode = options.get('dark_mode')
-        settings = self.get_settings() or Gtk.Settings.get_default()
-        if settings:
-            settings.set_property(
-                'gtk-application-prefer-dark-theme', dark_mode)
-        else:
-            logger.warning("Could not get GTK settings to apply dark mode")
-
         if options.is_corrupt():
             logger.error(
                 # TRANSLATORS: Error message shown in the log on the main window.
@@ -191,12 +183,14 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         # add InfoBar for non-blocking messages
         self._build_infobar(vbox)
+        bleachbit.log_startup_time('infobar built')
 
         vbox.add(hbox)
 
         # add operations to left
         operations = self.create_operations_box()
         hbox.pack_start(operations, False, True, 0)
+        bleachbit.log_startup_time('operations box built')
 
         # create the right side of the window
         right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -241,6 +235,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # theme changes or the application changes its style.
         self.textview.connect('style-updated', self._update_error_tag_color)
         self._update_error_tag_color()
+        bleachbit.log_startup_time('text view built')
 
         self.status_bar = Gtk.Statusbar()
         vbox.add(self.status_bar)
@@ -963,6 +958,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self.set_sensitive(True)
         # update tree view
         self.tree_store.refresh_rows()
+        bleachbit.log_startup_time('tree rows refreshed')
         # expand tree view
         self.view.expand_all()
         bleachbit.log_startup_time('tree filled')
@@ -981,12 +977,15 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         if self.textbuffer is None:
             # window was destroyed before this callback ran
             return False
+        # GDK's redraw ran before this idle, so the tree is on screen
+        bleachbit.log_startup_time('startup messages begin')
         try:
             startup_msgs = get_startup_messages(self._auto_exit)
         except Exception:
             # must not also skip the update check below
             logger.exception('Error getting startup messages')
             startup_msgs = []
+        bleachbit.log_startup_time('startup messages built')
         for (msg, is_error) in startup_msgs:
             self.append_text(msg + '\n', 'error' if is_error else None)
 
@@ -1264,6 +1263,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self.get_screen(),
             css_provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        bleachbit.log_startup_time('headerbar css added')
         self.update_button.get_style_context().add_class('update-available')
         hbar.pack_end(self.update_button)
         self.update_button.set_no_show_all(True)
@@ -1301,6 +1301,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.stop_button.set_sensitive(False)
         self.stop_button.connect('clicked', self.cb_stop_operations)
         box.add(self.stop_button)
+        bleachbit.log_startup_time('headerbar buttons built')
 
         hbar.pack_start(box)
 

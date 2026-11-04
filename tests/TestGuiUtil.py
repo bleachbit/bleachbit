@@ -24,9 +24,9 @@ from bleachbit.GtkShim import Gdk, Gtk, is_gtk_available
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
-    from bleachbit.GuiUtil import (clear_clipboard, flush_gtk_events,
-                                   get_clipboard_paths, get_font_size_from_name,
-                                   notify, threaded)
+    from bleachbit.GuiUtil import (apply_dark_mode, clear_clipboard,
+                                   flush_gtk_events, get_clipboard_paths,
+                                   get_font_size_from_name, notify, threaded)
 
 CLIPBOARD_TIMEOUT_SECONDS = 5
 CLIPBOARD_SLEEP_SECONDS = 0.05
@@ -331,6 +331,23 @@ class GUIUtilFontTestCase(common.BleachbitTestCase):
         for font_name in tests:
             self.assertIsNone(get_font_size_from_name(font_name),
                               f"Font name '{font_name}' should return None")
+
+
+@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
+class GUIUtilDarkModeTestCase(common.BleachbitTestCase):
+    """Test case for apply_dark_mode()"""
+
+    def test_apply_dark_mode(self):
+        """apply_dark_mode() sets the preference only when it differs"""
+        fake = mock.Mock()
+        fake.get_property.return_value = True
+        with mock.patch.object(Gtk.Settings, 'get_default', return_value=fake):
+            # pylint: disable-next=possibly-used-before-assignment
+            apply_dark_mode(True)
+            fake.set_property.assert_not_called()
+            apply_dark_mode(False)
+        fake.set_property.assert_called_once_with(
+            'gtk-application-prefer-dark-theme', False)
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')

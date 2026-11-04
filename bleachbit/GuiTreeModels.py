@@ -198,9 +198,8 @@ class TreeInfoModel:
         if not self.tree_store:
             raise RuntimeError("cannot create tree store")
         self.row_changed_handler_id = None
-        self.refresh_rows()
         self.tree_store.set_sort_func(3, self.sort_func)
-        self.tree_store.set_sort_column_id(3, Gtk.SortType.ASCENDING)
+        self.refresh_rows()
 
     def get_model(self):
         """Return the tree store"""
@@ -219,6 +218,9 @@ class TreeInfoModel:
         """Clear rows (cleaners) and add them fresh"""
         if self.row_changed_handler_id:
             self.tree_store.disconnect(self.row_changed_handler_id)
+        # A sorted store walks the siblings on every append, so sort once
+        self.tree_store.set_sort_column_id(
+            Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, Gtk.SortType.ASCENDING)
         self.tree_store.clear()
         hidden_cleaners = []
         auto_hide_enabled = options.get('auto_hide')
@@ -254,6 +256,7 @@ class TreeInfoModel:
         if hidden_cleaners:
             logger.debug("automatically hid %d cleaners: %s", len(
                 hidden_cleaners), ', '.join(hidden_cleaners))
+        self.tree_store.set_sort_column_id(3, Gtk.SortType.ASCENDING)
         self.row_changed_handler_id = self.tree_store.connect("row-changed",
                                                               self.on_row_changed)
 

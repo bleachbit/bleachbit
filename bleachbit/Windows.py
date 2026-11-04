@@ -59,8 +59,6 @@ if IS_WINDOWS:
     import win32gui
     import win32process
     import win32security
-    import win32service
-    import win32serviceutil
 
     # Ensure GetClassInfo exists for compatibility and testing
     # Some win32gui builds don't have GetClassInfo, so we create a stub
@@ -689,7 +687,8 @@ def delete_updates():
 def is_service_running(service):
     """Return True if service is running."""
     assert isinstance(service, str)
-    # pylint: disable-next=possibly-used-before-assignment
+    # Keep the service modules off the startup path: only cleaning needs them
+    import win32serviceutil
     service_status_code = win32serviceutil.QueryServiceStatus(service)[1]
     logger.debug('Windows service %s has current state %d',
                  service, service_status_code)
@@ -719,12 +718,14 @@ def run_net_service_command(service, start):
     """
     assert isinstance(service, str)
     assert isinstance(start, bool)
+    # Keep the service modules off the startup path: only cleaning needs them
+    import win32service
+    import win32serviceutil
     if start:
         action = win32serviceutil.StartService
         ignore_codes = (1056,)  # already running
         ignore_msgs = ('already',)
         verb = 'start'
-        # pylint: disable-next=possibly-used-before-assignment
         desired = win32service.SERVICE_RUNNING
         state_txt = 'RUNNING'
     else:

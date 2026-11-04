@@ -605,6 +605,8 @@ def build():
     for d in ('fonts', 'gtk-3.0'):
         path = os.path.join(GTK_DIR, 'etc', d)
         copy_tree(path, os.path.join('dist', 'etc', d))
+    # GTK then loads the dark theme first, the default dark_mode option
+    copy_file(r'windows\settings.ini', r'dist\etc\gtk-3.0\settings.ini')
     for d in ('gdk-pixbuf-2.0', 'girepository-1.0'):
         path = os.path.join(GTK_DIR, 'lib', d)
         copy_tree(path, os.path.join('dist', 'lib', d))

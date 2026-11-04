@@ -15,13 +15,14 @@ import sys
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
 from bleachbit.General import sanitize_surrogates
-from bleachbit import APP_VERSION, stdout_encoding, IS_WINDOWS
+from bleachbit import APP_VERSION, stdout_encoding, IS_WINDOWS, log_startup_time
 from bleachbit import SystemInformation, Options, Worker
 from bleachbit.Bootstrap import bootstrap
 from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 
 logger = logging.getLogger(__name__)
+log_startup_time('CLI imported')
 
 _OUTPUT_CLOSED_ERRNOS = {errno.EINVAL, errno.EPIPE}
 
@@ -338,6 +339,7 @@ def process_cmd_line():
     """Parse the command line and execute given commands."""
 
     parser, options, args, excludes = parse_cmd_line()
+    log_startup_time('command line parsed')
 
     for opt in ('delete_confirmation', 'load_cleaners',
                 'check_online_updates', 'first_start'):

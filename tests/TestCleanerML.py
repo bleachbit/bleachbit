@@ -200,6 +200,14 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
 
+    def test_load_cleaners_yields_by_time(self):
+        """load_cleaners() yields on a deadline, not once per file"""
+        with mock.patch.object(bleachbit.CleanerML, '_YIELD_SECONDS', 3600):
+            self.assertEqual(list(load_cleaners()), [])
+        with mock.patch.object(bleachbit.CleanerML, '_YIELD_SECONDS', 0):
+            self.assertEqual(len(list(load_cleaners())),
+                             len(list(list_cleanerml_files())))
+
     def test_load_cleaners_same_id(self):
         """A personal cleaner does not replace a bundled one with the same id
 

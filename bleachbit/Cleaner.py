@@ -24,7 +24,7 @@ from bleachbit.Options import options
 from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_pid_running, is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
-from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
+from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS, log_startup_time
 from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit.Wipe import wipe_path
 
@@ -771,6 +771,7 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_lo
     # Unicode (…) or as Unicode escape (\u2026).
     cb_progress(_('Loading native cleaners\u2026'))
     yield from CleanerML.load_cleaners(cb_progress, allow_local=allow_local)
+    log_startup_time('native cleaners loaded')
 
     # register Winapp2.ini cleaners
     if IS_WINDOWS:
@@ -781,6 +782,7 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_lo
         cb_progress(_('Importing cleaners from Winapp2.ini\u2026'))
         from bleachbit import Winapp
         yield from Winapp.load_cleaners(cb_progress)
+        log_startup_time('winapp2 loaded')
 
     cb_done()
 
