@@ -40,7 +40,8 @@ from bleachbit.FileUtilities import delete, open_for_overwrite
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
                                get_ip_for_url, get_user_agent,
                                unset_sslkeylogfile, _coarsen_os_version,
-                               _coarsen_windows_build, _version_major_minor)
+                               _coarsen_windows_build, _version_major_minor,
+                               _TrustStoreAdapter)
 
 logger = logging.getLogger(__name__)
 
@@ -345,6 +346,31 @@ class NetworkTestCase(common.BleachbitTestCase):
                                          custom_headers[expected_custom_key])
                     else:
                         self.assertNotIn('X-BleachBit-Version', headers)
+
+    def test_fetch_url_mounts_truststore_adapter(self):
+        """fetch_url() verifies TLS through _TrustStoreAdapter"""
+        with patch('bleachbit.Network.requests.Session') as mock_session:
+            session_instance = MagicMock()
+            mock_session.return_value.__enter__.return_value = session_instance
+            fetch_url('https://example.com', max_retries=0, timeout=5)
+        mounted = {call.args[0]: call.args[1]
+                   for call in session_instance.mount.call_args_list}
+        self.assertEqual({'http://', 'https://'}, set(mounted))
+        for adapter in mounted.values():
+            self.assertIsInstance(adapter, _TrustStoreAdapter)
+
+    def test_truststore_adapter_ssl_context(self):
+        """_TrustStoreAdapter passes the truststore context to pools and proxies"""
+        sentinel = object()
+        mock_truststore = Mock()
+        mock_truststore.SSLContext.return_value = sentinel
+        with patch('bleachbit.Network.HAVE_TRUSTSTORE', True), \
+                patch('bleachbit.Network.truststore', mock_truststore, create=True):
+            adapter = _TrustStoreAdapter()
+            proxy = adapter.proxy_manager_for('http://127.0.0.1:3128')
+        self.assertIs(
+            sentinel, adapter.poolmanager.connection_pool_kw['ssl_context'])
+        self.assertIs(sentinel, proxy.connection_pool_kw['ssl_context'])
 
     def test_fetch_url_retry(self):
         """Unit test for fetch_url() with retry"""
