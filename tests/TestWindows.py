@@ -1165,8 +1165,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with mock.patch.object(splash, 'is_alive', return_value=True), \
                 mock.patch.object(splash, '_hide_window') as mock_hide, \
                 mock.patch('bleachbit.Windows.win32gui.IsWindow', return_value=True), \
-                mock.patch(
-                    'bleachbit.Windows.ctypes.windll.user32.SendMessageTimeoutW',
+                mock.patch.object(
+                    Windows._user32, 'SendMessageTimeoutW',
                     return_value=1) as mock_send, \
                 mock.patch('bleachbit.Windows.win32gui.PostMessage') as mock_post, \
                 mock.patch('bleachbit.Windows.Thread.join') as mock_thread_join:
@@ -1184,8 +1184,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with mock.patch.object(splash, 'is_alive', return_value=True), \
                 mock.patch.object(splash, '_hide_window'), \
                 mock.patch('bleachbit.Windows.win32gui.IsWindow', return_value=True), \
-                mock.patch(
-                    'bleachbit.Windows.ctypes.windll.user32.SendMessageTimeoutW',
+                mock.patch.object(
+                    Windows._user32, 'SendMessageTimeoutW',
                     side_effect=RuntimeError('boom')), \
                 mock.patch('bleachbit.Windows.win32gui.PostMessage') as mock_post, \
                 mock.patch('bleachbit.Windows.Thread.join'):
@@ -1513,6 +1513,21 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # pylint: disable-next=possibly-used-before-assignment
         expected_flags = shellcon.BIF_RETURNONLYFSDIRS | shellcon.BIF_EDITBOX
         self.assertEqual(flags, expected_flags)
+
+    def test_prototypes_stay_off_shared_windll(self):
+        """Prototype setup leaves the shared ctypes.windll handles alone"""
+        # Other modules (plyer) may set prototypes on windll, so compare identity
+        shared = (ctypes.windll.shell32.SHGetKnownFolderPath,
+                  ctypes.windll.ole32.CoTaskMemFree)
+        before = [func.argtypes for func in shared]
+        get_known_folder_path('Fonts')
+        for func, argtypes in zip(shared, before):
+            self.assertIs(argtypes, func.argtypes)
+        self.assertEqual(5, len(Windows._peek_message.argtypes))
+        self.assertIsNot(ctypes.windll.user32.PeekMessageW,
+                         Windows._peek_message)
+        self.assertIsNot(ctypes.windll.user32.PeekMessageW.argtypes,
+                         Windows._peek_message.argtypes)
 
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
