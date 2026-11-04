@@ -27,6 +27,14 @@ PYTHON ?= python3
 # mangles unquoted, so use this instead of $(PYTHON).
 PYTHON_CMD := "$(PYTHON)"
 COVERAGE ?= $(PYTHON_CMD)
+# Interpreter for the installed launcher, picked the way pip does: absolute,
+# and the real binary behind a pyenv shim. An `env python3` shebang would
+# take whatever PATH has at run time, often a venv without PyGObject.
+# Empty means the install recipe asks Python. The recipe reads it from the
+# environment, so the shell never expands a $ or a backtick in the path.
+# make still expands a value given here or on the command line: $ takes $$.
+PYTHON_SHEBANG ?=
+export PYTHON_SHEBANG
 
 # pytest runner used by `tests-pytest`. Extra arguments go in PYTEST_ARGS
 PYTEST ?= $(PYTHON_CMD) -m pytest
@@ -100,7 +108,16 @@ clean-appimage:
 install:
 	# "binary"
 	test -d $(DESTDIR)$(bindir) || ($(INSTALL_DIR) $(DESTDIR)$(bindir))
-	$(INSTALL_SCRIPT) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
+	#note: install replaces a symlinked destination, a redirection writes through it
+	@shebang="$${PYTHON_SHEBANG:-$$($(PYTHON_CMD) -c 'import sys; print(sys.executable)')}"; \
+	case "$$shebang" in \
+		'') echo "error: $(PYTHON) not found"; exit 1;; \
+		*[[:space:]]*) echo "error: a shebang cannot hold the space in $$shebang, set PYTHON_SHEBANG"; exit 1;; \
+	esac; \
+	tmp=$$(mktemp "$${TMPDIR:-/tmp}/bleachbit.XXXXXX") && \
+	trap 'rm -f "$$tmp"' EXIT && \
+	{ printf '#!%s\n' "$$shebang"; tail -n +2 bleachbit.py; } > "$$tmp" && \
+	$(INSTALL_SCRIPT) "$$tmp" $(DESTDIR)$(bindir)/bleachbit
 
 	# application launcher
 	test -d $(DESTDIR)$(datadir)/applications || ($(INSTALL_DIR) $(DESTDIR)$(datadir)/applications)
@@ -349,8 +366,9 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	$(MAKE) -C po
 	# Stamp revision, build number, and build date into Revision.py
 	$(MAKE) stamp
-	# Install application into AppDir with prefix=/usr
-	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr
+	# Install application into AppDir with prefix=/usr.
+	# The AppImage runs the Python of the host, not of the build container.
+	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr PYTHON_SHEBANG=/usr/bin/python3
 	# Copy icon to hicolor theme so linuxdeploy can find it
 	mkdir -p "$(APPIMAGE_APPDIR)/usr/share/icons/hicolor/256x256/apps"
 	cp bleachbit.png "$(APPIMAGE_APPDIR)/usr/share/icons/hicolor/256x256/apps/bleachbit.png"
