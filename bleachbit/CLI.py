@@ -228,6 +228,19 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
             sys.exit(1)
         (cleaner_id, option_id) = parts
         option_id = fix_deprecated(cleaner_id, option_id)
+        if cleaner_id not in backends:
+            logger.error(not_valid_cleaner_msg, arg)
+            # Exit to avoid over-cleaning.
+            sys.exit(1)
+        if option_id not in backends[cleaner_id].options:
+            logger.warning(not_valid_cleaner_msg, arg)
+            if cleaner_id in operations:
+                # Fail closed: drop the cleaner rather than clean what
+                # the user tried to protect.
+                # TRANSLATORS: %s is a cleaner ID such as firefox
+                logger.warning(_("skipping cleaner %s"), cleaner_id)
+                del operations[cleaner_id]
+            continue
         if cleaner_id in operations and option_id in operations[cleaner_id]:
             operations[cleaner_id].remove(option_id)
             if not operations[cleaner_id]:

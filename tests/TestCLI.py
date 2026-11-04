@@ -123,6 +123,27 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertEqual(o, {'adobe_reader': ['cache']})
         self.assertEqual(len(log_context.output), 2)
 
+        # An unknown option in --except drops the whole cleaner
+        with self.assertLogs('bleachbit.CLI', level='WARNING') as log_context:
+            o = args_to_operations(
+                ['adobe_reader.*', 'google_chrome.cache'], False, False,
+                ['adobe_reader.bogus'])
+        self.assertEqual(o, {'google_chrome': ['cache']})
+        self.assertEqual(len(log_context.output), 2)
+
+        # An unknown option for a cleaner that is not selected only warns
+        with self.assertLogs('bleachbit.CLI', level='WARNING') as log_context:
+            o = args_to_operations(
+                ['google_chrome.cache'], False, False, ['adobe_reader.bogus'])
+        self.assertEqual(o, {'google_chrome': ['cache']})
+        self.assertEqual(len(log_context.output), 1)
+
+        # An unknown cleaner in --except cleans nothing
+        with self.assertRaises(SystemExit) as cm:
+            args_to_operations(
+                ['adobe_reader.cache'], False, False, ['no_such_cleaner.cache'])
+        self.assertEqual(cm.exception.code, 1)
+
         # Test failure on wildcard
         with self.assertRaises(SystemExit) as cm:
             args_to_operations(
