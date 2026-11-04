@@ -407,8 +407,21 @@ def list_safari_cookies(path):
     return sorted(domains)
 
 
+def _safari_cookie_checksum(pages):
+    """Return the checksum Safari writes after the pages.
+
+    It is the sum of every fourth byte of each page.
+    """
+    return sum(sum(page[::4]) for page in pages) & 0xffffffff
+
+
 def _read_safari_cookie_records(path):
-    """Read Safari BinaryCookies and return pages with cookie records."""
+    """Read Safari BinaryCookies and return pages with cookie records.
+
+    Returns (pages, trailer). The trailer is what follows the pages: a
+    checksum, a footer and a metadata plist. It is b'' when absent and
+    None when its checksum does not match, so it cannot be rewritten.
+    """
     import struct
 
     with open(path, 'rb') as f:
@@ -427,6 +440,7 @@ def _read_safari_cookie_records(path):
         f">{page_count}I", data, 8)
 
     pages = []
+    raw_pages = []
     offset = page_table_end
 
     for page_size in page_sizes:
@@ -434,6 +448,7 @@ def _read_safari_cookie_records(path):
             raise ValueError(f"invalid Safari cookies page size: {path}")
 
         page = data[offset:offset + page_size]
+        raw_pages.append(page)
 
         # The page marker and end-of-table marker are constants the
         # writer always emits (see safari_pages_to_bytes below); the
@@ -507,10 +522,15 @@ def _read_safari_cookie_records(path):
 
         offset += page_size
 
-    return pages
+    trailer = data[offset:]
+    if trailer and trailer[:4] != struct.pack(
+            ">I", _safari_cookie_checksum(raw_pages)):
+        trailer = None
+
+    return pages, trailer
 
 
-def _serialize_safari_cookie_records(pages):
+def _serialize_safari_cookie_records(pages, trailer=b''):
     """Serialize Safari BinaryCookies pages to bytes.
 
     Per-page layout (all fields little endian), confirmed against
@@ -524,8 +544,14 @@ def _serialize_safari_cookie_records(pages):
     Note this does NOT store the page's own size inside the page: the
     size of each page is only recorded in the file-level page-size
     table (see the caller), exactly as real Safari-written files do.
+
+    trailer comes from _read_safari_cookie_records(); its checksum is
+    recomputed for the new pages and the rest is kept as is.
     """
     import struct
+
+    if trailer is None:
+        raise ValueError("unrecognized Safari cookies trailer")
 
     output_pages = []
 
@@ -566,14 +592,18 @@ def _serialize_safari_cookie_records(pages):
     for page in output_pages:
         data.extend(page)
 
+    if trailer:
+        data.extend(struct.pack(">I", _safari_cookie_checksum(output_pages)))
+        data.extend(trailer[4:])
+
     return bytes(data)
 
 
-def _write_safari_cookie_records(path, pages):
+def _write_safari_cookie_records(path, pages, trailer=b''):
     """Rewrite a Safari BinaryCookies database with selected records."""
     import tempfile
 
-    data = _serialize_safari_cookie_records(pages)
+    data = _serialize_safari_cookie_records(pages, trailer)
 
     directory = str(Path(path).parent)
 
@@ -603,7 +633,7 @@ def _cookie_result(total_deleted, total_kept, skipped, whole_file_deleted,
     """Build a Safari cookie deletion result dict with a stable schema.
 
     Every branch returns the same set of keys; estimation fields default
-    to None when not applicable (e.g. whole-file delete, error fallback).
+    to None when not applicable (e.g. whole-file delete).
     """
     return {
         "total_deleted": total_deleted,
@@ -643,7 +673,9 @@ def _filter_safari_cookie_records(pages, keep_domains):
                 new_records.append((domain, record))
             else:
                 deleted_count += 1
-        new_pages.append({"records": new_records})
+        # Safari never writes an empty page
+        if new_records:
+            new_pages.append({"records": new_records})
 
     return new_pages, total_before, kept_count, deleted_count
 
@@ -651,7 +683,7 @@ def _filter_safari_cookie_records(pages, keep_domains):
 def _preview_safari_cookie_deletion(deleted_count, kept_count, total_before,
                                     original_size):
     """Build a preview result dict without modifying the file."""
-    if kept_count == 0:
+    if kept_count == 0 and deleted_count > 0:
         return _cookie_result(
             total_deleted=deleted_count,
             total_kept=0,
@@ -677,7 +709,7 @@ def _preview_safari_cookie_deletion(deleted_count, kept_count, total_before,
 
 
 def _apply_safari_cookie_deletion(path, new_pages, kept_count, deleted_count,
-                                  original_size, shred_enabled):
+                                  original_size, shred_enabled, trailer):
     """Perform real deletion and return a result dict."""
     if deleted_count == 0:
         return _cookie_result(
@@ -690,40 +722,16 @@ def _apply_safari_cookie_deletion(path, new_pages, kept_count, deleted_count,
         )
 
     if kept_count == 0:
-        try:
-            FileUtilities.delete(path, shred_enabled)
-            return _cookie_result(
-                total_deleted=deleted_count,
-                total_kept=0,
-                skipped=False,
-                whole_file_deleted=True,
-                file_size_reduction=original_size,
-            )
-        except OSError as e:
-            logger.error(
-                "Failed to delete Safari cookie database %s: %s",
-                path, e)
-            return _cookie_result(
-                total_deleted=0,
-                total_kept=0,
-                skipped=True,
-                whole_file_deleted=False,
-                file_size_reduction=0,
-            )
-
-    try:
-        _write_safari_cookie_records(path, new_pages)
-    except (OSError, ValueError) as e:
-        logger.error(
-            "Failed to rewrite Safari cookie database %s: %s",
-            path, e)
+        FileUtilities.delete(path, shred_enabled)
         return _cookie_result(
-            total_deleted=0,
-            total_kept=kept_count,
-            skipped=True,
-            whole_file_deleted=False,
-            file_size_reduction=0,
+            total_deleted=deleted_count,
+            total_kept=0,
+            skipped=False,
+            whole_file_deleted=True,
+            file_size_reduction=original_size,
         )
+
+    _write_safari_cookie_records(path, new_pages, trailer)
 
     new_size = _get_cookie_disk_size(path)
     return _cookie_result(
@@ -762,11 +770,15 @@ def delete_safari_cookies(path, keep_list, really_delete=False):
         raise RuntimeError(
             f"cookies database is empty: {path}")
 
-    pages = _read_safari_cookie_records(path)
+    pages, trailer = _read_safari_cookie_records(path)
     keep_domains = [str(d).lstrip('.').lower() for d in keep_list]
 
     new_pages, total_before, kept_count, deleted_count = \
         _filter_safari_cookie_records(pages, keep_domains)
+
+    # Only a partial rewrite needs the trailer
+    if trailer is None and kept_count and deleted_count:
+        raise ValueError("unrecognized Safari cookies trailer")
 
     if not really_delete:
         return _preview_safari_cookie_deletion(
@@ -774,4 +786,4 @@ def delete_safari_cookies(path, keep_list, really_delete=False):
 
     return _apply_safari_cookie_deletion(
         path, new_pages, kept_count, deleted_count,
-        original_size, shred_enabled)
+        original_size, shred_enabled, trailer)
