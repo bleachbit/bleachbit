@@ -372,6 +372,18 @@ class NetworkTestCase(common.BleachbitTestCase):
             sentinel, adapter.poolmanager.connection_pool_kw['ssl_context'])
         self.assertIs(sentinel, proxy.connection_pool_kw['ssl_context'])
 
+    def test_truststore_adapter_no_ca_file(self):
+        """With truststore, _TrustStoreAdapter trusts only the OS store"""
+        conn = Mock()
+        missing = os.path.join(self.mkdtemp(), 'missing.pem')
+        with patch('bleachbit.Network.HAVE_TRUSTSTORE', True), \
+                patch('bleachbit.Network.truststore', Mock(), create=True), \
+                patch('requests.adapters.DEFAULT_CA_BUNDLE_PATH', missing):
+            _TrustStoreAdapter().cert_verify(conn, 'https://example.com', True, None)
+        self.assertEqual('CERT_REQUIRED', conn.cert_reqs)
+        self.assertIsNone(conn.ca_certs)
+        self.assertIsNone(conn.ca_cert_dir)
+
     def test_fetch_url_retry(self):
         """Unit test for fetch_url() with retry"""
         url = self.status_generator_url.format(500)

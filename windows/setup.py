@@ -34,9 +34,6 @@ import sys
 import tempfile
 import time
 
-# third party
-import certifi
-
 # local import
 import bleachbit
 from setup import supported_languages
@@ -593,6 +590,8 @@ def build():
     assert_exist('dist\\bleachbit.exe')
     assert_exist('dist\\bleachbit_console.exe')
     os.remove('bleachbit_console.py')
+    # py2exe's certifi hook copies the bundle; truststore never reads it
+    os.remove(os.path.join('dist', 'cacert.pem'))
 
     if not os.path.exists('dist'):
         os.makedirs('dist')
@@ -642,10 +641,6 @@ def build():
 
     logger.info('Copying themes')
     copy_tree('themes', 'dist\\themes')
-
-    logger.info('Copying CA bundle')
-    copy_file(certifi.where(),
-              os.path.join('dist', 'cacert.pem'))
 
     dist_locale_dir = r'dist\share\locale'
     shutil.rmtree(dist_locale_dir, ignore_errors=True)
