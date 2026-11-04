@@ -1833,7 +1833,7 @@ Version: 2023-02-223
 !ifdef LANG_RUSSIAN
 	LangString ALREADY_INSTALLED ${LANG_RUSSIAN} "Приложение ${prodname} уже установлено.$\r$\nНажмите «ОК», чтобы удалить старую версию перед обновлением, или нажмите «Отменить», чтобы отменить обновление."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_RUSSIAN} "Посетите веб-сайт ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_RUSSIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_RUSSIAN} "Программа ${prodname} запущена.$\r$\nЗакройте её и нажмите «Повторить», чтобы продолжить, или нажмите «Отмена», чтобы прервать установку."
 	LangString INSTALLER_CAPTION ${LANG_RUSSIAN} "Установить ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_RUSSIAN} "Следующим шагом является создание кэша шрифтов, в ходе которого может появиться чёрное окно консоли."
 	LangString MULTIPRINT2 ${LANG_RUSSIAN} "Обычно это длится не более минуты, но иногда может потребоваться больше времени."
@@ -1882,7 +1882,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_RUSSIAN} "${prodname} — отладочная консоль"
 	LangString SHORTCUT_NO_UAC ${LANG_RUSSIAN} "${prodname} (без UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_RUSSIAN} "Уничтожить с помощью ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "${prodname} будет удалён из следующей папки.$\r$\nНажмите «Удалить», чтобы начать удаление.$\r$\nФайлы, добавленные вами в эту папку (например, пользовательские очистители), сохраняются."
 !endif
 
 !ifdef LANG_SERBIAN
