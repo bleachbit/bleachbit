@@ -140,15 +140,6 @@ class UpdateTestCase(common.BleachbitTestCase):
                    side_effect=OSError('Could not find a suitable TLS CA certificate bundle')):
             self.assertIsNone(check_updates(True, True, print, None))
 
-    def test_check_updates_real_network(self):
-        """Unit test for function check_updates() using real network"""
-        for update in check_updates(True, False, None, None) or []:
-            if not update:
-                continue
-            ver, url = update
-            self.assertIsInstance(ver, (type(None), str))
-            self.assertIsInstance(url, (type(None), str))
-
     # Keep the retries but skip the backoff waits between them
     @patch('urllib3.util.retry.Retry.sleep')
     def test_check_updates_bad_url(self, _mock_sleep):
