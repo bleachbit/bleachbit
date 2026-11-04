@@ -16,7 +16,6 @@ datadir ?= $(prefix)/share
 
 INSTALL = install
 INSTALL_DATA = $(INSTALL) -m 644
-INSTALL_SCRIPT = $(INSTALL) -m 755
 
 # if not specified, do not check coverage
 PYTHON ?= python3
@@ -24,6 +23,9 @@ PYTHON ?= python3
 # mangles unquoted, so use this instead of $(PYTHON).
 PYTHON_CMD := "$(PYTHON)"
 COVERAGE ?= $(PYTHON_CMD)
+# Interpreter for the installed launcher. An `env python3` shebang picks up
+# a pyenv shim or a venv on PATH, which usually lacks PyGObject.
+PYTHON_SHEBANG ?= $(shell command -v $(PYTHON_CMD))
 
 # pytest runner used by `tests-pytest`. Extra arguments go in PYTEST_ARGS
 PYTEST ?= $(PYTHON_CMD) -m pytest
@@ -96,7 +98,9 @@ clean-appimage:
 install:
 	# "binary"
 	mkdir -p $(DESTDIR)$(bindir)
-	$(INSTALL_SCRIPT) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
+	test -n "$(PYTHON_SHEBANG)" || { echo "error: $(PYTHON) not found"; exit 1; }
+	sed '1s|^#!.*|#!$(PYTHON_SHEBANG)|' bleachbit.py > $(DESTDIR)$(bindir)/bleachbit
+	chmod 755 $(DESTDIR)$(bindir)/bleachbit
 
 	# application launcher
 	mkdir -p $(DESTDIR)$(datadir)/applications
@@ -331,8 +335,9 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	$(MAKE) -C po
 	# Stamp revision, build number, and build date into Revision.py
 	$(MAKE) stamp
-	# Install application into AppDir with prefix=/usr
-	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr
+	# Install application into AppDir with prefix=/usr.
+	# The AppImage runs the Python of the host, not of the build container.
+	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr PYTHON_SHEBANG=/usr/bin/python3
 	# Copy icon to hicolor theme so linuxdeploy can find it
 	mkdir -p "$(APPIMAGE_APPDIR)/usr/share/icons/hicolor/256x256/apps"
 	cp bleachbit.png "$(APPIMAGE_APPDIR)/usr/share/icons/hicolor/256x256/apps/bleachbit.png"
