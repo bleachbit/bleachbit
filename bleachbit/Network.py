@@ -17,14 +17,13 @@ import os
 import re
 import socket
 import ssl
-import sys
 import platform
 import warnings
 from collections.abc import Callable
 from urllib.parse import quote
 
 # local imports
-from bleachbit import bleachbit_exe_path, comms_check_url, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
+from bleachbit import comms_check_url, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
 from bleachbit.FileUtilities import delete, open_for_overwrite
 from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_active_language_code, get_text as _
@@ -57,10 +56,9 @@ if HAVE_REQUESTS:
     RequestException = requests.exceptions.RequestException
 
     class _TrustStoreAdapter(requests.adapters.HTTPAdapter):
-        """HTTPAdapter that verifies TLS with truststore when available
+        """HTTPAdapter that verifies TLS only against the OS trust store
 
-        requests still loads its CA bundle into the context, and truststore
-        falls back to it when the OS store rejects the chain.
+        Without truststore it behaves like HTTPAdapter.
         """
 
         def init_poolmanager(self, *args, **kwargs):
@@ -80,6 +78,17 @@ if HAVE_REQUESTS:
                 if not proxy.lower().startswith('socks'):
                     proxy_kwargs.setdefault('proxy_ssl_context', context)
             return super().proxy_manager_for(proxy, **proxy_kwargs)
+
+        def cert_verify(self, conn, url, verify, cert):
+            """Load no CA file when truststore verifies"""
+            if not (HAVE_TRUSTSTORE and verify is True
+                    and url.lower().startswith('https')):
+                super().cert_verify(conn, url, verify, cert)
+                return
+            # A CA file loaded here would become truststore's fallback
+            conn.cert_reqs = 'CERT_REQUIRED'
+            conn.ca_certs = None
+            conn.ca_cert_dir = None
 else:
     class RequestException(Exception):
         pass
@@ -192,16 +201,6 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
     if not HAVE_REQUESTS:
         raise RequestException(
             'The requests package is not installed: network features are disabled.')
-    if hasattr(sys, 'frozen'):
-        # when frozen by py2exe, certificates are in alternate location;
-        # with truststore this bundle is only the fallback
-        ca_bundle = os.path.join(bleachbit_exe_path, 'cacert.pem')
-        if os.path.exists(ca_bundle):
-            requests.utils.DEFAULT_CA_BUNDLE_PATH = ca_bundle
-            requests.adapters.DEFAULT_CA_BUNDLE_PATH = ca_bundle
-        else:
-            logger.error(
-                'Application is frozen but certificate file not found: %s', ca_bundle)
     assert headers is None or isinstance(headers, dict)
     request_headers = {'User-Agent': get_user_agent()}
     if headers:
