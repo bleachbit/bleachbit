@@ -443,6 +443,9 @@ def environment_check():
     logger.info('Checking Python py2exe library')
     assert_module('py2exe')
 
+    logger.info('Checking Python truststore library')
+    assert_module('truststore')
+
     logger.info('Checking for CodeSign.bat')
     check_exist('CodeSign.bat', 'Code signing is not available')
 
@@ -503,7 +506,8 @@ def build_py2exe():
                      '_pydecimal',  # dead fallback
                      # non-Windows platform modules
                      'psutil._psaix', 'psutil._psbsd', 'psutil._pslinux',
-                     'psutil._psosx', 'psutil._pssunos'],
+                     'psutil._psosx', 'psutil._pssunos',
+                     'truststore._macos', 'truststore._openssl'],
     }
 
     freeze(
