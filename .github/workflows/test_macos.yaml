@@ -1,0 +1,97 @@
+# GitHub charges much more for macOS runner than Linux or Windows, so be
+# careful to manage costs
+#
+# References
+#  - https://docs.github.com/en/billing/reference/actions-runner-pricing
+#  - https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+#
+# Not in tests.yml: macOS runners queue longer and would hold up the Tests run
+#
+name: Run tests on macOS
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
+    paths: &paths
+      - '**'
+      - '!.github/**'
+      - '.github/actions/**'
+      - '.github/workflows/test_macos.yaml'
+      - '!**.md'
+      - '!bleachbit.spec'
+      - '!debian/**'
+      - '!doc/**'
+      - 'doc/example_cleaner.xml'
+      - '!docker/**'
+      - '!po/**'
+      - 'po/Makefile'
+      - '!scripts/**'
+      - 'scripts/install-deps.sh'
+      - '!windows/**'
+      - 'windows/NsisUtilities.py'
+  pull_request:
+    paths: *paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_name != 'master' && github.ref_type != 'tag' }}
+
+# Headless tests on macOS. GTK is not installed, so GUI tests
+# auto-skip via @unittest.skipUnless(HAVE_GTK, ...).
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest]
+        python-version: ['3.14']
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python ${{ matrix.python-version }}
+        # zizmor: ignore[cache-poisoning] test-only job, nothing cached here is published
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-test.txt
+
+      # Not install-deps-dev: the lint requirements and Homebrew tools it
+      # adds are not used by the tests
+      - name: Install dependencies
+        run: |
+          make install-deps INSTALL_DEPS_ARGS=--venv
+          .venv/bin/python -m pip install -r requirements-test.txt
+
+      - name: Generate Revision.py
+        uses: $/.github/actions/generate-revision
+
+      - name: Generate translations
+        run: make -C po local PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
+
+      - name: Smoke test (CLI --version and --list)
+        run: |
+          .venv/bin/python bleachbit.py --version
+          # A pipe into head would hide the exit status of --list
+          .venv/bin/python bleachbit.py --list > "$RUNNER_TEMP/cleaners.txt"
+          head -n 20 "$RUNNER_TEMP/cleaners.txt"
+
+      - name: Run tests
+        env:
+          PYTHONWARNINGS: error
+        run: |
+          touch ~/.zshrc # for test_expanduser
+          make tests-pytest PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"

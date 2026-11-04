@@ -198,7 +198,7 @@ jobs:
             gtk-themes.zip
             pygobject-*-win32.whl
             vcpkg_installed
-          # No workflow file in the key: editing the Linux or macOS jobs would
+          # No workflow file in the key: editing the Linux jobs would
           # bust it, and the test deps install below runs on every hit anyway
           key: win-test-env-${{ hashFiles('windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
 
@@ -309,89 +309,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
 
-  # GitHub charges much more for macOS runner than Linux or Windows, so be
-  # careful to manage costs
-  #
-  # References
-  #  - https://docs.github.com/en/billing/reference/actions-runner-pricing
-  #  - https://docs.github.com/en/actions/reference/runners/github-hosted-runners
-  #
-  # Headless tests on macOS. GTK is not installed, so GUI tests
-  # auto-skip via @unittest.skipUnless(HAVE_GTK, ...).
-  macos:
-    name: macos (${{ matrix.python-version }})
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest]
-        python-version: ['3.14']
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Set up Python ${{ matrix.python-version }}
-        # zizmor: ignore[cache-poisoning] test-only job, nothing cached here is published
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: |
-            requirements.txt
-            requirements-test.txt
-
-      # Not install-deps-dev: the lint requirements and Homebrew tools it
-      # adds are not used by the tests
-      - name: Install dependencies
-        run: |
-          make install-deps INSTALL_DEPS_ARGS=--venv
-          .venv/bin/python -m pip install -r requirements-test.txt
-
-      - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
-
-      - name: Generate translations
-        run: make -C po local PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
-
-      - name: Smoke test (CLI --version and --list)
-        run: |
-          .venv/bin/python bleachbit.py --version
-          # A pipe into head would hide the exit status of --list
-          .venv/bin/python bleachbit.py --list > "$RUNNER_TEMP/cleaners.txt"
-          head -n 20 "$RUNNER_TEMP/cleaners.txt"
-
-      - name: Validate cleaner XML
-        run: make -C cleaners tests
-
-      - name: Run tests
-        env:
-          PYTHONWARNINGS: error
-          PYTEST_COVERAGE: 1
-        run: |
-          touch ~/.zshrc # for test_expanduser
-          make tests-pytest tests-nsis PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
-
-      - name: Generate lcov coverage
-        if: github.repository == 'bleachbit/bleachbit'
-        run: |
-          .venv/bin/python -m coverage report
-          .venv/bin/python -m coverage lcov -o coverage.lcov
-
-      - name: Upload coverage to Coveralls
-        if: github.repository == 'bleachbit/bleachbit'
-        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
-        with:
-          file: coverage.lcov
-          flag-name: macos
-          parallel: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
-
   coveralls-finish:
-    needs: [linux, windows-test, macos]
+    needs: [linux, windows-test]
     if: github.repository == 'bleachbit/bleachbit'
     # This took 11s on ubuntu-slim (2026-07-27).
     runs-on: ubuntu-slim
@@ -401,6 +320,6 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           parallel-finished: true
-          carryforward: "linux,windows,macos"
+          carryforward: "linux,windows"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           git-commit: ${{ github.event.pull_request.head.sha || github.sha }}
