@@ -220,8 +220,8 @@ lint:
 
 delete_windows_files:
 	# This is used for building .deb and .rpm packages.
-	# Remove Windows-specific cleaners.
-	grep -l "cleaner id=\"\w*\" os=\"windows\"" cleaners/*xml | xargs rm -f
+	# Remove the cleaners that have nothing to do on Linux.
+	$(PYTHON_CMD) scripts/prune_cleaners.py linux cleaners
 	# Remove Windows-specific code.
 	rm -f bleachbit/{Winapp,Windows*}.py tests/TestWindows{,Wipe}.py
 	# The windows/ directory is left in place because removing it breaks po/Makefile.

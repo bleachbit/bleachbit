@@ -132,6 +132,48 @@ def _parse_cleaner_xml(pathname):
     return xml.etree.ElementTree.fromstring(data)
 
 
+def cleaner_applies_to(pathname, platform):
+    """Return whether the CleanerML file has any action for the platform
+
+    This only reads the os attributes, so unlike CleanerML() it does not
+    construct the actions and works for any platform on any host.
+    """
+    root = _parse_cleaner_xml(pathname)
+    cleaner = root if root.tag == 'cleaner' else root.find('.//cleaner')
+    if cleaner is None:
+        raise ValueError(f'missing <cleaner> element in {pathname}')
+    if not general_os_match(cleaner.attrib.get('os', ''), platform):
+        return False
+    # handle_localizations() adds an action on POSIX
+    if cleaner.find('localizations') is not None and \
+            general_os_match('unix', platform):
+        return True
+    for option in cleaner.findall('option'):
+        if not general_os_match(option.attrib.get('os', ''), platform):
+            continue
+        for action in option.findall('action'):
+            if general_os_match(action.attrib.get('os', ''), platform):
+                return True
+    return False
+
+
+def prune_cleaners(dirname, platform):
+    """Delete the cleaners in dirname that have no action for the platform
+
+    This is for packaging. Returns the deleted pathnames.
+    """
+    deleted = []
+    for fn in sorted(os.listdir(dirname)):
+        pathname = os.path.join(dirname, fn)
+        if not fn.lower().endswith('.xml') or not os.path.isfile(pathname):
+            continue
+        if cleaner_applies_to(pathname, platform):
+            continue
+        os.remove(pathname)
+        deleted.append(pathname)
+    return deleted
+
+
 class CleanerML:
 
     """Create a cleaner from CleanerML"""
