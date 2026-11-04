@@ -107,41 +107,42 @@ def ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
     teststr = '#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n'
-    for encoding in ['utf-8', 'utf-8-sig']:
-        with self.subTest(encoding=encoding):
-            bom_size = 3 if 'utf-8-sig' == encoding else 0
-            extra_size = bom_size
-            if IS_WINDOWS:
-                extra_size += teststr.count('\n')
+    # UTF-8 with and without a BOM, and the UTF-16 Windows writes for
+    # Unicode INI files
+    encodings = ((b'', 'utf-8'),
+                 (codecs.BOM_UTF8, 'utf-8'),
+                 (codecs.BOM_UTF16_LE, 'utf-16-le'),
+                 (codecs.BOM_UTF16_BE, 'utf-16-be'))
+    for bom, codec in encodings:
+        with self.subTest(codec=codec, bom=bom):
+            def encode(text):
+                return bom + text.encode(codec)
+
+            def read():
+                with open(filename, 'rb') as f:
+                    return f.read()
 
             # create test file
-            filename = self.write_file(
-                'bleachbit-test-ini', teststr, mode='w', encoding=encoding)
+            original = encode(teststr)
+            filename = self.write_file('bleachbit-test-ini', original)
             self.assertExists(filename)
-            size = os.path.getsize(filename)
-            self.assertEqual(len(teststr) + extra_size, size)
 
             # The section does not exist, so no change.
             execute(filename, 'Recents', None)
-            self.assertEqual(len(teststr) + extra_size,
-                             os.path.getsize(filename))
+            self.assertEqual(read(), original)
 
             # The parameter does not exist, so no change.
             execute(filename, 'RecentsMRL', 'files')
-            self.assertEqual(len(teststr) + extra_size,
-                             os.path.getsize(filename))
+            self.assertEqual(read(), original)
 
-            # The parameter does exist, so the file shrinks.
-            # Comments are not preserved, so only "[RecentsMRL]\n" (14
-            # bytes) remains. The BOM is preserved, so utf-8-sig files
-            # are 17 bytes and plain utf-8 files are 14 bytes. clean_ini
-            # writes with newline='' so there is no \r\n expansion.
+            # The parameter does exist. Comments are not preserved, the
+            # BOM is.
             execute(filename, 'RecentsMRL', 'list')
-            self.assertEqual(14 + bom_size, os.path.getsize(filename))
+            self.assertEqual(read(), encode('[RecentsMRL]\n\n'))
 
-            # The section does exist, so the file shrinks.
+            # The section does exist, so only the BOM remains.
             execute(filename, 'RecentsMRL', None)
-            self.assertEqual(0, os.path.getsize(filename))
+            self.assertEqual(read(), bom)
 
             # clean up
             delete(filename)
