@@ -926,6 +926,18 @@ State=AAAA/wA...
                 clean_ini(filename, 'Section', None)
         self.assertNotExists(filename)
 
+    def test_clean_json_many_keys(self):
+        """clean_json() takes a list of keys for one rewrite"""
+        filename = self.write_file(
+            'clean_json_many', text='{"a": 1, "b": {"c": 2, "d": 3}, "e": 4}')
+        clean_json(filename, ['a', 'b/c', 'missing', 'b/missing/deeper'])
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(json.load(f), {'b': {'d': 3}, 'e': 4})
+        # nothing to delete leaves the file alone
+        before = os.stat(filename).st_mtime_ns
+        clean_json(filename, ['missing', 'a'])
+        self.assertEqual(before, os.stat(filename).st_mtime_ns)
+
     def test_clean_json_refuses_symlink(self):
         """clean_json() must not write through a symlink to another file
 
