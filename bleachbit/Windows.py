@@ -49,6 +49,12 @@ import bleachbit
 from bleachbit import FileUtilities, General, ARCH_BITS, IS_WINDOWS
 from bleachbit.Language import get_text as _
 
+# Private handles keep the prototypes set below out of ctypes.windll
+_kernel32 = ctypes.WinDLL(
+    'kernel32', use_last_error=True) if IS_WINDOWS else None
+_user32 = ctypes.WinDLL('user32', use_last_error=True) if IS_WINDOWS else None
+_gdi32 = ctypes.WinDLL('gdi32', use_last_error=True) if IS_WINDOWS else None
+
 if IS_WINDOWS:
     import winreg
     import pywintypes
@@ -1190,12 +1196,12 @@ def get_known_folder_path(folder_name):
     class UserHandle:
         current = wintypes.HANDLE(0)
 
-    _CoTaskMemFree = ctypes.windll.ole32.CoTaskMemFree
+    _CoTaskMemFree = ctypes.WinDLL('ole32').CoTaskMemFree
     _CoTaskMemFree.restype = None
     _CoTaskMemFree.argtypes = [ctypes.c_void_p]
 
     try:
-        _SHGetKnownFolderPath = ctypes.windll.shell32.SHGetKnownFolderPath
+        _SHGetKnownFolderPath = ctypes.WinDLL('shell32').SHGetKnownFolderPath
     except AttributeError:
         # Not supported on Windows XP
         return None
@@ -1606,8 +1612,7 @@ def get_font_conf_file():
 
 
 if IS_WINDOWS:
-    # ctypes caches this on the DLL, so set argtypes once
-    _peek_message = ctypes.windll.user32.PeekMessageW
+    _peek_message = _user32.PeekMessageW
     _peek_message.argtypes = [ctypes.POINTER(wintypes.MSG), wintypes.HWND,
                               wintypes.UINT, wintypes.UINT, wintypes.UINT]
 
@@ -1727,7 +1732,7 @@ class SplashThread(Thread):
     def _hide_window(self, hWindow):
         """Hide the splash window before closing it."""
         try:
-            show_window_async = ctypes.windll.user32.ShowWindowAsync
+            show_window_async = _user32.ShowWindowAsync
             show_window_async.argtypes = [wintypes.HWND, ctypes.c_int]
             show_window_async.restype = wintypes.BOOL
             show_window_async(wintypes.HWND(hWindow), win32con.SW_HIDE)
@@ -1738,7 +1743,7 @@ class SplashThread(Thread):
         """Synchronously close the splash window with a timeout."""
         flags = getattr(win32con, 'SMTO_ABORTIFHUNG', 0x0002)
         try:
-            send_message_timeout_w = ctypes.windll.user32.SendMessageTimeoutW
+            send_message_timeout_w = _user32.SendMessageTimeoutW
             send_message_timeout_w.argtypes = [
                 wintypes.HWND,
                 wintypes.UINT,
@@ -1806,8 +1811,8 @@ class SplashThread(Thread):
                 'Icon file not found: %s with current working directory: %s.', filename, os.getcwd())
             return
 
-        user32 = ctypes.windll.user32
-        gdi32 = ctypes.windll.gdi32
+        user32 = _user32
+        gdi32 = _gdi32
         icon_size = SPLASH_ICON_SIZE_PX
         flags = win32con.LR_LOADFROMFILE
         hIcon = win32gui.LoadImage(
