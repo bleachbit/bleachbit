@@ -138,7 +138,7 @@ space to prevent data recovery.
 cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
-make delete_windows_files
+make delete_windows_files PYTHON=%{pyexe}
 
 
 %install
