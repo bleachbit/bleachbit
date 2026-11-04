@@ -87,7 +87,6 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
     msg = _('Downloading URL failed: %s') % url
 
     def do_error(msg2):
-        delete(fn, ignore_missing=True)  # delete any partial download
         if on_error:
             on_error(msg, msg2)
 
@@ -116,12 +115,17 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
             msg2 = f"SHA-512 mismatch: expected {expected_sha512}, got {hash_actual}"
             do_error(msg2)
             return False
+    opened = False
     try:
         General.makedirs(os.path.dirname(fn))
         with open_for_overwrite(fn, 'wb') as f:
+            opened = True
             f.write(response.content)
     except OSError as exc:
         logger.exception(msg)
+        if opened:
+            # a failed open leaves the old file intact, a failed write does not
+            delete(fn, ignore_missing=True)
         do_error(f'{type(exc).__name__}: {exc}')
         return False
     return True

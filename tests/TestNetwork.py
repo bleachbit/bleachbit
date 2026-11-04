@@ -35,7 +35,7 @@ from tests import common
 # pylint: disable-next=wrong-import-position
 from bleachbit import IS_WINDOWS
 # pylint: disable-next=wrong-import-position
-from bleachbit.FileUtilities import delete
+from bleachbit.FileUtilities import delete, open_for_overwrite
 # pylint: disable-next=wrong-import-position
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
                                get_ip_for_url, get_user_agent,
@@ -152,9 +152,14 @@ class NetworkTestCase(common.BleachbitTestCase):
         on_error = Mock()
 
         def disk_full(path, mode):
-            with open(path, mode) as f:
+            # the open truncates and writes, then the write fails
+            with open_for_overwrite(path, mode) as f:
                 f.write(b'part')
-            raise OSError(errno.ENOSPC, 'No space left on device')
+            ctx = MagicMock()
+            ctx.__enter__.return_value.write.side_effect = OSError(
+                errno.ENOSPC, 'No space left on device')
+            ctx.__exit__.return_value = False
+            return ctx
 
         with patch('bleachbit.Network.fetch_url', return_value=fake_response), \
                 patch('bleachbit.Network.open_for_overwrite', side_effect=disk_full):
@@ -171,6 +176,41 @@ class NetworkTestCase(common.BleachbitTestCase):
                 download_url_to_fn(
                     'https://example.invalid/x', fn, on_error=on_error_raising)
         self.assertNotExists(fn)
+
+    def test_download_url_to_fn_keeps_existing_file(self):
+        """A failure before the write leaves the existing file alone"""
+        fn = self.write_file('existing', text='keepme')
+        fake_response = Mock()
+        fake_response.status_code = 200
+        fake_response.content = b'new content'
+        bad_status = Mock()
+        bad_status.status_code = 503
+        on_error_raising = Mock(side_effect=RuntimeError('download failed'))
+        offline = requests.ConnectionError('offline')
+        cases = (
+            ('fetch', {'side_effect': offline}, None, {}),
+            ('status', {'return_value': bad_status}, None, {}),
+            ('hash', {'return_value': fake_response}, 'a' * 128, {}),
+            ('open', {'return_value': fake_response}, None,
+             {'side_effect': PermissionError(errno.EACCES, 'denied')}),
+        )
+        for name, fetch_kwargs, sha, open_kwargs in cases:
+            for on_error in (Mock(), on_error_raising):
+                raises = on_error is on_error_raising
+                with self.subTest(case=name, raises=raises), \
+                        patch('bleachbit.Network.fetch_url', **fetch_kwargs), \
+                        patch('bleachbit.Network.open_for_overwrite',
+                              wraps=open_for_overwrite, **open_kwargs):
+                    if raises:
+                        with self.assertRaises(RuntimeError):
+                            download_url_to_fn(
+                                'https://example.invalid/x', fn, sha, on_error)
+                    else:
+                        self.assertFalse(download_url_to_fn(
+                            'https://example.invalid/x', fn, sha, on_error))
+                        on_error.assert_called_once()
+                    with open(fn, encoding='utf-8') as f:
+                        self.assertEqual(f.read(), 'keepme')
 
     def test_get_gtk_version(self):
         """Unit test for get_gtk_version()"""
