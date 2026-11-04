@@ -859,9 +859,14 @@ class GUITestCase(common.BleachbitTestCase):
                        if call.args[0] == 'drag_data_received')
         data = mock.Mock()
         data.get_uris.return_value = ['https://example.com/', 'trash:///a']
+        widget = mock.Mock()
         with mock.patch.object(gui, 'shred_paths') as shred_paths:
-            handler(mock.Mock(), None, 0, 0, data, 80, 0)
+            handler(widget, None, 0, 0, data, 80, 0)
         shred_paths.assert_not_called()
+        # stop_emission() is deprecated and raises under -OO (#2381)
+        widget.stop_emission_by_name.assert_called_once_with(
+            'drag-data-received')
+        widget.stop_emission.assert_not_called()
 
     def test_shred_and_wipe_refused_while_busy(self):
         """Shredding and wiping do not start while an operation runs"""

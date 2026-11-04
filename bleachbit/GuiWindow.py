@@ -1104,7 +1104,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # Wayland that tears down the data offer in addition to the
             # GTK_DEST_DEFAULT_DROP handler, so stop emission and let the
             # default DROP handler finalize the drag exactly once.
-            widget.stop_emission('drag-data-received')
+            # The deprecated stop_emission() warns with its own docstring,
+            # which the -OO Windows build strips, so warnings.warn(None) raises.
+            widget.stop_emission_by_name('drag-data-received')
 
         def setup_widget(widget):
             widget.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
