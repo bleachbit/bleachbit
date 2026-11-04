@@ -16,6 +16,7 @@ import logging
 import os
 import re
 import socket
+import ssl
 import sys
 import platform
 import warnings
@@ -46,8 +47,39 @@ try:
 except ImportError:
     HAVE_REQUESTS = False
 
+try:
+    import truststore
+    HAVE_TRUSTSTORE = True
+except ImportError:
+    HAVE_TRUSTSTORE = False
+
 if HAVE_REQUESTS:
     RequestException = requests.exceptions.RequestException
+
+    class _TrustStoreAdapter(requests.adapters.HTTPAdapter):
+        """HTTPAdapter that verifies TLS with truststore when available
+
+        requests still loads its CA bundle into the context, and truststore
+        falls back to it when the OS store rejects the chain.
+        """
+
+        def init_poolmanager(self, *args, **kwargs):
+            """Verify with truststore in the connection pools"""
+            if HAVE_TRUSTSTORE:
+                kwargs.setdefault('ssl_context',
+                                  truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT))
+            super().init_poolmanager(*args, **kwargs)
+
+        def proxy_manager_for(self, proxy, **proxy_kwargs):
+            """Verify with truststore through proxies too"""
+            if HAVE_TRUSTSTORE:
+                context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+                proxy_kwargs.setdefault('ssl_context', context)
+                # TLS to an https:// proxy has its own context; SOCKS
+                # would pass the keyword on to its pools
+                if not proxy.lower().startswith('socks'):
+                    proxy_kwargs.setdefault('proxy_ssl_context', context)
+            return super().proxy_manager_for(proxy, **proxy_kwargs)
 else:
     class RequestException(Exception):
         pass
@@ -161,7 +193,8 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
         raise RequestException(
             'The requests package is not installed: network features are disabled.')
     if hasattr(sys, 'frozen'):
-        # when frozen by py2exe, certificates are in alternate location
+        # when frozen by py2exe, certificates are in alternate location;
+        # with truststore this bundle is only the fallback
         ca_bundle = os.path.join(bleachbit_exe_path, 'cacert.pem')
         if os.path.exists(ca_bundle):
             requests.utils.DEFAULT_CA_BUNDLE_PATH = ca_bundle
@@ -182,13 +215,19 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
     # 504: gateway_timeout
     status_forcelist = (408, 429, 500, 502, 503, 504)
     with requests.Session() as session:
+        retries = 0
         if HAVE_URLLIB3:
             retries = Retry(total=max_retries, backoff_factor=backoff_factor,
                             status_forcelist=status_forcelist, redirect=5)
-            session.mount(
-                'http://', requests.adapters.HTTPAdapter(max_retries=retries))
-            session.mount(
-                'https://', requests.adapters.HTTPAdapter(max_retries=retries))
+        # A CA bundle named in the environment replaces the OS store, as in requests
+        if session.trust_env and (os.environ.get('REQUESTS_CA_BUNDLE')
+                                  or os.environ.get('CURL_CA_BUNDLE')):
+            adapter = requests.adapters.HTTPAdapter(max_retries=retries)
+        else:
+            # pylint: disable-next=possibly-used-before-assignment
+            adapter = _TrustStoreAdapter(max_retries=retries)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
         response = session.get(url, headers=request_headers,
                                timeout=timeout, verify=True)
     return response
