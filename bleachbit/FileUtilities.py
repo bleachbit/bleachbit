@@ -738,12 +738,21 @@ _INI_BOMS = ((codecs.BOM_UTF8, 'utf_8'),
              (codecs.BOM_UTF16_BE, 'utf_16_be'))
 
 
-def _ini_encoding(data):
-    """Return (bom, encoding) for the raw contents of an INI file"""
+def _decode_ini(data):
+    """Return (bom, encoding, text) for the raw contents of an INI file
+
+    Raises UnicodeDecodeError when no supported encoding fits.
+    """
     for bom, encoding in _INI_BOMS:
         if data.startswith(bom):
-            return bom, encoding
-    return b'', 'utf_8'
+            return bom, encoding, data[len(bom):].decode(encoding)
+    try:
+        return b'', 'utf_8', data.decode('utf_8')
+    except UnicodeDecodeError:
+        if not IS_WINDOWS:
+            raise
+    # the ANSI code page, which WritePrivateProfileStringA writes
+    return b'', 'mbcs', data.decode('mbcs')
 
 
 def clean_ini(path, section, parameter):
@@ -752,18 +761,18 @@ def clean_ini(path, section, parameter):
     Comments are not preserved.
 
     The file is read as UTF-8 unless it starts with a UTF-8 or UTF-16
-    byte order mark. A file that does not decode is left untouched and
-    an error is logged so cleaning continues with the next file. The
-    BOM and Windows line endings are preserved on write.
+    byte order mark. On Windows a file without a BOM that is not UTF-8
+    is read as the ANSI code page. A file that does not decode is left
+    untouched and an error is logged so cleaning continues with the
+    next file. The BOM and Windows line endings are preserved on write.
     """
     with open(path, 'rb') as fp:
         data = fp.read()
-    bom, encoding = _ini_encoding(data)
     try:
-        text = data[len(bom):].decode(encoding)
-    except UnicodeDecodeError:
+        bom, encoding, text = _decode_ini(data)
+    except UnicodeDecodeError as e:
         logger.error("Cannot clean INI file because it is not valid %s: %s",
-                     codecs.lookup(encoding).name.upper(), path)
+                     codecs.lookup(e.encoding).name.upper(), path)
         return
 
     # read file to parser

@@ -1672,6 +1672,22 @@ State=AAAA/wA...
                 delete(long_dir, shred=shred)
                 self.assertNotExists(extended_path(long_dir))
 
+    @common.skipUnlessWindows
+    def test_clean_ini_ansi(self):
+        """clean_ini() reads a non-UTF-8 file without a BOM as ANSI"""
+        text = '[RecentsMRL]\r\nlist=café\r\n[Keep]\r\nk=café\r\n'
+        content = text.encode('mbcs', 'replace')
+        if b'?' in content:
+            self.skipTest('the ANSI code page has no é')
+        filename = self.write_file('bleachbit-test-ini-ansi', content)
+        clean_ini(filename, 'RecentsMRL', 'list')
+        expected = '[RecentsMRL]\r\n\r\n[Keep]\r\nk = café\r\n\r\n'
+        with open(filename, 'rb') as f:
+            self.assertEqual(f.read(), expected.encode('mbcs'))
+        delete(filename)
+        self.assertNotExists(filename)
+
+    @common.skipIfWindows
     def test_clean_ini_non_utf8(self):
         """clean_ini() leaves a non-UTF-8 file untouched and logs an error"""
         # Latin-1 bytes that are invalid as UTF-8 (0xe9 = 'é' in Latin-1).
