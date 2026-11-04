@@ -31,10 +31,13 @@ Usage:
     python nsis_automation.py upgrade|upgrade_running|upgrade_components|silent_upgrade|all --old C:\path\old-setup.exe --new C:\path\new-setup.exe
     Several modes may be listed. Options: --keep, --alert once|multiple
 
-basic:    install --new (per-machine), then uninstall; verify registry,
-          files, and shortcuts.
-per_user: install --new (per-user), then uninstall; verify HKCU registry,
-          HKCU shred verb, %LOCALAPPDATA%\BleachBit, and user shortcuts.
+basic:    install --new (per-machine), plant the font cache that 6.0.5
+          left in the install dir and an unrelated file next to it,
+          then uninstall; verify registry, files, shortcuts, and that
+          only the unrelated file is left.
+per_user: the same as basic, per-user and without the unrelated file;
+          verify HKCU registry, HKCU shred verb, %LOCALAPPDATA%\BleachBit,
+          user shortcuts, and that the install dir is gone.
 upgrade:  install --old, upgrade to --new; verify version bump and keys.
 upgrade_running:
           install --old, upgrade to --new while the app runs: canceling
@@ -1064,7 +1067,7 @@ def verify_upgraded(results, st_old, st):
 # -------------------------------------------------------------------- modes
 
 
-def _install_and_uninstall(exe_path, scope, tag):
+def _install_and_uninstall(exe_path, scope, tag, plant_unrelated=False):
     """Install exe_path in scope, then uninstall; return check results."""
     results = []
     ensure_uninstalled()
@@ -1099,13 +1102,33 @@ def _install_and_uninstall(exe_path, scope, tag):
     if not uninst.exists():
         check(results, "uninstaller available", False, str(uninst))
         return results
+    # 6.0.5 ran fc-cache with a cachedir inside the install folder, and
+    # upgrading keeps the result (#2437)
+    font_cache = idir / "var" / "cache" / "fontconfig"
+    font_cache.mkdir(parents=True, exist_ok=True)
+    (font_cache / "CACHEDIR.TAG").write_text(
+        "Signature: 8a477f597d28d172789f06886806bc55\n", encoding="utf-8")
+    (font_cache / "0123456789abcdef0123456789abcdef-le32d4.cache-9"
+     ).write_bytes(b"\0" * 64)
+    check(results, "font cache leftover planted", font_cache.is_dir())
+    unrelated = idir / "var" / "unrelated.txt"
+    if plant_unrelated:
+        unrelated.write_text("not ours\n", encoding="utf-8")
     log(f"== uninstall ({tag}, {scope}) ==")
     flags = run_wizard(uninst, RESULTS_DIR / f"{tag}-uninstall", scope=scope)
     check(results, "uninstall wizard finished", "saw_finish" in flags)
     check(results, "no reboot prompt on uninstall", "saw_reboot" not in flags)
     st = system_state(scope, idir=idir)
     log("state: " + json.dumps(st, indent=2, default=str))
-    check(results, "install dir removed", not st["install_dir_exists"])
+    check(results, "font cache leftover removed",
+          not (idir / "var" / "cache").exists())
+    if plant_unrelated:
+        left = sorted(p.relative_to(idir).as_posix() for p in idir.rglob("*"))
+        check(results, "only the unrelated file left",
+              left == ["var", "var/unrelated.txt"], str(left))
+        safe_rmtree(idir)
+    else:
+        check(results, "install dir removed", not st["install_dir_exists"])
     check(results, "Uninstall reg key removed",
           not st["reg_uninstall_present"])
     check(results, "shred key removed",
@@ -1117,7 +1140,8 @@ def _install_and_uninstall(exe_path, scope, tag):
 
 def mode_basic(a):
     """Install --new (per-machine), then uninstall; verify system state."""
-    return _install_and_uninstall(a.new, "all_users", "basic")
+    return _install_and_uninstall(a.new, "all_users", "basic",
+                                  plant_unrelated=True)
 
 
 def mode_per_user(a):
