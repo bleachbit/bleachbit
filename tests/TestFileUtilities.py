@@ -113,36 +113,35 @@ def ini_helper(self, execute):
                  (codecs.BOM_UTF8, 'utf-8'),
                  (codecs.BOM_UTF16_LE, 'utf-16-le'),
                  (codecs.BOM_UTF16_BE, 'utf-16-be'))
-    for bom, codec in encodings:
-        with self.subTest(codec=codec, bom=bom):
-            def encode(text):
-                return bom + text.encode(codec)
 
-            def read():
-                with open(filename, 'rb') as f:
-                    return f.read()
+    def read(filename):
+        with open(filename, 'rb') as f:
+            return f.read()
 
+    for (bom, codec), newline in itertools.product(encodings, ('\n', '\r\n')):
+        with self.subTest(codec=codec, bom=bom, newline=newline):
             # create test file
-            original = encode(teststr)
+            original = bom + teststr.replace('\n', newline).encode(codec)
             filename = self.write_file('bleachbit-test-ini', original)
             self.assertExists(filename)
 
             # The section does not exist, so no change.
             execute(filename, 'Recents', None)
-            self.assertEqual(read(), original)
+            self.assertEqual(read(filename), original)
 
             # The parameter does not exist, so no change.
             execute(filename, 'RecentsMRL', 'files')
-            self.assertEqual(read(), original)
+            self.assertEqual(read(filename), original)
 
             # The parameter does exist. Comments are not preserved, the
-            # BOM is.
+            # BOM and line endings are.
             execute(filename, 'RecentsMRL', 'list')
-            self.assertEqual(read(), encode('[RecentsMRL]\n\n'))
+            remaining = '[RecentsMRL]\n\n'.replace('\n', newline)
+            self.assertEqual(read(filename), bom + remaining.encode(codec))
 
             # The section does exist, so only the BOM remains.
             execute(filename, 'RecentsMRL', None)
-            self.assertEqual(read(), bom)
+            self.assertEqual(read(filename), bom)
 
             # clean up
             delete(filename)

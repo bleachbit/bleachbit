@@ -754,7 +754,7 @@ def clean_ini(path, section, parameter):
     The file is read as UTF-8 unless it starts with a UTF-8 or UTF-16
     byte order mark. A file that does not decode is left untouched and
     an error is logged so cleaning continues with the next file. The
-    BOM is preserved on write.
+    BOM and Windows line endings are preserved on write.
     """
     with open(path, 'rb') as fp:
         data = fp.read()
@@ -786,13 +786,16 @@ def clean_ini(path, section, parameter):
 
     out = io.StringIO()
     config.write(out)
+    output = out.getvalue()
+    if '\r\n' in text:
+        output = output.replace('\n', '\r\n')
 
     # write file
     from bleachbit.Options import options
     if options.get('shred'):
         _shred_before_rewrite(path)
     with open_for_overwrite(path, 'wb') as fp:
-        fp.write(bom + out.getvalue().encode(encoding))
+        fp.write(bom + output.encode(encoding))
 
 
 def clean_json(path, target):
