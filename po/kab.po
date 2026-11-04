@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 14:03-0600\n"
-"PO-Revision-Date: 2026-10-31 21:13+0000\n"
+"PO-Revision-Date: 2026-11-04 21:51+0000\n"
 "Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.1.dev0\n"
 
 #. Cleaner description: the category of application.
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1741,17 +1741,17 @@ msgstr ""
 #. TRANSLATORS: Help for --version option on the CLI.
 #: ../bleachbit/CLI.py
 msgid "output version information and exit"
-msgstr ""
+msgstr "Sken-d talɣut n lqem sakin ffeɣ"
 
 #. TRANSLATORS: Help for --no-uac option on the CLI.
 #: ../bleachbit/CLI.py
 msgid "do not prompt for administrator privileges"
-msgstr ""
+msgstr "Ur ssutur ara taseglut n unedbal"
 
 #. TRANSLATORS: Help for --update-winapp2 command on the CLI.
 #: ../bleachbit/CLI.py
 msgid "update winapp2.ini, if a new version is available"
-msgstr ""
+msgstr "Mucceḍ winapp2.ini ma yella lqem amaynut"
 
 #. TRANSLATORS: Error message shown on CLI.
 #: ../bleachbit/CLI.py
@@ -1759,31 +1759,33 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
+"Sbadu yiwet kan seg tiludna-a: --list-cleaners, --wipe-empty-space, --"
+"preview, --clean, --shred"
 
 #. TRANSLATORS: Log message on the CLI.
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "Asenqed ɣef uẓeṭṭa n yimucceḍen i winapp2.ini"
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
 msgid "No directories given for --wipe-empty-space"
-msgstr ""
+msgstr "Ulac ikaramen i d-yettunefken i --wipe-empty-space"
 
 #. TRANSLATORS: Log message on the CLI.
 #: ../bleachbit/CLI.py
 msgid "Wiping empty space can take a long time."
-msgstr ""
+msgstr "Asfaḍ n tallunt tilemt yezmer ad yeṭṭef aṭas n wakud."
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
 msgid "No operations selected. Specify cleaner options."
-msgstr ""
+msgstr "Ulac timhalin yettwafernen. Sbadu tixtiṛiyin n usfaḍ."
 
 #. TRANSLATORS: '--overwrite' and '--clean' are command line options
 #: ../bleachbit/CLI.py
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "--overwrite yettuseqdac kan akked --clean"
 
 #. TRANSLATORS: This is the label in the log indicating a path
 #. was skipped because it matches the keep list
@@ -1803,35 +1805,38 @@ msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
+"Xerṣum yiwen ufaylu yella isekkeṛ-it ukala-nniḍen, ihi ur yezmir ara ad "
+"yales tira ɣef ugbur-is. Ad yettwacreḍ i tukksa mi ara ales usenker n "
+"unagraw."
 
 #. TRANSLATORS: Label in the log when the file will be deleted
 #. when the system reboots. 'Mark' is a verb.
 #: ../bleachbit/Command.py
 msgid "Mark for deletion"
-msgstr ""
+msgstr "Creḍ i tukksa"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py
 msgid "Truncate"
-msgstr ""
+msgstr "Gzem"
 
 #. TRANSLATORS: A label of a command to delete a Windows registry key
 #: ../bleachbit/Command.py
 msgid "Delete registry key"
-msgstr ""
+msgstr "Kkes tasarut n Registry"
 
 #. TRANSLATORS: Button label on (1) the headerbar and (2) the chaff dialog.
 #. 'Abort' is a verb.
 #: ../bleachbit/Constant.py ../bleachbit/GuiWindow.py
 msgid "Abort"
-msgstr ""
+msgstr "Sefsex"
 
 #. TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
 #. It shows in the log of actions that would be performed (preview mode) or
 #. in the log of actions that are performed (clean mode).
 #: ../bleachbit/Constant.py
 msgid "Clean file"
-msgstr ""
+msgstr "Sfeḍ afaylu"
 
 #. TRANSLATORS: This message is used in three places (1) label at top of the
 #. preferences dialog (2) confirmation dialog when enabling the cleaning option
@@ -1845,12 +1850,19 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"Asfaḍ n tallunt tilemt yekkes lateṛ n yifuyla yettwakksen war asenger, maca "
+"ur d-yeslelli ara tallunt-nniḍen deg uḍebsi. Akala yezmer ad yeṭṭef aṭas n "
+"wakud u ad yerr aselkim-ik·im ad iɛeṭṭel i kra n wakud. Ur ilaq ara ma yella "
+"aḍebsi-ik·im yettwaḥrez s uwgelhen n uḍebsi s lekmal-is. Tarrayt-a txeddem "
+"akken iwata ugar ɣef yiḍebsiyen iqquranen imensayen. Ɣef yiḍebsiyen SSD, "
+"igmaḍ-is ur ḍminen ara am wakken llan ɣef yiḍebsiyen imensayen, yerna "
+"aseqdec-is s waṭas yesɛa amur deg usenqes n teɣzi n tudert-nsen."
 
 #. TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
 #. Expert mode is an option in the preferences to relax guardrails.
 #: ../bleachbit/Constant.py
 msgid "This option requires expert mode. Enable it in Preferences."
-msgstr ""
+msgstr "Taxtiṛit-a tesra askar n umazzay. Rmed-it deg yismenyifen."
 
 #. TRANSLATORS: Warning in the log when shredding a file could not
 #. overwrite its contents. %(path)s is the file path; %(error)s is
@@ -1858,97 +1870,97 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Could not overwrite the contents of %(path)s: %(error)s"
-msgstr ""
+msgstr "Ur yezmir ara ad yales tira ɣef ugbur n %(path)s: %(error)s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Directory is not empty: %s"
-msgstr ""
+msgstr "Akaram mačči d ilem: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Skipping mount point: %s"
-msgstr ""
+msgstr "Azgal n tneqqiḍt n userkeb: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Device or resource is busy: %s"
-msgstr ""
+msgstr "Ibenk neɣ taɣbalut yettwaseqdac: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Directory was left renamed to: %s"
-msgstr ""
+msgstr "Akaram yeqqim s yisem amaynut: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Special file type cannot be deleted: %s"
-msgstr ""
+msgstr "Anaw-a n ufaylu uzzig ur yezmir ara ad yettwakkes: %s"
 
 #. TRANSLATORS: This is a warning log message. %s is the directory path.
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
-msgstr ""
+msgstr "Amutti n twennaṭ TMP yettawi ɣer ukaram ur nelli ara: %s"
 
 #. TRANSLATORS: Title of the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Font check"
-msgstr ""
+msgstr "Asenqed n tsefsiyin"
 
 #. TRANSLATORS: Button label in the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is okay"
-msgstr ""
+msgstr "Aḍris iban akken iwata"
 
 #. TRANSLATORS: Button label in the font check dialog. This is one of
 #. three buttons the user can click to report how the text appears.
 #. The user clicks this if the text is readable but appears fuzzy.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is blurry"
-msgstr ""
+msgstr "Aḍris ur iban ara akken iwata"
 
 #. TRANSLATORS: Button label in the font check dialog in case the font
 #. looks like an alien language. This is one of three buttons the user
 #. can click to report how the text appears.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is unrecognizable"
-msgstr ""
+msgstr "Aḍris ur yettwaɛqal ara"
 
 #. TRANSLATORS: Question shown in the font check dialog displayed
 #. on startup on Windows. There are bugs that for some users the
 #. font is blurry or resembles an alien language.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Does all the text in this window look okay?"
-msgstr ""
+msgstr "Ma yettban-d uḍris meṛṛa deg usfaylu-a akken iwata?"
 
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiApplication.py
 msgid "Choose files to shred"
-msgstr ""
+msgstr "Fren ifuyla ara tesnegreḍ"
 
 #. TRANSLATORS: Title of a folder chooser dialog.
 #: ../bleachbit/GuiApplication.py
 msgid "Choose folder to shred"
-msgstr ""
+msgstr "Fren akaram ara tesnegreḍ"
 
 #. TRANSLATORS: Button label in a folder chooser dialog.
 #. TRANSLATORS: Label for the Delete button in the file choose dialog
 #. and delete confirmation dialog.
 #: ../bleachbit/GuiApplication.py ../bleachbit/GuiBasic.py
 msgid "_Delete"
-msgstr ""
+msgstr "_Kkes"
 
 #. TRANSLATORS: Warning log message when attempting to paste files/folders to shred.
 #: ../bleachbit/GuiApplication.py
 msgid "No paths found in clipboard."
-msgstr ""
+msgstr "Ulac iberdan i yettwafen deg tecfawt."
 
 #. TRANSLATORS: Title of a folder chooser dialog.
 #: ../bleachbit/GuiApplication.py ../bleachbit/GuiPreferences.py
@@ -1959,12 +1971,12 @@ msgstr "Fren yiwen n ukaram"
 #. Underscore is for accelerator key.
 #: ../bleachbit/GuiApplication.py
 msgid "_OK"
-msgstr ""
+msgstr "_Ih"
 
 #. TRANSLATORS: Title of the 'About' dialog.
 #: ../bleachbit/GuiApplication.py
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Ahil n usfaḍ n yifuyla ur nettwasran ara"
 
 #. TRANSLATORS: License text shown in the 'About' dialog.
 #: ../bleachbit/GuiApplication.py
@@ -1972,6 +1984,8 @@ msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
+"Turagt tazayezt tamatut n GNU, lqem 3 neɣ lqem i t-id-yeḍfaren.\n"
+"Wali https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -1984,30 +1998,30 @@ msgstr "Athmane MOKRAOUI"
 #. TRANSLATORS: Title of the system information dialog.
 #: ../bleachbit/GuiApplication.py
 msgid "System information"
-msgstr ""
+msgstr "Talɣut ɣef unagraw"
 
 #. TRANSLATORS: Button label in the system information dialog to
 #. replace the username with a placeholder.
 #: ../bleachbit/GuiApplication.py
 msgid "Anonymize"
-msgstr ""
+msgstr "Sedreg"
 
 #. TRANSLATORS: Label for the Cancel button in several dialog windows:
 #. file chooser, folder choose, delete confirmation, and warning dialogs.
 #. The underscore indicates the accelerator key.
 #: ../bleachbit/GuiBasic.py
 msgid "_Cancel"
-msgstr ""
+msgstr "_Sefsex"
 
 #. TRANSLATORS: This is a label for the Open button in a file chooser dialog.
 #: ../bleachbit/GuiBasic.py
 msgid "_Open"
-msgstr ""
+msgstr "_Ldi"
 
 #. TRANSLATORS: Title of the delete confirmation dialog.
 #: ../bleachbit/GuiBasic.py
 msgid "Delete confirmation"
-msgstr ""
+msgstr "Asentem n tukksa"
 
 #. TRANSLATORS: This message appears in a dialog window when the user
 #. chooses to shred settings and quit.
@@ -2017,6 +2031,10 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
+"Tawuri-a tekkes akk iɣewwaṛen n BleachBit, sakin teffeɣ seg usnas. Seqdec-"
+"itt akken ad teffreḍ aseqdec-ik·im n BleachBit neɣ ad terreḍ iɣewwaṛen-is "
+"ɣer wazalen n lexṣas. Mi ara talseḍ asenker n BleachBit, iɣewwaṛen ad uɣalen "
+"ɣer wazalen n lexṣas."
 
 #. TRANSLATORS: This message appears in a dialog window when the user
 #. asks the user to confirm deleting files when a preview was run.
