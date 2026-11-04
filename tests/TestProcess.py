@@ -116,7 +116,8 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
 
         result = list(_enumerate_proc_fs(proc_dir))
         self.assertEqual(
-            result, [ProcessInfo(1234, 'Web Content', not sudo_mode())])
+            result, [ProcessInfo(1234, 'Web Content',
+                                 not (sudo_mode() and os.geteuid() == 0))])
 
     @common.skipUnlessLinux
     def test_enumerate_proc_fs_script_comm(self):
