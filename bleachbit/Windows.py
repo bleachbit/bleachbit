@@ -1309,11 +1309,15 @@ def is_junction(path):
         logger.debug('no reparse tag for %s, so falling back to '
                      'GetFileAttributesW: %s', path, e)
 
-    attr = ctypes.windll.kernel32.GetFileAttributesW(path)
-    # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
-    # On 64-bit Python, ctypes may interpret this as signed -1 instead of unsigned 0xFFFFFFFF
-    if attr in (0xFFFFFFFF, -1):
-        error_code = ctypes.windll.kernel32.GetLastError()
+    get_attributes = _kernel32.GetFileAttributesW
+    get_attributes.argtypes = [wintypes.LPCWSTR]
+    get_attributes.restype = wintypes.DWORD
+    attr = get_attributes(path)
+    # INVALID_FILE_ATTRIBUTES
+    if attr == 0xFFFFFFFF:
+        # Python may call Win32 between the two calls, so GetLastError()
+        # through the shared handle could report a different error
+        error_code = ctypes.get_last_error()
         logger.error(
             'GetFileAttributesW() failed for path %s with error code %d', path, error_code)
         return False
