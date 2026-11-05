@@ -1131,3 +1131,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         """The Thunderbird snap is detected under its thunderbird-bin name"""
         self.assertTrue(self._bundled_cleaner_detects(
             'thunderbird', 'linux', 'thunderbird-bin'))
+
+    def test_opera_running_developer(self):
+        """The Opera developer snap, whose data Opera cleans, is detected"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'opera', 'linux', 'opera-developer'))

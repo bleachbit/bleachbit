@@ -15,6 +15,7 @@ Unlike Chromium, Opera does not support multiple profiles.
   <label>Opera</label>
   <description>Web browser</description>
   <running type="exe" os="linux" same_user="true">opera</running>
+  <running type="exe" os="linux" same_user="true">opera-developer</running>
   <running type="exe" os="windows" same_user="true">opera.exe</running>
   <var name="base">
     <!-- On Windows 10, Opera 68 created "Opera Stable" and "Opera Next" (beta)
