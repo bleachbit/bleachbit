@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 14:03-0600\n"
-"PO-Revision-Date: 2026-11-04 21:51+0000\n"
+"PO-Revision-Date: 2026-11-06 09:51+0000\n"
 "Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #. Cleaner description: the category of application.
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -2044,12 +2044,15 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
+"Tebɣiḍ s tidet ad tekkseḍ ifuyla i lebda ilmend n temhalin yettwafernen? "
+"Ifuyla ara yettwakksen s tidet zemren ad illin beddlen seg wasmi i tesnekreḍ "
+"taskant."
 
 #. TRANSLATORS: This message appears in a dialog window when the user
 #. asks the user to confirm deleting files when no preview was run.
 #: ../bleachbit/GuiBasic.py
 msgid "Are you sure you want to permanently delete these files?"
-msgstr ""
+msgstr "Tebɣiḍ s tidet ad tekkseḍ ifuyla-a i lebda?"
 
 #. TRANSLATORS: Check button shown in the confirm delete dialog.
 #. If unchecked, then it will not confirm next time.
@@ -2057,27 +2060,27 @@ msgstr ""
 #. Ask for confirmation before deleting items.
 #: ../bleachbit/GuiBasic.py ../bleachbit/GuiPreferences.py
 msgid "Confirm before delete"
-msgstr ""
+msgstr "Ssuter asentem uqbel tukksa"
 
 #. TRANSLATORS: Title of a warning dialog. %(option)s is the name
 #. of the option being enabled (e.g. "shred files").
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Enable %(option)s"
-msgstr ""
+msgstr "Rmed %(option)s"
 
 #. TRANSLATORS: Check button label. %(option)s is the name of
 #. the option being enabled (e.g. "shred files").
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Remember my choice for %(option)s"
-msgstr ""
+msgstr "Ḥrez afran-iw i %(option)s"
 
 #. TRANSLATORS: Button label in a warning dialog to confirm enabling an option.
 #. The underscore is the accelerator key.
 #: ../bleachbit/GuiBasic.py
 msgid "_Enable anyway"
-msgstr ""
+msgstr "_Rmed ɣas akken"
 
 #. TRANSLATORS: This is an error message shown to root users.
 #. %s expands to a web URL.
@@ -2088,13 +2091,16 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
+"Acku teslekmeḍ BleachBit s umiḍan root, ldi aseɣwen-a s ufus deg yiminig "
+"Web:\n"
+"%s"
 
 #. TRANSLATORS: The question appears in a confirmation dialog.
 #. %s expands to www.bleachbit.org or similar
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Open web browser to %s?"
-msgstr ""
+msgstr "Tebɣiḍ ad teldiḍ tansa %s deg yiminig Web?"
 
 #. TRANSLATORS: Title of a confirmation dialog.
 #. TRANSLATORS: Title of confirmation dialog for deleting orphaned wipe files.
@@ -2107,7 +2113,7 @@ msgstr "Serggeg"
 #. of files have been generated.
 #: ../bleachbit/GuiChaff.py
 msgid "Number of files"
-msgstr ""
+msgstr "Amḍan n yifuyla"
 
 #. TRANSLATORS: Option in a combo box for choosing the stop condition
 #. when generating chaff (dummy) files. This option means "stop after
@@ -2117,7 +2123,7 @@ msgstr ""
 #. "MB".
 #: ../bleachbit/GuiChaff.py
 msgid "Size (MB)"
-msgstr ""
+msgstr "Tiddi (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
@@ -2125,21 +2131,21 @@ msgstr ""
 #. placeholder.
 #: ../bleachbit/GuiChaff.py
 msgid "Free space (%)"
-msgstr ""
+msgstr "Tallunt tilellit deg uḍebsi (%)"
 
 #. TRANSLATORS: Used for (1) label for folder chooser button and
 #. (2) error message shown in the infobar when the folder has not
 #. been set. 'Select' is a verb.
 #: ../bleachbit/GuiChaff.py
 msgid "Select destination folder"
-msgstr ""
+msgstr "Fren akaram n tɣerwaḍt"
 
 #. TRANSLATORS: Error message shown when chaff file generation fails.
 #. The placeholder is for the technical error details.
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "Tuccḍa deg usnulfu n yisefka isugnanen: {error}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
@@ -2147,63 +2153,63 @@ msgstr ""
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Deleting files…"
-msgstr ""
+msgstr "Tukksa n yifuyla…"
 
 #. TRANSLATORS: Error message shown when deleting chaff files fails.
 #. The placeholder is for the technical error details.
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "Tuccḍa deg tukksa n yifuyla isugnanen: {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
 #. from radar-guided missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py
 msgid "Make chaff"
-msgstr ""
+msgstr "Snulfu-d isefka isugnanen"
 
 #. TRANSLATORS: Label at the top of the chaff dialog
 #: ../bleachbit/GuiChaff.py
 msgid "Make randomly-generated messages inspired by documents."
-msgstr ""
+msgstr "Snulfu-d iznan s wudem agacuran, s useqdec n yisemliyen am iɣbula."
 
 #. TRANSLATORS: Label for the inspiration combo box.
 #. 'Inspiration' is a choice of documents from which random text will be generated.
 #: ../bleachbit/GuiChaff.py
 msgid "Inspiration"
-msgstr ""
+msgstr "Tahregt"
 
 #: ../bleachbit/GuiChaff.py
 msgid "2600 Magazine"
-msgstr ""
+msgstr "Tasɣunt 2600"
 
 #: ../bleachbit/GuiChaff.py
 msgid "Hillary Clinton's emails"
-msgstr ""
+msgstr "Imaylen n Hillary Clinton"
 
 #. TRANSLATORS: Label for the combo box that selects when to stop
 #. generating chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Stop after"
-msgstr ""
+msgstr "Ḥbes seld"
 
 #. TRANSLATORS: Label for the combo box that selects what to do
 #. when chaff generation is finished.
 #: ../bleachbit/GuiChaff.py
 msgid "When finished"
-msgstr ""
+msgstr "Mi ara ifak"
 
 #. TRANSLATORS: Option in combo box to delete generated chaff
 #. files without shredding them.
 #: ../bleachbit/GuiChaff.py
 msgid "Delete without shredding"
-msgstr ""
+msgstr "Kkes war asenger"
 
 #. TRANSLATORS: Option in combo box to keep generated chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Do not delete"
-msgstr ""
+msgstr "Ur tekkes ara"
 
 #. TRANSLATORS: This is a label in a dialog shown when the user
 #. clicks the button to download models for chaff generation.
@@ -2214,31 +2220,31 @@ msgstr ""
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Downloading inspiration content…"
-msgstr ""
+msgstr "Asider n ugbur n tehregt…"
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Make files"
-msgstr ""
+msgstr "Snulfu-d ifuyla"
 
 #. TRANSLATORS: Error message shown when downloading
 #. chaff models failed.
 #: ../bleachbit/GuiChaff.py
 msgid "Download failed"
-msgstr ""
+msgstr "Asider ur yeddi ara"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation aborted"
-msgstr ""
+msgstr "Asnulfu n yisefka isugnanen yettwaḥbes"
 
 #. TRANSLATORS: Notification shown in an infobar when chaff file generation
 #. is complete.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation complete"
-msgstr ""
+msgstr "Asnulfu n yisefka isugnanen ifukk"
 
 #. TRANSLATORS: Progress message shown while generating chaff files.
 #. 'Generating' is a present participle.
@@ -2246,12 +2252,14 @@ msgstr ""
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Generating files…"
-msgstr ""
+msgstr "Asnulfu n yifuyla…"
 
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
 msgstr ""
+"Fren inagan n tuqqna ara teǧǧeḍ mi ara tesfdeḍ inagan n tuqqna deg yiminigen "
+"Web."
 
 #. TRANSLATORS: This is a notice in the cookie manager about supported
 #. cookie types. The hyperlink points to the documentation website.
@@ -2263,6 +2271,8 @@ msgid ""
 "Only cookies are preserved. Site data is always deleted. <a "
 "href='{url}'>Learn more</a>"
 msgstr ""
+"Inagan n tuqqna kan i yettwaḥerzen. Isefka n usmel ad ttwakksen yal tikkelt. "
+"<a href='{url}'>Lmed ugar</a>"
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2273,35 +2283,35 @@ msgstr "Anadi:"
 #. 'Filter' is a verb meaning to narrow down the list by typing.
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "Sti inagan n tuqqna..."
 
 #. TRANSLATORS: Toggle button label in the manage cookies dialog.
 #. "Show" is a command (imperative).
 #. 'Selected' refers to selected cookies (the noun "cookies" is implied).
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "Sken-d wid yettwafernen"
 
 #. TRANSLATORS: Tooltip for the "Show Selected" toggle button.
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "Sken-d kan inagan n tuqqna i yettwafernen tura"
 
 #. TRANSLATORS: Column header in the manage cookies dialog.
 #. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "Asenneftaɣ"
 
 #. TRANSLATORS: Button label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "Fren meṛṛa"
 
 #. TRANSLATORS: Button label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "Kkes afran i meṛṛa"
 
 #. TRANSLATORS: Status message shown while the cookie list is loading
 #. in the cookie manager dialog window.
@@ -2310,20 +2320,22 @@ msgstr ""
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
 msgid "Loading cookies…"
-msgstr ""
+msgstr "Asali n yinagan n tuqqna…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
 "Expert mode enables advanced features and relaxes guardrails. Use extra "
 "caution in expert mode."
 msgstr ""
+"Askar n umazzay yessermad tiwura tinaẓiyin yerna yesifsus ilugan n tɣellist. "
+"Ɣur-k·m aṭas mi ara tesqedceḍ askar-a."
 
 #. TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
 #. to bypass some safety guardails for advanced users and (2) the title of
 #. dialog asking to confirm this choice.
 #: ../bleachbit/GuiPreferences.py
 msgid "Expert mode"
-msgstr ""
+msgstr "Askar n umazzay"
 
 #. TRANSLATORS: Notice shown in an infobar after changing a preference
 #. that requires starting the application to be effective.
