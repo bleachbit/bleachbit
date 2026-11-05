@@ -950,3 +950,20 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         """Chromium is detected under the name Debian and Arch run it as"""
         self.assertTrue(self._bundled_cleaner_detects(
             'chromium', 'linux', 'chromium'))
+
+    @common.skipIfWindows
+    def test_chromium_running_snap(self):
+        """A snap Chromium is detected by its SingletonLock"""
+        home = self.mkdtemp(prefix='bleachbit-chromium-snap')
+        lock = os.path.join(home, 'snap', 'chromium', 'common', 'chromium',
+                            'SingletonLock')
+        os.makedirs(os.path.dirname(lock))
+        os.symlink(f'myhost-{os.getpid()}', lock)
+        cleaner = self._load_real_cleaner_as('chromium.xml', 'linux')
+        for pid, expected in ((os.getpid(), True), (os.getpid() + 1, False)):
+            procs = (ProcessInfo(pid, 'chrome', True),)
+            with self.subTest(pid=pid), \
+                    common.set_temporary_env('HOME', home), \
+                    mock.patch.object(process_cache, 'get',
+                                      return_value=procs):
+                self.assertEqual(expected, cleaner.is_process_running())
