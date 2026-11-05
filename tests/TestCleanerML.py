@@ -1126,3 +1126,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                                 if os.path.normpath(cmd.path) == path]
                     self.assertEqual(1, len(commands))
                     self.assertIsInstance(commands[0], Command.Function)
+
+    def test_thunderbird_running_snap(self):
+        """The Thunderbird snap is detected under its thunderbird-bin name"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'thunderbird', 'linux', 'thunderbird-bin'))

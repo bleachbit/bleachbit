@@ -13,6 +13,8 @@ later.  See the COPYING file in the top-level directory.
   <description>Email client</description>
   <running type="exe" os="windows" same_user="true">thunderbird.exe</running>
   <running type="exe" os="linux" same_user="true">thunderbird</running>
+  <!-- The snap runs thunderbird-bin -->
+  <running type="exe" os="linux" same_user="true">thunderbird-bin</running>
   <running type="exe" os="freebsd">thunderbird</running>
   <var name="base">
     <value os="windows">%AppData%\Thunderbird</value>
