@@ -618,6 +618,23 @@ class ActionTestCase(common.BleachbitTestCase):
             results += 1
         self.assertGreater(results, 0)
 
+    @common.skipIfWindows
+    def test_walk_protected_root(self):
+        """A walk search does not walk a protected root such as /run"""
+        root = self.mkdtemp(prefix='bleachbit-walk-protected')
+        inner = self.write_file(os.path.join(root, 'file'))
+        with mock.patch('bleachbit.FileUtilities._is_system_critical_posix',
+                        side_effect=lambda path: path == root):
+            for search in ('walk.all', 'walk.files', 'walk.top'):
+                action_str = (f'<action command="delete" search="{search}" '
+                              f'path="{root}" />')
+                cmds = list(_action_str_to_commands(action_str))
+                expected = [root] if search == 'walk.top' else []
+                self.assertEqual([cmd.path for cmd in cmds], expected, search)
+                for cmd in cmds:
+                    list(cmd.execute(True))
+        self.assertExists(inner)
+
     def test_walk_files_cache_survives_early_abandon(self):
         """An abandoned walk.files generator must not poison the cache"""
         dirname = self.mkdtemp(prefix='bleachbit-walk-cache')
