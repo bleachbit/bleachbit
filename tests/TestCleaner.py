@@ -286,6 +286,20 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertNotExists(dirname)
 
     @common.skipIfWindows
+    def test_create_simple_cleaner_protected_root(self):
+        """A protected folder such as /run/media is not walked"""
+        root = self.mkdir('csc-protected')
+        inner = self.write_file(os.path.join(root, 'file'))
+        with mock.patch('bleachbit.FileUtilities._is_system_critical_posix',
+                        side_effect=lambda path: path == root):
+            cmds = list(create_simple_cleaner([root]).get_commands('files'))
+            self.assertEqual([cmd.path for cmd in cmds], [root])
+            for cmd in cmds:
+                list(cmd.execute(True))
+        self.assertExists(inner)
+        self.assertExists(root)
+
+    @common.skipIfWindows
     def test_create_simple_cleaner_inner_directory_link(self):
         """Shredding a folder keeps the target of a link inside it"""
         target = self.mkdir('csc-inner-target')
@@ -704,6 +718,26 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         # Restore the original settings.
         options.set_custom_paths(original_custom_paths)
+
+    @common.skipIfWindows
+    def test_custom_protected_folder(self):
+        """A protected custom folder such as /run/media is not walked"""
+        from bleachbit.Options import options
+        root = self.mkdtemp(prefix='bleachbit-custom-protected')
+        inner = self.write_file(os.path.join(root, 'file'))
+        original = options.get_custom_paths()
+        try:
+            options.set_custom_paths([('folder', root)])
+            with mock.patch(
+                    'bleachbit.FileUtilities._is_system_critical_posix',
+                    side_effect=lambda path: path == root):
+                cmds = list(backends['system'].get_commands('custom'))
+                self.assertEqual([cmd.path for cmd in cmds], [root])
+                for cmd in cmds:
+                    list(cmd.execute(True))
+        finally:
+            options.set_custom_paths(original)
+        self.assertExists(inner)
 
     def test_recycle_bin_keep_list(self):
         """The recycle bin is not emptied when it holds a kept item"""
