@@ -40,7 +40,7 @@ import certifi
 # local import
 import bleachbit
 from setup import supported_languages
-from bleachbit.CleanerML import CleanerML
+from bleachbit.CleanerML import prune_cleaners
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.SystemInformation import get_version
 from windows.NsisUtilities import write_nsis_expressions_to_files
@@ -864,15 +864,11 @@ def upx():
 
 
 @count_size_improvement
-def delete_linux_only():
-    """Delete Linux-only cleaners to reduce size"""
-    logger.info('Deleting Linux-only cleaners')
-    files = recursive_glob('dist/share/cleaners/', ['*.xml'])
-    for fn in files:
-        cml = CleanerML(fn)
-        if not cml.get_cleaner().is_usable():
-            logger.info('Deleting cleaner not usable on this OS: %s', fn)
-            os.remove(fn)
+def delete_foreign_cleaners():
+    """Delete the cleaners that have nothing to do on Windows"""
+    logger.info('Deleting cleaners for other operating systems')
+    for fn in prune_cleaners('dist\\share\\cleaners', 'win32'):
+        logger.info('Deleted cleaner: %s', fn)
 
 
 def repack_library(settings):
@@ -960,7 +956,7 @@ def shrink(settings):
         upx()
     clean_dist_locale()
 
-    delete_linux_only()
+    delete_foreign_cleaners()
 
     if settings['recompress_lib']:
         repack_library(settings)
