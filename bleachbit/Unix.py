@@ -804,6 +804,11 @@ def yum_clean():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Yum"
         raise RuntimeError(msg)
+    # On Fedora yum is DNF5, which cleans only the user's cache when not root
+    if os.geteuid() != 0:
+        raise RuntimeError(
+            # TRANSLATORS: %s is the package manager, such as Yum or Dnf
+            _("%s cannot be cleaned without root permissions.") % "Yum")
 
     old_size = FileUtilities.getsizedir('/var/cache/yum')
     args = ['--enablerepo=*', 'clean', 'all']
@@ -836,7 +841,9 @@ def dnf_clean():
     # returned byte count reflects real system-cache cleaning rather than
     # silently returning 0.
     if os.geteuid() != 0:
-        raise RuntimeError('dnf clean requires root permissions')
+        raise RuntimeError(
+            # TRANSLATORS: %s is the package manager, such as Yum or Dnf
+            _("%s cannot be cleaned without root permissions.") % "Dnf")
 
     # DNF4 does not report freed space in its output, so infer effect
     # by measuring the delta in directory size.
@@ -934,7 +941,9 @@ def dnf_autoremove():
     freed_bytes = 0
     allout = stdout + stderr
     if 'Error: This command has to be run under the root user.' in allout:
-        raise RuntimeError('dnf autoremove requires root permissions')
+        raise RuntimeError(
+            # TRANSLATORS: %s is the package manager, such as Yum or Dnf
+            _("%s cannot be cleaned without root permissions.") % "Dnf")
     if rc > 0:
         raise RuntimeError(f'dnf autoremove raised error {rc}: {stderr}')
 
