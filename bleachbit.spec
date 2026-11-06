@@ -99,7 +99,6 @@ BuildRequires:  %{pyprefix}-setuptools
 BuildRequires:  %{pyprefix}-sqlite-utils
 %endif
 BuildRequires:  %{pyprefix}-xml
-BuildRequires:  update-desktop-files
 Requires:       gobject-introspection
 Requires:       hicolor-icon-theme
 Requires:       %{pyprefix}
@@ -160,11 +159,10 @@ sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' org.bleachbit.BleachBi
 
 desktop-file-install \
     --dir=%{buildroot}/%{_datadir}/applications/ \
-    --vendor="" org.bleachbit.BleachBit-root.desktop
+    --vendor="" --add-category=Filesystem org.bleachbit.BleachBit-root.desktop
 
-%suse_update_desktop_file -i org.bleachbit.BleachBit-root Utility Filesystem
-
-%suse_update_desktop_file org.bleachbit.BleachBit Utility Filesystem
+desktop-file-edit --add-category=Filesystem \
+    %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
 %endif
 
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
