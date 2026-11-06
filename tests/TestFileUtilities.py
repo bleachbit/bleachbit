@@ -10,6 +10,7 @@ Test case for module FileUtilities
 
 # standard library
 import codecs
+import configparser
 import contextlib
 import ctypes
 import errno
@@ -46,6 +47,7 @@ from bleachbit.FileUtilities import (
     children_in_directory,
     clear_path_spellings,
     clean_ini,
+    clean_ini_entries,
     clean_json,
     delete_file,
     delete,
@@ -72,6 +74,7 @@ from bleachbit.FileUtilities import (
     open_files_lsof,
     open_files_psutil,
     open_files_freebsd,
+    open_for_overwrite,
     OpenFiles,
     _linux_mount,
     same_partition,
@@ -843,6 +846,25 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         self.assertEqual(len(entries_with_dirs), 4)
         self.assertEqual(len(entries_files_only), 1)
+
+    def test_clean_ini_entries(self):
+        """clean_ini_entries() removes several entries in one rewrite"""
+        filename = self.write_file(
+            os.path.join(self.mkdtemp(), 'vlc-qt-interface.ini'),
+            text='[General]\nfiledialog-path=/x\nkeep=1\n\n'
+                 '[RecentsMRL]\nlist=a\n\n[OpenDialog]\nnetMRL=b\n')
+        with unittest.mock.patch('bleachbit.FileUtilities.open_for_overwrite',
+                                 wraps=open_for_overwrite) as mock_open:
+            clean_ini_entries(filename, [('General', 'filedialog-path'),
+                                         ('RecentsMRL', None),
+                                         ('OpenDialog', 'netMRL'),
+                                         ('Missing', None)])
+        mock_open.assert_called_once()
+        config = configparser.RawConfigParser()
+        config.read(filename, encoding='utf-8')
+        self.assertEqual(config.sections(), ['General', 'OpenDialog'])
+        self.assertEqual(dict(config.items('General')), {'keep': '1'})
+        self.assertEqual(dict(config.items('OpenDialog')), {})
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""

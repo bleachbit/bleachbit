@@ -731,7 +731,16 @@ def _shred_before_rewrite(path):
 
 
 def clean_ini(path, section, parameter):
+    """Delete a section, or one parameter (aka option) in it, in the file"""
+    clean_ini_entries(path, [(section, parameter)])
+
+
+def clean_ini_entries(path, entries):
     """Delete sections and parameters (aka option) in the file
+
+    entries is a list of (section, parameter) pairs, where a parameter
+    of None deletes the whole section, so one read and one write cover
+    every action on the file.
 
     Comments are not preserved.
 
@@ -757,7 +766,9 @@ def clean_ini(path, section, parameter):
 
     # change file
     changed = False
-    if config.has_section(section):
+    for section, parameter in entries:
+        if not config.has_section(section):
+            continue
         if parameter is None:
             changed = True
             config.remove_section(section)

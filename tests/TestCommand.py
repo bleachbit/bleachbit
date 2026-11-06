@@ -295,3 +295,12 @@ class CommandTestCase(common.BleachbitTestCase):
         with self.assertRaises(ValueError):
             cmd.merge(bleachbit.Command.Json('/b/Preferences', 'w'))
         self.assertEqual(cmd.addresses, ['x', 'y/z'])
+
+    def test_Ini_merge(self):
+        """Ini.merge() takes the entries of the same file and refuses another"""
+        cmd = bleachbit.Command.Ini('/a/vlc.ini', 'General', 'x')
+        cmd.merge(bleachbit.Command.Ini('/a/vlc.ini', 'RecentsMRL', None))
+        self.assertEqual(cmd.entries, [('General', 'x'), ('RecentsMRL', None)])
+        with self.assertRaises(ValueError):
+            cmd.merge(bleachbit.Command.Ini('/b/vlc.ini', 'General', 'y'))
+        self.assertEqual(cmd.entries, [('General', 'x'), ('RecentsMRL', None)])
