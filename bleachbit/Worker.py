@@ -195,43 +195,47 @@ class Worker:
         self.yield_time = time.time()
 
         option_sizes = {}
-        # Several options often edit the same JSON file, so merge those
-        # commands and run them after the options: one rewrite, one log line
-        pending_json = {}
+        # Several actions often edit the same JSON or INI file, so merge
+        # those commands and run them after the options: one rewrite, one
+        # log line
+        pending_edits = {}
         try:
             for option_id in operation_options:
                 if self.is_aborted:
                     break
                 yield from self._clean_option(operation, option_id,
-                                              pending_json, option_sizes)
+                                              pending_edits, option_sizes)
         except BrokenPipeError:
             raise
         except Exception:
             # Without the batching these edits would already have run
-            yield from self._run_pending_json(operation, pending_json,
-                                              option_sizes)
+            yield from self._run_pending_edits(operation, pending_edits,
+                                               option_sizes)
             raise
-        yield from self._run_pending_json(operation, pending_json, option_sizes)
+        yield from self._run_pending_edits(operation, pending_edits,
+                                           option_sizes)
         self.ui.update_item_size(operation, -1, sum(option_sizes.values()))
 
-    def _clean_option(self, operation, option_id, pending_json, option_sizes):
-        """Run the commands of one option and queue its JSON edits"""
+    def _clean_option(self, operation, option_id, pending_edits, option_sizes):
+        """Run the commands of one option and queue its file edits"""
         self.size = 0
         assert isinstance(option_id, str)
         # normal scan
         for cmd in self.backends[operation].get_commands(option_id):
-            if isinstance(cmd, Command.Json):
-                if cmd.path in pending_json:
-                    pending_json[cmd.path][1].merge(cmd)
-                else:
-                    pending_json[cmd.path] = (option_id, cmd)
+            path = getattr(cmd, 'path', None)
+            queued = pending_edits.get(path)
+            if queued and type(queued[1]) is type(cmd):
+                queued[1].merge(cmd)
                 continue
-            queued = pending_json.pop(getattr(cmd, 'path', None), None)
             if queued:
-                # edit the file before a later delete or truncate of it
+                # keep the order of different commands on one file
+                del pending_edits[path]
                 yield from self._run_command(queued[1], operation, option_id)
                 if self.is_aborted:
                     break
+            if isinstance(cmd, (Command.Ini, Command.Json)):
+                pending_edits[path] = (option_id, cmd)
+                continue
             yield from self._run_command(cmd, operation, option_id)
             if self.is_aborted:
                 break
@@ -250,9 +254,9 @@ class Worker:
                 self.deepscans[path] = []
             self.deepscans[path].append(search)
 
-    def _run_pending_json(self, operation, pending_json, option_sizes):
-        """Run the merged JSON commands"""
-        for option_id, cmd in pending_json.values():
+    def _run_pending_edits(self, operation, pending_edits, option_sizes):
+        """Run the merged file edit commands"""
+        for option_id, cmd in pending_edits.values():
             if self.is_aborted:
                 break
             # count the size toward the option that first asked for the file

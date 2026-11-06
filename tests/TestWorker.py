@@ -460,6 +460,42 @@ class WorkerTestCase(common.BleachbitTestCase):
         with open(other, encoding='utf-8') as f:
             self.assertEqual(json.load(f), {})
 
+    def test_ini_commands_batched(self):
+        """INI actions on one file run as one command"""
+        dirname = self.mkdtemp()
+        filename = self.write_file(
+            os.path.join(dirname, 'vlc-qt-interface.ini'),
+            text='[General]\nfiledialog-path=/x\nkeep=1\n\n'
+                 '[RecentsMRL]\nlist=a\n\n[OpenDialog]\nnetMRL=b\n')
+        other = self.write_file(os.path.join(dirname, 'other.ini'),
+                                text='[RecentsMRL]\nlist=a\n')
+        action_strs = [
+            f'<action command="ini" search="file" path="{filename}" section="General" parameter="filedialog-path"/>',
+            f'<action command="ini" search="file" path="{other}" section="RecentsMRL"/>',
+            f'<action command="ini" search="file" path="{filename}" section="RecentsMRL"/>',
+            f'<action command="ini" search="file" path="{filename}" section="OpenDialog" parameter="netMRL"/>',
+        ]
+        backends['test'] = TestCleaner.actions_to_cleaner(action_strs)
+        self.addCleanup(backends.pop, 'test', None)
+        operations = {'test': ['option1', 'option2', 'option3', 'option4']}
+        ui = CLI.CliCallback()
+        for really_delete in (False, True):
+            with mock.patch.object(ui, 'append_text') as append_text:
+                worker = Worker(ui, really_delete, operations)
+                for _ in worker.run():
+                    pass
+            self.assertEqual(worker.total_errors, 0)
+            self.assertEqual(worker.total_special, 2)
+            lines = [call.args[0] for call in append_text.call_args_list
+                     if call.args[0].startswith(CLEAN_FILE_LABEL)]
+            self.assertEqual(len(lines), 2)
+            self.assertEqual(1, sum(filename in line for line in lines))
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(f.read().split(), ['[General]', 'keep', '=', '1',
+                                                '[OpenDialog]'])
+        with open(other, encoding='utf-8') as f:
+            self.assertEqual(f.read().strip(), '')
+
     def test_json_command_runs_before_a_later_delete(self):
         """A JSON edit is not deferred past a delete of the same file"""
         filename = self.write_file(os.path.join(self.mkdtemp(), 'gone.json'),
