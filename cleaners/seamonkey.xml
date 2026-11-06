@@ -33,6 +33,9 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.files" path="$localappdata\Mozilla\SeaMonkey\Profiles\*\Cache\"/>
     <action command="delete" search="walk.files" path="$localappdata\Mozilla\SeaMonkey\Profiles\*\cache2\"/>
     <action command="delete" search="walk.files" path="$localappdata\Mozilla\SeaMonkey\Profiles\*\startupCache\"/>
+    <action command="delete" search="walk.files" path="~/Library/Caches/SeaMonkey/Profiles/*/Cache/" os="macos"/>
+    <action command="delete" search="walk.files" path="~/Library/Caches/SeaMonkey/Profiles/*/cache2/" os="macos"/>
+    <action command="delete" search="walk.files" path="~/Library/Caches/SeaMonkey/Profiles/*/startupCache/" os="macos"/>
   </option>
   <option id="chat_logs">
     <label>Chat logs</label>
@@ -44,6 +47,9 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\chatzilla\urls.txt"/>
     <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/chatzilla/logs/*log"/>
     <action command="delete" search="walk.files" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\chatzilla\logs\"/>
+    <action command="delete" search="glob" path="~/Library/Application Support/SeaMonkey/Profiles/*/chatzilla/inputHistory.txt" os="macos"/>
+    <action command="delete" search="glob" path="~/Library/Application Support/SeaMonkey/Profiles/*/chatzilla/urls.txt" os="macos"/>
+    <action command="delete" search="walk.files" path="~/Library/Application Support/SeaMonkey/Profiles/*/chatzilla/logs/" os="macos"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -56,12 +62,14 @@ later.  See the COPYING file in the top-level directory.
     <action command="cookie" search="glob" path="~/.mozilla/seamonkey/*.default/cookies.sqlite"/>
     <action command="cookie" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\cookies.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\cookies.txt"/>
+    <action command="cookie" search="glob" path="~/Library/Application Support/SeaMonkey/Profiles/*/cookies.sqlite" os="macos"/>
   </option>
   <option id="download_history">
     <label>Download history</label>
     <description>List of files downloaded</description>
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/downloads.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\downloads.sqlite"/>
+    <action command="delete" search="glob" path="~/Library/Application Support/SeaMonkey/Profiles/*/downloads.sqlite" os="macos"/>
   </option>
   <option id="history">
     <label>History</label>
@@ -71,5 +79,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/urlbarhistory.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\urlbarhistory.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\sessionstore.bak"/>
+    <action command="delete" search="glob" path="~/Library/Application Support/SeaMonkey/Profiles/*/urlbarhistory.sqlite" os="macos"/>
+    <action command="delete" search="glob" path="~/Library/Application Support/SeaMonkey/Profiles/*/sessionstore.bak" os="macos"/>
   </option>
 </cleaner>
