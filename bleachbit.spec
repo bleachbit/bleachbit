@@ -170,7 +170,6 @@ desktop-file-install \
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
 
-make -C po install DESTDIR=%{buildroot}
 %find_lang %{name}
 
 %if %{has_fdupes}
