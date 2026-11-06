@@ -804,6 +804,9 @@ def yum_clean():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Yum"
         raise RuntimeError(msg)
+    # On Fedora yum is DNF5, which cleans only the user's cache when not root
+    if os.geteuid() != 0:
+        raise RuntimeError('yum clean requires root permissions')
 
     old_size = FileUtilities.getsizedir('/var/cache/yum')
     args = ['--enablerepo=*', 'clean', 'all']
