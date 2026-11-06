@@ -19,7 +19,7 @@ import time
 import warnings
 
 # first party imports
-from bleachbit import DeepScan, FileUtilities, IS_WINDOWS
+from bleachbit import Command, DeepScan, FileUtilities, IS_WINDOWS
 from bleachbit.Action import FileActionProvider
 from bleachbit.Cleaner import backends
 from bleachbit.Constant import EMPTY_SPACE_WARNING
@@ -194,42 +194,90 @@ class Worker:
             return
         self.yield_time = time.time()
 
-        total_size = 0
-        for option_id in operation_options:
-            if self.is_aborted:
-                break
-            self.size = 0
-            assert isinstance(option_id, str)
-            # normal scan
-            for cmd in self.backends[operation].get_commands(option_id):
-                for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
-                    if ret is True:
-                        # Return control to PyGTK idle loop to keep
-                        # it responding allow the user to abort
-                        self.yield_time = time.time()
-                        yield True
-                if time.time() - self.yield_time > 0.25:
-                    if self.really_delete:
-                        self.ui.update_total_size(self.total_bytes)
-                    yield True
-                    self.yield_time = time.time()
+        option_sizes = {}
+        # Several actions often edit the same JSON or INI file, so merge
+        # those commands and run them after the options: one rewrite, one
+        # log line
+        pending_edits = {}
+        try:
+            for option_id in operation_options:
                 if self.is_aborted:
                     break
+                yield from self._clean_option(operation, option_id,
+                                              pending_edits, option_sizes)
+        except BrokenPipeError:
+            raise
+        except Exception:
+            # Without the batching these edits would already have run
+            yield from self._run_pending_edits(operation, pending_edits,
+                                               option_sizes)
+            raise
+        yield from self._run_pending_edits(operation, pending_edits,
+                                           option_sizes)
+        self.ui.update_item_size(operation, -1, sum(option_sizes.values()))
 
+    def _clean_option(self, operation, option_id, pending_edits, option_sizes):
+        """Run the commands of one option and queue its file edits"""
+        self.size = 0
+        assert isinstance(option_id, str)
+        # normal scan
+        for cmd in self.backends[operation].get_commands(option_id):
+            path = getattr(cmd, 'path', None)
+            queued = pending_edits.get(path)
+            if queued and type(queued[1]) is type(cmd):
+                queued[1].merge(cmd)
+                continue
+            if queued:
+                # keep the order of different commands on one file
+                del pending_edits[path]
+                yield from self._run_command(queued[1], operation, option_id)
+                if self.is_aborted:
+                    break
+            if isinstance(cmd, (Command.Ini, Command.Json)):
+                pending_edits[path] = (option_id, cmd)
+                continue
+            yield from self._run_command(cmd, operation, option_id)
+            if self.is_aborted:
+                break
+
+        option_sizes[option_id] = self.size
+        self.ui.update_item_size(operation, option_id, self.size)
+
+        # deep scan
+        for (path, search) in self.backends[operation].get_deep_scan(option_id):
+            if '' == path:
+                path = os.path.expanduser('~')
+            if search.command not in ('delete', 'shred'):
+                raise NotImplementedError(
+                    'Deep scan only supports deleting or shredding now')
+            if path not in self.deepscans:
+                self.deepscans[path] = []
+            self.deepscans[path].append(search)
+
+    def _run_pending_edits(self, operation, pending_edits, option_sizes):
+        """Run the merged file edit commands"""
+        for option_id, cmd in pending_edits.values():
+            if self.is_aborted:
+                break
+            # count the size toward the option that first asked for the file
+            self.size = option_sizes.get(option_id, 0)
+            yield from self._run_command(cmd, operation, option_id)
+            option_sizes[option_id] = self.size
             self.ui.update_item_size(operation, option_id, self.size)
-            total_size += self.size
 
-            # deep scan
-            for (path, search) in self.backends[operation].get_deep_scan(option_id):
-                if '' == path:
-                    path = os.path.expanduser('~')
-                if search.command not in ('delete', 'shred'):
-                    raise NotImplementedError(
-                        'Deep scan only supports deleting or shredding now')
-                if path not in self.deepscans:
-                    self.deepscans[path] = []
-                self.deepscans[path].append(search)
-        self.ui.update_item_size(operation, -1, total_size)
+    def _run_command(self, cmd, operation, option_id):
+        """Run one command, yielding to the UI as it goes"""
+        for ret in self.execute(cmd, f'{operation}.{option_id}'):
+            if ret is True:
+                # Return control to PyGTK idle loop to keep
+                # it responding allow the user to abort
+                self.yield_time = time.time()
+                yield True
+        if time.time() - self.yield_time > 0.25:
+            if self.really_delete:
+                self.ui.update_total_size(self.total_bytes)
+            yield True
+            self.yield_time = time.time()
 
     def run_delayed_op(self, operation, option_id):
         """Run one delayed operation"""
