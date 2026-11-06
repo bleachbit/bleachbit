@@ -681,6 +681,14 @@ Section "Uninstall" SectionUninstall
     # Remove Windows Explorer Shell Extension (Shredder)
     DeleteRegKey SHCTX "Software\Classes\${SHRED_REGEX_KEY}"
 
+    # The fc-cache run in 6.0.5 wrote its cache here, and the file list above only covers shipped files
+    # No RMDir /r, NSIS follows junctions
+    Delete "$INSTDIR\var\cache\fontconfig\*.cache-*"
+    Delete "$INSTDIR\var\cache\fontconfig\CACHEDIR.TAG"
+    RMDir "$INSTDIR\var\cache\fontconfig"
+    RMDir "$INSTDIR\var\cache"
+    RMDir "$INSTDIR\var"
+
     # Remove the uninstaller as the very last step.
     # If something goes wrong, let the user run it again.
     Delete "$INSTDIR\${UNINSTALL_FILENAME}"
