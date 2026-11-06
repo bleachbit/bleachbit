@@ -78,7 +78,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertEqual(uid, uid2)
 
         # Test relationship with sudo_mode()
-        if sudo_mode():
+        if sudo_mode() and os.geteuid() == 0:
             self.assertGreater(uid, 0)
             self.assertNotEqual(uid, os.geteuid())
         else:
@@ -97,7 +97,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         # Test environment variable consistency
         sudo_uid_env = os.getenv('SUDO_UID')
-        if sudo_uid_env:
+        if sudo_uid_env and os.geteuid() == 0:
             self.assertEqual(uid, int(sudo_uid_env))
 
         # Test with empty LOGNAME (if not in sudo mode)
@@ -132,10 +132,34 @@ class GeneralTestCase(common.BleachbitTestCase):
         # Ensure the code path executes past the SUDO_UID shortcut.
         env_overrides = {'SUDO_UID': ''}
         with mock.patch.dict(os.environ, env_overrides, clear=False):
-            with mock.patch('os.getlogin', return_value='1000'):
+            with mock.patch('os.getlogin', return_value='1000'), \
+                    mock.patch('os.getuid', return_value=0):
                 with mock.patch('pwd.getpwnam', side_effect=KeyError):
                     uid = get_real_uid()
         self.assertEqual(uid, 1000)
+
+    def test_get_real_uid_not_root(self):
+        """Without root, SUDO_UID and the login user are ignored"""
+        if not IS_POSIX:
+            self.skipTest('POSIX-only behavior')
+
+        with mock.patch.dict(os.environ, {'SUDO_UID': '1234'}), \
+                mock.patch('os.getlogin', return_value='root'), \
+                mock.patch('os.getuid', return_value=4321):
+            self.assertEqual(get_real_uid(), 4321)
+
+    def test_get_real_username_not_root(self):
+        """Without root, the name comes from the uid of the process"""
+        if not IS_POSIX:
+            self.skipTest('POSIX-only behavior')
+
+        pw_entry = mock.Mock(pw_name='processuser')
+        with mock.patch.dict(os.environ, {'SUDO_USER': 'sudouser'}), \
+                mock.patch('os.getlogin', return_value='loginuser'), \
+                mock.patch('os.getuid', return_value=4321), \
+                mock.patch('pwd.getpwuid', return_value=pw_entry) as mock_getpwuid:
+            self.assertEqual(get_real_username(), 'processuser')
+        mock_getpwuid.assert_called_once_with(4321)
 
     def test_sanitize_root_env_non_root(self):
         """Not running as root: environment is returned unchanged."""
@@ -271,7 +295,8 @@ class GeneralTestCase(common.BleachbitTestCase):
             self.skipTest('POSIX-only behavior')
 
         env = {'LOGNAME': 'containeruser'}
-        with mock.patch.dict(os.environ, env, clear=True):
+        with mock.patch.dict(os.environ, env, clear=True), \
+                mock.patch('os.getuid', return_value=0):
             with mock.patch('os.getlogin', side_effect=OSError('no tty')):
                 with mock.patch('getpass.getuser', side_effect=KeyError):
                     username = get_real_username()
