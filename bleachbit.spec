@@ -64,6 +64,7 @@ BuildArch:      noarch
 %if %{is_redhat_family}
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
+BuildRequires:  make
 BuildRequires:  python3-psutil
 BuildRequires:  python3-requests
 BuildRequires:  python3-setuptools
