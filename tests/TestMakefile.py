@@ -160,3 +160,19 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertTrue(os.path.isdir(install_tgt_dir))
         self.assertExists(os.path.join(
             install_tgt_dir, 'usr/local/share/bleachbit/cleaners/chromium.xml'))
+
+        # The launcher must not depend on PATH, where a pyenv shim or a
+        # venv without PyGObject may come first.
+        launcher_fn = os.path.join(install_tgt_dir, 'usr/local/bin/bleachbit')
+        self.assertExists(launcher_fn)
+        self.assertTrue(os.access(launcher_fn, os.X_OK))
+        with open(launcher_fn, encoding='utf-8') as f:
+            shebang = f.readline().rstrip('\n')
+        self.assertTrue(shebang.startswith('#!/'), shebang)
+        interpreter = shebang[2:]
+        self.assertNotEqual(os.path.basename(interpreter), 'env', shebang)
+        self.assertTrue(os.path.isfile(interpreter), shebang)
+        with open(launcher_fn, encoding='utf-8') as f:
+            lines = f.readlines()
+        with open('bleachbit.py', encoding='utf-8') as f:
+            self.assertEqual(lines[1:], f.readlines()[1:])
