@@ -782,34 +782,39 @@ def clean_ini(path, section, parameter):
         config.write(fp)
 
 
+def _delete_json_key(js, target):
+    """Delete one slash-separated key path from parsed JSON
+
+    Returns whether the key existed.
+    """
+    keys = target.split('/')
+    pos = js
+    for i, key in enumerate(keys):
+        if not isinstance(pos, dict) or key not in pos:
+            return False
+        if i == len(keys) - 1:
+            del pos[key]
+            return True
+        pos = pos[key]
+    return False
+
+
 def clean_json(path, target):
-    """Delete key in the JSON file"""
-    changed = False
-    targets = target.split('/')
+    """Delete keys in the JSON file
+
+    target is one slash-separated key path or a list of them, so one
+    read and one write cover every action on the file.
+    """
+    targets = [target] if isinstance(target, str) else target
 
     # read file to parser
     with open(path, 'r', encoding='utf-8-sig') as f:
         js = json.load(f)
 
-    # change file
-    pos = js
-    while True:
-        new_target = targets.pop(0)
-        if not isinstance(pos, dict):
-            break
-        if new_target in pos and targets:
-            # descend
-            pos = pos[new_target]
-        elif new_target in pos:
-            # delete terminal target
+    changed = False
+    for one_target in targets:
+        if _delete_json_key(js, one_target):
             changed = True
-            del pos[new_target]
-        else:
-            # target not found
-            break
-        if not targets:
-            # target not found
-            break
 
     if changed:
         from bleachbit.Options import options
