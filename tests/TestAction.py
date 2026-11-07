@@ -637,6 +637,25 @@ class ActionTestCase(common.BleachbitTestCase):
                    for cmd in _action_str_to_commands(action_str)]
         self.assertEqual(sorted(results), sorted(filenames))
 
+    def test_walk_files_cache_hit_keeps_other_paths(self):
+        """A walk.files cache hit on one path still walks the others"""
+        dirs = [self.mkdtemp(prefix=f'bleachbit-walk-cache{i}')
+                for i in range(2)]
+        filenames = [os.path.join(dirname, 'file') for dirname in dirs]
+        for filename in filenames:
+            common.touch_file(filename)
+        multi = Delete(parseString(
+            '<action command="delete" search="walk.files" path="$$d$$" />'
+        ).childNodes[0], {'d': dirs})
+        self.assertEqual(len(multi.paths), 2)
+
+        # Leave the first path of multi in the cache
+        list(_action_str_to_commands(
+            '<action command="delete" search="walk.files" '
+            f'path={quoteattr(multi.paths[0])} />'))
+        results = [cmd.path for cmd in multi.get_commands()]
+        self.assertEqual(sorted(results), sorted(filenames))
+
     def test_package_manager_missing(self):
         """Unit test for when package manager is not installed"""
         with mock.patch('bleachbit.Language.setup_translation', return_value=None), \
