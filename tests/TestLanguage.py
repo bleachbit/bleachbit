@@ -5,19 +5,23 @@
 # later.  See the COPYING file in the top-level directory.
 
 
+import ast
 import contextlib
 import ctypes
 import os
 import unittest
 from unittest import mock
 
+import bleachbit
 from bleachbit.Language import _UNSET, \
     find_supported_language_code, \
     get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
     LocaleCode, \
+    nget_text, \
     normalize_locale_code, \
+    pget_text, \
     setup_translation, \
     get_supported_language_code_name_dict
 from bleachbit.Options import options
@@ -28,6 +32,34 @@ def skipIfMissingPo(f):
     """Skip unit test if missing translations"""
     lang_count = len(get_supported_language_codes())
     return unittest.skipIf(lang_count < 3, 'missing translations: run `make -C po local`')(f)
+
+
+class _ImportTimeGettext(ast.NodeVisitor):
+    """Collect gettext calls that run when the module is imported"""
+
+    names = ('_', '_p', 'ngettext')
+
+    def __init__(self):
+        self.lines = []
+
+    def visit_Call(self, node):
+        if isinstance(node.func, ast.Name) and node.func.id in self.names:
+            self.lines.append(node.lineno)
+        self.generic_visit(node)
+
+    def _visit_defaults(self, args):
+        for node in args.defaults + [d for d in args.kw_defaults if d]:
+            self.visit(node)
+
+    def visit_FunctionDef(self, node):
+        for decorator in node.decorator_list:
+            self.visit(decorator)
+        self._visit_defaults(node.args)
+
+    visit_AsyncFunctionDef = visit_FunctionDef
+
+    def visit_Lambda(self, node):
+        self._visit_defaults(node.args)
 
 
 class LanguageTestCase(common.BleachbitTestCase):
@@ -49,6 +81,35 @@ class LanguageTestCase(common.BleachbitTestCase):
         """Test get_active_language_code()"""
         lang_id = get_active_language_code()
         self.assertIsLanguageCode(lang_id)
+
+    def test_no_translation_at_import(self):
+        """No string is translated at import time, so it follows a language change"""
+        package_dir = os.path.dirname(bleachbit.__file__)
+        found = []
+        for root, _dirs, files in os.walk(package_dir):
+            for name in files:
+                if not name.endswith('.py'):
+                    continue
+                path = os.path.join(root, name)
+                with open(path, encoding='utf-8') as f:
+                    tree = ast.parse(f.read(), path)
+                visitor = _ImportTimeGettext()
+                visitor.visit(tree)
+                rel = os.path.relpath(path, package_dir)
+                found.extend(f'{rel}:{line}' for line in visitor.lines)
+        self.assertEqual(found, [])
+
+    def test_plural_and_context_set_up_translation(self):
+        """nget_text() and pget_text() set up translation like get_text()"""
+        from bleachbit import Language as language_module
+        for call in (lambda: nget_text('file', 'files', 2),
+                     lambda: pget_text('button', 'Clean')):
+            with mock.patch.object(language_module,
+                                   'attempted_setup_translation', False), \
+                    mock.patch.object(language_module,
+                                      'setup_translation') as setup:
+                call()
+            setup.assert_called_once_with()
 
     def test_get_supported_language_codes(self):
         """Test get_supported_language_codes()"""

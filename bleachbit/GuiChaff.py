@@ -17,7 +17,6 @@ import threading
 
 
 from bleachbit.Chaff import generate_emails, generate_2600
-from bleachbit.Constant import ABORT_BUTTON_LABEL
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiInfoBar import InfoBarMixin
 from bleachbit.Language import get_text as _
@@ -34,29 +33,33 @@ MAX_FILE_COUNT = 999999
 MAX_MB_COUNT = 999999
 MAX_FREE_SPACE_PCT = 99
 
-STOP_MODE_LABELS = {
-    # TRANSLATORS: Option in combo box to choose to stop after a number
-    # of files have been generated.
-    STOP_MODE_FILE_COUNT: _("Number of files"),
-    # TRANSLATORS: Option in a combo box for choosing the stop condition
-    # when generating chaff (dummy) files. This option means "stop after
-    # the total size of generated files reaches a threshold in megabytes."
-    # "MB" is the megabyte unit abbreviation. Localize it if your language
-    # has an official abbreviation (e.g., "Mo" in French); otherwise keep
-    # "MB".
-    STOP_MODE_TOTAL_SIZE: _("Size (MB)"),
-    # TRANSLATORS: Option in combo box to choose to stop when free space
-    # reaches a certain percentage.
-    # The percentage symbol (%) is a literal character, not a format
-    # placeholder.
-    STOP_MODE_FREE_SPACE: _("Free space (%)"),
-}
+
+def _stop_mode_labels():
+    """Return the stop mode labels, keyed by stop mode"""
+    return {
+        # TRANSLATORS: Option in combo box to choose to stop after a number
+        # of files have been generated.
+        STOP_MODE_FILE_COUNT: _("Number of files"),
+        # TRANSLATORS: Option in a combo box for choosing the stop condition
+        # when generating chaff (dummy) files. This option means "stop after
+        # the total size of generated files reaches a threshold in megabytes."
+        # "MB" is the megabyte unit abbreviation. Localize it if your language
+        # has an official abbreviation (e.g., "Mo" in French); otherwise keep
+        # "MB".
+        STOP_MODE_TOTAL_SIZE: _("Size (MB)"),
+        # TRANSLATORS: Option in combo box to choose to stop when free space
+        # reaches a certain percentage.
+        # The percentage symbol (%) is a literal character, not a format
+        # placeholder.
+        STOP_MODE_FREE_SPACE: _("Free space (%)"),
+    }
 
 
-# TRANSLATORS: Used for (1) label for folder chooser button and
-# (2) error message shown in the infobar when the folder has not
-# been set. 'Select' is a verb.
-SELECT_DEST_FOLDER_MSG = _("Select destination folder")
+def _select_dest_folder_msg():
+    # TRANSLATORS: Used for (1) label for folder chooser button and
+    # (2) error message shown in the infobar when the folder has not
+    # been set. 'Select' is a verb.
+    return _("Select destination folder")
 
 
 def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
@@ -275,15 +278,16 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
         grid.attach(stop_after_label, 0, 1, 1, 1)
         self.stop_mode_combo = Gtk.ComboBoxText()
         self.stop_mode_combo.set_hexpand(True)
+        stop_mode_labels = _stop_mode_labels()
         for mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):
-            self.stop_mode_combo.append_text(STOP_MODE_LABELS[mode])
+            self.stop_mode_combo.append_text(stop_mode_labels[mode])
         self.stop_mode_combo.set_active(STOP_MODE_FILE_COUNT)
         self.stop_mode_combo.connect('changed', self._on_stop_mode_changed)
         grid.attach(self.stop_mode_combo, 1, 1, 1, 1)
 
         # TRANSLATORS: Label for the spin button that selects the stop value.
         self.stop_value_label = Gtk.Label(
-            label=STOP_MODE_LABELS[self.stop_mode_combo.get_active()])
+            label=stop_mode_labels[self.stop_mode_combo.get_active()])
         self.stop_value_label.set_xalign(0)
         grid.attach(self.stop_value_label, 0, 2, 1, 1)
         self._stop_value_adjustments = {
@@ -302,7 +306,7 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
         self.stop_value_spin.set_hexpand(True)
         grid.attach(self.stop_value_spin, 1, 2, 1, 1)
 
-        folder_label = Gtk.Label(label=SELECT_DEST_FOLDER_MSG)
+        folder_label = Gtk.Label(label=_select_dest_folder_msg())
         folder_label.set_xalign(0)
         grid.attach(folder_label, 0, 3, 1, 1)
         # The file chooser button displays a stock GTK icon. When some parts of GTK are not
@@ -379,7 +383,9 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
         self.make_button.connect('clicked', self.on_make_files)
         box.pack_start(self.make_button, False, False, 0)
 
-        self.abort_button = Gtk.Button(label=ABORT_BUTTON_LABEL)
+        # TRANSLATORS: Button label on (1) the headerbar and (2) the chaff dialog.
+        # 'Abort' is a verb.
+        self.abort_button = Gtk.Button(label=_('Abort'))
         self.abort_button.get_style_context().add_class('destructive-action')
         self.abort_button.connect('clicked', self._on_abort)
         box.pack_start(self.abort_button, False, False, 0)
@@ -390,7 +396,7 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
     def _on_stop_mode_changed(self, combo):
         """Update the value spin button when the stop mode changes"""
         mode = combo.get_active()
-        self.stop_value_label.set_text(STOP_MODE_LABELS[mode])
+        self.stop_value_label.set_text(_stop_mode_labels()[mode])
         self.stop_value_spin.set_adjustment(
             self._stop_value_adjustments[mode])
 
@@ -466,7 +472,7 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
         delete_when_finished = self.when_finished_combo.get_active() == 0
         inspiration = self.inspiration_combo.get_active()
         if not output_dir:
-            self.show_infobar(SELECT_DEST_FOLDER_MSG,
+            self.show_infobar(_select_dest_folder_msg(),
                               Gtk.MessageType.ERROR)
             return
 

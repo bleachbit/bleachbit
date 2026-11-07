@@ -14,7 +14,7 @@ import time
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, Language, SystemInformation, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.Constant import REQUIRES_EXPERT_MODE
+from bleachbit.Constant import requires_expert_mode
 from bleachbit.GUI import logger
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
@@ -1011,7 +1011,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         # block cleaning of warning options without expert mode
         if not options.get('expert_mode') and backends[cleaner_id].get_warning(option_id):
-            self.show_infobar(REQUIRES_EXPERT_MODE)
+            self.show_infobar(requires_expert_mode())
             return
 
         # delete
@@ -1207,6 +1207,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             #  Firefox - Cache).
             _("Clean files in the selected operations"))
 
+        # TRANSLATORS: Button label on (1) the headerbar and (2) the chaff dialog.
+        # 'Abort' is a verb.
         self.stop_button.set_label(_('Abort'))
         self.stop_button.set_tooltip_text(
             # TRANSLATORS: Tooltip for the abort button on the headerbar,
