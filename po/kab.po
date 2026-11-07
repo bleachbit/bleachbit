@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 14:03-0600\n"
-"PO-Revision-Date: 2026-11-07 12:49+0000\n"
+"PO-Revision-Date: 2026-11-08 18:51+0000\n"
 "Last-Translator: Amadɣas <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/bleachbit/main/"
 "kab/>\n"
@@ -583,29 +583,31 @@ msgstr "Amsaɣ n usiweḍ n ifuyla"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
-msgstr ""
+msgstr "Idigan"
 
 #: ../cleaners/epiphany.xml
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "websites"
 msgstr ""
+"Taffa n yisefka n tansiwin URL i deg llant tecraḍ n yisebtar, tignitin n "
+"yismal d uzray n yismal Web yettwarzan"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr ""
+msgstr "Taxtiṛit-a ad tekkes akk ticraḍ n yisebtar."
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr ""
+msgstr "Ipudkasten yettwasidren"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr ""
+msgstr "Kkes ipudkasten yettwasidren"
 
 #: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
-msgstr ""
+msgstr "Amsaɣ n yimayl"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
@@ -2872,7 +2874,7 @@ msgstr "Sefrek inagan n tuqqna ara teǧǧeḍ…"
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
 msgid "Manage custom paths…"
-msgstr ""
+msgstr "Sefrek iberdan udmawanen…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2880,19 +2882,21 @@ msgstr ""
 #: ../bleachbit/GuiWindow.py
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
+"Sken-d taskant n yifuyla n temhalin yettwafernen (war ma tekkseḍ ula d yiwen "
+"ufaylu)"
 
 #. TRANSLATORS: Tooltip for the clean button on the headerbar.
 #. 'Clean' is a verb, and 'operations' are cleaning options (e.g.,
 #. Firefox - Cache).
 #: ../bleachbit/GuiWindow.py
 msgid "Clean files in the selected operations"
-msgstr ""
+msgstr "Sfeḍ ifuyla n temhalin yettwafernen"
 
 #. TRANSLATORS: Tooltip for the abort button on the headerbar,
 #. and 'abort' ia a verb.
 #: ../bleachbit/GuiWindow.py
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "Sefsex taskant neɣ akala n usfaḍ"
 
 #. TRANSLATORS: Button in headerbar to update the application.
 #. 'Update' is a verb.
@@ -2904,12 +2908,12 @@ msgstr "Mucceḍ"
 #. 'Update' is a verb.
 #: ../bleachbit/GuiWindow.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Mucceḍ BleachBit ɣer lqem aneggaru"
 
 #. TRANSLATORS: Hint shown when starting in fullscreen mode.
 #: ../bleachbit/GuiWindow.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Sit ɣef F11 akken ad teffɣeḍ seg uskar n ugdil aččuran."
 
 #. TRANSLATORS: This message is shown when orphaned temporary files
 #. from an interrupted disk wipe operation are detected.
@@ -2918,6 +2922,8 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"BleachBit yufa-d ifuyla i d-yeqqimen acku tamhelt n usfaḍ n uḍebsi "
+"tettwaḥbes. Tebɣiḍ ad twaliḍ taskant-nsen s taxtiṛit n tukksa-nsen?"
 
 #. TRANSLATORS: This message is shown on Windows when the configuration
 #. folder (%APPDATA%\BleachBit) has broken file permissions that prevent
@@ -3331,37 +3337,37 @@ msgstr "Teḍra-d tuccḍa tarussint #0 deg tgezmi n ufaylu."
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr ""
+msgstr "Tasureft deg uselkem n temhelt '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "File not found: %s"
-msgstr ""
+msgstr "Afaylu ur yettwaf ara: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Adduf yettwagi deg ucraḍ n ufaylu i tukksa ticki: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Adduf yettwagi deg tukksa n wazal n Registry: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Adduf yettwagi deg tukksa n tsarut n Registry: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Adduf yettwagi: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "Taffa n yisefka tsekkeṛ: %s"
 
 #. TRANSLATORS: The special keyword {operation_option} will be
 #. replaced by a cleaner and option such as 'firefox.cache'.
@@ -3370,17 +3376,19 @@ msgstr ""
 #: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr ""
+msgstr "Tuccḍa: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
 msgid "Please wait. Wiping empty space."
-msgstr ""
+msgstr "Rǧu. Asfaḍ n tallunt tilemt iteddu."
 
 #. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"Akken ad tḥebseḍ akala-a, sit ɣef tqeffalt n usefsex deg tfeggagt n yifecka, "
+"sakin rǧu."
 
 #. TRANSLATORS: Warning shown while wiping a drive's
 #. empty space.
@@ -3390,48 +3398,51 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"Ma yettwamdel usnas s tmara uqbel ad ifukk ukala, zemren ad qqimen yifuyla "
+"imeqqranen deg uḍebsi u ad ṭṭfen akk tallunt yellan. Akken ad ten-tekkseḍ, "
+"ales asenker n BleachBit."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr ""
+msgstr "Rǧu. Asfaḍ n %s iteddu."
 
 #. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, no-python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mazal azal n %d n tesdat."
+msgstr[1] "Mazal azal n %d n tesdatin."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr ""
+msgstr "Tallunt n uḍebsi yettwaslellin: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr ""
+msgstr "Tallunt n uḍebsi ara yettwaslellin: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Files deleted: %d"
-msgstr ""
+msgstr "Ifuyla yettwakksen: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr ""
+msgstr "Ifuyla ara yettwakksen: %d"
 
 #. TRANSLATORS: %d is the number of special cleaning operations
 #. completed. Special operations are cleaning actions that do
@@ -3440,27 +3451,27 @@ msgstr ""
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"
-msgstr ""
+msgstr "Timhalin tuzzigin: %d"
 
 #. TRANSLATORS: %d is the count of errors that occurred
 #. during the cleaning or preview operation.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Errors: %d"
-msgstr ""
+msgstr "Tuccḍiwin: %d"
 
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
 #: ../bleachbit/Worker.py
 msgid "Please wait.  Running deep scan."
-msgstr ""
+msgstr "Rǧu. Aḍummu lqayen iteddu."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr ""
+msgstr "Rǧu. Taskant n %s tetteddu."
 
 #. TRANSLATORS: This menu item opens a file picker dialog where the
 #. user can select one or more files. The selected files are then
@@ -3468,7 +3479,7 @@ msgstr ""
 #. recovery impossible. "Shredding" refers to this secure deletion process.
 #: ../share/app-menu.ui
 msgid "_Shred Files"
-msgstr ""
+msgstr "_Senger ifuyla"
 
 #. TRANSLATORS: This menu item prompts the user to select one or
 #. more folders using a folder picker dialog. Then, it securely deletes
@@ -3476,7 +3487,7 @@ msgstr ""
 #. overwriting data before deletion to prevent recovery.
 #: ../share/app-menu.ui
 msgid "Sh_red Folders"
-msgstr ""
+msgstr "Se_nger ikaramen"
 
 #. TRANSLATORS: This menu item reads file or folder paths from the
 #. clipboard, then securely deletes them. "Shredding" means overwriting
@@ -3484,7 +3495,7 @@ msgstr ""
 #. after the operation.
 #: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "Senger iberdan seg tecfawit"
 
 #. TRANSLATORS: This menu item prompts the user to select a folder.
 #. It then fills the partition with data until full, overwriting any
@@ -3492,14 +3503,14 @@ msgstr ""
 #. to unallocated disk space where deleted file data may still exist.
 #: ../share/app-menu.ui
 msgid "_Wipe Empty Space"
-msgstr ""
+msgstr "_Sfeḍ tallunt tilemt"
 
 #. TRANSLATORS: This menu item creates decoy files filled with random
 #. data to mislead anyone searching for sensitive information. "Chaff" refers
 #. to material used as a distraction or decoy.
 #: ../share/app-menu.ui
 msgid "_Make Chaff"
-msgstr ""
+msgstr "_Snulfu-d isefka isugnanen"
 
 #. TRANSLATORS: This menu item securely deletes the application's
 #. configuration files (resetting all settings to defaults) and then
@@ -3507,23 +3518,23 @@ msgstr ""
 #. deletion to prevent recovery.
 #: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
-msgstr ""
+msgstr "S_enger iɣewwaṛen sakin ffeɣ"
 
 #. TRANSLATORS: This menu item displays technical details about
 #. the system, sometimes useful for troubleshooting issues.
 #: ../share/app-menu.ui
 msgid "S_ystem Information"
-msgstr ""
+msgstr "Talɣut ɣef u_nagraw"
 
 #. TRANSLATORS: This menu item opens a web browser to a page
 #. with links to documentation and the bug tracker.
 #: ../share/app-menu.ui
 msgid "_Help"
-msgstr ""
+msgstr "_Tallalt"
 
 #. TRANSLATORS: This menu item opens a dialog with general information
 #. about the application, including its name, version, description,
 #. copyright, license, and website link.
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
-msgstr ""
+msgstr "_Ɣef BleachBit"
