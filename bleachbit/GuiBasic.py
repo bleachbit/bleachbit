@@ -40,13 +40,17 @@ require_gtk()
 logger = logging.getLogger(__name__)
 
 
-# TRANSLATORS: Label for the Cancel button in several dialog windows:
-# file chooser, folder choose, delete confirmation, and warning dialogs.
-# The underscore indicates the accelerator key.
-CANCEL_BUTTON_LABEL = _("_Cancel")
-# TRANSLATORS: Label for the Delete button in the file choose dialog
-# and delete confirmation dialog.
-DELETE_BUTTON_LABEL = _("_Delete")
+def _cancel_button_label():
+    # TRANSLATORS: Label for the Cancel button in several dialog windows:
+    # file chooser, folder choose, delete confirmation, and warning dialogs.
+    # The underscore indicates the accelerator key.
+    return _("_Cancel")
+
+
+def _delete_button_label():
+    # TRANSLATORS: Label for the Delete button in the file choose dialog
+    # and delete confirmation dialog.
+    return _("_Delete")
 
 
 def browse_folder(parent, title, multiple, stock_button):
@@ -61,7 +65,7 @@ def browse_folder(parent, title, multiple, stock_button):
     chooser = Gtk.FileChooserDialog(transient_for=parent,
                                     title=title,
                                     action=Gtk.FileChooserAction.SELECT_FOLDER)
-    chooser.add_buttons(CANCEL_BUTTON_LABEL, Gtk.ResponseType.CANCEL,
+    chooser.add_buttons(_cancel_button_label(), Gtk.ResponseType.CANCEL,
                         stock_button, Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
     chooser.set_select_multiple(multiple)
@@ -90,7 +94,7 @@ def _browse_open(parent, title, multiple, stock_button):
     chooser = Gtk.FileChooserDialog(title=title,
                                     transient_for=parent,
                                     action=Gtk.FileChooserAction.OPEN)
-    chooser.add_buttons(CANCEL_BUTTON_LABEL, Gtk.ResponseType.CANCEL,
+    chooser.add_buttons(_cancel_button_label(), Gtk.ResponseType.CANCEL,
                         stock_button, Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
     chooser.set_select_multiple(multiple)
@@ -117,7 +121,7 @@ def browse_file(parent, title):
 
 def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
-    return _browse_open(parent, title, True, DELETE_BUTTON_LABEL)
+    return _browse_open(parent, title, True, _delete_button_label())
 
 
 def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
@@ -167,8 +171,8 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
     dialog.get_content_area().pack_start(vbox, False, True, 0)
     dialog.get_content_area().set_spacing(10)
 
-    dialog.add_button(DELETE_BUTTON_LABEL, Gtk.ResponseType.ACCEPT)
-    dialog.add_button(CANCEL_BUTTON_LABEL, Gtk.ResponseType.CANCEL)
+    dialog.add_button(_delete_button_label(), Gtk.ResponseType.ACCEPT)
+    dialog.add_button(_cancel_button_label(), Gtk.ResponseType.CANCEL)
     dialog.set_default_response(Gtk.ResponseType.CANCEL)
 
     dialog.show_all()
@@ -209,7 +213,7 @@ def warning_confirm_dialog(parent, option_name, warning_text, show_checkbox=True
         content.pack_start(remember_cb, False, False, 0)
 
     cancel_button = dialog.add_button(
-        CANCEL_BUTTON_LABEL, Gtk.ResponseType.CANCEL)
+        _cancel_button_label(), Gtk.ResponseType.CANCEL)
     # TRANSLATORS: Button label in a warning dialog to confirm enabling an option.
     # The underscore is the accelerator key.
     enable_button = dialog.add_button(_('_Enable anyway'), Gtk.ResponseType.OK)
