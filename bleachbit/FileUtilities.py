@@ -954,14 +954,24 @@ def _file_type(path, dir_fd=None):
             return os.lstat(path, dir_fd=dir_fd).st_mode
         except (OSError, ValueError):
             return None
-    # os.lstat() returns Access Denied on some Windows files that the
-    # native os.path checks can still see
-    if not os.path.lexists(path):
-        return None
     try:
-        tag = os.lstat(path).st_reparse_tag
-    except OSError:
+        st = os.lstat(path)
+    except (OSError, ValueError):
+        st = None
+    if st is None:
+        # os.lstat() returns Access Denied on some Windows files that the
+        # native os.path checks can still see
+        if not os.path.lexists(path):
+            return None
         tag = 0
+    else:
+        tag = st.st_reparse_tag
+        # Without a reparse point there is nothing to follow, so isdir()
+        # and isfile() would see what lstat() saw
+        if not tag and stat.S_ISDIR(st.st_mode):
+            return stat.S_IFDIR
+        if not tag and stat.S_ISREG(st.st_mode):
+            return stat.S_IFREG
     # A junction/symlink's contents belong to the target, not
     # this path; isdir() would follow it and judge the target's
     # emptiness instead of removing the reparse point itself.

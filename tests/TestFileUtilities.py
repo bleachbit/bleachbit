@@ -37,6 +37,7 @@ from tests.common import pytest
 
 # local import
 from bleachbit.FileUtilities import (
+    _file_type,
     _mount_points_below,
     _posix_keep_list_spelling,
     _remove_windows_readonly,
@@ -1139,6 +1140,7 @@ State=AAAA/wA...
             with self.subTest(tag=hex(tag), isdir=isdir):
                 st = unittest.mock.Mock(
                     st_reparse_tag=tag,
+                    st_mode=stat.S_IFDIR if isdir else stat.S_IFREG,
                     st_file_attributes=stat.FILE_ATTRIBUTE_REPARSE_POINT)
                 mock_delete_file = unittest.mock.Mock()
                 mock_delete_path = unittest.mock.Mock()
@@ -1158,6 +1160,29 @@ State=AAAA/wA...
                 else:
                     mock_delete_file.assert_not_called()
                     self.assertIs(mock_delete_path.call_args.args[1], expected)
+
+    def test_file_type_windows_no_reparse_point(self):
+        """_file_type() on Windows trusts lstat() for a plain file or dir"""
+        for mode, expected in ((stat.S_IFREG, stat.S_IFREG),
+                               (stat.S_IFDIR, stat.S_IFDIR),
+                               (stat.S_IFCHR, 0)):
+            with self.subTest(mode=oct(mode)):
+                st = unittest.mock.Mock(st_reparse_tag=0, st_mode=mode)
+                # Only a type lstat() cannot settle asks the os.path checks
+                if expected:
+                    ask = {'side_effect': AssertionError}
+                else:
+                    ask = {'return_value': False}
+                with unittest.mock.patch.multiple(
+                        'bleachbit.FileUtilities', IS_POSIX=False,
+                        IS_WINDOWS=True), \
+                        unittest.mock.patch('os.lstat', return_value=st), \
+                        unittest.mock.patch('os.path.lexists',
+                                            side_effect=AssertionError), \
+                        unittest.mock.patch('os.path.isdir', **ask), \
+                        unittest.mock.patch('os.path.isfile', **ask), \
+                        unittest.mock.patch('os.path.islink', **ask):
+                    self.assertEqual(_file_type('C:\\plain'), expected)
 
     def delete_helper(self, delete_func, shred):
         """Called by test_delete() with shred = False and = True"""
