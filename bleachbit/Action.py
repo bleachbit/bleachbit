@@ -333,7 +333,8 @@ class FileActionProvider(ActionProvider):
                 self.__class__.cache = (
                     self.search, input_path, entries, False)
                 for path in func(input_path):
-                    entries.append(path)
+                    # A replay comes later, so it reads the size again
+                    entries.append(str(path))
                     yield path
                 # Mark complete only once the walk finishes, so an
                 # early-abandoned generator doesn't poison the cache

@@ -451,6 +451,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             def is_symlink(self):
                 return False
 
+            def stat(self, follow_symlinks=True):
+                del follow_symlinks
+                return os.stat_result((0,) * 10)
+
         class _RaisingScandir:
             """Yields one file entry, then raises PermissionError mid-iteration."""
 
@@ -506,6 +510,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
             def is_junction(self):
                 return False
+
+            def stat(self, follow_symlinks=True):
+                del follow_symlinks
+                return os.stat_result((0,) * 10)
 
         class _FakeScandir:
             def __init__(self, entries):
@@ -2103,6 +2111,7 @@ State=AAAA/wA...
                 counter = 0
                 for child in children_in_directory(dirname, False):
                     self.assertEqual(getsize(child), 10 * 12345)
+                    self.assertEqual(child.scan_size, 10 * 12345)
                     counter += 1
                 self.assertEqual(counter, 1)
             if IS_POSIX:
