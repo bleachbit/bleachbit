@@ -22,7 +22,7 @@ import warnings
 from bleachbit import DeepScan, FileUtilities, IS_WINDOWS
 from bleachbit.Action import FileActionProvider
 from bleachbit.Cleaner import backends
-from bleachbit.Constant import EMPTY_SPACE_WARNING
+from bleachbit.Constant import empty_space_warning
 from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
 from bleachbit.Language import get_text as _, nget_text as ngettext
 from bleachbit.FileUtilities import close_delete_parent_lock
@@ -237,7 +237,7 @@ class Worker:
         if 'empty_space' == option_id:
             # TRANSLATORS: 'empty' means 'unallocated'
             msg = _("Please wait. Wiping empty space.")
-            self.ui.append_text(EMPTY_SPACE_WARNING)
+            self.ui.append_text(empty_space_warning())
             self.ui.append_text('\n\n')
             self.ui.append_text(
                 # TRANSLATORS: Instruction shown while wiping a drive's empty space.

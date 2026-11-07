@@ -29,7 +29,7 @@ import logging
 from bleachbit import GuiBasic, ProtectedPath, IS_POSIX, IS_WINDOWS
 from bleachbit import online_update_notification_enabled
 from bleachbit.PathUtils import normalize_path
-from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
+from bleachbit.Constant import empty_space_warning, requires_expert_mode
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiInfoBar import InfoBarMixin
@@ -48,20 +48,26 @@ logger = logging.getLogger(__name__)
 
 LOCATIONS_WHITELIST = 1
 LOCATIONS_CUSTOM = 2
-# TRANSLATORS: Shown as a tooltip in the preferences window and as
-# a description in a confirmation dialog.
-EXPERT_MODE_DESCRIPTION = _(
-    'Expert mode enables advanced features and relaxes guardrails. '
-    'Use extra caution in expert mode.')
 
-# TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
-# to bypass some safety guardails for advanced users and (2) the title of
-# dialog asking to confirm this choice.
-EXPERT_MODE_MSG = _('Expert mode')
 
-# TRANSLATORS: Notice shown in an infobar after changing a preference
-# that requires starting the application to be effective.
-RESTART_APP_MSG = _("Restart BleachBit for full effect.")
+def _expert_mode_description():
+    # TRANSLATORS: Shown as a tooltip in the preferences window and as
+    # a description in a confirmation dialog.
+    return _('Expert mode enables advanced features and relaxes guardrails. '
+             'Use extra caution in expert mode.')
+
+
+def _expert_mode_msg():
+    # TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
+    # to bypass some safety guardails for advanced users and (2) the title of
+    # dialog asking to confirm this choice.
+    return _('Expert mode')
+
+
+def _restart_app_msg():
+    # TRANSLATORS: Notice shown in an infobar after changing a preference
+    # that requires starting the application to be effective.
+    return _("Restart BleachBit for full effect.")
 
 
 class PreferencesDialog(InfoBarMixin):
@@ -192,8 +198,8 @@ class PreferencesDialog(InfoBarMixin):
             from bleachbit.GuiBasic import warning_confirm_dialog
             confirmed, _remember_choice = warning_confirm_dialog(
                 self.dialog,
-                EXPERT_MODE_MSG,
-                EXPERT_MODE_DESCRIPTION,
+                _expert_mode_msg(),
+                _expert_mode_description(),
                 show_checkbox=False
             )
             if not confirmed:
@@ -243,7 +249,7 @@ class PreferencesDialog(InfoBarMixin):
             from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
             install_kde_service_menu_file()
         if 'use_fontconfig_backend' == path:
-            self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
+            self.show_infobar(_restart_app_msg(), Gtk.MessageType.INFO)
 
     def __reset_warning_preferences(self, _button):
         """Reset saved warning confirmations."""
@@ -372,7 +378,7 @@ class PreferencesDialog(InfoBarMixin):
                 "No language code found in combobox for text %s", text)
         setup_translation()
         self.refresh_operations = True
-        self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
+        self.show_infobar(_restart_app_msg(), Gtk.MessageType.INFO)
 
     def on_auto_detect_toggled(self, _widget):
         """Callback for when the auto-detect language checkbox is toggled."""
@@ -396,7 +402,7 @@ class PreferencesDialog(InfoBarMixin):
             options.set("forced_language", matched, section="bleachbit")
         setup_translation()
         self.refresh_operations = True
-        self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
+        self.show_infobar(_restart_app_msg(), Gtk.MessageType.INFO)
 
     def __create_general_checkboxes(self, vbox):
         """Create and configure general checkboxes."""
@@ -423,7 +429,7 @@ class PreferencesDialog(InfoBarMixin):
             _("Confirm before delete"),
             'delete_confirmation',
             vbox=vbox,
-            tooltip=REQUIRES_EXPERT_MODE,
+            tooltip=requires_expert_mode(),
             requires_option='expert_mode',
             store_as_attr='cb_delete_confirmation')
 
@@ -432,7 +438,7 @@ class PreferencesDialog(InfoBarMixin):
             label=_("Reset warning confirmations"))
         self.reset_warnings_button.set_halign(Gtk.Align.START)
         self.reset_warnings_button.set_margin_top(6)
-        self.reset_warnings_button.set_tooltip_text(REQUIRES_EXPERT_MODE)
+        self.reset_warnings_button.set_tooltip_text(requires_expert_mode())
         self.reset_warnings_button.connect(
             'clicked', self.__reset_warning_preferences)
         self.reset_warnings_button.set_sensitive(options.get('expert_mode'))
@@ -574,10 +580,10 @@ class PreferencesDialog(InfoBarMixin):
             vbox=integration_box)
 
         self._create_checkbox(
-            EXPERT_MODE_MSG,
+            _expert_mode_msg(),
             'expert_mode',
             vbox=integration_box,
-            tooltip=EXPERT_MODE_DESCRIPTION,
+            tooltip=_expert_mode_description(),
             store_as_attr='cb_expert')
         self.cb_expert.connect('toggled', self.__on_expert_mode_toggled)
 
@@ -627,7 +633,7 @@ class PreferencesDialog(InfoBarMixin):
         notice.set_margin_end(12)
         vbox.pack_start(notice, False, True, 0)
 
-        notice2 = Gtk.Label(label=EMPTY_SPACE_WARNING)
+        notice2 = Gtk.Label(label=empty_space_warning())
         notice2.set_line_wrap(True)
         notice2.set_xalign(0.0)
         notice2.set_margin_start(12)
