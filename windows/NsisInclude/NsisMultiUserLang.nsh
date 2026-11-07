@@ -2328,7 +2328,7 @@ Version: 2023-02-223
 !ifdef LANG_TURKISH
 	LangString ALREADY_INSTALLED ${LANG_TURKISH} "${prodname} zaten kuruludur.$\r$\nYükseltmeden önce eski sürümü kaldırmak için 'Tamam'a ya da yükseltmeden vazgeçmek için 'İptal Et'e tıkla."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TURKISH} "${prodname} web sitesine git"
-	LangString BLEACHBIT_RUNNING ${LANG_TURKISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_TURKISH} "${prodname} çalışıyor.$\r$\nSürdürmek için kapatarak 'Yeniden Dene'ye ya da kurulumdan vazgeçmek için 'İptal Et'e tıkla."
 	LangString INSTALLER_CAPTION ${LANG_TURKISH} "${prodname} ${VERSION} Kurulumu"
 	LangString MULTIPRINT1 ${LANG_TURKISH} "Sonraki adım yazı tipi önbelleği inşasıdır, sürerken siyah pencere belirebilir."
 	LangString MULTIPRINT2 ${LANG_TURKISH} "Genellikle bir dakikada biter, ancak bazen on dakikaya dek sürebilir."
@@ -2358,7 +2358,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_TURKISH} "Bu programı yönetici olarak çalıştırmalısınız."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_TURKISH} "$(^NameDA) hem tüm kullanıcılar hem de geçerli kullanıcı için kurulmuş.$\r$\nHangi kurulumun kaldırılacağını seç."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_TURKISH} "Hangi kullanıcılar için $(^NameDA) kaldırılacağını seç."
-	LangString OLD_WINDOWS_WARNING ${LANG_TURKISH} "Bu BleachBit sürümü için Windows 10 ya da sonrası gereklidir. Sisteminizle uyumlu sürümü indirmek için Tamam düğmesine tıklayın. Kurulumdan çıkmak için İptal düğmesine tıklayın."
+	LangString OLD_WINDOWS_WARNING ${LANG_TURKISH} "Bu BleachBit sürümü için Windows 10 ya da sonrası gereklidir. Sisteminizle uyumlu sürümü indirmek için Tamam düğmesine tıklayın. Kurulumdan çıkmak için İptal Et düğmesine tıklayın."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_TURKISH} "Bunlar, ${prodname} işlevi için gereksinilen temel dosyalardır (gerekli)."
 	LangString SECTION_CORE_NAME ${LANG_TURKISH} "Çekirdek dosyalar (gerekli)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_TURKISH} "Masaüstünde kısayol oluştur."
@@ -2377,7 +2377,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TURKISH} "${prodname} Hata Ayıklama Uçbirimi"
 	LangString SHORTCUT_NO_UAC ${LANG_TURKISH} "${prodname} (UAC yok)."
 	LangString SHRED_SHELL_MENU ${LANG_TURKISH} "${prodname} ile parçala"
-	LangString UNINSTALL_TEXT ${LANG_TURKISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_TURKISH} "${prodname} şu klasörden kaldırılacaktır.$\r$\nKaldırmayı başlatmak için Kaldır'a tıklayın.$\r$\nBu klasöre eklediğiniz özel temizleyiciler gibi dosyalar tutulur."
 !endif
 
 !ifdef LANG_UKRAINIAN
