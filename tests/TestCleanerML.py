@@ -164,6 +164,16 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                 self.assertTrue(paths)
                 self.assertEqual(len(paths), len(set(paths)))
 
+    def test_default_vars_program_files(self):
+        """$$ProgramFiles$$ lists each Program Files folder once"""
+        for env, expected in common.program_files_envs():
+            with mock.patch('bleachbit.CleanerML.IS_WINDOWS', True), \
+                    mock.patch.dict(os.environ, env, clear=True):
+                variables = default_vars()
+            self.assertEqual(expected, variables['ProgramFiles'])
+            self.assertEqual([p + r'\Common Files' for p in expected],
+                             variables['CommonProgramFiles'])
+
     def test_list_cleanerml_files(self):
         """Unit test for list_cleanerml_files()"""
         for pathname in list_cleanerml_files():

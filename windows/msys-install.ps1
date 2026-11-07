@@ -1,5 +1,5 @@
 <#
-Install MSYS2 32-bit environment for BleachBit on Windows.
+Install the MSYS2 environment for building BleachBit on Windows.
 It installs in a portable style.
 This script may be run in an empty directory like `c:\projects`.
 

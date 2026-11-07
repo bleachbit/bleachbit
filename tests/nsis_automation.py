@@ -28,7 +28,7 @@ Existing unrelated pending operations, including NSIS temp cleanup, are ignored.
 
 Usage:
     python nsis_automation.py basic|per_user|uninstall_keep_files|reinstall --new C:\path\new-setup.exe
-    python nsis_automation.py upgrade|upgrade_running|upgrade_components|silent_upgrade|all --old C:\path\old-setup.exe --new C:\path\new-setup.exe
+    python nsis_automation.py upgrade|cross_arch|upgrade_running|upgrade_components|silent_upgrade|all --old C:\path\old-setup.exe --new C:\path\new-setup.exe
     Several modes may be listed. Options: --keep, --alert once|multiple
 
 basic:    install --new (per-machine), then uninstall; verify registry,
@@ -36,6 +36,10 @@ basic:    install --new (per-machine), then uninstall; verify registry,
 per_user: install --new (per-user), then uninstall; verify HKCU registry,
           HKCU shred verb, %LOCALAPPDATA%\BleachBit, and user shortcuts.
 upgrade:  install --old, upgrade to --new; verify version bump and keys.
+cross_arch:
+          install --old, upgrade to --new of the other architecture (x86
+          and x64 setups, either way); verify the old folder is gone and
+          only the new architecture's Uninstall key is left.
 upgrade_running:
           install --old, upgrade to --new while the app runs: canceling
           the locked-file prompt keeps the old install; closing the app
@@ -50,7 +54,7 @@ silent_upgrade:
           install --old, then run --new /S /allusers: aborts while the
           app runs and upgrades silently once it is closed.
 reinstall: install --new, then reinstall --new over itself.
-all:      run every mode in sequence.
+all:      run every mode but cross_arch in sequence.
 """
 
 import argparse
@@ -79,7 +83,11 @@ TITLE_RE = re.compile(r"(?i)bleachbit")
 UNPACK_RE = re.compile(
     r"unpacking data:|verifying installer:|please wait while setup is loading",
     re.I)
-DEFAULT_INSTALL_DIR = Path(r"C:\Program Files (x86)\BleachBit")
+# Per-machine folders of the x86 and the x64 build
+PER_MACHINE_INSTALL_DIRS = tuple(
+    Path(os.environ.get(var, default)) / "BleachBit"
+    for var, default in (("ProgramFiles(x86)", r"C:\Program Files (x86)"),
+                         ("ProgramW6432", r"C:\Program Files")))
 PER_USER_INSTALL_DIR = (
     Path(os.environ.get("LOCALAPPDATA", r"C:\Users\Default\AppData\Local"))
     / "BleachBit"
@@ -306,7 +314,7 @@ def _nsis_owned_path(path):
     base = os.path.basename(path)
     if base in APP_EXES:
         return False
-    for d in (DEFAULT_INSTALL_DIR, PER_USER_INSTALL_DIR,
+    for d in (*PER_MACHINE_INSTALL_DIRS, PER_USER_INSTALL_DIR,
               install_dir("all_users"), install_dir("current_user")):
         if path.startswith(os.path.normcase(str(d)) + os.sep):
             return True
@@ -387,7 +395,7 @@ def preflight(exe_path, keep=None):
     wanted = os.path.normcase(str(exe_path)) if exe_path else ""
     keep = os.path.normcase(str(keep)) if keep else None
     dirs = [os.path.normcase(str(d)) + os.sep for d in (
-        DEFAULT_INSTALL_DIR, PER_USER_INSTALL_DIR,
+        *PER_MACHINE_INSTALL_DIRS, PER_USER_INSTALL_DIR,
         install_dir("all_users"), install_dir("current_user"),
         tempfile.gettempdir())]
     for pid, name in tasklist_names().items():
@@ -812,8 +820,19 @@ def install_dir(scope="all_users"):
     for v in loc.values():
         if v:
             return Path(v)
-    return (PER_USER_INSTALL_DIR if scope == "current_user"
-            else DEFAULT_INSTALL_DIR)
+    if scope == "current_user":
+        return PER_USER_INSTALL_DIR
+    return next((d for d in PER_MACHINE_INSTALL_DIRS if d.exists()),
+                PER_MACHINE_INSTALL_DIRS[0])
+
+
+def all_install_dirs(scope="all_users"):
+    """Return registered and default install dirs for scope, both arches."""
+    loc = read_reg(_scope_root(scope), UNINST_KEY, "InstallLocation")
+    dirs = [Path(v) for v in loc.values() if v]
+    dirs += ([PER_USER_INSTALL_DIR] if scope == "current_user"
+             else PER_MACHINE_INSTALL_DIRS)
+    return list(dict.fromkeys(dirs))
 
 
 def _shell_folder(csidl):
@@ -906,7 +925,7 @@ def pending_file_operations(dirs):
 def watch_pending_file_operations():
     """Reject existing or newly queued operations that could damage an install."""
     # Retain custom paths even if uninstall removes their registry entries.
-    dirs = {DEFAULT_INSTALL_DIR, PER_USER_INSTALL_DIR,
+    dirs = {*PER_MACHINE_INSTALL_DIRS, PER_USER_INSTALL_DIR,
             install_dir("all_users"), install_dir("current_user")}
     before = pending_file_operations(dirs)
     if before:
@@ -996,23 +1015,23 @@ def ensure_uninstalled():
         preflight(None)
         for scope, flag in (("all_users", "/allusers"),
                             ("current_user", "/currentuser")):
-            idir = install_dir(scope)
-            uninst = idir / "uninstall.exe"
-            if uninst.exists():
-                log(f"  cleanup: running existing uninstaller ({scope})")
-                tmp_uninst = (Path(tempfile.gettempdir())
-                              / "bb_cleanup_uninst.exe")
-                try:
-                    shutil.copy(uninst, tmp_uninst)
-                    subprocess.run(
-                        [str(tmp_uninst), flag, "/S", f"_?={idir}"],
-                        timeout=120, check=False)
-                except Exception as e:
-                    log(f"  cleanup uninstaller error: {e}")
-                finally:
-                    tmp_uninst.unlink(missing_ok=True)
-            if idir.exists():
-                safe_rmtree(idir)
+            for idir in all_install_dirs(scope):
+                uninst = idir / "uninstall.exe"
+                if uninst.exists():
+                    log(f"  cleanup: running existing uninstaller ({scope})")
+                    tmp_uninst = (Path(tempfile.gettempdir())
+                                  / "bb_cleanup_uninst.exe")
+                    try:
+                        shutil.copy(uninst, tmp_uninst)
+                        subprocess.run(
+                            [str(tmp_uninst), flag, "/S", f"_?={idir}"],
+                            timeout=120, check=False)
+                    except Exception as e:
+                        log(f"  cleanup uninstaller error: {e}")
+                    finally:
+                        tmp_uninst.unlink(missing_ok=True)
+                if idir.exists():
+                    safe_rmtree(idir)
             delete_reg_tree(_scope_root(scope), UNINST_KEY)
             delete_reg_tree(_scope_root(scope), SHRED_KEY)
             start_dir, desktop_dir = shortcut_dirs(scope)
@@ -1146,6 +1165,41 @@ def mode_upgrade(a):
     st = system_state()
     log("new state: " + json.dumps(st, indent=2, default=str))
     verify_upgraded(results, st_old, st)
+    return results
+
+
+def mode_cross_arch(a):
+    """Upgrade --old with a --new of the other architecture."""
+    results = []
+    log("== install (old) ==")
+    st_old = install_baseline(a.old, results)
+    old_dir = Path(st_old["install_dir"])
+    # The x86 build registers in the 32-bit view, the x64 build in the 64-bit
+    old_names = read_reg(winreg.HKEY_LOCAL_MACHINE, UNINST_KEY, "DisplayName")
+
+    log("== upgrade (new arch over old) ==")
+    flags = run_wizard(Path(a.new), RESULTS_DIR / "cross_arch-new-install")
+    check(results, "'already installed' prompt seen",
+          "saw_already_installed" in flags)
+    check(results, "no reboot prompt", "saw_reboot" not in flags)
+    check(results, "wizard finished", "saw_finish" in flags)
+    st = system_state()
+    log("new state: " + json.dumps(st, indent=2, default=str))
+    check(results, "install dir changed",
+          Path(st["install_dir"]) != old_dir, st["install_dir"])
+    check(results, "old install dir removed", not old_dir.exists(),
+          str(old_dir))
+    check(results, "bleachbit.exe present", st["exe"])
+    names = read_reg(winreg.HKEY_LOCAL_MACHINE, UNINST_KEY, "DisplayName")
+    check(results, "one Uninstall reg key, in the other view",
+          names in ({"32": "BleachBit"}, {"64": "BleachBit (64-bit)"})
+          and names.keys() != old_names.keys(),
+          f"old={old_names} new={names}")
+    check(results, "shred context menu intact",
+          bool(st["shred_hklm"] or st["shred_hkcu"]),
+          f"HKLM={st['shred_hklm']} HKCU={st['shred_hkcu']}")
+    check(results, "shortcuts intact",
+          bool(st["shortcuts"]), str(st["shortcuts"]))
     return results
 
 
@@ -1328,13 +1382,14 @@ MODES = {
     "basic": mode_basic,
     "per_user": mode_per_user,
     "upgrade": mode_upgrade,
+    "cross_arch": mode_cross_arch,
     "upgrade_running": mode_upgrade_running,
     "upgrade_components": mode_upgrade_components,
     "uninstall_keep_files": mode_uninstall_keep_files,
     "silent_upgrade": mode_silent_upgrade,
     "reinstall": mode_reinstall,
 }
-NEEDS_OLD = {"upgrade", "upgrade_running",
+NEEDS_OLD = {"upgrade", "cross_arch", "upgrade_running",
              "upgrade_components", "silent_upgrade"}
 
 
@@ -1376,7 +1431,9 @@ def _main():
                    default="off",
                    help="beep when a UAC consent prompt needs a human click")
     a = p.parse_args()
-    modes = list(MODES) if "all" in a.mode else a.mode
+    # cross_arch needs --old and --new of different architectures
+    modes = ([m for m in MODES if m != "cross_arch"] if "all" in a.mode
+             else a.mode)
     if not a.new:
         p.error("--new is required")
     need_old = [m for m in modes if m in NEEDS_OLD]

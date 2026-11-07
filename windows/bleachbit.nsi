@@ -59,12 +59,17 @@
   ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
   ;!pragma warning disable 6040
 
-; windows/setup.py passes UPX_TAG for UPX builds
+; windows/setup.py passes UPX_TAG for UPX builds and X64 for 64-bit builds
 !define /ifndef UPX_TAG ""
-!ifdef NoTranslations
-  OutFile "${prodname}-${VERSION}-setup-English${UPX_TAG}.exe"
+!ifdef X64
+  !define ARCH_TAG "-x64"
 !else
-  OutFile "${prodname}-${VERSION}-setup${UPX_TAG}.exe"
+  !define ARCH_TAG ""
+!endif
+!ifdef NoTranslations
+  OutFile "${prodname}-${VERSION}${ARCH_TAG}-setup-English${UPX_TAG}.exe"
+!else
+  OutFile "${prodname}-${VERSION}${ARCH_TAG}-setup${UPX_TAG}.exe"
 !endif
 
 ; Unicode requires NSIS version 3 or later
@@ -109,7 +114,18 @@ Unicode true
 ; is set to 1, per-user installation is pre-selected, otherwise per-machine installation.
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER 0
 
-!define MULTIUSER_INSTALLMODE_64_BIT 0
+; 1 installs to $PROGRAMFILES64 and uses the 64-bit registry view
+!ifdef X64
+  !define MULTIUSER_INSTALLMODE_64_BIT 1
+  !define OTHER_ARCH_REGVIEW 32
+  !define OTHER_ARCH_PROGRAMFILES "$PROGRAMFILES32"
+  !define ARP_DISPLAYNAME "${prodname} (64-bit)"
+!else
+  !define MULTIUSER_INSTALLMODE_64_BIT 0
+  !define OTHER_ARCH_REGVIEW 64
+  !define OTHER_ARCH_PROGRAMFILES "$PROGRAMFILES64"
+  !define ARP_DISPLAYNAME "${prodname}"
+!endif
 !define MULTIUSER_INSTALLMODE_INSTDIR "${prodname}"
 
 
@@ -386,7 +402,7 @@ Section "$(SECTION_CORE_NAME)" SectionCore
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
-                 "DisplayName" "${prodname}"
+                 "DisplayName" "${ARP_DISPLAYNAME}"
 
     # Build cache now while there is a GUI progress bar.
     DetailPrint "$(MULTIPRINT1)"
@@ -481,6 +497,17 @@ Function .onInit
     Abort
   ${EndIf}
 
+!ifdef X64
+  ; x64 code runs on x64 Windows, and on ARM64 from Windows 11 on
+  ${IfNot} ${IsNativeAMD64}
+    ${IfNot} ${IsNativeARM64}
+    ${OrIfNot} ${AtLeastWin11}
+      MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(X64_UNSUPPORTED)" /SD IDCANCEL IDOK open_download_page
+      Abort
+    ${EndIf}
+  ${EndIf}
+!endif
+
   !insertmacro MULTIUSER_INIT
 
   ; Language display dialog
@@ -501,13 +528,27 @@ Function .onInit
     !insertmacro CopySectionFromOuter ${SectionShred}
   ${EndIf}
 
+  ; A per-machine install of the other architecture is registered in the
+  ; other registry view, but shares the Start menu folder and the Shred key
+  StrCpy $R2 ""
+  StrCpy $R3 ""
+  ${If} ${RunningX64}
+    SetRegView ${OTHER_ARCH_REGVIEW}
+    ReadRegStr $R2 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+       "UninstallString"
+    ReadRegStr $R3 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \
+       "InstallLocation"
+    ; Back to the view MULTIUSER_INIT chose, where our uninstall key goes
+    SetRegView lastused
+  ${EndIf}
+
   ; If not already installed, skip uninstallation. The outer instance handles
   ; per-user installations, since HKCU in the elevated one can be the admin's
   ${If} $IsInnerInstance = 0
   ${AndIf} $IsAdmin = 0
-    StrCmp "$PerMachineUninstallString$PerUserUninstallString" "" new_install
+    StrCmp "$PerMachineUninstallString$R2$PerUserUninstallString" "" new_install
   ${Else}
-    StrCmp $PerMachineUninstallString "" new_install
+    StrCmp "$PerMachineUninstallString$R2" "" new_install
   ${EndIf}
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
@@ -523,6 +564,13 @@ Function .onInit
     StrCpy $R1 $PerMachineInstallationFolder
     ; BleachBit 2.2 and older did not record InstallLocation
     ${IfThen} $R1 == "" ${|} StrCpy $R1 $INSTDIR ${|}
+    SetShellVarContext all
+    Call UninstallOld
+  ${EndIf}
+  ${If} $R2 != ""
+    StrCpy $R0 $R2
+    StrCpy $R1 $R3
+    ${IfThen} $R1 == "" ${|} StrCpy $R1 "${OTHER_ARCH_PROGRAMFILES}\${prodname}" ${|}
     SetShellVarContext all
     Call UninstallOld
   ${EndIf}
@@ -550,6 +598,13 @@ Function .onInit
     ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" "CurrentVersion"
     ExecShell "open" "https://www.bleachbit.org/goto/old-windows?ver=${VERSION}&os=$R0&lang=$LANGUAGE"
     Abort
+
+!ifdef X64
+  ; On Windows that can't run x64 after user agrees to open the link
+  open_download_page:
+    ExecShell "open" "https://www.bleachbit.org/download/windows"
+    Abort
+!endif
 
 FunctionEnd
 
