@@ -107,41 +107,41 @@ def ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
     teststr = '#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n'
-    for encoding in ['utf-8', 'utf-8-sig']:
-        with self.subTest(encoding=encoding):
-            bom_size = 3 if 'utf-8-sig' == encoding else 0
-            extra_size = bom_size
-            if IS_WINDOWS:
-                extra_size += teststr.count('\n')
+    # UTF-8 with and without a BOM, and the UTF-16 Windows writes for
+    # Unicode INI files
+    encodings = ((b'', 'utf-8'),
+                 (codecs.BOM_UTF8, 'utf-8'),
+                 (codecs.BOM_UTF16_LE, 'utf-16-le'),
+                 (codecs.BOM_UTF16_BE, 'utf-16-be'))
 
+    def read(filename):
+        with open(filename, 'rb') as f:
+            return f.read()
+
+    for (bom, codec), newline in itertools.product(encodings, ('\n', '\r\n')):
+        with self.subTest(codec=codec, bom=bom, newline=newline):
             # create test file
-            filename = self.write_file(
-                'bleachbit-test-ini', teststr, mode='w', encoding=encoding)
+            original = bom + teststr.replace('\n', newline).encode(codec)
+            filename = self.write_file('bleachbit-test-ini', original)
             self.assertExists(filename)
-            size = os.path.getsize(filename)
-            self.assertEqual(len(teststr) + extra_size, size)
 
             # The section does not exist, so no change.
             execute(filename, 'Recents', None)
-            self.assertEqual(len(teststr) + extra_size,
-                             os.path.getsize(filename))
+            self.assertEqual(read(filename), original)
 
             # The parameter does not exist, so no change.
             execute(filename, 'RecentsMRL', 'files')
-            self.assertEqual(len(teststr) + extra_size,
-                             os.path.getsize(filename))
+            self.assertEqual(read(filename), original)
 
-            # The parameter does exist, so the file shrinks.
-            # Comments are not preserved, so only "[RecentsMRL]\n" (14
-            # bytes) remains. The BOM is preserved, so utf-8-sig files
-            # are 17 bytes and plain utf-8 files are 14 bytes. clean_ini
-            # writes with newline='' so there is no \r\n expansion.
+            # The parameter does exist. Comments are not preserved, the
+            # BOM and line endings are.
             execute(filename, 'RecentsMRL', 'list')
-            self.assertEqual(14 + bom_size, os.path.getsize(filename))
+            remaining = '[RecentsMRL]\n\n'.replace('\n', newline)
+            self.assertEqual(read(filename), bom + remaining.encode(codec))
 
-            # The section does exist, so the file shrinks.
+            # The section does exist, so only the BOM remains.
             execute(filename, 'RecentsMRL', None)
-            self.assertEqual(0, os.path.getsize(filename))
+            self.assertEqual(read(filename), bom)
 
             # clean up
             delete(filename)
@@ -1672,6 +1672,22 @@ State=AAAA/wA...
                 delete(long_dir, shred=shred)
                 self.assertNotExists(extended_path(long_dir))
 
+    @common.skipUnlessWindows
+    def test_clean_ini_ansi(self):
+        """clean_ini() reads a non-UTF-8 file without a BOM as ANSI"""
+        text = '[RecentsMRL]\r\nlist=café\r\n[Keep]\r\nk=café\r\n'
+        content = text.encode('mbcs', 'replace')
+        if b'?' in content:
+            self.skipTest('the ANSI code page has no é')
+        filename = self.write_file('bleachbit-test-ini-ansi', content)
+        clean_ini(filename, 'RecentsMRL', 'list')
+        expected = '[RecentsMRL]\r\n\r\n[Keep]\r\nk = café\r\n\r\n'
+        with open(filename, 'rb') as f:
+            self.assertEqual(f.read(), expected.encode('mbcs'))
+        delete(filename)
+        self.assertNotExists(filename)
+
+    @common.skipIfWindows
     def test_clean_ini_non_utf8(self):
         """clean_ini() leaves a non-UTF-8 file untouched and logs an error"""
         # Latin-1 bytes that are invalid as UTF-8 (0xe9 = 'é' in Latin-1).
