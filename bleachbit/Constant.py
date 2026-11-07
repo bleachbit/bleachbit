@@ -14,27 +14,34 @@ from bleachbit.Language import get_text as _
 
 URL_COOKIE_MGR = "https://docs.bleachbit.org/doc/cookie-manager.html"
 
-# TRANSLATORS: Button label on (1) the headerbar and (2) the chaff dialog.
-# 'Abort' is a verb.
-ABORT_BUTTON_LABEL = _('Abort')
+# Translated strings are functions, so they follow a language change
 
-# This string is used several times. Listing it here helps with translation.
-# TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
-# It shows in the log of actions that would be performed (preview mode) or
-# in the log of actions that are performed (clean mode).
-CLEAN_FILE_LABEL = _('Clean file')
 
-# TRANSLATORS: This message is used in three places (1) label at top of the
-# preferences dialog (2) confirmation dialog when enabling the cleaning option
-# (3) log message when starting to clean empty space.
-EMPTY_SPACE_WARNING = _("Wiping empty space removes traces of files that were "
-                        "deleted without shredding, but it will not free additional disk space. The "
-                        "process can take a very long time and may temporarily slow your computer. "
-                        "It is not necessary if your drive is protected with full-disk encryption. "
-                        "The method works best on traditional hard drives. On solid-state drives, it "
-                        "is less reliable, and frequent use contributes to wear.")
+def clean_file_label():
+    """Return the label of the clean file action"""
+    # This string is used several times. Listing it here helps with translation.
+    # TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
+    # It shows in the log of actions that would be performed (preview mode) or
+    # in the log of actions that are performed (clean mode).
+    return _('Clean file')
 
-# TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
-# Expert mode is an option in the preferences to relax guardrails.
-REQUIRES_EXPERT_MODE = _("This option requires expert mode. "
-                         "Enable it in Preferences.")
+
+def empty_space_warning():
+    """Return the warning about wiping empty space"""
+    # TRANSLATORS: This message is used in three places (1) label at top of the
+    # preferences dialog (2) confirmation dialog when enabling the cleaning option
+    # (3) log message when starting to clean empty space.
+    return _("Wiping empty space removes traces of files that were "
+             "deleted without shredding, but it will not free additional disk space. The "
+             "process can take a very long time and may temporarily slow your computer. "
+             "It is not necessary if your drive is protected with full-disk encryption. "
+             "The method works best on traditional hard drives. On solid-state drives, it "
+             "is less reliable, and frequent use contributes to wear.")
+
+
+def requires_expert_mode():
+    """Return the notice that an option requires expert mode"""
+    # TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
+    # Expert mode is an option in the preferences to relax guardrails.
+    return _("This option requires expert mode. "
+             "Enable it in Preferences.")

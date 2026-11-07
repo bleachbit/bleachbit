@@ -1074,6 +1074,23 @@ FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""",
             self.assertEqual(this_option[1], 'Initech TPS Reports')
             mock_detect.assert_called()
 
+    def test_category_name_translated_on_load(self):
+        """Category names are translated when the file loads, not on import"""
+        tmp_ini_fn = self.write_file(
+            os.path.join(self.mkdtemp(), 'winapp2.ini'),
+            r"""[Initech TPS Reports *]
+LangSecRef=3023
+DetectFile=%CommonAppData%\Initech\TPSReports
+FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""",
+            mode='w')
+
+        with mock.patch.object(Winapp, 'detect', return_value=True), \
+                mock.patch('bleachbit.Winapp._',
+                           side_effect=lambda msg: f'[{msg}]'):
+            cleaner_list = list(Winapp(tmp_ini_fn).get_cleaners())
+        self.assertEqual(len(cleaner_list), 1)
+        self.assertEqual(cleaner_list[0].get_name(), '[Multimedia]')
+
     def test_many_patterns(self):
         """Test a cleaner like Steam Installers and related performance improvement
 
