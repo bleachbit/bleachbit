@@ -61,6 +61,19 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertEqual(ret['path'], path)
         self.assertNotExists(path)
 
+    def test_delete_scan_size(self):
+        """Delete reports the size a directory scan read"""
+        path = self.write_file('test_delete_scan_size', b'foo')
+        scanned = FileUtilities.ScannedPath(path)
+        scanned.scan_size = 1234
+        with mock.patch('bleachbit.FileUtilities.getsize') as mock_getsize:
+            ret = next(Delete(scanned).execute(really_delete=False))
+            mock_getsize.assert_not_called()
+            self.assertEqual(ret['size'], 1234)
+            next(Delete(path).execute(really_delete=False))
+            mock_getsize.assert_called_once_with(path)
+        self.assertExists(path)
+
     def test_delete_permission(self):
         """Test delete with permission denied for getsize()"""
         path = self.write_file('test_delete_permission', b'foo')

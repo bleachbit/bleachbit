@@ -432,6 +432,29 @@ def _is_junction_entry(entry):
     return bleachbit.Windows.is_junction(entry.path)
 
 
+class ScannedPath(str):
+    """A file path from a directory scan, with the size the scan read
+
+    On Windows the size comes with the directory entry, the same data
+    getsize() reads with FindFilesW. Building a new path from it gives a
+    plain str without the size.
+    """
+
+
+def _scanned_file_path(entry):
+    """Return the path of a scandir entry, with its size on Windows"""
+    if not IS_WINDOWS:
+        return entry.path
+    try:
+        # On Windows this is the cached directory entry, not a new stat
+        size = entry.stat(follow_symlinks=False).st_size
+    except OSError:
+        return entry.path
+    path = ScannedPath(entry.path)
+    path.scan_size = size
+    return path
+
+
 def _mount_points_below(dirname):
     """Return mount points below dirname, as paths starting with dirname"""
     # For bind mounts, which keep st_dev; off Linux st_dev is enough
@@ -495,7 +518,7 @@ def _scan_children(top, list_directories, pending_dirs, same_device=False):
                         if same_device and entry.path in mounts:
                             continue
                         # regular file, symlink to a file, or broken link
-                        yield entry.path
+                        yield _scanned_file_path(entry)
                         continue
                     try:
                         # is_junction_entry() is Windows-only and never reached on
@@ -931,14 +954,24 @@ def _file_type(path, dir_fd=None):
             return os.lstat(path, dir_fd=dir_fd).st_mode
         except (OSError, ValueError):
             return None
-    # os.lstat() returns Access Denied on some Windows files that the
-    # native os.path checks can still see
-    if not os.path.lexists(path):
-        return None
     try:
-        tag = os.lstat(path).st_reparse_tag
-    except OSError:
+        st = os.lstat(path)
+    except (OSError, ValueError):
+        st = None
+    if st is None:
+        # os.lstat() returns Access Denied on some Windows files that the
+        # native os.path checks can still see
+        if not os.path.lexists(path):
+            return None
         tag = 0
+    else:
+        tag = st.st_reparse_tag
+        # Without a reparse point there is nothing to follow, so isdir()
+        # and isfile() would see what lstat() saw
+        if not tag and stat.S_ISDIR(st.st_mode):
+            return stat.S_IFDIR
+        if not tag and stat.S_ISREG(st.st_mode):
+            return stat.S_IFREG
     # A junction/symlink's contents belong to the target, not
     # this path; isdir() would follow it and judge the target's
     # emptiness instead of removing the reparse point itself.

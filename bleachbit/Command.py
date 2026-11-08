@@ -76,19 +76,22 @@ class Delete:
         if FileUtilities.whitelisted(self.path):
             yield ret_keep_list(self.path)
             return
-        try:
-            size = FileUtilities.getsize(self.path)
-        except PermissionError:
-            size = None
-        except Exception as e:
-            # Handle Windows-specific pywintypes.error
-            # pywintypes.error: (5, 'FindFirstFileW', 'Access is denied.')
-            # Use a truthy check rather than hasattr(): on Windows every
-            # OSError carries a winerror attribute, sometimes None.
-            if getattr(e, 'winerror', None):
+        # A directory scan on Windows already read the size
+        size = getattr(self.path, 'scan_size', None)
+        if size is None:
+            try:
+                size = FileUtilities.getsize(self.path)
+            except PermissionError:
                 size = None
-            else:
-                raise
+            except Exception as e:
+                # Handle Windows-specific pywintypes.error
+                # pywintypes.error: (5, 'FindFirstFileW', 'Access is denied.')
+                # Use a truthy check rather than hasattr(): on Windows every
+                # OSError carries a winerror attribute, sometimes None.
+                if getattr(e, 'winerror', None):
+                    size = None
+                else:
+                    raise
         ret = {
             # TRANSLATORS: Label in the log indicating a path will be deleted
             # (for previews) or was actually deleted (clean mode).
