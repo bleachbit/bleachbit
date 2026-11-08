@@ -1187,15 +1187,16 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             logger.warning(
                 'ValueError in get_iter() when updating file size for tree path=%s', treepath)
             return
+        # get_value() and set_value() skip building a row object per cell
         for __iter in _iter_rows(model):
-            if model[__iter][2] != option:
+            if model.get_value(__iter, 2) != option:
                 continue
             if option_id == -1:
-                model[__iter][3] = text
+                model.set_value(__iter, 3, text)
             else:
                 for child in _iter_rows(model, __iter):
-                    if model[child][2] == option_id:
-                        model[child][3] = text
+                    if model.get_value(child, 2) == option_id:
+                        model.set_value(child, 3, text)
 
     def update_total_size(self, bytes_removed):
         """Callback to update the total size cleaned"""
