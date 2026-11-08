@@ -596,7 +596,7 @@ def build():
     os.makedirs(os.path.join('dist', 'share'), exist_ok=True)
 
     logger.info('Copying GTK helpers')
-    for exe in glob.glob1(GTK_LIBDIR, 'gspawn-win*-helper*.exe'):
+    for exe in glob.glob('gspawn-win*-helper*.exe', root_dir=GTK_LIBDIR):
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
     for exe in ('fc-cache.exe', 'gdbus.exe'):
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
@@ -629,7 +629,7 @@ def build():
     copy_file('bleachbit.png', 'dist\\share\\bleachbit.png')
     # bleachbit.ico is used the for pop-up notification.
     copy_file('windows\\bleachbit.ico', 'dist\\share\\bleachbit.ico')
-    for dll in glob.glob1(GTK_LIBDIR, '*.dll'):
+    for dll in glob.glob('*.dll', root_dir=GTK_LIBDIR):
         copy_file(os.path.join(GTK_LIBDIR, dll), 'dist\\' + dll)
 
     # Copy share files
