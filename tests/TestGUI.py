@@ -735,6 +735,34 @@ class GUITestCase(common.BleachbitTestCase):
         gui.append_text('e\n')
         self.assertEqual(text(), 'a\nb\nc\nd\ne\n')
 
+    def test_update_item_size(self):
+        """update_item_size() writes the size of an option and its cleaner"""
+        gui = self.get_window()
+        model = gui.view.get_model()
+
+        def size(cleaner_id, option_id=None):
+            for row in model:
+                if row[2] != cleaner_id:
+                    continue
+                if option_id is None:
+                    return row[3]
+                for child in row.iterchildren():
+                    if child[2] == option_id:
+                        return child[3]
+            return None
+
+        row = next(row for row in model if list(row.iterchildren()))
+        cleaner_id = row[2]
+        option_id = next(row.iterchildren())[2]
+        to_human = bleachbit.FileUtilities.bytes_to_human
+        self.addCleanup(gui.update_item_size, cleaner_id, -1, 0)
+        gui.update_item_size(cleaner_id, option_id, 1234)
+        self.assertEqual(size(cleaner_id, option_id), to_human(1234))
+        gui.update_item_size(cleaner_id, -1, 5678)
+        self.assertEqual(size(cleaner_id), to_human(5678))
+        gui.update_item_size(cleaner_id, option_id, 0)
+        self.assertEqual(size(cleaner_id, option_id), '')
+
     def test_interrupted_worker_is_not_left_running(self):
         gui = self.get_window()
         self.addCleanup(gui.set_sensitive, True)
