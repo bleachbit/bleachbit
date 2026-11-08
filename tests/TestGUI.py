@@ -697,6 +697,44 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertFalse(gui.stop_button.get_sensitive())
         self.assertFalse(gui.progressbar.get_visible())
 
+    def test_worker_step_text_inserted_at_step_end(self):
+        """Text a worker step logs goes in when the step ends, in order"""
+        gui = self.get_window()
+        buf = gui.textbuffer
+
+        def text():
+            return buf.get_text(buf.get_start_iter(), buf.get_end_iter(), True)
+
+        buf.set_text('')
+        seen = []
+
+        def run():
+            gui.append_text('a\n')
+            gui.append_text('b\n', 'error')
+            gui.append_text('c\n')
+            seen.append(text())
+            yield True
+
+        self.assertTrue(gui._step_worker(run()))
+        self.assertEqual(seen, [''])
+        self.assertEqual(text(), 'a\nb\nc\n')
+        error = buf.get_tag_table().lookup('error')
+        self.assertEqual([buf.get_iter_at_offset(i).has_tag(error)
+                          for i in range(6)],
+                         [False, False, True, True, False, False])
+
+        def failing():
+            gui.append_text('d\n')
+            raise RuntimeError('boom')
+            yield  # pylint: disable=unreachable
+
+        with self.assertRaises(RuntimeError):
+            gui._step_worker(failing())
+        self.assertEqual(text(), 'a\nb\nc\nd\n')
+        # Outside a step the text goes in at once
+        gui.append_text('e\n')
+        self.assertEqual(text(), 'a\nb\nc\nd\ne\n')
+
     def test_interrupted_worker_is_not_left_running(self):
         gui = self.get_window()
         self.addCleanup(gui.set_sensitive, True)
