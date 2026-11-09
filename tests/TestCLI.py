@@ -14,6 +14,7 @@ import copy
 import errno
 import io
 import locale
+import logging
 import os
 import random
 import runpy
@@ -21,6 +22,8 @@ import shutil
 import signal
 import sys
 import tempfile
+import threading
+import time
 from unittest.mock import MagicMock, patch
 
 from tests import common
@@ -375,6 +378,113 @@ class CLITestCase(common.BleachbitTestCase):
             preview_or_clean({'test': ['option1']}, True, quiet=True)
         self.assertEqual(handlers, [signal.SIG_IGN])
         self.assertIs(signal.getsignal(signal.SIGTERM), signal.SIG_IGN)
+
+    def _preview_on_terminal(self, run, stdout, stderr=None, windows=True):
+        """Run preview_or_clean() with run as the worker, stdout a terminal"""
+        stderr = stdout if stderr is None else stderr
+        handler = logging.StreamHandler(stderr)
+        log = logging.getLogger('bleachbit')
+        log.addHandler(handler)
+        self.addCleanup(log.removeHandler, handler)
+        with patch('sys.stdout', stdout), patch('sys.stderr', stderr), \
+                patch('bleachbit.CLI.IS_WINDOWS', windows), \
+                patch('bleachbit.Worker.Worker') as mock_worker:
+            mock_worker.return_value.run.side_effect = \
+                lambda: run(mock_worker.call_args.args[0])
+            ret = preview_or_clean({'test': ['option1']}, False)
+            self.assertIs(sys.stderr, stderr)
+        self.assertIs(handler.stream, stderr)
+        return ret
+
+    def test_preview_or_clean_terminal_off_windows(self):
+        """Off Windows each line goes to the terminal at once, no thread"""
+        class Terminal(io.StringIO):
+            def isatty(self):
+                return True
+
+        seen = []
+
+        def run(cb):
+            cb.append_text('one\n')
+            seen.append(terminal.getvalue())
+            seen.append(threading.active_count())
+            yield True
+
+        terminal = Terminal()
+        before = threading.active_count()
+        self.assertTrue(self._preview_on_terminal(run, terminal,
+                                                  windows=False))
+        self.assertEqual(['one\n', before], seen)
+
+    def test_preview_or_clean_batches_terminal(self):
+        """On a terminal the lines are batched, in order with the log"""
+        writes = []
+
+        class Terminal(io.StringIO):
+            def isatty(self):
+                return True
+
+            def write(self, text):
+                writes.append(text)
+                return super().write(text)
+
+        def run(cb):
+            cb.append_text('one\n')
+            cb.append_text('two\n')
+            logging.getLogger('bleachbit').warning('three')
+            cb.append_text('four\n')
+            yield True
+
+        terminal = Terminal()
+        with patch('bleachbit.CLI._TerminalBatch.interval', 60):
+            self.assertTrue(self._preview_on_terminal(run, terminal))
+        self.assertEqual('one\ntwo\nthree\nfour\n', terminal.getvalue())
+        self.assertEqual(['one\ntwo\n', 'three\n', 'four\n'], writes)
+
+    def test_preview_or_clean_terminal_timer(self):
+        """A batched line shows up while the worker is still busy"""
+        class Terminal(io.StringIO):
+            def isatty(self):
+                return True
+
+        seen = []
+
+        def run(cb):
+            cb.append_text('one\n')
+            deadline = time.monotonic() + 5
+            while 'one' not in terminal.getvalue() and \
+                    time.monotonic() < deadline:
+                time.sleep(0.01)
+            seen.append(terminal.getvalue())
+            yield True
+
+        terminal = Terminal()
+        self.assertTrue(self._preview_on_terminal(run, terminal))
+        self.assertEqual(['one\n'], seen)
+
+    def test_preview_or_clean_terminal_errors(self):
+        """A closed terminal is ignored, another write error fails the run"""
+        class Terminal(io.StringIO):
+            error = None
+
+            def isatty(self):
+                return True
+
+            def write(self, text):
+                raise self.error
+
+        def run(cb):
+            cb.append_text('one\n')
+            yield True
+
+        for error, expected in ((BrokenPipeError(), True),
+                                (OSError(errno.EIO, 'I/O error'), False)):
+            with self.subTest(error=error):
+                terminal = Terminal()
+                terminal.error = error
+                with patch('bleachbit.CLI._TerminalBatch.interval', 60):
+                    self.assertEqual(expected, self._preview_on_terminal(
+                        run, terminal, io.StringIO()))
 
     @pytest.mark.no_xdist
     def test_append_text(self):

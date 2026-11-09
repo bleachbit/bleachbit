@@ -15,6 +15,7 @@ import optparse
 import os
 import signal
 import sys
+import threading
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
 from bleachbit.General import sanitize_surrogates
@@ -58,21 +59,146 @@ def _interrupt_on_termination():
             signal.signal(getattr(signal, name), handler)
 
 
+class _TerminalBatch:
+    """Write lines to a terminal in batches, at most 50 ms after each
+
+    A terminal, the Windows console most of all, takes far longer for
+    one write per line than for a few large writes.
+    """
+    interval = 0.05
+
+    def __init__(self):
+        self.closed = False
+        self._lines = []
+        self._error = None
+        self._lock = threading.Lock()
+        self._stop = threading.Event()
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread.start()
+
+    def _run(self):
+        while not self._stop.wait(self.interval):
+            self.flush()
+
+    def add(self, line):
+        """Queue a line, raising a write error an earlier flush kept"""
+        with self._lock:
+            self._raise_error()
+            if not self.closed:
+                self._lines.append(line)
+
+    def flush(self):
+        """Write the queued lines"""
+        with self._lock:
+            lines, self._lines = self._lines, []
+            if not lines or self.closed:
+                return
+            try:
+                sys.stdout.write('\n'.join(lines) + '\n')
+                sys.stdout.flush()
+            except BrokenPipeError:
+                self.closed = True
+            except OSError as e:
+                if e.errno in _OUTPUT_CLOSED_ERRNOS:
+                    self.closed = True
+                else:
+                    # The timer thread cannot raise it to the worker
+                    self._error = e
+
+    def _raise_error(self):
+        if self._error is not None:
+            error, self._error = self._error, None
+            raise error
+
+    def close(self, raise_error=True):
+        """Stop the timer and write what is left"""
+        self._stop.set()
+        self._thread.join()
+        self.flush()
+        if raise_error:
+            self._raise_error()
+
+
+class _FlushFirst:
+    """A stream that writes the queued lines of a batch before its own"""
+
+    def __init__(self, stream, batch):
+        self._stream = stream
+        self._batch = batch
+
+    def write(self, text):
+        """Keep stderr in order with the queued stdout lines"""
+        self._batch.flush()
+        return self._stream.write(text)
+
+    def __getattr__(self, name):
+        return getattr(self._stream, name)
+
+
+@contextlib.contextmanager
+def _batched_output(cb):
+    """On the Windows console, batch the lines of cb, before stderr
+
+    Only Windows: the timer thread must not be running when the memory
+    wipe forks on Linux.
+    """
+    try:
+        terminal = IS_WINDOWS and not cb.quiet and sys.stdout.isatty()
+    except (AttributeError, OSError, ValueError):
+        terminal = False
+    if not terminal:
+        yield
+        return
+    batch = _TerminalBatch()
+    stderr = sys.stderr
+    proxy = _FlushFirst(stderr, batch)
+    handlers = [handler for handler in logging.getLogger('bleachbit').handlers
+                if isinstance(handler, logging.StreamHandler)
+                and handler.stream is stderr]
+    for handler in handlers:
+        handler.setStream(proxy)
+    sys.stderr = proxy
+    cb.batch = batch
+
+    def restore():
+        cb.batch = None
+        sys.stderr = stderr
+        for handler in handlers:
+            handler.setStream(stderr)
+
+    try:
+        yield
+    except BaseException:
+        restore()
+        # Keep the exception already on its way out
+        batch.close(raise_error=False)
+        raise
+    restore()
+    batch.close()
+
+
 class CliCallback:
     """Command line's callback passed to Worker"""
 
     def __init__(self, quiet=False):
         self.quiet = quiet
         self._output_closed = False
+        # A _TerminalBatch while preview_or_clean() writes to a terminal
+        self.batch = None
 
     def append_text(self, msg, _tag=None):
         """Write text to the terminal"""
         msg = sanitize_surrogates(msg)
         if self.quiet or self._output_closed:
             return
+        line = msg.strip('\n').encode(stdout_encoding,
+                                      errors='replace').decode(stdout_encoding)
+        if self.batch is not None:
+            self.batch.add(line)
+            self._output_closed = self.batch.closed
+            return
         try:
-            print(msg.strip('\n').encode(stdout_encoding,
-                  errors='replace').decode(stdout_encoding))
+            print(line)
         except BrokenPipeError:
             self._output_closed = True
         except OSError as e:
@@ -114,7 +240,7 @@ def preview_or_clean(operations, really_clean, quiet=False):
     cb = CliCallback(quiet)
     worker = Worker.Worker(cb, really_clean, operations).run()
     try:
-        with _interrupt_on_termination():
+        with _interrupt_on_termination(), _batched_output(cb):
             for ret in worker:
                 if not ret:
                     break
