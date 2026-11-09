@@ -455,6 +455,36 @@ def _scanned_file_path(entry):
     return path
 
 
+def with_listed_size(path, listings):
+    """Return path with the size one listing of its folder read, on Windows
+
+    listings keeps the sizes per folder, so each is listed once. A name
+    the listing does not hold exactly gives path as given.
+    """
+    if not IS_WINDOWS or hasattr(path, 'scan_size'):
+        return path
+    dirname, name = os.path.split(path)
+    sizes = listings.get(dirname)
+    if sizes is None:
+        sizes = {}
+        try:
+            with os.scandir(dirname) as entries:
+                for entry in entries:
+                    # The cached directory entry, as in _scanned_file_path()
+                    sizes[entry.name] = entry.stat(
+                        follow_symlinks=False).st_size
+        except OSError:
+            # Names not listed keep the getsize() fallback in Delete
+            pass
+        listings[dirname] = sizes
+    size = sizes.get(name)
+    if size is None:
+        return path
+    sized = ScannedPath(path)
+    sized.scan_size = size
+    return sized
+
+
 def _mount_points_below(dirname):
     """Return mount points below dirname, as paths starting with dirname"""
     # For bind mounts, which keep st_dev; off Linux st_dev is enough
