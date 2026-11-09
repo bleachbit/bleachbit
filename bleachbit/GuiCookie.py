@@ -30,6 +30,25 @@ COOKIE_DISCOVERY_WARN_THRESHOLD = 15.0  # seconds
 COOKIE_DISCOVERY_DEBUG_THRESHOLD = 5.0  # seconds
 
 
+class _CookieFilter:
+    """Visible func for the cookie list, holding no reference to the pane
+
+    GTK keeps the visible func where gc cannot see it, so a pane method
+    there would keep every closed pane alive.
+    """
+
+    def __init__(self):
+        self.search_text = ''
+        self.selected_only = False
+
+    def __call__(self, model, tree_iter, _data):
+        if self.search_text and self.search_text not in model[tree_iter][1].lower():
+            return False
+        if self.selected_only:
+            return bool(model[tree_iter][0])
+        return True
+
+
 class CookieManagerPane(Gtk.Box):
     """Widget for managing cookies to keep when cleaning."""
 
@@ -88,8 +107,6 @@ class CookieManagerPane(Gtk.Box):
         self.selected_toggle.connect("toggled", self.on_selected_toggle)
         search_box.pack_start(self.selected_toggle, False, False, 0)
 
-        self.show_selected_only = False
-
         # Create scrollable window for cookie list
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -120,7 +137,8 @@ class CookieManagerPane(Gtk.Box):
 
         # Create filter for the list store
         self.cookie_filter = self.cookie_store.filter_new()
-        self.cookie_filter.set_visible_func(self.filter_cookies)
+        self._filter = _CookieFilter()
+        self.cookie_filter.set_visible_func(self._filter)
 
         # Create the TreeView
         self.treeview = Gtk.TreeView(model=self.cookie_filter)
@@ -255,31 +273,15 @@ class CookieManagerPane(Gtk.Box):
         for path in paths:
             self.cookie_store[path][0] = is_selected
 
-    def filter_cookies(self, model, tree_iter, _data):
-        """Filter function for the cookie list"""
-        search_text = self.search_entry.get_text().lower()
-        if not search_text:
-            matches_search = True
-        else:
-            domain = model[tree_iter][1].lower()
-            matches_search = search_text in domain
-
-        if not matches_search:
-            return False
-
-        if self.show_selected_only:
-            return bool(model[tree_iter][0])
-
-        return True
-
     def on_selected_toggle(self, widget):
         """Toggle whether only selected cookies should be visible."""
-        self.show_selected_only = widget.get_active()
+        self._filter.selected_only = widget.get_active()
         self.cookie_filter.refilter()
         self.update_stat_label()
 
     def on_search_changed(self, _widget):
         """Called when the search text changes"""
+        self._filter.search_text = self.search_entry.get_text().lower()
         self.cookie_filter.refilter()
         self.update_stat_label()
 

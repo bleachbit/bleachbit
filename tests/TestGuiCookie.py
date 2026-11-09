@@ -11,10 +11,12 @@ Test case for module GuiCookie
 # These tests reach into internals on purpose.
 # pylint: disable=protected-access
 
+import gc
 import json
 import os
 import types
 import unittest
+import weakref
 from unittest import mock
 
 from tests import common
@@ -148,6 +150,22 @@ class GuiCookieTestCase(common.BleachbitTestCase):
             for column in pane.treeview.get_columns():
                 self.assertEqual(column.get_sort_column_id(), -1)
         pane.destroy()
+
+    def test_destroyed_pane_is_freed(self):
+        """The cookie filter does not keep a destroyed pane alive"""
+        with mock.patch('bleachbit.GuiCookie.threading.Thread',
+                        lambda **_kwargs: mock.Mock(spec=['start'])):
+            pane = CookieManagerPane()
+        pane._finish_populate(['a.example', 'b.example'])
+        pane.search_entry.set_text('b.')
+        self.assertEqual([row[1] for row in pane.cookie_filter], ['b.example'])
+        pane.selected_toggle.set_active(True)
+        self.assertEqual(list(pane.cookie_filter), [])
+        ref = weakref.ref(pane)
+        pane.destroy()
+        del pane
+        gc.collect()
+        self.assertIsNone(ref())
 
     def test_discovery_failure_finishes_loading(self):
         """Any error during cookie discovery still ends the loading state"""
