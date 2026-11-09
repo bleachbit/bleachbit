@@ -79,7 +79,8 @@ from bleachbit.FileUtilities import (
     truncate_file,
     uris_to_paths,
     vacuum_sqlite3,
-    whitelisted
+    whitelisted,
+    with_listed_size
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
@@ -2115,6 +2116,25 @@ State=AAAA/wA...
                 result = get_filesystem_type('/')
             self.assertEqual(result, FilesystemInfo("unknown", "none", False))
             self.assertIn('psutil', cm.output[0])
+
+    @common.skipUnlessWindows
+    def test_with_listed_size(self):
+        """with_listed_size() takes sizes from one listing per folder"""
+        dirname = self.mkdtemp(prefix='bleachbit-listed-size')
+        filename = self.write_file(os.path.join(dirname, 'file'), b'x' * 123)
+        subdir = os.path.join(dirname, 'sub')
+        os.mkdir(subdir)
+        missing = os.path.join(dirname, 'missing')
+        listings = {}
+        with unittest.mock.patch('os.scandir', wraps=os.scandir) as scandir:
+            sized = with_listed_size(filename, listings)
+            self.assertEqual(sized, filename)
+            self.assertEqual(sized.scan_size, getsize(filename))
+            self.assertEqual(with_listed_size(subdir, listings).scan_size,
+                             getsize(subdir))
+            self.assertIs(with_listed_size(missing, listings), missing)
+            self.assertIs(with_listed_size(sized, listings), sized)
+        scandir.assert_called_once_with(dirname)
 
     def test_getsize(self):
         """Unit test for method getsize()"""

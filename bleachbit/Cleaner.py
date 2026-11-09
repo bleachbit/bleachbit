@@ -627,6 +627,8 @@ class System(Cleaner):
             recycled_any = False
             kept_any = False
             metadata_paths = set()
+            # Bin folder listings give the sizes of its top-level entries
+            listings = {}
             for path in Windows.get_recycle_bin():
                 recycled_any = True
                 # whitelisted() also spares temp roots, which the bin may hold
@@ -637,10 +639,14 @@ class System(Cleaner):
                 metadata = Windows.get_recycle_bin_metadata(path)
                 if metadata and FileUtilities.whitelisted(metadata):
                     kept_any = True
+                if metadata:
+                    path = FileUtilities.with_listed_size(path, listings)
                 yield Command.Delete(path)
                 if metadata:
                     metadata_paths.add(os.path.normcase(metadata))
-                    yield Command.DeleteRecycleBinMetadata(metadata, path)
+                    yield Command.DeleteRecycleBinMetadata(
+                        FileUtilities.with_listed_size(metadata, listings),
+                        path)
 
             for metadata, payload in Windows.get_recycle_bin_orphaned_metadata():
                 if os.path.normcase(metadata) in metadata_paths:

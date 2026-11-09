@@ -714,6 +714,24 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertIsInstance(get_commands()[-1], Command.Function)
 
     @common.skipUnlessWindows
+    def test_recycle_bin_listed_sizes(self):
+        """Recycled entries and their records report the listed size"""
+        bin_dir = self.mkdtemp()
+        payload = self.write_file(os.path.join(bin_dir, '$RABC.txt'), b'x' * 7)
+        record = self.write_file(os.path.join(bin_dir, '$IABC.txt'), b'y' * 9)
+        windows = mock.Mock()
+        windows.get_recycle_bin.return_value = [payload]
+        windows.get_recycle_bin_metadata.return_value = record
+        windows.get_recycle_bin_orphaned_metadata.return_value = []
+        with mock.patch('bleachbit.Cleaner.Windows', windows), \
+                mock.patch('bleachbit.FileUtilities.getsize',
+                           side_effect=AssertionError):
+            commands = list(System().get_commands('recycle_bin'))
+            sizes = [next(cmd.execute(False))['size'] for cmd in commands[:2]]
+        self.assertEqual([payload, record], [cmd.path for cmd in commands[:2]])
+        self.assertEqual([7, 9], sizes)
+
+    @common.skipUnlessWindows
     def test_recycle_bin_temp_root(self):
         """A recycled temp root does not keep the bin from being emptied"""
         from bleachbit.Options import options
