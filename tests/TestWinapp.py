@@ -684,7 +684,7 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
     def test_action_keeps_xml_special_characters(self):
         """XML-special characters in keys reach the providers unchanged"""
         actions = self._build_actions(
-            'FileKey1=C:\\BB Test\\A & B <c> "d"|*.log\n'
+            f'FileKey1={self.tempdir}\\A & B <c> "d"|*.log\n'
             'RegKey1=HKCU\\Software\\BleachBit\\A & B|Value & Name\n',
             'winapp2-xmlchars')
 
@@ -704,7 +704,7 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-ctrlchar')
         with open(self.ini_fn, 'w', encoding='utf-8') as ini:
             ini.write('[someapp]\nLangSecRef=3021\n'
-                      'FileKey1=C:\\BB Test\\a\x01b|*.log\n')
+                      f'FileKey1={self.tempdir}\\a\x01b|*.log\n')
 
         winapp = Winapp(self.ini_fn)
         self.assertEqual(winapp.errors, 0)
@@ -715,7 +715,7 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
     def test_action_keeps_tab_in_path(self):
         """A tab in a path is kept, not collapsed to a space"""
         actions = self._build_actions(
-            'FileKey1=C:\\BB Test\\a\tb|*.log\n', 'winapp2-tabpath')
+            f'FileKey1={self.tempdir}\\a\tb|*.log\n', 'winapp2-tabpath')
 
         delete_path = actions['Delete'][0].paths[0]
         self.assertIn('a\tb', delete_path)
@@ -762,15 +762,15 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         personal = self.write_file(
             os.path.join(ini_dir, 'winapp2-personal.ini'),
             text='[NewApp *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-new.tmp\n'
+            f'FileKey1={self.tempdir}|bleachbit-test-new.tmp\n'
             '[SharedApp *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-personal.tmp\n')
+            f'FileKey1={self.tempdir}|bleachbit-test-personal.tmp\n')
         system = self.write_file(
             os.path.join(ini_dir, 'winapp2-system.ini'),
             text='[OldApp *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-old.tmp\n'
+            f'FileKey1={self.tempdir}|bleachbit-test-old.tmp\n'
             '[SharedApp *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-system.tmp\n')
+            f'FileKey1={self.tempdir}|bleachbit-test-system.tmp\n')
 
         with mock.patch('bleachbit.Winapp.list_winapp_files',
                         return_value=[personal, system]), \
@@ -792,13 +792,13 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         personal = self.write_file(
             os.path.join(ini_dir, 'winapp2-personal.ini'),
             text='[Notepad++ *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-personal.tmp\n')
+            f'FileKey1={self.tempdir}|bleachbit-test-personal.tmp\n')
         system = self.write_file(
             os.path.join(ini_dir, 'winapp2-system.ini'),
             text='[Notepad *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-notepad.tmp\n'
+            f'FileKey1={self.tempdir}|bleachbit-test-notepad.tmp\n'
             '[Notepad++ *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-system.tmp\n')
+            f'FileKey1={self.tempdir}|bleachbit-test-system.tmp\n')
 
         with mock.patch('bleachbit.Winapp.list_winapp_files',
                         return_value=[personal, system]), \
@@ -826,18 +826,18 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         """A malformed section is skipped, not the whole file"""
         self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-badsection')
         good = ('[Good App *]\nLangSecRef=3021\n'
-                'FileKey1=%Temp%|bleachbit-test-good.tmp\n')
+                f'FileKey1={self.tempdir}|bleachbit-test-good.tmp\n')
         tests = (
             # duplicate section: the first one wins
             '[Good App *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-dup.tmp\n',
+            f'FileKey1={self.tempdir}|bleachbit-test-dup.tmp\n',
             # duplicate key
             '[Bad App *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-a.tmp\n'
-            'FileKey1=%Temp%|bleachbit-test-b.tmp\n',
+            f'FileKey1={self.tempdir}|bleachbit-test-a.tmp\n'
+            f'FileKey1={self.tempdir}|bleachbit-test-b.tmp\n',
             # line without a delimiter
             '[Bad App *]\nLangSecRef=3021\n'
-            'FileKey1=%Temp%|bleachbit-test-a.tmp\n'
+            f'FileKey1={self.tempdir}|bleachbit-test-a.tmp\n'
             'not an option\n',
         )
         for bad in tests:
@@ -997,7 +997,7 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
             for i, section in enumerate(('Notepad *', 'Notepad++ *',
                                          'Notepad 2 *')):
                 ini.write(f'[{section}]\nLangSecRef=3021\nWarning=warning{i}\n'
-                          f'FileKey1=%Temp%|bleachbit-test-{i}.tmp\n')
+                          f'FileKey1={self.tempdir}|bleachbit-test-{i}.tmp\n')
 
         cleaner = next(Winapp(self.ini_fn).get_cleaners())
         # a suffix never takes the id of a section, as 'Notepad 2 *' here
@@ -1016,9 +1016,9 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         missing = os.path.join(self.mkdtemp(), 'does_not_exist')
         with open(self.ini_fn, 'w', encoding='utf-8') as ini:
             ini.write(f'[Notepad *]\nLangSecRef=3021\nDetectFile={missing}\n'
-                      'FileKey1=%Temp%|bleachbit-test-0.tmp\n'
+                      f'FileKey1={self.tempdir}|bleachbit-test-0.tmp\n'
                       '[Notepad++ *]\nLangSecRef=3021\n'
-                      'FileKey1=%Temp%|bleachbit-test-1.tmp\n')
+                      f'FileKey1={self.tempdir}|bleachbit-test-1.tmp\n')
         cleaner = next(Winapp(self.ini_fn).get_cleaners())
         self.assertEqual([('notepad__2', 'Notepad++')],
                          list(cleaner.get_options()))
