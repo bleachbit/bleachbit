@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 14:03-0600\n"
-"PO-Revision-Date: 2026-10-20 15:50+0000\n"
+"PO-Revision-Date: 2026-11-12 00:51+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
 "main/id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #. Cleaner description: the category of application.
@@ -454,6 +454,8 @@ msgid ""
 "This option will delete song ratings, internet radio stations, and podcast "
 "subscriptions."
 msgstr ""
+"Opsi ini akan menghapus penilaian lagu, stasiun radio internet, dan "
+"langganan podcast."
 
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
@@ -807,18 +809,22 @@ msgstr "Hapus riwayat berkas yang digunakan untuk /restore"
 #. Claude Code's automatically saved notes, reused in later sessions. Memory refers to saved information, not RAM.
 #: ../cleaners/claude.xml
 msgid "Auto memory"
-msgstr ""
+msgstr "Memori otomatis"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Delete the notes Claude Code automatically saves about you and your projects"
 msgstr ""
+"Hapus catatan yang disimpan secara otomatis oleh Claude Code tentang Anda "
+"dan proyek Anda"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Claude Code would forget the information it automatically saved about you "
 "and your projects"
 msgstr ""
+"Claude Code akan melupakan informasi yang disimpannya secara otomatis "
+"tentang Anda dan proyek Anda"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -1036,21 +1042,15 @@ msgstr "Kunjungi situs web ${prodname}"
 
 #. TRANSLATORS: Dialog shown when upgrading while the old version of BleachBit is still running. Instructs the user to close it and click Retry, or click Cancel to exit.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.\n"
-#| "Click 'OK' to uninstall the old version before upgrading, or click "
-#| "'Cancel' to abort the upgrade."
 msgctxt "nsis:BLEACHBIT_RUNNING"
 msgid ""
 "${prodname} is running.\n"
 "Close it and click 'Retry' to continue, or click 'Cancel' to abort the "
 "installation."
 msgstr ""
-"${prodname} sudah terinstal.\n"
-"Klik 'OK' untuk menghapus instalasi versi lama sebelum meningkatkan versi, "
-"atau klik 'Batal' untuk membatalkan peningkatan versi."
+"${prodname} sedang berjalan.\n"
+"Tutup aplikasi tersebut dan klik 'Coba Lagi' untuk melanjutkan, atau klik "
+"'Batal' untuk membatalkan penginstalan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
@@ -1358,25 +1358,16 @@ msgid "Shred with ${prodname}"
 msgstr "Hancurkan dengan ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:UNINSTALL_TEXT"
-#| msgid ""
-#| "${prodname} will be uninstalled from the following folder.\n"
-#| "Click Uninstall to start the uninstallation.\n"
-#| "WARNING: The uninstaller completely removes the installation directory, "
-#| "including any files (such as custom cleaners) that you may have added or "
-#| "changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
 "Click Uninstall to start the uninstallation.\n"
 "Files you added to this folder, such as custom cleaners, are kept."
 msgstr ""
-"${prodname} akan dihapus instalasinya dari folder berikut.\n"
-"Klik Uninstall untuk memulai penghapusan instalasi.\n"
-"PERINGATAN: Uninstaller sepenuhnya menghapus direktori instalasi, termasuk "
-"berkas apa pun (seperti pembersih khusus) yang mungkin telah Anda tambahkan "
-"atau ubah."
+"${prodname} akan dihapus dari folder berikut.\n"
+"Klik Hapus Instalasi untuk memulai penghapusan instalasi.\n"
+"Berkas yang Anda tambahkan ke folder ini, seperti pembersih khusus, akan "
+"tetap disimpan."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1424,7 +1415,7 @@ msgstr "Jalankan perintah eksternal: %s"
 #: ../bleachbit/Action.py
 #, python-brace-format
 msgid "Terminate process: {name}"
-msgstr ""
+msgstr "Hentikan proses: {name}"
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1898,7 +1889,7 @@ msgstr "Opsi ini memerlukan mode ahli. Aktifkan di Preferensi."
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Could not overwrite the contents of %(path)s: %(error)s"
-msgstr ""
+msgstr "Tidak dapat menimpa isi %(path)s: %(error)s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1920,10 +1911,9 @@ msgstr "Perangkat atau sumber daya sibuk: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
-#, fuzzy, python-format
-#| msgid "Directory is not empty: %s"
+#, python-format
 msgid "Directory was left renamed to: %s"
-msgstr "Direktori tidak kosong: %s"
+msgstr "Direktori dibiarkan dengan nama baru: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -2843,7 +2833,7 @@ msgstr "Mengatur ulang berkas konfigurasi karena rusak: %s"
 #. starts an operation while another one is running.
 #: ../bleachbit/GuiWindow.py
 msgid "Wait for the current operation to finish."
-msgstr ""
+msgstr "Tunggu hingga operasi saat ini selesai."
 
 #. TRANSLATORS: Error message shown when a cleaner option
 #. cannot be used because expert mode is disabled.
@@ -3169,6 +3159,9 @@ msgid ""
 "improvements and bug fixes. You can check for a newer version at https://"
 "www.bleachbit.org."
 msgstr ""
+"Versi BleachBit ini sudah lebih dari satu tahun. Kami secara berkala merilis "
+"peningkatan dan perbaikan bug. Anda dapat memeriksa ketersediaan versi yang "
+"lebih baru di https://www.bleachbit.org."
 
 #: ../bleachbit/Unix.py
 #, python-format
