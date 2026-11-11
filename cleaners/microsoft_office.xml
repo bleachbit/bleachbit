@@ -8,15 +8,42 @@ This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
 
 -->
-<cleaner id="microsoft_office" os="windows">
+<cleaner id="microsoft_office" os="windows,macos">
   <label>Microsoft Office</label>
   <description>Office suite</description>
+  <running type="exe" os="macos" same_user="true">Microsoft Word</running>
+  <running type="exe" os="macos" same_user="true">Microsoft Excel</running>
+  <running type="exe" os="macos" same_user="true">Microsoft PowerPoint</running>
+  <running type="exe" os="macos" same_user="true">Microsoft Outlook</running>
+  <running type="exe" os="macos" same_user="true">Microsoft OneNote</running>
   <option id="debug_logs">
     <label>Debug logs</label>
     <description>Delete the debug logs</description>
-    <action command="delete" search="walk.files" path="%LOCALAPPDATA%\Microsoft\Office\OffDiag\"/>
+    <!--
+Microsoft Office LTSC Standard for Mac 2024 16.115 on macOS 27.2.1, after opening and closing Word, Excel, PowerPoint, Outlook and OneNote
+~/Library/Containers/com.microsoft.<app>/Data/Library/Logs/Diagnostics/
+-->
+    <action command="delete" search="walk.files" os="windows" path="%LOCALAPPDATA%\Microsoft\Office\OffDiag\"/>
+    <action command="delete" search="walk.all" os="macos" path="~/Library/Containers/com.microsoft.Word/Data/Library/Logs/Diagnostics/"/>
+    <action command="delete" search="walk.all" os="macos" path="~/Library/Containers/com.microsoft.Excel/Data/Library/Logs/Diagnostics/"/>
+    <action command="delete" search="walk.all" os="macos" path="~/Library/Containers/com.microsoft.Powerpoint/Data/Library/Logs/Diagnostics/"/>
+    <action command="delete" search="walk.all" os="macos" path="~/Library/Containers/com.microsoft.Outlook/Data/Library/Logs/Diagnostics/"/>
+    <action command="delete" search="walk.all" os="macos" path="~/Library/Containers/com.microsoft.onenote.mac/Data/Library/Logs/Diagnostics/"/>
   </option>
-  <option id="mru">
+  <option id="cache" os="macos">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <!--
+Microsoft Office LTSC Standard for Mac 2024 16.115 on macOS 27.2.1, after opening and closing Word, Excel, PowerPoint, Outlook and OneNote
+~/Library/Containers/com.microsoft.<app>/Data/Library/Caches/
+-->
+    <action command="delete" search="walk.all" path="~/Library/Containers/com.microsoft.Word/Data/Library/Caches/"/>
+    <action command="delete" search="walk.all" path="~/Library/Containers/com.microsoft.Excel/Data/Library/Caches/"/>
+    <action command="delete" search="walk.all" path="~/Library/Containers/com.microsoft.Powerpoint/Data/Library/Caches/"/>
+    <action command="delete" search="walk.all" path="~/Library/Containers/com.microsoft.Outlook/Data/Library/Caches/"/>
+    <action command="delete" search="walk.all" path="~/Library/Containers/com.microsoft.onenote.mac/Data/Library/Caches/"/>
+  </option>
+  <option id="mru" os="windows">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
     <action command="delete" search="walk.files" path="%APPDATA%\Microsoft\Office\Recent\"/>
