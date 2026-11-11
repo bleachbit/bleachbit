@@ -10,6 +10,7 @@ Test case for module Worker
 """
 
 import errno
+import json
 import os
 import sqlite3
 import tempfile
@@ -22,6 +23,7 @@ import bleachbit
 from bleachbit import CLI, Command, FileUtilities
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import backends
+from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Process import process_cache
 from bleachbit.Worker import Worker, format_minutes_remaining
 
@@ -426,6 +428,108 @@ class WorkerTestCase(common.BleachbitTestCase):
         """Test Worker using Action.TruncateTestAction
         """
         self.action_test_helper('truncate.test', 0, 0, 4096, 2, 3, 2)
+
+    def test_json_commands_batched(self):
+        """JSON actions on one file across options run as one command"""
+        filename = self.write_file(
+            'batched.json', text='{"a": 1, "b": 2, "c": 3}')
+        other = self.write_file('other.json', text='{"a": 1}')
+        action_strs = [
+            f'<action command="json" search="file" path="{filename}" address="a"/>',
+            f'<action command="json" search="file" path="{other}" address="a"/>',
+            f'<action command="json" search="file" path="{filename}" address="b"/>',
+        ]
+        backends['test'] = TestCleaner.actions_to_cleaner(action_strs)
+        self.addCleanup(backends.pop, 'test', None)
+        operations = {'test': ['option1', 'option2', 'option3']}
+        ui = CLI.CliCallback()
+        for really_delete in (False, True):
+            with mock.patch.object(ui, 'append_text') as append_text:
+                worker = Worker(ui, really_delete, operations)
+                for _ in worker.run():
+                    pass
+            self.assertEqual(worker.total_errors, 0)
+            self.assertEqual(worker.total_special, 2)
+            lines = [call.args[0] for call in append_text.call_args_list
+                     if call.args[0].startswith(CLEAN_FILE_LABEL)]
+            # one line per file, not per action
+            self.assertEqual(len(lines), 2)
+            self.assertEqual(1, sum(filename in line for line in lines))
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(json.load(f), {'c': 3})
+        with open(other, encoding='utf-8') as f:
+            self.assertEqual(json.load(f), {})
+
+    def test_ini_commands_batched(self):
+        """INI actions on one file run as one command"""
+        dirname = self.mkdtemp()
+        filename = self.write_file(
+            os.path.join(dirname, 'vlc-qt-interface.ini'),
+            text='[General]\nfiledialog-path=/x\nkeep=1\n\n'
+                 '[RecentsMRL]\nlist=a\n\n[OpenDialog]\nnetMRL=b\n')
+        other = self.write_file(os.path.join(dirname, 'other.ini'),
+                                text='[RecentsMRL]\nlist=a\n')
+        action_strs = [
+            f'<action command="ini" search="file" path="{filename}" section="General" parameter="filedialog-path"/>',
+            f'<action command="ini" search="file" path="{other}" section="RecentsMRL"/>',
+            f'<action command="ini" search="file" path="{filename}" section="RecentsMRL"/>',
+            f'<action command="ini" search="file" path="{filename}" section="OpenDialog" parameter="netMRL"/>',
+        ]
+        backends['test'] = TestCleaner.actions_to_cleaner(action_strs)
+        self.addCleanup(backends.pop, 'test', None)
+        operations = {'test': ['option1', 'option2', 'option3', 'option4']}
+        ui = CLI.CliCallback()
+        for really_delete in (False, True):
+            with mock.patch.object(ui, 'append_text') as append_text:
+                worker = Worker(ui, really_delete, operations)
+                for _ in worker.run():
+                    pass
+            self.assertEqual(worker.total_errors, 0)
+            self.assertEqual(worker.total_special, 2)
+            lines = [call.args[0] for call in append_text.call_args_list
+                     if call.args[0].startswith(CLEAN_FILE_LABEL)]
+            self.assertEqual(len(lines), 2)
+            self.assertEqual(1, sum(filename in line for line in lines))
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(f.read().split(), ['[General]', 'keep', '=', '1',
+                                                '[OpenDialog]'])
+        with open(other, encoding='utf-8') as f:
+            self.assertEqual(f.read().strip(), '')
+
+    def test_json_command_runs_before_a_later_delete(self):
+        """A JSON edit is not deferred past a delete of the same file"""
+        filename = self.write_file(os.path.join(self.mkdtemp(), 'gone.json'),
+                                   text='{"a": 1}')
+        backends['test'] = TestCleaner.actions_to_cleaner([
+            f'<action command="json" search="file" path="{filename}" address="a"/>',
+            f'<action command="delete" search="file" path="{filename}"/>'])
+        self.addCleanup(backends.pop, 'test', None)
+        operations = {'test': ['option1', 'option2']}
+        for really_delete in (False, True):
+            worker = Worker(CLI.CliCallback(), really_delete, operations)
+            for _ in worker.run():
+                pass
+            self.assertEqual(worker.total_errors, 0)
+            self.assertEqual(worker.total_special, 1)
+            self.assertEqual(worker.total_deleted, 1)
+        self.assertNotExists(filename)
+
+    def test_json_commands_run_when_a_later_option_fails(self):
+        """Queued JSON edits still run when a later option raises"""
+        filename = self.write_file(os.path.join(self.mkdtemp(), 'queued.json'),
+                                   text='{"a": 1, "b": 2}')
+        backends['test'] = TestCleaner.actions_to_cleaner([
+            f'<action command="json" search="file" path="{filename}" address="a"/>'])
+        self.addCleanup(backends.pop, 'test', None)
+        # option2 does not exist, so get_commands() raises for it
+        operations = {'test': ['option1', 'option2']}
+        worker = Worker(CLI.CliCallback(), True, operations)
+        with self.assertLogs('bleachbit.Worker', level='ERROR'):
+            for _ in worker.run():
+                pass
+        self.assertEqual(worker.total_errors, 1)
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(json.load(f), {'b': 2})
 
     def test_deep_scan(self):
         """Test for deep scan"""

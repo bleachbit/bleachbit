@@ -319,30 +319,43 @@ class Ini(ConfigFile):
     def __init__(self, path, section, parameter):
         """Create the instance"""
         self.path = path
-        self.section = section
-        self.parameter = parameter
+        self.entries = [(section, parameter)]
 
     def __str__(self):
-        return f'Command to clean .ini path={self.path}, section={self.section}, parameter={self.parameter} '
+        return f'Command to clean .ini path={self.path}, entries={self.entries} '
+
+    def merge(self, other):
+        """Take over the entries of another command for the same file"""
+        if other.path != self.path:
+            raise ValueError(
+                f'cannot merge {other.path!r} into {self.path!r}')
+        self.entries.extend(other.entries)
 
     def _clean(self):
-        FileUtilities.clean_ini(self.path, self.section, self.parameter)
+        FileUtilities.clean_ini_entries(self.path, self.entries)
 
 
 class Json(ConfigFile):
 
-    """Remove a key from a JSON configuration file"""
+    """Remove keys from a JSON configuration file"""
 
     def __init__(self, path, address):
         """Create the instance"""
         self.path = path
-        self.address = address
+        self.addresses = [address]
 
     def __str__(self):
-        return f'Command to clean JSON file, path={self.path}, address={self.address} '
+        return f'Command to clean JSON file, path={self.path}, addresses={self.addresses} '
+
+    def merge(self, other):
+        """Take over the keys of another command for the same file"""
+        if other.path != self.path:
+            raise ValueError(
+                f'cannot merge {other.path!r} into {self.path!r}')
+        self.addresses.extend(other.addresses)
 
     def _clean(self):
-        FileUtilities.clean_json(self.path, self.address)
+        FileUtilities.clean_json(self.path, self.addresses)
 
 
 class Shred(Delete):
