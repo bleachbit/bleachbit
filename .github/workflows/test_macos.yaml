@@ -16,6 +16,7 @@ on:
       - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
     paths: &paths
       - '**'
+      - '!.coderabbit.yaml'
       - '!.github/**'
       - '.github/actions/**'
       - '.github/workflows/test_macos.yaml'

@@ -6,6 +6,7 @@ on:
       - '**'
       - '!dependabot/**'
     paths-ignore: &paths-ignore
+      - '.coderabbit.yaml'
       - 'appveyor.yml'
       - 'bleachbit.png'
       - 'bleachbit.svg'
