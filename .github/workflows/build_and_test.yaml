@@ -8,6 +8,7 @@ on:
     tags:
       - 'v*' # release tags trigger the max-effort Windows build
     paths-ignore: &paths-ignore
+      - '.coderabbit.yaml'
       - '.gitignore'
       - '.gitattributes'
       - 'bleachbit.png'

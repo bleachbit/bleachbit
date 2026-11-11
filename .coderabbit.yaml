@@ -1,0 +1,72 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# Only settings that differ from the defaults are listed.
+#
+# Per PR:
+#   @coderabbitai ignore    in the PR description: no automatic reviews until the line is removed
+#   @coderabbitai pause     as a comment: stop reviewing new pushes
+#   @coderabbitai resume    as a comment: start again
+#   @coderabbitai review    as a comment: review the new commits now
+
+reviews:
+  # Drops the "Prompt for AI Agents" block that doubles the length of every inline comment
+  enable_prompt_for_ai_agents: false
+
+  # Walkthrough extras that don't help review the change
+  changed_files_summary: false
+  sequence_diagrams: false
+  estimate_code_review_effort: false
+  in_progress_fortune: false
+
+  # Run config, commits and file list at the bottom of every review
+  review_info: false
+
+  pre_merge_checks:
+    # .pylintrc disables the missing-docstring checks, so this warning is noise
+    docstrings:
+      mode: "off"
+    # Style check on the PR text, not the code
+    description:
+      mode: "off"
+
+  # No bot-written commits on PR branches
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+    autofix:
+      enabled: false
+    fix_ci:
+      enabled: false
+    resolve_merge_conflict:
+      enabled: false
+
+  # Translations come from Weblate and make -C po tests checks them in CI; bleachbit.pot stays reviewed
+  path_filters:
+    - "!po/*.po"
+
+  tools:
+    # make lint already fails CI on these
+    pylint:
+      enabled: false
+    shellcheck:
+      enabled: false
+    # pyflakes and autopep8 cover these in make lint
+    flake8:
+      enabled: false
+    ruff:
+      enabled: false
+    # zizmor.yml runs on every PR
+    zizmor:
+      enabled: false
+    # Style nits on workflow YAML, actionlint stays on for real errors
+    yamllint:
+      enabled: false
+    # Grammar nits on prose and comments
+    languagetool:
+      enabled: false
+
+chat:
+  art: false
+  # Outside contributors can't command the bot from comments
+  allow_non_org_members: false
