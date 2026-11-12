@@ -310,7 +310,6 @@ class FileActionProvider(ActionProvider):
 
         func = search_functions[self.search]
 
-        cache = self.__class__.cache
         for input_path in self.paths:
             if self.search == 'glob' and not has_glob(input_path):
                 # TRANSLATORS: This is a lint-style warning that the CleanerML file
@@ -320,11 +319,12 @@ class FileActionProvider(ActionProvider):
                 # expect or support wildcards in the path.
                 logger.debug(_('path="%s" is not a glob pattern'), input_path)
 
-            # use cache
+            # use cache, then go on with the other paths
+            cache = self.__class__.cache
             if (self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search
                     and cache[1] == input_path and cache[3]):
                 yield from cache[2]
-                return
+                continue
             self.__class__.cache = ('cleared by', input_path, tuple(), False)
 
             # build new cache

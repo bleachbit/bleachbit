@@ -533,6 +533,20 @@ class WorkerTestCase(common.BleachbitTestCase):
         self.assertNotExists(filename2)
         self.assertEqual(worker.total_errors, 0)
 
+    def test_walk_files_cache_freed_after_run(self):
+        """A finished run does not keep its walk.files listings"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-worker')
+        self.write_file(os.path.join(dirname, 'foo'))
+        backends['test'] = TestCleaner.action_to_cleaner(
+            f'<action command="delete" search="walk.files" path="{dirname}"/>')
+        self.addCleanup(backends.pop, 'test', None)
+        worker = Worker(CLI.CliCallback(quiet=True), False,
+                        {'test': ['option1']})
+        list(worker.run())
+        self.assertEqual(worker.total_deleted, 1)
+        for plugin in ActionProvider.plugins:
+            self.assertFalse(getattr(plugin, 'cache', (None,) * 4)[2], plugin)
+
     def test_walk_files_cache_per_run(self):
         """A run does not replay the files an earlier run deleted"""
         dirname = self.mkdtemp(prefix='bleachbit-test-worker')

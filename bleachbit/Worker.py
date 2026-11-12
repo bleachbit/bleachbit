@@ -349,6 +349,8 @@ class Worker:
         finally:
             # Wiping empty space takes the lock again
             close_delete_parent_lock()
+            # Nothing replays the listings after the run, so free them
+            FileActionProvider.invalidate_cache()
 
         # print final stats
         bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)
