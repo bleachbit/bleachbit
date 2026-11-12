@@ -119,6 +119,11 @@ class MemoryTestCase(common.BleachbitTestCase):
         if not exe_exists(General.resolve_exe('swapon')):
             self.skipTest('swapon not found')
         ret = get_proc_swaps()
+        with open('/proc/swaps', encoding='utf-8') as f:
+            have_swap = len(f.read().splitlines()) > 1
+        if not have_swap and not ret:
+            # swapon -s prints nothing when no swap is active
+            return
         self.assertGreater(len(ret), 10)
         if not re.search(r'Filename\s+Type\s+Size', ret):
             raise RuntimeError(
