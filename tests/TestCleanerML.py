@@ -625,7 +625,12 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                     self.assertIn(os.path.normpath(os.path.expanduser(
                         '~/Library/Containers/com.microsoft.%s/Data/Library/%s/'
                         % (app, subdir))), paths)
-        self.assertEqual(len(mac.running), 5)
+        self.assertEqual(sorted(mac.running), [
+            ('exe', 'Microsoft Excel', True),
+            ('exe', 'Microsoft OneNote', True),
+            ('exe', 'Microsoft Outlook', True),
+            ('exe', 'Microsoft PowerPoint', True),
+            ('exe', 'Microsoft Word', True)])
         windows = self._load_real_cleaner_as('microsoft_office.xml', 'win32')
         self.assertEqual(sorted(windows.options), ['debug_logs', 'mru'])
         self.assertEqual(windows.running, [])
