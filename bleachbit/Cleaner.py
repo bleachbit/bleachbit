@@ -403,10 +403,14 @@ class System(Cleaner):
                     if os.path.lexists(c_path):
                         yield Command.Delete(c_path)
                 elif 'folder' == c_type:
-                    if os.path.lexists(c_path):
+                    if not os.path.lexists(c_path):
+                        continue
+                    # Like a shredded folder, a protected one is not walked
+                    # pylint: disable-next=protected-access
+                    if not FileUtilities._is_system_critical_posix(c_path):
                         for path in children_in_directory(c_path, True):
                             yield Command.Delete(path)
-                        yield Command.Delete(c_path)
+                    yield Command.Delete(c_path)
                 else:
                     raise RuntimeError(
                         f'custom folder has invalid type {c_type}')
@@ -834,6 +838,12 @@ class CustomFileAction(Action.ActionProvider):
         for path in self.paths:
             path = simpler_cleaner_process_path(path)
             if not path:
+                continue
+            # Skip a protected root such as / or /run/media instead of
+            # walking it, since what is below may not be protected
+            # pylint: disable-next=protected-access
+            if FileUtilities._is_system_critical_posix(path):
+                yield Command.Shred(path)
                 continue
             # Like delete(), shred a link or junction, not its target
             # pylint: disable-next=protected-access
