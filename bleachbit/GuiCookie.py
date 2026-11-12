@@ -49,12 +49,18 @@ class _CookieFilter:
         return True
 
 
+def _mark_destroyed(pane):
+    pane._destroyed = True  # pylint: disable=protected-access
+
+
 class CookieManagerPane(Gtk.Box):
     """Widget for managing cookies to keep when cleaning."""
 
     def __init__(self, bottom_widget=None):
         Gtk.Box.__init__(
             self, orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self._destroyed = False
+        self.connect('destroy', _mark_destroyed)
 
         # Instructions label
         instructions = Gtk.Label()
@@ -335,6 +341,9 @@ class CookieManagerPane(Gtk.Box):
 
     def _finish_populate(self, discovered):
         """Called on the GTK main thread after cookie discovery finishes."""
+        # Preferences was closed while discovery ran
+        if self._destroyed:
+            return False
         self._is_loading = False
         self._spinner.stop()
         self._spinner_box.destroy()

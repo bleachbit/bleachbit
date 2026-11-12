@@ -186,6 +186,26 @@ class GuiCookieTestCase(common.BleachbitTestCase):
         idle_add.assert_called_once_with(pane._finish_populate, [])
         pane.destroy()
 
+    def test_close_during_discovery(self):
+        """Discovery finishing after the pane is closed leaves it alone"""
+        workers = []
+
+        def fake_thread(target, **_kwargs):
+            workers.append(target)
+            return mock.Mock(spec=['start'])
+
+        with mock.patch('bleachbit.GuiCookie.threading.Thread', fake_thread):
+            pane = CookieManagerPane()
+        pane.destroy()
+        with mock.patch('bleachbit.GuiCookie.list_unique_cookies',
+                        return_value=['a.example']), \
+                mock.patch('bleachbit.GuiCookie.GLib.idle_add') as idle_add:
+            workers[0]()
+        idle_add.assert_called_once_with(pane._finish_populate, ['a.example'])
+        self.assertFalse(pane._finish_populate(['a.example']))
+        self.assertEqual(len(pane.cookie_store), 0)
+        self.assertTrue(pane._is_loading)
+
     def test_saved_padded_host_stays_checked(self):
         """Whitespace in a saved domain must not create a duplicate row."""
         keep_path = os.path.join(
