@@ -599,6 +599,47 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual(sorted(linux.options), [])
         self.assertEqual(linux.actions, [])
 
+    def test_microsoft_office_options_by_platform(self):
+        """The Microsoft Office cleaner has the options of each platform
+
+        macOS has the debug logs and the cache of the five applications,
+        and it waits for them to be closed. Windows keeps the debug logs and
+        the most recently used list, and the macOS paths are not used there.
+        Linux does not load the cleaner.
+        """
+        apps = ('Word', 'Excel', 'Powerpoint', 'Outlook', 'onenote.mac')
+
+        def option_paths(cleaner, wanted_option_id):
+            return [os.path.normpath(path)
+                    for option_id, action in cleaner.actions
+                    if option_id == wanted_option_id
+                    for path in action.paths]
+
+        mac = self._load_real_cleaner_as('microsoft_office.xml', 'darwin')
+        self.assertEqual(sorted(mac.options), ['cache', 'debug_logs'])
+        for subdir, option_id in (('Logs/Diagnostics', 'debug_logs'),
+                                  ('Caches', 'cache')):
+            paths = option_paths(mac, option_id)
+            for app in apps:
+                with self.subTest(option=option_id, app=app):
+                    self.assertIn(os.path.normpath(os.path.expanduser(
+                        '~/Library/Containers/com.microsoft.%s/Data/Library/%s/'
+                        % (app, subdir))), paths)
+        self.assertEqual(sorted(mac.running), [
+            ('exe', 'Microsoft Excel', True),
+            ('exe', 'Microsoft OneNote', True),
+            ('exe', 'Microsoft Outlook', True),
+            ('exe', 'Microsoft PowerPoint', True),
+            ('exe', 'Microsoft Word', True)])
+        windows = self._load_real_cleaner_as('microsoft_office.xml', 'win32')
+        self.assertEqual(sorted(windows.options), ['debug_logs', 'mru'])
+        self.assertEqual(windows.running, [])
+        for path in option_paths(windows, 'debug_logs'):
+            self.assertNotIn('Library', path)
+        linux = self._load_real_cleaner_as('microsoft_office.xml', 'linux')
+        self.assertEqual(sorted(linux.options), [])
+        self.assertEqual(linux.actions, [])
+
     def test_waterfox_options_by_platform(self):
         """The Waterfox cleaner has the macOS cache only on macOS"""
         mac_cache = os.path.normpath(
