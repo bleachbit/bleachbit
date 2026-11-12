@@ -843,7 +843,7 @@ Version: 2023-02-223
 !ifdef LANG_FRENCH
 	LangString ALREADY_INSTALLED ${LANG_FRENCH} "${prodname} est déjà installé.$\r$\nCliquez sur 'OK' pour désinstaller l’ancienne version avant la mise à niveau, ou cliquez sur 'Annuler' pour annuler la mise à niveau."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FRENCH} "Visiter le site web ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_FRENCH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_FRENCH} "${prodname} est en cours d’exécution.$\r$\nFermez-le et cliquez sur $\"Réessayer$\" pour continuer, ou cliquez sur$\"'Annuler$\" pour interrompre l’installation."
 	LangString INSTALLER_CAPTION ${LANG_FRENCH} "${prodname} ${VERSION} Configuration"
 	LangString MULTIPRINT1 ${LANG_FRENCH} "L’étape suivante est la construction du cache des polices, pendant laquelle une fenêtre de console noire peut apparaître."
 	LangString MULTIPRINT2 ${LANG_FRENCH} "Cela se termine généralement en une minute, mais parfois cela prend jusqu’à dix minutes."
@@ -892,7 +892,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FRENCH} "Terminal de débogage de ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_FRENCH} "${prodname} (pas d'UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_FRENCH} "Broyer avec ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_FRENCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_FRENCH} "${prodname} sera désinstallé du dossier suivant.$\r$\nCliquez sur désinstaller pour démarrer la désinstallation.$\r$\nLes fichiers que vous avez ajoutés à ce dossier, tels que les nettoyeurs personnalisés, sont conservés."
 !endif
 
 !ifdef LANG_GALICIAN
@@ -1173,7 +1173,7 @@ Version: 2023-02-223
 !ifdef LANG_INDONESIAN
 	LangString ALREADY_INSTALLED ${LANG_INDONESIAN} "${prodname} sudah terinstal.$\r$\nKlik 'OK' untuk menghapus instalasi versi lama sebelum meningkatkan versi, atau klik 'Batal' untuk membatalkan peningkatan versi."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_INDONESIAN} "Kunjungi situs web ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_INDONESIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_INDONESIAN} "${prodname} sedang berjalan.$\r$\nTutup aplikasi tersebut dan klik 'Coba Lagi' untuk melanjutkan, atau klik 'Batal' untuk membatalkan penginstalan."
 	LangString INSTALLER_CAPTION ${LANG_INDONESIAN} "Penyiapan ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_INDONESIAN} "Langkah berikutnya adalah membangun cache font, di mana jendela konsol hitam mungkin muncul."
 	LangString MULTIPRINT2 ${LANG_INDONESIAN} "Biasanya selesai dalam satu menit, tetapi terkadang memakan waktu hingga sepuluh menit."
@@ -1222,13 +1222,13 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_INDONESIAN} "Terminal Debugging ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_INDONESIAN} "${prodname} (Tanpa UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_INDONESIAN} "Hancurkan dengan ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} akan dihapus dari folder berikut.$\r$\nKlik Hapus Instalasi untuk memulai penghapusan instalasi.$\r$\nBerkas yang Anda tambahkan ke folder ini, seperti pembersih khusus, akan tetap disimpan."
 !endif
 
 !ifdef LANG_ITALIAN
 	LangString ALREADY_INSTALLED ${LANG_ITALIAN} "${prodname} è già installato. $\r$\nSeleziona 'OK' per disinstallare la vecchia versione prima dell'aggiornamento o seleziona 'Annulla' per interrompere l'aggiornamento."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ITALIAN} "Visita il sito web di ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_ITALIAN} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_ITALIAN} "${prodname} è in esecuzione.$\r$\nChiudi e fai clic su $\"Riprova$\" per continuare oppure su $\"Annulla$\" per interrompere l'installazione."
 	LangString INSTALLER_CAPTION ${LANG_ITALIAN} "Installazione di ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_ITALIAN} "Il passaggio successivo è la creazione della cache dei caratteri, durante il quale potrebbe apparire una finestra nera della console."
 	LangString MULTIPRINT2 ${LANG_ITALIAN} "Di solito termina in un minuto, ma a volte ci vogliono fino a dieci minuti."
@@ -1277,7 +1277,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ITALIAN} "Terminale debug ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_ITALIAN} "${prodname} (nessun UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "${prodname} verrà disinstallato dalla seguente cartella.$\r$\nPer avviare l'operazione seleziona 'Disinstalla'.$\r$\nI file aggiunti nella directory, come gli strumenti di pulizia personalizzati, verranno conservati."
 !endif
 
 !ifdef LANG_JAPANESE
