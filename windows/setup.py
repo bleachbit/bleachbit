@@ -79,6 +79,19 @@ UPX_EXE = shutil.which('upx') or (ROOT_DIR + '\\upx\\upx.exe')
 UPX_OPTS = '--best --nrv2e'
 ADVZIP_EXE = shutil.which('advzip') or (ROOT_DIR + '\\advancecomp\\advzip.exe')
 
+RT_MANIFEST = 24
+# Only longPathAware: a supportedOS or requestedExecutionLevel entry would
+# also change GetVersionEx() and UAC virtualization
+LONG_PATH_MANIFEST = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings xmlns:ws2="http://schemas.microsoft.com/SMI/2016/WindowsSettings">
+      <ws2:longPathAware>true</ws2:longPathAware>
+    </windowsSettings>
+  </application>
+</assembly>
+'''
+
 
 def get_build_settings():
     """Determine build preset and optimization flags.
@@ -477,6 +490,7 @@ def build_py2exe():
     gui_target = {
         'script': 'bleachbit.py',
         'icon_resources': [(1, 'windows/bleachbit.ico')],
+        'other_resources': [(RT_MANIFEST, 1, LONG_PATH_MANIFEST)],
         'version_info': version_info
     }
 
