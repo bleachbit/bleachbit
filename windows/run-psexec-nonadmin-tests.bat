@@ -4,10 +4,15 @@ setlocal
 cd /d "%~dp0.."
 set "REPO=%CD%"
 set "BB_TEST_USER=BleachBitTest"
-set "BB_TEST_PASS=Not-Real-Password_CiTest_9Xv4_73Qa"
+set "BB_TEST_PASS=Ci-%RANDOM%%RANDOM%%RANDOM%-Xv4Qa"
 set "LOG=%REPO%\psexec_nonadmin_tests.log"
 if exist "%LOG%" del /q "%LOG%"
 if exist "%REPO%\.coverage.nonadmin" del /q "%REPO%\.coverage.nonadmin"
+
+if not defined PYTHON_EXE (
+    echo ERROR: PYTHON_EXE is not set
+    exit /b 1
+)
 
 net user %BB_TEST_USER% /delete /y >nul 2>&1
 net user %BB_TEST_USER% %BB_TEST_PASS% /add /y
@@ -19,11 +24,7 @@ if errorlevel 1 (
 icacls "%REPO%" /grant "%BB_TEST_USER%:(OI)(CI)M" /T >nul
 if errorlevel 1 (
     echo ERROR: Failed to grant write access on %REPO%
-    exit /b 1
-)
-
-if not defined PYTHON_EXE (
-    echo ERROR: PYTHON_EXE is not set
+    net user %BB_TEST_USER% /delete /y >nul 2>&1
     exit /b 1
 )
 
