@@ -1303,7 +1303,7 @@ PrefersNonDefaultGPU=false""")
     @common.skipUnlessDestructive
     def test_snap_disabled_clean(self):
         """Unit test for snap_disabled_clean()"""
-        if not exe_exists(General.resolve_exe('snap')):
+        if not snapd_is_active():
             self.assertRaises(RuntimeError, snap_disabled_clean)
         else:
             bytes_freed = snap_disabled_clean()
@@ -1313,7 +1313,7 @@ PrefersNonDefaultGPU=false""")
     @common.skipIfWindows
     def test_snap_disabled_preview(self):
         """Unit test for snap_disabled_preview()"""
-        if not exe_exists(General.resolve_exe('snap')):
+        if not snapd_is_active():
             self.assertRaises(RuntimeError, snap_disabled_preview)
         else:
             bytes_freed = snap_disabled_preview()
