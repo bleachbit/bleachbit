@@ -34,9 +34,6 @@ import sys
 import tempfile
 import time
 
-# third party
-import certifi
-
 # local import
 import bleachbit
 from setup import supported_languages
@@ -443,6 +440,9 @@ def environment_check():
     logger.info('Checking Python py2exe library')
     assert_module('py2exe')
 
+    logger.info('Checking Python truststore library')
+    assert_module('truststore')
+
     logger.info('Checking for CodeSign.bat')
     check_exist('CodeSign.bat', 'Code signing is not available')
 
@@ -503,7 +503,8 @@ def build_py2exe():
                      '_pydecimal',  # dead fallback
                      # non-Windows platform modules
                      'psutil._psaix', 'psutil._psbsd', 'psutil._pslinux',
-                     'psutil._psosx', 'psutil._pssunos'],
+                     'psutil._psosx', 'psutil._pssunos',
+                     'truststore._macos', 'truststore._openssl'],
     }
 
     freeze(
@@ -585,6 +586,8 @@ def build():
     assert_exist('dist\\bleachbit.exe')
     assert_exist('dist\\bleachbit_console.exe')
     os.remove('bleachbit_console.py')
+    # py2exe's certifi hook copies the bundle; truststore never reads it
+    os.remove(os.path.join('dist', 'cacert.pem'))
 
     if not os.path.exists('dist'):
         os.makedirs('dist')
@@ -634,10 +637,6 @@ def build():
 
     logger.info('Copying themes')
     copy_tree('themes', 'dist\\themes')
-
-    logger.info('Copying CA bundle')
-    copy_file(certifi.where(),
-              os.path.join('dist', 'cacert.pem'))
 
     dist_locale_dir = r'dist\share\locale'
     shutil.rmtree(dist_locale_dir, ignore_errors=True)
