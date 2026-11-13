@@ -936,14 +936,16 @@ def dnf_autoremove():
         raise RuntimeError(msg)
     if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
         raise RuntimeError(_('Executable not found: %s') % 'dnf')
+    # dnf4 and dnf5 both refuse autoremove for non-root, with wording that
+    # changed between versions
+    if os.geteuid() != 0:
+        raise RuntimeError(
+            # TRANSLATORS: %s is the package manager, such as Yum or Dnf
+            _("%s cannot be cleaned without root permissions.") % "Dnf")
     cmd = [General.resolve_exe('dnf'), '-y', DNF_EXIT_ON_LOCK, 'autoremove']
     (rc, stdout, stderr) = General.run_external(cmd)
     freed_bytes = 0
     allout = stdout + stderr
-    if 'Error: This command has to be run under the root user.' in allout:
-        raise RuntimeError(
-            # TRANSLATORS: %s is the package manager, such as Yum or Dnf
-            _("%s cannot be cleaned without root permissions.") % "Dnf")
     if rc > 0:
         raise RuntimeError(f'dnf autoremove raised error {rc}: {stderr}')
 
