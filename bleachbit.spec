@@ -112,6 +112,8 @@ Requires:       %{pyprefix}-sqlite-utils
 Requires:       %{pyprefix}-xml
 Requires:       typelib(Gtk) = 3.0
 Requires:       typelib(Notify)
+# pkexec is its own package on Tumbleweed
+Requires:       /usr/bin/pkexec
 Requires:       xdg-utils
 Recommends:     libayatana-appindicator3-1
 %endif
@@ -143,26 +145,17 @@ make delete_windows_files
 make check-revision
 make install PYTHON=%{pyexe} DESTDIR=%{buildroot} prefix=%{_prefix}
 
-%if %{is_redhat_family}
-
-sed -i -e 's/^Exec=bleachbit$/Exec=pkexec bleachbit/g' org.bleachbit.BleachBit-root.desktop
+sed -i -e 's/^Exec=bleachbit$/Exec=pkexec \/usr\/bin\/bleachbit/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
     --dir=%{buildroot}/%{_datadir}/applications/ \
     --vendor="" org.bleachbit.BleachBit-root.desktop
 
-%endif
-
-
 %if 0%{?is_opensuse}
-sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' org.bleachbit.BleachBit-root.desktop
-
-desktop-file-install \
-    --dir=%{buildroot}/%{_datadir}/applications/ \
-    --vendor="" --add-category=Filesystem org.bleachbit.BleachBit-root.desktop
-
 desktop-file-edit --add-category=Filesystem \
     %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
+desktop-file-edit --add-category=Filesystem \
+    %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
 %endif
 
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
