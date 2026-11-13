@@ -5,6 +5,7 @@
 # later.  See the COPYING file in the top-level directory.
 
 import contextlib
+import itertools
 import logging
 import os
 import sys
@@ -68,6 +69,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _refresh_holds = 0
     _worker_run = None
     _worker_source = None
+    # Text appended during a worker step, inserted when the step ends
+    _text_batch = None
     recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
@@ -586,9 +589,13 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         if self.textbuffer is None:
             # textbuffer was destroyed.
             return
+        text = sanitize_surrogates(text)
+        if not __iter and self._text_batch is not None:
+            # One insert per worker step instead of one per line
+            self._text_batch.append((text, tag or None, scroll))
+            return
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
-        text = sanitize_surrogates(text)
         if tag:
             self.textbuffer.insert_with_tags_by_name(__iter, text, tag)
         else:
@@ -597,6 +604,22 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
         if scroll:
+            self._queue_scroll()
+
+    def _flush_text_batch(self):
+        """Insert the text of a worker step, one insert per run of a tag"""
+        batch, self._text_batch = self._text_batch, None
+        if not batch or self.textbuffer is None:
+            return
+        for tag, group in itertools.groupby(batch, key=lambda item: item[1]):
+            group = list(group)
+            text = ''.join(item[0] for item in group)
+            end = self.textbuffer.get_end_iter()
+            if tag:
+                self.textbuffer.insert_with_tags_by_name(end, text, tag)
+            else:
+                self.textbuffer.insert(end, text)
+        if any(item[2] for item in batch):
             self._queue_scroll()
 
     def _queue_scroll(self):
@@ -788,10 +811,20 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self._worker_source = GLib.idle_add(self._step_worker,
                                                 self._worker_run)
 
+    def _next_batched(self, worker_run):
+        """Return next(worker_run), with the text it logged inserted at once"""
+        if self._text_batch is not None:
+            return next(worker_run)
+        self._text_batch = []
+        try:
+            return next(worker_run)
+        finally:
+            self._flush_text_batch()
+
     def _step_worker(self, worker_run):
         """Run the worker up to its next yield"""
         try:
-            return next(worker_run)
+            return self._next_batched(worker_run)
         except (Exception, KeyboardInterrupt):
             # PyGObject drops the source after printing the error
             if worker_run is self._worker_run:
@@ -1156,15 +1189,16 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             logger.warning(
                 'ValueError in get_iter() when updating file size for tree path=%s', treepath)
             return
+        # get_value() and set_value() skip building a row object per cell
         for __iter in _iter_rows(model):
-            if model[__iter][2] != option:
+            if model.get_value(__iter, 2) != option:
                 continue
             if option_id == -1:
-                model[__iter][3] = text
+                model.set_value(__iter, 3, text)
             else:
                 for child in _iter_rows(model, __iter):
-                    if model[child][2] == option_id:
-                        model[child][3] = text
+                    if model.get_value(child, 2) == option_id:
+                        model.set_value(child, 3, text)
 
     def update_total_size(self, bytes_removed):
         """Callback to update the total size cleaned"""
