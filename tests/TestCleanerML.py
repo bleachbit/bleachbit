@@ -631,6 +631,52 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                  for path in action.paths]
         self.assertIn(os.path.join(profile, 'cookies.sqlite'), paths)
 
+    def test_microsoft_edge_running_by_platform(self):
+        """The Microsoft Edge cleaner notices Edge by the name of each platform
+
+        macOS also watches the lock file that Edge keeps in its data folder.
+        """
+        mac = self._load_real_cleaner_as('microsoft_edge.xml', 'darwin')
+        self.assertEqual(sorted(mac.running), [
+            ('exe', 'Microsoft Edge', True),
+            ('pathname', '~/Library/Application Support/Microsoft Edge/'
+             'SingletonLock', False)])
+        windows = self._load_real_cleaner_as('microsoft_edge.xml', 'win32')
+        self.assertEqual(windows.running, [('exe', 'msedge.exe', True)])
+        linux = self._load_real_cleaner_as('microsoft_edge.xml', 'linux')
+        self.assertEqual(linux.running, [('exe', 'msedge', True)])
+
+    @common.skipIfWindows
+    def test_microsoft_edge_macos_paths(self):
+        """On macOS the Microsoft Edge cleaner finds the profiles and cache"""
+        home = os.path.join(self.tempdir, 'edge-home')
+        base = os.path.join(
+            home, 'Library', 'Application Support', 'Microsoft Edge')
+        for profile in ('Default', 'Profile 1'):
+            os.makedirs(os.path.join(base, profile))
+        mac_cache = os.path.join(home, 'Library', 'Caches', 'Microsoft Edge')
+
+        def option_paths(platform, option):
+            with mock.patch.dict(os.environ, {'HOME': home}):
+                cleaner = self._load_real_cleaner_as(
+                    'microsoft_edge.xml', platform)
+            return [os.path.normpath(path)
+                    for option_id, action in cleaner.actions
+                    if option_id == option
+                    for path in action.paths]
+
+        cookies = option_paths('darwin', 'cookies')
+        self.assertIn(os.path.join(base, 'Default', 'Cookies'), cookies)
+        self.assertIn(os.path.join(base, 'Profile 1', 'Cookies'), cookies)
+        cache = option_paths('darwin', 'cache')
+        self.assertIn(mac_cache, cache)
+        self.assertIn(os.path.join(base, 'component_crx_cache'), cache)
+        # os="unix" applies to macOS, and Edge keeps this file in Default.
+        self.assertIn(
+            os.path.join(base, 'Default', 'Network Persistent State'), cache)
+        for platform in ('win32', 'linux'):
+            self.assertNotIn(mac_cache, option_paths(platform, 'cache'))
+
     @common.skipUnlessLinux
     def test_running_process_names(self):
         """Cleaners notice their application by its Linux process name"""
