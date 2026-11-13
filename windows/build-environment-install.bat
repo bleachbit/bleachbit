@@ -5,4 +5,4 @@ if %errorlevel% neq 0 (
     exit /b %errorlevel%
 )
 
-powershell.exe -ExecutionPolicy ByPass -File "%~dp0\python-gtk3-install.ps1"
+powershell.exe -ExecutionPolicy ByPass -File "%~dp0\python-gtk3-install.ps1" %*
