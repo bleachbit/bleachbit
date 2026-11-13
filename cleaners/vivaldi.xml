@@ -122,8 +122,9 @@ Tested with Vivaldi 6.x on Windows 10/11, Linux and macOS.
   </option>
   <option id="sync">
     <label>Sync</label>
-    <description>Delete the sync data (including web apps) and sign out of the browser</description>
-    <action command="delete" search="walk.files" path="$$profile$$/Sync Data/"/>
+    <description>Delete the sync data and sign out of the browser</description>
+    <!-- Files only, like Chromium on sign-out: Sync Data/LevelDB holds the installed web apps -->
+    <action command="delete" search="glob" path="$$profile$$/Sync Data/*" type="f"/>
   </option>
   <option id="passwords">
     <label>Passwords</label>
