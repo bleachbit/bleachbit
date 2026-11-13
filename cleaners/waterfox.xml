@@ -47,6 +47,7 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\OfflineCache"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\startupCache"/>
     <!--
 This file no longer exists in Firefox <=62
 
