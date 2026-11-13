@@ -278,7 +278,6 @@ install_opensuse() {
         "${py}-gobject"
         "${py}-gobject-Gdk"
         "${py}-setuptools"
-        update-desktop-files
         xdg-utils
     )
     local runtime_pip=(
