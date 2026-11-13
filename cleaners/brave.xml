@@ -160,6 +160,13 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
   </option>
+  <option id="statistics">
+    <label>Statistics</label>
+    <description>Delete the files</description>
+    <!-- Usage metrics Chromium has not uploaded yet -->
+    <action command="delete" search="walk.all" path="$$base$$/BrowserMetrics/"/>
+    <action command="delete" search="walk.all" path="$$base$$/DeferredBrowserMetrics/"/>
+  </option>
   <option id="sync">
     <label>Sync</label>
     <description>Delete the sync data and sign out of the browser</description>

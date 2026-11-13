@@ -185,6 +185,13 @@ Unlike Chromium, Opera does not support multiple profiles.
     <action command="delete" search="walk.all" path="%AppData%\Opera\Opera*\pstorage\"/>
     <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
   </option>
+  <option id="statistics">
+    <label>Statistics</label>
+    <description>Delete the files</description>
+    <!-- Usage metrics Chromium has not uploaded yet -->
+    <action command="delete" search="walk.all" path="$$base$$/BrowserMetrics/"/>
+    <action command="delete" search="walk.all" path="$$base$$/DeferredBrowserMetrics/"/>
+  </option>
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
