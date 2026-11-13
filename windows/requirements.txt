@@ -3,8 +3,10 @@
 # Windows specific dependencies
 certifi==2026.10.23
 charset_normalizer==3.5.2
+idna==3.20
 plyer==2.1.0
 py2exe==0.14.2.0
-pypiwin32==223
+pywin32==312
+urllib3==2.8.0
 winshell==0.6
 # python-gtk3-install.ps1 has special installation method for PyGObject.
