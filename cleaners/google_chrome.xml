@@ -18,12 +18,16 @@ later.  See the COPYING file in the top-level directory.
   <running type="pathname" os="linux">$XDG_CONFIG_HOME/google-chrome/SingletonLock</running>
   <running type="pathname" os="linux">$XDG_CONFIG_HOME/google-chrome-beta/SingletonLock</running>
   <running type="pathname" os="linux">$XDG_CONFIG_HOME/google-chrome-unstable/SingletonLock</running>
+  <running type="pathname" os="linux">$XDG_CONFIG_HOME/google-chrome-canary/SingletonLock</running>
   <running type="pathname" os="linux">~/.var/app/com.google.Chrome/config/google-chrome/SingletonLock</running>
   <running type="pathname" os="linux">~/.var/app/com.google.ChromeDev/config/google-chrome/SingletonLock</running>
   <var name="base">
     <value os="windows">%LocalAppData%\Google\Chrome\User Data</value>
     <value os="macos">~/Library/Application Support/Google/Chrome</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome</value>
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome-beta</value>
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome-unstable</value>
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome-canary</value>
     <value os="linux">~/.var/app/com.google.Chrome/config/google-chrome/</value>
     <value os="linux">~/.var/app/com.google.ChromeDev/config/google-chrome/</value>
   </var>
@@ -38,6 +42,8 @@ later.  See the COPYING file in the top-level directory.
     <value search="glob" os="linux">$XDG_CONFIG_HOME/google-chrome-beta/Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-unstable/Default</value>
     <value search="glob" os="linux">$XDG_CONFIG_HOME/google-chrome-unstable/Profile *</value>
+    <value os="linux">$XDG_CONFIG_HOME/google-chrome-canary/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/google-chrome-canary/Profile *</value>
     <value os="linux">~/.var/app/com.google.Chrome/config/google-chrome/Default</value>
     <value search="glob" os="linux">~/.var/app/com.google.Chrome/config/google-chrome/Profile *</value>
     <value os="linux">~/.var/app/com.google.ChromeDev/config/google-chrome/Default</value>
@@ -83,6 +89,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome/" os="unix"/>
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-beta/" os="unix"/>
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-unstable/" os="unix"/>
+    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-canary/" os="unix"/>
     <action command="delete" search="walk.files" path="~/.var/app/com.google.Chrome/cache/"/>
     <action command="delete" search="walk.files" path="~/.var/app/com.google.ChromeDev/cache/"/>
     <!-- macOS-specific -->
