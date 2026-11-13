@@ -51,6 +51,7 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\OfflineCache"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\startupCache"/>
     <!--
 This file no longer exists in Firefox <=62
 
