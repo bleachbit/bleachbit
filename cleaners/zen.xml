@@ -54,6 +54,8 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="~/.var/app/app.zen_browser.zen/cache/zen/"/>
     <action command="delete" search="walk.all" path="~/Library/Caches/zen/Profiles/*/" os="macos"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\cache2"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\cache2.*.purge.bg_rm"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Zen\Profiles\*\cache2.*.purge.bg_rm"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\OfflineCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\startupCache"/>

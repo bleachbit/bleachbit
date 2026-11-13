@@ -45,6 +45,8 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="~/.var/app/net.waterfox.waterfox/cache"/>
     <action command="delete" search="walk.all" path="~/Library/Caches/Waterfox/Profiles/*/" os="macos"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\cache2"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\cache2.*.purge.bg_rm"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Waterfox\Profiles\*\cache2.*.purge.bg_rm"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\OfflineCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\startupCache"/>

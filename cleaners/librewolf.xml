@@ -49,6 +49,8 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="~/.cache/librewolf/"/>
     <action command="delete" search="walk.all" path="~/.var/app/io.gitlab.librewolf-community/cache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\cache2"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\cache2.*.purge.bg_rm"/>
+    <action command="delete" search="glob" path="%LocalAppData%\librewolf\Profiles\*\cache2.*.purge.bg_rm"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\OfflineCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\startupCache"/>

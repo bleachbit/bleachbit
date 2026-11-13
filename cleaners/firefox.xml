@@ -54,6 +54,8 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="~/.var/app/org.mozilla.firefox/cache/mozilla/"/>
     <action command="delete" search="walk.all" path="~/Library/Caches/Firefox/Profiles/*/" os="macos"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2.*.purge.bg_rm"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2.*.purge.bg_rm"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\OfflineCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\startupCache"/>
