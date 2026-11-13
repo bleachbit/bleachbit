@@ -264,16 +264,21 @@ class UnixTestCase(common.BleachbitTestCase):
     def test_get_globs_size_vanished(self):
         """get_globs_size() skips a file that vanishes between glob and getsize"""
         real_fn = self.write_file('globs-size-real', contents=b'0123456789')
-        expected = getsize(real_fn)
-        self.assertGreater(expected, 0)
         pattern = os.path.join(self.tempdir, 'globs-size-*')
-        self.assertEqual(expected, get_globs_size([pattern]))
 
-        # A file listed by the glob but gone by the time it is measured
-        ghost_fn = os.path.join(self.tempdir, 'globs-size-ghost')
-        with mock.patch('bleachbit.Unix.glob.iglob',
-                        return_value=iter([real_fn, ghost_fn])):
-            self.assertEqual(expected, get_globs_size([pattern]))
+        # Some file systems, such as wslfs, report no allocated blocks
+        def getsize_real_10(path):
+            return 10 if path == real_fn else getsize(path)
+
+        with mock.patch('bleachbit.Unix.FileUtilities.getsize',
+                        side_effect=getsize_real_10):
+            self.assertEqual(10, get_globs_size([pattern]))
+
+            # A file listed by the glob but gone by the time it is measured
+            ghost_fn = os.path.join(self.tempdir, 'globs-size-ghost')
+            with mock.patch('bleachbit.Unix.glob.iglob',
+                            return_value=iter([real_fn, ghost_fn])):
+                self.assertEqual(10, get_globs_size([pattern]))
 
         # Other errors must still propagate
         with mock.patch('bleachbit.Unix.FileUtilities.getsize',
