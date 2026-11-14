@@ -15,6 +15,7 @@ import configparser
 import contextlib
 import errno
 import glob
+import io
 import json
 import locale
 import logging
@@ -753,30 +754,54 @@ def _shred_before_rewrite(path):
     delete(path, True)
 
 
+# BOMs clean_ini() recognizes. Windows writes the UTF-16 ones for
+# Unicode INI files.
+_INI_BOMS = ((codecs.BOM_UTF8, 'utf_8'),
+             (codecs.BOM_UTF16_LE, 'utf_16_le'),
+             (codecs.BOM_UTF16_BE, 'utf_16_be'))
+
+
+def _decode_ini(data):
+    """Return (bom, encoding, text) for the raw contents of an INI file
+
+    Raises UnicodeDecodeError when no supported encoding fits.
+    """
+    for bom, encoding in _INI_BOMS:
+        if data.startswith(bom):
+            return bom, encoding, data[len(bom):].decode(encoding)
+    try:
+        return b'', 'utf_8', data.decode('utf_8')
+    except UnicodeDecodeError:
+        if not IS_WINDOWS:
+            raise
+    # the ANSI code page, which WritePrivateProfileStringA writes
+    return b'', 'mbcs', data.decode('mbcs')
+
+
 def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file
 
     Comments are not preserved.
 
-    The file is expected to be UTF-8, optionally with a BOM. This matches
-    how VLC writes its configuration file (verified for over a decade). If
-    the file cannot be decoded as UTF-8, it is left untouched and an error
-    is logged so cleaning continues with the next file. The presence (or
-    absence) of a BOM is preserved on write.
+    The file is read as UTF-8 unless it starts with a UTF-8 or UTF-16
+    byte order mark. On Windows a file without a BOM that is not UTF-8
+    is read as the ANSI code page. A file that does not decode is left
+    untouched and an error is logged so cleaning continues with the
+    next file. The BOM and Windows line endings are preserved on write.
     """
-    # utf_8_sig transparently strips a BOM when reading, if present.
-    read_encoding = 'utf_8_sig'
+    with open(path, 'rb') as fp:
+        data = fp.read()
+    try:
+        bom, encoding, text = _decode_ini(data)
+    except UnicodeDecodeError as e:
+        logger.error("Cannot clean INI file because it is not valid %s: %s",
+                     codecs.lookup(e.encoding).name.upper(), path)
+        return
 
     # read file to parser
     config = configparser.RawConfigParser(delimiters='=')
     config.optionxform = str
-    try:
-        with open(path, 'r', encoding=read_encoding) as fp:
-            config.read_file(fp)
-    except UnicodeDecodeError:
-        logger.error(
-            "Cannot clean INI file because it is not valid UTF-8: %s", path)
-        return
+    config.read_string(text, source=path)
 
     # change file
     changed = False
@@ -791,18 +816,18 @@ def clean_ini(path, section, parameter):
     if not changed:
         return
 
-    # Preserve whether the file had a BOM: write with utf_8_sig (which
-    # re-adds it) only if the original file began with the UTF-8 BOM.
-    with open(path, 'rb') as bom_fp:
-        has_bom = bom_fp.read(3) == b'\xef\xbb\xbf'
-    write_encoding = 'utf_8_sig' if has_bom else 'utf_8'
+    out = io.StringIO()
+    config.write(out)
+    output = out.getvalue()
+    if '\r\n' in text:
+        output = output.replace('\n', '\r\n')
 
     # write file
     from bleachbit.Options import options
     if options.get('shred'):
         _shred_before_rewrite(path)
-    with open_for_overwrite(path, encoding=write_encoding, newline='') as fp:
-        config.write(fp)
+    with open_for_overwrite(path, 'wb') as fp:
+        fp.write(bom + output.encode(encoding))
 
 
 def clean_json(path, target):
