@@ -17,6 +17,9 @@ datadir ?= $(prefix)/share
 INSTALL = install
 INSTALL_DATA = $(INSTALL) -m 644
 INSTALL_SCRIPT = $(INSTALL) -m 755
+# -m covers only the last component; uutils install before 2026-10 creates
+# the missing parents with the umask
+INSTALL_DIR = umask 022 && $(INSTALL) -d -m 755
 
 # if not specified, do not check coverage
 PYTHON ?= python3
@@ -95,46 +98,46 @@ clean-appimage:
 
 install:
 	# "binary"
-	mkdir -p $(DESTDIR)$(bindir)
+	test -d $(DESTDIR)$(bindir) || ($(INSTALL_DIR) $(DESTDIR)$(bindir))
 	$(INSTALL_SCRIPT) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
 
 	# application launcher
-	mkdir -p $(DESTDIR)$(datadir)/applications
+	test -d $(DESTDIR)$(datadir)/applications || ($(INSTALL_DIR) $(DESTDIR)$(datadir)/applications)
 	$(INSTALL_DATA) org.bleachbit.BleachBit.desktop $(DESTDIR)$(datadir)/applications/
 
 	# AppStream metadata
-	mkdir -p $(DESTDIR)$(datadir)/metainfo
+	test -d $(DESTDIR)$(datadir)/metainfo || ($(INSTALL_DIR) $(DESTDIR)$(datadir)/metainfo)
 	$(INSTALL_DATA) org.bleachbit.BleachBit.metainfo.xml $(DESTDIR)$(datadir)/metainfo/
 
 	# Python code
-	mkdir -p $(DESTDIR)$(datadir)/bleachbit/markovify
+	$(INSTALL_DIR) $(DESTDIR)$(datadir)/bleachbit $(DESTDIR)$(datadir)/bleachbit/markovify
 	$(INSTALL_DATA) bleachbit/*.py $(DESTDIR)$(datadir)/bleachbit
 	$(INSTALL_DATA) bleachbit/markovify/*.py $(DESTDIR)$(datadir)/bleachbit/markovify
-	#note: compileall is recursive
-	cd $(DESTDIR)$(datadir)/bleachbit && \
+	#note: compileall is recursive; __pycache__ gets the umask, not -m 755
+	cd $(DESTDIR)$(datadir)/bleachbit && umask 022 && \
 	$(PYTHON_CMD) -O -c "import compileall; compileall.compile_dir('.')" && \
 	$(PYTHON_CMD) -c "import compileall; compileall.compile_dir('.')"
 
 	# cleaners
-	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
+	$(INSTALL_DIR) $(DESTDIR)$(datadir)/bleachbit/cleaners
 	$(INSTALL_DATA) cleaners/*.xml $(DESTDIR)$(datadir)/bleachbit/cleaners
 
 	# share files
-	mkdir -p $(DESTDIR)$(datadir)/bleachbit/share
+	$(INSTALL_DIR) $(DESTDIR)$(datadir)/bleachbit/share
 	$(INSTALL_DATA) share/app-menu.ui $(DESTDIR)$(datadir)/bleachbit/share
 	$(INSTALL_DATA) share/protected_path.xml $(DESTDIR)$(datadir)/bleachbit/share
 
 	# icon
-	mkdir -p $(DESTDIR)$(datadir)/pixmaps
+	test -d $(DESTDIR)$(datadir)/pixmaps || ($(INSTALL_DIR) $(DESTDIR)$(datadir)/pixmaps)
 	$(INSTALL_DATA) bleachbit.png $(DESTDIR)$(datadir)/pixmaps/
-	mkdir -p $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps
+	test -d $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps || ($(INSTALL_DIR) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps)
 	$(INSTALL_DATA) bleachbit.svg $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/
 
 	# translations
 	$(MAKE) -C po install DESTDIR=$(DESTDIR)
 
 	# PolicyKit
-	mkdir -p $(DESTDIR)$(datadir)/polkit-1/actions
+	test -d $(DESTDIR)$(datadir)/polkit-1/actions || ($(INSTALL_DIR) $(DESTDIR)$(datadir)/polkit-1/actions)
 	$(INSTALL_DATA) org.bleachbit.policy $(DESTDIR)$(datadir)/polkit-1/actions/
 
 # `lint` only warns about a missing tool, which is fine locally but hides a
