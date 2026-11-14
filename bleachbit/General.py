@@ -592,7 +592,7 @@ def sudo_mode():
         # Fedora 13: os.getenv('USER') = 'root' under sudo
         # return False
 
-    return os.getenv('SUDO_UID') is not None
+    return os.geteuid() == 0 and os.getenv('SUDO_UID') is not None
 
 
 def unset_sslkeylogfile(use_logger):

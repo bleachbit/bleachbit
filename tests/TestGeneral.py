@@ -78,7 +78,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertEqual(uid, uid2)
 
         # Test relationship with sudo_mode()
-        if sudo_mode() and os.geteuid() == 0:
+        if sudo_mode():
             self.assertGreater(uid, 0)
             self.assertNotEqual(uid, os.geteuid())
         else:
@@ -638,3 +638,12 @@ class GeneralTestCase(common.BleachbitTestCase):
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assertIsInstance(sudo_mode(), bool)
+
+    @common.skipUnlessLinux
+    def test_sudo_mode_requires_root(self):
+        """SUDO_UID means sudo mode only when running as root"""
+        with mock.patch.dict(os.environ, {'SUDO_UID': '1000'}):
+            with mock.patch('os.geteuid', return_value=1234):
+                self.assertFalse(sudo_mode())
+            with mock.patch('os.geteuid', return_value=0):
+                self.assertTrue(sudo_mode())
