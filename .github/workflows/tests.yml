@@ -8,6 +8,7 @@ on:
     tags:
       - 'v*' # the release build in build_and_test.yaml runs on tags too
     paths-ignore: &paths-ignore
+      - '.coderabbit.yaml'
       - '.gitignore'
       - '.gitattributes'
       - 'bleachbit.png'
