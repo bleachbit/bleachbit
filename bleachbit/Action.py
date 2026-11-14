@@ -19,7 +19,7 @@ from itertools import product
 import bleachbit
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod, Process as ProcessMod  # mod=module
 from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC, IS_POSIX, IS_WINDOWS
-from bleachbit.Constant import CLEAN_FILE_LABEL
+from bleachbit.Constant import clean_file_label
 from bleachbit.Cookie import load_keep_list
 from bleachbit.Language import get_text as _
 
@@ -404,7 +404,7 @@ class ChromeAutofill(FileActionProvider):
             yield Command.Function(
                 path,
                 Special.delete_chrome_autofill,
-                CLEAN_FILE_LABEL)
+                clean_file_label())
 
 
 class ChromeDatabases(FileActionProvider):
@@ -417,7 +417,7 @@ class ChromeDatabases(FileActionProvider):
             yield Command.Function(
                 path,
                 Special.delete_chrome_databases_db,
-                CLEAN_FILE_LABEL)
+                clean_file_label())
 
 
 class ChromeFavicons(FileActionProvider):
@@ -430,7 +430,7 @@ class ChromeFavicons(FileActionProvider):
             yield Command.Function(
                 path,
                 Special.delete_chrome_favicons,
-                CLEAN_FILE_LABEL)
+                clean_file_label())
 
 
 class ChromeOrphanedFrameworkVersions(FileActionProvider):
@@ -460,7 +460,7 @@ class ChromeHistory(FileActionProvider):
             yield Command.Function(
                 path,
                 Special.delete_chrome_history,
-                CLEAN_FILE_LABEL)
+                clean_file_label())
 
 
 class ChromeKeywords(FileActionProvider):
@@ -473,7 +473,7 @@ class ChromeKeywords(FileActionProvider):
             yield Command.Function(
                 path,
                 Special.delete_chrome_keywords,
-                CLEAN_FILE_LABEL)
+                clean_file_label())
 
 
 class Cookie(FileActionProvider):
@@ -586,7 +586,7 @@ class MozillaUrlHistory(FileActionProvider):
         for path in self.get_paths():
             yield Command.Function(path,
                                    Special.delete_mozilla_url_history,
-                                   CLEAN_FILE_LABEL)
+                                   clean_file_label())
 
 
 class MozillaFavicons(FileActionProvider):
@@ -598,7 +598,7 @@ class MozillaFavicons(FileActionProvider):
         for path in self.get_paths():
             yield Command.Function(path,
                                    Special.delete_mozilla_favicons,
-                                   CLEAN_FILE_LABEL)
+                                   clean_file_label())
 
 
 class OfficeRegistryModifications(FileActionProvider):
@@ -611,7 +611,7 @@ class OfficeRegistryModifications(FileActionProvider):
             yield Command.Function(
                 path,
                 Special.delete_office_registrymodifications,
-                CLEAN_FILE_LABEL)
+                clean_file_label())
 
 
 class Process(ActionProvider):
