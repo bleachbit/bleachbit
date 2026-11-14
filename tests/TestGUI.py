@@ -32,7 +32,7 @@ from bleachbit.Options import options
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GuiPreferences import PreferencesDialog
-    from bleachbit.GuiUtil import (clear_clipboard, get_font_size_from_name,
+    from bleachbit.GuiUtil import (WindowInfo, clear_clipboard, get_font_size_from_name,
                                    get_window_info)
     from bleachbit.GuiTreeModels import TreeDisplayModel
 
@@ -1217,6 +1217,25 @@ class GUITestCase(common.BleachbitTestCase):
                     self.assertEqual(options.get('window_width'), 640)
                     self.assertEqual(options.get('window_height'), 480)
                     flush.assert_called_once_with()
+
+    def test_restore_size_fits_monitor(self):
+        """A saved size larger than the monitor is shrunk to fit"""
+        gui = self.get_window()
+        options.set('remember_geometry', True)
+        options.set('window_fullscreen', False)
+        options.set('window_maximized', False)
+        options.set('window_x', 10)
+        options.set('window_y', 10)
+        options.set('window_width', 2450)
+        options.set('window_height', 1684)
+        # pylint: disable-next=possibly-used-before-assignment
+        info = WindowInfo(0, 0, 1280, 800, 'test')
+        with mock.patch('bleachbit.GuiWindow.get_window_info', return_value=info), \
+                mock.patch.object(gui, 'move'), \
+                mock.patch.object(gui, 'resize') as resize, \
+                mock.patch.object(gui, 'check_resize'):
+            gui.on_show(gui)
+        resize.assert_called_once_with(1280, 800)
 
     def test_unmaximize_restores_saved_size(self):
         """A maximized start must restore the remembered size"""

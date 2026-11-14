@@ -1485,6 +1485,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 "window_width"), options.get("window_height"))
 
             g = get_window_info(self)
+            # A size saved under another display scale may not fit
+            r.width = min(r.width, g.width)
+            r.height = min(r.height, g.height)
 
             # only restore position and size if window left corner
             # is within the closest monitor
