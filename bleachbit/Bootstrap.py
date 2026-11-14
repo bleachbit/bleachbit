@@ -43,15 +43,15 @@ def gdk_scale_environ(dpi):
 
     GTK 3 truncates dpi / 96 to an integer scale and draws text at the full
     DPI, so at 175% text is scaled but icons and sizes are not. Round the
-    scale instead (150% still rounds down) and give the rest to the fonts.
+    scale instead (150% still rounds down). From scale 2 GTK draws text at
+    96 DPI, so text and widgets scale together.
     """
     if not dpi:
         return {}
     scale = int(dpi / 96 + 0.49)
     if scale < 2:
         return {}
-    return {'GDK_SCALE': str(scale),
-            'GDK_WIN32_FONT_RESOLUTION': str(round(dpi / scale))}
+    return {'GDK_SCALE': str(scale)}
 
 
 def _apply_hidpi_scale():

@@ -26,11 +26,11 @@ class BootstrapTestCase(common.BleachbitTestCase):
             (96, {}),
             (120, {}),
             (144, {}),
-            (168, {'GDK_SCALE': '2', 'GDK_WIN32_FONT_RESOLUTION': '84'}),
-            (192, {'GDK_SCALE': '2', 'GDK_WIN32_FONT_RESOLUTION': '96'}),
-            (240, {'GDK_SCALE': '2', 'GDK_WIN32_FONT_RESOLUTION': '120'}),
-            (264, {'GDK_SCALE': '3', 'GDK_WIN32_FONT_RESOLUTION': '88'}),
-            (288, {'GDK_SCALE': '3', 'GDK_WIN32_FONT_RESOLUTION': '96'}),
+            (168, {'GDK_SCALE': '2'}),
+            (192, {'GDK_SCALE': '2'}),
+            (240, {'GDK_SCALE': '2'}),
+            (264, {'GDK_SCALE': '3'}),
+            (288, {'GDK_SCALE': '3'}),
         )
         for dpi, expected in tests:
             with self.subTest(dpi=dpi):
@@ -42,10 +42,12 @@ class BootstrapTestCase(common.BleachbitTestCase):
         clean = {k: v for k, v in os.environ.items() if k not in
                  ('GDK_SCALE', 'GDK_WIN32_FONT_RESOLUTION', 'GDK_WIN32_DISABLE_HIDPI')}
         with mock.patch.dict(os.environ, clean, clear=True), \
+                mock.patch('bleachbit.Bootstrap.gtk_default_scale', None), \
                 mock.patch('bleachbit.Windows.get_system_dpi', return_value=168):
             Bootstrap._apply_hidpi_scale()  # pylint: disable=protected-access
             self.assertEqual(os.environ['GDK_SCALE'], '2')
-            self.assertEqual(os.environ['GDK_WIN32_FONT_RESOLUTION'], '84')
+            self.assertNotIn('GDK_WIN32_FONT_RESOLUTION', os.environ)
+            self.assertEqual(Bootstrap.gtk_default_scale, 1)
         for var in ('GDK_SCALE', 'GDK_WIN32_FONT_RESOLUTION', 'GDK_WIN32_DISABLE_HIDPI'):
             with self.subTest(var=var), \
                     mock.patch.dict(os.environ, dict(clean, **{var: '1'}), clear=True), \
