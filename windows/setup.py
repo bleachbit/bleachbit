@@ -42,6 +42,7 @@ import bleachbit
 from setup import supported_languages
 from bleachbit.CleanerML import CleanerML
 from bleachbit.FileUtilities import children_in_directory
+from bleachbit.Windows import GDK_DLL
 from bleachbit.SystemInformation import get_version
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
@@ -627,6 +628,7 @@ def build():
     copy_file('windows\\bleachbit.ico', 'dist\\share\\bleachbit.ico')
     for dll in glob.glob('*.dll', root_dir=GTK_LIBDIR):
         copy_file(os.path.join(GTK_LIBDIR, dll), 'dist\\' + dll)
+    assert_exist(os.path.join('dist', GDK_DLL))
 
     # Copy share files
     copy_file('share\\app-menu.ui', 'dist\\share\\app-menu.ui')

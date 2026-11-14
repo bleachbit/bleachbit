@@ -591,7 +591,7 @@ class PreferencesDialog(InfoBarMixin):
             # TRANSLATORS: Title of a folder chooser dialog.
             title = _("Choose a folder")
             pathname = GuiBasic.browse_folder(
-                self.parent, title, multiple=False, stock_button=Gtk.STOCK_ADD)
+                self.dialog, title, multiple=False, stock_button=Gtk.STOCK_ADD)
             if pathname:
                 liststore.append([sanitize_surrogates(pathname)])
                 pathnames.append(pathname)
@@ -974,7 +974,7 @@ class PreferencesDialog(InfoBarMixin):
             """Callback for adding a file"""
             # TRANSLATORS: Title of a file chooser dialog.
             title = _("Choose a file")
-            pathname = GuiBasic.browse_file(self.parent, title)
+            pathname = GuiBasic.browse_file(self.dialog, title)
             if pathname:
                 self._add_path(pathname, 'file', page_type,
                                liststore, pathnames)
@@ -983,7 +983,7 @@ class PreferencesDialog(InfoBarMixin):
             """Callback for adding a folder"""
             # TRANSLATORS: Title of a folder chooser dialog.
             title = _("Choose a folder")
-            pathname = GuiBasic.browse_folder(self.parent, title,
+            pathname = GuiBasic.browse_folder(self.dialog, title,
                                               multiple=False, stock_button=Gtk.STOCK_ADD)
             if pathname:
                 self._add_path(pathname, 'folder', page_type,
