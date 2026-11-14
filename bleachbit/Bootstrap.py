@@ -36,6 +36,39 @@ def _apply_fontconfig_backend_preference():
         logger.debug('could not read the fontconfig backend preference: %s', e)
 
 
+def gdk_scale_environ(dpi):
+    """Return the GDK variables that scale the GUI to the given DPI
+
+    GTK 3 truncates dpi / 96 to an integer scale and draws text at the full
+    DPI, so at 175% text is scaled but icons and sizes are not. Round the
+    scale instead (150% still rounds down) and give the rest to the fonts.
+    """
+    if not dpi:
+        return {}
+    scale = int(dpi / 96 + 0.49)
+    if scale < 2:
+        return {}
+    return {'GDK_SCALE': str(scale),
+            'GDK_WIN32_FONT_RESOLUTION': str(round(dpi / scale))}
+
+
+def _apply_hidpi_scale():
+    """On Windows, set the GDK scale before Gtk opens the display"""
+    if any(var in os.environ for var in
+           ('GDK_SCALE', 'GDK_WIN32_FONT_RESOLUTION', 'GDK_WIN32_DISABLE_HIDPI')):
+        return
+    from bleachbit import Windows
+    try:
+        dpi = Windows.get_system_dpi()
+    except Exception as e:
+        logger.debug('could not get the system DPI: %s', e)
+        return
+    environ = gdk_scale_environ(dpi)
+    if environ:
+        logger.debug('DPI %s, setting %s', dpi, environ)
+    os.environ.update(environ)
+
+
 def check_wayland_and_root():
     """Check if Wayland is being used and root is not allowed.
 
@@ -92,6 +125,7 @@ def _bootstrap_windows():
     log_startup_time('Windows imported')
     Windows.setup_environment()
     log_startup_time('environment set up')
+    _apply_hidpi_scale()
 
     # Use our `font.conf` (see commit 3385952b37d78).
     os.environ.pop('FONTCONFIG_FILE', None)

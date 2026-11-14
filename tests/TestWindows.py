@@ -55,6 +55,7 @@ from bleachbit.Windows import (
     get_known_folder_path,
     get_recycle_bin,
     get_recycle_bin_metadata,
+    get_system_dpi,
     get_windows_system_paths,
     get_windows_version,
     elevate_privileges,
@@ -1562,6 +1563,13 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         t1 = get_sid_token_48()
         t2 = get_sid_token_48()
         self.assertEqual(t1, t2)
+
+    def test_get_system_dpi(self):
+        """get_system_dpi returns a DPI or None when the process is unaware"""
+        dpi = get_system_dpi()
+        if dpi is not None:
+            self.assertIsInstance(dpi, int)
+            self.assertGreaterEqual(dpi, 96)
 
     def test_get_windows_version(self):
         """Unit test for get_windows_version"""

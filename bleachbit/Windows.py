@@ -1453,6 +1453,51 @@ def set_environ(varname, path):
             'set_environ(%s, %s): exception when setting environment variable', varname, path)
 
 
+def get_system_dpi():
+    """Make the process system DPI aware and return the system DPI
+
+    GTK makes the same SetProcessDpiAwareness() call when it opens the
+    display. Returns None if the process stays DPI unaware, e.g. when the
+    compatibility setting forces it.
+    """
+    process_system_dpi_aware = 1
+    logpixelsx = 88
+    shcore = ctypes.WinDLL('shcore')
+    set_awareness = shcore.SetProcessDpiAwareness
+    set_awareness.argtypes = [ctypes.c_int]
+    set_awareness.restype = ctypes.HRESULT
+    get_awareness = shcore.GetProcessDpiAwareness
+    get_awareness.argtypes = [wintypes.HANDLE, ctypes.POINTER(ctypes.c_int)]
+    get_awareness.restype = ctypes.HRESULT
+    get_dc = _user32.GetDC
+    get_dc.argtypes = [wintypes.HWND]
+    get_dc.restype = wintypes.HDC
+    release_dc = _user32.ReleaseDC
+    release_dc.argtypes = [wintypes.HWND, wintypes.HDC]
+    release_dc.restype = ctypes.c_int
+    get_device_caps = _gdi32.GetDeviceCaps
+    get_device_caps.argtypes = [wintypes.HDC, ctypes.c_int]
+    get_device_caps.restype = ctypes.c_int
+
+    try:
+        set_awareness(process_system_dpi_aware)
+    except OSError as e:
+        # E_ACCESSDENIED: a manifest or compatibility setting decided already
+        logger.debug('SetProcessDpiAwareness: %s', e)
+    awareness = ctypes.c_int(0)
+    get_awareness(None, ctypes.byref(awareness))
+    if awareness.value == 0:
+        return None
+    hdc = get_dc(None)
+    if not hdc:
+        return None
+    try:
+        dpi = get_device_caps(hdc, logpixelsx)
+    finally:
+        release_dc(None, hdc)
+    return dpi if dpi > 0 else None
+
+
 def setup_environment():
     """Define any extra environment variables"""
 
