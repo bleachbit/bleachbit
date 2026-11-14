@@ -71,7 +71,7 @@ from bleachbit.FileUtilities import (
     is_hard_link,
     is_normal_directory,
 )
-from bleachbit.General import gc_collect, sudo_mode
+from bleachbit.General import gc_collect
 
 if bleachbit.IS_WINDOWS:
     import winreg
@@ -617,7 +617,7 @@ def have_root():
     """Return true if we have root privileges on POSIX systems"""
     if not bleachbit.IS_POSIX:
         return False
-    return sudo_mode() or os.getuid() == 0
+    return os.getuid() == 0
 
 
 def put_env(key, val):

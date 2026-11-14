@@ -243,6 +243,12 @@ def get_real_username():
     """
     if not IS_POSIX:
         raise RuntimeError('get_real_username() requires POSIX')
+    if os.getuid() != 0:
+        import pwd
+        try:
+            return pwd.getpwuid(os.getuid()).pw_name
+        except KeyError:
+            return str(os.getuid())
     sudo_user = os.getenv('SUDO_USER')
     if sudo_user:
         return sudo_user
@@ -280,6 +286,8 @@ def get_real_uid():
 
     if not IS_POSIX:
         raise RuntimeError('get_real_uid() requires POSIX')
+    if os.getuid() != 0:
+        return os.getuid()
 
     sudo_uid = os.getenv('SUDO_UID')
     if sudo_uid:
@@ -584,7 +592,7 @@ def sudo_mode():
         # Fedora 13: os.getenv('USER') = 'root' under sudo
         # return False
 
-    return os.getenv('SUDO_UID') is not None
+    return os.geteuid() == 0 and os.getenv('SUDO_UID') is not None
 
 
 def unset_sslkeylogfile(use_logger):
