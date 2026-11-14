@@ -22,19 +22,27 @@ class BootstrapTestCase(common.BleachbitTestCase):
     def test_gdk_scale_environ(self):
         """Scale rounds to the nearest integer, 150% rounds down"""
         tests = (
-            (None, {}),
-            (96, {}),
-            (120, {}),
-            (144, {}),
-            (168, {'GDK_SCALE': '2'}),
-            (192, {'GDK_SCALE': '2'}),
-            (240, {'GDK_SCALE': '2'}),
-            (264, {'GDK_SCALE': '3'}),
-            (288, {'GDK_SCALE': '3'}),
+            (None, 2160, {}),
+            (96, 2160, {}),
+            (120, 2160, {}),
+            (144, 2160, {}),
+            (168, 2160, {'GDK_SCALE': '2'}),
+            (192, 2160, {'GDK_SCALE': '2'}),
+            (240, 2160, {'GDK_SCALE': '2'}),
+            (264, 2160, {'GDK_SCALE': '3'}),
+            (288, 2160, {'GDK_SCALE': '3'}),
+            # rounding up only where 600 logical pixels still fit
+            (168, 1200, {'GDK_SCALE': '2'}),
+            (168, 1080, {}),
+            (168, None, {}),
+            (264, 1800, {'GDK_SCALE': '3'}),
+            (264, 1700, {}),
+            (192, 1080, {'GDK_SCALE': '2'}),
         )
-        for dpi, expected in tests:
-            with self.subTest(dpi=dpi):
-                self.assertEqual(Bootstrap.gdk_scale_environ(dpi), expected)
+        for dpi, height, expected in tests:
+            with self.subTest(dpi=dpi, height=height):
+                actual = Bootstrap.gdk_scale_environ(dpi, height)
+                self.assertEqual(actual, expected)
 
     @common.skipUnlessWindows
     def test_apply_hidpi_scale(self):
@@ -43,7 +51,8 @@ class BootstrapTestCase(common.BleachbitTestCase):
                  ('GDK_SCALE', 'GDK_WIN32_FONT_RESOLUTION', 'GDK_WIN32_DISABLE_HIDPI')}
         with mock.patch.dict(os.environ, clean, clear=True), \
                 mock.patch('bleachbit.Bootstrap.gtk_default_scale', None), \
-                mock.patch('bleachbit.Windows.get_system_dpi', return_value=168):
+                mock.patch('bleachbit.Windows.get_system_dpi', return_value=168), \
+                mock.patch('bleachbit.Windows.get_screen_height', return_value=1600):
             Bootstrap._apply_hidpi_scale()  # pylint: disable=protected-access
             self.assertEqual(os.environ['GDK_SCALE'], '2')
             self.assertNotIn('GDK_WIN32_FONT_RESOLUTION', os.environ)

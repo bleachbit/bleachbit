@@ -1498,6 +1498,18 @@ def get_system_dpi():
     return dpi if dpi > 0 else None
 
 
+def get_screen_height():
+    """Return the primary screen height in pixels
+
+    The process must be DPI aware, or Windows reports a scaled-down height.
+    """
+    sm_cyscreen = 1
+    get_metrics = _user32.GetSystemMetrics
+    get_metrics.argtypes = [ctypes.c_int]
+    get_metrics.restype = ctypes.c_int
+    return get_metrics(sm_cyscreen)
+
+
 def setup_environment():
     """Define any extra environment variables"""
 
