@@ -623,6 +623,9 @@ def build():
         'dist', schemas_dir, 'gschemas.compiled')
     copy_file(gschemas_compiled_src, gschemas_compiled_dst)
     copy_file('bleachbit.png', 'dist\\share\\bleachbit.png')
+    # A themed icon follows the display scale in the About dialog
+    copy_file('bleachbit.png',
+              'dist\\share\\icons\\hicolor\\256x256\\apps\\bleachbit.png')
     # bleachbit.ico is used the for pop-up notification.
     copy_file('windows\\bleachbit.ico', 'dist\\share\\bleachbit.ico')
     for dll in glob.glob('*.dll', root_dir=GTK_LIBDIR):
@@ -732,6 +735,7 @@ def delete_icons():
     # emblem-readonly is an exception: it is requested by name in
     # GuiPreferences.py and has no GTK built-in equivalent.
     icon_keep_list = [
+        'bleachbit.png',  # About dialog logo
         'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',

@@ -447,6 +447,9 @@ class GUITestCase(common.BleachbitTestCase):
     def test_about(self):
         """Opens the about dialog and closes it"""
         about = self.app.get_about_dialog()
+        if about.get_logo_icon_name() != 'bleachbit' and about.get_logo() is not None:
+            # a pixbuf logo is not scaled for HiDPI, so keep it small
+            self.assertEqual(about.get_logo().get_width(), 128)
         about.show_all()
         self.refresh_gui()
 
