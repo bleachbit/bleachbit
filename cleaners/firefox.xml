@@ -13,6 +13,7 @@ later.  See the COPYING file in the top-level directory.
   <description>Web browser</description>
   <running type="exe" os="unix" same_user="true">firefox</running>
   <running type="exe" os="unix" same_user="true">firefox-bin</running>
+  <running type="exe" os="unix" same_user="true">firefox-esr</running>
   <running type="exe" os="windows" same_user="true">firefox.exe</running>
   <running type="exe" os="macos" same_user="true">firefox</running>
   <running type="pathname">~/.mozilla/firefox/*/lock</running>
@@ -53,8 +54,11 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="~/.var/app/org.mozilla.firefox/cache/mozilla/"/>
     <action command="delete" search="walk.all" path="~/Library/Caches/Firefox/Profiles/*/" os="macos"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2.*.purge.bg_rm"/>
+    <action command="delete" search="glob" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2.*.purge.bg_rm"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\OfflineCache"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\startupCache"/>
     <!--
 This file no longer exists in Firefox <=62
 
