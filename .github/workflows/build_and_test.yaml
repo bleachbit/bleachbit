@@ -78,7 +78,7 @@ jobs:
             pygobject-*-win32.whl
             nsis-*-setup.exe
             advancecomp.zip
-          key: win-build-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/install-build-tools.ps1', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
+          key: win-build-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/install-build-tools.ps1', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'windows/requirements-pip.txt') }}
 
       - name: Cache pip packages
         # Skipped for tags: requirements are version-pinned but not hash-pinned,

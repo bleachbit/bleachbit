@@ -149,8 +149,9 @@ if (-not $python_exists) {
     Write-Host "Checking pip version"
     & "$python_home\Scripts\pip3.exe" --version  # show pip version
 
+    # ensurepip gives the pip bundled with this Python; the pinned one is tracked by Dependabot
     Write-Host "Updating pip..."
-    & "$python_home\python.exe" -m pip install --disable-pip-version-check --upgrade pip
+    & "$python_home\python.exe" -m pip install --disable-pip-version-check --upgrade -r "$script_dir\requirements-pip.txt"
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Failed to update pip: exit code $LASTEXITCODE"
         exit $LASTEXITCODE

@@ -200,7 +200,7 @@ jobs:
             vcpkg_installed
           # No workflow file in the key: editing the Linux jobs would
           # bust it, and the test deps install below runs on every hit anyway
-          key: win-test-env-${{ hashFiles('windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+          key: win-test-env-${{ hashFiles('windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'windows/requirements-pip.txt', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
 
       - name: Cache pip packages
         # zizmor: ignore[cache-poisoning] test-only job, windows-deploy ships windows-build output

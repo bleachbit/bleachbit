@@ -27,6 +27,7 @@ $ErrorActionPreference = "Stop"
 $msys_exe_fn = "msys2-base-x86_64-20250830.sfx.exe"
 $msys_exe_full_path = Join-Path -Path (Get-Location) -ChildPath $msys_exe_fn
 $msys_exe_url = "https://github.com/msys2/msys2-installer/releases/download/2025-08-30/$msys_exe_fn"
+$msys_exe_sha256 = "1f27d95ca3943272e16102029e6433608cb204068ac9456a510d069be0c02eeb"
 $msys_root = ".\msys64"
 if (-not (Test-Path $msys_exe_full_path)) {
     Write-Host "Downloading MSYS2 from $msys_exe_url..."
@@ -36,8 +37,13 @@ if (-not (Test-Path $msys_exe_full_path)) {
 }
 $fileSizeMB = (Get-Item $msys_exe_full_path).Length
 Write-Host "File size: $($fileSizeMB.ToString('N0')) bytes"
-$fileHash = Get-FileHash -Path $msys_exe_full_path -Algorithm SHA256
-Write-Host "File hash: $($fileHash.Hash)"
+$fileHash = (Get-FileHash -Path $msys_exe_full_path -Algorithm SHA256).Hash
+Write-Host "File hash: $fileHash"
+if ($fileHash -ine $msys_exe_sha256) {
+    # Otherwise every rerun skips the download and fails the same way
+    Remove-Item $msys_exe_full_path -ErrorAction SilentlyContinue
+    throw "SHA256 mismatch for ${msys_exe_fn}: expected $msys_exe_sha256, got $fileHash"
+}
 
 #$msys_root_install = Join-Path ("$msys_root", "..").Path |  Resolve-Path
 $msys_root_install = (Resolve-Path (Split-Path $msys_root -Parent)).Path
