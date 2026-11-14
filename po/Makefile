@@ -129,8 +129,8 @@ install: $(MOFILES)
 	for MO in $(MOFILES); do \
 		lang=`basename $$MO .mo`; \
 		DST=$(DESTDIR)/usr/share/locale/$$lang/LC_MESSAGES/; \
-		mkdir -p $$DST; \
-		cp $$MO $$DST/bleachbit.mo; \
+		test -d $$DST || (umask 022 && install -d -m 755 $$DST); \
+		install -m 644 $$MO $$DST/bleachbit.mo; \
 	done
 
 tests: require-gettext
