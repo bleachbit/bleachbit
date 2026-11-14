@@ -488,8 +488,12 @@ class System(Cleaner):
             fname = os.path.expandvars('$windir\\memory.dmp')
             if os.path.exists(fname):
                 yield Command.Delete(fname)
-            for fname in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
-                yield Command.Delete(fname)
+            for pattern in ('$windir\\Minidump\\*.dmp',
+                            '$windir\\LiveKernelReports\\*.dmp',
+                            '$windir\\LiveKernelReports\\*\\*.dmp',
+                            '$localappdata\\CrashDumps\\*.dmp'):
+                for fname in glob.iglob(os.path.expandvars(pattern)):
+                    yield Command.Delete(fname)
 
         # most recently used documents list
         if IS_POSIX and 'recent_documents' == option_id:
