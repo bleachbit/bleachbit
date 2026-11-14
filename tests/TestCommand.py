@@ -203,6 +203,28 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertEqual(ret['label'], _('Mark for deletion'))
         self.assertIn(UserWarning, [w.category for w in caught])
 
+    def test_Delete_locked_without_shred(self):
+        """A locked file is labeled as marked for deletion without shredding too"""
+        path = os.path.join(self.mkdtemp(), 'locked')
+        self.write_file(path, b'foo')
+        if IS_WINDOWS:
+            locked = PermissionError(errno.EACCES, 'locked', path)
+            locked.winerror = 32
+        else:
+            # pylint: disable-next=possibly-used-before-assignment
+            locked = WindowsError(32, 'locked')
+        options.set('shred', False)
+        with mock.patch('bleachbit.FileUtilities.delete', side_effect=locked), \
+                mock.patch.object(bleachbit.Command, 'bleachbit', mock.Mock(),
+                                  create=True) as fake_bleachbit, \
+                warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            ret = next(Delete(path).execute(really_delete=True))
+        fake_bleachbit.Windows.delete_locked_file.assert_called_once_with(
+            FileUtilities.extended_path(path))
+        self.assertEqual(ret['label'], _('Mark for deletion'))
+        self.assertNotIn(UserWarning, [w.category for w in caught])
+
     def test_Delete_locked_extended_path(self):
         """A locked file is flagged for deletion by the same extended
         path that delete() uses, so a long path is found"""

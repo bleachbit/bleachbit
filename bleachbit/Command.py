@@ -125,9 +125,9 @@ class Delete:
                         _('At least one file was locked by another process, '
                           'so its contents could not be overwritten. '
                           'It will be marked for deletion upon system reboot.'))
-                    # TRANSLATORS: Label in the log when the file will be deleted
-                    # when the system reboots. 'Mark' is a verb.
-                    ret['label'] = _('Mark for deletion')
+                # TRANSLATORS: Label in the log when the file will be deleted
+                # when the system reboots. 'Mark' is a verb.
+                ret['label'] = _('Mark for deletion')
             else:
                 if not deleted:
                     ret['n_deleted'] = 0
