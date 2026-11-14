@@ -22,6 +22,8 @@ later.  See the COPYING file in the top-level directory.
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="file" path="%WinDir%\Temp\MpCmdRun.log"/>
+    <action command="delete" search="file" path="%WinDir%\ServiceProfiles\LocalService\AppData\Local\Temp\MpCmdRun.log"/>
+    <action command="delete" search="file" path="%WinDir%\ServiceProfiles\NetworkService\AppData\Local\Temp\MpCmdRun.log"/>
     <action command="delete" search="file" path="%WinDir%\Temp\MpSigStub.log"/>
     <!-- Definition updates -->
     <action command="delete" search="file" path="%WinDir%\SoftwareDistribution\Download\Install\mpas-d.exe"/>
