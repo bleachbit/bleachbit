@@ -121,7 +121,7 @@ class InitTestCase(common.BleachbitTestCase):
                       getattr(bleachbit, '__icons'))
 
     def test_exe_manifest(self):
-        """The Windows exe manifest declares Windows 10 and runs as invoker"""
+        """The Windows exe manifest declares Windows 10, invoker, long paths"""
         import xml.etree.ElementTree as ET
         path = os.path.join(os.path.dirname(os.path.dirname(
             os.path.abspath(__file__))), 'windows', 'bleachbit.manifest')
@@ -132,6 +132,9 @@ class InitTestCase(common.BleachbitTestCase):
         levels = [e.get('level') for e in root.iter(
             '{urn:schemas-microsoft-com:asm.v3}requestedExecutionLevel')]
         self.assertEqual(levels, ['asInvoker'])
+        long_paths = [e.text for e in root.iter(
+            '{http://schemas.microsoft.com/SMI/2016/WindowsSettings}longPathAware')]
+        self.assertEqual(long_paths, ['true'])
 
     def test_stdout_encoding_frozen_console(self):
         """A frozen console build uses the encoding of a redirected stdout"""
