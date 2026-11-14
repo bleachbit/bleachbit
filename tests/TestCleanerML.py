@@ -21,11 +21,13 @@ from bleachbit import Cleaner
 from bleachbit.CleanerML import (
     CleanerML,
     boolstr_to_bool,
+    cleaner_applies_to,
     create_pot,
     default_vars,
     list_cleanerml_files,
     load_cleaners,
-    pot_fragment)
+    pot_fragment,
+    prune_cleaners)
 from bleachbit.General import os_match as general_os_match
 from bleachbit.Options import options
 from bleachbit.Process import ProcessInfo, process_cache
@@ -435,6 +437,78 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                          xmlcleaner.cleaner.options['opt'][1])
         commands = list(xmlcleaner.cleaner.get_commands('opt'))
         self.assertEqual(0, len(commands))
+
+    def test_cleaner_applies_to(self):
+        """Unit test for cleaner_applies_to()"""
+        # bundled cleaners: the cleaner-level os attribute is not always
+        # literally the platform, which the old grep in the Makefile missed
+        tests = (
+            ('chromium.xml', {'linux': True, 'win32': True, 'darwin': True}),
+            ('safari.xml', {'linux': False, 'win32': False, 'darwin': True}),
+            ('teamviewer.xml',
+             {'linux': False, 'win32': True, 'darwin': True}),
+            ('windows_explorer.xml',
+             {'linux': False, 'win32': True, 'darwin': False}),
+            # no <action>, the <localizations> element adds one on POSIX
+            ('localizations.xml',
+             {'linux': True, 'win32': False, 'darwin': False,
+              'freebsd14': True}),
+        )
+        for fn, expected in tests:
+            for platform, applies in expected.items():
+                self.assertEqual(
+                    cleaner_applies_to(os.path.join('cleaners', fn), platform),
+                    applies, f'{fn} on {platform}')
+
+        # the os attribute on options and actions counts, too
+        base = self.mkdtemp(prefix='bleachbit-cleanerml-applies')
+        xml_str = """<?xml version="1.0" encoding="UTF-8"?>
+<cleaner id="test"{cleaner_os}>
+  <label>Test</label>
+  <description>Test</description>
+  <option id="opt"{option_os}>
+    <label>Test</label>
+    <description>Test</description>
+    <action command="delete" search="file" path="~/.cache/foo"{action_os}/>
+  </option>
+</cleaner>"""
+        tests = (
+            ('', '', '', {'linux': True, 'win32': True}),
+            (' os="windows"', '', '', {'linux': False, 'win32': True}),
+            ('', ' os="windows"', '', {'linux': False, 'win32': True}),
+            ('', '', ' os="windows"', {'linux': False, 'win32': True}),
+            ('', '', ' os="unix,!macos"',
+             {'linux': True, 'win32': False, 'darwin': False}),
+        )
+        fn = os.path.join(base, 'test.xml')
+        for cleaner_os, option_os, action_os, expected in tests:
+            self.write_file(fn, text=xml_str.format(
+                cleaner_os=cleaner_os, option_os=option_os,
+                action_os=action_os))
+            for platform, applies in expected.items():
+                self.assertEqual(
+                    cleaner_applies_to(fn, platform), applies,
+                    f'{cleaner_os}{option_os}{action_os} on {platform}')
+
+        fn = os.path.join(base, 'empty.xml')
+        self.write_file(fn, text='<?xml version="1.0"?><nothing/>')
+        with self.assertRaises(ValueError):
+            cleaner_applies_to(fn, 'linux')
+
+    def test_prune_cleaners(self):
+        """Unit test for prune_cleaners()"""
+        base = self.mkdtemp(prefix='bleachbit-cleanerml-prune')
+        for fn in ('chromium.xml', 'safari.xml', 'windows_explorer.xml'):
+            shutil.copy(os.path.join('cleaners', fn), base)
+        # non-XML files are left alone
+        readme = os.path.join(base, 'README.txt')
+        self.write_file(readme, text='not a cleaner')
+        deleted = prune_cleaners(base, 'linux')
+        self.assertEqual(deleted, [os.path.join(base, 'safari.xml'),
+                                   os.path.join(base, 'windows_explorer.xml')])
+        self.assertEqual(sorted(os.listdir(base)),
+                         ['README.txt', 'chromium.xml'])
+        self.assertEqual(prune_cleaners(base, 'linux'), [])
 
     def test_os_match(self):
         """Unit test for os_match"""
