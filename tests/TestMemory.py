@@ -119,9 +119,7 @@ class MemoryTestCase(common.BleachbitTestCase):
         if not exe_exists(General.resolve_exe('swapon')):
             self.skipTest('swapon not found')
         ret = get_proc_swaps()
-        with open('/proc/swaps', encoding='utf-8') as f:
-            have_swap = len(f.read().splitlines()) > 1
-        if not have_swap and not ret:
+        if not count_swap_linux() and not ret:
             # swapon -s prints nothing when no swap is active
             return
         self.assertGreater(len(ret), 10)
@@ -148,6 +146,16 @@ class MemoryTestCase(common.BleachbitTestCase):
         n_swaps = count_swap_linux()
         self.assertIsInteger(n_swaps)
         self.assertTrue(0 <= n_swaps < 10)
+
+    @common.skipUnlessLinux
+    def test_no_proc_swaps(self):
+        """A kernel without swap support has no /proc/swaps"""
+        with mock.patch('bleachbit.Memory.open', create=True,
+                        side_effect=FileNotFoundError):
+            self.assertEqual(count_swap_linux(), 0)
+            with mock.patch('bleachbit.General.run_external',
+                            return_value=(1, '', 'swapon: failed')):
+                self.assertEqual(get_proc_swaps(), '')
 
     @common.skipIfWindows
     def test_physical_free_darwin(self):
@@ -234,10 +242,10 @@ Swapouts:                              20258188.
         """Test for get_swap_size_linux()"""
         if not exe_exists(General.resolve_exe('swapon')):
             self.skipTest('swapon not found')
+        if 0 == count_swap_linux():
+            self.skipTest('no active swap device detected')
         with open('/proc/swaps', encoding='utf-8') as f:
             swapdev = f.read().split('\n')[1].split(' ')[0]
-        if 0 == len(swapdev):
-            self.skipTest('no active swap device detected')
         size = get_swap_size_linux(swapdev)
         self.assertIsInteger(size)
         self.assertGreater(size, 1024 ** 2)
