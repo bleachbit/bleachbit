@@ -2715,7 +2715,7 @@ State=AAAA/wA...
             self.assertFalse(whitelisted('/home/keep/folder/child'))
             self.assertEqual(
                 2, spelling.call_args_list.count(unittest.mock.call(keep)))
-            options.set_whitelist_paths([('folder', '')])
+            options.set_whitelist_paths([('folder', '/home/elsewhere')])
             self.assertTrue(whitelisted('/home/elsewhere'))
             self.assertFalse(whitelisted('relative/path'))
             options.set_whitelist_paths([])
