@@ -94,6 +94,7 @@ clean:
 
 clean-appimage:
 	@rm -rf "$(APPIMAGE_APPDIR)"
+	@rm -f $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	@rm -f BleachBit-*.AppImage
 
 install:
@@ -338,8 +339,10 @@ $(LINUXDEPLOY_GTK_PLUGIN):
 appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	@echo "* Building AppImage: $(APPIMAGE_OUTPUT)"
 	# The rules above run only when the files are missing
-	echo "$(LINUXDEPLOY_SHA256)  $(LINUXDEPLOY)" | sha256sum -c
-	echo "$(LINUXDEPLOY_GTK_PLUGIN_SHA256)  $(LINUXDEPLOY_GTK_PLUGIN)" | sha256sum -c
+	echo "$(LINUXDEPLOY_SHA256)  $(LINUXDEPLOY)" | sha256sum -c || \
+		{ rm -f $(LINUXDEPLOY); exit 1; }
+	echo "$(LINUXDEPLOY_GTK_PLUGIN_SHA256)  $(LINUXDEPLOY_GTK_PLUGIN)" | sha256sum -c || \
+		{ rm -f $(LINUXDEPLOY_GTK_PLUGIN); exit 1; }
 	# Clean previous build
 	rm -rf "$(APPIMAGE_APPDIR)"
 	# Build translations (.mo files)
