@@ -633,6 +633,37 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         from bleachbit.FileUtilities import delete
         delete(obexd_fn, ignore_missing=True)
 
+    @common.skipUnlessWindows
+    def test_system_cache_windows(self):
+        """Windows cache deletes files only and never through a junction"""
+        localappdata = self.mkdtemp()
+        shader_dir = os.path.join(
+            localappdata, 'D3DSCache', 'bed3ea9b918cad5d')
+        os.makedirs(shader_dir)
+        shader_file = self.write_file(os.path.join(shader_dir, 'a.dxcache'))
+        temp_state = os.path.join(
+            localappdata, 'Packages',
+            'MicrosoftWindows.Client.CBS_cw5n1h2txyewy', 'TempState')
+        os.makedirs(os.path.join(temp_state, 'sub'))
+        temp_file = self.write_file(
+            os.path.join(temp_state, 'SettingsCache.txt'))
+        self.write_file(os.path.join(temp_state, 'sub', 'nested.txt'))
+        target = self.mkdtemp()
+        target_file = self.write_file(os.path.join(target, 'victim.txt'))
+        self._create_win_junction(target, os.path.join(temp_state, 'link'))
+        self._create_win_junction(
+            target, os.path.join(localappdata, 'D3DSCache', 'link'))
+
+        with mock.patch.dict(os.environ, {'LOCALAPPDATA': localappdata}):
+            cmds = list(System().get_commands('cache'))
+        self.assertEqual(sorted(cmd.path for cmd in cmds),
+                         sorted([shader_file, temp_file]))
+        for cmd in cmds:
+            list(cmd.execute(True))
+        self.assertNotExists(shader_file)
+        self.assertNotExists(temp_file)
+        self.assertExists(target_file)
+
     @common.skipIfWindows
     def test_system_cache_mount_point(self):
         """System cache neither walks nor deletes a mount point below it"""
@@ -855,7 +886,7 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         from bleachbit.GtkShim import gtk_may_be_available
 
         cases = (
-            ('cache', IS_POSIX),
+            ('cache', IS_POSIX or IS_WINDOWS),
             ('clipboard', IS_WINDOWS or gtk_may_be_available()),
             ('custom', True),
             ('desktop_entry', IS_POSIX and not IS_MAC),
