@@ -331,18 +331,25 @@ class Ini(ConfigFile):
 
 class Json(ConfigFile):
 
-    """Remove a key from a JSON configuration file"""
+    """Remove keys from a JSON configuration file"""
 
     def __init__(self, path, address):
         """Create the instance"""
         self.path = path
-        self.address = address
+        self.addresses = [address]
 
     def __str__(self):
-        return f'Command to clean JSON file, path={self.path}, address={self.address} '
+        return f'Command to clean JSON file, path={self.path}, addresses={self.addresses} '
+
+    def merge(self, other):
+        """Take over the keys of another command for the same file"""
+        if other.path != self.path:
+            raise ValueError(
+                f'cannot merge {other.path!r} into {self.path!r}')
+        self.addresses.extend(other.addresses)
 
     def _clean(self):
-        FileUtilities.clean_json(self.path, self.address)
+        FileUtilities.clean_json(self.path, self.addresses)
 
 
 class Shred(Delete):

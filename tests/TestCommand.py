@@ -299,3 +299,12 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertEqual(ret['path'], path)
         self.assertExists(path)
         self.assertEqual(os.path.getsize(path), 0)
+
+    def test_Json_merge(self):
+        """Json.merge() takes the keys of the same file and refuses another"""
+        cmd = bleachbit.Command.Json('/a/Preferences', 'x')
+        cmd.merge(bleachbit.Command.Json('/a/Preferences', 'y/z'))
+        self.assertEqual(cmd.addresses, ['x', 'y/z'])
+        with self.assertRaises(ValueError):
+            cmd.merge(bleachbit.Command.Json('/b/Preferences', 'w'))
+        self.assertEqual(cmd.addresses, ['x', 'y/z'])
