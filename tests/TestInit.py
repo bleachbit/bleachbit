@@ -120,6 +120,19 @@ class InitTestCase(common.BleachbitTestCase):
         self.assertIn(prefix + '/share/pixmaps/bleachbit.png',
                       getattr(bleachbit, '__icons'))
 
+    def test_exe_manifest(self):
+        """The Windows exe manifest declares Windows 10 and runs as invoker"""
+        import xml.etree.ElementTree as ET
+        path = os.path.join(os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__))), 'windows', 'bleachbit.manifest')
+        root = ET.parse(path).getroot()
+        compat = '{urn:schemas-microsoft-com:compatibility.v1}'
+        ids = [e.get('Id') for e in root.iter(compat + 'supportedOS')]
+        self.assertIn('{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}', ids)
+        levels = [e.get('level') for e in root.iter(
+            '{urn:schemas-microsoft-com:asm.v3}requestedExecutionLevel')]
+        self.assertEqual(levels, ['asInvoker'])
+
     def test_stdout_encoding_frozen_console(self):
         """A frozen console build uses the encoding of a redirected stdout"""
         script = '''
