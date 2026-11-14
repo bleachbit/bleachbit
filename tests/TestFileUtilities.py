@@ -2214,13 +2214,17 @@ State=AAAA/wA...
         dirname = self.mkdtemp(prefix='bleachbit-test-getsizedir-vanished')
         real_fn = os.path.join(dirname, 'real')
         self.write_file(real_fn, contents=b'0123456789')
-        expected = getsize(real_fn)
-        self.assertGreater(expected, 0)
+
+        # Some file systems, such as wslfs, report no allocated blocks
+        def getsize_real_10(path):
+            return 10 if path == real_fn else getsize(path)
 
         ghost_fn = os.path.join(dirname, 'ghost')
-        with unittest.mock.patch('bleachbit.FileUtilities.children_in_directory',
-                                 return_value=iter([real_fn, ghost_fn])):
-            self.assertEqual(getsizedir(dirname), expected)
+        with unittest.mock.patch('bleachbit.FileUtilities.getsize',
+                                 side_effect=getsize_real_10), \
+                unittest.mock.patch('bleachbit.FileUtilities.children_in_directory',
+                                    return_value=iter([real_fn, ghost_fn])):
+            self.assertEqual(getsizedir(dirname), 10)
 
         # Other errors must still propagate
         with unittest.mock.patch('bleachbit.FileUtilities.getsize',
@@ -2566,7 +2570,7 @@ State=AAAA/wA...
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
-        path = os.path.join(self.tempdir, 'bleachbit_test_vacuum.sqlite3')
+        path = os.path.join(self.mkdtemp(), 'bleachbit_test_vacuum.sqlite3')
         conn = sqlite3.connect(path)
         # Use in-memory journal to avoid creating a transient
         # file that could trigger TOCTOU error in parallel tests.
@@ -2575,7 +2579,8 @@ State=AAAA/wA...
         conn.execute('PRAGMA journal_mode=memory')
         conn.execute('create table numbers (number)')
         conn.commit()
-        empty_size = getsize(path)
+        # Allocated blocks may stay after VACUUM, as on wslfs
+        empty_size = os.path.getsize(path)
 
         def number_generator():
             for x in range(1, 10000):
@@ -2583,13 +2588,13 @@ State=AAAA/wA...
         conn.executemany(
             'insert into numbers (number) values ( ? ) ', number_generator())
         conn.commit()
-        self.assertLess(empty_size, getsize(path))
+        self.assertLess(empty_size, os.path.getsize(path))
         conn.execute('delete from numbers')
         conn.commit()
         conn.close()
 
         vacuum_sqlite3(path)
-        self.assertEqual(empty_size, getsize(path))
+        self.assertEqual(empty_size, os.path.getsize(path))
 
         gc_collect()
         delete(path)
