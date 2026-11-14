@@ -1218,24 +1218,42 @@ class GUITestCase(common.BleachbitTestCase):
                     self.assertEqual(options.get('window_height'), 480)
                     flush.assert_called_once_with()
 
-    def test_restore_size_fits_monitor(self):
-        """A saved size larger than the monitor is shrunk to fit"""
+    def test_restore_geometry_fits_monitor(self):
+        """Saved geometry follows a scale change and stays on the monitor"""
         gui = self.get_window()
         options.set('remember_geometry', True)
         options.set('window_fullscreen', False)
         options.set('window_maximized', False)
-        options.set('window_x', 10)
-        options.set('window_y', 10)
-        options.set('window_width', 2450)
-        options.set('window_height', 1684)
         # pylint: disable-next=possibly-used-before-assignment
-        info = WindowInfo(0, 0, 1280, 800, 'test')
-        with mock.patch('bleachbit.GuiWindow.get_window_info', return_value=info), \
-                mock.patch.object(gui, 'move'), \
-                mock.patch.object(gui, 'resize') as resize, \
-                mock.patch.object(gui, 'check_resize'):
-            gui.on_show(gui)
-        resize.assert_called_once_with(1280, 800)
+        info = WindowInfo(0, 0, 1806, 939, 'test')
+        # saved under scale 1, the monitor is now at scale 2
+        tests = (
+            ({'window_scale': 1}, None, (420, 170), (965, 678)),
+            ({}, 1, (420, 170), (965, 678)),
+            # unknown scale: only shrunk and moved onto the work area
+            ({}, None, (0, 0), (1806, 899)),
+            ({'window_scale': 0}, None, (0, 0), (1806, 899)),
+        )
+        for saved, default_scale, pos, size in tests:
+            with self.subTest(saved=saved, default_scale=default_scale):
+                options.set('window_x', 840)
+                options.set('window_y', 339)
+                options.set('window_width', 1930)
+                options.set('window_height', 1357)
+                if options.has_option('window_scale'):
+                    options.config.remove_option('bleachbit', 'window_scale')
+                for key, value in saved.items():
+                    options.set(key, value)
+                with mock.patch('bleachbit.GuiWindow.get_window_info', return_value=info), \
+                        mock.patch.object(gui, '_get_workarea', return_value=(0, 0, 1806, 899)), \
+                        mock.patch.object(gui, 'get_scale_factor', return_value=2), \
+                        mock.patch('bleachbit.Bootstrap.gtk_default_scale', default_scale), \
+                        mock.patch.object(gui, 'move') as move, \
+                        mock.patch.object(gui, 'resize') as resize, \
+                        mock.patch.object(gui, 'check_resize'):
+                    gui.on_show(gui)
+                move.assert_called_once_with(*pos)
+                resize.assert_called_once_with(*size)
 
     def test_unmaximize_restores_saved_size(self):
         """A maximized start must restore the remembered size"""

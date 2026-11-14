@@ -17,6 +17,8 @@ from bleachbit import IS_POSIX, IS_WINDOWS, logger, log_startup_time
 
 # pylint: disable=invalid-name
 _bootstrapped = False
+# The scale GTK would have picked if _apply_hidpi_scale() overrode it
+gtk_default_scale = None
 
 _PYTHON_DLL_RE = re.compile(r'python\d+\.dll$', re.IGNORECASE)
 
@@ -66,6 +68,8 @@ def _apply_hidpi_scale():
     environ = gdk_scale_environ(dpi)
     if environ:
         logger.debug('DPI %s, setting %s', dpi, environ)
+        global gtk_default_scale  # pylint: disable=global-statement
+        gtk_default_scale = max(1, dpi // 96)
     os.environ.update(environ)
 
 

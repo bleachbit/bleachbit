@@ -202,6 +202,28 @@ def get_window_info(window):
     return WindowInfo(geo.x, geo.y, geo.width, geo.height, monitor_model)
 
 
+def rescale_geometry(geometry, saved_scale, scale):
+    """Convert a saved (x, y, width, height) to the current scale
+
+    GTK geometry is in logical pixels, so a size saved under scale 1 is
+    twice as large on screen under scale 2.
+    """
+    if saved_scale == scale:
+        return tuple(geometry)
+    return tuple(round(v * saved_scale / scale) for v in geometry)
+
+
+def fit_geometry(geometry, area):
+    """Shrink and move (x, y, width, height) to fit in area"""
+    x, y, width, height = geometry
+    area_x, area_y, area_width, area_height = area
+    width = max(1, min(width, area_width))
+    height = max(1, min(height, area_height))
+    x = max(area_x, min(x, area_x + area_width - width))
+    y = max(area_y, min(y, area_y + area_height - height))
+    return x, y, width, height
+
+
 def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
     """Return True if the widget background is dark, False if light, None on failure."""
     threshold = 0.45
