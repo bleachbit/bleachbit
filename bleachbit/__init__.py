@@ -327,7 +327,7 @@ __icons = (
     '/usr/local/share/pixmaps/bleachbit.png',
     # Windows
     os.path.normpath(os.path.join(bleachbit_exe_path,
-                                  'share\\bleachbit.png')),
+                                  'share\\icons\\hicolor\\256x256\\apps\\bleachbit.png')),
     # When running from source (i.e., not installed).
     os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')),
 )

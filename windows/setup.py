@@ -622,8 +622,7 @@ def build():
     gschemas_compiled_dst = os.path.join(
         'dist', schemas_dir, 'gschemas.compiled')
     copy_file(gschemas_compiled_src, gschemas_compiled_dst)
-    copy_file('bleachbit.png', 'dist\\share\\bleachbit.png')
-    # A themed icon follows the display scale in the About dialog
+    # Also the window icon. As a themed icon the About logo follows the scale.
     copy_file('bleachbit.png',
               'dist\\share\\icons\\hicolor\\256x256\\apps\\bleachbit.png')
     # bleachbit.ico is used the for pop-up notification.
@@ -735,7 +734,7 @@ def delete_icons():
     # emblem-readonly is an exception: it is requested by name in
     # GuiPreferences.py and has no GTK built-in equivalent.
     icon_keep_list = [
-        'bleachbit.png',  # About dialog logo
+        'bleachbit.png',  # window icon and About dialog logo
         'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',
