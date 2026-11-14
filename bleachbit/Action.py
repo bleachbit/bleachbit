@@ -32,6 +32,7 @@ if IS_WINDOWS:
 logger = logging.getLogger(__name__)
 
 _GLOB_CHARS_RE = re.compile(r'[?*\[\]]')
+_MULTI_VAR_RE = re.compile(r'\$\$[^$/\\]+\$\$')
 
 
 def has_glob(s):
@@ -145,12 +146,13 @@ class FileActionProvider(ActionProvider):
         has_skip_open = bool(skip_open) or (
             action_element.hasAttribute('skip_open') is True)
         if 'deep' == self.search:
-            self.ds = (self.paths[0], DeepScan.Search(
-                command=action_element.getAttribute('command'),
-                regex=self.regex, nregex=self.nregex,
-                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex,
-                skip_open=General.boolstr_to_bool(skip_open) if has_skip_open else False))
-            if len(self.paths) != 1:
+            if self.paths:
+                self.ds = (self.paths[0], DeepScan.Search(
+                    command=action_element.getAttribute('command'),
+                    regex=self.regex, nregex=self.nregex,
+                    wholeregex=self.wholeregex, nwholeregex=self.nwholeregex,
+                    skip_open=General.boolstr_to_bool(skip_open) if has_skip_open else False))
+            if len(self.paths) > 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained
                     # in the online documentation. Basically, they are like
@@ -167,19 +169,33 @@ class FileActionProvider(ActionProvider):
 
     def _set_paths(self, raw_path, path_vars):
         """Set the list of paths to work on"""
+        if not raw_path:
+            # A deep scan without a path starts at the home folder (Worker)
+            self.paths = ['']
+            return
         self.paths = []
         # expand special $$foo$$ which may give multiple values
         for path2 in expand_multi_var(raw_path, path_vars):
+            # Check before expandvars(), which turns $$ into $ on Windows
+            if _MULTI_VAR_RE.search(path2):
+                logger.debug('Skipping path with an unresolved variable: %s',
+                             path2)
+                continue
             if IS_WINDOWS:
                 paths = Windows.expand_windows_system_vars(path2)
             else:
                 paths = (path2, )
             for path3 in paths:
                 path3 = os.path.expanduser(os.path.expandvars(path3))
-                if IS_WINDOWS and path3:
+                # An unset variable leaves a relative path, which would
+                # resolve against the working directory
+                if not os.path.isabs(path3):
+                    logger.debug('Skipping path with an unresolved variable: %s',
+                                 path3)
+                    continue
+                if IS_WINDOWS:
                     # convert forward slash to backslash for compatibility with getsize()
-                    # and for display.  Do not convert an empty path, or it will become
-                    # the current directory (.).
+                    # and for display
                     path3 = os.path.normpath(path3)
                 # $XDG_CONFIG_HOME/foo and ~/.config/foo are usually the same
                 if path3 not in self.paths:
