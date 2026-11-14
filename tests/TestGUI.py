@@ -384,6 +384,42 @@ class GUITestCase(common.BleachbitTestCase):
         finally:
             pref.dialog.destroy()
 
+    def test_preferences_browse_parent(self):
+        """Choosers opened from Preferences belong to the Preferences dialog"""
+        pref = self.app.get_preferences_dialog()
+        try:
+            buttons = (('drives', 'browse_folder', 'Add'),
+                       ('keep-list', 'browse_file', 'Add file'),
+                       ('keep-list', 'browse_folder', 'Add folder'))
+            for page_name, func, label in buttons:
+                page = pref.page_stack.get_child_by_name(page_name)
+                with mock.patch(f'bleachbit.GuiBasic.{func}',
+                                return_value=None) as browse:
+                    self.find_widget(page, Gtk.Button, label).clicked()
+                self.assertIs(browse.call_args.args[0], pref.dialog, label)
+        finally:
+            pref.dialog.destroy()
+
+    @common.skipUnlessWindows
+    def test_window_handle(self):
+        """The GDK DLL is found and gives the HWND of a GTK window"""
+        # pylint: disable=import-outside-toplevel
+        import win32gui
+        import win32process
+        from bleachbit import Windows
+        pref = self.app.get_preferences_dialog()
+        try:
+            pref.dialog.show_all()
+            self.refresh_gui()
+            # pylint: disable-next=protected-access
+            hwnd = Windows._get_window_handle(pref.dialog)
+            self.assertIsNotNone(hwnd, Windows.GDK_DLL)
+            self.assertTrue(win32gui.IsWindow(hwnd))
+            _thread_id, pid = win32process.GetWindowThreadProcessId(hwnd)
+            self.assertEqual(pid, os.getpid())
+        finally:
+            pref.dialog.destroy()
+
     def test_preferences_cookies_page(self):
         """Opens the preferences dialog and navigates to cookies page"""
         pref = self.app.get_preferences_dialog()
