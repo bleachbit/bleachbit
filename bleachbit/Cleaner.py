@@ -314,6 +314,11 @@ class System(Cleaner):
 
         if IS_WINDOWS:
             self.add_option(
+                'cache',
+                # TRANSLATORS: Name of a cleaning option. Cache is a noun.
+                _('Cache'),
+                DELETE_CACHE_DESCRIPTION)
+            self.add_option(
                 'logs',
                 # TRANSLATORS: Name of a cleaning option for Windows log files.
                 _('Logs'),
@@ -395,6 +400,20 @@ class System(Cleaner):
                                                       same_device=True):
                     if not self.whitelisted(filename):
                         yield Command.Delete(filename)
+
+        if IS_WINDOWS and 'cache' == option_id:
+            # DirectX shader cache, as Disk Cleanup clears it
+            shader_cache = os.path.expandvars('$localappdata\\D3DSCache')
+            for path in children_in_directory(shader_cache, False):
+                yield Command.Delete(path)
+            # Temporary app data of the Windows shell. Sandboxed code writes
+            # here, so only the files directly in it, never a walk.
+            temp_state = os.path.expandvars(
+                '$localappdata\\Packages\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\TempState\\*')
+            for path in glob.iglob(temp_state):
+                # Also skips a junction or a link to a directory
+                if not os.path.isdir(path):
+                    yield Command.Delete(path)
 
         # custom
         if 'custom' == option_id:
