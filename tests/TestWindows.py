@@ -1498,6 +1498,45 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             '<fontconfig><cachedir>~/.fontconfig</cachedir></fontconfig>\n')
         self.assertFalse(has_fontconfig_cache(font_conf))
 
+    def test_browse_dialogs_owned_by_parent(self):
+        """The native file and folder dialogs are owned by the parent window"""
+        parent = object()
+        hwnd = 0x1234
+        with mock.patch('bleachbit.Windows._get_window_handle',
+                        return_value=hwnd) as get_handle, \
+                mock.patch('bleachbit.Windows.shell') as mock_shell, \
+                mock.patch('bleachbit.Windows.win32gui') as mock_win32gui:
+            mock_shell.SHBrowseForFolder.return_value = (None, '', 0)
+            mock_win32gui.GetOpenFileNameW.return_value = (r'C:\x', None, 0)
+            Windows.browse_folder(parent, 'title')
+            Windows.browse_file(parent, 'title')
+            Windows.browse_files(parent, 'title')
+        self.assertEqual(get_handle.call_args_list, [mock.call(parent)] * 3)
+        self.assertEqual(mock_shell.SHBrowseForFolder.call_args.args[0], hwnd)
+        calls = mock_win32gui.GetOpenFileNameW.call_args_list
+        self.assertEqual([call.args[0] for call in calls], [hwnd, hwnd])
+
+    def test_get_window_handle_none(self):
+        """_get_window_handle() returns None when there is no handle to get"""
+        # pylint: disable=protected-access
+        self.assertIsNone(Windows._get_window_handle(None))
+        window = mock.Mock()
+        window.get_window.return_value = None
+        self.assertIsNone(Windows._get_window_handle(window))
+
+        window.get_window.return_value = object()
+        error = pywintypes.error(126, 'GetModuleHandle', 'not found')
+        with mock.patch('bleachbit.Windows.win32api.GetModuleHandle',
+                        side_effect=error):
+            self.assertIsNone(Windows._get_window_handle(window))
+
+        # A loaded DLL without the GDK export
+        # pylint: disable-next=possibly-used-before-assignment
+        kernel32 = win32api.GetModuleHandle('kernel32.dll')
+        with mock.patch('bleachbit.Windows.win32api.GetModuleHandle',
+                        return_value=kernel32):
+            self.assertIsNone(Windows._get_window_handle(window))
+
     def test_browse_folder_not_file_system(self):
         """browse_folder() returns None for a folder without a file system path"""
         e_fail = -2147467259

@@ -83,6 +83,9 @@ IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003
 IO_REPARSE_TAG_NAME_SURROGATE = 0x20000000
 FILE_ATTRIBUTE_REPARSE_POINT = 0x400
 
+# Name in the pygtkwin GTK bundle
+GDK_DLL = 'gdk-3-vs17.dll'
+
 SPLASH_ICON_SIZE_PX = 256  # 256x256 pixels
 SPLASH_CLOSE_TIMEOUT_MS = 1000
 
@@ -232,16 +235,44 @@ def expand_windows_system_vars(pathname, system_paths=None):
     ]
 
 
-def browse_file(_, title):
+def _get_window_handle(window):
+    """Return the HWND of a GTK window, or None"""
+    gdk_window = window.get_window() if window is not None else None
+    if gdk_window is None:
+        return None
+    try:
+        # Never loads or searches for the DLL
+        # pylint: disable-next=possibly-used-before-assignment
+        module = win32api.GetModuleHandle(GDK_DLL)
+    # pylint: disable-next=possibly-used-before-assignment
+    except pywintypes.error:
+        return None
+    try:
+        # Private handles keep these prototypes off the shared ctypes ones
+        gdk = ctypes.CDLL(GDK_DLL, handle=module)
+        get_handle = gdk.gdk_win32_window_get_handle
+        get_handle.restype = ctypes.c_void_p
+        get_handle.argtypes = (ctypes.c_void_p,)
+        python = ctypes.PyDLL('python dll', handle=sys.dllhandle)
+        get_pointer = python.PyCapsule_GetPointer
+        get_pointer.restype = ctypes.c_void_p
+        get_pointer.argtypes = (ctypes.py_object, ctypes.c_char_p)
+        pointer = get_pointer(gdk_window.__gpointer__, None)
+    except (AttributeError, ValueError):
+        logger.debug('no window handle for %r', gdk_window, exc_info=True)
+        return None
+    return get_handle(pointer) or None
+
+
+def browse_file(parent, title):
     """Ask the user to select a single file.  Return full path"""
     try:
-        ret = win32gui.GetOpenFileNameW(None,
+        ret = win32gui.GetOpenFileNameW(_get_window_handle(parent),
                                         # pylint: disable-next=possibly-used-before-assignment
                                         Flags=win32con.OFN_EXPLORER
                                         | win32con.OFN_FILEMUSTEXIST
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
-    # pylint: disable-next=possibly-used-before-assignment
     except pywintypes.error as e:
         if 0 == e.winerror:
             logger.debug('browse_file(): user cancelled')
@@ -251,11 +282,11 @@ def browse_file(_, title):
     return ret[0]
 
 
-def browse_files(_, title):
+def browse_files(parent, title):
     """Ask the user to select files.  Return full paths"""
     try:
         # The File parameter is a hack to increase the buffer length.
-        ret = win32gui.GetOpenFileNameW(None,
+        ret = win32gui.GetOpenFileNameW(_get_window_handle(parent),
                                         File='\x00' * 10240,
                                         Flags=win32con.OFN_ALLOWMULTISELECT
                                         | win32con.OFN_EXPLORER
@@ -276,12 +307,13 @@ def browse_files(_, title):
     return [os.path.join(dirname, fname) for fname in _split[1:]]
 
 
-def browse_folder(_, title):
+def browse_folder(parent, title):
     """Ask the user to select a folder.  Return full path."""
     # pylint: disable-next=possibly-used-before-assignment
     flags = shellcon.BIF_RETURNONLYFSDIRS | shellcon.BIF_EDITBOX
     # pylint: disable-next=possibly-used-before-assignment
-    pidl = shell.SHBrowseForFolder(None, None, title, flags)[0]
+    pidl = shell.SHBrowseForFolder(
+        _get_window_handle(parent), None, title, flags)[0]
     if pidl is None:
         # user cancelled
         return None
