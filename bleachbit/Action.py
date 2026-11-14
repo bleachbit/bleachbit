@@ -270,6 +270,11 @@ class FileActionProvider(ActionProvider):
         def get_walk_all(top):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
+                # What is below a protected root such as /run may not be
+                # protected itself
+                # pylint: disable-next=protected-access
+                if FileUtilities._is_system_critical_posix(expanded):
+                    continue
                 yield from FileUtilities.children_in_directory(expanded, True)
                 # This is a lint checker because this scenario may
                 # indicate the cleaner developer made a mistake.
@@ -286,6 +291,9 @@ class FileActionProvider(ActionProvider):
         def get_walk_files(top):
             """Delete files inside a directory but not any directories"""
             for expanded in glob.iglob(top):
+                # pylint: disable-next=protected-access
+                if FileUtilities._is_system_critical_posix(expanded):
+                    continue
                 yield from FileUtilities.children_in_directory(expanded, False)
 
         def get_top(top):
