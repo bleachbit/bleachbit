@@ -474,6 +474,7 @@ def wipe_path(pathname, idle=False):
                  {"pathname": pathname, "fstype": fs_info.fstype})
     if not os.path.isdir(pathname):
         logger.error(
+            # TRANSLATORS: Error message in the log. %s is the path to wipe.
             _("Path to wipe must be an existing directory: %s"), pathname)
         return
 

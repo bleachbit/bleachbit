@@ -237,8 +237,11 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
             if cleaner_id in operations:
                 # Fail closed: drop the cleaner rather than clean what
                 # the user tried to protect.
-                # TRANSLATORS: %s is a cleaner ID such as firefox
-                logger.warning(_("skipping cleaner %s"), cleaner_id)
+                logger.warning(
+                    # TRANSLATORS: Command-line warning. %s is a cleaner ID,
+                    # such as firefox. All options for this cleaner are skipped.
+                    # Do not translate variables.
+                    _("Skipping cleaner %s"), cleaner_id)
                 del operations[cleaner_id]
             continue
         if cleaner_id in operations and option_id in operations[cleaner_id]:
@@ -463,6 +466,7 @@ There is NO WARRANTY, to the extent permitted by law.
             # wipe_path() only logs this, so check here to set the exit status
             if not os.path.isdir(wipe_path):
                 logger.error(
+                    # TRANSLATORS: Error message on the CLI. %s is the path to wipe.
                     _("Path to wipe must be an existing directory: %s"), wipe_path)
                 had_error = True
                 continue

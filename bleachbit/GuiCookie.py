@@ -136,11 +136,12 @@ class CookieManagerPane(Gtk.Box):
             logger.error("Failed to load cookie keep list %s: %s",
                          self.keep_list_path, exc)
             self.saved_domains = set()
-            # TRANSLATORS: Shown in the manage cookies dialog when the saved
-            # list is damaged or cannot be opened.
             error_label = Gtk.Label(label=_(
-                "The list of cookies to keep cannot be read, so cookies are "
-                "not cleaned. Changing the selection saves a new list."))
+                # TRANSLATORS: Warning in the manage cookies dialog when the
+                # saved list is damaged or cannot be opened. Selected cookies
+                # are kept, not deleted. Changing the selection replaces the list.
+                "The list of cookies to keep could not be read, so cookies "
+                "will not be deleted. Change the selection to save a new list."))
             error_label.set_line_wrap(True)
             error_label.set_xalign(0)
             self.pack_start(error_label, False, False, 0)

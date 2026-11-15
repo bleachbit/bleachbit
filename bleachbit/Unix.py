@@ -807,8 +807,10 @@ def yum_clean():
     # On Fedora yum is DNF5, which cleans only the user's cache when not root
     if os.geteuid() != 0:
         raise RuntimeError(
-            # TRANSLATORS: %s is the package manager, such as Yum or Dnf
-            _("%s cannot be cleaned without root permissions.") % "Yum")
+            # TRANSLATORS: %s is the package manager, such as Yum or Dnf.
+            # Root privileges are system administrator permissions.
+            # Do not translate variables.
+            _("%s cannot be cleaned without root privileges.") % "Yum")
 
     old_size = FileUtilities.getsizedir('/var/cache/yum')
     args = ['--enablerepo=*', 'clean', 'all']
@@ -842,8 +844,10 @@ def dnf_clean():
     # silently returning 0.
     if os.geteuid() != 0:
         raise RuntimeError(
-            # TRANSLATORS: %s is the package manager, such as Yum or Dnf
-            _("%s cannot be cleaned without root permissions.") % "Dnf")
+            # TRANSLATORS: %s is the package manager, such as Yum or Dnf.
+            # Root privileges are system administrator permissions.
+            # Do not translate variables.
+            _("%s cannot be cleaned without root privileges.") % "Dnf")
 
     # DNF4 does not report freed space in its output, so infer effect
     # by measuring the delta in directory size.
@@ -940,8 +944,10 @@ def dnf_autoremove():
     # changed between versions
     if os.geteuid() != 0:
         raise RuntimeError(
-            # TRANSLATORS: %s is the package manager, such as Yum or Dnf
-            _("%s cannot be cleaned without root permissions.") % "Dnf")
+            # TRANSLATORS: %s is the package manager, such as Yum or Dnf.
+            # Root privileges are system administrator permissions.
+            # Do not translate variables.
+            _("%s cannot be cleaned without root privileges.") % "Dnf")
     cmd = [General.resolve_exe('dnf'), '-y', DNF_EXIT_ON_LOCK, 'autoremove']
     (rc, stdout, stderr) = General.run_external(cmd)
     freed_bytes = 0

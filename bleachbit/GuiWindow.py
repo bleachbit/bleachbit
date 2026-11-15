@@ -88,7 +88,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # Goes to the delayed log, shown in the window below
             logger.error(
                 # TRANSLATORS: Error message shown in the log on the main window.
-                # %(file)s is the file path, %(options)s a list of option names.
+                # %(file)s is the configuration file path. %(options)s is a
+                # comma-separated list of setting names, not their invalid values.
+                # Do not translate variables.
                 _('Removed invalid values from the configuration file %(file)s: %(options)s'),
                 {'file': bleachbit.options_file, 'options': ', '.join(invalid)})
         self.populate_window()
