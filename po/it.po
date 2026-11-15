@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-10-30 14:03-0600\n"
-"PO-Revision-Date: 2026-11-12 00:51+0000\n"
-"Last-Translator: Pierfrancesco Passerini "
-"<passero@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-15 13:52+0000\n"
+"Last-Translator: ROBERTO BORIOTTI <roberto.boriotti@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
 "it/>\n"
 "Language: it\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
 
 #. Cleaner description: the category of application.
@@ -738,7 +737,7 @@ msgstr "Elenco pacchetti"
 #. Cleaner description: the category of application. 'Container' means a software container that packages and runs applications in isolation, not a physical shipping container.
 #: ../cleaners/docker.xml
 msgid "Container platform"
-msgstr ""
+msgstr "Piattaforma container"
 
 #. Label for Claude coding assistant
 #: ../cleaners/docker.xml ../cleaners/claude.xml
@@ -812,18 +811,22 @@ msgstr "Elimina elenco file recenti /restore"
 #. Claude Code's automatically saved notes, reused in later sessions. Memory refers to saved information, not RAM.
 #: ../cleaners/claude.xml
 msgid "Auto memory"
-msgstr ""
+msgstr "Memoria automatica"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Delete the notes Claude Code automatically saves about you and your projects"
 msgstr ""
+"Elimina le note Claude Code salvate automaticamente su di te e sui tuoi "
+"progetti"
 
 #: ../cleaners/claude.xml
 msgid ""
 "Claude Code would forget the information it automatically saved about you "
 "and your projects"
 msgstr ""
+"Claude Code potrebbe aver dimenticato le informazioni salvate "
+"automaticamente su di te e sui tuoi progetti"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -914,6 +917,8 @@ msgstr "Versioni precedenti"
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Elimina file del programma dalle versioni precedenti lasciate dagli "
+"aggiornamenti"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -1415,7 +1420,7 @@ msgstr "Esegui comando esterno: %s"
 #: ../bleachbit/Action.py
 #, python-brace-format
 msgid "Terminate process: {name}"
-msgstr ""
+msgstr "Termina processo: {name}"
 
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
@@ -1886,7 +1891,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Could not overwrite the contents of %(path)s: %(error)s"
-msgstr ""
+msgstr "Impossibile sovrascrivere il contenuto di %(path)s: %(error)s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1908,10 +1913,9 @@ msgstr "Dispositivo o risorsa occupata: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
-#, fuzzy, python-format
-#| msgid "Directory is not empty: %s"
+#, python-format
 msgid "Directory was left renamed to: %s"
-msgstr "La cartella non è vuota: %s"
+msgstr "La cartella è stata rinominata in: %s"
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -2796,6 +2800,12 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"BleachBit potrebbe non avere accesso completo al disco. Senza di esso, macOS "
+"blocca l'accesso ad alcuni file e alcuni pulitori non funzioneranno.\n"
+"\n"
+"Per risolvere questo problema, apri 'Impostazioni di sistema' > 'Privacy e "
+"sicurezza' > 'Accesso completo al disco', attiva BleachBit, quindi riavvia "
+"BleachBit."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -2836,7 +2846,7 @@ msgstr "Reimpostazione del file di configurazione perché rovinato: %s"
 #. starts an operation while another one is running.
 #: ../bleachbit/GuiWindow.py
 msgid "Wait for the current operation to finish."
-msgstr ""
+msgstr "Attendi il completamento dell'operazione attuale."
 
 #. TRANSLATORS: Error message shown when a cleaner option
 #. cannot be used because expert mode is disabled.
@@ -2946,13 +2956,15 @@ msgid ""
 "BleachBit detected a permissions issue with its configuration folder (%s). "
 "Would you like to repair it?"
 msgstr ""
+"BleachBit ha rilevato un problema di autorizzazioni con alla sua cartella di "
+"configurazione (%s). Vuoi corregere questo problema?"
 
 #. TRANSLATORS: Message shown in the log after repairing
 #. folder permissions. %s is the folder path.
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid "Repaired permissions for %s."
-msgstr ""
+msgstr "Autorizzazioni riparate per %s."
 
 #. TRANSLATORS: Message shown in the log when repairing
 #. folder permissions did not fully succeed. %s is the
@@ -2960,7 +2972,7 @@ msgstr ""
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid "Could not fully repair permissions for %s."
-msgstr ""
+msgstr "Impossibile ripristinare completamente le autorizzazioni per %s."
 
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
@@ -3166,6 +3178,9 @@ msgid ""
 "improvements and bug fixes. You can check for a newer version at https://"
 "www.bleachbit.org."
 msgstr ""
+"Questa versione di BleachBit ha più di un anno. Rilasciamo regolarmente "
+"miglioramenti e correzioni di bug. Puoi verificare la disponibilità di "
+"aggiornamenti su https://www.bleachbit.org."
 
 #: ../bleachbit/Unix.py
 #, python-format
@@ -3295,6 +3310,8 @@ msgstr "Il percorso da pulire deve essere una cartella esistente: %s"
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Qui non è sicuro cancellare lo spazio libero perché qualsiasi utente può "
+"modificare questa cartella: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
