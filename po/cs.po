@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 14:03-0600\n"
+"POT-Creation-Date: 2026-11-15 11:40-0700\n"
 "PO-Revision-Date: 2026-03-28 13:49+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/bleachbit/main/cs/"
@@ -261,6 +261,7 @@ msgstr "Smazat záložní soubory"
 msgid "Crash reports"
 msgstr "Zprávy o pádu"
 
+#. Description of a cleaning option that deletes files on disk.
 #. Description of a cleaning option that deletes files on disk.
 #: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
@@ -534,18 +535,27 @@ msgid ""
 msgstr ""
 "Smazat historii obsahující navštívené stránky, historii stahování a náhledy"
 
+#. Name of a cleaning option for usage statistics collected by the browser.
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/transmission.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml
+msgid "Statistics"
+msgstr "Statistiky"
+
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Sync"
 msgstr "Synchronizovat"
 
+#. Description of the Sync cleaning option. Sync means synchronization of browser data between devices. Sign out means disconnect the browser from the account used for synchronization, not sign out of websites.
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 #, fuzzy
 #| msgid "Delete the sync data and sign out of the browser"
-msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgid "Delete the sync data and sign out of the browser"
 msgstr "Smazat synchronizovaná data a odhlásit z prohlížeče"
 
 #: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
@@ -872,10 +882,6 @@ msgstr ""
 msgid "VIM swap files under user profile"
 msgstr "VIM swap soubory pod uživatelským profilem"
 
-#: ../cleaners/deepscan.xml
-msgid "VIM swap files across system"
-msgstr "VIM swap soubory napříč systémem"
-
 #: ../cleaners/zoom.xml
 msgid "Recordings"
 msgstr "Nahrávky"
@@ -947,10 +953,6 @@ msgstr "Torrenty"
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
 msgstr "Smazat torrenty (pouze metadata, nikoli soubory, které popisují)"
-
-#: ../cleaners/transmission.xml ../cleaners/vuze.xml
-msgid "Statistics"
-msgstr "Statistiky"
 
 #. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
@@ -1663,6 +1665,15 @@ msgstr "neplatný čistič disku: %s"
 msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
 
+#. TRANSLATORS: Command-line warning. %s is a cleaner ID,
+#. such as firefox. All options for this cleaner are skipped.
+#. Do not translate variables.
+#: ../bleachbit/CLI.py
+#, fuzzy, python-format
+#| msgid "Error reading cleaner: %s"
+msgid "Skipping cleaner %s"
+msgstr "Chyba čtení čističe: %s"
+
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
 #. Don't translate and add "usage:" - it gets added by Python.
@@ -1799,6 +1810,13 @@ msgstr "Žádné složky dány pro --wipe-free-space"
 #| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
 msgstr "Čištění volného místa může zabrat hodně dlouho."
+
+#. TRANSLATORS: Error message on the CLI. %s is the path to wipe.
+#. TRANSLATORS: Error message in the log. %s is the path to wipe.
+#: ../bleachbit/CLI.py ../bleachbit/Wipe.py
+#, python-format
+msgid "Path to wipe must be an existing directory: %s"
+msgstr "Cesta k vyčištění musí být existující soubor : %s"
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
@@ -2331,6 +2349,15 @@ msgstr ""
 msgid "Only show cookies that are currently selected"
 msgstr ""
 
+#. TRANSLATORS: Warning in the manage cookies dialog when the
+#. saved list is damaged or cannot be opened. Selected cookies
+#. are kept, not deleted. Changing the selection replaces the list.
+#: ../bleachbit/GuiCookie.py
+msgid ""
+"The list of cookies to keep could not be read, so cookies will not be "
+"deleted. Change the selection to save a new list."
+msgstr ""
+
 #. TRANSLATORS: Column header in the manage cookies dialog.
 #. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
 #: ../bleachbit/GuiCookie.py
@@ -2842,13 +2869,14 @@ msgid "%(cleaner)s - %(option)s"
 msgstr "%(cleaner)s – %(option)s"
 
 #. TRANSLATORS: Error message shown in the log on the main window.
-#. %s is the file path.
+#. %(file)s is the configuration file path. %(options)s is a
+#. comma-separated list of setting names, not their invalid values.
+#. Do not translate variables.
 #: ../bleachbit/GuiWindow.py
 #, python-format
-msgid "Resetting the configuration file because it is corrupt: %s"
+msgid ""
+"Removed invalid values from the configuration file %(file)s: %(options)s"
 msgstr ""
-"Nastavení vrácena na výchozí hodnoty, protože soubor s nastaveními je "
-"poškozený: %s"
 
 #. TRANSLATORS: Error message shown in the infobar when the user
 #. starts an operation while another one is running.
@@ -3191,6 +3219,14 @@ msgstr ""
 "Nelze spustit čistič pro %s, neboť tato aplikace právě běží. Ukončete ji a "
 "zkuste to znovu."
 
+#. TRANSLATORS: %s is the package manager, such as Yum or Dnf.
+#. Root privileges are system administrator permissions.
+#. Do not translate variables.
+#: ../bleachbit/Unix.py
+#, python-format
+msgid "%s cannot be cleaned without root privileges."
+msgstr ""
+
 #. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
@@ -3289,11 +3325,6 @@ msgstr ""
 #| msgid "Wiping path {pathname} with file system type {fstype}"
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
 msgstr "Mazání cesty {pathname} se souborovým systémem {fstype}"
-
-#: ../bleachbit/Wipe.py
-#, python-format
-msgid "Path to wipe must be an existing directory: %s"
-msgstr "Cesta k vyčištění musí být existující soubor : %s"
 
 #. TRANSLATORS: Warning in the log. BleachBit wipes free space by
 #. creating temporary files in the chosen folder. This folder can be
@@ -3568,6 +3599,15 @@ msgstr "_Nápověda"
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_O BleachBitu"
+
+#~ msgid "VIM swap files across system"
+#~ msgstr "VIM swap soubory napříč systémem"
+
+#, python-format
+#~ msgid "Resetting the configuration file because it is corrupt: %s"
+#~ msgstr ""
+#~ "Nastavení vrácena na výchozí hodnoty, protože soubor s nastaveními je "
+#~ "poškozený: %s"
 
 #, fuzzy
 #~| msgid "A history of forms entered in web sites and in the Search bar"

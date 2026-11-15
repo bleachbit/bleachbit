@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 14:03-0600\n"
+"POT-Creation-Date: 2026-11-15 11:40-0700\n"
 "PO-Revision-Date: 2026-08-17 02:40+0000\n"
 "Last-Translator: VenusGirl <VenusGirl@outlook.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/bleachbit/main/ko/"
@@ -254,6 +254,7 @@ msgstr "백업 파일 삭제"
 msgid "Crash reports"
 msgstr "오류 보고서"
 
+#. Description of a cleaning option that deletes files on disk.
 #. Description of a cleaning option that deletes files on disk.
 #: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/safari.xml
@@ -516,16 +517,28 @@ msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr "방문한 사이트, 다운로드, 썸네일을 포함한 사용 기록 삭제"
 
+#. Name of a cleaning option for usage statistics collected by the browser.
+#: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/transmission.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml
+msgid "Statistics"
+msgstr "통계"
+
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Sync"
 msgstr "동기화"
 
+#. Description of the Sync cleaning option. Sync means synchronization of browser data between devices. Sign out means disconnect the browser from the account used for synchronization, not sign out of websites.
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
-msgid "Delete the sync data (including web apps) and sign out of the browser"
+#, fuzzy
+#| msgid ""
+#| "Delete the sync data (including web apps) and sign out of the browser"
+msgid "Delete the sync data and sign out of the browser"
 msgstr "동기화 데이터 (웹 앱 포함)를 삭제하고 브라우저에서 로그아웃"
 
 #: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
@@ -834,10 +847,6 @@ msgstr ""
 msgid "VIM swap files under user profile"
 msgstr "사용자 프로필 아래 VIM 스왑 파일"
 
-#: ../cleaners/deepscan.xml
-msgid "VIM swap files across system"
-msgstr "시스템 전체 VIM 스왑 파일"
-
 #: ../cleaners/zoom.xml
 msgid "Recordings"
 msgstr "기록"
@@ -907,10 +916,6 @@ msgstr "토렌트 파일"
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
 msgstr "토렌트 파일 삭제 (설명된 파일을 제외한 메타데이터만)"
-
-#: ../cleaners/transmission.xml ../cleaners/vuze.xml
-msgid "Statistics"
-msgstr "통계"
 
 #. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
@@ -1633,6 +1638,15 @@ msgstr "유효한 클리너가 아닙니다: %s"
 msgid "Wildcard characters are not allowed in --except: %s"
 msgstr "와일드카드 문자는 허용되지 않습니다 -- 단, %s"
 
+#. TRANSLATORS: Command-line warning. %s is a cleaner ID,
+#. such as firefox. All options for this cleaner are skipped.
+#. Do not translate variables.
+#: ../bleachbit/CLI.py
+#, fuzzy, python-format
+#| msgid "Error reading cleaner: %s"
+msgid "Skipping cleaner %s"
+msgstr "클리너 읽기 오류: %s"
+
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
 #. Don't translate and add "usage:" - it gets added by Python.
@@ -1755,6 +1769,13 @@ msgstr "--wipe-free-space를 위한 디렉터리가 없음"
 #: ../bleachbit/CLI.py
 msgid "Wiping empty space can take a long time."
 msgstr "빈 공간을 지우는 데는 시간이 꽤 걸릴 수 있습니다."
+
+#. TRANSLATORS: Error message on the CLI. %s is the path to wipe.
+#. TRANSLATORS: Error message in the log. %s is the path to wipe.
+#: ../bleachbit/CLI.py ../bleachbit/Wipe.py
+#, python-format
+msgid "Path to wipe must be an existing directory: %s"
+msgstr "정리할 경로는 존재하는 디렉토리어야 합니다 : %s"
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
@@ -2288,6 +2309,15 @@ msgstr ""
 msgid "Only show cookies that are currently selected"
 msgstr ""
 
+#. TRANSLATORS: Warning in the manage cookies dialog when the
+#. saved list is damaged or cannot be opened. Selected cookies
+#. are kept, not deleted. Changing the selection replaces the list.
+#: ../bleachbit/GuiCookie.py
+msgid ""
+"The list of cookies to keep could not be read, so cookies will not be "
+"deleted. Change the selection to save a new list."
+msgstr ""
+
 #. TRANSLATORS: Column header in the manage cookies dialog.
 #. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
 #: ../bleachbit/GuiCookie.py
@@ -2805,11 +2835,14 @@ msgstr ""
 "%(warning)s"
 
 #. TRANSLATORS: Error message shown in the log on the main window.
-#. %s is the file path.
+#. %(file)s is the configuration file path. %(options)s is a
+#. comma-separated list of setting names, not their invalid values.
+#. Do not translate variables.
 #: ../bleachbit/GuiWindow.py
 #, python-format
-msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr "구성 파일이 손상되어 다시 설정하는 중: %s"
+msgid ""
+"Removed invalid values from the configuration file %(file)s: %(options)s"
+msgstr ""
 
 #. TRANSLATORS: Error message shown in the infobar when the user
 #. starts an operation while another one is running.
@@ -3152,6 +3185,14 @@ msgid ""
 msgstr ""
 "%s은(는) 현재 실행 중이므로 청소할 수 없습니다. 종료 후 다시 실행하십시오."
 
+#. TRANSLATORS: %s is the package manager, such as Yum or Dnf.
+#. Root privileges are system administrator permissions.
+#. Do not translate variables.
+#: ../bleachbit/Unix.py
+#, python-format
+msgid "%s cannot be cleaned without root privileges."
+msgstr ""
+
 #. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
@@ -3247,11 +3288,6 @@ msgstr "파일 시스템에 고급 덮어쓰기를 지원하지 않는 파일이
 #| msgid "Wiping path {pathname} with file system type {fstype}"
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
 msgstr "경로{pathname}를 파일 시스템 유형 {fstype}으로 지우기"
-
-#: ../bleachbit/Wipe.py
-#, python-format
-msgid "Path to wipe must be an existing directory: %s"
-msgstr "정리할 경로는 존재하는 디렉토리어야 합니다 : %s"
 
 #. TRANSLATORS: Warning in the log. BleachBit wipes free space by
 #. creating temporary files in the chosen folder. This folder can be
@@ -3522,6 +3558,13 @@ msgstr "도움말(_H)"
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "BleachBit 정보(_A)"
+
+#~ msgid "VIM swap files across system"
+#~ msgstr "시스템 전체 VIM 스왑 파일"
+
+#, python-format
+#~ msgid "Resetting the configuration file because it is corrupt: %s"
+#~ msgstr "구성 파일이 손상되어 다시 설정하는 중: %s"
 
 #, fuzzy
 #~| msgid "A history of forms entered in web sites and in the Search bar"
