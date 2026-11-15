@@ -86,10 +86,18 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 	rm -f $(POTFILE).bak
 	echo " Words after update: " \
 		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc -w`
+	# msgcomm -u prints msgids defined in fewer than two inputs. Piping the
+	# union (msgcat) gives every msgid one definition, so those also found in
+	# the comparison file are filtered out, leaving the set difference.
 	if [ -f $(POTFILE).old ]; then \
-		echo "msgid added or removed"; \
-		msgcomm -u $(POTFILE) $(POTFILE).old > diff.pot; \
-		sed -e '1,/^"Plural-Forms:/d' -e '/^#/d' -e '/^msgstr/d' -e '/^$$/d' diff.pot; \
+		echo "== msgid added =="; \
+		msgcat --use-first $(POTFILE) $(POTFILE).old | \
+			msgcomm -u - $(POTFILE).old | \
+			sed -e '1,/^$$/d' -e '/^#/d' -e '/^msgstr/d' -e '/^$$/d'; \
+		echo "== msgid removed =="; \
+		msgcat --use-first $(POTFILE) $(POTFILE).old | \
+			msgcomm -u - $(POTFILE) | \
+			sed -e '1,/^$$/d' -e '/^#/d' -e '/^msgstr/d' -e '/^$$/d'; \
 	fi
 
 
