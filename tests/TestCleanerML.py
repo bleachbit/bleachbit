@@ -744,15 +744,20 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual('translated Label', xmlc.cleaner.name)
 
     def test_vuze_macos_profile(self):
-        """The Vuze profile and cache are in the macOS folders only on macOS"""
+        """The Vuze profile and other folders are macOS paths only on macOS"""
         profile = '~/Library/Application Support/Vuze'
+        saved_state = ('~/Library/Saved Application State/'
+                       'com.azureus.vuze.savedState')
         expected = {
             'backup': [profile],
             'cache': [profile + '/cache', profile + '/ipfilter.cache',
-                      '~/Library/Caches/com.azureus.vuze'],
+                      '~/Library/Caches/com.azureus.vuze',
+                      '~/Library/HTTPStorages/com.azureus.vuze'],
+            'cookies': ['~/Library/Cookies/com.azureus.vuze.binarycookies',
+                        '~/Library/HTTPStorages/com.azureus.vuze.binarycookies'],
             'logs': [profile + '/logs'],
-            'stats': [profile + '/stats'],
-            'temp': [profile + '/tmp'],
+            'stats': [profile + '/stats', profile + '/azureus.statistics'],
+            'temp': [profile + '/tmp', saved_state],
         }
 
         def paths(platform, option):

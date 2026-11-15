@@ -28,8 +28,15 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the cache</description>
     <action command="delete" search="file" path="$$Profile$$/ipfilter.cache"/>
     <action command="delete" search="walk.all" path="$$Profile$$/cache"/>
-    <action command="delete" search="walk.all" path="~/Library/Caches/com.azureus.vuze" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/com.azureus.vuze/" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/HTTPStorages/com.azureus.vuze/" os="macos"/>
     <!-- $$Profile$$\shares\cache* are not ordinary caches, so leave them -->
+  </option>
+  <option id="cookies" os="macos">
+    <label>Cookies</label>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
+    <action command="delete" search="file" path="~/Library/Cookies/com.azureus.vuze.binarycookies"/>
+    <action command="delete" search="file" path="~/Library/HTTPStorages/com.azureus.vuze.binarycookies"/>
   </option>
   <option id="logs">
     <label>Logs</label>
@@ -47,6 +54,7 @@ later.  See the COPYING file in the top-level directory.
     <label>Statistics</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$Profile$$/stats/"/>
+    <action command="delete" search="file" path="$$Profile$$/azureus.statistics"/>
   </option>
   <option id="temp">
     <label>Temporary files</label>
@@ -58,6 +66,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="glob" path="$$Profile$$/torrents/*.tmp._az"/>
     <action command="delete" search="glob" path="$$Profile$$/torrents/*.torrent._az.saving"/>
     <action command="delete" search="walk.all" path="$$Profile$$/updates/"/>
+    <action command="delete" search="walk.all" path="~/Library/Saved Application State/com.azureus.vuze.savedState" os="macos"/>
     <action command="delete" search="walk.all" path="%Temp%\AzureusInstall\"/>
     <action command="delete" search="file" path="%Temp%\AzureusInstall\"/>
     <action command="delete" search="glob" path="%Temp%\core_Azureus*"/>
