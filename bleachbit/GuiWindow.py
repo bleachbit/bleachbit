@@ -82,6 +82,15 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         self.set_property('name', APP_NAME)
         self.set_property('role', APP_NAME)
+        # Before populate_window(): its show_all() reads the geometry
+        invalid = options.remove_invalid_values()
+        if invalid:
+            # Goes to the delayed log, shown in the window below
+            logger.error(
+                # TRANSLATORS: Error message shown in the log on the main window.
+                # %(file)s is the file path, %(options)s a list of option names.
+                _('Removed invalid values from the configuration file %(file)s: %(options)s'),
+                {'file': bleachbit.options_file, 'options': ', '.join(invalid)})
         self.populate_window()
 
         # Redirect logging to the GUI.
@@ -97,14 +106,6 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 self.append_text(msg)
             # if stderr was redirected - keep redirecting it
             sys.stderr = self.gtklog
-
-        if options.is_corrupt():
-            logger.error(
-                # TRANSLATORS: Error message shown in the log on the main window.
-                # %s is the file path.
-                _('Resetting the configuration file because it is corrupt: %s'),
-                bleachbit.options_file)
-            bleachbit.Options.init_configuration()
 
         GLib.idle_add(self.cb_refresh_operations)
 

@@ -25,16 +25,21 @@ Store and retrieve user preferences
 # standard library imports
 import atexit
 import configparser
+import contextlib
 import errno
+import hashlib
+import json
 import logging
 import os
 import re
+import stat
+import tempfile
 import threading
 
 # local application imports
 import bleachbit
-from bleachbit import General, IS_WINDOWS
-from bleachbit.FileUtilities import open_for_overwrite
+from bleachbit import General, IS_POSIX, IS_WINDOWS
+from bleachbit.FileUtilities import _open_nofollow_fd, open_for_overwrite
 from bleachbit.Language import get_text as _
 
 # third-party imports
@@ -47,6 +52,9 @@ FLUSH_DELAY_SECS = 15.0  # decimal seconds
 
 # Matches a Windows drive-letter key that lost its colon to ConfigParser
 _HASHPATH_DRIVE_RE = re.compile(r'^[a-z]\\')
+
+_PROTECTED_PATH_PREFIX = 'protected_path:'
+_SHA256_HEX_RE = re.compile(r'[0-9a-f]{64}')
 
 OPTION_DEFAULTS = {
     'auto_hide': {'value': True},
@@ -133,10 +141,123 @@ def path_to_option(pathname):
     return pathname
 
 
+def _quote_path(path):
+    """Quote a path that would not come back unchanged as a plain value
+
+    ConfigParser strips whitespace from both ends of a value and the
+    indentation of its continuation lines. An absolute path never starts
+    with a quotation mark, so the quoting is unambiguous.
+    """
+    if path != path.strip() or '\n' in path or '\r' in path:
+        return json.dumps(path)
+    return path
+
+
+def _unquote_path(value):
+    """Reverse _quote_path()"""
+    if value.startswith('"'):
+        try:
+            return json.loads(value)
+        except ValueError:
+            pass
+    return value
+
+
+def protected_path_warning_key(pathname):
+    """Return the [warnings] key that remembers a protected path
+
+    Hashed, since an INI key cannot hold '=' or a line break.
+    """
+    digest = hashlib.sha256(
+        pathname.encode('utf-8', 'surrogatepass')).hexdigest()
+    return _PROTECTED_PATH_PREFIX + digest
+
+
+def _free_bad_path(path):
+    """Return the first of path.bad, path.bad.1, ... that does not exist"""
+    bad_file = path + '.bad'
+    counter = 0
+    while os.path.lexists(bad_file):
+        counter += 1
+        bad_file = f'{path}.bad.{counter}'
+    return bad_file
+
+
 def _open_config_write(path):
     """Open the config file for writing without following a final symlink."""
     return open_for_overwrite(
         path, encoding='utf-8-sig', errors='surrogateescape')
+
+
+def _replace_config_file(config, path, exists):
+    """Write config to a temporary file, then move it over path
+
+    Returns False instead of moving when the file exists on Windows: the
+    replacement would take the writer's owner, and an elevated save would
+    lock the user out of a folder with an OWNER RIGHTS ACL.
+    """
+    fd, temp_path = tempfile.mkstemp(
+        prefix=os.path.basename(path) + '.', suffix='.tmp',
+        dir=os.path.dirname(path))
+    try:
+        # Use the descriptor, the name can be swapped for a link meanwhile
+        try:
+            f = open(fd, 'w', encoding='utf-8-sig', errors='surrogateescape')
+        except BaseException:
+            os.close(fd)
+            raise
+        with f:
+            config.write(f)
+            f.flush()
+            if exists and IS_POSIX:
+                # keep the old file's mode and, as root, its owner
+                old_stat = os.lstat(path)
+                if stat.S_ISLNK(old_stat.st_mode):
+                    raise OSError(
+                        errno.ELOOP, 'refusing to replace a link', path)
+                # No setuid, setgid or sticky bit from whatever sits there
+                os.fchmod(fd, stat.S_IMODE(old_stat.st_mode) & 0o777)
+                if os.geteuid() == 0:
+                    os.fchown(fd, old_stat.st_uid, old_stat.st_gid)
+            elif not exists and General.sudo_mode() and \
+                    not General.chownself(temp_path, fd):
+                # Published root-owned and private, the user could not
+                # read it back; the old file (or none) is better
+                raise OSError(errno.EPERM, 'cannot give the file to the user',
+                              path)
+            os.fsync(f.fileno())
+        if exists and IS_WINDOWS:
+            return False
+        os.replace(temp_path, path)
+        return True
+    finally:
+        with contextlib.suppress(OSError):
+            os.unlink(temp_path)
+
+
+def _write_config_file(config, path):
+    """Write config to path
+
+    Via a temporary file, so a failed write leaves the old file whole. An
+    existing file on Windows is then written in place, which keeps its owner.
+    """
+    if os.path.islink(path):
+        raise OSError(errno.EACCES, 'refusing to replace a link', path)
+    exists = os.path.exists(path)
+    # Replacing needs no write access to the file, so respect a read-only one
+    if exists and not os.access(path, os.W_OK):
+        raise PermissionError(errno.EACCES, os.strerror(errno.EACCES), path)
+    try:
+        replaced = _replace_config_file(config, path, exists)
+    except OSError as e:
+        # Blocked by a read-only directory, or by a bind mount on the file
+        if not exists or not (
+                isinstance(e, PermissionError) or e.errno == errno.EBUSY):
+            raise
+        replaced = False
+    if not replaced:
+        with _open_config_write(path) as f:
+            config.write(f)
 
 
 def init_configuration(*, log=True):
@@ -147,10 +268,15 @@ def init_configuration(*, log=True):
         if log:
             logger.debug('Deleting configuration: %s', bleachbit.options_file)
         os.remove(bleachbit.options_file)
-    with _open_config_write(bleachbit.options_file) as f_ini:
+    # Exclusive: whatever took the name since the remove is refused, not
+    # truncated and given to the user
+    with open(bleachbit.options_file, 'x', encoding='utf-8-sig',
+              errors='surrogateescape', opener=_open_nofollow_fd) as f_ini:
         f_ini.write('[bleachbit]\n')
         if IS_WINDOWS and bleachbit.portable_mode:
             f_ini.write('[Portable]\n')
+        if General.sudo_mode():
+            General.chownself(bleachbit.options_file, f_ini.fileno())
     for section in options.config.sections():
         options.config.remove_section(section)
     options.restore()
@@ -162,7 +288,9 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = configparser.RawConfigParser(delimiters='=')
+        # Not strict, so a duplicate key does not drop the rest of the file
+        self.config = configparser.RawConfigParser(
+            delimiters='=', strict=False)
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
@@ -170,8 +298,11 @@ class Options:
         # Cache of get_paths() results, keyed by section. The keep list is read
         # once per file during a scan, so recomputing it every time is costly.
         self._paths_cache = {}
+        # Invalid values already logged, as some are read once per file
+        self._invalid_logged = set()
         self.old_version = None  # Store previous version in memory
         self._dirty = False
+        self._keep_file = False
         self._closed = False
         self._flush_generation = 0
         self._flush_lock = threading.RLock()
@@ -229,6 +360,9 @@ class Options:
         """Write configuration to disk while holding the flush lock."""
         if not force and not self._dirty:
             return
+        if self._keep_file:
+            # restore() could not move an unreadable file out of the way
+            return
         if not self.purged:
             self.__purge()
         self.__sort()
@@ -236,20 +370,18 @@ class Options:
         try:
             if not os.path.exists(bleachbit.options_dir):
                 General.makedirs(bleachbit.options_dir)
-            mkfile = not os.path.exists(bleachbit.options_file)
-            with _open_config_write(bleachbit.options_file) as _file:
-                self.config.write(_file)
-            if mkfile and General.sudo_mode():
-                General.chownself(bleachbit.options_file)
+            _write_config_file(self.config, bleachbit.options_file)
         except (OSError, IOError, PermissionError) as e:
-            if e.errno == errno.ENOSPC:
+            # Log instead of raising so a failed save never blocks quitting
+            if e.errno in (errno.ENOSPC, errno.EDQUOT):
                 logger.error(
                     _("Disk was full when writing configuration to file: %s"), bleachbit.options_file)
             elif e.errno == errno.EACCES:
                 logger.error(
                     _("Permission denied when writing configuration to file: %s"), bleachbit.options_file)
             else:
-                raise
+                logger.error("Error writing configuration to file %s: %s",
+                             bleachbit.options_file, e)
         else:
             self._dirty = False
 
@@ -337,6 +469,25 @@ class Options:
                     self.config.set(section, migrated_option, warning_value)
                 self.config.remove_option(section, option)
                 migrated = True
+            # Protected paths used to be stored raw instead of hashed
+            for option in tuple(self.config.options(section)):
+                if not option.startswith(_PROTECTED_PATH_PREFIX):
+                    continue
+                pathname = option[len(_PROTECTED_PATH_PREFIX):]
+                if _SHA256_HEX_RE.fullmatch(pathname):
+                    continue
+                value = self.config.get(section, option)
+                if '=' in value:
+                    # A raw key was split at its first '='
+                    rest, last = value.rsplit('=', 1)
+                    if last.strip().lower() in self.config.BOOLEAN_STATES:
+                        pathname += '=' + rest.rstrip()
+                        value = last.strip()
+                hashed_option = protected_path_warning_key(pathname)
+                if not self.config.has_option(section, hashed_option):
+                    self.config.set(section, hashed_option, value)
+                self.config.remove_option(section, option)
+                migrated = True
             if migrated:
                 self.__schedule_flush()
 
@@ -373,11 +524,15 @@ class Options:
         if section == 'hashpath' and len(option) > 1 and option[1] == ':':
             option = option[0] + option[2:]
         if self.config.has_option(section, option):
-            if option in boolean_keys:
-                return self.config.getboolean(section, option)
-            if option in int_keys:
-                return self.config.getint(section, option)
-            return self.config.get(section, option)
+            try:
+                if option in boolean_keys:
+                    return self.config.getboolean(section, option)
+                if option in int_keys:
+                    return self.config.getint(section, option)
+                return self.config.get(section, option)
+            except ValueError:
+                # The GUI removes invalid values only after reading some options
+                self.__warn_invalid(section, option)
 
         if section == 'bleachbit':
             default = _get_default_value(option)
@@ -385,6 +540,12 @@ class Options:
                 return default
 
         return None
+
+    def __warn_invalid(self, section, option):
+        """Log an invalid value once"""
+        if (section, option) not in self._invalid_logged:
+            self._invalid_logged.add((section, option))
+            logger.warning('Ignoring invalid value of option %s', option)
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
@@ -396,7 +557,12 @@ class Options:
             self.__auto_preserve_languages()
         if not self.config.has_option('preserve_languages', langid):
             return False
-        return self.config.getboolean('preserve_languages', langid)
+        try:
+            return self.config.getboolean('preserve_languages', langid)
+        except ValueError:
+            # get_languages() keeps every listed language
+            self.__warn_invalid('preserve_languages', langid)
+            return True
 
     def get_languages(self):
         """Return a list of all selected languages"""
@@ -410,7 +576,7 @@ class Options:
         if not self.config.has_section(section):
             return None
         return [
-            self.config.get(section, opt)
+            _unquote_path(self.config.get(section, opt))
             for opt in sorted(self.config.options(section), key=_option_index)
         ]
 
@@ -430,7 +596,13 @@ class Options:
         values = []
         for opt in sorted(set(myoptions), key=_option_index):
             p_type = self.config.get(section, opt + '_type')
-            p_path = self.config.get(section, opt + '_path')
+            p_path = _unquote_path(self.config.get(section, opt + '_path'))
+            if not os.path.isabs(p_path):
+                # The GUI only writes absolute paths; a hand-edited one
+                # could also be a legacy value starting with a quote
+                logger.warning('Ignoring relative path in [%s]: %r',
+                               section, p_path)
+                continue
             values.append((p_type, p_path))
         self._paths_cache[section] = values
         return list(values)
@@ -502,23 +674,36 @@ class Options:
             logger.exception('Error in get_tree()')
             return False
 
-    def is_corrupt(self):
-        """Perform a self-check for corruption of the configuration"""
-        # no boolean key must raise an exception
-        for boolean_key in boolean_keys:
-            try:
-                if self.config.has_option('bleachbit', boolean_key):
-                    self.config.getboolean('bleachbit', boolean_key)
-            except ValueError:
-                return True
-        # no int key must raise an exception
-        for int_key in int_keys:
-            try:
-                if self.config.has_option('bleachbit', int_key):
-                    self.config.getint('bleachbit', int_key)
-            except ValueError:
-                return True
-        return False
+    def __is_valid(self, key):
+        """Return whether a general option is unset or parses"""
+        if not self.config.has_option('bleachbit', key):
+            return True
+        try:
+            if key in boolean_keys:
+                self.config.getboolean('bleachbit', key)
+            else:
+                self.config.getint('bleachbit', key)
+        except ValueError:
+            return False
+        return True
+
+    def remove_invalid_values(self):
+        """Remove the general options get() cannot parse and return them"""
+        invalid = []
+        with self._flush_lock:
+            for key in sorted(boolean_keys | int_keys):
+                if self.__is_valid(key):
+                    continue
+                self.config.remove_option('bleachbit', key)
+                # a hand-edited [DEFAULT] value shows through once the
+                # section's own value is gone
+                if not self.__is_valid(key):
+                    self.config.remove_option(
+                        self.config.default_section, key)
+                invalid.append(key)
+            if invalid:
+                self.__schedule_flush()
+        return invalid
 
     def reset_overrides(self):
         """Clear all overrides"""
@@ -532,7 +717,9 @@ class Options:
         with self._flush_lock:
             self.__cancel_flush_timer()
             self._dirty = False
+            self._keep_file = False
             self._paths_cache.clear()
+            self._invalid_logged.clear()
             # Reading configuration merges with existing data,
             # so clear it first.
             for section in self.config.sections():
@@ -544,6 +731,18 @@ class Options:
                 if not bleachbit.options_file.startswith('/tmp'):
                     logger.debug("Configuration file does not exist yet: %s",
                                  bleachbit.options_file)
+            except configparser.MissingSectionHeaderError:
+                # Nothing was read, so keep the next write from replacing it
+                bad_file = _free_bad_path(bleachbit.options_file)
+                logger.exception("Error reading application's configuration, "
+                                 "moving it to %s", bad_file)
+                try:
+                    os.replace(bleachbit.options_file, bad_file)
+                except OSError:
+                    logger.exception(
+                        "Error moving configuration to %s, not saving changes",
+                        bad_file)
+                    self._keep_file = True
             except Exception:
                 logger.exception("Error reading application's configuration")
             if not self.config.has_section("bleachbit"):
@@ -611,7 +810,14 @@ class Options:
 
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""
-        self.set(path_to_option(pathname), hashvalue, 'hashpath')
+        option = path_to_option(pathname)
+        if ('=' in option or '\n' in option or '\r' in option
+                or option != option.strip()):
+            # ConfigParser cannot read such a key back unchanged
+            logger.warning("Cannot remember the hash of this path: %r",
+                           pathname)
+            return
+        self.set(option, hashvalue, 'hashpath')
 
     def set_list(self, key, values):
         """Set a value which is a list data type"""
@@ -624,7 +830,8 @@ class Options:
                 self.config.remove_section(section)
             self.config.add_section(section)
             for counter, value in enumerate(values):
-                self.config.set(section, str(counter), value)
+                # The shred drives are paths too
+                self.config.set(section, str(counter), _quote_path(value))
             self.__schedule_flush()
 
     def __set_paths(self, section, values):
@@ -642,7 +849,8 @@ class Options:
             for counter, (path_type, path) in enumerate(values):
                 assert path_type in ('file', 'folder')
                 self.config.set(section, str(counter) + '_type', path_type)
-                self.config.set(section, str(counter) + '_path', path)
+                self.config.set(section, str(counter) + '_path',
+                                _quote_path(path))
             self._paths_cache.pop(section, None)
             self.__schedule_flush()
 

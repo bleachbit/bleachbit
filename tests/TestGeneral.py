@@ -252,6 +252,20 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertIsInstance(uid, int)
         self.assertGreaterEqual(uid, 0)
 
+    @common.skipIfWindows
+    def test_chownself_fd(self):
+        """With a descriptor the open file is chowned, and a failure is
+        reported instead of only logged"""
+        with mock.patch.object(General, 'get_real_uid', return_value=1000), \
+                mock.patch.object(os, 'chown') as mock_chown, \
+                mock.patch.object(os, 'fchown') as mock_fchown:
+            self.assertTrue(chownself('/tmp/x', 7))
+        mock_chown.assert_not_called()
+        mock_fchown.assert_called_once_with(7, 1000, -1)
+        with mock.patch.object(General, 'get_real_uid', return_value=1000), \
+                mock.patch.object(os, 'fchown', side_effect=OSError(1, 'nope')):
+            self.assertFalse(chownself('/tmp/x', 7))
+
     def test_chownself_root_guard(self):
         """chownself() must refuse /root and its descendants, including
         via a non-canonical path spelling that a raw substring check
@@ -276,6 +290,21 @@ class GeneralTestCase(common.BleachbitTestCase):
             # an ordinary path is still chowned
             chownself('/home/user/file')
             mock_chown.assert_called_once()
+
+    def test_chownself_root_home_from_passwd(self):
+        """chownself() refuses the home of root from passwd, as on macOS"""
+        if not IS_POSIX:
+            self.skipTest('POSIX-only behavior')
+        for pw_dir, path, chowned in (
+                ('/var/root', '/var/root/.config/bleachbit', False),
+                ('/var/root', '/var/rootlookalike/file', True),
+                ('/', '/home/user/file', True)):
+            with self.subTest(pw_dir=pw_dir, path=path), \
+                    mock.patch.object(General, 'get_real_uid', return_value=1000), \
+                    mock.patch('pwd.getpwuid', return_value=mock.Mock(pw_dir=pw_dir)), \
+                    mock.patch.object(os, 'chown') as mock_chown:
+                chownself(path)
+                self.assertEqual(mock_chown.called, chowned)
 
     @also_with_sudo
     def test_get_real_username(self):
@@ -329,6 +358,37 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertLExists(path)
         # clean up
         shutil.rmtree(os.path.join(self.tempdir, 'just'))
+
+    @common.skipIfWindows
+    def test_makedirs_sudo_chown_through_fd(self):
+        """Under sudo the new folder is chowned through a descriptor, and
+        one swapped for a link is not chowned"""
+        parent = self.mkdtemp()
+        path = os.path.join(parent, 'config')
+        with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chown:
+            makedirs(path)
+        mock_chown.assert_called_once_with(path, mock.ANY)
+        self.assertIsInstance(mock_chown.call_args[0][1], int)
+
+        target = os.path.join(parent, 'target')
+        os.mkdir(target)
+        swapped = os.path.join(parent, 'swapped')
+        real_mkdir = os.mkdir
+
+        def mkdir_then_swap(p, *args, **kwargs):
+            real_mkdir(p, *args, **kwargs)
+            if p == swapped:
+                os.rmdir(p)
+                os.symlink(target, p)
+
+        with mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.os.mkdir',
+                           side_effect=mkdir_then_swap), \
+                mock.patch('bleachbit.General.chownself') as mock_chown, \
+                self.assertLogs('bleachbit.General', level='ERROR'):
+            makedirs(swapped)
+        mock_chown.assert_not_called()
 
     @common.skipUnlessWindows
     def test_makedirs_inherits_acl(self):
@@ -639,7 +699,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         """Unit test for sudo_mode"""
         self.assertIsInstance(sudo_mode(), bool)
 
-    @common.skipUnlessLinux
+    @common.skipIfWindows
     def test_sudo_mode_requires_root(self):
         """SUDO_UID means sudo mode only when running as root"""
         with mock.patch.dict(os.environ, {'SUDO_UID': '1000'}):
@@ -647,3 +707,13 @@ class GeneralTestCase(common.BleachbitTestCase):
                 self.assertFalse(sudo_mode())
             with mock.patch('os.geteuid', return_value=0):
                 self.assertTrue(sudo_mode())
+
+    @common.skipIfWindows
+    def test_sudo_mode_follows_sudo_uid(self):
+        """sudo_mode() is True on any POSIX system when SUDO_UID is set"""
+        with mock.patch.dict(os.environ, {'SUDO_UID': str(os.getuid())}), \
+                mock.patch('os.geteuid', return_value=0):
+            self.assertTrue(sudo_mode())
+        with mock.patch.dict(os.environ):
+            os.environ.pop('SUDO_UID', None)
+            self.assertFalse(sudo_mode())
