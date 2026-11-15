@@ -34,8 +34,6 @@ RUN zypper --non-interactive refresh \
 
 RUN rpm -qa --qf '%{SIZE}\t%{NAME}-%{VERSION}-%{RELEASE}\n' | sort -nr | head -n 20
 
-RUN localedef -i en_US -f UTF-8 en_US.UTF-8 || true
-
 ARG HOME_IN_CONTAINER=/home/user
 ARG USER_ID=1000
 ARG GROUP_ID=1000

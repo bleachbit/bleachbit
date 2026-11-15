@@ -1,4 +1,9 @@
 #!/bin/sh
+
+# The shebang is sh, but the script re-executes itself with Bash below, so
+# check it as Bash rather than reporting every bashism.
+# shellcheck shell=bash
+
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
@@ -17,7 +22,7 @@
 # On Linux, native libraries (GTK, GObject introspection, etc.) are still
 # installed via the system package manager because PyGObject cannot be
 # pip-installed reliably. On macOS, GTK/GObject is ignored and only the
-# venv is used.
+# venv is used; with --dev, lint tools come from Homebrew.
 #
 # Distro is auto-detected from /etc/os-release; macOS is detected via uname;
 # FreeBSD is detected via uname -s.
@@ -27,7 +32,7 @@
 #   opensuse (Tumbleweed, Leap)                   -> zypper
 #   arch    (Arch, Manjaro, etc.)                 -> pacman
 #   freebsd (FreeBSD)                             -> pkg
-#   macos   (macOS)                               -> pip in venv
+#   macos   (macOS)                               -> pip in venv + Homebrew (dev)
 #
 # This Bash script works similarly to:
 #   - .github/workflows/tests.yaml
@@ -77,7 +82,8 @@ Usage: ./scripts/install-deps.sh [--dev] [--venv] [--help]
   --venv      Create a Python virtualenv (.venv) and install pure-Python
               deps into it with pip. On Linux, native libs are still
               installed via the system package manager. On macOS, GTK/
-              GObject is ignored and --venv is used. Override the location
+              GObject is ignored and --venv is used; --dev also installs
+              lint tools via Homebrew. Override the location
               with VENV_DIR=/path/to/venv.
   --help      Show this help.
 
@@ -160,7 +166,6 @@ install_debian() {
         python3-pyflakes
         python3-pytest
         python3-pytest-xdist
-        python3-pytest-rerunfailures
         pylint
     )
     if [[ "$VENV" == 1 ]]; then
@@ -223,7 +228,6 @@ install_fedora() {
         python3-pyflakes
         python3-pytest
         python3-pytest-xdist
-        python3-pytest-rerunfailures
         pylint
     )
     # skip dnf update: focus on just the installation.
@@ -291,7 +295,6 @@ install_opensuse() {
         libxml2-tools
         make
         "${py}-pip"
-        "${py}-sqlite-utils"
         "${py}-xml"
         python-rpm-macros
         rpm-build
@@ -299,10 +302,11 @@ install_opensuse() {
         ShellCheck
         timezone
     )
+    # sqlite-utils is not packaged on Leap (see bleachbit.spec); install if available.
+    local dev_extra=("${py}-sqlite-utils")
     local dev_pip=(
         "${py}-pytest"
         "${py}-pytest-xdist"
-        "${py}-pytest-rerunfailures"
     )
     # Lint tools on openSUSE are packaged differently; install via pip
     # in dev mode if the system packages are unavailable.
@@ -316,14 +320,15 @@ install_opensuse() {
     if [[ "$MODE" == "dev" ]]; then
         echo "[opensuse] installing dev/test/packaging deps"
         sudo zypper --non-interactive install --no-recommends "${dev[@]}"
+        sudo zypper --non-interactive install --no-recommends "${dev_extra[@]}" || true
         if [[ "$VENV" == 0 ]]; then
             sudo zypper --non-interactive install --no-recommends "${dev_pip[@]}" || true
             # pylint/pyflakes/autopep8 may not be in the main repos;
             # fall back to pip --user for the lint tooling used by `make pretty`/`make lint`.
             if ! command -v pylint >/dev/null 2>&1; then
                 echo "[opensuse] installing lint tools via pip --user"
-                pip install --user --break-system-packages pylint pyflakes autopep8 || \
-                    pip install --user pylint pyflakes autopep8
+                pip install --user --break-system-packages -r "$REPO_ROOT/requirements-lint.txt" || \
+                    pip install --user -r "$REPO_ROOT/requirements-lint.txt"
             fi
         fi
     fi
@@ -361,7 +366,6 @@ install_arch() {
         python-pyflakes
         python-pytest
         python-pytest-xdist
-        python-pytest-rerunfailures
         pylint
     )
     # no `pacman -Sy` to avoid partial upgrade.
@@ -418,7 +422,7 @@ install_freebsd() {
     fi
 }
 
-# --- macOS (no native package manager; use pip in a venv) --------------------
+# --- macOS (pip in a venv; Homebrew for dev tools) ---------------------------
 install_macos() {
     echo "[macos] using pip in a venv (GTK/GObject is not installed on macOS)"
     if ! command -v python3 >/dev/null 2>&1; then
@@ -431,7 +435,32 @@ install_macos() {
         exit 1
     fi
     if [[ "$MODE" == "dev" ]]; then
+        install_macos_dev
         echo "[macos] dev/test/lint Python deps will be installed via venv"
+    fi
+}
+
+# The shellcheck, appstreamcli (`make lint`), and dos2unix (`make pretty`)
+# tools are not installable via pip; get them from Homebrew.
+install_macos_dev() {
+    local brew_cmd
+    brew_cmd="$(command -v brew || true)"
+    # Homebrew may be installed but not on PATH in a non-interactive shell.
+    if [[ -z "$brew_cmd" ]]; then
+        local candidate
+        for candidate in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+            if [[ -x "$candidate" ]]; then
+                brew_cmd="$candidate"
+                break
+            fi
+        done
+    fi
+    if [[ -n "$brew_cmd" ]]; then
+        echo "[macos] installing dev/lint tools via Homebrew"
+        "$brew_cmd" install shellcheck appstream dos2unix
+    else
+        echo "WARNING: Homebrew not found; skipping shellcheck, appstream, dos2unix." >&2
+        echo "         Install Homebrew (https://brew.sh) or install them manually." >&2
     fi
 }
 
@@ -442,7 +471,11 @@ setup_venv() {
     if [[ -d "$VENV_DIR" ]]; then
         echo "[venv] $VENV_DIR already exists; reusing it"
     else
-        python3 -m venv "$VENV_DIR"
+        # --system-site-packages: on Linux, python3-gi is installed as a system
+        # package (see install_debian/install_fedora/etc.), and pip cannot
+        # install PyGObject reliably. Without this flag, pylint would report
+        # spurious unresolved-import errors for every `import gi`.
+        python3 -m venv --system-site-packages "$VENV_DIR"
     fi
     # shellcheck disable=SC1091
     . "$VENV_DIR/bin/activate"
@@ -456,7 +489,7 @@ setup_venv() {
     fi
     if [[ "$MODE" == "dev" ]]; then
         echo "[venv] installing dev/test/lint Python deps"
-        pip install pylint pyflakes autopep8 pytest pytest-xdist pytest-rerunfailures
+        pip install -r "$REPO_ROOT/requirements-test.txt" -r "$REPO_ROOT/requirements-lint.txt"
     fi
 }
 

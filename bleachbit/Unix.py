@@ -22,7 +22,8 @@ import subprocess
 import bleachbit
 from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
-from bleachbit.Language import get_text as _, native_locale_names
+from bleachbit.Language import get_text as _, native_locale_names, \
+    LocaleCode
 from bleachbit.VFS import RealVFS
 
 logger = logging.getLogger(__name__)
@@ -53,7 +54,10 @@ class LocaleCleanerPath:
 
     def add_child(self, child):
         """Adds a child LocaleCleanerPath"""
+        # child is the same class, so _vfs is not foreign.
+        # pylint: disable-next=protected-access
         if isinstance(child, LocaleCleanerPath) and child._vfs is None:
+            # pylint: disable-next=protected-access
             child._vfs = self._vfs
         self.children.append(child)
         return child
@@ -68,26 +72,34 @@ class LocaleCleanerPath:
                 f"Malformed regex '{pre}' or '{post}': {errormsg}") from errormsg
         self.add_child(regex)
 
+    def _listdir(self, path):
+        """List a directory, treating one that cannot be read as empty"""
+        try:
+            return self._get_vfs().listdir(path)
+        except OSError:
+            # Such as /usr/share/empty.sshd, which is mode 0711
+            return []
+
     def get_subpaths(self, basepath):
         """Returns direct subpaths for this object, i.e. either the named subfolder or all
         subfolders matching the pattern"""
         vfs = self._get_vfs()
         if isinstance(self.pattern, re.Pattern):
+            names = self._listdir(basepath)
             # posixpath is easy way to test also from Windows.
-            return (posixpath.join(basepath, p) for p in vfs.listdir(basepath)
+            return (posixpath.join(basepath, p) for p in names
                     if self.pattern.match(p) and vfs.isdir(posixpath.join(basepath, p)))
         path = posixpath.join(basepath, self.pattern)
         return [path] if vfs.isdir(path) else []
 
     def get_localizations(self, basepath):
         """Returns all localization items for this object and all descendant objects"""
-        vfs = self._get_vfs()
         for path in self.get_subpaths(basepath):
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
                     yield from child.get_localizations(path)
                 elif isinstance(child, re.Pattern):
-                    for element in vfs.listdir(path):
+                    for element in self._listdir(path):
                         match = child.match(element)
                         if match is not None:
                             yield (match.group('locale'),
@@ -241,43 +253,48 @@ def find_available_locales():
 
 
 def find_best_locale(user_locale):
-    """Find closest match to available locales"""
+    """Find closest match to available locales, preferring UTF-8
+
+    BleachBit's code and .po files are UTF-8 and GTK 3 requires UTF-8
+    for display strings, so a non-UTF-8 locale is returned only when
+    UTF-8 is not available.
+    """
     assert isinstance(user_locale, str)
-    if not user_locale:
+    req = LocaleCode(user_locale)
+    if not req.raw:
         return 'C'
-    if user_locale in ('C', 'C.utf8', 'POSIX'):
-        return user_locale
-    available_locales = find_available_locales()
+    if req.is_special:
+        return req.raw
+    available_raw = find_available_locales()
+    available = [LocaleCode(a) for a in available_raw]
 
-    # If requesting a language like 'es' and current locale is compatible
-    # like 'es_MX', then return that.
+    # Exact match if already UTF-8.
+    if req.is_utf8 and req.raw in available_raw:
+        return req.raw
+
+    # Prefer current system locale if compatible and UTF-8
+    # (e.g., system is 'es_MX.UTF-8' when requesting 'es').
     # Import here for mock patch.
-    import locale  # pylint: disable=import-outside-toplevel
-    current_locale = locale.getlocale()[0]
-    if current_locale and current_locale.startswith(user_locale.split('.')[0]):
-        # getlocale() may return (language, None) when the encoding is unknown.
-        return '.'.join(p for p in locale.getlocale() if p)
+    import locale
+    lang, codeset = locale.getlocale()
+    if lang and codeset and lang.startswith(req.normalized) and \
+            codeset.replace('-', '').replace('_', '').lower() == 'utf8':
+        return '.'.join((lang, codeset))
 
-    # Check for exact match.
-    if user_locale in available_locales:
-        return user_locale
+    # Otherwise search installed locales for UTF-8 (e.g., 'es_ES.utf8').
+    for avail in available:
+        if avail.normalized.startswith(req.normalized) and avail.is_utf8:
+            return avail.raw
 
-    # Next, match like 'en' to 'en_US.utf8' (if available) because
-    # of preference for UTF-8. Compare case- and hyphen-insensitively:
-    # macOS's locale -a uses '.UTF-8' (uppercase, hyphenated), while
-    # some Linux distros use '.utf8' (lowercase, no hyphen); comparing
-    # only against '.utf8' silently never matched on macOS, falling
-    # through to the next loop and picking whatever locale happened to
-    # be listed first for the prefix -- including a non-UTF-8 one.
-    for avail_locale in available_locales:
-        suffix = avail_locale.rsplit('.', 1)[-1].replace('-', '').lower()
-        if avail_locale.startswith(user_locale) and suffix == 'utf8':
-            return avail_locale
+    # Fall back to exact non-UTF-8 match (e.g., 'de_DE@euro').
+    for candidate in (req.raw, req.normalized):
+        if candidate in available_raw:
+            return candidate
 
-    # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
-    for avail_locale in available_locales:
-        if avail_locale.startswith(user_locale):
-            return avail_locale
+    # Fall back to any installed match (e.g., 'en_US.iso88591').
+    for avail in available:
+        if avail.normalized.startswith(req.normalized):
+            return avail.raw
 
     return 'C'
 
@@ -315,7 +332,7 @@ def get_distribution_name_version_distro():
     """
     try:
         # Import here in case of ImportError.
-        import distro  # pylint: disable=import-outside-toplevel
+        import distro
         # example 'ubuntu 24.10'
         # Arch Linux returns id='arch' and version=''.
         dist_version = distro.version()
@@ -359,8 +376,8 @@ def get_distribution_name_version():
 
     Depending on system capabilities, return value may be:
     * 'ubuntu 24.10'
-    * 'Linux 6.12.3 (unknown distribution)'
-    * 'Linux (unknown version and distribution)'
+    * 'Linux 6.12.3'
+    * 'Linux'
 
     Python 3.7 had platform.linux_distribution(), but it
     was removed in Python 3.8.
@@ -368,24 +385,23 @@ def get_distribution_name_version():
     for get_dist in (get_distribution_name_version_platform_freedesktop,
                      get_distribution_name_version_distro,
                      get_distribution_name_version_os_release):
-        ret = get_dist()
-        if ret:
+        if ret := get_dist():
             return ret
     for name, get_release in (('platform.release()', platform.release),
                               ('os.uname()', lambda: os.uname().release)):
         try:
             # example '6.12.3-061203-generic'
             linux_version = get_release().split('-')[0]
-            return f"Linux {linux_version} (unknown distribution)"
+            return f"Linux {linux_version}"
         except Exception as e:
             logger.debug("Error calling %s: %s", name, e)
-    return "Linux (unknown version and distribution)"
+    return "Linux"
 
 
 def get_mount_points():
     """Return read-write mount points that may have trash"""
     try:
-        import psutil  # pylint: disable=import-outside-toplevel
+        import psutil
     except ImportError:
         logger.warning('install psutil for better trash detection')
         return []
@@ -415,14 +431,15 @@ def get_purgeable_locales(locales_to_keep):
 
     # Remove the locales we want to keep
     for keep in locales_to_keep:
+        keep_loc = LocaleCode(keep)
         purgeable_locales.discard(keep)
         # If keeping a variant (e.g. 'en_US'), also keep the base locale (e.g. 'en')
-        if '_' in keep:
-            purgeable_locales.discard(keep[:keep.find('_')])
+        if keep_loc.territory:
+            purgeable_locales.discard(keep_loc.language)
         # If keeping a base locale (e.g. 'en'), also keep all its variants (e.g. 'en_US')
-        if '_' not in keep:
+        else:
             purgeable_locales = {locale for locale in purgeable_locales
-                                 if not locale.startswith(keep + '_')}
+                                 if LocaleCode(locale).language != keep_loc.language}
 
     return frozenset(purgeable_locales)
 
@@ -430,7 +447,6 @@ def get_purgeable_locales(locales_to_keep):
 def get_trash_paths():
     """Iterate over all trash on POSIX systems"""
     # Import here to avoid a circular import.
-    # pylint: disable=import-outside-toplevel
     from bleachbit import Command
     # macOS-style flat trash. list_directories=True is required so that
     # a folder sent to Trash is itself removed after its contents are
@@ -476,7 +492,7 @@ def is_unregistered_mime(mimetype):
     """Returns True if the MIME type is known to be unregistered. If
     registered or unknown, conservatively returns False."""
     try:
-        from bleachbit.GtkShim import Gio  # pylint: disable=import-outside-toplevel
+        from bleachbit.GtkShim import Gio
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:
@@ -487,8 +503,8 @@ def is_unregistered_mime(mimetype):
 
 def is_broken_xdg_desktop(pathname):
     """Returns whether the given XDG .desktop file is critically broken.
-    Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
-    config = bleachbit.RawConfigParser()
+    Reference: https://specifications.freedesktop.org/desktop-entry/latest/"""
+    config = configparser.RawConfigParser()
     try:
         config.read(pathname)
     except UnicodeDecodeError:
@@ -562,6 +578,72 @@ def rotated_logs():
             continue
         if positive_re.search(path):
             yield path
+
+
+def orphaned_framework_versions(versions_dir):
+    """Yield paths of files (and, once emptied, the folder itself)
+    inside each orphaned version folder under a macOS .app's
+    Contents/Frameworks/*.framework/Versions/ directory.
+
+    Individual files are yielded rather than each orphaned folder as a
+    single unit because Command.Delete sizes a directory via a single
+    lstat(), reflecting only the directory inode itself (near 0 bytes)
+    rather than its actual recursive disk usage.
+
+    Chromium-based browsers on macOS (e.g. Google Chrome) keep every
+    version they have ever been updated to/from inside this directory,
+    with a 'Current' symlink pointing at the one actually in use.
+    Google's own auto-update mechanism has never reliably cleaned up
+    the old ones (a bug reported publicly since at least 2011), so
+    these can accumulate to several GB over the lifetime of an
+    installation.
+
+    Only 'Current' identifies the version genuinely in use -- version
+    numbers are not orderable across schemes (e.g. '152.0.7977.83' vs
+    '152.1.94.117') and a folder's modification time can be misleading
+    (e.g. after restoring from a backup), so both are deliberately
+    ignored here. If 'Current' cannot be read as a valid symlink to an
+    existing sibling directory, nothing is yielded at all, erring on
+    the side of not deleting anything rather than guessing which
+    version is safe to remove.
+    """
+    current_link = os.path.join(versions_dir, 'Current')
+    if not os.path.islink(current_link):
+        return
+    try:
+        current_target = os.readlink(current_link)
+    except OSError:
+        return
+    # The symlink is typically relative (e.g. '152.0.7977.83'), but
+    # tolerate an absolute target too.
+    current_name = os.path.basename(current_target.rstrip('/'))
+    current_real = os.path.realpath(current_link)
+    if not os.path.isdir(current_real):
+        # 'Current' points at something that doesn't exist -- do not
+        # guess which folder is safe to remove.
+        return
+    try:
+        entries = os.listdir(versions_dir)
+    except OSError:
+        return
+    for name in entries:
+        if name in ('Current', current_name):
+            continue
+        full_path = os.path.join(versions_dir, name)
+        if not os.path.isdir(full_path) or os.path.islink(full_path):
+            continue
+        # Yield each file individually (rather than the folder as one
+        # unit) so Command.Delete reports the real disk space freed --
+        # it sizes a directory via a single lstat(), which reflects
+        # only the directory inode itself (near 0 bytes), not its
+        # recursive content. children_in_directory() only yields items
+        # found INSIDE full_path (with list_directories=True also
+        # yielding any nested subdirectories, once emptied) -- it never
+        # yields full_path itself, so that is yielded explicitly last,
+        # once its own contents have all been accounted for above.
+        yield from bleachbit.FileUtilities.children_in_directory(
+            full_path, list_directories=True)
+        yield full_path
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):

@@ -15,7 +15,7 @@
 ;  GNU General Public License for more details.
 ;
 ;  You should have received a copy of the GNU General Public License
-;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;  @scriptversion v3.0.1.1429
 ;  @scriptdate 2019-12-01
@@ -59,10 +59,12 @@
   ; ----------------------------- disable warning missing strings in some not english section (wrn 6040)
   ;!pragma warning disable 6040
 
+; windows/setup.py passes UPX_TAG for UPX builds
+!define /ifndef UPX_TAG ""
 !ifdef NoTranslations
-  OutFile "${prodname}-${VERSION}-setup-English.exe"
+  OutFile "${prodname}-${VERSION}-setup-English${UPX_TAG}.exe"
 !else
-  OutFile "${prodname}-${VERSION}-setup.exe"
+  OutFile "${prodname}-${VERSION}-setup${UPX_TAG}.exe"
 !endif
 
 ; Unicode requires NSIS version 3 or later
@@ -215,7 +217,7 @@ Caption "$(INSTALLER_CAPTION)"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "picture.MUI2\bleachbit_164x314.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !define MUI_LICENSEPAGE_RADIOBUTTONS
-!insertmacro MUI_PAGE_LICENSE "..\COPYING"
+!insertmacro MUI_PAGE_LICENSE "gpl-3.0.rtf"
 ;Later:
 ;!insertmacro MUI_PAGE_LICENSE "$(MUI_LICENSE)"
 ;!define MUI_PAGE_CUSTOMFUNCTION_PRE "MULTIUSER_PAGE_INSTALLMODE_Pre"
@@ -225,7 +227,8 @@ Caption "$(INSTALLER_CAPTION)"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_NOAUTOCLOSE
-!define MUI_FINISHPAGE_RUN "$INSTDIR\${prodname}.exe"
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION RunBleachBit
 ;!define MUI_FINISHPAGE_LINK "Visit the ${prodname} web site."
 ;Later:
 !define MUI_FINISHPAGE_LINK "$(BLEACHBIT_MUI_FINISHPAGE_LINK)"
@@ -260,7 +263,6 @@ Caption "$(INSTALLER_CAPTION)"
 !ifndef NoTranslations
   !insertmacro MUI_LANGUAGE "Albanian"
   !insertmacro MUI_LANGUAGE "Arabic"
-  !insertmacro MUI_LANGUAGE "Armenian"
   !insertmacro MUI_LANGUAGE "Asturian"
   !insertmacro MUI_LANGUAGE "Basque"
   !insertmacro MUI_LANGUAGE "Belarusian"
@@ -281,6 +283,13 @@ Caption "$(INSTALLER_CAPTION)"
   !insertmacro MUI_LANGUAGE "Hungarian"
   !insertmacro MUI_LANGUAGE "Indonesian"
   !insertmacro MUI_LANGUAGE "Italian"
+  ; Override upstream Italian.nsh: add line break on finish page (issue #1453)
+  ; The last LangString wins; 6030 only warns about the replaced string
+  !pragma warning push
+  !pragma warning disable 6030
+  LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\n$\r$\nVuoi riavviarlo ora?"
+  LangString MUI_UNTEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare la disinstallazione di $(^NameDA) il computer deve essere riavviato.$\r$\n$\r$\nVuoi riavviarlo ora?"
+  !pragma warning pop
   !insertmacro MUI_LANGUAGE "Japanese"
   !insertmacro MUI_LANGUAGE "Korean"
   !insertmacro MUI_LANGUAGE "Latvian"
@@ -316,11 +325,22 @@ ${StrCase}
 ;--------------------------------
 ;Function
 
-; http://nsis.sourceforge.net/RefreshShellIcons
+; https://nsis.sourceforge.io/RefreshShellIcons
 Function RefreshShellIcons
   !define SHCNE_ASSOCCHANGED 0x08000000
   !define SHCNF_IDLIST 0
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
+; Start BleachBit as the user who ran setup, not the admin that elevated it
+Function RunBleachBit
+  HideWindow ; so BleachBit becomes the active window once setup exits
+  ${If} ${UAC_IsInnerInstance}
+    !insertmacro UAC_AsUser_ExecShell "open" "$INSTDIR\${prodname}.exe" "" "$INSTDIR" ""
+  ${Else}
+    ; Setup was started elevated, so there is no user instance to ask
+    ${StdUtils.ExecShellAsUser} $0 "$INSTDIR\${prodname}.exe" "open" ""
+  ${EndIf}
 FunctionEnd
 
 Function .onVerifyInstDir
@@ -351,19 +371,21 @@ Section "$(SECTION_CORE_NAME)" SectionCore
 
     # register uninstaller in Add/Remove Programs
     !insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
         "HelpLink" "https://www.bleachbit.org/help"
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
         "URLInfoAbout" "https://www.bleachbit.org/"
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
         "URLUpdateInfo" "https://www.bleachbit.org/download"
-    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
+    WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}" \
                  "DisplayName" "${prodname}"
 
     # Build cache now while there is a GUI progress bar.
     DetailPrint "$(MULTIPRINT1)"
     DetailPrint "$(MULTIPRINT2)"
-    ExecWait '"$instdir\fc-cache.exe"'
+    # nsExec runs it without flashing a console window
+    nsExec::Exec '"$instdir\fc-cache.exe"'
+    Pop $0 ; exit code
 SectionEnd
 
 
@@ -440,7 +462,10 @@ Function .onInit
   !insertmacro MULTIUSER_INIT
 
   ; Language display dialog
-  !insertmacro MUI_LANGDLL_DISPLAY
+  ; The elevated inner instance already has the language of the outer one
+  ${If} $IsInnerInstance = 0
+    !insertmacro MUI_LANGDLL_DISPLAY
+  ${EndIf}
 
   ; Check whether application is already installed
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${prodname}" \

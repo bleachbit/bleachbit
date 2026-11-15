@@ -8,6 +8,9 @@
 Test case for module Windows
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 
 # standard imports
 import ctypes
@@ -51,6 +54,8 @@ from bleachbit.Windows import (
     get_windows_system_paths,
     get_windows_version,
     elevate_privileges,
+    fix_appdata_acl,
+    has_broken_appdata_acl,
     has_fontconfig_cache,
     is_junction,
     move_to_recycle_bin,
@@ -136,11 +141,18 @@ class WindowsSystemPathsTestCase(common.BleachbitTestCase):
 if bleachbit.IS_WINDOWS:
     import pywintypes
     import win32api
+    import win32con
+    import win32gui
     import win32service
     import winreg
     from win32com.shell import shell
 
+    # pylint: disable-next=ungrouped-imports
     from bleachbit import Windows
+else:
+    # WindowsError is a builtin only on Windows
+    # pylint: disable-next=redefined-builtin
+    from bleachbit.General import WindowsError
 
 
 def put_objects_into_recycle_bin():
@@ -198,6 +210,7 @@ class WindowsLinksMixIn():
         link_path = Path(linkname)
         self.assertTrue(link_path.is_symlink())
         self.assertTrue(link_path.is_dir())
+        # pylint: disable-next=possibly-used-before-assignment
         self.assertFalse(Windows.is_junction(linkname))
         self.assertFalse(FileUtilities.is_normal_directory(linkname))
 
@@ -293,6 +306,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     """Test case for module Windows"""
 
     def skipUnlessAdmin(self):
+        # pylint: disable-next=possibly-used-before-assignment
         if not shell.IsUserAnAdmin():
             self.skipTest('requires administrator privileges')
 
@@ -550,8 +564,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             pathname = self.mkstemp(suffix=test)
             time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
-            logger.debug('delete_locked_file(%s) ' % pathname)
+            logger.debug('delete_locked_file(%s) ', pathname)
             if not shell.IsUserAnAdmin():
+                # pylint: disable-next=possibly-used-before-assignment
                 with self.assertRaises(WindowsError):
                     delete_locked_file(pathname)
             else:
@@ -641,6 +656,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # create a nested key
         key = 'Software\\BleachBit\\DeleteThisKey'
         subkey = key + '\\AndThisKey'
+        # pylint: disable-next=possibly-used-before-assignment
         hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, subkey)
         hkey.Close()
 
@@ -691,6 +707,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # Windows Update is sometimes running.
         self.assertIsInstance(is_service_running('wuauserv'), bool)
         # Non-existent service should raise an error.
+        # pylint: disable-next=possibly-used-before-assignment
         with self.assertRaises(pywintypes.error):
             is_service_running('does_not_exist')
         # None should raise an error.
@@ -776,7 +793,10 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_splash_thread_reuses_cached_class_atom(self):
         """_register_window_class skips RegisterClass when cached."""
         splash = SplashThread()
-        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', None))
+        # Restore rather than clear: the class stays registered in this
+        # process, so a later real splash needs its atom back.
+        previous = SplashThread._class_atom
+        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', previous))
         SplashThread._class_atom = 9876
         with mock.patch('bleachbit.Windows.win32gui.RegisterClass') as mock_register:
             atom = splash._register_window_class(mock.Mock())
@@ -786,7 +806,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_splash_thread_recovers_when_class_exists(self):
         """_register_window_class handles ERROR_CLASS_ALREADY_EXISTS."""
         splash = SplashThread()
-        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', None))
+        previous = SplashThread._class_atom
+        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', previous))
         SplashThread._class_atom = None
         wnd_class = mock.Mock()
         wnd_class.hInstance = mock.sentinel.instance
@@ -888,6 +909,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.skipTest('requires administrator privileges')
 
         def _service_exists_and_enabled(svc):
+            # pylint: disable-next=possibly-used-before-assignment
             scm = win32service.OpenSCManager(
                 None, None, win32service.SC_MANAGER_CONNECT)
             try:
@@ -895,7 +917,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     scm, svc, win32service.SERVICE_QUERY_STATUS | win32service.SERVICE_QUERY_CONFIG)
                 try:
                     cfg = win32service.QueryServiceConfig(hs)
-                    return True if cfg[1] != win32service.SERVICE_DISABLED else False
+                    return cfg[1] != win32service.SERVICE_DISABLED
                 finally:
                     win32service.CloseServiceHandle(hs)
             except pywintypes.error:
@@ -912,9 +934,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                         scm, svc, win32service.SERVICE_ALL_ACCESS)
                 except pywintypes.error:
                     return False
-                else:
-                    win32service.CloseServiceHandle(hs)
-                    return True
+                win32service.CloseServiceHandle(hs)
+                return True
             finally:
                 win32service.CloseServiceHandle(scm)
 
@@ -1095,6 +1116,31 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             '</fontconfig>\n')
         self.assertFalse(has_fontconfig_cache(font_conf))
 
+    def test_has_fontconfig_cache_any_version(self):
+        """A cache file of any fontconfig cache version is found"""
+        cache_dir = self.mkdir('fc_cache')
+        font_conf = self.write_file(
+            'fonts_cache_dir.conf',
+            text='<?xml version="1.0"?>\n'
+            f'<fontconfig><cachedir>{cache_dir}</cachedir></fontconfig>\n')
+        self.assertFalse(has_fontconfig_cache(font_conf))
+        self.write_file(os.path.join(cache_dir, 'x-le32d8.cache-9'))
+        self.assertTrue(has_fontconfig_cache(font_conf))
+
+    def test_has_fontconfig_cache_install_relative(self):
+        """A cachedir starting with / is under the folder holding etc/fonts"""
+        fonts_dir = self.mkdir(os.path.join('fc_prefix', 'etc', 'fonts'))
+        font_conf = self.write_file(
+            os.path.join(fonts_dir, 'fonts.conf'),
+            text='<?xml version="1.0"?>\n'
+            '<fontconfig><cachedir>/var/cache/fontconfig</cachedir>'
+            '</fontconfig>\n')
+        self.assertFalse(has_fontconfig_cache(font_conf))
+        cache_dir = self.mkdir(
+            os.path.join('fc_prefix', 'var', 'cache', 'fontconfig'))
+        self.write_file(os.path.join(cache_dir, 'x-le32d8.cache-9'))
+        self.assertTrue(has_fontconfig_cache(font_conf))
+
     def test_has_fontconfig_cache_rejects_dtd(self):
         """A fonts.conf with a DTD is rejected (entity-expansion defense)"""
         font_conf = self.write_file(
@@ -1208,7 +1254,6 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """
 
         from bleachbit.WindowsWipe import file_wipe, open_file, close_file, file_make_sparse
-        from bleachbit.Windows import elevate_privileges
         from win32con import GENERIC_WRITE, WRITE_DAC
 
         dirname = self.mkdtemp()
@@ -1220,8 +1265,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
             def _write_file(longname, contents):
                 self.write_file(longname, contents)
-                import win32api
                 shortname = extended_path_undo(
+                    # win32api is imported on Windows, where this test runs.
+                    # pylint: disable-next=possibly-used-before-assignment
                     win32api.GetShortPathName(extended_path(longname)))
                 self.assertExists(shortname)
                 return shortname
@@ -1231,6 +1277,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 import ntsecuritycon as con
 
                 user, _, _ = win32security.LookupAccountName(
+                    # pylint: disable-next=possibly-used-before-assignment
                     "", win32api.GetUserName())
                 dacl = win32security.ACL()
                 dacl.AddAccessDeniedAce(
@@ -1239,6 +1286,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                                               None, None, dacl, None)
 
             def _test_wipe(contents, deny_access=False, is_sparse=False):
+                # The closure runs inside the iteration that defines these names.
+                # pylint: disable=cell-var-from-loop
                 shortname = _write_file(longname, contents)
                 if deny_access or is_sparse:
                     fh = open_file(extended_path(longname),
@@ -1248,8 +1297,10 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     if deny_access:
                         _deny_access(fh)
                     close_file(fh)
-                logger.debug('test_file_wipe(): filename length={}, shortname length ={}, contents length={}, is_sparse={}'.format(
-                    len(longname), len(shortname), len(contents), is_sparse))
+                logger.debug(
+                    'test_file_wipe(): filename length=%d, '
+                    'shortname length =%d, contents length=%d, is_sparse=%s',
+                    len(longname), len(shortname), len(contents), is_sparse)
                 if shell.IsUserAnAdmin():
                     # wiping requires admin privileges
                     file_wipe(shortname)
@@ -1356,6 +1407,46 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         repeat.start()
         repeat.join()
 
+    def test_splash_thread_start_runs_sent_messages(self):
+        """start() runs messages sent to its thread while it waits"""
+        received = []
+
+        def wnd_proc(hwnd, msg, wparam, lparam):
+            # pylint: disable-next=possibly-used-before-assignment
+            if msg == win32con.WM_USER:
+                received.append(wparam)
+                return 0
+            # pylint: disable-next=possibly-used-before-assignment
+            return win32gui.DefWindowProc(hwnd, msg, wparam, lparam)
+
+        wnd_class = win32gui.WNDCLASS()
+        wnd_class.lpszClassName = 'BleachBitSplashWaitTest'
+        wnd_class.lpfnWndProc = wnd_proc
+        wnd_class.hInstance = win32api.GetModuleHandle(None)
+        atom = win32gui.RegisterClass(wnd_class)
+        hwnd = win32gui.CreateWindowEx(
+            0, atom, '', 0, 0, 0, 0, 0, win32con.HWND_MESSAGE, 0,
+            wnd_class.hInstance, None)
+
+        def send_from_splash_thread(_self, _splash_hwnd):
+            # Stands in for GDK's keyboard hook, which the splash's ALT keys
+            # wait on. A sent message, unlike keys, needs no input desktop.
+            win32gui.SendMessageTimeout(hwnd, win32con.WM_USER, 1, 0,
+                                        win32con.SMTO_NORMAL, 2000)
+            return True
+
+        splash_thread = SplashThread()
+        try:
+            with mock.patch.object(SplashThread, '_force_set_foreground_window',
+                                   send_from_splash_thread):
+                splash_thread.start()
+            received_during_start = list(received)
+        finally:
+            splash_thread.join()
+            win32gui.DestroyWindow(hwnd)
+            win32gui.UnregisterClass(atom, wnd_class.hInstance)
+        self.assertEqual(received_during_start, [1])
+
     def test_splash_screen_window_pos(self):
         """Unit test for calculate_window_position()"""
         splash_thread = SplashThread()
@@ -1440,3 +1531,86 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # multiple arguments, one with spaces, in a realistic combination
         self._assert_roundtrips(
             base, ['--context-menu', r'C:\path with spaces\file.txt', '--debug-log'])
+
+    def test_appdata_acl_check_and_fix(self):
+        """Detect and fix a broken 0o700 ACL on %APPDATA%\\BleachBit"""
+        # Simulate the elevated first run: the folder is owned by the current
+        # user here, so pretend the current user is someone else.
+        import win32security  # pylint: disable=import-outside-toplevel
+        other_sid = win32security.ConvertStringSidToSid('S-1-5-32-545')
+        parent = os.path.join(self.tempdir, 'appdata_roaming')
+        os.mkdir(parent)
+        self.assertFalse(has_broken_appdata_acl(parent))
+        self.assertFalse(has_broken_appdata_acl(parent, other_sid))
+
+        broken_dir = os.path.join(parent, 'BleachBit')
+        os.mkdir(broken_dir, 0o700)
+        cleaners_dir = os.path.join(broken_dir, 'cleaners')
+        os.mkdir(cleaners_dir, 0o700)
+        ini_file = os.path.join(broken_dir, 'bleachbit.ini')
+        self.write_file(ini_file, b'[bleachbit]\n')
+
+        # A 0o700 folder owned by the current user works, so it is not flagged.
+        # When elevated the owner is Administrators, so read it from the file.
+        owner_sid = win32security.GetFileSecurity(
+            broken_dir, win32security.OWNER_SECURITY_INFORMATION).GetSecurityDescriptorOwner()
+        self.assertFalse(has_broken_appdata_acl(broken_dir, owner_sid))
+        self.assertTrue(has_broken_appdata_acl(broken_dir, other_sid))
+
+        fix_appdata_acl(broken_dir)
+        self.assertFalse(has_broken_appdata_acl(broken_dir, other_sid))
+        self.assertFalse(has_broken_appdata_acl(cleaners_dir, other_sid))
+
+        # Child-only broken DACL is also detected and repaired
+        os.rmdir(cleaners_dir)
+        os.mkdir(cleaners_dir, 0o700)
+        self.assertTrue(has_broken_appdata_acl(broken_dir, other_sid))
+        fix_appdata_acl(broken_dir)
+        self.assertFalse(has_broken_appdata_acl(broken_dir, other_sid))
+
+        # Hard-linked files are neither checked nor repaired
+        outside_dir = os.path.join(self.tempdir, 'outside_options')
+        os.mkdir(outside_dir, 0o700)
+        outside_file = os.path.join(outside_dir, 'victim.txt')
+        self.write_file(outside_file, b'x')
+        os.link(outside_file, os.path.join(broken_dir, 'link.txt'))
+        self.assertFalse(has_broken_appdata_acl(broken_dir, other_sid))
+        fix_appdata_acl(broken_dir)
+        self.assertTrue(bleachbit.Windows._is_path_acl_broken(  # pylint: disable=protected-access
+            outside_file, other_sid))
+
+        # Non-existent path and portable mode
+        self.assertFalse(
+            has_broken_appdata_acl(os.path.join(parent, 'does_not_exist')))
+        with mock.patch('bleachbit.portable_mode', True):
+            self.assertFalse(has_broken_appdata_acl())
+
+    def test_fix_appdata_acl_continues_after_failure(self):
+        """A failure on one path does not prevent repairing the others"""
+        import win32security  # pylint: disable=import-outside-toplevel
+        other_sid = win32security.ConvertStringSidToSid('S-1-5-32-545')
+        parent = os.path.join(self.tempdir, 'appdata_partial')
+        os.mkdir(parent)
+        broken_dir = os.path.join(parent, 'BleachBit')
+        os.mkdir(broken_dir, 0o700)
+        cleaners_dir = os.path.join(broken_dir, 'cleaners')
+        os.mkdir(cleaners_dir, 0o700)
+        ini_file = os.path.join(broken_dir, 'bleachbit.ini')
+        self.write_file(ini_file, b'[bleachbit]\n')
+
+        real_set = win32security.SetNamedSecurityInfo
+
+        def flaky_set(target, *args, **kwargs):
+            if target == ini_file:
+                raise OSError('simulated failure')
+            return real_set(target, *args, **kwargs)
+
+        with mock.patch.object(win32security, 'SetNamedSecurityInfo',
+                               side_effect=flaky_set) as setter:
+            with self.assertRaises(OSError):
+                fix_appdata_acl(broken_dir)
+        attempted = [call.args[0] for call in setter.call_args_list]
+        # cleaners/ is yielded after the top-level files, so its presence
+        # proves iteration continued past the failing file.
+        self.assertIn(cleaners_dir, attempted)
+        self.assertFalse(has_broken_appdata_acl(cleaners_dir, other_sid))

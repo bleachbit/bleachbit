@@ -31,7 +31,7 @@ if IS_POSIX:
     from bleachbit import Unix
 elif IS_WINDOWS:
     from bleachbit import Windows
-elif not (IS_POSIX or IS_WINDOWS):
+else:
     raise RuntimeError(f"Unknown OS '{os.name}'")
 
 
@@ -218,34 +218,36 @@ class System(Cleaner):
         # options for Linux and BSD
         #
         if IS_POSIX:
-            self.add_option(
-                'desktop_entry',
-                # TRANSLATORS: desktop entries are .desktop files in Linux that
-                # make up the application menu (the menu that shows BleachBit,
-                # Firefox, and others.  The .desktop files also associate file
-                # types, so clicking on an .html file in Nautilus brings up
-                # Firefox.
-                # More information:
-                # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-                _('Broken desktop files'),
-                # TRANSLATORS: Description of the Broken desktop files cleaning option.
-                _('Delete broken application menu entries and file associations'))
+            if not IS_MAC:
+                self.add_option(
+                    'desktop_entry',
+                    # TRANSLATORS: desktop entries are .desktop files in Linux that
+                    # make up the application menu (the menu that shows BleachBit,
+                    # Firefox, and others).  The .desktop files also associate file
+                    # types, so clicking on an .html file in Nautilus brings up
+                    # Firefox.
+                    # More information:
+                    # https://specifications.freedesktop.org/menu/latest/index.html#introduction
+                    _('Broken desktop files'),
+                    # TRANSLATORS: Description of the Broken desktop files cleaning option.
+                    _('Delete broken application menu entries and file associations'))
             self.add_option(
                 'cache',
                 # TRANSLATORS: Name of a cleaning option. Cache is a noun.
                 _('Cache'),
                 DELETE_CACHE_DESCRIPTION)
-            self.add_option(
-                'localizations',
-                # TRANSLATORS: Localizations are files supporting specific
-                # languages, so applications appear in Spanish, etc.
-                _('Localizations'),
-                # TRANSLATORS: Description of the Localizations cleaning option.
-                _('Delete files for unwanted languages'))
-            self.set_warning(
-                'localizations',
-                # TRANSLATORS: Warning for the Localizations cleaning option.
-                _("Configure this option in the preferences."))
+            if not IS_MAC:
+                self.add_option(
+                    'localizations',
+                    # TRANSLATORS: Localizations are files supporting specific
+                    # languages, so applications appear in Spanish, etc.
+                    _('Localizations'),
+                    # TRANSLATORS: Description of the Localizations cleaning option.
+                    _('Delete files for unwanted languages'))
+                self.set_warning(
+                    'localizations',
+                    # TRANSLATORS: Warning for the Localizations cleaning option.
+                    _("Configure this option in the preferences."))
             self.add_option(
                 'rotated_logs',
                 # TRANSLATORS: 'Rotated logs' refers to old system log files.
@@ -286,6 +288,8 @@ class System(Cleaner):
         #
         # options just for Microsoft Windows
         #
+        # IS_LINUX implies IS_POSIX, which is what binds Unix; pylint can't see that.
+        # pylint: disable-next=possibly-used-before-assignment
         has_dns_flush = IS_WINDOWS or (IS_LINUX and Unix.can_flush_dns())
         if has_dns_flush:
             # TRANSLATORS: This is a label for the option to clear the system DNS cache.
@@ -391,16 +395,16 @@ class System(Cleaner):
                         f'custom folder has invalid type {c_type}')
 
         # menu
-        if IS_POSIX and 'desktop_entry' == option_id:
+        if IS_POSIX and not IS_MAC and 'desktop_entry' == option_id:
             for path in MENU_DIRS:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
-                    # pylint: disable=possibly-used-before-assignment
+                    # pylint: disable-next=possibly-used-before-assignment
                     if filename.endswith('.desktop') and Unix.is_broken_xdg_desktop(filename):
                         yield Command.Delete(filename)
 
         # unwanted locales
-        if IS_POSIX and 'localizations' == option_id:
+        if IS_POSIX and not IS_MAC and 'localizations' == option_id:
             for path in Unix.locales.localization_paths(locales_to_keep=options.get_languages()):
                 # A symlinked locale directory points at a locale that may be
                 # on the keep list, so delete the link without its contents.
@@ -450,6 +454,7 @@ class System(Cleaner):
                 '%WindowsSystem%\\wbem\\Logs\\*.log', )
 
             for path in paths:
+                # pylint: disable-next=possibly-used-before-assignment
                 for expanded in Windows.expand_windows_system_vars(path):
                     expanded = os.path.expandvars(expanded)
                     for globbed in glob.iglob(expanded):
@@ -461,7 +466,7 @@ class System(Cleaner):
 
         # memory dump
         # how to manually create this file
-        # http://www.pctools.com/guides/registry/detail/856/
+        # https://web.archive.org/web/20170601020156/http://www.pctools.com/guides/registry/detail/856
         if IS_WINDOWS and 'memory_dump' == option_id:
             fname = os.path.expandvars('$windir\\memory.dmp')
             if os.path.exists(fname):
@@ -486,9 +491,9 @@ class System(Cleaner):
 
             def gtk_purge_items():
                 """Purge GTK items"""
-                from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                from bleachbit.GtkShim import require_gtk
                 require_gtk()
-                from bleachbit.GtkShim import Gtk  # pylint: disable=import-outside-toplevel
+                from bleachbit.GtkShim import Gtk
                 Gtk.RecentManager().get_default().purge_items()
                 yield 0
 
@@ -513,11 +518,13 @@ class System(Cleaner):
             dirnames = ['/tmp', '/var/tmp']
             for dirname in dirnames:
                 for path in children_in_directory(dirname, True):
-                    is_open = FileUtilities.openfiles.is_open(path)
-                    ok = not is_open and os.path.isfile(path) and \
+                    # is_open() resolves the path and rescans /proc, so leave
+                    # it until the cheaper tests have had a chance to reject.
+                    ok = os.path.isfile(path) and \
                         not os.path.islink(path) and \
                         FileUtilities.ego_owner(path) and \
-                        not self.whitelisted(path)
+                        not self.whitelisted(path) and \
+                        not FileUtilities.openfiles.is_open(path)
                     if ok:
                         yield Command.Delete(path)
 
@@ -562,7 +569,7 @@ class System(Cleaner):
                 def func_clear_clipboard():
                     """Command function to clear clipboard"""
                     # GuiUtil is GTK-specific
-                    from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                    from bleachbit.GtkShim import require_gtk
                     require_gtk()
                     import bleachbit.GuiUtil
                     bleachbit.GuiUtil.clear_clipboard()
@@ -600,7 +607,6 @@ class System(Cleaner):
         if IS_WINDOWS and 'recycle_bin' == option_id:
             # This method allows shredding
             recycled_any = False
-            # pylint: disable=possibly-used-before-assignment
             for path in Windows.get_recycle_bin():
                 recycled_any = True
                 yield Command.Delete(path)
@@ -730,7 +736,6 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_lo
         # To indicate an ongoing operation, include the ellipsis as literal
         # Unicode (…) or as Unicode escape (\u2026).
         cb_progress(_('Importing cleaners from Winapp2.ini\u2026'))
-        # pylint: disable=import-outside-toplevel
         from bleachbit import Winapp
         yield from Winapp.load_cleaners(cb_progress)
 
@@ -780,6 +785,7 @@ class CustomFileAction(Action.ActionProvider):
         self.paths = paths
 
     def get_commands(self):
+        """Yield a shred command for each path"""
         for path in self.paths:
             path = simpler_cleaner_process_path(path)
             if not path:
@@ -810,6 +816,7 @@ class CustomWipeAction(Action.ActionProvider):
         self.display = _("Wipe empty space %s") % path
 
     def get_commands(self):
+        """Yield the command that wipes the free space"""
         def wipe_path_func():
             yield from wipe_path(self.path, idle=True)
             yield 0

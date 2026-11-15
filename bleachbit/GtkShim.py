@@ -10,23 +10,76 @@ Centralized GTK import handling.
 
 This module handles importing GTK and related libraries (e.g., Gdk)
 in a way that:
+
 - Avoids crashes when GTK is unavailable
 - Suppresses warning messages in non-GUI scenarios
+- Avoids opening display sockets when they are not needed
 - Provides a single source of truth for GTK availability
 
-Scenarios when GTK is not needed or not available:
-- CLI mode requested
+Scenarios in which GTK is not needed or not available:
+
+- CLI mode explicitly requested
+- Text User Interface (TUI) mode
+- Non-GTK GUI environment (e.g., wxWidgets)
 - GTK/PyGObject not installed
 - chroot
 - crontab
-- ssh
-- limited environment variables (e.g., missing DISPLAY/XAUTHORITY)
+- SSH
+- Limited environment variables (e.g., missing DISPLAY/XAUTHORITY)
 
-Usage:
-    from bleachbit.GtkShim import Gtk, Gdk, GObject, GLib, Gio, HAVE_GTK
+Usage
+=====
 
-    if HAVE_GTK:
-        # do GTK stuff
+Consider two axes:
+
+- Cost: cheap preconditions versus an expensive import
+- Failure mode: return a Boolean versus raise an exception
+
+Cheap exposure check
+--------------------
+
+- Does not open a display socket
+- Checks only gi, typelib, and DISPLAY environment variables
+
+::
+
+    from bleachbit.GtkShim import gtk_may_be_available
+
+    if gtk_may_be_available():
+        self.add_option('clipboard', ...)  # exposure only
+
+Expensive use, raise on failure
+-------------------------------
+
+- Opens a Wayland/X11 socket through a gi.repository import
+- Raises on failure; use when about to call GTK::
+
+    from bleachbit.GtkShim import require_gtk
+
+    require_gtk()  # raises RuntimeError if GTK is unavailable
+    from bleachbit.GtkShim import Gtk
+    Gtk.RecentManager().get_default().purge_items()
+
+Expensive use, return a Boolean
+------------------------------
+
+Use when about to import or run other GUI code and want to skip
+cleanly instead of raising::
+
+    from bleachbit.GtkShim import is_gtk_available
+
+    if is_gtk_available():
+        from bleachbit.GuiApplication import Bleachbit
+
+Lazy attribute access
+---------------------
+
+``import bleachbit.GtkShim`` runs only the cheap preconditions. However,
+``from bleachbit.GtkShim import Gtk`` (or Gdk/GObject/GLib/Gio) triggers
+module-level ``__getattr__``, which calls ``_ensure_gtk_libraries()`` and
+opens the display socket on first access.  Until that import succeeds,
+``is_gtk_available()`` returns ``False`` and ``require_gtk()`` raises.
+
 """
 
 import ctypes
@@ -38,24 +91,26 @@ import warnings
 import webbrowser
 from contextlib import contextmanager
 from pathlib import PureWindowsPath
-from html import escape as esc
 from traceback import format_exc
 
-from bleachbit import bleachbit_exe_path, IS_POSIX, IS_WINDOWS
+from bleachbit import bleachbit_exe_path, log_startup_time, IS_MAC, IS_POSIX, IS_WINDOWS
 
 HELP_URL = 'https://link.bleachbit.org/get-help'
 PYGOBJECT_URL = 'https://link.bleachbit.org/pygobject-lib-bin-error'
 
 logger = logging.getLogger(__name__)
 
-# Module-level GTK availability flag and placeholder objects
-HAVE_GTK = False
+# Module-level GTK state.  See the module docstring for the distinction
+# between the cheap preconditions (_gtk_preconditions_met) and the
+# expensive gi.repository import (_gtk_libraries_imported).
 gi = None
-Gtk = None
-Gdk = None
-GObject = None
-GLib = None
-Gio = None
+# Gtk, Gdk, GObject, GLib, Gio are intentionally NOT module-level names.
+# _import_gtk_libraries() fills this dict and __getattr__ serves them out
+# of it, which is what keeps the expensive import deferred.
+_gtk_modules = {}
+
+# Whether the cheap, non-GUI GTK preconditions have passed.
+_gtk_preconditions_met = False
 
 # Reason that GTK is unavailable
 _gtk_unavailable_reason = None
@@ -117,6 +172,8 @@ def _build_error_html(error, traceback_text=None):
 
     It does not write to a file.
     """
+    # Keep html off the startup path: only the error page needs it
+    from html import escape as esc  # pylint: disable=import-outside-toplevel
 
     try:
         # Import here to avoid a circular import.
@@ -194,9 +251,9 @@ def _show_windows_error_dialog(title, html_content):
         result = ctypes.windll.user32.MessageBoxW(
             0, prompt, title, MB_YESNO | MB_ICONERROR)
         if result == IDYES:
-            tmp_dir = os.environ.get('TEMP', tempfile.gettempdir())
-            html_path = os.path.join(tmp_dir, 'bleachbit_error.html')
-            with open(html_path, 'w', encoding='utf-8') as f:
+            fd, html_path = tempfile.mkstemp(
+                prefix='bleachbit_error_', suffix='.html')
+            with os.fdopen(fd, 'w', encoding='utf-8') as f:
                 f.write(html_content)
             webbrowser.open(f'file:///{html_path}')
     except Exception as e:
@@ -224,6 +281,11 @@ def _check_display_available():
         # Windows always has a display
         return True, None
 
+    # macOS uses GDK Quartz rather than X11 or Wayland.
+    # GDK will perform the actual display availability check later.
+    if IS_MAC:
+        return True, None
+
     # Check for X11 or Wayland display
     has_display = bool(
         os.environ.get('DISPLAY') or
@@ -235,21 +297,29 @@ def _check_display_available():
     return True, None
 
 
-def _try_import_gtk():
-    """Attempt to import GTK and related libraries.
+def _check_gtk_available():
+    """Check the cheap GTK preconditions without importing gi.repository.
+
+    See the module docstring for why the gi.repository import is deferred.
+    This checks that ``gi`` is importable, the typelib version can be
+    required, and a display server appears to be reachable.
 
     Returns:
         tuple: (success: bool, reason: str or None)
     """
-    global gi, Gtk, Gdk, GObject, GLib, Gio
+    # gi is imported lazily into a module global.
+    # pylint: disable-next=global-statement
+    global gi
 
-    # Suppress GTK warning messages during import
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
 
-        # Always try to import gi first (for gi.version reporting)
+        # Always try to import gi first (for gi.version reporting).
+        # The top-level ``gi`` package itself does not open a display
+        # connection; only ``gi.repository.Gtk``/``Gdk`` do.
         try:
-            import gi
+            import gi as _gi
+            gi = _gi
         except ImportError:
             return False, 'PyGObject (gi) module not installed'
 
@@ -265,6 +335,8 @@ def _try_import_gtk():
                 bleachbit_exe_path, 'lib', 'girepository-1.0')
             if os.path.isdir(typelib_dir):
                 logger.debug('Setting typelib search path to: %s', typelib_dir)
+                # PyGObject exposes Repository only under gi._gi.
+                # pylint: disable-next=protected-access
                 gi._gi.Repository.get_default().prepend_search_path(typelib_dir)
             else:
                 logger.warning('Typelib directory not found: %s', typelib_dir)
@@ -274,6 +346,25 @@ def _try_import_gtk():
         except Exception as e:
             _handle_gtk_import_error(e)
             return False, f'GTK 3.0 not available: {e}'
+
+    return True, None
+
+
+def _import_gtk_libraries():
+    """Import ``gi.repository`` GTK libraries and verify the display.
+
+    This is the expensive counterpart to :func:`_check_gtk_available`.
+    It is called lazily by :func:`_ensure_gtk_libraries` and thus by
+    :func:`require_gtk` and module-level ``__getattr__``.
+
+    Returns:
+        tuple: (success: bool, reason: str or None)
+    """
+    if not _gtk_preconditions_met or gi is None:
+        return False, _gtk_unavailable_reason or 'GTK preconditions not met'
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
 
         # Gdk.init_check() inside gi.overrides.Gdk reads sys.argv during
         # import and fails with UnicodeEncodeError if arguments contain
@@ -287,37 +378,71 @@ def _try_import_gtk():
                 from gi.repository import GLib as _GLib
                 from gi.repository import Gio as _Gio
 
-                Gtk = _Gtk
-                Gdk = _Gdk
-                GObject = _GObject
-                GLib = _GLib
-                Gio = _Gio
+                _gtk_modules.update(Gtk=_Gtk, Gdk=_Gdk, GObject=_GObject,
+                                    GLib=_GLib, Gio=_Gio)
 
         except (ImportError, RuntimeError, ValueError) as e:
             _handle_gtk_import_error(e)
             return False, f'Failed to import GTK libraries: {e}'
 
-        # On POSIX, verify we can actually get a display
-        if IS_POSIX:
+        # On POSIX, verify we can actually get a display.
+        # macOS uses GDK Quartz and has no X11-style root window.
+        if IS_POSIX and not IS_MAC:
             try:
-                if Gdk.get_default_root_window() is None:
+                if _Gdk.get_default_root_window() is None:
                     return False, 'No default root window (display not accessible)'
             except Exception as e:
                 return False, f'Display check failed: {e}'
 
+    log_startup_time('GTK imported')
     return True, None
 
 
+# Track whether the expensive gi.repository import has been attempted and
+# whether it succeeded.  _gtk_libraries_imported gates the one-time
+# attempt; _gtk_libraries_available caches its result for repeat callers.
+_gtk_libraries_imported = False
+_gtk_libraries_available = False
+
+
+def _ensure_gtk_libraries():
+    """Lazily import gi.repository GTK libraries once.
+
+    Called by :func:`require_gtk`, :func:`is_gtk_available`, and
+    module-level ``__getattr__``.  Returns whether the GTK libraries and
+    display are available.  Does nothing when the cheap preconditions
+    have failed.
+    """
+    # The import result is cached for the process.
+    # pylint: disable-next=global-statement
+    global _gtk_libraries_imported, _gtk_libraries_available, _gtk_unavailable_reason
+    if _gtk_libraries_imported:
+        return _gtk_libraries_available
+    if not _gtk_preconditions_met:
+        return False
+    _gtk_libraries_imported = True
+    success, reason = _import_gtk_libraries()
+    _gtk_libraries_available = success
+    if not success:
+        _gtk_unavailable_reason = reason
+    return _gtk_libraries_available
+
+
 def _init_gtk():
-    """Initialize GTK imports. Called once at module load."""
-    global HAVE_GTK, _gtk_unavailable_reason
+    """Check cheap GTK preconditions when the module loads.
 
-    success, reason = _try_import_gtk()
-    HAVE_GTK = success
-    _gtk_unavailable_reason = reason
+    The expensive gi.repository import is deferred to
+    :func:`_ensure_gtk_libraries`; ``is_gtk_available()`` returns
+    ``False`` and ``require_gtk()`` raises until it succeeds.
+    """
+    # The precondition check runs once per process.
+    # pylint: disable-next=global-statement
+    global _gtk_preconditions_met, _gtk_unavailable_reason
 
-    if not success and reason:
-        logger.debug('GTK not available: %s', reason)
+    _gtk_preconditions_met, _gtk_unavailable_reason = _check_gtk_available()
+
+    if not _gtk_preconditions_met and _gtk_unavailable_reason:
+        logger.debug('GTK not available: %s', _gtk_unavailable_reason)
 
 
 def get_gtk_unavailable_reason():
@@ -325,35 +450,63 @@ def get_gtk_unavailable_reason():
     return _gtk_unavailable_reason
 
 
-def is_gtk_available():
-    """Return whether GTK is available.
-
-    Compatibility wrapper for code written against the lazy-loading
-    GtkShim API.  This branch initializes GTK eagerly at module load,
-    so this is equivalent to the module-level ``HAVE_GTK`` flag.
-    """
-    return HAVE_GTK
-
-
 def gtk_may_be_available():
-    """Cheap check for whether GTK might be available.
+    """Return whether the cheap GTK preconditions passed.
 
-    Compatibility wrapper for code written against the lazy-loading
-    GtkShim API.  In this branch GTK is probed eagerly at import time,
-    so the cheap and expensive checks coincide and this just returns
-    ``HAVE_GTK``.
+    Use this only when exposing operations that call :func:`require_gtk`
+    immediately before using GTK.  GUI code should call
+    :func:`is_gtk_available` or :func:`require_gtk` instead.
     """
-    return HAVE_GTK
+    return _gtk_preconditions_met
+
+
+def is_gtk_available():
+    """Return whether GTK libraries and a display are actually available."""
+    return _ensure_gtk_libraries()
+
+
+def is_gtk_loaded():
+    """Return whether the gi.repository GTK libraries are loaded.
+
+    Unlike :func:`is_gtk_available`, this only reports a past import --
+    it never triggers the lazy import itself.  Callers that need to know
+    whether GTK is part of this process without pulling it in should use
+    this.
+    """
+    return _gtk_libraries_available or 'gi.repository.Gtk' in sys.modules
 
 
 def require_gtk():
-    """Raise an exception if GTK is not available.
+    """Raise ``RuntimeError`` if GTK is not available.
 
-    Use this in modules that absolutely require GTK (e.g., GUI modules).
+    Triggers the lazy ``gi.repository`` import on its first call.  Use
+    this in modules that absolutely require GTK (e.g., GUI modules).
     """
-    if not HAVE_GTK:
+    if not _ensure_gtk_libraries():
         reason = _gtk_unavailable_reason or 'unknown reason'
         raise RuntimeError(f'GTK is required but not available: {reason}')
+
+
+# PyGObject 3.56 calls both from inside Gtk.main_iteration_do() and
+# Gtk.Application.run(). Python 3.14 deprecated them; 3.16 removes them.
+_ASYNCIO_DEPRECATIONS = (
+    r".*asyncio\.AbstractEventLoopPolicy.*",
+    r".*asyncio\.get_event_loop_policy.*",
+)
+
+
+def ignore_pygobject_asyncio_warnings():
+    """Ignore PyGObject's asyncio deprecation warnings under Python 3.14+.
+
+    This changes the active filter list rather than a catch_warnings() copy,
+    so a thread that copies the list later still sees it. Use the context
+    manager below to scope the filters instead.
+    """
+    if sys.version_info < (3, 14):
+        return
+    for message in _ASYNCIO_DEPRECATIONS:
+        warnings.filterwarnings(
+            "ignore", message=message, category=DeprecationWarning)
 
 
 @contextmanager
@@ -363,14 +516,7 @@ def suppress_pygobject_asyncio_warnings():
         yield
         return
     with warnings.catch_warnings():
-        warnings.filterwarnings(
-            "ignore",
-            message=".*asyncio.AbstractEventLoopPolicy.*",
-            category=DeprecationWarning)
-        warnings.filterwarnings(
-            "ignore",
-            message=".*asyncio.get_event_loop_policy.*",
-            category=DeprecationWarning)
+        ignore_pygobject_asyncio_warnings()
         yield
 
 
@@ -390,6 +536,26 @@ def suppress_pygobject_import_warnings():
             message=".*DynamicImporter.exec_module\\(\\) not found.*",
             category=ImportWarning)
         yield
+
+
+# Names whose access triggers the lazy gi.repository import.
+_LAZY_GTK_NAMES = frozenset(('Gtk', 'Gdk', 'GObject', 'GLib', 'Gio'))
+
+
+def __getattr__(name):
+    """Lazily import gi.repository GTK libraries on first attribute access.
+
+    ``from bleachbit.GtkShim import Gtk`` (or Gdk/GObject/GLib/Gio)
+    triggers this hook because those names are not defined at module
+    level until :func:`_import_gtk_libraries` populates them.  See the
+    module docstring for why this deferral matters.
+    """
+    if name in _LAZY_GTK_NAMES:
+        _ensure_gtk_libraries()
+        # On failure the name is absent; return None so callers see a
+        # falsy placeholder rather than an AttributeError from this import.
+        return _gtk_modules.get(name)
+    raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
 
 
 # Perform initialization at module load

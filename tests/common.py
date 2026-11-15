@@ -9,6 +9,9 @@
 Common code for unit tests
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import contextlib
 import os
 import re
@@ -21,7 +24,11 @@ import warnings
 from pathlib import Path
 from unittest import mock
 
+import psutil
+
 try:
+    # pytest is re-exported for the test modules.
+    # pylint: disable-next=unused-import
     import pytest
 except ImportError:  # pytest is optional for plain unittest discovery
     class _MarkShimMeta(type):
@@ -31,6 +38,8 @@ except ImportError:  # pytest is optional for plain unittest discovery
         ``@pytest.mark.foo(...)`` (with parens).
         """
         def __getattr__(cls, _name):
+            # func is positional so the shim works with and without parentheses.
+            # pylint: disable-next=keyword-arg-before-vararg
             def decorator(func=None, *_args, **_kwargs):
                 if callable(func):
                     # Used as @pytest.mark.foo without parentheses.
@@ -48,19 +57,23 @@ except ImportError:  # pytest is optional for plain unittest discovery
 import bleachbit
 from bleachbit import logger
 
-if bleachbit.IS_WINDOWS:
-    import winreg
-    import win32gui
-    from bleachbit import Windows
 import bleachbit.Options
 from bleachbit.Bootstrap import bootstrap
+from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
 from bleachbit.FileUtilities import (
     children_in_directory,
     extended_path,
+    get_filesystem_type,
     is_hard_link,
     is_normal_directory,
 )
 from bleachbit.General import gc_collect, sudo_mode
+
+if bleachbit.IS_WINDOWS:
+    import winreg
+    import win32gui
+    # pylint: disable-next=ungrouped-imports
+    from bleachbit import Windows
 
 # /etc/locale.alias may list the qaa-qtz range, which is reserved for
 # private use rather than a concrete locale. Skip it if present.
@@ -192,6 +205,21 @@ def get_volatile_dir():
     return volatile_dir
 
 
+def cdrom_mountpoints():
+    """Return mountpoints of mounted CD-ROM drives (real or virtual).
+
+    Only read-only mounts are returned, so tests never write to media
+    that might be writable (e.g., a UDF DVD-RAM).
+
+    Returns an empty list when no CD-ROM is present. CI mounts a test
+    ISO: see scripts/mount_test_iso.ps1 (Windows) and
+    scripts/mount_test_iso.sh (Linux).
+    """
+    return [part.mountpoint for part in psutil.disk_partitions(all=False)
+            if (fs_info := get_filesystem_type(part.mountpoint)).is_cdrom
+            and fs_info.is_readonly]
+
+
 class BleachbitTestCase(unittest.TestCase):
     """TestCase class with several convenience methods and asserts"""
     _patchers = []
@@ -212,6 +240,18 @@ class BleachbitTestCase(unittest.TestCase):
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._patch_options_paths()
+        if bleachbit.IS_WINDOWS:
+            # mkdtemp() leaves a protected 0o700 DACL on the bleachbit-test-*
+            # ancestors; reset them outside-in (issue #2401).
+            ancestors = []
+            parent = os.path.dirname(cls.tempdir)
+            while os.path.basename(parent).startswith('bleachbit-test-'):
+                ancestors.append(parent)
+                parent = os.path.dirname(parent)
+            for ancestor in reversed(ancestors):
+                Windows.fix_appdata_acl(ancestor)
+            Windows.fix_appdata_acl(cls.tempdir)
+            Windows.fix_appdata_acl(bleachbit.options_dir)
         bleachbit.Options.options.reset_overrides()
         bleachbit.Options.options.set_override("first_start", False)
 
@@ -230,17 +270,7 @@ class BleachbitTestCase(unittest.TestCase):
         filter in the active scope (``setUpClass``/``setUp``) makes it visible
         to every copy of the filter list, including the worker thread's.
         """
-        if sys.version_info >= (3, 14):
-            warnings.filterwarnings(
-                "ignore",
-                message=r".*asyncio\.get_event_loop_policy.*",
-                category=DeprecationWarning,
-            )
-            warnings.filterwarnings(
-                "ignore",
-                message=r".*asyncio\.AbstractEventLoopPolicy.*",
-                category=DeprecationWarning,
-            )
+        ignore_pygobject_asyncio_warnings()
 
     @classmethod
     def _patch_options_paths(cls):
@@ -389,7 +419,9 @@ class BleachbitTestCase(unittest.TestCase):
         if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
             return
         self.assertGreaterEqual(len(lang_id), 2)
-        pattern = r'^[a-z]{2,3}([_-]([A-Z][A-Za-z]{1,3}|[0-9]{3}))?(\.[a-zA-Z][a-zA-Z0-9-]+)?(@\w+)?$'
+        pattern = (
+            r'^[a-z]{2,3}([_-]([A-Z][A-Za-z]{1,3}|[0-9]{3}))?'
+            r'(\.[a-zA-Z][a-zA-Z0-9-]+)?(@\w+)?$')
         self.assertTrue(re.match(pattern, lang_id),
                         f'Invalid language code format: {lang_id}')
 
@@ -592,7 +624,7 @@ def put_env(key, val):
 
 
 def skipIfWindows(f):
-    """Skip unit test if running on Windows"""
+    """Skip unit test if running on Windows (i.e., skipUnlessPOSIX)"""
     return unittest.skipIf(bleachbit.IS_WINDOWS, 'running on Windows')(f)
 
 
@@ -679,6 +711,7 @@ def validate_result(self, result, really_delete=False, allow_vanishing=False):
 
 def get_winregistry_value(key, subkey):
     try:
+        # pylint: disable-next=possibly-used-before-assignment
         with winreg.OpenKey(key, subkey) as hkey:
             return winreg.QueryValue(hkey, None)
     except FileNotFoundError:
@@ -695,6 +728,7 @@ def get_opened_windows_titles():
     opened_windows_titles = []
 
     def enumerate_opened_windows_titles(hwnd, _ctx):
+        # pylint: disable-next=possibly-used-before-assignment
         text = win32gui.GetWindowText(hwnd)
         if win32gui.IsWindowVisible(hwnd) and text:
             opened_windows_titles.append(text)

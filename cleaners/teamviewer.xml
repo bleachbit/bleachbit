@@ -1,57 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    @app TeamViewer
-    @url https://www.teamviewer.com/en/
-    @os Windows, Linux
-    @cleanerversion v1.5.0
-    @cleanerdate 2019-03-22
-    @cleanerby MixCool (2009-06-23) & Andrew Ziem (2009-06-23 - 2009-10-04) & Tobias B. Besemer (2019-03-13 - 2019-03-22)
-    @tested ok v???, Windows 7
-    @testeddate 2019-03-13
-    @testedby https://github.com/Tobias-B-Besemer
-    @note
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
-<cleaner id="teamviewer" os="windows">
+<cleaner id="teamviewer" os="windows,macos">
   <label>TeamViewer</label>
   <description>Remote control software</description>
+  <running type="exe" os="macos" same_user="true">TeamViewer</running>
   <var name="Profile">
     <value os="windows">%AppData%\TeamViewer</value>
-    <!--
-    Linux $$Profile$$ not yet figured out! I will do this maybe later! Tobias.
-    <value os="linux">~/.teamviewer</value>
-    -->
   </var>
-  <option id="logs">
+  <option id="cache" os="macos">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <!--
+TeamViewer 15.82.6 on macOS 27.0.1, after opening and closing the application
+~/Library/Caches/com.teamviewer.TeamViewer/
+~/Library/Caches/TeamViewer/
+~/Library/HTTPStorages/com.teamviewer.TeamViewer/
+-->
+    <action command="delete" search="walk.all" path="~/Library/Caches/com.teamviewer.TeamViewer/"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/TeamViewer/"/>
+    <action command="delete" search="walk.all" path="~/Library/HTTPStorages/com.teamviewer.TeamViewer/"/>
+  </option>
+  <option id="cookies" os="macos">
+    <label>Cookies</label>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
+    <action command="delete" search="file" path="~/Library/HTTPStorages/com.teamviewer.TeamViewer.binarycookies"/>
+  </option>
+  <option id="site_data" os="macos">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
+    <action command="delete" search="walk.all" path="~/Library/WebKit/com.teamviewer.TeamViewer/"/>
+  </option>
+  <option id="logs" os="windows">
     <label>Logs</label>
     <description>Delete the logs</description>
     <action command="delete" search="glob" path="$$Profile$$\TeamViewer*_Logfile.log"/>
   </option>
-  <option id="mru">
+  <option id="mru" os="windows">
     <label>Most recently used</label>
     <description>Delete the most recently used list</description>
     <action command="delete" search="walk.files" path="$$Profile$$\MRU\"/>
     <action command="delete" search="file" path="$$Profile$$\MRU\"/>
     <action command="delete" search="file" path="$$Profile$$\Connections.txt"/>
-    <!-- Windows: -->
     <action command="winreg" path="HKCU\Software\TeamViewer\Version4" name="Last_Machine_Connections"/>
   </option>
 </cleaner>

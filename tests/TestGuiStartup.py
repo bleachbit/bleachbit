@@ -8,6 +8,9 @@
 Test case for module GuiStartup
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import shutil
 import stat
@@ -39,6 +42,7 @@ class StubOptions:
         """Set a option value."""
         self.values[key] = value
 
+    # pylint: disable-next=unused-argument
     def get_tree(self, parent, child):
         """Return whether a tree option is selected."""
         return False
@@ -81,6 +85,12 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         with common.mock_missing_package(
                 'requests',
                 clear_prefixes=('bleachbit.Network', 'bleachbit.Update', 'bleachbit.GuiStartup')):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
+            # pylint: disable=reimported
+            # pylint: disable-next=redefined-outer-name
             import bleachbit.GuiStartup as GuiStartup
             missing = GuiStartup._get_missing_dependencies()
             self.assertIn('requests', missing)
@@ -134,6 +144,71 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertNotExists(bleachbit.options_file)
         issues = GuiStartup._get_config_permission_issues()
         self.assertFalse(issues)
+
+    @common.also_with_sudo
+    def test_config_permission_nonissue_missing_dir(self):
+        """A missing options directory (fresh profile) is created without error."""
+        new_dir = os.path.join(self.mkdtemp(), 'a', 'bleachbit')
+        new_file = os.path.join(new_dir, 'bleachbit.ini')
+        with mock.patch('bleachbit.options_dir', new_dir), \
+                mock.patch('bleachbit.options_file', new_file):
+            self.assertFalse(GuiStartup._get_config_permission_issues())
+        self.assertExists(new_dir)
+        self.assertExists(new_file)
+        if not IS_WINDOWS:
+            real_uid = bleachbit.General.get_real_uid()
+            self.assertEqual(os.stat(new_dir).st_uid, real_uid)
+            self.assertEqual(os.stat(new_file).st_uid, real_uid)
+
+    @common.skipIfWindows
+    def test_config_permission_missing_file_sudo_chown(self):
+        """Creating a missing config file in sudo mode chowns it to the user."""
+        new_dir = self.mkdtemp()
+        new_file = os.path.join(new_dir, 'bleachbit.ini')
+        with mock.patch('bleachbit.options_dir', new_dir), \
+                mock.patch('bleachbit.options_file', new_file), \
+                mock.patch('bleachbit.General.sudo_mode', return_value=True), \
+                mock.patch('bleachbit.General.chownself') as mock_chown:
+            self.assertFalse(GuiStartup._get_config_permission_issues())
+            mock_chown.assert_called_once_with(new_file)
+            mock_chown.reset_mock()
+            # Existing file should not be re-chowned by the probe
+            self.assertFalse(GuiStartup._get_config_permission_issues())
+            mock_chown.assert_not_called()
+
+    @common.skipIfWindows
+    def test_config_permission_issue_missing_dir_non_writeable_parent(self):
+        """Missing options dir under a non-writable parent reports an error."""
+        non_writable_parent = self.mkdir('not_writeable_parent')
+        missing_dir = os.path.join(non_writable_parent, 'bleachbit')
+        missing_file = os.path.join(missing_dir, 'bleachbit.ini')
+        use_chattr = common.have_root()
+        try:
+            if use_chattr:
+                subprocess.run(
+                    ['chattr', '+i', non_writable_parent], check=True)
+            else:
+                os.chmod(non_writable_parent, stat.S_IRUSR | stat.S_IXUSR)
+            with mock.patch('bleachbit.options_dir', missing_dir), \
+                    mock.patch('bleachbit.options_file', missing_file):
+                issues = GuiStartup._get_config_permission_issues()
+        finally:
+            if use_chattr:
+                subprocess.run(
+                    ['chattr', '-i', non_writable_parent], check=True)
+            else:
+                os.chmod(non_writable_parent, stat.S_IRWXU)
+            shutil.rmtree(non_writable_parent)
+        self.assertNotExists(missing_dir)
+        self.assertIsInstance(issues, list)
+        self.assertTrue(
+            any('Cannot create directory' in issue for issue in issues),
+            f"Expected 'Cannot create directory' in issues: {issues}")
+        self.assertIn(
+            f'Nearest existing parent directory: {non_writable_parent}', issues)
+        self.assertTrue(
+            any(issue.startswith('Current user:') for issue in issues),
+            f"Expected 'Current user:' in issues: {issues}")
 
     @common.skipIfWindows
     def test_config_permission_issue_non_writeable_options_dir(self):
@@ -216,3 +291,39 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         sid = win32security.ConvertStringSidToSid(bogus)
         name, _ = GuiStartup._lookup_account_name_or_sid(sid)
         self.assertEqual(name, bogus)
+
+    @common.skipUnlessWindows
+    def test_config_permission_issue_protected_dacl(self):
+        """A 0o700 config directory (issue #2401) is flagged until repaired."""
+        import win32security  # pylint: disable=import-outside-toplevel
+        protected_dir = os.path.join(self.tempdir, 'protected_options')
+        os.mkdir(protected_dir, 0o700)
+        self.addCleanup(shutil.rmtree, protected_dir, ignore_errors=True)
+        protected_file = os.path.join(protected_dir, 'bleachbit.ini')
+        self.write_file(protected_file, b'[bleachbit]\n')
+        with mock.patch('bleachbit.options_dir', protected_dir), \
+                mock.patch('bleachbit.options_file', protected_file), \
+                mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False):
+            # Owned by the current user, so it works and is not flagged.
+            # When elevated the owner is Administrators, so read it from the file.
+            owner_sid = win32security.GetFileSecurity(
+                protected_dir, win32security.OWNER_SECURITY_INFORMATION).GetSecurityDescriptorOwner()
+            with mock.patch('bleachbit.Windows._current_user_sid', return_value=owner_sid):
+                self.assertFalse(GuiStartup._get_config_permission_issues())
+
+            # Simulate an elevated first run: the owner is not the user
+            other_sid = win32security.ConvertStringSidToSid('S-1-5-32-545')
+            with mock.patch('bleachbit.Windows._current_user_sid', return_value=other_sid):
+                issues = GuiStartup._get_config_permission_issues()
+                self.assertIsInstance(issues, list)
+                self.assertTrue(
+                    any('issue #2401' in issue for issue in issues),
+                    f'Expected issue #2401 in issues: {issues}')
+                with mock.patch('bleachbit.portable_mode', True):
+                    self.assertFalse(
+                        GuiStartup._get_config_permission_issues())
+                with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=True):
+                    self.assertFalse(
+                        GuiStartup._get_config_permission_issues())
+                bleachbit.Windows.fix_appdata_acl(protected_dir)
+                self.assertFalse(GuiStartup._get_config_permission_issues())

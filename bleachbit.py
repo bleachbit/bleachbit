@@ -25,10 +25,15 @@ def _add_posix_share_to_path():
     if not (os.path.isfile(os.path.join(_launcher_dir, 'bleachbit', '__init__.py')) and
             os.path.isfile(os.path.join(_launcher_dir, 'bleachbit', 'Unix.py'))):
         _appdir = os.environ.get('APPDIR')
+        # `make install` defaults to <prefix>/bin and <prefix>/share
+        _prefix_share = os.path.normpath(
+            os.path.join(_launcher_dir, '..', 'share'))
         if _appdir:
             _share = os.path.normpath(os.path.join(_appdir, 'usr/share/'))
             if os.path.isfile(os.path.join(_share, 'bleachbit', '__init__.py')):
                 sys.path.insert(0, _share)
+        elif os.path.isfile(os.path.join(_prefix_share, 'bleachbit', '__init__.py')):
+            sys.path.append(_prefix_share)
         elif os.path.isfile('/usr/share/bleachbit/__init__.py'):
             sys.path.append('/usr/share/')
 
@@ -54,12 +59,12 @@ def main():
     if 1 == len(sys.argv) and have_gui and not check_wayland_and_root():
         # Import GUI inside the condition for Linux packagers to
         # separate GUI into another package.
-        import bleachbit.GuiApplication  # pylint: disable=import-outside-toplevel
+        import bleachbit.GuiApplication
         app = bleachbit.GuiApplication.Bleachbit()
         sys.exit(app.run(sys.argv))
 
     # Either CLI args were provided or no display is available
-    import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+    import bleachbit.CLI
     # If no args and defaulting to CLI, print usage information
     if 1 == len(sys.argv) and not have_gui:
         sys.argv.append('--help')

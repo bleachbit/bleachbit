@@ -29,6 +29,7 @@ import warnings
 # third-party import
 import psutil
 
+from tests import common
 from tests.common import pytest
 
 # local import
@@ -49,6 +50,7 @@ from bleachbit.FileUtilities import (
     expand_glob_join,
     extended_path_undo,
     extended_path,
+    FilesystemInfo,
     free_space,
     get_filesystem_type,
     getsize,
@@ -61,6 +63,8 @@ from bleachbit.FileUtilities import (
     is_normal_directory,
     listdir,
     open_files_lsof,
+    open_files_psutil,
+    open_files_freebsd,
     OpenFiles,
     same_partition,
     truncate_file,
@@ -70,21 +74,24 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import logger, FS_CASE_SENSITIVE, IS_POSIX, IS_WINDOWS
-from tests import common
+from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_LINUX, IS_POSIX, IS_WINDOWS
 
 
 if IS_WINDOWS:
+    from bleachbit import Windows
     # pylint: disable=import-error
     import win32api
     import win32com.shell
     import win32con
     import win32file
 
-    from bleachbit import Windows
+    # pylint: disable-next=ungrouped-imports
     from tests.TestWindows import WindowsLinksMixIn
 else:
     WindowsLinksMixIn = object
+    # WindowsError is a builtin only on Windows
+    # pylint: disable-next=redefined-builtin, ungrouped-imports
+    from bleachbit.General import WindowsError
 
 
 def ini_helper(self, execute):
@@ -190,8 +197,10 @@ def _open_blocking_handle(path, share_mode):
     Returns:
         File handle that blocks other processes from accessing the file
     """
+    # pylint: disable-next=possibly-used-before-assignment
     return win32file.CreateFile(
         path,
+        # pylint: disable-next=possibly-used-before-assignment
         win32con.GENERIC_READ | win32con.GENERIC_WRITE,
         share_mode,
         None,
@@ -783,6 +792,34 @@ State=AAAA/wA...
                 delete(path, shred=False)
         self.assertExists(path)
 
+    def test_delete_windows_lstat_denied(self):
+        """delete() on Windows still works where os.lstat() is denied
+
+        Some Windows files give Access Denied to os.lstat() but not to the
+        native os.path checks. There is no reliable way to create one in a
+        test, so both are mocked.
+        """
+        denied = PermissionError(13, 'Access is denied')
+        for isdir in (False, True):
+            with self.subTest(isdir=isdir):
+                mock_delete_file = unittest.mock.Mock()
+                mock_delete_path = unittest.mock.Mock()
+                with unittest.mock.patch.multiple(
+                        'bleachbit.FileUtilities', IS_POSIX=False,
+                        IS_WINDOWS=True, delete_file=mock_delete_file,
+                        _delete_path=mock_delete_path), \
+                        unittest.mock.patch('os.lstat', side_effect=denied), \
+                        unittest.mock.patch('os.path.lexists', return_value=True), \
+                        unittest.mock.patch('os.path.isdir', return_value=isdir), \
+                        unittest.mock.patch('os.path.isfile', return_value=not isdir):
+                    self.assertTrue(delete('C:\\locked'))
+                if isdir:
+                    mock_delete_file.assert_not_called()
+                    self.assertIs(mock_delete_path.call_args.args[1], os.rmdir)
+                else:
+                    mock_delete_file.assert_called_once()
+                    mock_delete_path.assert_not_called()
+
     def delete_helper(self, delete_func, shred):
         """Called by test_delete() with shred = False and = True"""
 
@@ -903,7 +940,8 @@ State=AAAA/wA...
         for shred in (False, True):
             fn = os.path.join(self.tempdir, 'hidden')
             common.touch_file(fn)
-            # pylint: disable=possibly-used-before-assignment, c-extension-no-member
+            # pylint: disable=c-extension-no-member
+            # pylint: disable-next=possibly-used-before-assignment
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
             self.assertFalse(is_hard_link(fn))
@@ -966,7 +1004,8 @@ State=AAAA/wA...
                     self.assertTrue(delete_file(filename, shred))
                 else:
                     # Delete expected to fail.
-                    # pylint: disable=undefined-variable
+                    # WindowsError is a builtin on Windows and imported above otherwise.
+                    # pylint: disable-next=undefined-variable, possibly-used-before-assignment
                     with self.assertRaises(WindowsError):
                         delete_file(filename, shred)
                 win32file.CloseHandle(handle)
@@ -1585,15 +1624,50 @@ State=AAAA/wA...
         elif IS_POSIX:
             for check_path in (home, '/'):
                 detected_fs = get_filesystem_type(check_path)[0]
-                self.assertIn(detected_fs, ['apfs', 'btrfs', 'ext4', 'ext3', 'hfs', 'squashfs', 'unknown'],
-                              f"Unexpected file system type for {check_path}: {detected_fs}")
+                self.assertIn(detected_fs, [
+                    'apfs', 'btrfs', 'ext4', 'ext3', 'ext2', 'xfs',
+                    'hfs', 'squashfs', 'ufs', 'zfs', 'tmpfs', 'ffs',
+                    'unknown'],
+                    f"Unexpected file system type for {check_path}: {detected_fs}")
+
+    def test_get_filesystem_type_cdrom(self):
+        """Unit test for get_filesystem_type() on a CD-ROM drive"""
+        cdrom_mounts = common.cdrom_mountpoints()
+        if 'GITHUB_ACTIONS' in os.environ and (IS_LINUX or IS_WINDOWS):
+            self.assertTrue(
+                cdrom_mounts, 'Expected a mounted CD-ROM drive in CI')
+        # Scan all partitions: cdrom_mountpoints() already filters on
+        # is_cdrom and is_readonly, so asserting on its output cannot fail.
+        for part in psutil.disk_partitions(all=False):
+            fs_info = get_filesystem_type(part.mountpoint)
+            # UDF is excluded: it can be writable (e.g., DVD-RAM).
+            if fs_info.is_cdrom and fs_info.fstype.lower() != 'udf':
+                self.assertTrue(fs_info.is_readonly, part)
+
+    @common.skipUnlessMac
+    def test_get_filesystem_type_macos(self):
+        """get_filesystem_type handles firmlinks on macOS"""
+        # The sealed system volume is read-only.
+        root_fs_info = get_filesystem_type('/')
+        self.assertTrue(root_fs_info.is_readonly)
+        self.assertFalse(root_fs_info.is_cdrom)
+
+        # Because of firmlinks, read-write paths like ~ resolve to the
+        # root partition, which is a secured sealed volume, but
+        # os.statvfs() sees through the firmlink to the read-write
+        # data volume.
+        for pathname in ('/tmp', os.path.expanduser('~')):
+            fs_info = get_filesystem_type(pathname)
+            self.assertFalse(fs_info.is_readonly)
+            self.assertFalse(fs_info.is_cdrom)
+            self.assertEqual(fs_info.fstype, root_fs_info.fstype)
 
     def test_get_filesystem_type_missing_psutil(self):
         """get_filesystem_type should return unknown when psutil is missing."""
         with common.mock_missing_package('psutil'):
             with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
                 result = get_filesystem_type('/')
-            self.assertEqual(result, ("unknown", "none"))
+            self.assertEqual(result, FilesystemInfo("unknown", "none", False))
             self.assertIn('psutil', cm.output[0])
 
     def test_getsize(self):
@@ -1609,7 +1683,7 @@ State=AAAA/wA...
                 # Expand the directory names, which are in the short format,
                 # to test the case where the full path (including the directory)
                 # is longer than 255 characters.
-                # pylint: disable=possibly-used-before-assignment, c-extension-no-member
+                # pylint: disable=c-extension-no-member
                 lname = win32api.GetLongPathNameW(extended_path(filename))
                 self.assertEqual(getsize(lname), 10 * 12345)
                 # this function returns a byte string instead of Unicode
@@ -1620,9 +1694,9 @@ State=AAAA/wA...
                 self.assertEqual(counter, 1)
             if IS_POSIX:
                 encoding = sys.getdefaultencoding()
-                output = str(subprocess.Popen(
-                    ["du", "-h", filename],
-                    stdout=subprocess.PIPE).communicate()[0], encoding=encoding)
+                output = str(subprocess.run(
+                    ["du", "-h", filename], stdout=subprocess.PIPE,
+                    check=False).stdout, encoding=encoding)
                 output = output.replace("\n", "")
                 du_size = output.split('\t', maxsplit=1)[0] + "B"
                 print(f"output = '{output}', size='{du_size}'")
@@ -1666,11 +1740,20 @@ State=AAAA/wA...
     def test_getsize_sparse(self):
         """Test getsize() with a sparse file"""
         # macOS HFS+ did not support sparse files, but APFS does.
+        logical_size = 1000 ** 2
         (handle, filename) = tempfile.mkstemp(
             prefix="bleachbit-test-sparse-", dir=self.tempdir)
-        os.ftruncate(handle, 1000 ** 2)
+        os.ftruncate(handle, logical_size)
         os.close(handle)
-        self.assertEqual(getsize(filename), 0)
+        allocated = getsize(filename)
+        if IS_FREEBSD:
+            # UFS still allocates a small amount of metadata (often 64KiB).
+            self.assertEqual(os.lstat(filename).st_size, logical_size)
+            self.assertLess(allocated, logical_size // 10,
+                            f"sparse file allocated {allocated} bytes "
+                            f"for logical size {logical_size}")
+        else:
+            self.assertEqual(allocated, 0)
 
     def test_getsizedir(self):
         """Unit test for getsizedir()"""
@@ -1786,13 +1869,49 @@ State=AAAA/wA...
         """Unit test for open_files_lsof()"""
         self.assertEqual(list(open_files_lsof(
             lambda: 'n/bar/foo\nn/foo/bar\nnoise')), ['/bar/foo', '/foo/bar'])
+        # FreeBSD lsof appends the mount device to NAME.
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_FREEBSD', True):
+            self.assertEqual(list(open_files_lsof(
+                lambda: 'n/tmp/foo (/dev/gpt/rootfs)\nn/bar/baz\nnoise')),
+                ['/tmp/foo', '/bar/baz'])
+        # Other lsof (e.g., macOS) does not append the device, so a real
+        # file whose name ends in ' (/dev/x)' must not be mangled.
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_FREEBSD', False):
+            self.assertEqual(list(open_files_lsof(
+                lambda: 'n/tmp/foo (/dev/sr0)')),
+                ['/tmp/foo (/dev/sr0)'])
+
+    def test_open_files_psutil(self):
+        """Unit test for open_files_psutil()"""
+        fake_file = unittest.mock.Mock(path='/tmp/opened')
+        proc = unittest.mock.Mock()
+        proc.open_files.return_value = [fake_file]
+        denied = unittest.mock.Mock()
+        denied.open_files.side_effect = OSError('denied')
+        empty = unittest.mock.Mock(path='')
+        proc_empty = unittest.mock.Mock()
+        proc_empty.open_files.return_value = [empty]
+        with unittest.mock.patch('psutil.process_iter', return_value=[proc, denied, proc_empty]):
+            self.assertEqual(list(open_files_psutil()), ['/tmp/opened'])
+
+    def test_open_files_freebsd_without_psutil(self):
+        """open_files_freebsd() falls back to lsof when psutil is missing"""
+        with unittest.mock.patch('bleachbit.FileUtilities.open_files_psutil',
+                                 side_effect=ImportError('no psutil')), \
+                unittest.mock.patch('bleachbit.FileUtilities.open_files_lsof',
+                                    return_value=iter(['/tmp/via-lsof'])):
+            self.assertEqual(list(open_files_freebsd()), ['/tmp/via-lsof'])
 
     @common.skipIfWindows
     def test_open_files(self):
         """Unit test for class OpenFiles"""
 
         filename = os.path.join(self.tempdir, 'bleachbit-test-open-files')
-        with open(filename, 'wb'):
+        # FreeBSD kinfo_getfile leaves kf_path empty for a newly created
+        # O_WRONLY file (Python's 'wb'). Open an existing file for reading
+        # so the kernel reports the path.
+        self.write_file(filename, b'x')
+        with open(filename, 'rb'):
             openfiles = OpenFiles()
             ago = None
             if openfiles.last_scan_time:
@@ -1817,7 +1936,6 @@ State=AAAA/wA...
             self.assertFalse(same_partition(home, '/dev'))
         elif IS_WINDOWS:
             home_drive = os.path.splitdrive(home)[0]
-            # pylint: disable=import-outside-toplevel
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():
                 this_drive = os.path.splitdrive(drive)[0]
@@ -2071,7 +2189,7 @@ State=AAAA/wA...
             d = os.path.expandvars(r'%windir%\system32')
             keep_list = [('file', r'c:\filename'), ('folder', r'c:\\folder')]
         reps = 20
-        paths = [p for p in children_in_directory(d, True)]
+        paths = list(children_in_directory(d, True))
         paths = paths[:1000]  # truncate
         self.assertGreater(len(paths), 10)
         old_keep_list = options.get_whitelist_paths()

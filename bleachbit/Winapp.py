@@ -8,12 +8,13 @@
 Import Winapp2.ini files
 """
 
+import configparser
 import fnmatch
 import glob
 import logging
 import os
 import re
-from xml.dom.minidom import parseString
+import time
 
 import bleachbit
 from bleachbit import Cleaner, IS_WINDOWS, Windows
@@ -66,9 +67,14 @@ _WINAPP_VAR_SUBS = (
 )
 
 
-def xml_escape(s):
-    """Lightweight way to escape XML entities"""
-    return s.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;').replace('>', '&gt;')
+class _ActionNode:
+    """Stand-in for a minidom <action> node, without the parse per key"""
+
+    def __init__(self, attrs):
+        self._attrs = attrs
+
+    def getAttribute(self, name):
+        return self._attrs.get(name, '')
 
 
 def section2option(s):
@@ -82,6 +88,10 @@ def section2option(s):
 def _noop_progress(_fraction):
     """Default progress callback used when one is not provided."""
     return None
+
+
+# Longest a winapp2.ini load runs before yielding to the GUI main loop
+_YIELD_SECONDS = 0.05
 
 
 def detectos(required_ver, mock=False):
@@ -140,15 +150,14 @@ def special_detect(code):
                'DET_SPACE_QUEST': r'HKCU\Software\Sierra Games\Space Quest'}
     if code in sd_keys:
         return Windows.detect_registry_key(sd_keys[code])
-    else:
-        logger.error('Unknown SpecialDetect=%s', code)
+    logger.error('Unknown SpecialDetect=%s', code)
     return False
 
 
-"""fnmatch.translate() only got atomic groups (avoiding catastrophic
-regex backtracking) in Python 3.11, but BleachBit supports 3.8+, so
-cap the wildcard count instead of trusting the stdlib on older versions.
-TODO: drop this once the minimum supported Python is 3.11+."""
+# fnmatch.translate() only got atomic groups (avoiding catastrophic
+# regex backtracking) in Python 3.11, but BleachBit supports 3.8+, so
+# cap the wildcard count instead of trusting the stdlib on older versions.
+# TODO: drop this once the minimum supported Python is 3.11+
 MAX_GLOB_WILDCARDS = 10
 
 
@@ -173,23 +182,38 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname, cb_progress=_noop_progress):
-        """Create cleaners from a Winapp2.ini-style file"""
+    def __init__(self, pathname, cb_progress=_noop_progress, load_now=True):
+        """Create cleaners from a Winapp2.ini-style file
+
+        Pass load_now=False to drive load_sections() yourself, which lets a
+        GUI caller keep painting between sections.
+        """
 
         self.cleaners = {}
         self.cleaner_ids = []
         for langsecref in set(langsecref_map.values()):
             self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
-        self.parser = bleachbit.RawConfigParser()
+        self.parser = configparser.RawConfigParser()
         encoding = detect_encoding(pathname) or 'utf_8_sig'
         self.parser.read(pathname, encoding=encoding)
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         self.re_excludekey = re.compile(r'^excludekey\d+$')
-        section_total_count = len(self.parser.sections())
+        # An app's sections repeat Detect keys; cache the probes for this load
+        self._detect_cache = {}
+        if not load_now:
+            return
+        for _dummy in self.load_sections(cb_progress):
+            pass
+
+    def load_sections(self, cb_progress=_noop_progress):
+        """Parse each section, yielding so a GUI caller can keep painting"""
+        sections = self.parser.sections()
+        section_total_count = len(sections)
         section_done_count = 0
-        for section in self.parser.sections():
+        deadline = time.monotonic() + _YIELD_SECONDS
+        for section in sections:
             try:
                 self.handle_section(section)
             except Exception:
@@ -198,6 +222,9 @@ class Winapp:
             else:
                 section_done_count += 1
                 cb_progress(1.0 * section_done_count / section_total_count)
+            if time.monotonic() >= deadline:
+                yield True
+                deadline = time.monotonic() + _YIELD_SECONDS
 
     def add_section(self, cleaner_id, name):
         """Add a section (cleaners)"""
@@ -275,8 +302,14 @@ class Winapp:
 
         if len(regexes) == 1:
             return regexes[0]
-        else:
-            return f"({'|'.join(regexes)})"
+        return f"({'|'.join(regexes)})"
+
+    def _detect_cached(self, kind, probe, key):
+        """Run a Detect probe, reusing the result within this load"""
+        cache_key = (kind, key)
+        if cache_key not in self._detect_cache:
+            self._detect_cache[cache_key] = probe(key)
+        return self._detect_cache[cache_key]
 
     def detect(self, section):
         """Check whether to show the section
@@ -302,13 +335,13 @@ class Winapp:
                 # Detect= checks for a registry key
                 any_detect_option = True
                 key = self.parser.get(section, option)
-                if Windows.detect_registry_key(key):
+                if self._detect_cached('reg', Windows.detect_registry_key, key):
                     return True
             elif self.re_detectfile.match(option):
                 # DetectFile= checks for a file
                 any_detect_option = True
                 key = self.parser.get(section, option)
-                if detect_file(key):
+                if self._detect_cached('file', detect_file, key):
                     return True
         return not any_detect_option
 
@@ -378,7 +411,7 @@ class Winapp:
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
-        regex = ''
+        attrs = {'command': 'delete'}
         if recurse:
             search = 'walk.files'
             path = dirname
@@ -386,13 +419,12 @@ class Winapp:
                 if removeself:
                     search = 'walk.all'
             else:
-                regex = f' regex="^{xml_escape(fnmatch_translate(filename))}$" '
+                attrs['regex'] = f'^{fnmatch_translate(filename)}$'
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
             if path.find('*') == -1:
                 search = 'file'
-        excludekeysxml = ''
         if excludekeys:
             if len(excludekeys) > 1:
                 # multiple
@@ -400,15 +432,16 @@ class Winapp:
             else:
                 # just one
                 exclude_str = excludekeys[0]
-            excludekeysxml = f'nwholeregex="{xml_escape(exclude_str)}"'
-        action_str = f'<option command="delete" search="{search}" path="{xml_escape(path)}" {regex}{excludekeysxml}/>'
-        yield Delete(parseString(action_str).childNodes[0])
+            attrs['nwholeregex'] = exclude_str
+        attrs['search'] = search
+        attrs['path'] = path
+        yield Delete(_ActionNode(attrs))
         if removeself:
             search = 'file'
             if dirname.find('*') > -1:
                 search = 'glob'
-            action_str = f'<option command="delete" search="{search}" path="{xml_escape(dirname)}" type="d"/>'
-            yield Delete(parseString(action_str).childNodes[0])
+            yield Delete(_ActionNode({'command': 'delete', 'search': search,
+                                      'path': dirname, 'type': 'd'}))
 
     def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
         """Parse a FileKey# option.
@@ -459,12 +492,10 @@ class Winapp:
                 logger.debug('Skipping excluded registry key: %s', path)
                 return
 
-        path = xml_escape(path)
-        name = ""
+        attrs = {'command': 'winreg', 'path': path}
         if len(elements) == 2:
-            name = f' name="{xml_escape(elements[1])}"'
-        action_str = f'<option command="winreg" path="{path}"{name}/>'
-        provider = Winreg(parseString(action_str).childNodes[0])
+            attrs['name'] = elements[1]
+        provider = Winreg(_ActionNode(attrs))
         provider.excludekeys = reg_excludekeys
         self.cleaners[lid].add_action(section2option(ini_section), provider)
 
@@ -492,7 +523,9 @@ def load_cleaners(cb_progress=_noop_progress):
     cb_progress(0.0)
     for pathname in list_winapp_files():
         try:
-            inicleaner = Winapp(pathname, cb_progress)
+            inicleaner = Winapp(pathname, load_now=False)
+            yield True
+            yield from inicleaner.load_sections(cb_progress)
         except Exception:
             logger.exception(
                 "Error reading winapp2.ini cleaner '%s'", pathname)

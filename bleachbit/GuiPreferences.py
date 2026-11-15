@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 """
@@ -32,11 +32,15 @@ from bleachbit.PathUtils import normalize_path
 from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.GuiInfoBar import InfoBarMixin
 from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
                                load_icon_or_fallback,
                                should_show_dark_mode_warning)
-from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
+from bleachbit.Language import (find_supported_language_code,
+                                get_active_language_code,
+                                get_supported_language_code_name_dict,
+                                setup_translation)
 from bleachbit.Language import get_text as _, pget_text as _p
 from bleachbit.Options import options
 
@@ -60,7 +64,7 @@ EXPERT_MODE_MSG = _('Expert mode')
 RESTART_APP_MSG = _("Restart BleachBit for full effect.")
 
 
-class PreferencesDialog:
+class PreferencesDialog(InfoBarMixin):
 
     """Present the preferences dialog and save changes"""
 
@@ -82,14 +86,7 @@ class PreferencesDialog:
         self._cookie_page_container = None
 
         # Add InfoBar for non-blocking messages
-        self.infobar = Gtk.InfoBar()
-        self.infobar.set_show_close_button(True)
-        self.infobar.connect('response', self._on_infobar_response)
-        self.infobar_label = Gtk.Label()
-        self.infobar_label.set_line_wrap(True)
-        self.infobar.get_content_area().add(self.infobar_label)
-        self.dialog.get_content_area().pack_start(self.infobar, False, False, 0)
-        self._infobar_timeout_id = None
+        self._build_infobar(self.dialog.get_content_area())
 
         content_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL, spacing=18)
@@ -187,42 +184,6 @@ class PreferencesDialog:
         vbox.pack_start(cb, False, True, 0)
 
         return cb
-
-    def __del__(self):
-        """Destructor called when the dialog is closing"""
-        if self.refresh_operations:
-            # refresh the list of cleaners
-            self.cb_refresh_operations()
-
-    def _on_infobar_response(self, _infobar, _response_id):
-        """Handle InfoBar close button click"""
-        if self._infobar_timeout_id:
-            GLib.source_remove(self._infobar_timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar.hide()
-
-    def _hide_infobar(self):
-        """Hide the InfoBar (used for auto-dismiss timeout)"""
-        self._infobar_timeout_id = None
-        self.infobar.hide()
-        return False  # Remove from GLib timeout
-
-    def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
-        """Show a non-blocking InfoBar message that auto-dismisses
-
-        Args:
-            message: The message to display
-            message_type: Gtk.MessageType (ERROR, WARNING, INFO, etc.)
-        """
-        # Cancel any existing timeout
-        if self._infobar_timeout_id:
-            GLib.source_remove(self._infobar_timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar_label.set_text(message)
-        self.infobar.set_message_type(message_type)
-        self.infobar.show_all()
-        self._infobar_timeout_id = GLib.timeout_add_seconds(
-            15, self._hide_infobar)
 
     def __on_expert_mode_toggled(self, cb):
         """Callback for expert mode checkbox"""
@@ -350,27 +311,23 @@ class PreferencesDialog:
 
         self.lang_select_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         # TRANSLATORS: Label for the language selection dropdown.
-        lang_label = Gtk.Label(label=_("Language:"))
-        lang_label.set_margin_start(20)  # Add some indentation
-        self.lang_select_box.pack_start(lang_label, False, True, 5)
+        self.lang_label = Gtk.Label(label=_("Language:"))
+        self.lang_label.set_margin_start(20)  # Add some indentation
+        self.lang_select_box.pack_start(self.lang_label, False, True, 5)
 
         self.lang_combo = Gtk.ComboBoxText()
-        current_lang_code = get_active_language_code()
         # Add available languages
-        active_language_idx = None
         if supported_langs is None:
-            lang_items = [('en_us', 'English')]
+            lang_items = [('en_US', 'English')]
         else:
             lang_items = supported_langs.items()
-        for lang_idx, (lang_code, native) in enumerate(lang_items):
+        self.lang_codes = []
+        for lang_code, native in lang_items:
+            self.lang_codes.append(lang_code)
             if native:
                 self.lang_combo.append_text(f"{native} ({lang_code})")
             else:
                 self.lang_combo.append_text(lang_code)
-            if lang_code == current_lang_code:
-                active_language_idx = lang_idx
-        if active_language_idx is not None:
-            self.lang_combo.set_active(active_language_idx)
         # set_wrap_width() prevents infinite space to scroll up.
         # https://github.com/bleachbit/bleachbit/issues/1764
         self.lang_combo.set_wrap_width(1)
@@ -378,13 +335,39 @@ class PreferencesDialog:
         lang_box.pack_start(self.lang_select_box, False, True, 0)
 
         vbox.pack_start(lang_box, False, True, 0)
-        self.lang_select_box.set_sensitive(not is_auto_detect)
         self.cb_auto_lang.connect('toggled', self.on_auto_detect_toggled)
         self.lang_combo.connect('changed', self.on_lang_changed)
+        self.__select_supported_language(get_active_language_code())
+        self.__set_language_widgets_sensitive(not is_auto_detect)
+
+    def __select_supported_language(self, lang_code):
+        """Select the best matching supported language in the combobox.
+
+        The 'changed' signal is blocked, so the forced_language option
+        is not changed.  Returns the selected language code, or None if
+        there is no matching entry.
+        """
+        matched = find_supported_language_code(lang_code, self.lang_codes)
+        if matched is None:
+            matched = find_supported_language_code('en', self.lang_codes)
+        if matched is None:
+            return None
+        self.lang_combo.handler_block_by_func(self.on_lang_changed)
+        self.lang_combo.set_active(self.lang_codes.index(matched))
+        self.lang_combo.handler_unblock_by_func(self.on_lang_changed)
+        return matched
+
+    def __set_language_widgets_sensitive(self, sensitive):
+        """Enable or disable the language label and dropdown together."""
+        self.lang_select_box.set_sensitive(sensitive)
+        self.lang_label.set_sensitive(sensitive)
+        self.lang_combo.set_sensitive(sensitive)
 
     def on_lang_changed(self, widget):
         """Callback for when the language combobox is changed."""
         text = widget.get_active_text()
+        if text is None:
+            return
         # Extract language code from the format "Native Name (lang_code)"
         lang_code = text.split("(")[-1].rstrip(")")
         if lang_code:
@@ -400,9 +383,22 @@ class PreferencesDialog:
         """Callback for when the auto-detect language checkbox is toggled."""
         self.__toggle_callback(None, 'auto_detect_lang')
         is_auto_detect = options.get("auto_detect_lang")
-        self.lang_select_box.set_sensitive(not is_auto_detect)
-        if is_auto_detect:
-            options.set("forced_language", "", section="bleachbit")
+        self.__set_language_widgets_sensitive(not is_auto_detect)
+        # Clear first so detection below sees the system locale rather
+        # than a stale forced value.
+        options.set("forced_language", "", section="bleachbit")
+        # Show the detected language when auto-detect is enabled, or
+        # keep it as the default when auto-detect is disabled.
+        # https://github.com/bleachbit/bleachbit/issues/1800
+        matched = self.__select_supported_language(
+            get_active_language_code())
+        if matched and not is_auto_detect:
+            # Keep the detected language as the default now that it is
+            # no longer automatically detected.  Save the same code the
+            # dropdown shows (including its fallback) so the displayed
+            # and saved languages cannot disagree.
+            # https://github.com/bleachbit/bleachbit/issues/1799
+            options.set("forced_language", matched, section="bleachbit")
         setup_translation()
         self.refresh_operations = True
         self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
@@ -1035,3 +1031,5 @@ class PreferencesDialog:
         self.select_page(page_name)
         self.dialog.run()
         self.dialog.destroy()
+        if self.refresh_operations and self.cb_refresh_operations:
+            self.cb_refresh_operations()

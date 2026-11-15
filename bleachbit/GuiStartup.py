@@ -11,7 +11,7 @@ import sys
 from importlib.util import find_spec
 
 import bleachbit
-from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
+from bleachbit import General, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -67,7 +67,7 @@ def _get_posix_permission_issues(fstat, options_file):
     """
     lines = []
     has_error = False
-    import pwd  # pylint: disable=import-outside-toplevel
+    import pwd
     from bleachbit.General import get_real_uid, get_real_username
     try:
         file_owner = pwd.getpwuid(fstat.st_uid).pw_name
@@ -114,7 +114,8 @@ def _lookup_account_name_or_sid(sid):
     try:
         return win32security.LookupAccountSid(None, sid)[0], sid_str
     except pywintypes.error as e:
-        logger.debug('LookupAccountSid failed (%s); falling back to SID string', e)
+        logger.debug(
+            'LookupAccountSid failed (%s); falling back to SID string', e)
         return sid_str, sid_str
 
 
@@ -125,9 +126,9 @@ def _get_windows_user_info():
     """
     if not IS_WINDOWS:
         raise RuntimeError("This function is only available on Windows")
-    import win32api  # pylint: disable=import-outside-toplevel
-    import win32file  # pylint: disable=import-outside-toplevel
-    import win32security  # pylint: disable=import-outside-toplevel
+    import win32api
+    import win32file
+    import win32security
     process_token = win32security.OpenProcessToken(
         win32api.GetCurrentProcess(),
         win32security.TOKEN_QUERY)
@@ -150,7 +151,7 @@ def _get_windows_file_owner(filepath):
     """
     if not IS_WINDOWS:
         raise RuntimeError("This function is only available on Windows")
-    import win32security  # pylint: disable=import-outside-toplevel
+    import win32security
     file_sd = win32security.GetFileSecurity(
         filepath, win32security.OWNER_SECURITY_INFORMATION)
     file_owner_sid = file_sd.GetSecurityDescriptorOwner()
@@ -159,8 +160,8 @@ def _get_windows_file_owner(filepath):
     return file_owner_sid_str, file_owner_name
 
 
-def _get_windows_permission_issues(options_file):
-    """Check Windows-specific ownership issues.
+def _get_windows_permission_issues(options_file, options_dir=None):
+    """Check Windows-specific ownership and ACL issues.
 
     Returns (has_error, lines).
     """
@@ -178,8 +179,7 @@ def _get_windows_permission_issues(options_file):
         # from the owner. This is not representative of a normal installation.
         if 'GITHUB_ACTIONS' in os.environ and file_owner_name == 'Administrators':
             lines.append('Skipping file ownership check in CI')
-            return False, lines
-        if file_owner_sid_str != current_sid and file_owner_sid_str not in group_sids:
+        elif file_owner_sid_str != current_sid and file_owner_sid_str not in group_sids:
             if file_owner_name == file_owner_sid_str:
                 # The file owner's SID could not be resolved to an account
                 # name (e.g., issue #2271).
@@ -192,12 +192,32 @@ def _get_windows_permission_issues(options_file):
     except Exception as e:
         has_error = True
         lines.append(f'Could not check file ownership: {e}')
+
+    # When elevated, GUI.check_appdata_permissions() offers the repair instead.
+    if (options_dir and not bleachbit.portable_mode
+            # pylint: disable-next=possibly-used-before-assignment
+            and not Windows.shell.IsUserAnAdmin()):
+        try:
+            if Windows.has_broken_appdata_acl(options_dir):
+                has_error = True
+                lines.append(
+                    'Configuration folder permissions lock out non-elevated '
+                    'processes (issue #2401); run BleachBit with administrator '
+                    'privileges to repair them')
+        except Exception as e:
+            has_error = True
+            lines.append(f'Could not check directory ACL: {e}')
+
     return has_error, lines
 
 
 def _get_config_permission_issues():
     """Check for permission and file access issues with the
     configuration.
+
+    Side effects: creates the options directory and an empty
+    configuration file if they are missing. In sudo mode, chowns
+    them to the real user.
 
     If no errors, returns False.
     If errors found, returns list of strings with info.
@@ -207,6 +227,28 @@ def _get_config_permission_issues():
 
     _options_file = bleachbit.options_file
     _options_dir = bleachbit.options_dir
+
+    try:
+        General.makedirs(_options_dir)
+    except OSError as e:
+        lines.append(f'Cannot create directory {_options_dir}: '
+                     f'{type(e).__name__}: {e}')
+        parent = os.path.dirname(_options_dir)
+        while not os.path.lexists(parent) and parent != os.path.dirname(parent):
+            parent = os.path.dirname(parent)
+        try:
+            pstat = os.stat(parent)
+            lines.append(f'Nearest existing parent directory: {parent}')
+            lines.append(
+                f'Parent directory permissions: {stat.filemode(pstat.st_mode)} '
+                f'({oct(stat.S_IMODE(pstat.st_mode))})')
+            if IS_POSIX:
+                lines.extend(_get_posix_permission_issues(pstat, parent)[1])
+            elif IS_WINDOWS:
+                lines.extend(_get_windows_permission_issues(parent)[1])
+        except OSError as e2:
+            lines.append(f'Cannot stat parent directory {parent}: {e2}')
+        return lines
 
     try:
         with open(_options_file, 'rb') as f:
@@ -221,8 +263,11 @@ def _get_config_permission_issues():
         lines.append(f"Read error: {type(e).__name__}: {e}")
 
     try:
-        with open(_options_file, 'a') as f:
+        mkfile = not os.path.exists(_options_file)
+        with open(_options_file, 'a', encoding='utf-8') as f:
             f.write('')
+        if mkfile and General.sudo_mode():
+            General.chownself(_options_file)
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Write error: {type(e).__name__}: {e}")
@@ -249,17 +294,16 @@ def _get_config_permission_issues():
         lines.append(f'Cannot stat directory {_options_dir}: {e}')
 
     # File ownership vs current user
-    if 'fstat' in locals():
-        if IS_POSIX:
-            _has_error, _lines = _get_posix_permission_issues(
-                fstat, _options_file)
-            has_error = has_error or _has_error
-            lines.extend(_lines)
-        elif IS_WINDOWS:
-            _has_error, _lines = _get_windows_permission_issues(
-                _options_file)
-            has_error = has_error or _has_error
-            lines.extend(_lines)
+    if IS_POSIX and 'fstat' in locals():
+        _has_error, _lines = _get_posix_permission_issues(
+            fstat, _options_file)
+        has_error = has_error or _has_error
+        lines.extend(_lines)
+    elif IS_WINDOWS:
+        _has_error, _lines = _get_windows_permission_issues(
+            _options_file, _options_dir)
+        has_error = has_error or _has_error
+        lines.extend(_lines)
 
     if has_error:
         return lines
@@ -271,7 +315,7 @@ def _has_selected_warning_option():
 
     Returns True if any selected option has a warning, False otherwise.
     """
-    from bleachbit.Cleaner import backends  # pylint: disable=import-outside-toplevel
+    from bleachbit.Cleaner import backends
     if not backends:
         return False
     for cleaner_id, cleaner in backends.items():
@@ -386,12 +430,18 @@ def get_startup_messages(auto_exit):
     if IS_MAC:
         from bleachbit.Mac import is_full_disk_access_enabled
         if not is_full_disk_access_enabled():
+            # In the future, we could add button to option system settings.
+            # This message doesn't handle a corner case if our application
+            # is running from a terminal: the user would need to grant
+            # permissions to it instead.
             ret_msgs.append((
                 # TRANSLATORS: Startup warning on macOS when the application
-                # lacks Full Disk Access.
-                _('Full Disk Access is not granted to BleachBit. macOS will '
-                  'block access and some cleaners will not work. Grant Full '
-                  'Disk Access to this application in System Settings > '
-                  'Privacy & Security > Full Disk Access.'), True))
+                # lacks Full Disk Access. "Full Disk Access", "System
+                # Settings", and "Privacy & Security" are names of macOS
+                # features and settings: match Apple's localization.
+                _('BleachBit may not have Full Disk Access. Without it, macOS blocks '
+                  'access to some files, and some cleaners will not work.\n\n'
+                  'To fix this, open System Settings > Privacy & Security > Full Disk '
+                  'Access, turn on BleachBit, and then restart BleachBit.'), True))
 
     return ret_msgs

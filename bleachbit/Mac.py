@@ -8,14 +8,19 @@
 Integration specific to macOS
 """
 
+import ctypes
+import ctypes.util
 import errno
 import logging
 import os
 import platform
+import plistlib
 import subprocess
+import xml.parsers.expat
 from pathlib import Path
 
 from bleachbit import APP_NAME, FileUtilities, IS_MAC
+from bleachbit.Language import normalize_locale_code
 
 logger = logging.getLogger(__name__)
 
@@ -54,19 +59,40 @@ MACOSX_DICT_MODERN = {
     '14': 'Sonoma',
     '15': 'Sequoia',
     '26': 'Tahoe',
+    '27': 'Golden Gate',
 }
 
 
-def get_macos_locale():
-    """Return the user's preferred locale on macOS, e.g. 'es_ES'.
+def _read_global_preferences_plist():
+    """Return the parsed contents of ~/Library/Preferences/
+    .GlobalPreferences.plist as a dict, or None if it cannot be read
+    or does not parse to a dictionary."""
+    path = os.path.expanduser(
+        '~/Library/Preferences/.GlobalPreferences.plist')
+    try:
+        with open(path, 'rb') as f:
+            data = plistlib.load(f)
+            if isinstance(data, dict):
+                return data
+            logger.debug('unexpected non-dict root in %s: %r',
+                         path, type(data))
+            return None
+    except (OSError, ValueError, xml.parsers.expat.ExpatError) as e:
+        logger.debug('failed to read %s: %s', path, e)
+        return None
 
-    On macOS, locale.getlocale() reflects POSIX environment variables
-    (LANG/LC_ALL), which are not set when the app is launched from
-    Finder (as opposed to a terminal) and can be stale or inconsistent
-    with the user's actual System Settings > General > Language & Region
-    preference. AppleLocale, read via `defaults read -g AppleLocale`,
-    reflects the real system preference regardless of how the app was
-    launched.
+
+def _get_apple_locale_via_defaults():
+    """Return AppleLocale by shelling out to `defaults read -g
+    AppleLocale`, or None on any failure.
+
+    This is the fallback path: reliable when tested from a terminal,
+    but observed to consistently fail (falling through to the 'C'
+    locale) when the app is launched via an actual Finder double-click
+    rather than a terminal or `open` -- `_read_global_preferences_plist`
+    above does not depend on spawning a subprocess at all, so it is
+    unaffected by whatever session/TCC context differs between those
+    two launch paths, and is tried first.
     """
     try:
         result = subprocess.run(
@@ -79,11 +105,109 @@ def get_macos_locale():
     if result.returncode != 0:
         return None
     value = result.stdout.strip()
-    if not value:
+    return value or None
+
+
+def get_macos_locale():
+    """Return the user's preferred locale on macOS, e.g. 'es_ES'.
+
+    On macOS, locale.getlocale() reflects POSIX environment variables
+    (LANG/LC_ALL), which are not set when the app is launched from
+    Finder (as opposed to a terminal) and can be stale or inconsistent
+    with the user's actual System Settings > General > Language & Region
+    preference. AppleLocale reflects the real system preference
+    regardless of how the app was launched.
+
+    Prefer reading AppleLocale directly from .GlobalPreferences.plist
+    (pure file I/O, no subprocess); if AppleLocale is absent from the
+    plist, fall back to the first entry of AppleLanguages in the same
+    plist, and finally to `defaults read -g AppleLocale` if the plist
+    itself cannot be read.
+    """
+    value = None
+    prefs = _read_global_preferences_plist()
+    if isinstance(prefs, dict):
+        apple_locale = prefs.get('AppleLocale')
+        if isinstance(apple_locale, str) and apple_locale:
+            value = apple_locale
+        else:
+            languages = prefs.get('AppleLanguages')
+            if isinstance(languages, (list, tuple)) and languages:
+                first_lang = languages[0]
+                if isinstance(first_lang, str) and first_lang:
+                    # AppleLanguages uses hyphens ('es-ES'); AppleLocale and
+                    # everywhere else in this codebase use underscores.
+                    value = first_lang.replace('-', '_')
+
+    if not value or not isinstance(value, str):
+        value = _get_apple_locale_via_defaults()
+
+    if not isinstance(value, str) or not value:
         return None
     # AppleLocale can include a variant suffix like 'es_ES@currency=EUR'.
-    value = value.split('@')[0]
+    value = normalize_locale_code(value)
     return value or None
+
+
+def bind_libintl_domain(text_domain, locale_dir):
+    """Bind the gettext text domain through GNU libintl using ctypes.
+
+    Gtk.Builder translates .ui files (such as the hamburger menu) with the
+    C library libintl, not with Python's gettext. Python builds for macOS
+    (Homebrew, python.org) lack locale.bindtextdomain(), so without this
+    call the .mo files are never found and these strings stay in English.
+
+    The candidates are tried in order, so that the libintl that GTK uses
+    is found first (inside an app bundle, DYLD_LIBRARY_PATH resolves the
+    bare name to the bundled copy).
+
+    Returns True if the domain was bound.
+    """
+    candidates = [
+        'libintl.8.dylib',
+        'libintl.dylib',
+    ]
+    found = ctypes.util.find_library('intl')
+    if found and found not in candidates:
+        candidates.append(found)
+    candidates.extend((
+        '/opt/homebrew/lib/libintl.8.dylib',  # Homebrew on Apple silicon
+        '/usr/local/lib/libintl.8.dylib',  # Homebrew on Intel
+        '/opt/local/lib/libintl.8.dylib',  # MacPorts
+    ))
+    libintl = None
+    for name in candidates:
+        try:
+            libintl = ctypes.CDLL(name)
+            break
+        except OSError as e:
+            logger.debug('could not load %s: %s', name, e)
+    if libintl is None:
+        logger.warning(
+            'internationalization library (libintl) was not found, '
+            'so translations will not work.')
+        return False
+    try:
+        libintl.libintl_bindtextdomain.argtypes = [
+            ctypes.c_char_p, ctypes.c_char_p]
+        libintl.libintl_bindtextdomain.restype = ctypes.c_char_p
+        libintl.libintl_bind_textdomain_codeset.argtypes = [
+            ctypes.c_char_p, ctypes.c_char_p]
+        libintl.libintl_bind_textdomain_codeset.restype = ctypes.c_char_p
+        libintl.libintl_textdomain.argtypes = [ctypes.c_char_p]
+        libintl.libintl_textdomain.restype = ctypes.c_char_p
+        encoded_domain = text_domain.encode('utf-8')
+        if libintl.libintl_bindtextdomain(
+                encoded_domain, os.fsencode(locale_dir)) is None:
+            logger.warning('libintl_bindtextdomain() failed.')
+            return False
+        libintl.libintl_bind_textdomain_codeset(encoded_domain, b'UTF-8')
+        libintl.libintl_textdomain(encoded_domain)
+    except AttributeError as e:
+        logger.warning('libintl does not export the expected functions: %s', e)
+        return False
+    logger.debug('libintl text domain %s bound to %s', text_domain, locale_dir)
+    return True
 
 
 def notify_macos(msg):
@@ -118,6 +242,7 @@ _FDA_PROBE_PATHS = (
     '~/Library/Caches/com.apple.Safari/',
     '~/Library/Containers/com.apple.Safari/',
 )
+
 
 def is_full_disk_access_enabled():
     """Detect whether Full Disk Access is enabled on macOS.
@@ -469,7 +594,7 @@ def _write_safari_cookie_records(path, pages):
         try:
             os.unlink(temp_path)
         except OSError:
-            pass
+            pass  # best-effort cleanup, original error takes priority
         raise
 
 

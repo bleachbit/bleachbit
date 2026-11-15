@@ -377,6 +377,7 @@ Swapouts:                              20258188.
         """_run_memory_child_systemd_scope() uses a PID-suffixed unit name"""
         captured = {}
 
+        # pylint: disable-next=unused-argument
         def fake_run(args, env=None, **kwargs):
             captured['args'] = args
             captured['kwargs'] = kwargs
@@ -400,6 +401,7 @@ Swapouts:                              20258188.
             os.path.dirname(os.path.abspath(Memory_mod.__file__)))
         captured = {}
 
+        # pylint: disable-next=unused-argument
         def fake_run(args, env=None, **kwargs):
             captured['env'] = env
             captured['kwargs'] = kwargs

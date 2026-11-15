@@ -116,13 +116,28 @@ show_the_browse_folder_dialog(self.window,
     _("Choose folder to shred"))
 ```
 
-In this example, the hint would apply only to the first string,
-and there would be no hint for the second string.
+Watch out for two localizable strings on one line. In this example, the
+hint would apply only to the first string ('File'), and there would be no
+hint for the second string ('Folder').
 
 ```py
 # TRANSLATORS: Noun indicating file type - either 'File' or 'Folder'.
 type_str = _('File') if path_type == 'file' else _('Folder')
 ```
+
+To give each string its own hint, put each in a separate statement:
+
+```py
+if path_type == 'file':
+    # TRANSLATORS: Noun indicating file type.
+    type_str = _('File')
+else:
+    # TRANSLATORS: Noun indicating file type.
+    type_str = _('Folder')
+```
+
+A compact form also works: put a hint on the line before `else _('Folder')`.
+Both forms pass autopep8 and pylint.
 
 The following works:
 
@@ -133,3 +148,17 @@ show_the_browse_folder_dialog(self.window,
 # Third line of hint.
     _("Choose folder to shred"))
 ```
+
+A hint is needed only once per unique string. xgettext merges the hints
+from all occurrences of the same string into one .pot entry.
+
+For CleanerML files, only one translation is needed per `msgid`.
+For example, "Web browser" is repeated across many cleaners, but only
+one .xml needs the hint. If the same `msgid` carries different hints,
+xgettext concatenates them into one .pot entry, which confuses
+translators, so keep one hint per `msgid`.
+
+Checklist for Python translation hints:
+- Run autopep8, which may move the comment.
+- Run pylint to catch errors before CI does.
+- Run `make -C po bleachbit.pot` and verify the hint landed.

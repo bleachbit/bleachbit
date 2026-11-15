@@ -11,6 +11,7 @@ Test case for Common
 
 # standard imports
 import os
+import subprocess
 import tempfile
 
 # first party imports
@@ -93,7 +94,7 @@ class CommonTestCase(common.BleachbitTestCase):
                     continue
                 lang_codes.append(lang_code)
         if os.path.exists('/etc/locale.alias'):
-            with open('/etc/locale.alias', 'r') as f:
+            with open('/etc/locale.alias', 'r', encoding='utf-8') as f:
                 for line in f:
                     line = line.strip()
                     if not line.startswith('#'):
@@ -149,6 +150,55 @@ class CommonTestCase(common.BleachbitTestCase):
         self.assertTrue(os.path.samefile(
             options_dir, os.path.commonpath((options_dir, self.tempdir))))
 
+    def test_testall_import_leaves_bleachbit_unloaded(self):
+        """TestAll sets the options dir before bleachbit is imported"""
+        import sys
+        # An early import would pin the real config dir before main() sets it
+        code = 'import sys, tests.TestAll; print("bleachbit" in sys.modules)'
+        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        proc = subprocess.run([sys.executable, '-c', code],
+                              capture_output=True, text=True, timeout=60,
+                              check=False, cwd=root)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(proc.stdout.strip(), 'False', proc.stderr)
+
+    def _run_conftest(self, options_dir, worker=None):
+        """Run conftest.py in a child process and return its options dir"""
+        import sys
+        env = dict(os.environ, BLEACHBIT_TEST_OPTIONS_DIR=options_dir)
+        env.pop('PYTEST_XDIST_WORKER', None)
+        if worker:
+            env['PYTEST_XDIST_WORKER'] = worker
+        code = ('import os, runpy, sys; runpy.run_path(sys.argv[1]); '
+                'print(os.environ["BLEACHBIT_TEST_OPTIONS_DIR"])')
+        conftest = os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), 'conftest.py')
+        proc = subprocess.run([sys.executable, '-c', code, conftest],
+                              env=env, capture_output=True, text=True,
+                              check=False, timeout=60)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        return proc.stdout.strip()
+
+    def test_conftest_worker_skips_controller_dir(self):
+        """An xdist worker does not adopt the controller's options dir"""
+        # The worker id can turn up in the controller's random suffix
+        controller_dir = os.path.join(
+            self.tempdir, 'bleachbit-test-master-k0gw1zq_')
+        other_worker_dir = os.path.join(
+            controller_dir, 'bleachbit-test-gw0-abcd1234')
+        os.makedirs(other_worker_dir)
+        worker_dir = self._run_conftest(controller_dir, 'gw1')
+        self.assertNotEqual(controller_dir, worker_dir)
+        self.assertExists(other_worker_dir)
+
+    def test_conftest_keeps_preset_options_dir(self):
+        """conftest does not remove an options dir the caller set"""
+        preset_dir = os.path.join(self.tempdir, 'preset')
+        preset_file = os.path.join(preset_dir, 'bleachbit.ini')
+        common.touch_file(preset_file)
+        self.assertEqual(preset_dir, self._run_conftest(preset_dir))
+        self.assertExists(preset_file)
+
     def test_get_put_env(self):
         """Unit test for get_env() and put_env()"""
         self.assertIsNone(common.get_env('PUTENV_TEST'))
@@ -177,17 +227,29 @@ class CommonTestCase(common.BleachbitTestCase):
 
     def test_mock_missing_package(self):
         """Test mock_missing_package context manager"""
+        # The imports are what this test exercises, so each one lives in its
+        # own function and is returned, rather than left as an unused name
+        def import_logging():
+            import logging
+            return logging
+
+        def import_cli():
+            import bleachbit.CLI
+            return bleachbit.CLI
+
+        def import_sys():
+            import sys
+            return sys
+
         # Inside the context, importing logging should raise an errorl.
         with common.mock_missing_package('logging', clear_prefixes=('bleachbit.CLI',)):
-            with self.assertRaises(ImportError):
-                import logging  # pylint: disable=import-outside-toplevel
-            with self.assertRaises(ImportError):
-                import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+            self.assertRaises(ImportError, import_logging)
+            self.assertRaises(ImportError, import_cli)
             # Importing sys should be unaffected.
-            import sys  # pylint: disable=import-outside-toplevel
+            self.assertIsNotNone(import_sys())
         # Outside the context, importing should work.
-        import logging  # pylint: disable=import-outside-toplevel
-        import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+        self.assertIsNotNone(import_logging())
+        self.assertIsNotNone(import_cli())
 
     def test_set_temporary_env(self):
         """Test set_temporary_env context manager"""
@@ -220,7 +282,7 @@ class CommonTestCase(common.BleachbitTestCase):
 
         # Increase size of file.
         fsize = 2**13
-        with open(fn, "w") as f:
+        with open(fn, "w", encoding="utf-8") as f:
             f.write(' ' * fsize)
         self.assertEqual(fsize, getsize(fn))
 
@@ -239,3 +301,53 @@ class CommonTestCase(common.BleachbitTestCase):
         os.remove(relative_fn)
         self.assertNotExists(relative_fn)
         self.assertNotExists('this-does-not-exist')
+
+
+class ResolveLocaleDirTestCase(common.BleachbitTestCase):
+    """Test case for bleachbit._resolve_locale_dir()"""
+
+    def test_macos_app_bundle(self):
+        """On macOS, prefer Contents/locale (one level above
+        Contents/Resources) over the generic /usr/share/locale/
+        fallback, when it exists."""
+        from bleachbit import _resolve_locale_dir
+        exe_path = '/Applications/BleachBit.app/Contents/Resources'
+        bundle_dir = os.path.normpath(os.path.join(exe_path, '..', 'locale'))
+        result = _resolve_locale_dir(
+            exe_path, is_linux=False, is_mac=True, is_windows=False,
+            is_netbsd=False, is_bsd=False,
+            path_exists=lambda p: p == bundle_dir)
+        self.assertEqual(result, bundle_dir)
+
+    def test_macos_no_bundle_falls_back(self):
+        """On macOS, when neither the local, AppImage-style, nor
+        bundle-relative locale directory exists, fall back to the
+        generic system path."""
+        from bleachbit import _resolve_locale_dir
+        result = _resolve_locale_dir(
+            '/some/dev/path', is_linux=False, is_mac=True,
+            is_windows=False, is_netbsd=False, is_bsd=False,
+            path_exists=lambda p: False)
+        self.assertEqual(result, '/usr/share/locale/')
+
+    def test_local_locale_takes_priority(self):
+        """A local ./locale/ directory (running from source) takes
+        priority over the macOS bundle path, even on macOS."""
+        from bleachbit import _resolve_locale_dir
+        result = _resolve_locale_dir(
+            '/Applications/BleachBit.app/Contents/Resources',
+            is_linux=False, is_mac=True, is_windows=False,
+            is_netbsd=False, is_bsd=False,
+            path_exists=lambda p: p == './locale/')
+        self.assertTrue(result.endswith('locale'))
+        self.assertNotIn('BleachBit.app', result)
+
+    def test_non_mac_unaffected(self):
+        """On Linux, the macOS bundle-relative check must never be
+        consulted, even if such a path happened to exist."""
+        from bleachbit import _resolve_locale_dir
+        result = _resolve_locale_dir(
+            '/usr/bin', is_linux=True, is_mac=False, is_windows=False,
+            is_netbsd=False, is_bsd=False,
+            path_exists=lambda p: False)
+        self.assertEqual(result, '/usr/share/locale/')

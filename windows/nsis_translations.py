@@ -37,7 +37,6 @@ LANGUAGE_MAP = [
     ('en', 'LANG_ENGLISH'),
     ('sq', 'LANG_ALBANIAN'),
     ('ar', 'LANG_ARABIC'),
-    ('hy', 'LANG_ARMENIAN'),
     ('ast', 'LANG_ASTURIAN'),
     ('eu', 'LANG_BASQUE'),
     ('be', 'LANG_BELARUSIAN'),
@@ -180,21 +179,36 @@ def _parse_po_string(token):
 
 
 def _parse_po_file(po_path):
-    """Parse a PO file and return a mapping of msgctxt to translated text."""
+    """Parse a PO file and return a mapping of msgctxt to translated text.
+
+    Untranslated and fuzzy entries map to the msgid, as with msgfmt.
+    """
     entries = {}
     current_ctx = None
     current_id = None
     current_str = None
+    fuzzy = False
     state = None
 
     with open(po_path, encoding='utf-8') as po_file:
-        for raw_line in po_file:
+        # The extra blank line ends the last entry
+        for raw_line in [*po_file, '\n']:
             line = raw_line.rstrip('\n')
-            if not line or line.startswith('#'):
+            if not line.strip():
+                # A blank line ends the entry, so a following entry without
+                # msgctxt cannot overwrite it
+                if current_ctx and current_id is not None and current_str is not None:
+                    use_str = current_str and not fuzzy
+                    entries[current_ctx] = current_str if use_str else current_id
+                current_ctx = current_id = current_str = state = None
+                fuzzy = False
+                continue
+            if line.startswith('#,') and 'fuzzy' in line:
+                fuzzy = True
+                continue
+            if line.startswith('#'):
                 continue
             if line.startswith('msgctxt '):
-                if current_ctx and current_id is not None and current_str is not None:
-                    entries[current_ctx] = current_str if current_str else current_id
                 current_ctx = _parse_po_string(line[len('msgctxt '):])
                 current_id = None
                 current_str = None
@@ -216,9 +230,6 @@ def _parse_po_file(po_path):
                     current_id += text
                 elif state == 'msgstr' and current_str is not None:
                     current_str += text
-
-        if current_ctx and current_id is not None and current_str is not None:
-            entries[current_ctx] = current_str if current_str else current_id
 
     return entries
 
@@ -254,7 +265,8 @@ def _parse_nsis_lang_strings(nsh_path):
             match = pattern.match(line)
             if match:
                 key, lang_macro, text = match.groups()
-                lang_strings.setdefault(lang_macro, {})[key] = _unescape_nsis_text(text)
+                lang_strings.setdefault(lang_macro, {})[
+                    key] = _unescape_nsis_text(text)
 
     return header_lines, lang_strings
 
@@ -379,13 +391,15 @@ class TestNsisEscaping(unittest.TestCase):
 
     def test_unescape_nsis_newlines(self):
         """Test unescaping NSIS newline sequences."""
-        self.assertEqual(_unescape_nsis_text(r'Line1$\r$\nLine2'), 'Line1\nLine2')
+        self.assertEqual(_unescape_nsis_text(
+            r'Line1$\r$\nLine2'), 'Line1\nLine2')
         self.assertEqual(_unescape_nsis_text(r'Line1$\nLine2'), 'Line1\nLine2')
         self.assertEqual(_unescape_nsis_text(r'Line1$\rLine2'), 'Line1\nLine2')
 
     def test_unescape_nsis_quotes(self):
         """Test unescaping NSIS quote sequences."""
-        self.assertEqual(_unescape_nsis_text(r'Text with $\"quotes$\"'), 'Text with "quotes"')
+        self.assertEqual(_unescape_nsis_text(
+            r'Text with $\"quotes$\"'), 'Text with "quotes"')
 
     def test_unescape_nsis_dollar_signs(self):
         """Test that literal dollar signs in NSIS strings are preserved."""
@@ -401,7 +415,8 @@ class TestNsisEscaping(unittest.TestCase):
 
     def test_escape_po_text_backslashes(self):
         """Test escaping backslashes for PO format."""
-        self.assertEqual(_escape_po_text('path\\to\\file'), 'path\\\\to\\\\file')
+        self.assertEqual(_escape_po_text(
+            'path\\to\\file'), 'path\\\\to\\\\file')
 
     def test_escape_po_text_quotes(self):
         """Test escaping quotes for PO format."""
@@ -413,12 +428,15 @@ class TestNsisEscaping(unittest.TestCase):
 
     def test_escape_nsis_newlines(self):
         """Test escaping newlines for NSIS format."""
-        self.assertEqual(_escape_nsis_text('Line1\nLine2'), 'Line1$\\r$\\nLine2')
-        self.assertEqual(_escape_nsis_text('Line1\r\nLine2'), 'Line1$\\r$\\nLine2')
+        self.assertEqual(_escape_nsis_text(
+            'Line1\nLine2'), 'Line1$\\r$\\nLine2')
+        self.assertEqual(_escape_nsis_text(
+            'Line1\r\nLine2'), 'Line1$\\r$\\nLine2')
 
     def test_escape_nsis_quotes(self):
         """Test escaping quotes for NSIS format."""
-        self.assertEqual(_escape_nsis_text('Text with "quotes"'), 'Text with $\\"quotes$\\"')
+        self.assertEqual(_escape_nsis_text(
+            'Text with "quotes"'), 'Text with $\\"quotes$\\"')
 
     def test_escape_nsis_no_dollar_escaping(self):
         """Regression test: ensure we don't escape literal $ as $$."""
@@ -431,11 +449,15 @@ class TestNsisEscaping(unittest.TestCase):
         """Test that NSIS -> PO -> NSIS roundtrip preserves content."""
         original_nsis = r'Version {VERSION} is installed in $\"{FOLDER}$\".'
         unescaped = _unescape_nsis_text(original_nsis)
-        self.assertEqual(unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
+        self.assertEqual(
+            unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
         po_escaped = _escape_po_text(unescaped)
-        self.assertEqual(po_escaped, 'Version {VERSION} is installed in \\"{FOLDER}\\".')
-        back_to_plain = po_escaped.replace('\\n', '\n').replace('\\"', '"').replace('\\\\', '\\')
-        self.assertEqual(back_to_plain, 'Version {VERSION} is installed in "{FOLDER}".')
+        self.assertEqual(
+            po_escaped, 'Version {VERSION} is installed in \\"{FOLDER}\\".')
+        back_to_plain = po_escaped.replace('\\n', '\n').replace(
+            '\\"', '"').replace('\\\\', '\\')
+        self.assertEqual(
+            back_to_plain, 'Version {VERSION} is installed in "{FOLDER}".')
         back_to_nsis = _escape_nsis_text(back_to_plain)
         self.assertEqual(back_to_nsis, original_nsis)
 
@@ -443,7 +465,8 @@ class TestNsisEscaping(unittest.TestCase):
         """Test handling of strings with multiple escape sequences."""
         nsis_text = r'${prodname} is installed.$\r$\nClick $\"OK$\" to continue.'
         unescaped = _unescape_nsis_text(nsis_text)
-        self.assertEqual(unescaped, '${prodname} is installed.\nClick "OK" to continue.')
+        self.assertEqual(
+            unescaped, '${prodname} is installed.\nClick "OK" to continue.')
         re_escaped = _escape_nsis_text(unescaped)
         self.assertEqual(re_escaped, nsis_text)
 
@@ -454,6 +477,43 @@ class TestNsisEscaping(unittest.TestCase):
         self.assertEqual(_parse_po_string('"Say \\"hi\\""'), 'Say "hi"')
         self.assertEqual(_parse_po_string(''), '')
         self.assertEqual(_parse_po_string('  '), '')
+
+    def _parse_po_text(self, content):
+        """Write content to a temporary PO file and parse it."""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.po', delete=False, encoding='utf-8') as f:
+            f.write(content)
+            temp_path = f.name
+        try:
+            return _parse_po_file(temp_path)
+        finally:
+            os.unlink(temp_path)
+
+    def test_parse_po_entry_without_msgctxt_does_not_overwrite(self):
+        """Regression test: an entry without msgctxt must not replace the one before it."""
+        content = '''msgctxt "nsis:LAST_KEY"
+msgid "English"
+msgstr "Translated"
+
+msgid "Other string"
+msgstr "Other translation"
+'''
+        self.assertEqual(self._parse_po_text(content),
+                         {'nsis:LAST_KEY': 'Translated'})
+
+    def test_parse_po_fuzzy_entry_uses_msgid(self):
+        """Fuzzy translations are not used, as with msgfmt."""
+        content = '''#, fuzzy
+msgctxt "nsis:FUZZY_KEY"
+msgid "English"
+msgstr "Guess"
+
+msgctxt "nsis:GOOD_KEY"
+msgid "English 2"
+msgstr "Translated"
+'''
+        self.assertEqual(self._parse_po_text(content),
+                         {'nsis:FUZZY_KEY': 'English',
+                          'nsis:GOOD_KEY': 'Translated'})
 
     def test_parse_nsis_stops_at_autogen_marker(self):
         """Regression test: ensure header parsing stops at auto-generated marker."""
@@ -482,7 +542,8 @@ Header line 2
             self.assertNotIn('auto-generated', header_text)
             # But it should have parsed the LangStrings
             self.assertIn('LANG_ENGLISH', lang_strings)
-            self.assertEqual(lang_strings['LANG_ENGLISH']['TEST_KEY'], 'Test value')
+            self.assertEqual(
+                lang_strings['LANG_ENGLISH']['TEST_KEY'], 'Test value')
         finally:
             os.unlink(temp_path)
 
@@ -500,11 +561,15 @@ Header line 2
         try:
             _header, lang_strings = _parse_nsis_lang_strings(temp_path)
             # Text should be unescaped when read
-            self.assertEqual(lang_strings['LANG_ENGLISH']['TEST_QUOTES'], 'Text with "quotes"')
-            self.assertEqual(lang_strings['LANG_ENGLISH']['TEST_NEWLINE'], 'Line1\nLine2')
+            self.assertEqual(
+                lang_strings['LANG_ENGLISH']['TEST_QUOTES'], 'Text with "quotes"')
+            self.assertEqual(
+                lang_strings['LANG_ENGLISH']['TEST_NEWLINE'], 'Line1\nLine2')
             # Should not contain NSIS escape sequences
-            self.assertNotIn('$\\', lang_strings['LANG_ENGLISH']['TEST_QUOTES'])
-            self.assertNotIn('$\\', lang_strings['LANG_ENGLISH']['TEST_NEWLINE'])
+            self.assertNotIn(
+                '$\\', lang_strings['LANG_ENGLISH']['TEST_QUOTES'])
+            self.assertNotIn(
+                '$\\', lang_strings['LANG_ENGLISH']['TEST_NEWLINE'])
         finally:
             os.unlink(temp_path)
 
@@ -514,7 +579,8 @@ Header line 2
 
         # Simulate reading from file (should unescape)
         unescaped = _unescape_nsis_text(original_escaped)
-        self.assertEqual(unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
+        self.assertEqual(
+            unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
 
         # Simulate writing back to file (should re-escape)
         re_escaped = _escape_nsis_text(unescaped)

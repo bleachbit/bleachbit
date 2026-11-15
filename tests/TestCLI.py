@@ -17,12 +17,15 @@ import io
 import locale
 import os
 import random
+import runpy
+import shutil
 import sys
 import tempfile
 import types
 from contextlib import nullcontext
 from unittest.mock import MagicMock, patch
 
+from tests import common
 from tests.common import pytest
 
 # first party imports
@@ -36,9 +39,8 @@ from bleachbit.CLI import (
     preview_or_clean,
     process_cmd_line)
 from bleachbit.General import get_executable, run_external
-from bleachbit.GtkShim import HAVE_GTK
+from bleachbit.GtkShim import gtk_may_be_available, is_gtk_available
 from bleachbit import FileUtilities, Options, IS_WINDOWS, IS_POSIX
-from tests import common
 
 
 try:
@@ -63,7 +65,7 @@ class CLITestCase(common.BleachbitTestCase):
         """Helper to test preview"""
         # Use devnull because in some cases the buffer will be too large,
         # and the other alternative, the screen, is not desirable.
-        with open(os.devnull, 'w') as stdout:
+        with open(os.devnull, 'w', encoding='utf-8') as stdout:
             if not redirect_stdout:
                 stdout = None
             output = run_external(args, stdout=stdout,
@@ -92,7 +94,7 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIsInstance(o, list)
         self.assertIn('google_chrome.cache', o)
         self.assertIn('system.tmp', o)
-        gui_available = IS_WINDOWS or HAVE_GTK
+        gui_available = IS_WINDOWS or gtk_may_be_available()
         self.assertEqual(gui_available, 'system.clipboard' in o)
         self.assertNotIn('system.empty_space', o)
         self.assertNotIn('system.memory', o)
@@ -100,12 +102,24 @@ class CLITestCase(common.BleachbitTestCase):
     def test_args_to_operations(self):
         """Unit test for args_to_operations()"""
         # test explicit cleaners (without --preset or --all-but-warning)
+        # adobe_reader is used here only as a stable example cleaner for
+        # testing wildcard/exclusion parsing. Its 'logs' option is macOS-only
+        # and its 'mru'/'tmp' options are excluded on macOS
+        # (cleaners/adobe_reader.xml), so the expected option set differs by
+        # platform.
+        if bleachbit.IS_MAC:
+            adobe_reader_options = ['cache', 'logs']
+        else:
+            adobe_reader_options = ['cache', 'mru', 'tmp']
+        adobe_reader_options_no_cache = [
+            o for o in adobe_reader_options if o != 'cache']
+
         tests = (
             (['adobe_reader.*'], [],
-             {'adobe_reader': ['cache', 'mru', 'tmp']}),
+             {'adobe_reader': adobe_reader_options}),
             (['adobe_reader.mru'], [], {'adobe_reader': ['mru']}),
             (['adobe_reader.*'], ['adobe_reader.cache'],
-             {'adobe_reader': ['mru', 'tmp']}))
+             {'adobe_reader': adobe_reader_options_no_cache}))
         for test_args, excludes, expected in tests:
             o = args_to_operations(test_args, False, False, excludes)
             self.assertIsInstance(o, dict)
@@ -272,8 +286,10 @@ class CLITestCase(common.BleachbitTestCase):
                 deleted_paths = []
                 crash = [False]
 
+                # the defaults bind this iteration's values into the closure
+                # pylint: disable-next=unused-argument, dangerous-default-value
                 def dummy_delete(path, shred=False, crash=crash,
-                                 deleted_paths=deleted_paths):
+                                 deleted_paths=deleted_paths, filename=filename):
                     try:
                         self.assertLExists(path)
                     except AssertionError:
@@ -480,7 +496,7 @@ class CLITestCase(common.BleachbitTestCase):
 
     def test_process_cmd_line_gui(self):
         """Unit test for process_cmd_line() with --gui and --gui-gtk"""
-        for flag, gtk_may_be_available in (('--gui', True), ('--gui-gtk', None)):
+        for flag, simulate_gtk in (('--gui', True), ('--gui-gtk', None)):
             with self.subTest(flag=flag):
                 mock_gui_module = MagicMock()
                 mock_app = MagicMock()
@@ -492,8 +508,8 @@ class CLITestCase(common.BleachbitTestCase):
                             # simulate GTK on non-Windows
                             with patch('bleachbit.CLI.IS_WINDOWS', False):
                                 gtk_patch = (
-                                    patch('bleachbit.GtkShim.gtk_may_be_available', return_value=True)
-                                    if gtk_may_be_available is not None else nullcontext())
+                                    patch('bleachbit.GtkShim.is_gtk_available', return_value=True)
+                                    if simulate_gtk is not None else nullcontext())
                                 with gtk_patch:
                                     with patch('sys.argv', ['bleachbit', flag]):
                                         with self.assertRaises(SystemExit) as cm:
@@ -619,6 +635,21 @@ class CLITestCase(common.BleachbitTestCase):
             # FIXME: verify that there is not a message like
             # (bleachbit.py:1234): Gdk-CRITICAL **: 23:05:08.581: gdk_screen_get_root_window: assertion 'GDK_IS_SCREEN (screen)' failed
 
+    @common.skipIfWindows
+    def test_launcher_prefix_share(self):
+        """The launcher finds the package `make install` put in <prefix>/share"""
+        prefix = self.mkdtemp()
+        common.touch_file(os.path.join(
+            prefix, 'share', 'bleachbit', '__init__.py'))
+        launcher = os.path.join(prefix, 'bin', 'bleachbit')
+        os.mkdir(os.path.dirname(launcher))
+        shutil.copy('bleachbit.py', launcher)
+        launcher_globals = runpy.run_path(launcher, run_name='launcher')
+        with patch.object(sys, 'path', []), patch.dict(os.environ):
+            os.environ.pop('APPDIR', None)
+            launcher_globals['_add_posix_share_to_path']()
+            self.assertEqual(sys.path, [os.path.join(prefix, 'share')])
+
     @pytest.mark.xdist_group('gui')
     @common.skipUnlessWindows
     def test_gui_exit(self):
@@ -628,7 +659,7 @@ class CLITestCase(common.BleachbitTestCase):
         # closes immediately, but the child continues, causing test to fail.
         if HAVE_WX:
             gui_flag = '--gui-wx'
-        elif HAVE_GTK:
+        elif is_gtk_available():
             gui_flag = '--gui-gtk'
         else:
             self.skipTest('requires wxPython or GTK')

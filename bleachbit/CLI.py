@@ -322,6 +322,10 @@ def parse_cmd_line(argv=None):
     parser.add_option('--exit', action='store_true',
                       help=optparse.SUPPRESS_HELP)
 
+    # Build-time smoke test for network stack
+    parser.add_option('--comms-check', action='store_true',
+                      help=optparse.SUPPRESS_HELP)
+
     # some workaround for context menu added here
     # https://github.com/bleachbit/bleachbit/commit/b09625925149c98a6c79e278c35d5995e7526993
     def expand_context_menu_option(_option, _opt, _value, parser):
@@ -380,12 +384,15 @@ def process_cmd_line():
         version_message = f"""
 BleachBit version {APP_VERSION}
 Copyright (C) 2008-2026 Andrew Ziem.  All rights reserved.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+License GPLv3+: GNU GPL version 3 or later <https://www.gnu.org/licenses/gpl-3.0.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 """
         print(version_message)
         sys.exit(0)
+    if options.comms_check:
+        from bleachbit import Network
+        sys.exit(Network.comms_check())
     if IS_WINDOWS and options.update_winapp2:
         from bleachbit import Update
         # TRANSLATORS: Log message on the CLI.
@@ -407,13 +414,19 @@ There is NO WARRANTY, to the extent permitted by law.
             sys.exit(1)
         # TRANSLATORS: Log message on the CLI.
         logger.info(_("Wiping empty space can take a long time."))
+        had_error = False
         for wipe_path in args:
             # TRANSLATORS: Shows activity in the CLI, and %s is the path to the directory.
             logger.info(_("Wipe empty space in %s"), wipe_path)
             import bleachbit.Wipe
-            for _ret in bleachbit.Wipe.wipe_path(wipe_path):
-                pass
-        sys.exit(0)
+            try:
+                for _ret in bleachbit.Wipe.wipe_path(wipe_path):
+                    pass
+            except OSError as e:
+                # Do not let one bad path abort the remaining ones.
+                logger.error('%s: %s', wipe_path, e)
+                had_error = True
+        sys.exit(1 if had_error else 0)
     operations = {}
     if options.preview or options.clean:
         operations = args_to_operations(
@@ -444,8 +457,8 @@ There is NO WARRANTY, to the extent permitted by law.
         elif options.gui_gtk:
             want_gtk = True
         else:
-            from bleachbit.GtkShim import gtk_may_be_available
-            want_gtk = gtk_may_be_available()
+            from bleachbit.GtkShim import is_gtk_available
+            want_gtk = is_gtk_available()
         if want_gtk:
             import bleachbit.GuiApplication
             app = bleachbit.GuiApplication.Bleachbit(

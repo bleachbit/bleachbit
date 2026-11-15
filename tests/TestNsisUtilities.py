@@ -4,6 +4,9 @@
 # This work is licensed under the terms of the GNU GPL, version 3 or
 # later.  See the COPYING file in the top-level directory.
 
+
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
 import os
 from unittest import mock
 
@@ -159,6 +162,8 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
 
         for nsis_file in nsis_files:
             self.assertExists(nsis_file.filepath)
+            # Written in the platform default encoding, so read it back the same way.
+            # pylint: disable-next=unspecified-encoding
             with open(nsis_file.filepath) as f:
                 file_content = f.read()
                 self.assertEqual(self._sort_string_by_lines(file_content),
@@ -257,16 +262,16 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         return '\n'.join(result)
 
     @classmethod
-    def _generate_setoutpath_expression(cls, dir, subdir):
-        return cls._generate_dir_subdir_expression('SetOutPath', dir, subdir)
+    def _generate_setoutpath_expression(cls, dirname, subdir):
+        return cls._generate_dir_subdir_expression('SetOutPath', dirname, subdir)
 
     @classmethod
-    def _generate_rmdir_expression(cls, dir, subdir):
-        return cls._generate_dir_subdir_expression('RMDir', dir, subdir)
+    def _generate_rmdir_expression(cls, dirname, subdir):
+        return cls._generate_dir_subdir_expression('RMDir', dirname, subdir)
 
     @classmethod
-    def _generate_dir_subdir_expression(cls, command, dir, subdir):
-        return r'{} "{}\{}"'.format(command, dir, subdir)
+    def _generate_dir_subdir_expression(cls, command, dirname, subdir):
+        return r'{} "{}\{}"'.format(command, dirname, subdir)
 
     def tearDown(self):
         super().tearDown()

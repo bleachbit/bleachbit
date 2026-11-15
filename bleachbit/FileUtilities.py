@@ -10,6 +10,8 @@ File-related utilities
 
 # standard imports
 import codecs
+import collections
+import configparser
 import contextlib
 import errno
 import glob
@@ -23,7 +25,6 @@ import stat
 import subprocess
 import time
 import urllib.parse
-import urllib.request
 from pathlib import Path
 
 # local imports
@@ -49,10 +50,10 @@ if IS_WINDOWS:
     os.path.islink = lambda path: os_path_islink(
         path) or bleachbit.Windows.is_junction(path)
 
-if IS_POSIX:
-    # pylint: disable=redefined-builtin
+else:
+    # pylint: disable-next=redefined-builtin
     from bleachbit.General import WindowsError
-    # pylint: disable=invalid-name
+    # pylint: disable-next=invalid-name
     pywinerror = WindowsError
 
 # DirEntry.is_junction() was added in Python 3.12. Below that, fall back to
@@ -70,10 +71,13 @@ def _remove_windows_readonly(path):
     if not IS_WINDOWS:
         return False
     try:
+        # pylint: disable-next=possibly-used-before-assignment
         attrs = GetFileAttributesW(path)
     except pywinerror:
         return False
+    # pylint: disable-next=possibly-used-before-assignment
     if attrs & FILE_ATTRIBUTE_READONLY:
+        # pylint: disable-next=possibly-used-before-assignment
         SetFileAttributesW(path, attrs & ~FILE_ATTRIBUTE_READONLY)
         return True
     return False
@@ -102,6 +106,8 @@ def _run_with_delete_lock(path, func):
 def close_delete_parent_lock():
     """Close the delete parent lock if on Windows."""
     if IS_WINDOWS:
+        # Private helper of our own package.
+        # pylint: disable-next=protected-access
         bleachbit.Windows._close_delete_parent_lock()
 
 
@@ -110,53 +116,105 @@ def open_files_linux():
     return glob.iglob("/proc/*/fd/*")
 
 
+FilesystemInfo = collections.namedtuple(
+    'FilesystemInfo', ['fstype', 'device', 'is_readonly', 'is_cdrom'],
+    defaults=[False])
+
+
 def get_filesystem_type(path):
     """Get file system type from the given path
 
     path: directory path
 
     Return value:
-    A tuple of (file_system_type, device_name)
-    file_system_type: vfat, ntfs, etc.
-    device_name: C:, D:, etc.
+    A FilesystemInfo named tuple of (fstype, device, is_readonly, is_cdrom)
+        * fstype: vfat, ntfs, tmpfs, etc.
+        * device: C:, /dev/sda1, etc.
+        * is_readonly: True if the file system is mounted read-only.
+          On POSIX, this is from os.statvfs(), which follows firmlinks
+          and stacked mounts; on Windows, from the mount options
+          reported by psutil
+        * is_cdrom: CD-ROM or other optical disc
 
     File system types seen
-    * On Linux: btrfs,ext4, vfat, squashfs
-    * On Windows: NTFS, FAT32, CDFS
+    * On Linux: btrfs, ext4, squashfs, tmpfs, vfat
+    * On macOS: apfs
+    * On Windows: NTFS, FAT32, CDFS, unknown
+
+    When checking remote file share on Linux server, psutils may return
+        - fstype = 'unknown' for UNC path
+        - fstype = 'NTFS' for same path mapped to drive letter
     """
     try:
-        # pylint: disable=import-outside-toplevel
         import psutil
     except ImportError:
         logger.warning(
             'To get the file system type from the given path, you need to install psutil package')
-        return ("unknown", "none")
+        return FilesystemInfo("unknown", "none", False)
 
     path_obj = Path(path)
     if IS_WINDOWS:
         if len(path) == 2 and path[1] == ':':
             path_obj = Path(path + '\\')
 
-    # Get all partitions with Path objects as keys
+    # Get all partitions with Path objects as keys.
     partitions = {}
-    for partition in psutil.disk_partitions():
+    for partition in psutil.disk_partitions(all=False):
+        # all=True on Windows
+        # "may spin up a removable drive or go over the wire for a network one"
+        # https://github.com/giampaolo/psutil/blob/master/psutil/arch/windows/disk.c
         mount_path = Path(partition.mountpoint)
-        partitions[mount_path] = (partition.fstype, partition.device)
+        mount_opts = [opt.strip().lower()
+                      for opt in partition.opts.split(',')]
+        # examples from Windows
+        # sdiskpart(device='C:\\', mountpoint='C:\\', fstype='NTFS', opts='rw,fixed')
+        # sdiskpart(device='D:\\', mountpoint='D:\\', fstype='CDFS', opts='ro,readonly,cdrom')
+        is_readonly = 'ro' in mount_opts or 'readonly' in mount_opts
+        # Windows reports 'cdrom' in opts; the fstype list covers POSIX.
+        is_cdrom = 'cdrom' in mount_opts or partition.fstype.lower() in (
+            'cdfs', 'cddafs', 'cd9660', 'iso9660', 'udf')
+        partitions[mount_path] = FilesystemInfo(
+            partition.fstype, partition.device, is_readonly, is_cdrom)
 
     # Exact match
-    for mount_path, fs_info in partitions.items():
+    fs_info = None
+    for mount_path, fs_info_iter in partitions.items():
         if path_obj == mount_path:
-            return fs_info
+            fs_info = fs_info_iter
+            break
 
     # Try parent paths
-    current = path_obj
-    while current.parent != current:  # Stop at root
-        current = current.parent
-        for mount_path, fs_info in partitions.items():
-            if current == mount_path:
-                return fs_info
+    if fs_info is None:
+        current = path_obj
+        while current.parent != current and fs_info is None:  # Stop at root
+            current = current.parent
+            for mount_path, fs_info_iter in partitions.items():
+                if current == mount_path:
+                    fs_info = fs_info_iter
+                    break
 
-    return ("unknown", "none")
+    if fs_info is None:
+        fs_info = FilesystemInfo("unknown", "none", False)
+
+    if IS_POSIX:
+        # On macOS, firmlinks redirect most user paths from the sealed,
+        # read-only system volume to the read-write data volume, so the
+        # matched ancestor's mount options are wrong. os.statvfs() asks
+        # the kernel, which resolves firmlinks and stacked mounts.
+        try:
+            is_readonly = bool(os.statvfs(path).f_flag & os.ST_RDONLY)
+        except OSError:
+            # The path may not exist; keep the mount options.
+            pass
+        else:
+            fs_info = fs_info._replace(is_readonly=is_readonly)
+
+    return fs_info
+
+
+# FreeBSD lsof appends the mount device to NAME, e.g.
+# "/tmp/foo (/dev/gpt/rootfs)".
+_LSOF_DEV_SUFFIX = re.compile(r' \(/dev/[^)]+\)$')
 
 
 def open_files_lsof(run_lsof=None):
@@ -186,14 +244,51 @@ def open_files_lsof(run_lsof=None):
         output = output.decode('utf-8', errors='replace')
     for f in output.split("\n"):
         if f.startswith("n/"):
-            yield f[1:]  # Drop lsof's "n"
+            # example: "n/dev/null"
+            name = f[1:]  # Drop lsof's "n"
+            if IS_FREEBSD:
+                # See comment above by definition of _LSOF_DEV_SUFFIX.
+                name = _LSOF_DEV_SUFFIX.sub('', name)
+            yield name
+
+
+def open_files_psutil():
+    """Return iterator of open files using psutil
+
+    FreeBSD lsof typically lists cwd and the process executable but not
+    file descriptors unless it is setgid kmem. psutil uses
+    KERN_PROC_FILEDESC, which a user can read for their own processes.
+    """
+    # pylint: disable=import-outside-toplevel
+    import psutil
+    for proc in psutil.process_iter():
+        try:
+            open_file_list = proc.open_files()
+        except (psutil.Error, OSError):
+            continue
+        for ofile in open_file_list:
+            # FreeBSD kinfo_getfile leaves an empty path for a newly
+            # created O_WRONLY file (Python's 'wb').
+            if ofile.path:
+                yield ofile.path
+
+
+def open_files_freebsd():
+    """Return iterator of open files on FreeBSD"""
+    try:
+        yield from open_files_psutil()
+    except ImportError:
+        logger.debug('psutil not available; listing open files with lsof')
+        yield from open_files_lsof()
 
 
 def open_files():
     """Return iterator of open files"""
     if IS_LINUX:
         files = open_files_linux()
-    elif IS_MAC or IS_FREEBSD:
+    elif IS_FREEBSD:
+        files = open_files_freebsd()
+    elif IS_MAC:
         files = open_files_lsof()
     else:
         raise RuntimeError('unsupported platform for open_files()')
@@ -386,9 +481,12 @@ def open_for_overwrite(path, mode='w', **kwargs):
         # protection available either way.
         if os.path.islink(path):
             raise OSError(errno.EACCES, 'refusing to open a link', path)
+        # encoding comes via **kwargs (e.g. utf-8-sig); don't hardcode it.
+        # pylint: disable-next=unspecified-encoding
         return open(path, mode, **kwargs)
     fd = _open_nofollow_fd(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC)
     try:
+        # pylint: disable-next=unspecified-encoding
         return open(fd, mode, **kwargs)
     except Exception:
         os.close(fd)
@@ -410,7 +508,7 @@ def clean_ini(path, section, parameter):
     read_encoding = 'utf_8_sig'
 
     # read file to parser
-    config = bleachbit.RawConfigParser(delimiters='=')
+    config = configparser.RawConfigParser(delimiters='=')
     config.optionxform = str
     try:
         with open(path, 'r', encoding=read_encoding) as fp:
@@ -516,7 +614,7 @@ def _delete_file_impl(path, shred):
     if shred and not is_hard_link(path):
         try:
             wipe_contents(path)
-        except pywinerror as e:  # pylint: disable=possibly-used-before-assignment
+        except pywinerror as e:
             # 2 = The system cannot find the file specified.
             # This can happen with a broken symlink
             # https://github.com/bleachbit/bleachbit/issues/195
@@ -575,6 +673,39 @@ def truncate_file(path):
     _run_with_delete_lock(path, _truncate)
 
 
+def _file_type(path):
+    """Return the file type bits of path, or None if it is missing
+
+    On Windows only the type bits are set, and 0 means a type delete()
+    does not handle.
+    """
+    if IS_POSIX:
+        try:
+            return os.lstat(path).st_mode
+        except (OSError, ValueError):
+            return None
+    # os.lstat() returns Access Denied on some Windows files that the
+    # native os.path checks can still see
+    if not os.path.lexists(path):
+        return None
+    try:
+        attrs = os.lstat(path).st_file_attributes
+    except OSError:
+        attrs = 0
+    # A junction/symlink's contents belong to the target, not
+    # this path; isdir() would follow it and judge the target's
+    # emptiness instead of removing the reparse point itself.
+    if attrs & stat.FILE_ATTRIBUTE_REPARSE_POINT:
+        return stat.S_IFLNK
+    if os.path.isdir(path):
+        return stat.S_IFDIR
+    if os.path.isfile(path):
+        return stat.S_IFREG
+    if os.path.islink(path):
+        return stat.S_IFLNK
+    return 0
+
+
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     """Delete path that is either file, directory, link or FIFO.
 
@@ -591,32 +722,17 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        Returns True if the path was deleted, False otherwise.
     """
     from bleachbit.Options import options
-    is_special = False
     path = extended_path(path)
     do_shred = allow_shred and (shred or options.get('shred'))
-    if not os.path.lexists(path):
+    mode = _file_type(path)
+    if mode is None:
         if ignore_missing:
             return False
         raise OSError(2, 'No such file or directory', path)
-    if IS_POSIX:
-        # With certain (relatively rare) files on Windows os.lstat()
-        # may return Access Denied
-        mode = os.lstat(path)[stat.ST_MODE]
-        is_special = stat.S_ISFIFO(mode) or stat.S_ISLNK(mode)
-    elif IS_WINDOWS:
-        try:
-            # A junction/symlink's contents belong to the target, not
-            # this path; isdir() would follow it and judge the target's
-            # emptiness instead of removing the reparse point itself.
-            is_special = bool(
-                os.lstat(path).st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT)
-        except OSError:
-            # lstat returns Access Denied on some Windows files
-            is_special = False
-    if is_special:
+    if stat.S_ISLNK(mode) or stat.S_ISFIFO(mode):
         _delete_path(path, os.remove)
         return True
-    if os.path.isdir(path):
+    if stat.S_ISDIR(mode):
         delpath = path
         # TRANSLATORS: Log message where %s is the pathname.
         not_empty_msg = _("Directory is not empty: %s")
@@ -635,7 +751,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             if errno.ENOTEMPTY == e.errno:
                 logger.info(not_empty_msg, path)
                 return False
-            elif errno.EBUSY == e.errno:
+            if errno.EBUSY == e.errno:
                 if IS_POSIX and os.path.ismount(path):
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Skipping mount point: %s"), path)
@@ -643,7 +759,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Device or resource is busy: %s"), path)
                 return False
-            elif IS_WINDOWS and errno.EACCES == e.errno:
+            if IS_WINDOWS and errno.EACCES == e.errno:
                 # On Windows, read-only directories cause Access Denied
                 if _remove_windows_readonly(delpath):
                     _delete_path(delpath, os.rmdir)
@@ -659,19 +775,14 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             if 145 == e.winerror:
                 logger.info(not_empty_msg, path)
                 return False
-            else:
-                raise
+            raise
         return True
-    elif os.path.isfile(path):
+    if stat.S_ISREG(mode):
         delete_file(path, do_shred)
         return True
-    elif os.path.islink(path):
-        _delete_path(path, os.remove)
-        return True
-    else:
-        # TRANSLATORS: Log message where %s is the pathname.
-        logger.info(_("Special file type cannot be deleted: %s"), path)
-        return False
+    # TRANSLATORS: Log message where %s is the pathname.
+    logger.info(_("Special file type cannot be deleted: %s"), path)
+    return False
 
 
 def detect_encoding(fn):
@@ -741,8 +852,7 @@ def exe_exists(pathname):
     """Returns boolean whether executable exists"""
     if os.path.isabs(pathname):
         return os.path.exists(pathname)
-    else:
-        return exists_in_path(pathname)
+    return exists_in_path(pathname)
 
 
 def execute_sqlite3(path, cmds):
@@ -761,7 +871,6 @@ def execute_sqlite3(path, cmds):
     """
     from bleachbit.Options import options
     # In FreeBSD, sqlite3 is a separate package
-    # pylint: disable=import-outside-toplevel
     import sqlite3
     assert isinstance(path, str)
     assert isinstance(cmds, str)
@@ -860,7 +969,7 @@ def free_space(pathname):
     estimation of completion time in wipe_path().
     """
     if IS_WINDOWS:
-        # pylint: disable=import-error,import-outside-toplevel
+        # pylint: disable=import-error
         import psutil
         return psutil.disk_usage(pathname).free
     assert IS_POSIX
@@ -897,7 +1006,7 @@ def getsize(path):
             finddata = win32file.FindFilesW(extended_path(path))
         except pywinerror as e:
             if e.winerror == 3:  # 3 = The system cannot find the path specified.
-                raise OSError(errno.ENOENT, e.strerror, path)
+                raise OSError(errno.ENOENT, e.strerror, path) from e
             raise e
         if not finddata:
             # FindFilesW does not work for directories, so fall back to
@@ -1074,6 +1183,8 @@ def truncate_f(f):
 def uris_to_paths(file_uris):
     """Return a list of paths from text/uri-list"""
     assert isinstance(file_uris, (tuple, list))
+    # Keep urllib.request off the startup path: it drags in ssl and socket.
+    from urllib.request import url2pathname  # pylint: disable=import-outside-toplevel
     file_paths = []
     for file_uri in file_uris:
         if not file_uri:
@@ -1081,7 +1192,7 @@ def uris_to_paths(file_uris):
             continue
         parsed_uri = urllib.parse.urlparse(file_uri)
         if parsed_uri.scheme == 'file':
-            file_path = urllib.request.url2pathname(parsed_uri.path)
+            file_path = url2pathname(parsed_uri.path)
             if len(file_path) > 2 and file_path[2] == ':':
                 # remove front slash for Windows-style path
                 file_path = file_path[1:]

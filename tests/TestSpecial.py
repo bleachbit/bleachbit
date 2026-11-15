@@ -9,6 +9,9 @@
 Test case for module Special
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 # standard imports
 import contextlib
 import os
@@ -356,7 +359,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         if fn and sql:
             raise RuntimeError(
                 'sqlite_clean_helper: supply either fn or sql but not both')
-        elif fn:
+        if fn:
             filename = os.path.normpath(os.path.join(self.dir_base, fn))
             self.assertExists(filename)
         # create sqlite file
@@ -670,6 +673,7 @@ CREATE TABLE moz_pages_w_icons (id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, 
         FileUtilities.execute_sqlite3(places_path, places_sql)
         FileUtilities.execute_sqlite3(favicons_path, favicons_sql)
 
+        # pylint: disable-next=unused-argument
         def fake_get(path, sql, row_factory=None, parameters=()):
             if 'icon_url' in sql:
                 # First query: orphaned favicons. Inject a non-integer ID.
@@ -740,7 +744,6 @@ INSERT INTO "meta" VALUES('version','20');"""
                 filename = os.path.join(self.tempdir, basename)
                 FileUtilities.execute_sqlite3(filename, ddl)
                 self.assertExists(filename)
-                # pylint: disable=protected-access
                 ver = Special._get_sqlite_values(filename, sql)
                 self.assertEqual(ver, [(12, 34), (56, 78)])
                 ver = Special._get_sqlite_values(
@@ -791,7 +794,6 @@ INSERT INTO "meta" VALUES('version','20');"""
                 self.assertExists(filename)
 
                 # run the test
-                # pylint: disable=protected-access
                 self.assertTrue(Special.sqlite_table_exists(filename, 'foo'))
                 self.assertFalse(Special.sqlite_table_exists(
                     filename, 'table_does_not_exist'))

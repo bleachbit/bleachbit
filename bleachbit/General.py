@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 General code
@@ -134,7 +134,7 @@ def boolstr_to_bool(value):
 
 def getText(nodelist):
     """Return the text data in an XML node
-    http://docs.python.org/library/xml.dom.minidom.html"""
+    https://docs.python.org/3/library/xml.dom.minidom.html"""
     return "".join(
         node.data for node in nodelist if node.nodeType == node.TEXT_NODE
     )
@@ -158,9 +158,12 @@ def reject_xml_dtd(data, description='XML'):
 #
 # General
 #
+# pylint: disable-next=redefined-builtin
 class WindowsError(Exception):
     """Dummy class for non-Windows systems"""
 
+    # The stand-in mirrors the builtin WindowsError signature.
+    # pylint: disable-next=keyword-arg-before-vararg
     def __init__(self, winerror=None, *args, **kwargs):
         self.winerror = winerror
         super().__init__(*args, **kwargs)
@@ -298,7 +301,7 @@ def get_real_uid():
     if login and 'root' != login:
         # pwd does not exist on Windows, so global unconditional import
         # would cause a ModuleNotFoundError.
-        import pwd  # pylint: disable=import-outside-toplevel
+        import pwd
         try:
             return pwd.getpwnam(login).pw_uid
         except KeyError:
@@ -319,21 +322,39 @@ def makedirs(path):
     parentdir = os.path.split(path)[0]
     if not os.path.lexists(parentdir):
         makedirs(parentdir)
-    os.mkdir(path, 0o700)
+    if IS_WINDOWS:
+        # Python makes 0o700 an owner-only ACL, and an elevated process's owner
+        # is Administrators, which would lock out the user's normal session
+        os.mkdir(path)
+    else:
+        os.mkdir(path, 0o700)
     if sudo_mode():
         chownself(path)
 
 
-def os_match(os_str, platform=sys.platform):
-    """Return boolean whether operating system matches
+# Operating system tokens recognized in the os attribute.
+# Keep in sync with the os pattern in doc/cleaner_markup_language.xsd.
+VALID_OS_TOKENS = frozenset(
+    ('bsd', 'darwin', 'freebsd', 'linux', 'macos', 'netbsd', 'openbsd',
+     'unix', 'windows'))
+
+
+def _os_match_token(os_str, platform):
+    """Return whether a single operating system token matches the platform
+
+    Returns True or False for a recognized token. An unrecognized token
+    logs a warning and returns None, which os_match() treats as a
+    non-match for a positive token and as a disqualifier for a negated
+    token (fail closed).
 
     Keyword arguments:
-    os_str -- the required operating system as written in XML
+    os_str -- one operating system as written in XML (e.g., 'linux')
     platform -- used only for unit tests
     """
-    # If blank, return true.
-    if not os_str:
-        return True
+    if os_str not in VALID_OS_TOKENS:
+        logger.warning(
+            'The os="%s" attribute is not recognized.', os_str)
+        return None
     # "darwin" is accepted as a deprecated alias for "macos"
     if os_str == 'darwin':
         logger.warning(
@@ -354,9 +375,42 @@ def os_match(os_str, platform=sys.platform):
     elif platform == 'win32':
         current_os = ('windows',)
     else:
-        raise RuntimeError(f'Unknown operating system: {sys.platform}')
+        raise RuntimeError(f'Unknown operating system: {platform}')
     # Compare current OS against required OS.
     return os_str in current_os
+
+
+def os_match(os_str, platform=sys.platform):
+    """Return boolean whether operating system matches
+
+    Keyword arguments:
+    os_str -- the required operating system as written in XML. It may
+        be a comma-separated list of tokens, each optionally negated
+        with a leading '!' (e.g., 'unix,!macos'). If negated tokens
+        are present, none may match; if positive tokens are present,
+        at least one must match. An unrecognized token logs a warning:
+        a positive token is a non-match, and a negated token
+        disqualifies (fails closed).
+    platform -- used only for unit tests
+    """
+    # If blank, return true.
+    if not os_str:
+        return True
+    tokens = [token.strip() for token in os_str.split(',') if token.strip()]
+    neg_tokens = [t[1:] for t in tokens if t.startswith('!')]
+    pos_tokens = [t for t in tokens if not t.startswith('!')]
+
+    # Evaluate every token so each unrecognized token logs a warning.
+    neg_results = [_os_match_token(t, platform) for t in neg_tokens]
+    pos_results = [_os_match_token(t, platform) for t in pos_tokens]
+
+    # An unrecognized negated token returns None, which disqualifies
+    # because its intent cannot be verified.
+    if any(r is not False for r in neg_results):
+        return False
+    if pos_results:
+        return any(pos_results)
+    return True
 
 
 def _set_detached_kwargs(kwargs):
@@ -390,6 +444,8 @@ def run_external_nowait(args, env=None, kwargs=None):
         env = sanitize_root_env(dict(os.environ) if env is None else env)
     try:
         _set_detached_kwargs(kwargs)
+        # The detached process must outlive this call.
+        # pylint: disable-next=consider-using-with
         process = subprocess.Popen(args,
                                    stdin=subprocess.DEVNULL,
                                    stdout=subprocess.DEVNULL,
@@ -397,7 +453,10 @@ def run_external_nowait(args, env=None, kwargs=None):
                                    env=env, **kwargs)
         process.returncode = 0
         if IS_WINDOWS:
+            # Popen offers no public way to release the Windows handle.
+            # pylint: disable-next=protected-access
             process._handle.Close()
+            # pylint: disable-next=protected-access
             process._handle = None
         return True
     except Exception as e:
@@ -460,6 +519,8 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
             return (0, '', '')
         # Use fallback method.
         _set_detached_kwargs(kwargs)
+        # The detached process must outlive this call.
+        # pylint: disable-next=consider-using-with
         process = subprocess.Popen(args,
                                    stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL,

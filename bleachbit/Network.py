@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -23,14 +10,23 @@ Check for updates via the Internet
 """
 
 # standard library
+from bisect import bisect_right
 import hashlib
 import logging
 import os
+import re
 import socket
 import sys
 import platform
 import warnings
 from collections.abc import Callable
+from urllib.parse import quote
+
+# local imports
+from bleachbit import bleachbit_exe_path, comms_check_url, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
+from bleachbit.FileUtilities import delete, open_for_overwrite
+from bleachbit.General import unset_sslkeylogfile
+from bleachbit.Language import get_active_language_code, get_text as _
 
 # urllib3 v2 warns when the ssl module is not OpenSSL (e.g. macOS
 # LibreSSL).  The warning is informational and does not prevent
@@ -55,12 +51,6 @@ if HAVE_REQUESTS:
 else:
     class RequestException(Exception):
         pass
-
-# local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
-from bleachbit.FileUtilities import delete, open_for_overwrite
-from bleachbit.General import unset_sslkeylogfile
-from bleachbit.Language import get_active_language_code, get_text as _
 
 logger = logging.getLogger(__name__)
 
@@ -157,6 +147,9 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
     assert backoff_factor > 0
     assert isinstance(timeout, int)
     assert timeout > 0
+    if not HAVE_REQUESTS:
+        raise RequestException(
+            'The requests package is not installed: network features are disabled.')
     if hasattr(sys, 'frozen'):
         # when frozen by py2exe, certificates are in alternate location
         ca_bundle = os.path.join(bleachbit_exe_path, 'cacert.pem')
@@ -166,9 +159,6 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
         else:
             logger.error(
                 'Application is frozen but certificate file not found: %s', ca_bundle)
-    if not HAVE_REQUESTS:
-        raise RequestException(
-            'The requests package is not installed: network features are disabled.')
     assert headers is None or isinstance(headers, dict)
     request_headers = {'User-Agent': get_user_agent()}
     if headers:
@@ -194,11 +184,120 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
     return response
 
 
+COMMS_CHECK_PHRASE = 'STATION CHECK, STANDBY'
+
+
+def comms_check(timeout=15, max_retries=1):
+    """Smoke test the network stack (requests, TLS, and the CA bundle)"""
+    url = f'{comms_check_url}?msg={quote(COMMS_CHECK_PHRASE)}'
+    try:
+        response = fetch_url(url, max_retries=max_retries, timeout=timeout,
+                             headers=get_update_request_headers())
+    except (RequestException, OSError) as exc:
+        req_exc = requests.exceptions if HAVE_REQUESTS else None
+        if req_exc and isinstance(exc, req_exc.Timeout):
+            kind = 'Drop track is jammed.'
+        elif req_exc and isinstance(exc, req_exc.ConnectionError):
+            kind = 'Dropship is offline.'
+        else:
+            kind = "That's it, man. Game over, man. Game over!"
+        print(f'SMOKE TEST FAILED: {kind} ({type(exc).__name__}: {exc})')
+        return 1
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = None
+    if not isinstance(payload, dict):
+        payload = {}
+    speaker = payload.get('speaker')
+    quote_text = payload.get('quote')
+    reply = (f'{speaker}: {quote_text}' if speaker and quote_text
+             else response.text)
+    if response.status_code == 200 and payload.get('status') == 'ok':
+        print(f'SMOKE TEST SUCCESS: {reply}\n'
+              'Express elevator to hell, going down!')
+        return 0
+    logger.error('comms-check returned HTTP %s: %r',
+                 response.status_code, reply[:200])
+    print("SMOKE TEST FAILED: That's it, man. Game over, man. Game over!")
+    return 1
+
+
+def _version_major_minor(version):
+    """Reduce one version token to at most major.minor precision
+
+    For more examples, see test_version_major_minor.
+    """
+    # ISO date: YYYY-MM-DD or YYYY-MM -> YYYY-MM (e.g., '2008-12-21' -> '2008-12')
+    if re.match(r'^\d{4}-\d{2}(-\d{2})?$', version):
+        return version[:7]
+    # Compact date or Arch build: YYYYMMDD... -> YYYYMM (e.g., '20081221' -> '200812')
+    if re.match(r'^\d{8}', version):
+        return version[:6]
+    # Strip suffix like '-generic', '+deb14', '_1', '-STABLE' (e.g., '6.18.50_1' -> '6.18')
+    version = re.split(r'[-+_]', version)[0]
+    # Keep major.minor (e.g., '7.0.12' -> '7.0')
+    return '.'.join(version.split('.')[:2])
+
+
+def _coarsen_os_version(os_version):
+    """Reduce precision of an 'OS-name version' string
+
+    Keeps the OS/distribution name and reduces the version to
+    -  major.minor (e.g., Linux 7.2)
+    -  year-month (e.g., 'arch 200812')
+
+    For more examples, see test_coarsen_os_version.
+    """
+    if not os_version:
+        return os_version
+    name, sep, rest = os_version.partition(' ')
+    if not sep:
+        # Bare token: reduce if it is a version, else it is a name
+        return _version_major_minor(name) if name[0].isdigit() else name
+    version = rest.partition(' ')[0]
+    if not version or not version[0].isdigit():
+        return os_version
+    return f'{name} {_version_major_minor(version)}'
+
+
+def _coarsen_windows_build(os_version):
+    """Reduce precision of a Windows version like '10.0.26461'
+
+    For Windows 10/11 releases within the known range, round the
+    build number down.
+
+    For future, unknown build numbers, keep the first two digits.
+
+    For more examples, see test_coarsen_windows_build.
+    """
+    # Known Windows "10.0.x" versions:
+    # Windows 10 1507 (2015) through Windows 11 26H2 (2026).
+    windows10_release_builds = (
+        10240, 10586, 14393, 15063, 16299, 17134, 17763, 18362, 18363,
+        19041, 19042, 19043, 19044, 19045, 22000, 22621, 22631,
+        26100, 26200, 26300, 28000
+    )
+
+    parts = os_version.split('.')
+    if len(parts) != 3 or not all(p.isdigit() for p in parts):
+        return os_version
+    build = parts[2]
+    if int(build) > windows10_release_builds[-1]:
+        # Future release beyond the known builds
+        parts[2] = build[:2].ljust(len(build), '0')
+        return '.'.join(parts)
+    idx = bisect_right(windows10_release_builds, int(build)) - 1
+    if idx < 0:
+        return os_version
+    parts[2] = str(windows10_release_builds[idx])
+    return '.'.join(parts)
+
+
 def _get_os_name_version():
     """Return (os_name, os_version) tuple for network requests."""
     os_name = platform.system()  # 'Linux', 'Windows', etc.
     if IS_LINUX:
-        # pylint: disable=import-outside-toplevel
         from bleachbit.Unix import get_distribution_name_version
         os_version = get_distribution_name_version()
     elif IS_MAC:
@@ -209,6 +308,10 @@ def _get_os_name_version():
         os_version = os_name + '/' + platform.machine() + ' ' + platform.release()
     else:
         os_version = platform.uname().version
+    if IS_WINDOWS:
+        os_version = _coarsen_windows_build(os_version)
+    else:
+        os_version = _coarsen_os_version(os_version)
     return os_name, os_version
 
 
@@ -238,7 +341,7 @@ def get_gtk_version():
 
     If GTK is not available, returns None.
     """
-    # pylint: disable=import-outside-toplevel, import-error
+    # pylint: disable=import-error
     from bleachbit.GtkShim import Gtk, is_gtk_available
     if not is_gtk_available():
         return None

@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <cleaner id="zoom">
@@ -24,6 +13,7 @@
   <description>Chat client</description>
   <running type="exe" os="windows" same_user="true">Zoom.exe</running>
   <running type="exe" os="linux" same_user="true">zoom</running>
+  <running type="exe" os="macos" same_user="true">zoom.us</running>
   <var name="base">
     <value os="windows">%AppData%\Zoom</value>
     <value search="glob" os="linux">~/snap/zoom-client/*/.zoom</value>
@@ -45,6 +35,8 @@ Zoom 5.2.440215.0803 on Ubuntu 20.04
 -->
     <action command="delete" search="walk.all" path="~/snap/zoom-client/common/.cache/"/>
     <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/zoom/"/>
+    <!-- Zoom macOS: real app cache, confirmed on macOS 27 (WebKit, ZoomCefWebView subfolders) -->
+    <action command="delete" search="walk.all" path="~/Library/Caches/us.zoom.xos/" os="macos"/>
   </option>
   <option id="logs">
     <label>Logs</label>
@@ -66,6 +58,9 @@ Zoom 5.2.0 on Windows 10
 -->
     <action command="delete" search="walk.all" path="$$base$$/logs/"/>
     <action command="delete" search="file" path="$$base$$/installer.txt"/>
+    <!-- Zoom macOS: confirmed real log locations on macOS 27 -->
+    <action command="delete" search="walk.all" path="~/Library/Logs/zoom.us/" os="macos"/>
+    <action command="delete" search="walk.all" path="~/Library/Logs/ZoomPhone/" os="macos"/>
   </option>
   <!--
 Zoom 5.2.440215.0803 on Ubuntu 20.04
@@ -77,7 +72,7 @@ playback.m3u
 zoom_0.mp4
 audio_only.m4a
 
-Zoom 5.2.0 Windows 10
+Zoom 5.2.0 on Windows 10
 %UserProfile%\Documents\Zoom
 -->
   <option id="recordings">

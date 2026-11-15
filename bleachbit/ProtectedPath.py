@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 The protected path warning system is a safety net
@@ -27,7 +27,6 @@ accidentally delete important system or application files.
 
 import logging
 import os
-import xml.dom.minidom
 
 import bleachbit
 from bleachbit import FileUtilities, FS_CASE_SENSITIVE
@@ -64,6 +63,8 @@ def load_protected_paths(force_reload=False):
     Args:
         force_reload: If True, reload from XML even if cached
     """
+    # The parsed XML is cached for the process.
+    # pylint: disable-next=global-statement
     global _protected_paths_cache
 
     if _protected_paths_cache is not None and not force_reload:
@@ -75,6 +76,9 @@ def load_protected_paths(force_reload=False):
         return []
 
     protected_paths = []
+
+    # Keep minidom off the startup path: this is the only place it is needed.
+    import xml.dom.minidom  # pylint: disable=import-outside-toplevel
 
     try:
         with open(xml_path, 'rb') as f:
@@ -296,5 +300,7 @@ def get_warning_message(user_path, impact):
 
 def clear_cache():
     """Clear the protected paths cache."""
+    # Clearing the cache means rebinding it.
+    # pylint: disable-next=global-statement
     global _protected_paths_cache
     _protected_paths_cache = None

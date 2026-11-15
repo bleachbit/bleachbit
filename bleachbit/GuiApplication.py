@@ -36,6 +36,8 @@ if IS_WINDOWS:
         RESPONSE_TEXT_UNREADABLE,
     )
 
+bleachbit.log_startup_time('GuiApplication imported')
+
 
 class Bleachbit(Gtk.Application):
     _window = None
@@ -70,6 +72,7 @@ class Bleachbit(Gtk.Application):
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
             atexit.register(Windows.cleanup_nonce)
+        bleachbit.log_startup_time('application created')
 
     def run(self, *args, **kwargs):
         """Run the GTK application."""
@@ -248,7 +251,7 @@ class Bleachbit(Gtk.Application):
                                  website=bleachbit.APP_URL,
                                  transient_for=self._window)
         try:
-            with open(bleachbit.license_filename) as f_license:
+            with open(bleachbit.license_filename, encoding='utf-8') as f_license:
                 dialog.set_license(f_license.read())
         except (IOError, TypeError):
             # TRANSLATORS: License text shown in the 'About' dialog.
@@ -274,7 +277,9 @@ class Bleachbit(Gtk.Application):
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
+        bleachbit.log_startup_time('GTK startup done')
         self.build_app_menu()
+        bleachbit.log_startup_time('app menu built')
 
     def quit(self, _action=None, _param=None, init_configuration=False):
         if init_configuration:
@@ -355,6 +360,9 @@ class Bleachbit(Gtk.Application):
             # Check for orphaned wipe files from interrupted operations
             GLib.idle_add(self._window.check_orphaned_wipe_files,
                           priority=GLib.PRIORITY_LOW)
+            if IS_WINDOWS:
+                GLib.idle_add(self._window.check_appdata_permissions,
+                              priority=GLib.PRIORITY_LOW)
 
         self._maybe_prompt_font_check()
 
@@ -397,11 +405,13 @@ class Bleachbit(Gtk.Application):
             return False
         if not self._window:
             return False
+        # pylint: disable-next=possibly-used-before-assignment
         dialog = create_font_check_dialog(self._window)
         response = dialog.run()
         dialog.destroy()
         if response == Gtk.ResponseType.YES:
             options.set('font_check_completed', True)
+        # pylint: disable-next=possibly-used-before-assignment
         elif response in (RESPONSE_TEXT_BLURRY, RESPONSE_TEXT_UNREADABLE):
             self._restart_with_fontconfig_backend()
         # If user dismisses the dialog, ask again next time.

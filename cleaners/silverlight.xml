@@ -1,33 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    @app Microsoft Silverlight
-    @url https://www.microsoft.com/silverlight/
-    @os Windows
-    @cleanerversion v1.5.0
-    @cleanerdate 2019-03-18
-    @cleanerby Andrew Ziem (2010-09-28 - 2016-12-26) & Tobias B. Besemer (2019-03-13 - 2019-03-18)
-    @tested ok v???, Windows 7
-    @testeddate 2019-03-13
-    @testedby https://github.com/Tobias-B-Besemer
-    @note Deprecated application framework for writing and running rich Internet applications, similar to Adobe Flash.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <cleaner id="silverlight" os="windows">
@@ -43,9 +21,6 @@
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="glob" path="%Temp%\Silverlight*.log"/>
-    <!-- Example:
-    Silverlight0.log
-    SilverlightMSI.log
-    -->
+    <!-- Silverlight0.log, SilverlightMSI.log -->
   </option>
 </cleaner>

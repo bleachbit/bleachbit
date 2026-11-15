@@ -9,6 +9,9 @@
 Test case for module GUI
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import unittest
 import time
@@ -16,18 +19,19 @@ import types
 import warnings
 from unittest import mock
 
+from tests import common
 from tests.common import pytest
 
 import bleachbit
 from bleachbit.Cleaner import Cleaner, backends
 from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
-from bleachbit.Language import get_supported_language_code_name_dict
+from bleachbit.Language import get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
-from tests import common
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
+    from bleachbit.GuiPreferences import PreferencesDialog
     from bleachbit.GuiUtil import (clear_clipboard, get_font_size_from_name,
                                    get_window_info)
     from bleachbit.GuiTreeModels import TreeDisplayModel
@@ -80,6 +84,7 @@ class GUITestCase(common.BleachbitTestCase):
         if window:
             window.destroy()
             cls.clear_window()
+            cls.refresh_gui()
 
     @classmethod
     def get_window(cls):
@@ -184,6 +189,7 @@ class GUITestCase(common.BleachbitTestCase):
     def test_get_window_info(self):
         """Test get_window_info"""
         gui = self.get_window()
+        # pylint: disable-next=possibly-used-before-assignment
         geo = get_window_info(gui)
         self.assertGreaterEqual(geo.x, 0)
         self.assertGreaterEqual(geo.y, 0)
@@ -213,8 +219,35 @@ class GUITestCase(common.BleachbitTestCase):
                  ("", None),
                  (None, None))
         for font_name, expected in tests:
+            # pylint: disable-next=possibly-used-before-assignment
             self.assertEqual(get_font_size_from_name(
                 font_name), expected, f"Font name '{font_name}' should return {expected}")
+
+    def test_splash_screen_only_for_fontconfig_backend(self):
+        """The font cache splash shows only with the fontconfig backend"""
+        from bleachbit import GuiWindow
+        fake_windows = mock.Mock()
+        fake_windows.get_font_conf_file.return_value = __file__
+        cases = ((None, False, False),
+                 ('win32', False, False),
+                 ('fc', False, True),
+                 ('fontconfig', False, True),
+                 ('fc', True, False))
+        with mock.patch.object(GuiWindow, 'IS_WINDOWS', True), \
+                mock.patch.object(GuiWindow, 'Windows', fake_windows,
+                                  create=True), \
+                mock.patch.dict(os.environ):
+            os.environ.pop('BLEACHBIT_SPLASH_SCREEN_DELAY', None)
+            for backend, has_cache, expected in cases:
+                with self.subTest(backend=backend, has_cache=has_cache):
+                    fake_windows.reset_mock()
+                    fake_windows.has_fontconfig_cache.return_value = has_cache
+                    os.environ.pop('PANGOCAIRO_BACKEND', None)
+                    if backend:
+                        os.environ['PANGOCAIRO_BACKEND'] = backend
+                    self.get_window()._show_splash_screen()
+                    self.assertEqual(
+                        fake_windows.splash_thread.start.called, expected)
 
     def test_preferences(self):
         """Opens the preferences dialog and closes it"""
@@ -238,6 +271,72 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual(mock_get.call_count, 1)
         pref.dialog.destroy()
 
+    def test_preferences_language_selection(self):
+        """Test language selection and sensitivity in preferences dialog"""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        pref = self.app.get_preferences_dialog()
+        try:
+            # Language widgets are insensitive when auto-detect is on.
+            self.assertFalse(pref.lang_select_box.get_sensitive())
+            self.assertFalse(pref.lang_label.get_sensitive())
+            self.assertFalse(pref.lang_combo.get_sensitive())
+            # Combobox has an active language selected matching detected language.
+            self.assertIsNotNone(pref.lang_combo.get_active_text())
+
+            # Toggle auto-detect off: widgets become sensitive, and
+            # detected language is saved to forced_language.
+            pref.cb_auto_lang.set_active(False)
+            self.assertTrue(pref.lang_select_box.get_sensitive())
+            self.assertTrue(pref.lang_label.get_sensitive())
+            self.assertTrue(pref.lang_combo.get_sensitive())
+            self.assertFalse(options.get('auto_detect_lang'))
+            self.assertGreaterEqual(len(options.get('forced_language')), 2)
+            # The saved language matches the language shown in the
+            # dropdown.
+            combo_code = pref.lang_combo.get_active_text().split(
+                "(")[-1].rstrip(")")
+            self.assertEqual(options.get('forced_language'), combo_code)
+
+            # Toggle auto-detect back on: widgets become insensitive, and
+            # forced_language is cleared.
+            pref.cb_auto_lang.set_active(True)
+            self.assertFalse(pref.lang_select_box.get_sensitive())
+            self.assertFalse(pref.lang_label.get_sensitive())
+            self.assertFalse(pref.lang_combo.get_sensitive())
+            self.assertTrue(options.get('auto_detect_lang'))
+            self.assertEqual(options.get('forced_language'), '')
+        finally:
+            pref.dialog.destroy()
+            options.set('auto_detect_lang', True)
+            options.set('forced_language', '')
+
+    def test_preferences_language_unsupported_locale(self):
+        """Fallback when the detected language has no supported match
+
+        When detection finds no match (e.g., the 'C' locale), the
+        dropdown falls back to English, and manual mode must save that
+        same fallback so the displayed and saved languages agree.
+        """
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with mock.patch('bleachbit.GuiPreferences.get_active_language_code',
+                        return_value='C'):
+            pref = self.app.get_preferences_dialog()
+            try:
+                self.assertIsNotNone(pref.lang_combo.get_active_text())
+                # Toggle auto-detect off: the dropdown falls back to
+                # English, and the same fallback is saved.
+                pref.cb_auto_lang.set_active(False)
+                combo_code = pref.lang_combo.get_active_text().split(
+                    "(")[-1].rstrip(")")
+                self.assertTrue(options.get('forced_language'))
+                self.assertEqual(options.get('forced_language'), combo_code)
+            finally:
+                pref.dialog.destroy()
+                options.set('auto_detect_lang', True)
+                options.set('forced_language', '')
+
     def test_preferences_cookies_page(self):
         """Opens the preferences dialog and navigates to cookies page"""
         pref = self.app.get_preferences_dialog()
@@ -251,6 +350,40 @@ class GUITestCase(common.BleachbitTestCase):
         # click close button
         self.click_button(pref.dialog, Gtk.STOCK_CLOSE)
         pref.dialog.destroy()
+
+    def test_preferences_run_refresh_operations(self):
+        """PreferencesDialog.run() refreshes operations if needed"""
+        mock_refresh = mock.Mock()
+        mock_theme = mock.Mock()
+        # PreferencesDialog is imported under IS_GTK, causing false positive.
+        # pylint: disable-next=possibly-used-before-assignment
+        pref = PreferencesDialog(self.get_window(), mock_refresh, mock_theme)
+        try:
+            self.assertFalse(pref.refresh_operations)
+            with mock.patch.object(pref.dialog, 'run',
+                                   return_value=Gtk.ResponseType.CLOSE):
+                pref.run()
+            mock_refresh.assert_not_called()
+
+            pref2 = PreferencesDialog(self.get_window(), mock_refresh,
+                                      mock_theme)
+            pref2.refresh_operations = True
+            with mock.patch.object(pref2.dialog, 'run',
+                                   return_value=Gtk.ResponseType.CLOSE):
+                pref2.run()
+            mock_refresh.assert_called_once()
+        finally:
+            if hasattr(pref, 'dialog') and pref.dialog:
+                pref.dialog.destroy()
+
+    def test_cb_refresh_operations_destroyed_window(self):
+        """GuiWindow.cb_refresh_operations() is safe if window is destroyed"""
+        window = self.get_window()
+        window._destroyed = True
+        try:
+            self.assertFalse(window.cb_refresh_operations())
+        finally:
+            window._destroyed = False
 
     def test_system_information(self):
         """Opens the system information dialog and closes it"""
@@ -486,9 +619,8 @@ class GUITestCase(common.BleachbitTestCase):
         mock_clear_clipboard.assert_called_once()
         self.assertNotExists(test_file)
 
-    # Flaky ~1/100 on Linux: X11 CLIPBOARD owner can be transiently lost
-    # under parallel xdist workers. assertTrue (not skipTest) lets flaky rerun.
-    @pytest.mark.flaky(reruns=2, reruns_delay=1)
+    # Other xdist workers can take the X11 CLIPBOARD owner away mid-test
+    @pytest.mark.no_xdist
     def test_shred_paths_from_clipboard_menu_integration(self):
         """Shred a path copied to the real clipboard"""
         test_file = self.write_file('shred-me-via-real-clipboard')
@@ -510,6 +642,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_shred_clipboard_empty_no_glib_warnings(self):
         """Empty clipboard must not trigger GLib g_array warnings."""
+        # pylint: disable-next=possibly-used-before-assignment
         clear_clipboard()
         self.refresh_gui()
 
@@ -556,6 +689,82 @@ class GUITestCase(common.BleachbitTestCase):
         file_to_clean = self.mkstemp(prefix="somefile", dir=dirname)
         self.assertExists(file_to_clean)
         return file_to_clean
+
+    def test_orphaned_wipe_prompt_waits_for_idle(self):
+        """The orphaned wipe prompt is skipped while an operation runs"""
+        gui = self.get_window()
+        with mock.patch('bleachbit.GuiBasic.message_dialog') as dialog:
+            gui.set_sensitive(False)
+            self.addCleanup(gui.set_sensitive, True)
+            self.assertFalse(
+                gui._prompt_orphaned_wipe_files(['/does/not/exist']))
+            dialog.assert_not_called()
+
+            gui.set_sensitive(True)
+            gui._prompt_orphaned_wipe_files(['/does/not/exist'])
+            dialog.assert_called_once()
+
+    @common.skipUnlessWindows
+    def test_prompt_appdata_permissions(self):
+        """Confirming the permissions prompt repairs the configuration folder ACL"""
+        gui = self.get_window()
+        with mock.patch('bleachbit.GuiBasic.message_dialog',
+                        return_value=Gtk.ResponseType.NO) as dialog, \
+                mock.patch('bleachbit.Windows.fix_appdata_acl') as fix_acl:
+            gui._prompt_appdata_permissions()
+            dialog.assert_called_once()
+            fix_acl.assert_not_called()
+
+        with mock.patch('bleachbit.GuiBasic.message_dialog',
+                        return_value=Gtk.ResponseType.YES) as dialog, \
+                mock.patch('bleachbit.Windows.fix_appdata_acl') as fix_acl, \
+                mock.patch('bleachbit.Windows.has_broken_appdata_acl',
+                           return_value=False), \
+                mock.patch.object(gui, 'append_text') as append_text:
+            gui._prompt_appdata_permissions()
+            dialog.assert_called_once()
+            fix_acl.assert_called_once_with()
+            self.assertIn('Repaired permissions',
+                          append_text.call_args.args[0])
+
+        # A failed or ineffective repair is reported, not claimed as success.
+        for fix_side_effect, has_broken in ((OSError('fail'), False),
+                                            (None, True)):
+            with mock.patch('bleachbit.GuiBasic.message_dialog',
+                            return_value=Gtk.ResponseType.YES), \
+                    mock.patch('bleachbit.Windows.fix_appdata_acl',
+                               side_effect=fix_side_effect), \
+                    mock.patch('bleachbit.Windows.has_broken_appdata_acl',
+                               return_value=has_broken), \
+                    mock.patch.object(gui, 'append_text') as append_text:
+                gui._prompt_appdata_permissions()
+                self.assertIn('Could not fully repair',
+                              append_text.call_args.args[0])
+
+        with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False), \
+                mock.patch('bleachbit.Windows.has_broken_appdata_acl') as has_broken:
+            self.assertFalse(gui.check_appdata_permissions())
+            has_broken.assert_not_called()
+
+    def test_app_menu_reloads_only_after_setup_translation(self):
+        """The app menu is rebuilt only after setup_translation() runs again"""
+        gui = self.get_window()
+        menu = gui.menu_button.get_menu_model()
+        gui.update_headerbar_labels()
+        self.assertIs(gui.menu_button.get_menu_model(), menu)
+        setup_translation()
+        gui.update_headerbar_labels()
+        self.assertIsNot(gui.menu_button.get_menu_model(), menu)
+
+    def test_refresh_supersedes_running_registration(self):
+        """A new refresh stops the registration still running"""
+        gui = self.get_window()
+        with mock.patch.object(gui.tree_store, 'refresh_rows',
+                               wraps=gui.tree_store.refresh_rows) as refresh_rows:
+            gui.cb_refresh_operations()
+            gui.cb_refresh_operations()
+            self.refresh_gui()
+        refresh_rows.assert_called_once_with()
 
     def test_run_operations(self):
         gui = self.get_window()
@@ -652,6 +861,7 @@ class GUITestCase(common.BleachbitTestCase):
         model.append(parent_iter, ("Option1", False, "option1", "", ""))
         model.append(parent_iter, ("Option2", False, "option2", "", ""))
 
+        # pylint: disable-next=possibly-used-before-assignment
         tdm = TreeDisplayModel()
 
         def blocked_warning(_option_id):
@@ -668,3 +878,31 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertFalse(model[parent_iter][1],
                          "Parent should remain unchecked when all children are blocked by expert mode")
+
+    def test_on_quit_commits_pending_options(self):
+        """Regression test: quitting via on_quit() (Ctrl+Q/Ctrl+W, and
+        Cmd+Q on macOS) must flush pending option changes to disk, the
+        same way closing the window via its own close button does
+        through on_delete_event() -> options.close().
+
+        Before the fix, on_quit() called Gtk.main_quit()/self.destroy()
+        directly without ever emitting delete-event, so a setting
+        change still waiting on the delayed flush timer
+        (Options.__schedule_flush) would be lost if the process exited
+        via this path before that timer fired.
+        """
+        with mock.patch('bleachbit.GuiWindow.options.commit') as mock_commit, \
+                mock.patch('bleachbit.GuiWindow.Gtk.main_level', return_value=1), \
+                mock.patch('bleachbit.GuiWindow.Gtk.main_quit') as mock_main_quit:
+            self.app._window.on_quit()
+
+        mock_commit.assert_called_once()
+        mock_main_quit.assert_called_once()
+
+        with mock.patch('bleachbit.GuiWindow.options.commit') as mock_commit, \
+                mock.patch('bleachbit.GuiWindow.Gtk.main_level', return_value=0), \
+                mock.patch.object(self.app._window, 'destroy') as mock_destroy:
+            self.app._window.on_quit()
+
+        mock_commit.assert_called_once()
+        mock_destroy.assert_called_once()

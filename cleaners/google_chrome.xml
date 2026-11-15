@@ -10,7 +10,7 @@ later.  See the COPYING file in the top-level directory.
 -->
 <cleaner id="google_chrome">
   <label>Google Chrome</label>
-  <description>Web browser</description>
+  <description translators="Cleaner description: the category of application.">Web browser</description>
   <running type="exe" os="windows" same_user="true">chrome.exe</running>
   <running type="exe" os="linux" same_user="true">chrome</running>
   <running type="exe" os="macos" same_user="true">Google Chrome</running>
@@ -39,7 +39,7 @@ later.  See the COPYING file in the top-level directory.
     <value search="glob" os="linux">~/.var/app/com.google.ChromeDev/config/google-chrome/Profile *</value>
   </var>
   <option id="ai">
-    <label translators="Cleaning option that deletes AI models in a web browser">AI</label>
+    <label translators="Cleaning option that deletes AI models in a web browser.">AI</label>
     <description>Delete the AI models</description>
     <action command="delete" search="walk.all" path="$$base$$/OnDeviceHeadSuggestModel"/>
     <action command="delete" search="walk.all" path="$$base$$/OptGuideOnDeviceModel"/>
@@ -53,15 +53,22 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
     <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUPersistentCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <!-- Google Chrome 126 on Linux stores Network Persistent State directly under $$profile$$ while Chrome 126 on Windows stores it under $$profile$$/Network -->
-    <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
-    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
+    <!-- Chrome 126 keeps Network Persistent State in $$profile$$ on Unix and in $$profile$$/Network on Windows -->
+    <action command="delete" search="file" path="$$profile$$/Network Persistent State" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State" os="windows"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnGraphiteCache/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnGraphiteCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/DawnWebGPUCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*/GPUCache"/>
+    <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network Persistent State" os="unix"/>
+    <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/Network/Network Persistent State" os="windows"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
@@ -79,27 +86,28 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
-    <!-- Linux stores the Code Cache under ~/.cache/ , so it doesn't need an extra rule -->
+    <!-- Linux keeps Code Cache under ~/.cache/, so it needs no extra rule -->
     <action command="delete" search="walk.files" path="$$profile$$\Code Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
+    <description translators="Description of the Cookies cleaning option.">Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="cookie" search="file" path="$$profile$$/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
-    <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
+    <action command="delete" search="file" path="$$profile$$/TransportSecurity" os="unix"/>
+    <action command="delete" search="file" path="$$profile$$/Network/TransportSecurity" os="windows"/>
     <action command="delete" search="glob" path="$$profile$$/Storage/ext/*/*/TransportSecurity"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
-    <description>Delete the files</description>
+    <description translators="Description of a cleaning option that deletes files on disk.">Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
-    <action command="delete" search="walk.all" path="$$base$$/Crashpad/" os="macos"/>
+    <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
@@ -107,7 +115,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="chrome.autofill" search="file" path="$$profile$$/Web Data"/>
   </option>
   <option id="history">
-    <label>History</label>
+    <label translators="Name of a cleaning option for usage history.">History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <!-- keep /History before /Favicons -->
     <action command="chrome.history" search="file" path="$$profile$$/History"/>
@@ -131,7 +139,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <!-- Thumbnails was an SQLite file until about January 2016 and is a folder by Chrome 48 -->
     <action command="delete" search="file" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="walk.files" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="file" path="$$profile$$/Thumbnails-journal"/>
@@ -153,8 +161,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="chrome.keywords" search="file" path="$$profile$$/Web Data"/>
   </option>
   <option id="session">
-    <label>Session</label>
-    <description>Previously open tabs and windows</description>
+    <label translators="Label for cleaning option that deletes saved session data.">Session</label>
+    <description translators="Description for the Session cleaning option.">Previously open tabs and windows</description>
     <action command="delete" search="file" path="$$profile$$/Current Session"/>
     <action command="delete" search="file" path="$$profile$$/Current Tabs"/>
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
@@ -162,8 +170,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$profile$$/Sessions"/>
   </option>
   <option id="site_data">
-    <label translators="Label for cleaning option to delete site data such as LocalStorage and IndexedDB">Site data</label>
-    <description translators="Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate">Delete LocalStorage, IndexedDB, and other data stored by websites</description>
+    <label translators="Label for cleaning option to delete site data such as LocalStorage and IndexedDB.">Site data</label>
+    <description translators="Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate.">Delete LocalStorage, IndexedDB, and other data stored by websites</description>
     <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
     <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
     <action command="delete" search="walk.all" path="$$profile$$/File System"/>
@@ -189,7 +197,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
-    <warning>This option will delete your saved passwords.</warning>
+    <warning translators="Warning shown when the user selects the Passwords cleaning option.">This option will delete your saved passwords.</warning>
     <action command="delete" search="file" path="$$profile$$/Login Data"/>
     <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
   </option>
@@ -227,7 +235,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/SharedStorage"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/History Index ????-??"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <!-- Thumbnails was an SQLite file until about January 2016 and is a folder by Chrome 48 -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Trust Tokens"/>
@@ -241,7 +249,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
-    <!-- The three below were seen on Google Chrome on Windows before Chrome version 66 -->
+    <!-- Seen on Windows before Chrome 66 -->
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Archived History"/>
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
@@ -250,5 +258,14 @@ later.  See the COPYING file in the top-level directory.
     <label>Site preferences</label>
     <description>Settings for individual sites</description>
     <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
+  </option>
+  <option id="old_versions" os="macos">
+    <label>Old versions</label>
+    <description>Delete program files from previous versions left behind by updates</description>
+    <!-- Google's macOS updater has left old versions behind since at least
+         2011, and they can add up to several GB. Only the version the
+         'Current' symlink points to is in use, so orphaned_framework_versions()
+         removes the rest, or nothing if 'Current' is missing or broken. -->
+    <action command="macos.orphaned_framework_versions" os="macos" search="file" path="/Applications/Google Chrome.app/Contents/Frameworks/Google Chrome Framework.framework/Versions"/>
   </option>
 </cleaner>

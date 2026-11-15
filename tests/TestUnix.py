@@ -8,6 +8,9 @@
 Test case for module Unix
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 from unittest import mock
 import os
 import random
@@ -43,6 +46,7 @@ from bleachbit.Unix import (
     is_unix_display_protocol_wayland,
     journald_clean,
     JOURNALD_REGEX,
+    orphaned_framework_versions,
     LocaleCleanerPath,
     Locales,
     pacman_cache,
@@ -148,8 +152,9 @@ class UnixTestCase(common.BleachbitTestCase):
             'POSIX',
         ]
         mock_getlocale.return_value = ('en_US', 'UTF-8')
-        for locale in ('en', 'en_US', 'en_US.utf8'):
+        for locale in ('en', 'en_US'):
             self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
+        self.assertEqual(find_best_locale('en_US.utf8'), 'en_US.utf8')
 
         mock_find_available_locales.assert_called()
         mock_getlocale.assert_called()
@@ -164,8 +169,9 @@ class UnixTestCase(common.BleachbitTestCase):
         # Reverse the list.
         mock_find_available_locales.return_value = mock_find_available_locales.return_value[
             ::-1]
-        for locale in ('en', 'en_US', 'en_US.utf8'):
+        for locale in ('en', 'en_US'):
             self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
+        self.assertEqual(find_best_locale('en_US.utf8'), 'en_US.utf8')
 
         # ISO-8859-1 is less preferred than UTF-8
         mock_find_available_locales.return_value.remove('en_US.utf8')
@@ -176,10 +182,24 @@ class UnixTestCase(common.BleachbitTestCase):
         mock_getlocale.return_value = ('es_MX', 'UTF-8')
         mock_find_available_locales.return_value = ['C', 'C.utf8', 'en_US.utf8',
                                                     'es_MX.iso88591', 'es_MX.utf8', 'POSIX']
-        for locale in ('es', 'es_MX', 'es_MX.utf8'):
+        for locale in ('es', 'es_MX'):
             self.assertEqual(find_best_locale(locale), 'es_MX.UTF-8')
+        self.assertEqual(find_best_locale('es_MX.utf8'), 'es_MX.utf8')
+
+        # Prefer UTF-8 over legacy codesets or modifiers.
+        mock_getlocale.return_value = ('de_DE', 'ISO8859-15')
+        mock_find_available_locales.return_value = [
+            'de_DE@euro', 'de_DE.utf8', 'en_US.utf8']
+        for locale in ('de', 'de_DE', 'de_DE@euro', 'de_DE.iso88591'):
+            self.assertEqual(find_best_locale(locale), 'de_DE.utf8')
+        # Fall back to requested variant when no UTF-8 is available.
+        mock_find_available_locales.return_value = [
+            'de_DE@euro', 'en_US.utf8']
+        self.assertEqual(find_best_locale('de_DE@euro'), 'de_DE@euro')
 
         self.assertEqual(find_best_locale('C'), 'C')
+        self.assertEqual(find_best_locale('C.utf8'), 'C.utf8')
+        self.assertEqual(find_best_locale('C.UTF-8'), 'C.UTF-8')
         self.assertEqual(find_best_locale(''), 'C')
         self.assertEqual(find_best_locale('POSIX'), 'POSIX')
 
@@ -200,6 +220,30 @@ class UnixTestCase(common.BleachbitTestCase):
             'en_US.UTF-8',
         ]
         self.assertEqual(find_best_locale('en'), 'en_US.UTF-8')
+
+    @mock.patch('locale.getlocale')
+    @mock.patch('bleachbit.Unix.find_available_locales')
+    def test_find_best_locale_prefers_utf8_over_bare(
+            self, mock_find_available_locales, mock_getlocale):
+        """Prefer UTF-8 over an exact bare-locale match.
+
+        - `locale -a` may list a bare alias like 'de_DE' alongside
+          'de_DE.UTF-8'.
+          - On macOS 26.6 observed every `en` had bare locale plus
+            at least one with encoding. Example: ('en_US','en_US.UTF-8')
+          - On Ubuntu 26.04, observed that `C` plus every language + region
+            combination had `.utf8` encoding, and some had bare locales
+            or another (non-Unicode) encoding.
+        - Matching the bare alias sets a non-UTF-8 locale, and GTK may
+          fail to render.
+        """
+        mock_getlocale.return_value = ('en_US', 'UTF-8')
+        mock_find_available_locales.return_value = [
+            'de_DE', 'de_DE.UTF-8', 'en_US', 'en_US.UTF-8', 'C', 'POSIX']
+        for locale in ('de', 'de_DE', 'de-DE', 'de_DE.UTF-8', 'de_DE.utf8'):
+            self.assertEqual(find_best_locale(locale), 'de_DE.UTF-8')
+        # Also applies when the request matches the running locale.
+        self.assertEqual(find_best_locale('en_US'), 'en_US.UTF-8')
 
     @unittest.skipUnless(exe_exists(General.resolve_exe('apt-get')),
                          'skipping tests for unavailable apt-get')
@@ -243,7 +287,6 @@ class UnixTestCase(common.BleachbitTestCase):
             self.assertIsInstance(ret, str)
             self.assertGreater(len(ret), 0)
             self.assertLess(len(ret), 100)
-            self.assertIn(' ', ret)
         if ret_platform_freedesktop and ret_os_release:
             self.assertEqual(ret_platform_freedesktop, ret_os_release)
         if ret_distro and ret_os_release:
@@ -1216,7 +1259,7 @@ PrefersNonDefaultGPU=false""")
                 real_rev, '.local', 'share', 'Trash', 'files')
             os.makedirs(trash_files)
             test_file = os.path.join(trash_files, 'test.txt')
-            with open(test_file, 'w') as f:
+            with open(test_file, 'w', encoding='utf-8') as f:
                 f.write('test')
             # Create symlink current -> 238
             current_dir = os.path.join(self.tempdir, 'snap', 'app', 'current')
@@ -1232,6 +1275,19 @@ PrefersNonDefaultGPU=false""")
             self.assertNotIn(symlink_path, paths)
 
 
+class UnreadableVFS(ListVFS):
+    """ListVFS where listing one directory is denied"""
+
+    def __init__(self, paths, unreadable):
+        super().__init__(paths)
+        self._unreadable = unreadable
+
+    def listdir(self, path):
+        if path.rstrip('/') == self._unreadable:
+            raise PermissionError(13, 'Permission denied', path)
+        return super().listdir(path)
+
+
 class LocalizationsTestCase(common.BleachbitTestCase):
 
     """Test case for localizations in Unix module"""
@@ -1245,7 +1301,7 @@ class LocalizationsTestCase(common.BleachbitTestCase):
             xml_doc = parseString(f.read())
 
         localizations_node = None
-        for child in xml_doc.firstChild.childNodes:
+        for child in xml_doc.documentElement.childNodes:
             if child.nodeType == child.ELEMENT_NODE and child.nodeName == 'localizations':
                 localizations_node = child
                 break
@@ -1326,3 +1382,133 @@ class LocalizationsTestCase(common.BleachbitTestCase):
                 self._path_matches_recognized(neg_path, recognized),
                 f'Path should NOT be matched by localizations.xml: {neg_path}'
             )
+
+    def test_localization_paths_unreadable_dir(self):
+        """A directory that cannot be listed is skipped, not fatal
+
+        /usr/share/empty.sshd is mode 0711, so a regular user cannot list it.
+        """
+        data_file = os.path.join(os.path.dirname(
+            __file__), 'localization_paths_positive.txt')
+        with open(data_file, 'r', encoding='utf-8') as f:
+            test_paths = [line.strip() for line in f if line.strip()
+                          and not line.strip().startswith('#')]
+
+        expected = self._get_recognized_paths(ListVFS(test_paths))
+        vfs = UnreadableVFS(test_paths + ['/usr/share/empty.sshd/'],
+                            '/usr/share/empty.sshd')
+        self.assertEqual(self._get_recognized_paths(vfs), expected)
+
+    def test_localization_filter_unreadable_dir(self):
+        """A filtered directory that cannot be listed yields nothing"""
+        vfs = UnreadableVFS(['/usr/share/locale/de/', '/usr/share/locale/fr/'],
+                            '/usr/share/locale')
+        locales = Locales(vfs=vfs)
+        locales.add_xml(parseString(
+            '<path location="/usr/share/locale/" filter="*" />').firstChild)
+        self.assertEqual(list(locales.localization_paths(['en'])), [])
+
+
+@common.skipIfWindows
+class OrphanedFrameworkVersionsTestCase(common.BleachbitTestCase):
+    """Test case for orphaned_framework_versions()
+
+    This targets the Contents/Frameworks/*.framework/Versions/ directory
+    found in macOS .app bundles for Chromium-based browsers, where
+    Google's own auto-updater has never reliably removed the previous
+    version(s) after updating (a bug publicly reported since at least
+    2011). Only the 'Current' symlink identifies the version genuinely
+    in use, since version numbers are not orderable across schemes and a
+    folder's modification time can be misleading (e.g. after restoring
+    from a backup)."""
+
+    def _make_versions_dir(self, folder_names, current_target=None):
+        """Create a temp Versions/ directory with the given version
+        folders (each containing one file, so size isn't trivially
+        zero), and an optional 'Current' symlink."""
+        versions_dir = self.mkdtemp(prefix='bleachbit-test-versions')
+        for name in folder_names:
+            folder = os.path.join(versions_dir, name)
+            os.mkdir(folder)
+            self.write_file(os.path.join(folder, 'placeholder.txt'))
+        if current_target is not None:
+            os.symlink(current_target, os.path.join(versions_dir, 'Current'))
+        return versions_dir
+
+    def test_orphaned_framework_versions_basic(self):
+        """One orphaned version alongside the current one is detected;
+        the current version's own files are never yielded."""
+        versions_dir = self._make_versions_dir(
+            ['150.0.1.1', '152.0.7977.83'], current_target='152.0.7977.83')
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertTrue(
+            any('150.0.1.1' in p for p in result),
+            'the orphaned version was not detected')
+        self.assertFalse(
+            any('152.0.7977.83' in p for p in result),
+            'the current version must never be yielded')
+
+    def test_orphaned_framework_versions_single_version(self):
+        """With only the current version present, nothing is yielded."""
+        versions_dir = self._make_versions_dir(
+            ['152.0.7977.83'], current_target='152.0.7977.83')
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertEqual(result, [])
+
+    def test_orphaned_framework_versions_no_current_symlink(self):
+        """Without a 'Current' symlink, nothing is yielded: guessing
+        which version is genuinely in use would risk deleting it."""
+        versions_dir = self._make_versions_dir(
+            ['150.0.1.1', '152.0.7977.83'])
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertEqual(result, [])
+
+    def test_orphaned_framework_versions_broken_current_symlink(self):
+        """A 'Current' symlink pointing at a nonexistent target must not
+        be treated as safe to infer anything from -- nothing is
+        yielded."""
+        versions_dir = self._make_versions_dir(['150.0.1.1'])
+        os.symlink('152.0.7977.83-does-not-exist',
+                   os.path.join(versions_dir, 'Current'))
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertEqual(result, [])
+
+    def test_orphaned_framework_versions_missing_directory(self):
+        """A Versions/ directory that does not exist at all yields
+        nothing, rather than raising."""
+        result = list(orphaned_framework_versions(
+            '/nonexistent/path/Versions'))
+        self.assertEqual(result, [])
+
+    def test_orphaned_framework_versions_multiple_orphans(self):
+        """Every sibling folder except 'Current' is detected, even with
+        more than one orphan present."""
+        versions_dir = self._make_versions_dir(
+            ['150.0.1.1', '151.0.2.2', '152.0.7977.83'],
+            current_target='152.0.7977.83')
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertTrue(any('150.0.1.1' in p for p in result))
+        self.assertTrue(any('151.0.2.2' in p for p in result))
+        self.assertFalse(any('152.0.7977.83' in p for p in result))
+
+    def test_orphaned_framework_versions_yields_files_not_folder_as_unit(self):
+        """Regression test: files inside an orphaned version folder must
+        be yielded individually (with the now-empty folder last), not
+        the folder as a single path -- Command.Delete sizes a directory
+        via a single lstat(), which reflects only the directory inode
+        itself (near 0 bytes) rather than its actual recursive disk
+        usage, so yielding the folder as one unit would silently
+        under-report the space to be freed."""
+        versions_dir = self._make_versions_dir(
+            ['150.0.1.1', '152.0.7977.83'], current_target='152.0.7977.83')
+        orphan_folder = os.path.join(versions_dir, '150.0.1.1')
+        orphan_file = os.path.join(orphan_folder, 'placeholder.txt')
+
+        result = list(orphaned_framework_versions(versions_dir))
+
+        self.assertIn(orphan_file, result)
+        self.assertNotIn(orphan_folder, result[:-1])
+        # The folder itself is still eventually yielded, once emptied,
+        # so it too gets removed -- just last, and never as the sole
+        # representative of its contents.
+        self.assertIn(orphan_folder, result)

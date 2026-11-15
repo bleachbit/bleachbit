@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """Dialog used to verify text rendering on Windows.
 
@@ -28,6 +28,7 @@ from bleachbit.Language import get_text as _
 
 require_gtk()
 
+# pylint: disable-next=wrong-import-order, wrong-import-position
 from gi.repository import Pango
 
 

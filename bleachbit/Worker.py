@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -35,13 +22,28 @@ import warnings
 from bleachbit import DeepScan, FileUtilities, IS_WINDOWS
 from bleachbit.Cleaner import backends
 from bleachbit.Constant import EMPTY_SPACE_WARNING
+from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
 from bleachbit.Language import get_text as _, nget_text as ngettext
 from bleachbit.FileUtilities import close_delete_parent_lock
+from bleachbit.Process import process_cache
 
 logger = logging.getLogger(__name__)
 
 # Delayed ops run last, sorted ascending: memory, then empty space
 _DELAY_PRIORITY = {'empty_space': 100, 'memory': 99}
+
+
+def format_minutes_remaining(msg2, eta_mins):
+    """Format the localized time-remaining message.
+
+    Some translations (e.g., Arabic and Hebrew) intentionally omit the
+    %d placeholder for certain plural forms, so tolerate a failed
+    formatting and show the message as-is. (Issue #2305)
+    """
+    try:
+        return msg2 % eta_mins
+    except (TypeError, ValueError):
+        return msg2
 
 
 class Worker:
@@ -96,7 +98,7 @@ class Worker:
         ret = None
         try:
             for ret in cmd.execute(self.really_delete):
-                if True == ret or isinstance(ret, tuple):
+                if ret is True or isinstance(ret, tuple):
                     # Temporarily pass control to the GTK idle loop,
                     # allow user to abort, and
                     # display progress (if applicable).
@@ -140,6 +142,10 @@ class Worker:
                              getattr(cmd, 'path', cmd))
             else:
                 # For other errors, show the traceback.
+                # TRANSLATORS: The special keyword {operation_option} will be
+                # replaced by a cleaner and option such as 'firefox.cache'.
+                # The special keyword {command} will be replaced by the
+                # cleaning action that failed. Do not translate the placeholders.
                 msg = _('Error: {operation_option}: {command}')
                 data = {'command': cmd, 'operation_option': operation_option}
                 logger.error(msg.format(**data), exc_info=True)
@@ -197,7 +203,7 @@ class Worker:
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
-                    if True == ret:
+                    if ret is True:
                         # Return control to PyGTK idle loop to keep
                         # it responding allow the user to abort
                         self.yield_time = time.time()
@@ -238,6 +244,8 @@ class Worker:
                 _('To stop this process, press the abort button on the toolbar and wait.'))
             self.ui.append_text('\n\n')
             self.ui.append_text(
+                # TRANSLATORS: Warning shown while wiping a drive's
+                # empty space.
                 _('If the application is force closed before the process is complete, '
                   'large files may remain on the disk, and they may use all available space. '
                   'To remove them, start BleachBit again.'))
@@ -261,16 +269,17 @@ class Worker:
                     self.ui.update_progress_bar(percent_done)
                     if isinstance(eta_seconds, int):
                         eta_mins = math.ceil(eta_seconds / 60)
+                        # xgettext: no-python-format
                         # TRANSLATORS: %d is the estimated number of minutes remaining.
                         msg2 = ngettext("About %d minute remaining.",
-                                        "About %d minutes remaining.", eta_mins) \
-                            % eta_mins
+                                        "About %d minutes remaining.", eta_mins)
+                        msg2 = format_minutes_remaining(msg2, eta_mins)
                         self.ui.update_progress_bar(msg + ' ' + msg2)
                     else:
                         self.ui.update_progress_bar(msg)
                 if self.is_aborted:
                     break
-                if True == ret or isinstance(ret, tuple):
+                if ret is True or isinstance(ret, tuple):
                     # Return control to PyGTK idle loop to keep
                     # it responding and allow the user to abort.
                     yield True
@@ -281,6 +290,9 @@ class Worker:
         2. Deep scan
         3. Memory
         4. Empty space"""
+        # Otherwise a scan from an earlier run still reports an application
+        # the user has just closed.
+        process_cache.invalidate()
         self.deepscans = {}
         # prioritize
         self.delayed_ops = []
@@ -303,17 +315,7 @@ class Worker:
             # capture PyGObject's asyncio deprecation warnings and re-log
             # them as red errors in the GUI.  Re-install the ignore filter
             # so it takes precedence over the 'once' filter.
-            if sys.version_info >= (3, 14):
-                warnings.filterwarnings(
-                    "ignore",
-                    message=r".*asyncio\.get_event_loop_policy.*",
-                    category=DeprecationWarning,
-                )
-                warnings.filterwarnings(
-                    "ignore",
-                    message=r".*asyncio\.AbstractEventLoopPolicy.*",
-                    category=DeprecationWarning,
-                )
+            ignore_pygobject_asyncio_warnings()
             for _dummy in self.run_operations(self.operations):
                 # yield to GTK+ idle loop
                 yield True
@@ -364,6 +366,8 @@ class Worker:
             line = _("Special operations: %d") % self.total_special
             self.ui.append_text("\n%s" % line)
         if self.total_errors > 0:
+            # TRANSLATORS: %d is the count of errors that occurred
+            # during the cleaning or preview operation.
             line = _("Errors: %d") % self.total_errors
             self.ui.append_text("\n%s" % line, 'error')
         self.ui.append_text('\n')
@@ -385,7 +389,7 @@ class Worker:
         ds = DeepScan.DeepScan(self.deepscans)
 
         for cmd in ds.scan():
-            if True == cmd:
+            if cmd is True:
                 yield True
                 continue
             for _ret in self.execute(cmd, 'deepscan'):

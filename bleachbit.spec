@@ -15,6 +15,7 @@
 # Standard macro definitions on OBS.
 #  openSUSE:Leap:15.6 reports suse_version 1500
 #  openSUSE:Leap:16.0 reports suse_version 1600
+#  openSUSE:Leap:16.1 reports suse_version 1610
 #  openSUSE:Slowroll reports suse_version=1699
 #  openSUSE:Tumbleweed reports suse_version=1699
 #  CentOS_9_Stream reports centos_version=900
@@ -31,9 +32,11 @@
 %if 0%{?is_opensuse}
 %define pyprefix %{modern_python}
 %define is_leap 0
-%if 0%{?suse_version} <= 1600
+# Leap 16.x reports suse_version 1600, 1610, etc., while the rolling
+# Tumbleweed and Slowroll releases report 1699.
+%if 0%{?suse_version} < 1699
 %define is_leap 1
-%endif # suse_version <= 1600
+%endif # suse_version < 1699
 %if 0%{?suse_version} == 1500
 %define pyexe /usr/bin/python3.11
 %endif # suse_version == 1500
@@ -49,15 +52,8 @@
 %define has_fdupes 1
 %endif
 
-# Fedora 42 unified /usr/sbin https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
-%if "%{_bindir}" == "%{_sbindir}"
-%define has_sbin 0
-%else
-%define has_sbin 1
-%endif
-
 Name:           bleachbit
-Version:        6.0.4
+Version:        6.0.6
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
 License:        GPL-3.0-or-later
@@ -75,21 +71,24 @@ Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires:       python3
 Requires:       gtk3
+Requires:       hicolor-icon-theme
 Requires:       python3-gobject
 Requires:       python3-psutil
 Requires:       python3-requests
+Requires:       polkit
 %endif
 
 %if 0%{?is_opensuse}
 BuildRequires:  desktop-file-utils
+BuildRequires:  hicolor-icon-theme
 BuildRequires:  make
 BuildRequires:  %{pyprefix}
 BuildRequires:  python-rpm-macros
 BuildRequires:  %{pyprefix}-base
-# Leap 16.0 split the unversioned /usr/bin/python3 symlink into a separate
+# Leap 16.x split the unversioned /usr/bin/python3 symlink into a separate
 # python3-base package that is no longer pulled in transitively by
-# python313-base. Require it explicitly so %{__python3} resolves.
-%if 0%{?suse_version} == 1600
+# python313-base. Require it explicitly so %%{__python3} resolves.
+%if %{is_leap} && 0%{?suse_version} >= 1600
 BuildRequires:  python3-base
 %endif
 BuildRequires:  %{pyprefix}-psutil
@@ -101,6 +100,7 @@ BuildRequires:  %{pyprefix}-sqlite-utils
 BuildRequires:  %{pyprefix}-xml
 BuildRequires:  update-desktop-files
 Requires:       gobject-introspection
+Requires:       hicolor-icon-theme
 Requires:       %{pyprefix}
 Requires:       %{pyprefix}-gobject
 Requires:       %{pyprefix}-gobject-Gdk
@@ -136,23 +136,6 @@ space to prevent data recovery.
 cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
-%if %{is_redhat_family}
-
-cat > bleachbit.pam <<EOF
-#%%PAM-1.0
-auth        include     config-util
-account     include     config-util
-session     include     config-util
-EOF
-
-cat > bleachbit.console <<EOF
-USER=root
-PROGRAM=/usr/bin/bleachbit
-SESSION=true
-EOF
-
-%endif
-
 make delete_windows_files
 
 
@@ -161,22 +144,11 @@ make install PYTHON=%{pyexe} DESTDIR=%{buildroot} prefix=%{_prefix}
 
 %if %{is_redhat_family}
 
-sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' org.bleachbit.BleachBit-root.desktop
+sed -i -e 's/^Exec=bleachbit$/Exec=pkexec bleachbit/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
     --dir=%{buildroot}/%{_datadir}/applications/ \
     --vendor="" org.bleachbit.BleachBit-root.desktop
-
-# consolehelper and userhelper
-ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
-%if %{has_sbin}
-mkdir -p %{buildroot}/%{_sbindir}
-ln -s ../..%{_bindir}/%{name} %{buildroot}/%{_sbindir}/%{name}-root
-%endif
-mkdir -p %{buildroot}%{_sysconfdir}/pam.d
-install -m 644 %{name}.pam %{buildroot}%{_sysconfdir}/pam.d/%{name}-root
-mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
-install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/%{name}-root
 
 %endif
 
@@ -206,6 +178,7 @@ make -C po install DESTDIR=%{buildroot}
 
 
 %check
+set -o pipefail
 %{pyexe} bleachbit.py --sysinfo
 %{pyexe} bleachbit.py -l | wc -l
 %{pyexe} bleachbit.py -p system.cache | wc -l
@@ -225,20 +198,13 @@ update-desktop-database &> /dev/null ||:
 %defattr(-,root,root,-)
 %doc README.md
 %license COPYING
-%if %{is_redhat_family}
-%config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
-%config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
-%{_bindir}/%{name}-root
-%if %{has_sbin}
-%{_sbindir}/%{name}-root
-%endif
-%endif
 %{_bindir}/%{name}
 %{_datadir}/metainfo/org.bleachbit.BleachBit.metainfo.xml
 %{_datadir}/applications/org.bleachbit.BleachBit.desktop
 %{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %dir %{_datadir}/polkit-1
 %dir %{_datadir}/polkit-1/actions
 %{_datadir}/polkit-1/actions/org.bleachbit.policy
@@ -246,6 +212,6 @@ update-desktop-database &> /dev/null ||:
 
 %changelog
 
-* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 6.0.4-1
-- Update to 6.0.4
+* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 6.0.6-1
+- Update to 6.0.6
 - See https://www.bleachbit.org/news

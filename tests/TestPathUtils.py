@@ -24,7 +24,22 @@ from bleachbit.ProtectedPath import check_protected_path
 from tests import common
 
 
-class PathUtilsTestCase(unittest.TestCase):
+class RelativeSuffixAssertions:
+    """Assertions for path_has_relative_suffix() shared with TestProtectedPath."""
+
+    def assert_relative_suffix_matches_components(self):
+        """Check path_has_relative_suffix matches whole components only."""
+        self.assertTrue(path_has_relative_suffix('/home/user/.git', '.git'))
+        self.assertTrue(path_has_relative_suffix('.git', '.git'))
+        self.assertFalse(path_has_relative_suffix(
+            '/home/user/not-git', '.git'))
+        self.assertFalse(path_has_relative_suffix(
+            '/home/user/.gitignore', '.git'))
+        self.assertTrue(path_has_relative_suffix(
+            '/home/user/.GIT', '.git', case_sensitive=False))
+
+
+class PathUtilsTestCase(RelativeSuffixAssertions, unittest.TestCase):
     """Tests for the PathUtils helper functions."""
 
     def test_path_equal_case_sensitivity(self):
@@ -85,14 +100,7 @@ class PathUtilsTestCase(unittest.TestCase):
 
     def test_path_has_relative_suffix(self):
         """Verify path_has_relative_suffix matches suffix components only."""
-        self.assertTrue(path_has_relative_suffix('/home/user/.git', '.git'))
-        self.assertTrue(path_has_relative_suffix('.git', '.git'))
-        self.assertFalse(path_has_relative_suffix(
-            '/home/user/not-git', '.git'))
-        self.assertFalse(path_has_relative_suffix(
-            '/home/user/.gitignore', '.git'))
-        self.assertTrue(path_has_relative_suffix(
-            '/home/user/.GIT', '.git', case_sensitive=False))
+        self.assert_relative_suffix_matches_components()
 
     @unittest.skipUnless(IS_WINDOWS, 'Windows treats backslash as separator')
     def test_path_startswith_windows_separators(self):

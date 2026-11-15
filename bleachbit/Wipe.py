@@ -12,7 +12,6 @@ import atexit
 import ctypes
 import errno
 import os
-import secrets
 import string
 import struct
 import tempfile
@@ -32,6 +31,10 @@ if IS_POSIX:
     import fcntl
 
 logger = logging.getLogger(__name__)
+
+# Same buffer size as WindowsWipe.py.
+WRITE_BUF_SIZE = 512 * 1024     # 512 kilobytes
+ZERO_FILL_BUFFER = bytes(WRITE_BUF_SIZE)
 
 FILENAME_CHARS = string.ascii_lowercase + \
     string.digits + '_.-+~!@#$%^&()=[]{},'
@@ -54,6 +57,8 @@ WINDOWS_RESERVED_FILENAMES.update(
 
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
+    # Keep secrets off the startup path: it drags in hmac and _hashlib
+    import secrets  # pylint: disable=import-outside-toplevel
     return ''.join(secrets.choice(FILENAME_CHARS)
                    for i in range(length))
 
@@ -87,10 +92,12 @@ def __valid_random_filename(filename):
     return True
 
 
-def detect_orphaned_wipe_files():
+def detect_orphaned_wipe_files(shred_drives=None):
     """Detect orphaned temporary files from interrupted wipe_path operations.
 
     These files are created by wipe_path() to fill free disk space with zeros.
+
+    Pass shred_drives from a worker thread: Options.get_list() is not locked.
 
     Detection criteria:
     - Located in directories from options shred_drives
@@ -102,10 +109,11 @@ def detect_orphaned_wipe_files():
     Returns:
         list: Paths to detected orphaned wipe files
     """
-    from bleachbit.Options import options
     orphaned_files = []
 
-    shred_drives = options.get_list('shred_drives')
+    if shred_drives is None:
+        from bleachbit.Options import options
+        shred_drives = options.get_list('shred_drives')
     if not shred_drives:
         return orphaned_files
 
@@ -128,7 +136,7 @@ def detect_orphaned_wipe_files():
                 try:
                     with open(entry.path, 'rb') as f:
                         sample = f.read(4096)
-                        if sample and all(b == 0 for b in sample):
+                        if sample and not sample.strip(b'\0'):
                             orphaned_files.append(entry.path)
                 except (IOError, OSError) as e:
                     logger.debug('Could not read file %s: %s', entry.path, e)
@@ -163,6 +171,7 @@ def fitrim(pathname):
             # Set range to the entire filesystem
             trim_range = struct.pack(
                 'QQQ', 0, stats.f_blocks * stats.f_bsize, 0)
+            # pylint: disable-next=possibly-used-before-assignment
             fcntl.ioctl(fd, fitrim_id, trim_range)
             logger.debug(
                 "Successfully performed FITRIM on filesystem at %s", pathname)
@@ -196,7 +205,6 @@ def wipe_write(path):
     """Overwrite a file's contents with zeros without truncating it.
 
     Return the open file handle; the caller must close it."""
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import getsize, _open_nofollow_fd
     size = getsize(path)
     flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
@@ -213,10 +221,10 @@ def wipe_write(path):
             raise
     f = os.fdopen(fd, 'wb')
     try:
-        blanks = b'\0' * 4096
+        blanks = memoryview(ZERO_FILL_BUFFER)
         while size > 0:
-            f.write(blanks)
-            size -= 4096
+            f.write(blanks[:min(size, WRITE_BUF_SIZE)])
+            size -= WRITE_BUF_SIZE
         f.flush()  # flush to OS buffer
         os.fsync(f.fileno())  # force write to disk
     except BaseException:
@@ -233,13 +241,11 @@ def wipe_contents(path):
     shown that most of today's media can be effectively cleared
     by one overwrite"
     """
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import truncate_f
 
-    # pylint: disable=possibly-used-before-assignment
+    # pylint: disable-next=possibly-used-before-assignment
     if IS_WINDOWS and IsUserAnAdmin():
         # The import placement here avoids a circular import.
-        # pylint: disable=import-outside-toplevel
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         from bleachbit.FileUtilities import pywinerror
         try:
@@ -265,7 +271,9 @@ def wipe_contents(path):
                         # Errno 13 Permission Denied
                         pass
             # translate exception to mark file to deletion in Command.py
-            raise WindowsError(e.winerror, e.strerror)
+            # WindowsError is a real builtin, reachable only under IS_WINDOWS.
+            # pylint: disable-next=undefined-variable
+            raise WindowsError(e.winerror, e.strerror) from e
         except UnsupportedFileSystemError:
             warnings.warn(
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
@@ -278,6 +286,8 @@ def wipe_contents(path):
             if os.path.islink(path):
                 raise OSError(
                     errno.EACCES, 'refusing to truncate a link', path)
+            # f is closed by the try/finally below.
+            # pylint: disable-next=consider-using-with
             f = open(path, 'wb')
     else:
         f = wipe_write(path)
@@ -326,51 +336,93 @@ def wipe_name(pathname1):
     return pathname2
 
 
+def is_wipe_path_readonly(pathname, fs_info=None):
+    """Quick check for some directories that should not be wiped
+
+    Returns True for cases including:
+        - CD-ROM and optical drives (including writable types)
+        - read-only USB flash drive
+        - special file systems like /dev, /proc, snap squashfs
+
+    This function is not exhaustive: it may have false negatives,
+    but it should not have false positives, which is why it is
+    not named `is_wipe_path_writable`.
+    """
+    # pylint: disable=import-outside-toplevel
+    from bleachbit.FileUtilities import get_filesystem_type
+    if IS_POSIX:
+        # /dev exists on FreeBSD, Linux, and macOS
+        # /proc exists on Linux and FreeBSD
+        real = os.path.realpath(pathname)
+        if any(real == dirname or real.startswith(dirname + os.sep)
+               for dirname in ('/dev', '/proc')):
+            return True
+    if fs_info is None:
+        fs_info = get_filesystem_type(pathname)
+    if fs_info.is_cdrom:
+        return True
+    if IS_WINDOWS:
+        return fs_info.is_readonly
+    if fs_info.fstype in ('devfs', 'devpts', 'devtmpfs', 'proc', 'procfs'):
+        return True
+    return fs_info.is_readonly
+
+
 def wipe_path(pathname, idle=False):
     """Wipe the free space in the path
     This function uses an iterator to update the GUI."""
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import delete, free_space, get_filesystem_type, truncate_f
 
     def temporaryfile():
         # reference
-        # http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
+        # https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
         maxlen = 185
         f = None
-        while True:
-            try:
-                f = tempfile.NamedTemporaryFile(
-                    dir=pathname,
-                    suffix=__random_string(maxlen),
-                    delete=False,
-                    prefix="empty_"
-                )
-                # In case the application closes prematurely, make sure this
-                # file is deleted
-                atexit.register(
-                    delete, f.name, allow_shred=False, ignore_missing=True)
-                break
-            except OSError as e:
-                if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT, errno.EINVAL):
-                    # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
-                    # Shrinking the size helps.
+        tmp_max_orig = tempfile.TMP_MAX
+        if IS_WINDOWS:
+            # On Windows/Python 3.12, tempfile retries PermissionError up to
+            # TMP_MAX (2^31-1) times when os.access() wrongly reports a
+            # read-only mount as writable; bound it so wiping fails fast.
+            # On POSIX, tempfile raises immediately instead of retrying.
+            tempfile.TMP_MAX = min(tmp_max_orig, 20)
+        try:
+            while True:
+                try:
+                    # The temporary file outlives the retry loop and is deleted at exit.
+                    # pylint: disable-next=consider-using-with
+                    f = tempfile.NamedTemporaryFile(
+                        dir=pathname,
+                        suffix=__random_string(maxlen),
+                        delete=False,
+                        prefix="empty_"
+                    )
+                    # In case the application closes prematurely, make sure this
+                    # file is deleted
+                    atexit.register(
+                        delete, f.name, allow_shred=False, ignore_missing=True)
+                    break
+                except OSError as e:
+                    if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT, errno.EINVAL):
+                        # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
+                        # Shrinking the size helps.
 
-                    # Microsoft Windows returns ENOENT "No such file or directory"
-                    # or EINVAL "Invalid argument"
-                    # when the path is too long such as %TEMP% but not in C:\
-                    if maxlen > 5:
-                        maxlen -= 5
-                        continue
-                raise
+                        # Microsoft Windows returns ENOENT "No such file or directory"
+                        # or EINVAL "Invalid argument"
+                        # when the path is too long such as %TEMP% but not in C:\
+                        if maxlen > 5:
+                            maxlen -= 5
+                            continue
+                    raise
+        finally:
+            tempfile.TMP_MAX = tmp_max_orig
         return f
 
     def estimate_completion():
         """Return (percent, seconds) to complete"""
         remaining_bytes = free_space(pathname)
         done_bytes = start_free_bytes - remaining_bytes
-        if done_bytes < 0:
-            # maybe user deleted large file after starting wipe
-            done_bytes = 0
+        # maybe user deleted large file after starting wipe
+        done_bytes = max(done_bytes, 0)
         if 0 == start_free_bytes:
             done_percent = 0
         else:
@@ -381,16 +433,22 @@ def wipe_path(pathname, idle=False):
         return 1, done_percent, remaining_seconds
 
     # Get the file system type from the given path
-    fstype = get_filesystem_type(pathname)[0]
+    fs_info = get_filesystem_type(pathname)
     # TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
     # present participle (ongoing action) refering to secure overwrite.
     # %(pathname)s is the file/directory path; %(fstype)s is the file system type
     # (e.g., ext3, ntfs). Do not translate placeholders.
     logger.debug(_("Wiping path %(pathname)s with file system type %(fstype)s"),
-                 {"pathname": pathname, "fstype": fstype})
+                 {"pathname": pathname, "fstype": fs_info.fstype})
     if not os.path.isdir(pathname):
         logger.error(
             _("Path to wipe must be an existing directory: %s"), pathname)
+        return
+
+    if is_wipe_path_readonly(pathname, fs_info):
+        logger.warning(
+            'Not wiping %s: the %s file system is read-only.',
+            pathname, fs_info.fstype)
         return
 
     if IS_POSIX:
@@ -398,10 +456,18 @@ def wipe_path(pathname, idle=False):
         from bleachbit.PathUtils import is_world_writable
         if is_world_writable(pathname):
             logger.warning(
-                _("Shred drive is world-writable; wiping there is unsafe: %s"), pathname)
+                # TRANSLATORS: Warning in the log. BleachBit wipes free space by
+                # creating temporary files in the chosen folder. This folder can be
+                # changed by any user on the computer, so another user could tamper
+                # with those files. %s is the folder path.
+                _("Wiping free space here is unsafe because any user can change this folder: %s"), pathname)
 
-    if fstype in ('ext4', 'btrfs'):
+    if fs_info.fstype in ('ext4', 'btrfs'):
         fitrim(pathname)
+
+    # FAT12/16/32 limit file size to 4 GB; exFAT does not. Linux reports
+    # 'vfat', while Windows reports 'FAT' or 'FAT32'.
+    is_fat = fs_info.fstype.lower() in ('vfat', 'fat', 'fat12', 'fat16', 'fat32')
 
     files = []
     total_bytes = 0
@@ -413,6 +479,7 @@ def wipe_path(pathname, idle=False):
 
         # Because FAT32 has a maximum file size of 4,294,967,295 bytes,
         # this loop is sometimes necessary to create multiple files.
+
         while True:
             try:
                 logger.debug(
@@ -425,8 +492,17 @@ def wipe_path(pathname, idle=False):
                 # Linux gives errno 122 Disk quota exceeded (EDQUOT)
                 if e.errno in (errno.EMFILE, errno.ENOSPC, errno.EDQUOT):
                     break
-                else:
-                    raise
+                if e.errno == errno.EROFS or \
+                        (IS_WINDOWS and e.errno in (errno.EACCES, errno.EPERM, errno.EEXIST)):
+                    # Read-only mount missed by the check above. POSIX always
+                    # reports it as EROFS, so EACCES/EPERM there are genuine
+                    # permission errors worth raising. On Windows, tempfile
+                    # retries a denied write and finally raises EEXIST.
+                    logger.warning(
+                        'Cannot create a temporary file for wiping; '
+                        'the file system may be read-only: %s', e)
+                    break
+                raise
 
             # Remember to delete
             files.append(f)
@@ -438,7 +514,7 @@ def wipe_path(pathname, idle=False):
             while True:
 
                 try:
-                    if fstype != 'vfat':
+                    if not is_fat:
                         f.write(blanks)
                     # On Ubuntu, the size of file should be less than
                     # 4GB. If not, there should be EFBIG error, so the
@@ -450,6 +526,8 @@ def wipe_path(pathname, idle=False):
                         break
 
                 except IOError as e:
+                    # Windows 11 25H2 (10.0.26220.9472) raised ENOSPC (not EFBIG) on
+                    # 4GB VFAT, but the `is_fat` guard above should prevent it.
                     if e.errno in (errno.ENOSPC, errno.EDQUOT):
                         if len(blanks) > 1:
                             # Try writing smaller blocks
@@ -458,6 +536,13 @@ def wipe_path(pathname, idle=False):
                             disk_full = True
                             break
                     elif e.errno == errno.EFBIG:
+                        # Normally the  `is_fat` guard stops first, so this
+                        # is a fallback.
+                        # Writes beyond a filesystem's s_maxbytes fail with
+                        # EFBIG (generic_write_check_limits).
+                        # VFAT sets s_maxbytes = 0xffffffff (4 GiB - 1).
+                        # RLIMIT_FSIZE produces the same errno on any FS.
+                        # EFBIG with VFAT verified with Linux 6.12.
                         break
                     else:
                         raise

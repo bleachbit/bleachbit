@@ -13,15 +13,7 @@ later.  See the COPYING file in the top-level directory.
     <xs:attribute name="os" use="optional">
       <xs:simpleType>
         <xs:restriction base="xs:string">
-          <xs:enumeration value="bsd"/>
-          <xs:enumeration value="darwin"/>
-          <xs:enumeration value="linux"/>
-          <xs:enumeration value="macos"/>
-          <xs:enumeration value="netbsd"/>
-          <xs:enumeration value="openbsd"/>
-          <xs:enumeration value="freebsd"/>
-          <xs:enumeration value="unix"/>
-          <xs:enumeration value="windows"/>
+          <xs:pattern value="!?(bsd|darwin|linux|macos|netbsd|openbsd|freebsd|unix|windows)(\s*,\s*!?(bsd|darwin|linux|macos|netbsd|openbsd|freebsd|unix|windows))*"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -113,7 +105,15 @@ later.  See the COPYING file in the top-level directory.
                   </xs:simpleContent>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="warning" type="xs:string" minOccurs="0" maxOccurs="1"/>
+              <xs:element name="warning" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="translators" type="xs:string"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
               <xs:element name="action" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:simpleContent>
@@ -137,6 +137,7 @@ later.  See the COPYING file in the top-level directory.
                             <xs:enumeration value="ini"/>
                             <xs:enumeration value="journald.clean"/>
                             <xs:enumeration value="json"/>
+                            <xs:enumeration value="macos.orphaned_framework_versions"/>
                             <xs:enumeration value="mozilla.favicons"/>
                             <xs:enumeration value="mozilla.url.history"/>
                             <xs:enumeration value="office_registrymodifications"/>

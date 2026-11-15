@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <cleaner id="zen">
@@ -25,11 +13,13 @@
   <description>Web browser</description>
   <running type="exe" os="unix" same_user="true">zen-browser</running>
   <running type="exe" os="windows" same_user="true">zen-browser.exe</running>
+  <running type="exe" os="macos" same_user="true">zen</running>
   <running type="pathname">~/.zen/*.default/lock</running>
   <running type="pathname">~/snap/zen/common/.zen/*.default/lock</running>
   <running type="pathname">~/.var/app/app.zen_browser.zen/.zen/*.default*/lock</running>
   <var name="base">
     <value os="windows">%AppData%\Zen</value>
+    <value os="macos">~/Library/Application Support/zen</value>
     <value os="linux">~/.zen</value>
     <value os="linux">~/snap/zen/common/.zen</value>
     <value os="linux">~/.var/app/app.zen_browser.zen/.zen</value>
@@ -38,6 +28,7 @@
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\Zen\Profiles\*</value>
+    <value search="glob" os="macos">~/Library/Application Support/zen/Profiles/*</value>
     <value search="glob" os="linux">~/.zen/*</value>
     <value search="glob" os="linux">~/snap/zen/common/.zen/*</value>
     <value search="glob" os="linux">~/.var/app/app.zen_browser.zen/.zen/*</value>
@@ -54,12 +45,13 @@
     <label>Cache</label>
     <description>Delete the cache</description>
     <!--
-This Linux path is whitelisted under the System - Cache cleaner, so it is not
-redundant. Also, this Linux path contains the cache2 and OfflineCache directories.
+This Linux path is whitelisted by the System - Cache cleaner, so it is not
+redundant. It also contains the cache2 and OfflineCache directories.
 -->
     <action command="delete" search="walk.all" path="~/.cache/zen/"/>
     <action command="delete" search="walk.all" path="~/snap/zen/common/.zen/mozilla/"/>
     <action command="delete" search="walk.all" path="~/.var/app/app.zen_browser.zen/cache/zen/"/>
+    <action command="delete" search="walk.all" path="~/Library/Caches/zen/Profiles/*/" os="macos"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\OfflineCache"/>
@@ -81,6 +73,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
+    <action command="delete" search="glob" path="~/Library/Logs/DiagnosticReports/zen-*.ips" os="macos"/>
     <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
   </option>
   <option id="forms">
@@ -93,18 +86,19 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
     <warning>This option will delete your saved passwords.</warning>
-    <!-- http://kb.mozillazine.org/Password_Manager -->
+    <!-- https://kb.mozillazine.org/Password_Manager -->
     <action command="delete" search="file" path="$$profile$$/signons.txt"/>
     <action command="delete" search="file" path="$$profile$$/signons2.txt"/>
     <action command="delete" search="file" path="$$profile$$/signons3.txt"/>
     <action command="delete" search="file" path="$$profile$$/signons.sqlite"/>
     <action command="delete" search="file" path="$$profile$$/logins.json"/>
+    <action command="delete" search="file" path="$$profile$$/logins-backup.json"/>
   </option>
   <option id="session">
     <label>Session</label>
     <description>Previously open tabs and windows</description>
     <!--
-example names
+Example names
 sessionstore.js
 sessionstore.jsonlz4
 sessionstore.bak
@@ -125,6 +119,8 @@ sessionstore-backups/recovery.jsonlz4
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/recovery.bak*"/>
     <action command="delete" search="file" path="$$profile$$/sessionstore-backups/previous.bak"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/upgrade.js*-20*"/>
+    <action command="delete" search="file" path="$$profile$$/zen-sessions.jsonlz4"/>
+    <action command="delete" search="glob" path="$$profile$$/zen-sessions-backup/*"/>
   </option>
   <option id="site_data">
     <label>Site data</label>
@@ -132,11 +128,14 @@ sessionstore-backups/recovery.jsonlz4
     <action command="delete" search="walk.all" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="glob" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/storage.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/serviceworker.txt"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
     <description>Settings for individual sites</description>
     <action command="delete" search="file" path="$$profile$$/content-prefs.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/permissions.sqlite"/>
   </option>
   <option id="url_history">
     <label>URL history</label>
@@ -150,10 +149,12 @@ sessionstore-backups/recovery.jsonlz4
     <!-- Firefox 3 introduced downloads.sqlite and places.sqlite -->
     <action command="delete" search="file" path="$$profile$$/downloads.sqlite"/>
     <action command="mozilla.url.history" search="file" path="$$profile$$/places.sqlite"/>
-    <!-- Firefox 78 (or probably some previous version) moved icons from places.sqlite to favicons.sqlite -->
+    <!-- Firefox 78 (or earlier) moved icons from places.sqlite to favicons.sqlite -->
     <action command="mozilla.favicons" search="file" path="$$profile$$/favicons.sqlite"/>
     <!-- Firefox 108 has alternative services with visited domains -->
     <action command="delete" search="file" path="$$profile$$/AlternateServices.txt"/>
+    <!-- Firefox 148 has AlternateServices.bin instead of .txt -->
+    <action command="delete" search="file" path="$$profile$$/AlternateServices.bin"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>

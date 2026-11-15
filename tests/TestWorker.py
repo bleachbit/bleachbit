@@ -13,6 +13,7 @@ import errno
 import os
 import sqlite3
 import tempfile
+import time
 from unittest import mock
 
 from tests import TestCleaner, common
@@ -21,7 +22,8 @@ import bleachbit
 from bleachbit import CLI, Command, FileUtilities
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import backends
-from bleachbit.Worker import Worker
+from bleachbit.Process import process_cache
+from bleachbit.Worker import Worker, format_minutes_remaining
 
 if bleachbit.IS_WINDOWS:
     import win32con
@@ -168,6 +170,7 @@ class LockedAction(ActionProvider):
     def get_commands(self):
         # Open the file with a blocking handle that allows read/write but blocks delete.
         # This causes delete() to truncate and mark for deletion. Windows only.
+        # pylint: disable-next=possibly-used-before-assignment
         share_mode = win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE
         handle = _open_blocking_handle(self.pathname, share_mode)
         from bleachbit.FileUtilities import getsize
@@ -175,8 +178,9 @@ class LockedAction(ActionProvider):
         yield Command.Delete(self.pathname)
         assert os.path.exists(self.pathname)
         fsize = getsize(self.pathname)
-        if not fsize == 0:  # File should be truncated to 0 bytes
+        if fsize != 0:  # File should be truncated to 0 bytes
             raise RuntimeError('Locked file has size %dB (not 0B)' % fsize)
+        # pylint: disable-next=possibly-used-before-assignment
         win32file.CloseHandle(handle)
 
         # Now that the file is not locked, admin privileges
@@ -253,6 +257,35 @@ class WorkerTestCase(common.BleachbitTestCase):
         elif bleachbit.IS_WINDOWS:
             self.assertEqual(worker.total_bytes, bytes_expected_nt)
             self.assertEqual(worker.total_deleted, count_deleted_nt)
+
+    def test_run_invalidates_process_cache(self):
+        """Each run rescans instead of reusing a cached process list"""
+        missing = os.path.join(self.tempdir, 'does-not-exist')
+        backends['test'] = TestCleaner.action_to_cleaner(
+            f'<action command="delete" search="file" path="{missing}"/>')
+        self.addCleanup(backends.pop, 'test', None)
+        process_cache.processes = ('stale',)
+        process_cache.last_scan_time = time.time()
+        self.addCleanup(process_cache.invalidate)
+
+        for _dummy in Worker(CLI.CliCallback(), True, {'test': ['option1']}).run():
+            pass
+
+        self.assertIsNone(process_cache.last_scan_time)
+        self.assertEqual(process_cache.processes, ())
+
+    def test_format_minutes_remaining(self):
+        """Test format_minutes_remaining() for issue #2305"""
+        # The placeholder is substituted normally.
+        self.assertEqual(format_minutes_remaining(
+            "cooking for %d mins", 5), "cooking for 5 mins")
+        # A translation without a placeholder (e.g., some Arabic and
+        # Hebrew plural forms) is shown as-is.
+        so_close = "almost done, like actually"
+        self.assertEqual(format_minutes_remaining(so_close, 0), so_close)
+        # A stray '%' that cannot be formatted must not crash either.
+        self.assertEqual(format_minutes_remaining("100%| done", 1),
+                         "100%| done")
 
     def test_AccessDenied(self):
         """Test Worker using Action.AccessDeniedAction"""
@@ -374,20 +407,20 @@ class WorkerTestCase(common.BleachbitTestCase):
         """Test for deep scan"""
 
         # load cleaners from XML
-        import bleachbit.CleanerML
-        list(bleachbit.CleanerML.load_cleaners())
+        from bleachbit import CleanerML
+        list(CleanerML.load_cleaners())
 
         # DeepScan itself is tested elsewhere, so replace it here
-        import bleachbit.DeepScan
-        SaveDeepScan = bleachbit.DeepScan.DeepScan
+        from bleachbit import DeepScan
+        SaveDeepScan = DeepScan.DeepScan
         self.scanned = 0
         parent = self
 
         class MyDeepScan:
             def __init__(self, searches):
-                for (path, searches) in searches.items():
+                for (path, path_searches) in searches.items():
                     parent.assertEqual(path, os.path.expanduser('~'))
-                    for s in searches:
+                    for s in path_searches:
                         parent.assertIn(
                             s.regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
 
@@ -395,7 +428,7 @@ class WorkerTestCase(common.BleachbitTestCase):
                 parent.scanned += 1
                 yield True
 
-        bleachbit.DeepScan.DeepScan = MyDeepScan
+        DeepScan.DeepScan = MyDeepScan
 
         # test
         operations = {'deepscan': ['thumbs_db']}
@@ -406,7 +439,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         self.assertEqual(1, self.scanned)
 
         # clean up
-        bleachbit.DeepScan.DeepScan = SaveDeepScan
+        DeepScan.DeepScan = SaveDeepScan
 
     def test_multiple_options(self):
         """Test one cleaner with two options"""

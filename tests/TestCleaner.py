@@ -17,7 +17,7 @@ from unittest import mock
 from xml.dom.minidom import parseString
 
 import bleachbit
-from bleachbit import IS_WINDOWS, IS_POSIX
+from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, IS_MAC
 from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, System, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
 from bleachbit.FileUtilities import extended_path_undo
@@ -54,7 +54,7 @@ def actions_to_cleaner(action_strs):
 def register_all_cleaners():
     """Register all cleaners for testing; leaves winapp2.ini in the shared personal_cleaners_dir"""
     if IS_WINDOWS:
-        from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
+        from tests.TestWinapp import get_winapp2
 
         os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
         print(f"personal_cleaners_dir: {bleachbit.personal_cleaners_dir}")
@@ -422,6 +422,8 @@ class CleanerTestCase(common.BleachbitTestCase):
             def __exit__(self, *exc):
                 return False
 
+        # The nesting is the scaffolding that patches the filesystem.
+        # pylint: disable-next=too-many-nested-blocks
         try:
             glob.iglob = lambda path, *args, **kwargs: []
             os.path.exists = lambda path: False
@@ -492,9 +494,11 @@ class CleanerTestCase(common.BleachbitTestCase):
             with mock.patch('os.path.expanduser',
                             lambda path, home=home: path.replace('~', home, 1)):
                 cleaner.init_whitelist()
-            self.assertTrue(cleaner.whitelisted(home + '/.cache/mozilla/x'), home)
+            self.assertTrue(cleaner.whitelisted(
+                home + '/.cache/mozilla/x'), home)
             self.assertTrue(cleaner.whitelisted(home + '/.cache/kwin/y'), home)
-            self.assertFalse(cleaner.whitelisted(home + '/.cache/other/z'), home)
+            self.assertFalse(cleaner.whitelisted(
+                home + '/.cache/other/z'), home)
             self.assertFalse(cleaner.whitelisted('/tmp/nope'), home)
 
     @common.skipIfWindows
@@ -594,3 +598,40 @@ class CleanerTestCase(common.BleachbitTestCase):
 
         # Restore the original settings.
         options.set_custom_paths(original_custom_paths)
+
+    def test_system_options_platform(self):
+        """Test that System cleaner options match the current platform"""
+        options_ids = [o[0] for o in System().get_options()]
+
+        has_dns_flush = IS_WINDOWS
+        if IS_LINUX:
+            from bleachbit.Unix import can_flush_dns
+            has_dns_flush = can_flush_dns()
+        from bleachbit.GtkShim import gtk_may_be_available
+
+        cases = (
+            ('cache', IS_POSIX),
+            ('clipboard', IS_WINDOWS or gtk_may_be_available()),
+            ('custom', True),
+            ('desktop_entry', IS_POSIX and not IS_MAC),
+            ('dns_cache', has_dns_flush),
+            ('empty_space', True),
+            ('localizations', IS_POSIX and not IS_MAC),
+            ('logs', IS_WINDOWS),
+            ('memory', IS_LINUX),
+            ('memory_dump', IS_WINDOWS),
+            ('muicache', IS_WINDOWS),
+            ('prefetch', IS_WINDOWS),
+            ('recent_documents', IS_POSIX),
+            ('recycle_bin', IS_WINDOWS),
+            ('rotated_logs', IS_POSIX),
+            ('tmp', True),
+            ('trash', IS_POSIX),
+            ('updates', IS_WINDOWS),
+        )
+        for option_id, expected in cases:
+            with self.subTest(option_id=option_id):
+                if expected:
+                    self.assertIn(option_id, options_ids)
+                else:
+                    self.assertNotIn(option_id, options_ids)

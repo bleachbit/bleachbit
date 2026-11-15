@@ -26,6 +26,7 @@ from bleachbit.CleanerML import (
     list_cleanerml_files,
     load_cleaners,
     pot_fragment)
+from bleachbit.General import os_match as general_os_match
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -321,13 +322,60 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertFalse(xmlcleaner.os_match('linux', 'darwin'))
         self.assertFalse(xmlcleaner.os_match('windows', 'darwin'))
 
+        # as FreeBSD
+        self.assertTrue(xmlcleaner.os_match('unix', 'freebsd'))
+        self.assertTrue(xmlcleaner.os_match('bsd', 'freebsd'))
+        self.assertTrue(xmlcleaner.os_match('freebsd', 'freebsd'))
+        self.assertFalse(xmlcleaner.os_match('linux', 'freebsd'))
+        self.assertFalse(xmlcleaner.os_match('windows', 'freebsd'))
+
         # "darwin" is accepted as a deprecated alias for "macos"
         with self.assertLogs('bleachbit.General', level='WARNING'):
             self.assertTrue(xmlcleaner.os_match('darwin', 'darwin'))
 
+        # comma-separated list with negation (positive tokens OR'd, negative tokens excluded)
+        cases = [
+            ('unix,!macos', 'linux', True),
+            ('unix,!macos', 'freebsd', True),
+            ('unix,!macos', 'darwin', False),
+            ('unix,!macos', 'win32', False),
+            ('!macos', 'win32', True),
+            ('linux , unix', 'linux', True),
+            ('!macos', 'darwin', False),
+            ('linux,freebsd', 'linux', True),
+            ('linux,freebsd', 'freebsd', True),
+            ('linux,freebsd', 'darwin', False),
+            ('linux,freebsd', 'win32', False),
+            ('!macos,!windows', 'linux', True),
+            ('!macos,!windows', 'darwin', False),
+            ('!macos,!windows', 'win32', False),
+        ]
+        for os_attr, platform, expected in cases:
+            with self.subTest(os=os_attr, platform=platform):
+                self.assertEqual(expected,
+                                 xmlcleaner.os_match(os_attr, platform))
+
+        # unrecognized tokens log a warning and fail closed: a positive
+        # token is a non-match and a negated token disqualifies
+        unknown_cases = [
+            ('posix', 'linux', False),
+            ('posix', 'win32', False),
+            ('!posix', 'win32', False),
+            ('!hal9000', 'linux', False),
+            ('linux,hal9000', 'linux', True),
+            ('windows,!hal9000', 'win32', False),
+        ]
+        for os_attr, platform, expected in unknown_cases:
+            with self.subTest(os=os_attr, platform=platform):
+                with self.assertLogs('bleachbit.General', level='WARNING'):
+                    self.assertEqual(expected,
+                                     xmlcleaner.os_match(os_attr, platform))
+
         # as unknown operating system
-        with self.assertRaises(RuntimeError):
+        with self.assertRaisesRegex(RuntimeError, 'Unknown operating system: hal9000'):
             xmlcleaner.os_match('linux', 'hal9000')
+        with self.assertRaisesRegex(RuntimeError, 'Unknown operating system: hal9000'):
+            xmlcleaner.os_match('!macos', 'hal9000')
 
     def test_option_os_filter(self):
         """Unit test for <option os="..."> filtering
@@ -379,6 +427,39 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             self.assertNotIn('windows_only', xmlc.cleaner.options)
             self.assertNotIn('linux_only', xmlc.cleaner.options)
             self.assertIn('mac_only', xmlc.cleaner.options)
+
+    def _load_real_cleaner_as(self, filename, platform):
+        """Load a cleaner from the cleaners directory as if on another platform
+
+        CleanerML.os_match() calls General.os_match() with the real
+        platform, so the call is replaced to use the given platform.
+        """
+        def os_match_for_platform(os_str, _platform=None):
+            return general_os_match(os_str, platform)
+
+        with mock.patch('bleachbit.CleanerML.general_os_match',
+                        os_match_for_platform):
+            return CleanerML(os.path.join('cleaners', filename)).cleaner
+
+    def test_teamviewer_options_by_platform(self):
+        """The TeamViewer cleaner has the options of each platform
+
+        macOS has the cache, the cookies and the site data. Windows keeps
+        the logs and the most recently used list. Linux does not load the
+        cleaner.
+        """
+        mac = self._load_real_cleaner_as('teamviewer.xml', 'darwin')
+        self.assertEqual(sorted(mac.options), [
+                         'cache', 'cookies', 'site_data'])
+        # The framework adds an action of its own for the localizations.
+        self.assertEqual(
+            sum(1 for option_id, __action in mac.actions
+                if option_id == 'cache'), 3)
+        windows = self._load_real_cleaner_as('teamviewer.xml', 'win32')
+        self.assertEqual(sorted(windows.options), ['logs', 'mru'])
+        linux = self._load_real_cleaner_as('teamviewer.xml', 'linux')
+        self.assertEqual(sorted(linux.options), [])
+        self.assertEqual(linux.actions, [])
 
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""

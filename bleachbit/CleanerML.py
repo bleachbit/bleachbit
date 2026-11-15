@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -146,7 +133,7 @@ class CleanerML:
         """Create cleaner from XML in pathname.
 
         If xlate_cb is set, use it as a callback for each
-        translate-able string.
+        translate-able string (untranslated, as in the XML).
 
         trusted is False for cleaners from user-writable directories;
         their command-execution actions are ignored.
@@ -244,16 +231,18 @@ class CleanerML:
 
     def handle_cleaner_label(self, label):
         """<label> element under <cleaner>"""
-        self.cleaner.name = _(_gettext_etree(label))
+        msgid = _gettext_etree(label)
+        self.cleaner.name = _(msgid)
         translate = label.attrib.get('translate', '')
         if translate and boolstr_to_bool(translate):
-            self.xlate_cb(self.cleaner.name)
+            self.xlate_cb(msgid)
 
     def handle_cleaner_description(self, description):
         """<description> element under <cleaner>"""
-        self.cleaner.description = _(_gettext_etree(description))
+        msgid = _gettext_etree(description)
+        self.cleaner.description = _(msgid)
         translators = description.attrib.get('translators', '')
-        self.xlate_cb(self.cleaner.description, translators)
+        self.xlate_cb(msgid, translators)
 
     def handle_cleaner_running(self, running_elements):
         """<running> element under <cleaner>"""
@@ -300,22 +289,26 @@ class CleanerML:
 
     def handle_cleaner_option_label(self, label):
         """<label> element under <option>"""
-        self.option_name = _(_gettext_etree(label))
+        msgid = _gettext_etree(label)
+        self.option_name = _(msgid)
         translate = label.attrib.get('translate', '')
         translators = label.attrib.get('translators', '')
         if not translate or boolstr_to_bool(translate):
-            self.xlate_cb(self.option_name, translators)
+            self.xlate_cb(msgid, translators)
 
     def handle_cleaner_option_description(self, description):
         """<description> element under <option>"""
-        self.option_description = _(_gettext_etree(description))
+        msgid = _gettext_etree(description)
+        self.option_description = _(msgid)
         translators = description.attrib.get('translators', '')
-        self.xlate_cb(self.option_description, translators)
+        self.xlate_cb(msgid, translators)
 
     def handle_cleaner_option_warning(self, warning):
         """<warning> element under <option>"""
-        self.option_warning = _(_gettext_etree(warning))
-        self.xlate_cb(self.option_warning)
+        msgid = _gettext_etree(warning)
+        self.option_warning = _(msgid)
+        translators = warning.attrib.get('translators', '')
+        self.xlate_cb(msgid, translators)
 
     def handle_cleaner_option_action(self, action_node):
         """<action> element under <option>"""
@@ -329,20 +322,17 @@ class CleanerML:
                 "ignoring '%s' action from untrusted cleaner '%s'",
                 command, self.cleaner.id or '?')
             return
-        provider = None
-        for actionplugin in ActionProvider.plugins:
-            if actionplugin.action_key == command:
-                provider = actionplugin(
-                    _ETActionElementAdapter(action_node), self.vars)
-        if provider is None:
+        actionplugin = ActionProvider.plugins_by_key.get(command)
+        if actionplugin is None:
             raise RuntimeError(f"Invalid command '{command}'")
+        provider = actionplugin(
+            _ETActionElementAdapter(action_node), self.vars)
         self.cleaner.add_action(self.option_id, provider)
 
     def handle_localizations(self, localization_nodes):
         """<localizations> element under <cleaner>"""
         if not IS_POSIX:
             return
-        # pylint: disable=import-outside-toplevel
         from bleachbit import Unix
         for localization_node in localization_nodes:
             for child_element in list(localization_node):
@@ -373,6 +363,7 @@ class CleanerML:
             elif search_type == 'winreg':
                 if not IS_WINDOWS:
                     continue
+                # pylint: disable-next=possibly-used-before-assignment
                 value_list = read_registry_key(value_element.attrib.get(
                     'path', ''), value_element.attrib.get('name', ''))
                 if value_list is None:

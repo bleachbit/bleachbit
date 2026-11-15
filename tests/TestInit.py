@@ -9,6 +9,9 @@
 Test cases for __init__
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import shutil
 import tempfile

@@ -8,6 +8,9 @@
 
 """
 Build BleachBit tarballs
+
+setup.py only builds the source distribution (sdist); it installs nothing.
+Installation is handled by the Makefile (Linux) and windows/setup.py.
 """
 
 # standard library
@@ -20,26 +23,11 @@ import bleachbit
 
 APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had."
 
-data_files = []
-if bleachbit.IS_LINUX:
-    data_files.append(('/usr/share/applications',
-                      ['./org.bleachbit.BleachBit.desktop']))
-    data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
-elif bleachbit.IS_NETBSD:
-    data_files.append(('/usr/pkg/share/applications',
-                      ['./org.bleachbit.BleachBit.desktop']))
-    data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
-elif bleachbit.IS_BSD:
-    data_files.append(
-        ('/usr/local/share/applications', ['./org.bleachbit.BleachBit.desktop']))
-    data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))
-
 
 def run_setup(args=None):
     """Run setup from setuptools"""
     if args is None:
         args = {}
-    # pylint: disable=import-outside-toplevel
     from setuptools import setup
     setup(name='bleachbit',
           version=bleachbit.APP_VERSION,

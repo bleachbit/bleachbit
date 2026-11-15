@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 Basic GUI code
@@ -53,6 +53,7 @@ def browse_folder(parent, title, multiple, stock_button):
     """Ask the user to select a folder.  Return the full path or None."""
 
     if IS_WINDOWS and not os.getenv('BB_NATIVE'):
+        # pylint: disable-next=possibly-used-before-assignment
         ret = Windows.browse_folder(parent, title)
         return [ret] if multiple and not ret is None else ret
 

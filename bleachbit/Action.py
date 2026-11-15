@@ -17,7 +17,7 @@ from itertools import product
 
 # first party imports
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
-from bleachbit import FS_SCAN_RE_FLAGS, IS_POSIX, IS_WINDOWS
+from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Cookie import load_keep_list
 from bleachbit.Language import get_text as _
@@ -76,7 +76,7 @@ def expand_multi_var(s, variables):
 
 #
 # Plugin framework
-# http://martyalchin.com/2008/jan/10/simple-plugin-framework/
+# https://martyalchin.com/2008/jan/10/simple-plugin-framework/
 #
 
 
@@ -87,8 +87,13 @@ class PluginMount(type):
     def __init__(cls, _name, _bases, _attrs):
         if not hasattr(cls, 'plugins'):
             cls.plugins = []
+            cls.plugins_by_key = {}
         else:
             cls.plugins.append(cls)
+            # Indexed here, not on demand: Cleaner and tests register later.
+            action_key = getattr(cls, 'action_key', None)
+            if action_key is not None:
+                cls.plugins_by_key[action_key] = cls
 
 
 class ActionProvider(metaclass=PluginMount):
@@ -405,6 +410,23 @@ class ChromeFavicons(FileActionProvider):
                 path,
                 Special.delete_chrome_favicons,
                 CLEAN_FILE_LABEL)
+
+
+class ChromeOrphanedFrameworkVersions(FileActionProvider):
+
+    """Action to remove orphaned old version folders left behind under
+    a Chromium-based browser's Contents/Frameworks/*.framework/Versions/
+    on macOS, keeping only the one the 'Current' symlink points to."""
+    action_key = 'macos.orphaned_framework_versions'
+
+    def get_commands(self):
+        if not IS_MAC:
+            # This action only ever applies to macOS .app bundles;
+            # 'Unix' may not even be imported on other platforms.
+            return
+        for versions_dir in self.get_paths():
+            for orphan_path in Unix.orphaned_framework_versions(versions_dir):
+                yield Command.Delete(orphan_path)
 
 
 class ChromeHistory(FileActionProvider):

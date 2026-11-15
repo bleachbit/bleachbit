@@ -15,14 +15,29 @@ fixed ``${proname}`` -> ``${prodname}`` in Italian).
 For format-string validation run ``make -C po tests``.
 """
 
+import ast
 import os
 import re
 import unittest
+import warnings
 
 _PO_DIR = os.path.join(os.path.dirname(__file__), '..', 'po')
 
 # Matches ${name} placeholders used in NSIS strings, e.g. ${prodname}.
 _NSIS_PLACEHOLDER = re.compile(r'\$\{([A-Za-z_][A-Za-z0-9_]*)\}')
+
+
+def _parse_po_string(token):
+    """Return the decoded PO string literal from the raw token."""
+    token = token.strip()
+    if not token:
+        return ''
+    with warnings.catch_warnings():
+        # An invalid escape sequence (e.g. ``\q``) raises SyntaxWarning,
+        # which CI turns into an error under PYTHONWARNINGS=error. Decode
+        # it the way Python does (keeping the backslash) instead.
+        warnings.simplefilter('ignore')
+        return ast.literal_eval(token)
 
 
 def _parse_po(path):
@@ -34,42 +49,54 @@ def _parse_po(path):
     msgctxt = None
     msgid = None
     msgstr = None
+    fuzzy = False
     field = None  # which multiline field we are accumulating into
-
-    def _unescape(s):
-        return s.replace('\\"', '"').replace('\\n', '\n').replace('\\t', '\t')
 
     results = []
     with open(path, 'r', encoding='utf-8') as f:
-        for line in f:
-            line = line.rstrip('\n')
-            if line.startswith('msgctxt '):
-                msgctxt = _unescape(line[len('msgctxt '):].strip().strip('"'))
-                field = None
-            elif line.startswith('msgid '):
-                msgid = _unescape(line[len('msgid '):].strip().strip('"'))
-                field = 'msgid'
-            elif line.startswith('msgstr '):
-                msgstr = _unescape(line[len('msgstr '):].strip().strip('"'))
-                field = 'msgstr'
-            elif line.startswith('"'):
-                text = _unescape(line.strip().strip('"'))
-                if field == 'msgid':
-                    msgid += text
-                elif field == 'msgstr':
-                    msgstr += text
-            elif line == '':
-                if msgid is not None and msgstr:
+        for raw_line in [*f, '\n']:
+            line = raw_line.rstrip('\n')
+            if not line.strip():
+                if msgid and msgstr and not fuzzy:
                     results.append((msgctxt, msgid, msgstr))
                 msgctxt, msgid, msgstr = None, None, None
+                fuzzy = False
                 field = None
-    if msgid is not None and msgstr:
-        results.append((msgctxt, msgid, msgstr))
+            elif line.startswith('#,') and 'fuzzy' in line:
+                fuzzy = True
+            elif line.startswith('#'):
+                continue
+            elif line.startswith('msgctxt '):
+                msgctxt = _parse_po_string(line[len('msgctxt '):])
+                field = 'msgctxt'
+            elif line.startswith('msgid '):
+                msgid = _parse_po_string(line[len('msgid '):])
+                field = 'msgid'
+            elif line.startswith('msgstr '):
+                msgstr = _parse_po_string(line[len('msgstr '):])
+                field = 'msgstr'
+            elif line.startswith('"'):
+                text = _parse_po_string(line)
+                if field == 'msgctxt' and msgctxt is not None:
+                    msgctxt += text
+                elif field == 'msgid' and msgid is not None:
+                    msgid += text
+                elif field == 'msgstr' and msgstr is not None:
+                    msgstr += text
     return results
 
 
 class TestTranslations(unittest.TestCase):
     """Validate .po files beyond what msgfmt --check covers."""
+
+    def _po_entries(self, po_path, failures):
+        """Parse a .po file, recording a clean failure if it is malformed."""
+        try:
+            return _parse_po(po_path)
+        except (SyntaxError, ValueError) as e:
+            failures.append(
+                f"{os.path.basename(po_path)}: parse error: {e!r}")
+            return []
 
     def _po_files(self):
         po_dir = os.path.abspath(_PO_DIR)
@@ -83,7 +110,7 @@ class TestTranslations(unittest.TestCase):
         """
         failures = []
         for po_path in self._po_files():
-            for msgctxt, msgid, msgstr in _parse_po(po_path):
+            for msgctxt, msgid, msgstr in self._po_entries(po_path, failures):
                 if not msgctxt or not msgctxt.startswith('nsis:'):
                     continue
                 expected = sorted(_NSIS_PLACEHOLDER.findall(msgid))
@@ -95,6 +122,28 @@ class TestTranslations(unittest.TestCase):
         self.assertEqual([], failures,
                          "NSIS placeholder mismatch in translations:\n" +
                          "\n".join(failures))
+
+    def test_no_excess_backslash_escapes(self):
+        """Translations must not contain excess backslash escapes.
+
+        Regression test for excess escaping in Indonesian and Sinhala, where
+        quotes or newlines had extra backslashes (``\\\\\\"`` or ``\\\\\\n``).
+        """
+        failures = []
+        for po_path in self._po_files():
+            for msgctxt, msgid, msgstr in self._po_entries(po_path, failures):
+                if '\\"' in msgstr or '\\\n' in msgstr:
+                    failures.append(
+                        f"{os.path.basename(po_path)}: msgctxt={msgctxt!r} "
+                        f"msgid={msgid!r} msgstr={msgstr!r}")
+        self.assertEqual([], failures,
+                         "Unexpected backslash escapes in translations:\n" +
+                         "\n".join(failures))
+
+    def test_parse_po_string_decodes_escapes(self):
+        """PO string parser decodes escaped quotes and backslash-newline."""
+        self.assertEqual(_parse_po_string('"Say \\"hello\\""'), 'Say "hello"')
+        self.assertEqual(_parse_po_string('"Line 1\\\\\\n"'), 'Line 1\\\n')
 
 
 if __name__ == '__main__':

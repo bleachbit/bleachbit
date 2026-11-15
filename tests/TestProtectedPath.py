@@ -8,6 +8,9 @@
 Test case for module ProtectedPath
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import tempfile
 import unittest
@@ -16,6 +19,9 @@ from unittest import mock
 from functools import wraps
 
 from tests import common
+from tests.TestCleaner import register_all_cleaners
+from tests.TestPathUtils import RelativeSuffixAssertions
+
 from bleachbit.ProtectedPath import (
     _check_exempt,
     _get_protected_path_xml,
@@ -27,13 +33,8 @@ from bleachbit.ProtectedPath import (
 from bleachbit import ProtectedPath as protected_path_module
 from bleachbit import get_share_path
 from bleachbit import IS_MAC, IS_WINDOWS, IS_POSIX
-from bleachbit.PathUtils import (
-    expand_path,
-    normalize_path,
-    path_has_relative_suffix,
-)
+from bleachbit.PathUtils import expand_path, normalize_path
 from bleachbit.Cleaner import backends
-from tests.TestCleaner import register_all_cleaners
 
 
 CASE_METHODS = (
@@ -54,7 +55,7 @@ def requirePPXML(test_func):
     return wrapper
 
 
-class ProtectedPathTestCase(common.BleachbitTestCase):
+class ProtectedPathTestCase(RelativeSuffixAssertions, common.BleachbitTestCase):
     """Test case for ProtectedPath module"""
 
     def setUp(self):
@@ -99,14 +100,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
 
     def test_path_has_relative_suffix(self):
         """Test path-component matching for relative protected paths"""
-        self.assertTrue(path_has_relative_suffix('/home/user/.git', '.git'))
-        self.assertTrue(path_has_relative_suffix('.git', '.git'))
-        self.assertFalse(path_has_relative_suffix(
-            '/home/user/not-git', '.git'))
-        self.assertFalse(path_has_relative_suffix(
-            '/home/user/.gitignore', '.git'))
-        self.assertTrue(path_has_relative_suffix(
-            '/home/user/.GIT', '.git', case_sensitive=False))
+        self.assert_relative_suffix_matches_components()
 
     def test_get_protected_path_xml(self):
         """Test that protected path XML file can be found"""

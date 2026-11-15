@@ -24,15 +24,23 @@ from unittest.mock import MagicMock, Mock, patch
 warnings.filterwarnings("ignore", message="urllib3 v2 only supports OpenSSL")
 
 # third party imports
+# pylint: disable-next=wrong-import-position
 import requests
 
 # first party imports
+# pylint: disable-next=wrong-import-position
 import bleachbit
+# pylint: disable-next=wrong-import-position
 from tests import common
+# pylint: disable-next=wrong-import-position
 from bleachbit import IS_WINDOWS
+# pylint: disable-next=wrong-import-position
 from bleachbit.FileUtilities import delete
+# pylint: disable-next=wrong-import-position
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
-                               get_ip_for_url, get_user_agent, unset_sslkeylogfile)
+                               get_ip_for_url, get_user_agent,
+                               unset_sslkeylogfile, _coarsen_os_version,
+                               _coarsen_windows_build, _version_major_minor)
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +87,8 @@ class NetworkTestCase(common.BleachbitTestCase):
         super().setUpClass()
         cls._httpd = http.server.ThreadingHTTPServer(
             ('127.0.0.1', 0), _StatusCodeHandler)
+        # tearDownClass is skipped when setUpClass raises
+        cls.addClassCleanup(cls._httpd.server_close)
         cls._server_thread = threading.Thread(
             target=cls._httpd.serve_forever, daemon=True)
         cls._server_thread.start()
@@ -90,7 +100,6 @@ class NetworkTestCase(common.BleachbitTestCase):
     def tearDownClass(cls):
         cls._httpd.shutdown()
         cls._server_thread.join(timeout=5)
-        cls._httpd.server_close()
         super().tearDownClass()
 
     def test_unset_sslkeylogfile(self):
@@ -188,6 +197,74 @@ class NetworkTestCase(common.BleachbitTestCase):
         logger.debug("user agent = '%s'", agent)
         self.assertIsString(agent)
 
+    def test_version_major_minor(self):
+        """Unit test for _version_major_minor()"""
+        cases = (
+            ('6.18.50_1', '6.18'),
+            ('7.0.12+deb14.1', '7.0'),
+            ('6.12.3-061203-generic', '6.12'),
+            ('15.1-STABLE', '15.1'),
+            ('2026-05-16', '2026-05'),
+            ('2026-05', '2026-05'),
+            ('20260402', '202604'),
+            ('20250302.0.316047', '202503'),
+            ('24.10', '24.10'),
+            ('6.12', '6.12'),
+        )
+        for version, expected in cases:
+            with self.subTest(version=version):
+                self.assertEqual(expected, _version_major_minor(version))
+
+    def test_coarsen_os_version(self):
+        """Unit test for _coarsen_os_version()"""
+        cases = (
+            ('arch 20081221.0.316047', 'arch 200812'),
+            ('artix 20081221', 'artix 200812'),
+            ('biglinux 2008-12-21', 'biglinux 2008-12'),
+            ('endeavouros 2008.12.21', 'endeavouros 2008.12'),
+            ('omarchy 4.0.0.r1854.g06e32d2', 'omarchy 4.0'),
+            ('opensuse-slowroll 20081221', 'opensuse-slowroll 200812'),
+            ('opensuse-tumbleweed 20081221', 'opensuse-tumbleweed 200812'),
+            ('ubuntu 24.10', 'ubuntu 24.10'),
+            ('Linux 7.0.12+deb14.1 (unknown distribution)', 'Linux 7.0'),
+            ('Linux 6.18.50_1 (unknown distribution)', 'Linux 6.18'),
+            ('Linux', 'Linux'),
+            ('FreeBSD 15.1-STABLE stable/15-n284829-192a5eeab8d1', 'FreeBSD 15.1'),
+            ('', ''),
+        )
+        for os_version, expected in cases:
+            with self.subTest(os_version=os_version):
+                self.assertEqual(expected,
+                                 _coarsen_os_version(os_version))
+
+    def test_coarsen_windows_build(self):
+        """Unit test for _coarsen_windows_build()"""
+        cases = (
+            ('10.0.27999', '10.0.26300'),
+            ('10.0.26461', '10.0.26300'),
+            ('10.0.22625', '10.0.22621'),
+            ('10.0.28000', '10.0.28000'),
+            ('10.0.22000', '10.0.22000'),
+            ('10.0.19045', '10.0.19045'),
+            ('10.0.10240', '10.0.10240'),
+            # Future builds beyond the newest known release keep two
+            # significant digits
+            ('10.0.28001', '10.0.28000'),
+            ('10.0.99999', '10.0.99000'),
+            ('11.0.100000', '11.0.100000'),
+            # Builds below the first known release are unchanged
+            ('6.1.7601', '6.1.7601'),
+            ('10.0.9', '10.0.9'),
+            ('10.0.2660', '10.0.2660'),
+            ('10.0', '10.0'),
+            ('10.0.26461.foo', '10.0.26461.foo'),
+            ('', ''),
+        )
+        for os_version, expected in cases:
+            with self.subTest(os_version=os_version):
+                self.assertEqual(expected,
+                                 _coarsen_windows_build(os_version))
+
     def test_fetch_url_nonretry(self):
         """Unit test for fetch_url() without retry"""
         status_codes = (200, 404)
@@ -251,6 +328,10 @@ class MissingPackagesTestCase(unittest.TestCase):
         with common.mock_missing_package(
                 'requests', 'urllib3',
                 clear_prefixes=('bleachbit.Network', 'bleachbit.Update')):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
             import bleachbit.Network as Network
             self.assertFalse(Network.HAVE_REQUESTS)
             with self.assertRaises(Network.RequestException):
@@ -261,5 +342,9 @@ class MissingPackagesTestCase(unittest.TestCase):
         with common.mock_missing_package(
                 'urllib3',
                 clear_prefixes=('bleachbit.Network',)):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
             import bleachbit.Network as Network
             self.assertFalse(Network.HAVE_URLLIB3)
