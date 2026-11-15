@@ -17,6 +17,7 @@ LibreWolf 150.0.1-1 installed by .deb from its official repository uses
   <description>Web browser</description>
   <running type="exe" os="unix" same_user="true">librewolf</running>
   <running type="exe" os="unix" same_user="true">librewolf-bin</running>
+  <running type="exe" os="windows" same_user="true">librewolf.exe</running>
   <running type="pathname">~/.librewolf/*/lock</running>
   <running type="pathname">~/.config/librewolf/librewolf/*/lock</running>
   <running type="pathname">~/.var/app/io.gitlab.librewolf-community/.librewolf/*/lock</running>
@@ -48,8 +49,11 @@ redundant. It also contains the cache2 and OfflineCache directories.
     <action command="delete" search="walk.all" path="~/.cache/librewolf/"/>
     <action command="delete" search="walk.all" path="~/.var/app/io.gitlab.librewolf-community/cache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\cache2"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\cache2.*.purge.bg_rm"/>
+    <action command="delete" search="glob" path="%LocalAppData%\librewolf\Profiles\*\cache2.*.purge.bg_rm"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\OfflineCache"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%\librewolf\Profiles\*\startupCache"/>
     <!--
 This file no longer exists in Firefox <=62
 
