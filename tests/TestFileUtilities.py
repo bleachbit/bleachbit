@@ -2645,13 +2645,18 @@ State=AAAA/wA...
         """Unit test for whitelisted()"""
         # FIXME: finish renaming whitelist to keep list
         # setup
-        keep_list = [('file', '/home/foo'), ('folder', '/home/folder')]
+        # With a drive on Windows, where /home alone is not absolute
+        home = os.path.join(os.path.abspath(os.sep), 'home')
+        keep_file = os.path.join(home, 'foo')
+        keep_folder = os.path.join(home, 'folder')
+        keep_folder_file = os.path.join(keep_folder, 'file')
+        keep_list = [('file', keep_file), ('folder', keep_folder)]
         options.set_whitelist_paths(keep_list)
         self.assertEqual(set(keep_list), set(options.get_whitelist_paths()))
 
         # test
         # '/' is system-critical and always kept, so it is excluded here
-        tests = ('', '/home/foo2', '/home/fo', '/home/', '/home')
+        tests = ('', keep_file + '2', keep_file[:-1], home + os.sep, home)
         for path in tests:
             self.assertFalse(whitelisted(
                 path), f"{path} should not be whitelisted")
@@ -2660,29 +2665,29 @@ State=AAAA/wA...
             whitelisted(None)
 
         # Verbatim of whitelisted.
-        self.assert_is_whitelisted('/home/foo')
-        self.assert_is_whitelisted('/home/folder')
+        self.assert_is_whitelisted(keep_file)
+        self.assert_is_whitelisted(keep_folder)
         if IS_POSIX:
             # Whitelisted + path separator.
-            self.assert_is_whitelisted('/home/folder/')
+            self.assert_is_whitelisted(keep_folder + os.sep)
             # File under whitelisted directory.
-            self.assert_is_whitelisted('/home/folder/file')
+            self.assert_is_whitelisted(keep_folder_file)
         # Same as explicit whitelisted, minus one character.
-        self.assertFalse(whitelisted('/home/folde'))
+        self.assertFalse(whitelisted(keep_folder[:-1]))
         # Same as explicit whitelisted, plus one character.
-        self.assertFalse(whitelisted('/home/folder2'))
+        self.assertFalse(whitelisted(keep_folder + '2'))
 
         # Test a blank whitelist.
         options.set_whitelist_paths([])
-        self.assertFalse(whitelisted('/home/foo'))
-        self.assertFalse(whitelisted('/home/folder'))
-        self.assertFalse(whitelisted('/home/folder/file'))
+        self.assertFalse(whitelisted(keep_file))
+        self.assertFalse(whitelisted(keep_folder))
+        self.assertFalse(whitelisted(keep_folder_file))
 
         # Remove the whitelist section from  the configuration.
         options.config.remove_section('whitelist/paths')
-        self.assertFalse(whitelisted('/home/foo'))
-        self.assertFalse(whitelisted('/home/folder'))
-        self.assertFalse(whitelisted('/home/folder/file'))
+        self.assertFalse(whitelisted(keep_file))
+        self.assertFalse(whitelisted(keep_folder))
+        self.assertFalse(whitelisted(keep_folder_file))
 
     def test_whitelisted_posix_system_critical(self):
         """System-critical POSIX paths are kept even with an empty keep list."""

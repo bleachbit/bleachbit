@@ -227,8 +227,10 @@ auto_hide = True
         o = bleachbit.Options.options
         # FIXME: finish renaming whitelist to keep list
         self.assertIsInstance(o.get_whitelist_paths(), list)
-        keep_list = [('file', '/home/foo'), ('folder', '/home'),
-                     ('file', '/home/unicode/кодирование')]
+        # abspath() adds the drive that Windows needs
+        keep_list = [('file', os.path.abspath('/home/foo')),
+                     ('folder', os.path.abspath('/home')),
+                     ('file', os.path.abspath('/home/unicode/кодирование'))]
         old_keep_list = o.get_whitelist_paths()
         o.config.remove_section('whitelist/paths')
         self.assertIsInstance(o.get_whitelist_paths(), list)
@@ -956,6 +958,8 @@ protected_path:/srv/other=2 = True
 
     def test_flush_mechanisms_timer_and_close(self):
         """Test that changes flush correctly via timer fire or explicit close()."""
+        keep_path = os.path.abspath('/tmp/a')
+        custom_path = os.path.abspath('/tmp/b')
         with mock.patch('bleachbit.Options.threading.Timer', FakeTimer):
             for commit_method in ['timer', 'close']:
                 with self.subTest(commit=commit_method):
@@ -979,8 +983,8 @@ protected_path:/srv/other=2 = True
                     with mock.patch('builtins.open', side_effect=AssertionError('unexpected flush')):
                         o.set('shred', True)
                         o.set_list('list_test', ['a', 'b'])
-                        o.set_whitelist_paths([('file', '/tmp/a')])
-                        o.set_custom_paths([('folder', '/tmp/b')])
+                        o.set_whitelist_paths([('file', keep_path)])
+                        o.set_custom_paths([('folder', custom_path)])
                         o.set_language('zz', True)
                         o.set_tree('system', 'cache', True)
                         o.remember_warning_preference('warn_key')
@@ -1003,9 +1007,9 @@ protected_path:/srv/other=2 = True
                     o3 = bleachbit.Options.Options()
                     self.assertTrue(o3.get('shred'))
                     self.assertEqual(['a', 'b'], o3.get_list('list_test'))
-                    self.assertEqual([('file', '/tmp/a')],
+                    self.assertEqual([('file', keep_path)],
                                      o3.get_whitelist_paths())
-                    self.assertEqual([('folder', '/tmp/b')],
+                    self.assertEqual([('folder', custom_path)],
                                      o3.get_custom_paths())
                     self.assertTrue(o3.get_language('zz'))
                     self.assertTrue(o3.get_tree('system', 'cache'))
@@ -1153,14 +1157,16 @@ protected_path:/srv/other=2 = True
         # when ConfigParser writes the .ini file.
         # https://github.com/bleachbit/bleachbit/issues/2082
 
+        # A drive on Windows, where /tmp alone is not absolute
+        tmp = os.path.join(os.path.abspath(os.sep), 'tmp')
         test_cases = [
-            ('surrogate', '/tmp/invalid_unicode_surrogate_\udce9'),
-            ('cjk', '/tmp/中文日本語한국어'),
-            ('european', '/tmp/àéïöüñçß'),
-            ('cyrillic', '/tmp/кодирование'),
-            ('arabic', '/tmp/العربية'),
-            ('emoji', '/tmp/🎉🚀💻'),
-            ('mixed', '/tmp/mixed_中文_àéï_\udce9'),
+            ('surrogate', os.path.join(tmp, 'invalid_unicode_surrogate_\udce9')),
+            ('cjk', os.path.join(tmp, '中文日本語한국어')),
+            ('european', os.path.join(tmp, 'àéïöüñçß')),
+            ('cyrillic', os.path.join(tmp, 'кодирование')),
+            ('arabic', os.path.join(tmp, 'العربية')),
+            ('emoji', os.path.join(tmp, '🎉🚀💻')),
+            ('mixed', os.path.join(tmp, 'mixed_中文_àéï_\udce9')),
         ]
 
         def verify_paths(o, keep_list, custom_list):
