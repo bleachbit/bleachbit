@@ -1,14 +1,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 
-# For the CI tests, put PsExec 2.43 in .\psexec. A copy already there, such
+# For the CI tests, put PsExec 2.44 in .\psexec. A copy already there, such
 # as from the cache, is kept only if its hash matches.
 
 $ErrorActionPreference = 'Stop'
 
 $dir = 'psexec'
 $exe = Join-Path $dir 'PsExec.exe'
-$sha256 = '078163D5C16F64CAA5A14784323FD51451B8C831C73396B967B4E35E6879937B'
+$sha256 = 'CBC86048C9C5A9DE697D29EA3650BECABBFAE5A6FC276785EECA3AAD938F3292'
 
 function Test-PsExec {
     (Test-Path $exe) -and (Get-FileHash $exe -Algorithm SHA256).Hash -eq $sha256
