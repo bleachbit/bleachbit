@@ -935,6 +935,10 @@ class MainFrame(wx.Frame):
                 wx.ID_ANY, _('Clean only %s') % label)
             mi_filter_log = menu.Append(
                 wx.ID_ANY, _('Filter log by %s') % label)
+            if self._loader_thread is not None:
+                # See _start_worker: cleaners cannot run while loading.
+                mi_preview_one.Enable(False)
+                mi_clean_one.Enable(False)
             self.Bind(
                 wx.EVT_MENU,
                 lambda _e, c=cid, o=oid:
@@ -1103,6 +1107,12 @@ class MainFrame(wx.Frame):
         if not operations:
             self._no_selection()
             return
+        if self._loader_thread is not None and set(operations) != {'_gui'}:
+            # Registration clears and rebuilds ``backends`` (for example
+            # after a language change), so a cleaner may be missing
+            # until it finishes.  Shredding brings its own ``_gui``
+            # cleaner, and the startup shred runs while loading.
+            return
         self.log.SetValue('')
         self._log_entries = []
         self._log_display_count = 0
@@ -1262,8 +1272,10 @@ class MainFrame(wx.Frame):
         self._tree_model.set_display(op, opid, display)
 
     def worker_done(self, worker, really_delete):
-        self.btn_preview.Enable()
-        self.btn_clean.Enable()
+        if self._loader_thread is None:
+            # Otherwise _on_loader_done enables them.
+            self.btn_preview.Enable()
+            self.btn_clean.Enable()
         self.btn_abort.Disable()
         self.gauge.SetValue(100)
         if worker.is_aborted:
@@ -1627,5 +1639,22 @@ class MainFrame(wx.Frame):
         try:
             if dlg.ShowModal() == wx.ID_OK:
                 dlg.commit()
+            language_changed = dlg.language_changed
         finally:
             dlg.Destroy()
+        if language_changed:
+            self._reload_cleaners()
+
+    def _reload_cleaners(self):
+        """Reload the cleaners so their names use the new language.
+
+        Mirrors ``GuiWindow.GUI.cb_refresh_operations``.  Skipped
+        while cleaners are loading or a preview/clean is running,
+        because registration replaces ``backends``; the restart notice
+        shown by the dialog covers that case.
+        """
+        if self._loader_thread is not None:
+            return
+        if self._worker_thread is not None and self._worker_thread.is_alive():
+            return
+        self._load_cleaners()
