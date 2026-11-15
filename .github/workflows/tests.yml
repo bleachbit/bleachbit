@@ -6,7 +6,7 @@ on:
       - '**'
       - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
     tags:
-      - 'v*' # the release build in build_and_test.yaml runs on tags too
+      - 'v*' # the release build in windows_build.yaml runs on tags too
     paths-ignore: &paths-ignore
       - '.coderabbit.yaml'
       - '.gitignore'

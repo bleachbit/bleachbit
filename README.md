@@ -68,7 +68,7 @@ make pretty  # format .py and .xml files
 More resources:
 
 * [![Tests](https://img.shields.io/github/actions/workflow/status/bleachbit/bleachbit/tests.yml?branch=master&label=Tests)](https://github.com/bleachbit/bleachbit/actions/workflows/tests.yml)
-* [![Windows build](https://img.shields.io/github/actions/workflow/status/bleachbit/bleachbit/build_and_test.yaml?branch=master&label=Windows%20build)](https://github.com/bleachbit/bleachbit/actions/workflows/build_and_test.yaml)
+* [![Windows build](https://img.shields.io/github/actions/workflow/status/bleachbit/bleachbit/windows_build.yaml?branch=master&label=Windows%20build)](https://github.com/bleachbit/bleachbit/actions/workflows/windows_build.yaml)
 * [![Coverage](https://img.shields.io/coverallsCoverage/github/bleachbit/bleachbit?branch=master)](https://coveralls.io/github/bleachbit/bleachbit?branch=master)
 * [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
