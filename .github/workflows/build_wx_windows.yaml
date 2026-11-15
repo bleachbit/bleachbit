@@ -108,6 +108,10 @@ jobs:
           set PATH=C:\msys64\usr\bin;%PATH%
           make PYTHON="%PYTHON_EXE%" -C po local
 
+      - name: Mount virtual CD-ROM for testing
+        shell: pwsh
+        run: .\scripts\mount_test_iso.ps1
+
       - name: Run wx unit tests
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         env:
