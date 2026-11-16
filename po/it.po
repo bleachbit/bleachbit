@@ -6,10 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-11-15 11:40-0700\n"
-"PO-Revision-Date: 2026-11-15 13:52+0000\n"
-"Last-Translator: ROBERTO BORIOTTI <roberto.boriotti@gmail.com>\n"
+"PO-Revision-Date: 2026-11-17 18:51+0000\n"
+"Last-Translator: Pierfrancesco Passerini "
+"<passero@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
 "it/>\n"
 "Language: it\n"
@@ -549,11 +550,8 @@ msgstr "Sincronizza"
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid ""
-#| "Delete the sync data (including web apps) and sign out of the browser"
 msgid "Delete the sync data and sign out of the browser"
-msgstr "Elimina i dati sincronizzati e disconnetti account dal browser"
+msgstr "Elimina i dati sincronizzati e disconnetti l'account utilizzato"
 
 #: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
@@ -1681,10 +1679,9 @@ msgstr "I caratteri jolly non sono consentiti in --eccetto: %s"
 #. such as firefox. All options for this cleaner are skipped.
 #. Do not translate variables.
 #: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "Error reading cleaner: %s"
+#, python-format
 msgid "Skipping cleaner %s"
-msgstr "Errore durante la lettura della procedura di cancellazione: %s"
+msgstr "Pulizia di %s ignorata"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -2347,6 +2344,8 @@ msgid ""
 "The list of cookies to keep could not be read, so cookies will not be "
 "deleted. Change the selection to save a new list."
 msgstr ""
+"La lettura dei cookie da conservare potrebbe fallire, quindi non verranno "
+"eliminati. Modificare la selezione per salvare una nuova lista."
 
 #. TRANSLATORS: Column header in the manage cookies dialog.
 #. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
@@ -2874,6 +2873,7 @@ msgstr "%(cleaner)s - %(option)s"
 msgid ""
 "Removed invalid values from the configuration file %(file)s: %(options)s"
 msgstr ""
+"Valori non validi rimossi dal file di configurazione %(file)s: %(options)s"
 
 #. TRANSLATORS: Error message shown in the infobar when the user
 #. starts an operation while another one is running.
@@ -3234,7 +3234,7 @@ msgstr "%s è ancora aperto e non può essere eliminato. Chiudilo e riprova."
 #: ../bleachbit/Unix.py
 #, python-format
 msgid "%s cannot be cleaned without root privileges."
-msgstr ""
+msgstr "%s non può essere svuotato senza privilegi di root."
 
 #. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
