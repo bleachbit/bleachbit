@@ -2322,7 +2322,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_TRADCHINESE} "${prodname} 除錯終端"
 	LangString SHORTCUT_NO_UAC ${LANG_TRADCHINESE} "${prodname}（無 UAC）。"
 	LangString SHRED_SHELL_MENU ${LANG_TRADCHINESE} "用 ${prodname} 粉碎"
-	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "將從以下資料夾卸載 ${prodname}。$\r$\n點擊「卸載」啟動卸載作業。$\r$\n您先前於此資料夾新增的檔案（例如自定義清理器）將會被保留。"
+	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "將從以下資料夾卸載 ${prodname}。$\r$\n點擊「卸載」啟動卸載作業。$\r$\n您先前於此資料夾新增的檔案，比如清理規則，將會被保留。"
 !endif
 
 !ifdef LANG_TURKISH
