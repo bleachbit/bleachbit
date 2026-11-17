@@ -40,7 +40,9 @@ from bleachbit.FileUtilities import delete, open_for_overwrite
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
                                get_ip_for_url, get_user_agent,
                                unset_sslkeylogfile, _coarsen_os_version,
-                               _coarsen_windows_build, _version_major_minor)
+                               _coarsen_windows_build,
+                               _point_certifi_at_frozen_bundle,
+                               _version_major_minor)
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +73,16 @@ class NetworkTestCase(common.BleachbitTestCase):
         with common.set_temporary_env('SSLKEYLOGFILE', 'ssl.log'):
             self.assertEqual(unset_sslkeylogfile(True), IS_WINDOWS)
             self.assertFalse(unset_sslkeylogfile(True))
+
+    def test_point_certifi_at_frozen_bundle(self):
+        """certifi returns the CA bundle next to the executable"""
+        import certifi
+        with patch.object(certifi, 'where'), \
+                patch.object(certifi.core, 'where'):
+            _point_certifi_at_frozen_bundle()
+            self.assertEqual(certifi.where(), os.path.join(
+                bleachbit.bleachbit_exe_path, 'cacert.pem'))
+            self.assertIs(certifi.core.where, certifi.where)
 
     # Keep the retries but skip the backoff waits between them
     @patch('urllib3.util.retry.Retry.sleep')
