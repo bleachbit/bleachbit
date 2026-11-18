@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-11-15 11:40-0700\n"
-"PO-Revision-Date: 2026-11-07 12:49+0000\n"
+"PO-Revision-Date: 2026-11-19 08:12+0000\n"
 "Last-Translator: Emin Tufan Çetin <etc@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 
 #. Cleaner description: the category of application.
@@ -547,12 +547,8 @@ msgstr "Eşitle"
 #: ../cleaners/vivaldi.xml ../cleaners/helium.xml ../cleaners/chromium.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid ""
-#| "Delete the sync data (including web apps) and sign out of the browser"
 msgid "Delete the sync data and sign out of the browser"
-msgstr ""
-"Web uygulamalarını içeren eşitleme verisini sil ve tarayıcı oturumunu kapat"
+msgstr "Eşitleme verisini sil ve tarayıcı oturumunu kapat"
 
 #: ../cleaners/helium.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
@@ -1656,10 +1652,9 @@ msgstr "--except içinde joker karakterlere izin verilmez: %s"
 #. such as firefox. All options for this cleaner are skipped.
 #. Do not translate variables.
 #: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "Error reading cleaner: %s"
+#, python-format
 msgid "Skipping cleaner %s"
-msgstr "Temizleyici okuma hatası: %s"
+msgstr "%s temizleyici atlanıyor"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -2320,6 +2315,8 @@ msgid ""
 "The list of cookies to keep could not be read, so cookies will not be "
 "deleted. Change the selection to save a new list."
 msgstr ""
+"Tutulacak çerezler listesi okunamadı bu nedenle çerezler silinmeyecek. Yeni "
+"liste kaydetmek için seçimi değiştir."
 
 #. TRANSLATORS: Column header in the manage cookies dialog.
 #. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
@@ -2834,6 +2831,7 @@ msgstr "%(cleaner)s - %(option)s"
 msgid ""
 "Removed invalid values from the configuration file %(file)s: %(options)s"
 msgstr ""
+"Geçersiz değerler %(file)s yapılandırma dosyasından kaldırıldı: %(options)s"
 
 #. TRANSLATORS: Error message shown in the infobar when the user
 #. starts an operation while another one is running.
@@ -3191,7 +3189,7 @@ msgstr ""
 #: ../bleachbit/Unix.py
 #, python-format
 msgid "%s cannot be cleaned without root privileges."
-msgstr ""
+msgstr "%s kök ayrıcalıkları olmadan temizlenemez."
 
 #. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
