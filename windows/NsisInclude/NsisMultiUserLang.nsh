@@ -1532,7 +1532,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER ${LANG_IRISH} "Athshuiteáil leagan {VERSION} don úsáideoir reatha."
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_IRISH} "Ní mór duit an clár seo a rith mar riarthóir."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_IRISH} "Tá $(^NameDA) suiteáilte do gach úsáideoir agus don úsáideoir reatha araon.$\r$\nRoghnaigh cén suiteáil atá le baint."
-	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_IRISH} "Roghnaigh cé na húsáideoirí ar mhaith leat $(^NameDA a bhaint dóibh)."
+	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_IRISH} "Roghnaigh cé na húsáideoirí ar mhaith leat $(^NameDA) a bhaint dóibh."
 	LangString OLD_WINDOWS_WARNING ${LANG_IRISH} "Éilíonn an leagan seo de BleachBit Windows 10 nó níos déanaí. Chun leagan comhoiriúnach a íoslódáil chun do chóras, cliceáil OK. Chun an suiteálaí a fhágáil, cliceáil Cealaigh."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_IRISH} "Seo iad na comhaid bhunúsacha atá riachtanach le go bhfeidhmeoidh ${prodname} (riachtanach)."
 	LangString SECTION_CORE_NAME ${LANG_IRISH} "Comhaid lárnacha (riachtanach)"
