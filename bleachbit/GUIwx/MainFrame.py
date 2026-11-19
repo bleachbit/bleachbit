@@ -18,10 +18,15 @@ import wx.dataview as dv
 
 from bleachbit import APP_NAME, APP_VERSION, Cleaner, FileUtilities
 from bleachbit.Cleaner import backends
+from bleachbit.Constant import REQUIRES_EXPERT_MODE
 from bleachbit.Language import get_text as _
 from bleachbit.Log import GtkLoggerHandler
 from bleachbit.Options import options
 
+from bleachbit.GUIwx.Accessibility import NoticeBar
+from bleachbit.GUIwx.Dialogs import (delete_confirmation_dialog,
+                                     gtk_mnemonic_to_wx as _gtk_mnemonic_to_wx,
+                                     warning_confirm_dialog)
 from bleachbit.GUIwx.LoaderThread import LoaderThread
 from bleachbit.GUIwx.PreferencesDialog import PreferencesDialog
 from bleachbit.GUIwx.WorkerThread import WorkerThread
@@ -52,35 +57,6 @@ COL_SIZE = 3
 COL_ACTION = 4
 
 _ROW_FIELDS = ('cleaner_name', 'option_name', 'path', 'size_human', 'action')
-
-
-def _gtk_mnemonic_to_wx(label):
-    """Convert a translated GTK menu mnemonic to wx syntax.
-
-    GTK marks a mnemonic with ``_`` and escapes a literal underscore as
-    ``__``. wx uses ``&`` and escapes a literal ampersand as ``&&``.
-    Reusing the GTK menu msgids lets the wx front-end benefit from the
-    existing translations without displaying the GTK mnemonic marker.
-    """
-    converted = []
-    index = 0
-    while index < len(label):
-        char = label[index]
-        if char == '&':
-            converted.append('&&')
-        elif char == '_':
-            if index + 1 < len(label) and label[index + 1] == '_':
-                converted.append('_')
-                index += 1
-            elif index + 1 == len(label):
-                # A dangling GTK marker cannot designate a mnemonic.
-                converted.append('_')
-            else:
-                converted.append('&')
-        else:
-            converted.append(char)
-        index += 1
-    return ''.join(converted)
 
 
 class _VirtualResultsList(wx.ListCtrl):
@@ -221,6 +197,11 @@ class _CleanerTreeModel(dv.PyDataViewModel):
         self._cleaner_by_id = {}
         self._options = {}   # cleaner_id -> [_OptionNode]
         self._filter = ''
+        # Optional ``callable(cleaner_id, option_id) -> bool`` asked
+        # before an option is checked from the tree.  Returning False
+        # leaves the option unchecked (see ``MainFrame._allow_enable``,
+        # which implements the GTK expert mode and warning flow).
+        self.confirm_enable = None
 
     # -- data setup ---------------------------------------------------
     def set_data(self, entries):
@@ -344,12 +325,19 @@ class _CleanerTreeModel(dv.PyDataViewModel):
         # Text column.
         return obj.display
 
+    def _allow_enable(self, node):
+        if self.confirm_enable is None:
+            return True
+        return self.confirm_enable(node.cleaner_id, node.option_id)
+
     def SetValue(self, value, item, col):  # noqa: N802
         if col != 0:
             return False
         obj = self.ItemToObject(item)
         new = bool(value)
         if isinstance(obj, _OptionNode):
+            if new and not self._allow_enable(obj):
+                return False
             options.set_tree(obj.cleaner_id, obj.option_id, new)
             cn = self._cleaner_by_id.get(obj.cleaner_id)
             if cn is not None:
@@ -357,10 +345,24 @@ class _CleanerTreeModel(dv.PyDataViewModel):
                 self.ItemChanged(self.ObjectToItem(cn))
         else:
             for o in self._options.get(obj.cleaner_id, ()):
+                # Options blocked by expert mode, or waiting for the
+                # user to confirm a warning, stay unchecked, as in GTK.
+                if new and not self._allow_enable(o):
+                    continue
                 options.set_tree(o.cleaner_id, o.option_id, new)
                 self.ValueChanged(self.ObjectToItem(o), 0)
             self.ItemChanged(item)
         return True
+
+    def set_option_checked(self, cleaner_id, option_id, checked):
+        """Persist an option's check state and repaint its rows."""
+        options.set_tree(cleaner_id, option_id, checked)
+        node = self.option_node(cleaner_id, option_id)
+        if node is not None:
+            self.ValueChanged(self.ObjectToItem(node), 0)
+        cn = self._cleaner_by_id.get(cleaner_id)
+        if cn is not None:
+            self.ItemChanged(self.ObjectToItem(cn))
 
     def GetAttr(self, item, col, attr):  # noqa: N802
         obj = self.ItemToObject(item)
@@ -422,10 +424,18 @@ class MainFrame(wx.Frame):
         self._tree_filter_text = ''
         # True while WxUIProxy is delivering a batch of worker callbacks.
         self._in_batch = False
+        # Warning options waiting for the user to confirm them, as
+        # (cleaner_id, option_id, warning) tuples; see _allow_enable.
+        self._pending_warnings = []
+        self._confirming_warnings = False
+        # Startup notices about expert mode are logged after the first
+        # load only, like the GTK startup messages.
+        self._startup_notices_done = False
 
         self._build_ui()
         self._build_menu()
         self._build_accelerators()
+        self._restore_geometry()
 
         # Route ``bleachbit`` logger records (e.g. Worker's per-file
         # "Access denied: ..." errors) to the Log tab.  Despite its
@@ -446,6 +456,11 @@ class MainFrame(wx.Frame):
     def _build_ui(self):
         panel = wx.Panel(self)
         outer = wx.BoxSizer(wx.VERTICAL)
+
+        # Non-blocking notices, like the GTK info bar; screen readers
+        # announce them without moving the focus.
+        self.infobar = NoticeBar(panel)
+        outer.Add(self.infobar, 0, wx.EXPAND)
 
         # Toolbar ------------------------------------------------------
         toolbar = wx.BoxSizer(wx.HORIZONTAL)
@@ -516,6 +531,7 @@ class MainFrame(wx.Frame):
         )
         self.tree.SetName(_('Cleaners'))
         self._tree_model = _CleanerTreeModel()
+        self._tree_model.confirm_enable = self._allow_enable
         self.tree.AssociateModel(self._tree_model)
         # ``AssociateModel`` does not take ownership in PyDataViewModel;
         # ``DecRef`` balances the implicit ``IncRef`` so the model is
@@ -761,6 +777,48 @@ class MainFrame(wx.Frame):
         else:
             self.SetStatusText(
                 _('%d cleaners loaded.') % n_visible)
+        if not self._startup_notices_done:
+            self._startup_notices_done = True
+            self._log_expert_mode_notices()
+
+    def _log_expert_mode_notices(self):
+        """Log the GTK startup notices about expert mode.
+
+        Mirrors the expert mode checks in
+        ``GuiStartup.get_startup_messages``.
+        """
+        if options.get('expert_mode'):
+            return
+        if self._has_selected_warning_option():
+            self.append_text(
+                # TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
+                # Preferences. Keep it consistent with the translation of "Expert Mode"
+                # in the preferences dialog. This message appears when cleaning options
+                # with warnings are selected but expert mode is disabled.
+                _('One or more selected cleaning options have warnings and '
+                  'require Expert Mode to clean. Enable it in preferences.')
+                + '\n')
+        if not options.get('delete_confirmation'):
+            self.append_text(
+                # TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
+                # Preferences. Keep it consistent with the translation of "Expert Mode"
+                # in the preferences dialog. This message appears when the user tries to
+                # skip a delete confirmation without enabling Expert Mode.
+                _('Delete confirmation is disabled but expert mode is not enabled. '
+                  'Enable Expert Mode in preferences to skip delete confirmations.')
+                + '\n')
+
+    @staticmethod
+    def _has_selected_warning_option():
+        """Return whether any checked option has a warning."""
+        for cleaner_id, cleaner in list(backends.items()):
+            if cleaner_id == '_gui':
+                continue
+            for option_id, _option_name in cleaner.get_options():
+                if (options.get_tree(cleaner_id, option_id)
+                        and cleaner.get_warning(option_id)):
+                    return True
+        return False
 
     def _on_loader_error(self, _exc):
         self._loader_thread = None
@@ -953,6 +1011,27 @@ class MainFrame(wx.Frame):
                 wx.EVT_MENU,
                 lambda _e, text=oname: self._filter_log_by(text),
                 mi_filter_log)
+            # Open the matching preferences page, as in the GTK GUI.
+            if cleaner is not None and cleaner.has_action_key(oid, 'cookie'):
+                menu.AppendSeparator()
+                mi_cookies = menu.Append(
+                    wx.ID_ANY,
+                    # TRANSLATORS: Button in tree view's context menu to open the cookie
+                    # manager.
+                    _("Manage cookies to keep\u2026"))
+                self.Bind(wx.EVT_MENU,
+                          lambda _e: self._show_preferences('cookies'),
+                          mi_cookies)
+            if cid == 'system' and oid == 'custom':
+                menu.AppendSeparator()
+                mi_custom = menu.Append(
+                    wx.ID_ANY,
+                    # TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
+                    # Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+                    _("Manage custom paths\u2026"))
+                self.Bind(wx.EVT_MENU,
+                          lambda _e: self._show_preferences('custom'),
+                          mi_custom)
             menu.AppendSeparator()
         elif isinstance(obj, _CleanerNode):
             mi_check_cleaner = menu.Append(
@@ -989,16 +1068,15 @@ class MainFrame(wx.Frame):
                 APP_NAME, wx.ICON_INFORMATION)
             return
         if really_delete:
-            msg = _('Are you sure you want to permanently delete these '
-                    'files?')
-            dlg = wx.MessageDialog(
-                self, msg, APP_NAME,
-                wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)
-            try:
-                if dlg.ShowModal() != wx.ID_YES:
-                    return
-            finally:
-                dlg.Destroy()
+            # Block cleaning of warning options without expert mode,
+            # as in GuiWindow.GUI.cb_run_option.
+            cleaner = backends.get(cleaner_id)
+            if (not options.get('expert_mode') and cleaner is not None
+                    and cleaner.get_warning(option_id)):
+                self.show_infobar(REQUIRES_EXPERT_MODE, wx.ICON_WARNING)
+                return
+            if not self._confirm_delete(False):
+                return
         self._start_worker(
             really_delete=really_delete,
             operations={cleaner_id: [option_id]})
@@ -1030,19 +1108,18 @@ class MainFrame(wx.Frame):
         if not operations:
             self._no_selection()
             return
-        msg = _(
-            'Are you sure you want to permanently delete files according '
-            'to the selected operations?  The actual files that will be '
-            'deleted may have changed since you ran the preview.')
-        dlg = wx.MessageDialog(
-            self, msg, APP_NAME,
-            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)
-        try:
-            if dlg.ShowModal() != wx.ID_YES:
-                return
-        finally:
-            dlg.Destroy()
+        if not self._confirm_delete(True):
+            return
         self._start_worker(really_delete=True, operations=operations)
+
+    def _confirm_delete(self, mention_preview):
+        """Ask before deleting; only expert mode can skip the question.
+
+        Mirrors ``GuiWindow.GUI._confirm_delete``.
+        """
+        if options.get('delete_confirmation') or not options.get('expert_mode'):
+            return delete_confirmation_dialog(self, mention_preview)
+        return True
 
     def _on_abort(self, _evt):
         if self._worker_thread is not None:
@@ -1083,6 +1160,7 @@ class MainFrame(wx.Frame):
                 dlg.Destroy()
             self._worker_thread.abort()
             self._worker_thread.join(timeout=5.0)
+        self._save_geometry()
         # Detach the log handler so any stray worker-thread log
         # records after shutdown do not try to touch destroyed widgets.
         handler = getattr(self, '_log_handler', None)
@@ -1090,6 +1168,112 @@ class MainFrame(wx.Frame):
             logging.getLogger('bleachbit').removeHandler(handler)
             self._log_handler = None
         evt.Skip()
+
+    # ------------------------------------------------------------------
+    # Notices, expert mode and window geometry
+    # ------------------------------------------------------------------
+    def show_infobar(self, message, flags=wx.ICON_INFORMATION):
+        """Show a non-blocking notice, like the GTK info bar."""
+        self.infobar.show_notice(message, flags)
+
+    @staticmethod
+    def _warning_key(cleaner_id, option_id):
+        return 'cleaner:' + cleaner_id + ':' + option_id
+
+    def _allow_enable(self, cleaner_id, option_id):
+        """Decide whether an option may be checked in the tree.
+
+        Mirrors ``GuiTreeModels.TreeDisplayModel.set_cleaner``: without
+        expert mode, an option with a warning cannot be checked.  In
+        expert mode, the user confirms the warning first, unless they
+        asked to remember the choice.  The confirmation is shown after
+        the tree has handled the click or key press, one at a time;
+        the option is checked if the user confirms.
+        """
+        cleaner = backends.get(cleaner_id)
+        warning = cleaner.get_warning(option_id) if cleaner else None
+        if not warning:
+            return True
+        if not options.get('expert_mode'):
+            self.show_infobar(
+                # TRANSLATORS: Warning shown in the infobar.
+                _("This option is protected. To bypass protection, enable expert mode."),
+                wx.ICON_WARNING)
+            return False
+        if options.get_warning_preference(
+                self._warning_key(cleaner_id, option_id)):
+            return True
+        self._pending_warnings.append((cleaner_id, option_id, warning))
+        if not self._confirming_warnings:
+            self._confirming_warnings = True
+            wx.CallAfter(self._confirm_pending_warnings)
+        return False
+
+    def _confirm_pending_warnings(self):
+        """Ask to confirm each queued warning option, one at a time."""
+        try:
+            while self._pending_warnings:
+                cleaner_id, option_id, warning = self._pending_warnings.pop(0)
+                if options.get_tree(cleaner_id, option_id):
+                    continue
+                cleaner = backends.get(cleaner_id)
+                # TRANSLATORS: %(cleaner) may be Firefox, System, etc.
+                # %(option) may be cache, logs, cookies, etc.
+                option_name = _("%(cleaner)s - %(option)s") % {
+                    'cleaner': cleaner.get_name() if cleaner else cleaner_id,
+                    'option': self._option_name(cleaner_id, option_id),
+                }
+                confirmed, remember_choice = warning_confirm_dialog(
+                    self, option_name, warning)
+                if not confirmed:
+                    continue
+                if remember_choice:
+                    options.remember_warning_preference(
+                        self._warning_key(cleaner_id, option_id))
+                self._tree_model.set_option_checked(
+                    cleaner_id, option_id, True)
+        finally:
+            self._confirming_warnings = False
+
+    def _restore_geometry(self):
+        """Restore the window position, size and maximized state.
+
+        Mirrors ``GuiWindow.GUI.on_show``: only when *Remember window
+        geometry* is on, and the position only when its top-left corner
+        is on a connected display.  The wx window has no full screen
+        mode, so ``window_fullscreen`` is not restored.
+        """
+        if not options.get('remember_geometry'):
+            return
+        keys = ('window_x', 'window_y', 'window_width', 'window_height')
+        try:
+            if all(options.has_option(key) for key in keys):
+                x, y, width, height = (options.get(key) for key in keys)
+                if wx.Display.GetFromPoint(wx.Point(x, y)) != wx.NOT_FOUND:
+                    self.SetRect(wx.Rect(x, y, width, height))
+            if options.get('window_maximized'):
+                self.Maximize()
+        except ValueError:
+            logger.exception('Invalid window geometry in the options')
+
+    def _save_geometry(self):
+        """Save the window position, size and maximized state.
+
+        Like the GTK GUI, they are saved even when *Remember window
+        geometry* is off; the option only controls restoring them.
+        """
+        if self.IsIconized() or self.IsFullScreen():
+            return
+        maximized = self.IsMaximized()
+        options.set('window_maximized', maximized)
+        if maximized:
+            # Keep the last normal geometry for when it is restored.
+            return
+        rect = self.GetRect()
+        options.set('window_x', rect.x)
+        options.set('window_y', rect.y)
+        options.set('window_width', rect.width)
+        options.set('window_height', rect.height)
 
     # ------------------------------------------------------------------
     # Worker lifecycle
@@ -1118,6 +1302,11 @@ class MainFrame(wx.Frame):
         self._log_display_count = 0
         self._log_truncated = False
         self._clear_results()
+        if really_delete:
+            operations = self._filter_operations_for_expert_mode(operations)
+            if not operations:
+                self.show_infobar(REQUIRES_EXPERT_MODE, wx.ICON_WARNING)
+                return
         self.gauge.SetValue(0)
         self.status.SetLabel('')
         self.btn_preview.Disable()
@@ -1126,6 +1315,48 @@ class MainFrame(wx.Frame):
         self._current_really_delete = really_delete
         self._worker_thread = WorkerThread(self, really_delete, operations)
         self._worker_thread.start()
+
+    def _filter_operations_for_expert_mode(self, operations):
+        """Drop options with warnings when expert mode is off.
+
+        Mirrors ``GuiWindow.GUI._filter_operations_for_expert_mode``:
+        each dropped option is logged as an error.  Preview is always
+        allowed, so callers use this only when deleting.
+        """
+        if options.get('expert_mode'):
+            return operations
+        filtered = {}
+        for cleaner_id, option_ids in operations.items():
+            cleaner = backends.get(cleaner_id)
+            if option_ids is None or cleaner is None:
+                filtered[cleaner_id] = option_ids
+                continue
+            safe_options = []
+            for option_id in option_ids:
+                if not cleaner.get_warning(option_id):
+                    safe_options.append(option_id)
+                    continue
+                self.append_text(
+                    # TRANSLATORS: Error message shown when a cleaner option
+                    # cannot be used because expert mode is disabled.
+                    # %(cleaner)s is the cleaner name, %(option)s is the option name.
+                    _("%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled.") % {
+                        'cleaner': cleaner.get_name(),
+                        'option': self._option_name(cleaner_id, option_id)}
+                    + '\n', 'error')
+            if safe_options:
+                filtered[cleaner_id] = safe_options
+        return filtered
+
+    @staticmethod
+    def _option_name(cleaner_id, option_id):
+        """Return the display name of an option, or its ID."""
+        cleaner = backends.get(cleaner_id)
+        if cleaner is not None:
+            for o_id, o_name in cleaner.get_options():
+                if o_id == option_id:
+                    return o_name
+        return option_id
 
     def _clear_results(self):
         self._rows = []
@@ -1291,6 +1522,11 @@ class MainFrame(wx.Frame):
         self.status.SetLabel(summary)
         self.SetStatusText(done_msg)
         self._worker_thread = None
+        if really_delete and options.get('exit_done'):
+            # "Exit after cleaning" in Preferences, as in
+            # GuiWindow.GUI.worker_done.
+            self.Close()
+            return
         if self._auto_exit and not worker.is_aborted:
             # Started from the CLI with ``--gui-wx --exit`` (typically
             # the context-menu shred invocation).  Close the window now
@@ -1614,18 +1850,10 @@ class MainFrame(wx.Frame):
                 self.Close()
             return
         if options.get('delete_confirmation'):
-            msg = _('Are you sure you want to permanently delete these '
-                    'files?')
-            dlg = wx.MessageDialog(
-                self, msg, APP_NAME,
-                wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)
-            try:
-                if dlg.ShowModal() != wx.ID_YES:
-                    if self._auto_exit:
-                        self.Close()
-                    return
-            finally:
-                dlg.Destroy()
+            if not self._confirm_delete(False):
+                if self._auto_exit:
+                    self.Close()
+                return
         # Register a transient cleaner; the GTK UI uses the same hook.
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
         self._start_worker(
@@ -1635,14 +1863,19 @@ class MainFrame(wx.Frame):
     # Preferences
     # ------------------------------------------------------------------
     def _on_preferences(self, _evt):
-        dlg = PreferencesDialog(self)
+        self._show_preferences()
+
+    def _show_preferences(self, page=None):
+        """Show the preferences dialog, optionally at a page such as
+        ``'cookies'`` or ``'custom'``."""
+        dlg = PreferencesDialog(self, page)
         try:
             if dlg.ShowModal() == wx.ID_OK:
                 dlg.commit()
-            language_changed = dlg.language_changed
+            refresh_operations = dlg.refresh_operations
         finally:
             dlg.Destroy()
-        if language_changed:
+        if refresh_operations:
             self._reload_cleaners()
 
     def _reload_cleaners(self):

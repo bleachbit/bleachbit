@@ -13,6 +13,7 @@ import logging
 import wx
 
 from bleachbit.GUIwx.MainFrame import MainFrame
+from bleachbit.GUIwx.PreferencesDialog import apply_appearance
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,9 @@ class BleachBitWxApp(wx.App):
     _shred_paths = None
 
     def OnInit(self):  # noqa: N802 - wx API
+        # Apply the "Dark mode" preference before creating any window:
+        # on Windows it affects only windows created afterwards.
+        apply_appearance(at_startup=True)
         frame = MainFrame(shred_paths=self._shred_paths,
                           auto_exit=self._auto_exit)
         frame.Show()
