@@ -15,6 +15,7 @@ Options that only affect GTK rendering (Windows 10 theme, Fontconfig
 backend) have no wx counterpart and are not shown.
 """
 
+import errno
 import html
 import json
 import logging
@@ -153,6 +154,15 @@ def _notice(parent, text, light_bg, dark_bg):
 
 def _wrapped_text(parent, text):
     return _wrap(wx.StaticText(parent, label=text))
+
+
+def _save_error_message(path, error):
+    """Return a message for an ``OSError`` raised while saving ``path``."""
+    if error.errno == errno.ENOSPC:
+        return _("Disk was full when writing configuration to file: %s") % path
+    if error.errno in (errno.EACCES, errno.EPERM):
+        return _("Permission denied when writing configuration to file: %s") % path
+    return '%s: %s' % (path, error.strerror or error)
 
 
 def _split_link_markup(markup):
@@ -579,11 +589,13 @@ class _CookiesPanel(wx.Panel):
         row = evt.GetIndex()
         if not 0 <= row < len(self._visible):
             return
+        previous = [is_checked for is_checked, _host in self._hosts]
         self._hosts[self._visible[row]][0] = checked
-        self.save_changes()
-        if self._show_selected_only and not checked:
-            # The row no longer matches the filter.  Rebuild after the
-            # event, not while the list control is handling it.
+        saved = self._save_or_revert(previous)
+        if not saved or (self._show_selected_only and not checked):
+            # The row no longer matches the filter or the saved list.
+            # Rebuild after the event, not while the list control is
+            # handling it.
             wx.CallAfter(self._refresh_if_alive)
         else:
             self._update_stat_label()
@@ -596,9 +608,10 @@ class _CookiesPanel(wx.Panel):
         """Check or uncheck the hosts that match the current filter."""
         if self._is_loading or not self._loaded:
             return
+        previous = [is_checked for is_checked, _host in self._hosts]
         for index in self._visible:
             self._hosts[index][0] = is_selected
-        self.save_changes()
+        self._save_or_revert(previous)
         self._refresh_list()
 
     def _on_search_changed(self, _evt):
@@ -627,7 +640,10 @@ class _CookiesPanel(wx.Panel):
 
     # -- saving ------------------------------------------------------
     def save_changes(self):
-        """Save the checked hosts to the JSON keep list."""
+        """Save the checked hosts to the JSON keep list.
+
+        Returns ``None`` on success, or the ``OSError`` that stopped it.
+        """
         keep_list = sorted(host for checked, host in self._hosts if checked)
         try:
             mkfile = not os.path.exists(self.keep_list_path)
@@ -637,11 +653,31 @@ class _CookiesPanel(wx.Panel):
             if mkfile and General.sudo_mode():
                 General.chownself(self.keep_list_path)
             self.saved_domains = set(keep_list)
-            return True
+            return None
         except OSError as exc:
             logger.error('Failed to save cookie keep list %s: %s',
                          self.keep_list_path, exc)
-            return False
+            return exc
+
+    def _save_or_revert(self, previous):
+        """Save the keep list, or restore ``previous`` if saving fails.
+
+        ``previous`` holds each host's checked state before the change.
+        Showing a host as kept when the file was not written would let
+        cleaning delete its cookies, so the change is undone and the
+        error is shown in the dialog.  Returns whether it was saved.
+        """
+        error = self.save_changes()
+        if error is None:
+            return True
+        for row, is_checked in zip(self._hosts, previous):
+            row[0] = is_checked
+        owner = wx.GetTopLevelParent(self)
+        if hasattr(owner, 'show_infobar'):
+            owner.show_infobar(
+                _save_error_message(self.keep_list_path, error),
+                wx.ICON_ERROR)
+        return False
 
 
 class _LocationsPanel(wx.Panel):

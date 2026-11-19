@@ -436,6 +436,11 @@ class MainFrame(wx.Frame):
         self._build_menu()
         self._build_accelerators()
         self._restore_geometry()
+        # The last position and size while not maximized, saved on
+        # close even if the window is maximized by then.
+        self._normal_rect = self.GetRect()
+        self.Bind(wx.EVT_SIZE, self._track_normal_rect)
+        self.Bind(wx.EVT_MOVE, self._track_normal_rect)
 
         # Route ``bleachbit`` logger records (e.g. Worker's per-file
         # "Access denied: ..." errors) to the Log tab.  Despite its
@@ -914,7 +919,9 @@ class MainFrame(wx.Frame):
 
         ``predicate`` receives ``(cleaner_id, option_id, option_label)``.
         Iterates over the model's full dataset (not the live view) so
-        options hidden by the current filter are still updated.
+        options hidden by the current filter are still updated.  Like a
+        click in the tree, checking an option with a warning goes
+        through ``_allow_enable``.
         """
         touched = set()
         for cn in self._tree_model.cleaner_nodes():
@@ -924,6 +931,9 @@ class MainFrame(wx.Frame):
                     continue
                 cur = options.get_tree(o.cleaner_id, o.option_id)
                 if cur != checked:
+                    if checked and not self._allow_enable(
+                            o.cleaner_id, o.option_id):
+                        continue
                     options.set_tree(o.cleaner_id, o.option_id, checked)
                     self._tree_model.ValueChanged(
                         self._tree_model.ObjectToItem(o), 0)
@@ -936,7 +946,11 @@ class MainFrame(wx.Frame):
 
     def _on_select_safe(self, _evt):
         """Check only low-risk options; uncheck everything else."""
-        def is_safe(_cid, _oid, label):
+        def is_safe(cid, oid, label):
+            # An option with a warning is not low-risk, whatever its name.
+            cleaner = backends.get(cid)
+            if cleaner is not None and cleaner.get_warning(oid):
+                return False
             low = label.lower()
             return any(k in low for k in _SAFE_OPTION_KEYWORDS)
         # First uncheck all, then check the safe ones.  Doing it in two
@@ -1089,9 +1103,16 @@ class MainFrame(wx.Frame):
         self.SetStatusText(_('Log filtered by %s.') % text)
 
     def _set_cleaner_children(self, cleaner_id, checked):
-        """Check/uncheck every option of ``cleaner_id`` via the model."""
+        """Check/uncheck every option of ``cleaner_id`` via the model.
+
+        Like a click on the cleaner's checkbox, checking an option with
+        a warning goes through ``_allow_enable``.
+        """
         for o in self._tree_model.all_options(cleaner_id):
             if options.get_tree(o.cleaner_id, o.option_id) != checked:
+                if checked and not self._allow_enable(
+                        o.cleaner_id, o.option_id):
+                    continue
                 options.set_tree(o.cleaner_id, o.option_id, checked)
                 self._tree_model.ValueChanged(
                     self._tree_model.ObjectToItem(o), 0)
@@ -1256,20 +1277,30 @@ class MainFrame(wx.Frame):
         except ValueError:
             logger.exception('Invalid window geometry in the options')
 
+    def _is_normal_state(self):
+        return not (self.IsIconized() or self.IsMaximized()
+                    or self.IsFullScreen())
+
+    def _track_normal_rect(self, evt):
+        """Remember the geometry the window returns to when restored."""
+        if self._is_normal_state():
+            self._normal_rect = self.GetRect()
+        evt.Skip()
+
     def _save_geometry(self):
         """Save the window position, size and maximized state.
 
         Like the GTK GUI, they are saved even when *Remember window
-        geometry* is off; the option only controls restoring them.
+        geometry* is off; the option only controls restoring them.  A
+        maximized window saves the size it had before it was
+        maximized, so restoring it later goes back to that size.
         """
         if self.IsIconized() or self.IsFullScreen():
             return
-        maximized = self.IsMaximized()
-        options.set('window_maximized', maximized)
-        if maximized:
-            # Keep the last normal geometry for when it is restored.
-            return
-        rect = self.GetRect()
+        options.set('window_maximized', self.IsMaximized())
+        if self._is_normal_state():
+            self._normal_rect = self.GetRect()
+        rect = self._normal_rect
         options.set('window_x', rect.x)
         options.set('window_y', rect.y)
         options.set('window_width', rect.width)

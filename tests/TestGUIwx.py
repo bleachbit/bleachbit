@@ -425,9 +425,33 @@ class GUIwxTestCase(common.BleachbitTestCase):
         with self.assertRaises(AttributeError):
             getattr(proxy, 'not_forwarded')
 
+    def _show_updates_page(self):
+        """Show the Updates page during this test.
+
+        ``tests/TestGUI.py`` turns off update notifications when it is
+        imported, which hides the page if pytest imports it first.
+        """
+        patcher = mock.patch.object(
+            self.PreferencesModule, 'online_update_notification_enabled', True)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_preferences_updates_page_follows_build_setting(self):
+        """The Updates page exists only when update notifications are on."""
+        prefs = self.PreferencesModule
+        with mock.patch.object(prefs, 'online_update_notification_enabled',
+                               False):
+            dialog = prefs.PreferencesDialog(self.frame)
+        try:
+            self.assertNotIn('updates', dialog._page_ids)
+            self.assertNotIn('check_online_updates', dialog._checkboxes)
+        finally:
+            dialog.Destroy()
+
     def test_preferences_dialog_persists_options(self):
         """Test PreferencesDialog commits general and location options."""
         prefs = self.PreferencesModule
+        self._show_updates_page()
         saved_whitelist = options.get_whitelist_paths()
         saved_custom = options.get_custom_paths()
         dialog = None
@@ -604,6 +628,7 @@ class GUIwxTestCase(common.BleachbitTestCase):
     def test_preferences_dependent_options(self):
         """Sub-options follow the option they depend on, as in GTK."""
         prefs = self.PreferencesModule
+        self._show_updates_page()
         keys = ('expert_mode', 'delete_confirmation', 'check_online_updates',
                 'check_beta')
         saved = {key: options.get(key) for key in keys}
@@ -792,6 +817,47 @@ class GUIwxTestCase(common.BleachbitTestCase):
                 if dialog is not None:
                     dialog.Destroy()
 
+    def test_cookies_page_reverts_failed_save(self):
+        """A host is not shown as kept when the keep list was not saved."""
+        import errno
+        prefs = self.PreferencesModule
+
+        class Event:
+            def __init__(self, index):
+                self._index = index
+
+            def GetIndex(self):  # noqa: N802 - wx API
+                return self._index
+
+        def fail_to_open(*_args, **_kwargs):
+            raise PermissionError(errno.EACCES, 'Permission denied')
+
+        dialog = prefs.PreferencesDialog(self.frame)
+        try:
+            panel = dialog.get_page('cookies')
+            panel.keep_list_path = 'keep.json'
+            panel.saved_domains = {'b.example'}
+            panel._finish_populate(['a.example'])
+            with mock.patch.object(prefs, 'open_for_overwrite',
+                                   side_effect=fail_to_open),                     mock.patch.object(prefs.wx, 'CallAfter') as call_after:
+                panel._on_item_toggled(Event(0), True)
+                self.assertEqual([[False, 'a.example'], [True, 'b.example']],
+                                 panel._hosts)
+                call_after.assert_called_once_with(panel._refresh_if_alive)
+                self.assertEqual(
+                    prefs._('Permission denied when writing configuration '
+                            'to file: %s') % 'keep.json',
+                    dialog._infobar.get_message())
+
+                panel._set_visible_selection(False)
+            self.assertEqual([[False, 'a.example'], [True, 'b.example']],
+                             panel._hosts)
+            self.assertEqual([False, True],
+                             [panel._list.IsItemChecked(i) for i in range(2)])
+            self.assertEqual({'b.example'}, panel.saved_domains)
+        finally:
+            dialog.Destroy()
+
     def test_cookie_notice_link_markup(self):
         """The GTK link markup is split for a native link control."""
         split = self.PreferencesModule._split_link_markup
@@ -806,17 +872,17 @@ class GUIwxTestCase(common.BleachbitTestCase):
         acc_module = self.AccessibilityModule
         frame = wx.Frame(None)
         try:
-            bar = acc_module.NoticeBar(frame)
+            notice_bar = acc_module.NoticeBar(frame)
             checkbox = wx.CheckBox(frame, label='Exit after cleaning')
             acc_module.set_tooltip(checkbox, 'More details')
             listbox = wx.ListBox(frame)
             acc_module.set_accessible_name(listbox, 'Drives')
             with mock.patch.object(wx.Accessible, 'NotifyEvent',
                                    create=True) as notify:
-                bar.show_notice('Restart BleachBit for full effect.')
-                bar.show_notice('Restart BleachBit for full effect.')
+                notice_bar.show_notice('Restart BleachBit for full effect.')
+                notice_bar.show_notice('Restart BleachBit for full effect.')
             self.assertEqual('Restart BleachBit for full effect.',
-                             bar.get_message())
+                             notice_bar.get_message())
             self.assertEqual('More details', checkbox.GetToolTipText())
             self.assertEqual('Drives', listbox.GetName())
             if not acc_module._HAVE_MSAA:
@@ -825,7 +891,7 @@ class GUIwxTestCase(common.BleachbitTestCase):
             notify.assert_called_once()
             self.assertEqual(wx.ACC_EVENT_SYSTEM_ALERT,
                              notify.call_args.args[0])
-            acc = bar._alert_window._bb_accessible
+            acc = notice_bar._alert_window._bb_accessible
             self.assertEqual((wx.ACC_OK, wx.ROLE_SYSTEM_ALERT),
                              acc.GetRole(wx.ACC_SELF))
             self.assertEqual(
@@ -959,6 +1025,58 @@ class GUIwxTestCase(common.BleachbitTestCase):
             options.clear_warning_preferences()
             options.set('expert_mode', saved_expert)
 
+    def test_bulk_selection_guards_warning_options(self):
+        """Checking many options at once still guards warning options."""
+        frame = self.frame
+        module = self.MainFrameModule
+        self._register_fake_cleaner()
+        model = mock.Mock()
+        model.cleaner_nodes.return_value = [
+            module._CleanerNode(BROWSER1_ID, 'Fauxfox')]
+        model.all_options.return_value = [
+            module._OptionNode(BROWSER1_ID, 'cache', 'Cache'),
+            module._OptionNode(BROWSER1_ID, 'cookies', 'Cookies')]
+        saved_expert = options.get('expert_mode')
+        saved_tree = {oid: options.get_tree(BROWSER1_ID, oid)
+                      for oid in ('cache', 'cookies')}
+
+        def checked():
+            return [options.get_tree(BROWSER1_ID, oid)
+                    for oid in ('cache', 'cookies')]
+
+        try:
+            options.clear_warning_preferences()
+            with mock.patch.object(frame, '_tree_model', model):
+                # Without expert mode, "check all" skips the warning option.
+                options.set('expert_mode', False)
+                frame._set_all_checked(False)
+                frame._set_cleaner_children(BROWSER1_ID, True)
+                self.assertEqual([False, True], checked())
+
+                # In expert mode it waits for the user to confirm it.
+                options.set('expert_mode', True)
+                frame._set_all_checked(False)
+                with mock.patch.object(module.wx, 'CallAfter') as call_after:
+                    frame._set_all_checked(True)
+                call_after.assert_called_once()
+                self.assertEqual([False, True], checked())
+                frame._pending_warnings = []
+                frame._confirming_warnings = False
+
+                # "Select safe" never picks an option with a warning.
+                with mock.patch.object(module, '_SAFE_OPTION_KEYWORDS',
+                                       ('cache', 'cookies')),                         mock.patch.object(module.wx, 'CallAfter') as call_after:
+                    frame._on_select_safe(None)
+                call_after.assert_not_called()
+                self.assertEqual([False, True], checked())
+        finally:
+            frame._pending_warnings = []
+            frame._confirming_warnings = False
+            options.clear_warning_preferences()
+            options.set('expert_mode', saved_expert)
+            for oid, value in saved_tree.items():
+                options.set_tree(BROWSER1_ID, oid, value)
+
     def test_delete_confirmation_needs_expert_mode(self):
         """Only expert mode can skip the delete confirmation."""
         frame = self.frame
@@ -1016,6 +1134,17 @@ class GUIwxTestCase(common.BleachbitTestCase):
             self.assertEqual((10, 20, 800, 600), tuple(
                 options.get(key) for key in keys[1:5]))
             self.assertFalse(options.get('window_maximized'))
+
+            # Closing a maximized window keeps the size from before it
+            # was maximized, for when it is restored.
+            with mock.patch.object(frame, 'IsMaximized', return_value=True), \
+                    mock.patch.object(frame, 'GetRect',
+                                      return_value=wx.Rect(0, 0, 1920, 1080)):
+                frame._track_normal_rect(mock.Mock())
+                frame._save_geometry()
+            self.assertEqual((10, 20, 800, 600), tuple(
+                options.get(key) for key in keys[1:5]))
+            self.assertTrue(options.get('window_maximized'))
 
             options.set('remember_geometry', True)
             options.set('window_maximized', True)
@@ -1123,7 +1252,7 @@ class GUIwxTestCase(common.BleachbitTestCase):
             result = wx.ID_OK
             checked = False
 
-            def __init__(self, parent, message, caption, style):
+            def __init__(self, _parent, message, caption, style):
                 self.message = message
                 self.caption = caption
                 self.style = style
