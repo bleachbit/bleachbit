@@ -2163,7 +2163,7 @@ Version: 2023-02-223
 !ifdef LANG_SWEDISH
 	LangString ALREADY_INSTALLED ${LANG_SWEDISH} "${prodname} är redan installerat.$\r$\nKlicka på 'OK' för att avinstallera den gamla versionen innan du uppgraderar, eller klicka på 'Avbryt' för att avbryta uppgraderingen."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SWEDISH} "Besök webbplatsen för ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_SWEDISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_SWEDISH} "${prodname} körs.$\r$\nStäng det och klicka på ”Försök igen” för att fortsätta, eller klicka på ”Avbryt” för att avbryta installationen."
 	LangString INSTALLER_CAPTION ${LANG_SWEDISH} "Installationsprogram för ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_SWEDISH} "Nästa steg är att bygga teckensnittscachen. Under tiden kan ett svart konsolfönster visas."
 	LangString MULTIPRINT2 ${LANG_SWEDISH} "Det brukar ta en minut, men ibland tar det upp till tio minuter."
@@ -2212,7 +2212,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SWEDISH} "Felsökningsterminal för ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_SWEDISH} "${prodname} (utan UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Säkerhetsradera med ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "${prodname} kommer att avinstalleras från följande mapp.$\r$\nKlicka på Avinstallera för att starta avinstallationen.$\r$\nFiler som du har lagt till i den här mappen, till exempel anpassade rensningsverktyg, behålls."
 !endif
 
 !ifdef LANG_THAI
