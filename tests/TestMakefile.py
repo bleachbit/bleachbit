@@ -10,6 +10,7 @@ Test case for Makefile
 """
 
 import os
+import subprocess
 
 from tests import common
 from bleachbit import APP_VERSION, IS_LINUX, IS_MAC, IS_WINDOWS
@@ -160,3 +161,66 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertTrue(os.path.isdir(install_tgt_dir))
         self.assertExists(os.path.join(
             install_tgt_dir, 'usr/local/share/bleachbit/cleaners/chromium.xml'))
+
+        # The launcher must not depend on PATH, where a pyenv shim or a
+        # venv without PyGObject may come first.
+        launcher_fn = os.path.join(install_tgt_dir, 'usr/local/bin/bleachbit')
+        self.assertExists(launcher_fn)
+        self.assertTrue(os.access(launcher_fn, os.X_OK))
+        with open(launcher_fn, encoding='utf-8') as f:
+            shebang = f.readline().rstrip('\n')
+        self.assertTrue(shebang.startswith('#!/'), shebang)
+        interpreter = shebang[2:]
+        self.assertNotEqual(os.path.basename(interpreter), 'env', shebang)
+        self.assertTrue(os.path.isfile(interpreter), shebang)
+        with open(launcher_fn, encoding='utf-8') as f:
+            lines = f.readlines()
+        with open('bleachbit.py', encoding='utf-8') as f:
+            self.assertEqual(lines[1:], f.readlines()[1:])
+
+        # a relative PATH entry must still give an absolute shebang
+        rel_bin = os.path.join(extract_subdir, 'rel', 'bin')
+        os.makedirs(rel_bin)
+        wrapper_fn = os.path.join(rel_bin, 'python3')
+        marker_fn = os.path.join(self.tempdir, 'wrapper-ran')
+        with open(wrapper_fn, 'w', encoding='utf-8') as f:
+            f.write(f'#!/bin/sh\n: > "{marker_fn}"\n'
+                    f'exec "{get_executable()}" "$@"\n')
+        os.chmod(wrapper_fn, 0o700)
+        # an outer `make tests-pytest PYTHON=...` reaches this make through
+        # MAKEFLAGS and would skip the PATH lookup
+        rel_env = {key: value for key, value in os.environ.items()
+                   if key not in ('MAKEFLAGS', 'MFLAGS', 'MAKELEVEL')}
+        rel_env['PATH'] = os.pathsep.join(
+            [os.path.join('rel', 'bin'), rel_env['PATH']])
+        rel_tgt_dir = os.path.join(self.tempdir, 'install-rel')
+        # not run_external(), which drops a relative PATH entry as root
+        proc = subprocess.run(
+            [make_exe, 'install', 'DESTDIR=' + rel_tgt_dir, 'PYTHON=python3'],
+            env=rel_env, capture_output=True, text=True, check=False)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertExists(marker_fn)
+        with open(os.path.join(rel_tgt_dir, 'usr/local/bin/bleachbit'),
+                  encoding='utf-8') as f:
+            shebang = f.readline().rstrip('\n')
+        self.assertTrue(shebang.startswith('#!/'), shebang)
+        self.assertTrue(os.path.isfile(shebang[2:]), shebang)
+
+        # written as given, not through a sed replacement
+        odd_tgt_dir = os.path.join(self.tempdir, 'install-odd')
+        odd_python = '/opt/a&b|c/python3'
+        (rc, _, stderr) = run_external(
+            [make_exe, 'install', 'DESTDIR=' + odd_tgt_dir,
+             'PYTHON_SHEBANG=' + odd_python])
+        self.assertEqual(rc, 0, stderr)
+        with open(os.path.join(odd_tgt_dir, 'usr/local/bin/bleachbit'),
+                  encoding='utf-8') as f:
+            self.assertEqual(f.readline(), f'#!{odd_python}\n')
+
+        # the kernel would cut the interpreter at the space
+        (rc, stdout, _) = run_external(
+            [make_exe, 'install',
+             'DESTDIR=' + os.path.join(self.tempdir, 'install-space'),
+             'PYTHON_SHEBANG=/opt/my python/python3'])
+        self.assertNotEqual(rc, 0)
+        self.assertIn('shebang', stdout)
