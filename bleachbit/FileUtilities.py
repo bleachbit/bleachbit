@@ -825,14 +825,21 @@ def _delete_json_key(node, targets):
 
 
 def clean_json(path, target):
-    """Delete key in the JSON file
+    """Delete keys in the JSON file
 
-    A '*' segment in target matches every key at that level.
+    target is one slash-separated key path or a list of them, so one
+    read and one write cover every action on the file. A '*' segment
+    matches every key at that level.
     """
+    targets = [target] if isinstance(target, str) else target
+
     with open(path, 'r', encoding='utf-8-sig') as f:
         js = json.load(f)
 
-    changed = _delete_json_key(js, target.split('/'))
+    changed = False
+    for one_target in targets:
+        if _delete_json_key(js, one_target.split('/')):
+            changed = True
 
     if changed:
         from bleachbit.Options import options
