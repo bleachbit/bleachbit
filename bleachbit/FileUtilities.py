@@ -1794,7 +1794,8 @@ def _windows_spelling(path):
 
 
 def _windows_keep_list(keep_paths):
-    """Return the keep list with each path spelled by _windows_spelling()
+    """Return (kind, spelling, lowered spelling) per keep list entry,
+    spelled by _windows_spelling()
 
     Spelled once per keep list, since it is read for every file. An entry
     that is not settled is spelled again next time.
@@ -1806,12 +1807,13 @@ def _windows_keep_list(keep_paths):
     spellings = _keep_list_cache['spellings']
     keep_list = []
     for kind, path in entries:
-        spelling = spellings.get(path)
-        if spelling is None:
+        spelled = spellings.get(path)
+        if spelled is None:
             spelling, settled = _windows_spelling(path)
+            spelled = (spelling, spelling.lower())
             if settled:
-                spellings[path] = spelling
-        keep_list.append((kind, spelling))
+                spellings[path] = spelled
+        keep_list.append((kind,) + spelled)
     return keep_list
 
 
@@ -1837,20 +1839,18 @@ def whitelisted_windows(path):
     keep_paths = options.get_whitelist_paths()
     if not keep_paths:
         return False
-    path = _windows_spelling(path)[0]
-    for kind, keep_path in _windows_keep_list(keep_paths):
-        # Windows is case insensitive
-        if (kind == 'file'
-                and path_equal(path, keep_path, case_sensitive=False)):
+    # Windows is case insensitive, so compare lowered, once per path
+    path = _windows_spelling(path)[0].lower()
+    for kind, keep_path, keep_lower in _windows_keep_list(keep_paths):
+        if kind == 'file' and path == keep_lower:
             return True
         if kind == 'folder':
-            if path_equal(path, keep_path, case_sensitive=False):
+            if path == keep_lower:
                 return True
-            if path_startswith(path, keep_path, case_sensitive=False):
+            if path_startswith(path, keep_lower, case_sensitive=True):
                 return True
             # Simple drive letter like C:\ matches everything below
-            if (len(keep_path) == 3
-                    and path.lower().startswith(keep_path.lower())):
+            if len(keep_path) == 3 and path.startswith(keep_lower):
                 return True
     return False
 
