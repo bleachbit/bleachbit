@@ -26,19 +26,14 @@ from bleachbit.Language import get_text as _
 logger = logging.getLogger(__name__)
 
 
-# TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 langsecref_map = {
     '3001': ('winapp2_internet_explorer', 'Internet Explorer'),
     '3005': ('winapp2_edge_classic', 'Microsoft Edge'),
     '3006': ('winapp2_edge_chromium', 'Microsoft Edge'),
-    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-    '3021': ('winapp2_applications', _('Applications')),
-    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-    '3022': ('winapp2_internet', _('Internet')),
-    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-    '3023': ('winapp2_multimedia', _('Multimedia')),
-    # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-    '3024': ('winapp2_utilities', _('Utilities')),
+    '3021': ('winapp2_applications', 'Applications'),
+    '3022': ('winapp2_internet', 'Internet'),
+    '3023': ('winapp2_multimedia', 'Multimedia'),
+    '3024': ('winapp2_utilities', 'Utilities'),
     '3025': ('winapp2_windows', 'Microsoft Windows'),
     '3026': ('winapp2_mozilla', 'Firefox/Mozilla'),
     '3027': ('winapp2_opera', 'Opera'),
@@ -49,10 +44,22 @@ langsecref_map = {
     '3033': ('winapp2_vivaldi', 'Vivaldi'),
     '3034': ('winapp2_brave', 'Brave'),
     # Section=Games (technically not langsecref)
-    'Games': (
-        'winapp2_games',
+    'Games': ('winapp2_games', 'Games')}
+
+
+def _translated_category_names():
+    """Return the translated langsecref_map names, keyed by cleaner ID"""
+    return {
+        # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+        'winapp2_applications': _('Applications'),
+        # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+        'winapp2_internet': _('Internet'),
+        # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+        'winapp2_multimedia': _('Multimedia'),
+        # TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
+        'winapp2_utilities': _('Utilities'),
         # TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
-        _('Games'))}
+        'winapp2_games': _('Games')}
 
 
 # Compiled once; these run for every section/filekey when importing winapp2.ini
@@ -222,8 +229,10 @@ class Winapp:
 
         self.cleaners = {}
         self.cleaner_ids = []
-        for langsecref in set(langsecref_map.values()):
-            self.add_section(langsecref[0], langsecref[1])
+        translated_names = _translated_category_names()
+        for cleaner_id, name in set(langsecref_map.values()):
+            self.add_section(
+                cleaner_id, translated_names.get(cleaner_id, name))
         self.errors = 0
         self.parser = configparser.RawConfigParser()
         encoding = detect_encoding(pathname) or 'utf_8_sig'

@@ -647,6 +647,8 @@ def get_text(text):
 
 def nget_text(singular, plural, n):
     """Return translated string with plural variant"""
+    if not attempted_setup_translation:
+        setup_translation()
     if not t:
         if 1 == n:
             return singular
@@ -659,6 +661,8 @@ def pget_text(msgctxt, msgid):
 
     Example context is button
     """
+    if not attempted_setup_translation:
+        setup_translation()
     if not t:
         return msgid
     return t.pgettext(msgctxt, msgid)

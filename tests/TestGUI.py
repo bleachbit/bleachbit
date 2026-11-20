@@ -357,6 +357,33 @@ class GUITestCase(common.BleachbitTestCase):
                 options.set('auto_detect_lang', True)
                 options.set('forced_language', '')
 
+    def test_preferences_restart_notice_in_new_language(self):
+        """The restart notice after a language change uses the new language"""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        lang = ['old']
+
+        def fake_setup_translation():
+            lang[0] = 'new'
+
+        pref = self.app.get_preferences_dialog()
+        try:
+            with mock.patch('bleachbit.GuiPreferences.setup_translation',
+                            side_effect=fake_setup_translation), \
+                    mock.patch('bleachbit.GuiPreferences._',
+                               side_effect=lambda msg: f'[{lang[0]}] {msg}'), \
+                    mock.patch.object(pref, 'show_infobar') as show_infobar:
+                pref.cb_auto_lang.set_active(False)
+                lang[0] = 'old'
+                pref.on_lang_changed(pref.lang_combo)
+            expected = mock.call('[new] Restart BleachBit for full effect.',
+                                 Gtk.MessageType.INFO)
+            self.assertEqual(show_infobar.call_args_list, [expected] * 2)
+        finally:
+            pref.dialog.destroy()
+            options.set('auto_detect_lang', True)
+            options.set('forced_language', '')
+
     @pytest.mark.no_xdist
     def test_preferences_undecodable_path(self):
         """Paths that are not valid UTF-8 reach GTK only sanitized"""
