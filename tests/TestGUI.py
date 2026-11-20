@@ -697,6 +697,72 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertFalse(gui.stop_button.get_sensitive())
         self.assertFalse(gui.progressbar.get_visible())
 
+    def test_worker_step_text_inserted_at_step_end(self):
+        """Text a worker step logs goes in when the step ends, in order"""
+        gui = self.get_window()
+        buf = gui.textbuffer
+
+        def text():
+            return buf.get_text(buf.get_start_iter(), buf.get_end_iter(), True)
+
+        buf.set_text('')
+        seen = []
+
+        def run():
+            gui.append_text('a\n')
+            gui.append_text('b\n', 'error')
+            gui.append_text('c\n')
+            seen.append(text())
+            yield True
+
+        self.assertTrue(gui._step_worker(run()))
+        self.assertEqual(seen, [''])
+        self.assertEqual(text(), 'a\nb\nc\n')
+        error = buf.get_tag_table().lookup('error')
+        self.assertEqual([buf.get_iter_at_offset(i).has_tag(error)
+                          for i in range(6)],
+                         [False, False, True, True, False, False])
+
+        def failing():
+            gui.append_text('d\n')
+            raise RuntimeError('boom')
+            yield  # pylint: disable=unreachable
+
+        with self.assertRaises(RuntimeError):
+            gui._step_worker(failing())
+        self.assertEqual(text(), 'a\nb\nc\nd\n')
+        # Outside a step the text goes in at once
+        gui.append_text('e\n')
+        self.assertEqual(text(), 'a\nb\nc\nd\ne\n')
+
+    def test_update_item_size(self):
+        """update_item_size() writes the size of an option and its cleaner"""
+        gui = self.get_window()
+        model = gui.view.get_model()
+
+        def size(cleaner_id, option_id=None):
+            for row in model:
+                if row[2] != cleaner_id:
+                    continue
+                if option_id is None:
+                    return row[3]
+                for child in row.iterchildren():
+                    if child[2] == option_id:
+                        return child[3]
+            return None
+
+        row = next(row for row in model if list(row.iterchildren()))
+        cleaner_id = row[2]
+        option_id = next(row.iterchildren())[2]
+        to_human = bleachbit.FileUtilities.bytes_to_human
+        self.addCleanup(gui.update_item_size, cleaner_id, -1, 0)
+        gui.update_item_size(cleaner_id, option_id, 1234)
+        self.assertEqual(size(cleaner_id, option_id), to_human(1234))
+        gui.update_item_size(cleaner_id, -1, 5678)
+        self.assertEqual(size(cleaner_id), to_human(5678))
+        gui.update_item_size(cleaner_id, option_id, 0)
+        self.assertEqual(size(cleaner_id, option_id), '')
+
     def test_interrupted_worker_is_not_left_running(self):
         gui = self.get_window()
         self.addCleanup(gui.set_sensitive, True)
