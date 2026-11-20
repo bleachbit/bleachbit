@@ -2508,6 +2508,7 @@ decoration {
   .maximized decoration, .fullscreen decoration, .tiled decoration, .tiled-top decoration, .tiled-right decoration, .tiled-bottom decoration, .tiled-left decoration {
     border-radius: 0; }
   .popup decoration {
+    transition: none;
     box-shadow: none; }
   .csd.popup decoration {
     border-radius: 0px;
