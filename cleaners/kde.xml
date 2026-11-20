@@ -33,5 +33,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="glob" path="~/.kde/share/apps/RecentDocuments/*.desktop"/>
     <action command="delete" search="glob" path="~/.kde4/share/apps/RecentDocuments/*.desktop"/>
     <action command="delete" search="glob" path="~/.local/share/RecentDocuments/*.desktop"/>
+    <action command="ini" search="file" path="~/.config/dolphinrc" section="kuick-copy" parameter="Paths[$e]"/>
+    <action command="ini" search="file" path="~/.config/dolphinrc" section="kuick-move" parameter="Paths[$e]"/>
   </option>
 </cleaner>
