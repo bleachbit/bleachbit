@@ -11,6 +11,7 @@ Test cases for module Action
 
 # standard imports
 import logging
+import ntpath
 import os
 import shutil
 import sys
@@ -245,8 +246,9 @@ class ActionTestCase(common.BleachbitTestCase):
             r'path="%WindowsSystem%\foo.log"/>'
         )
         action_node = parseString(action_xml).childNodes[0]
-        expanded = [r'C:\Windows\Sysnative\foo.log',
-                    r'C:\Windows\SysWOW64\foo.log']
+        # absolute on every OS, so the unresolved-variable check keeps them
+        expanded = [os.path.join(self.tempdir, 'Sysnative', 'foo.log'),
+                    os.path.join(self.tempdir, 'SysWOW64', 'foo.log')]
         with mock.patch('bleachbit.Action.IS_WINDOWS', True), \
                 mock.patch('bleachbit.Action.Windows', create=True) as mock_windows:
             mock_windows.expand_windows_system_vars.return_value = expanded
@@ -268,6 +270,65 @@ class ActionTestCase(common.BleachbitTestCase):
         if IS_WINDOWS:
             expected = [os.path.normpath(p) for p in expected]
         self.assertEqual(expected, action.paths)
+
+    def test_unresolved_var_paths(self):
+        """Paths an unset variable leaves relative or with a $$var$$ are skipped"""
+        kept = os.path.join(self.tempdir, '$Recycle.Bin', 'foo')
+        cases = (
+            ('$BLEACHBIT_TEST_UNSET/foo', None, []),
+            ('%BLEACHBIT_TEST_UNSET%/foo', None, []),
+            ('$$nope$$/foo', None, []),
+            ('$$profile$$/foo', {'profile': []}, []),
+            ('~/$$profile$$/foo', {'profile': []}, []),
+            ('$BLEACHBIT_TEST_EMPTY', None, []),
+            # no path at all keeps its meaning, the home folder for deep scan
+            ('', None, ['']),
+            (kept, None, [kept]),
+        )
+        with common.set_temporary_env('BLEACHBIT_TEST_UNSET', None), \
+                common.set_temporary_env('BLEACHBIT_TEST_EMPTY', ''):
+            for raw_path, path_vars, expected in cases:
+                with self.subTest(raw_path=raw_path):
+                    action_node = parseString(
+                        '<action command="delete" search="file"/>').childNodes[0]
+                    action_node.setAttribute('path', raw_path)
+                    action = Delete(action_node, path_vars)
+                    self.assertEqual(expected, action.paths)
+
+    def test_unresolved_multi_var_windows_expandvars(self):
+        """A $$var$$ is skipped though Windows expandvars() turns $$ into $"""
+        cases = (
+            ('~/$$profile$$/foo', {'profile': []}),
+            ('~/$$Config-File$$', {'Config-File': []}),
+            # vuze.xml, the example in issue #616, and the path it became there
+            ('$$ProgramFiles$$\\Vuze\\backup\\', None),
+            ('%$ProgramFiles$$%\\Vuze\\backup', None),
+        )
+        for raw_path, path_vars in cases:
+            with self.subTest(raw_path=raw_path):
+                action_node = parseString(
+                    '<action command="delete" search="walk.all"/>').childNodes[0]
+                action_node.setAttribute('path', raw_path)
+                with mock.patch('os.path.expandvars', ntpath.expandvars):
+                    action = Delete(action_node, path_vars)
+                self.assertEqual([], action.paths)
+
+    def test_deep_scan_unresolved_root(self):
+        """A deep scan whose root did not resolve scans nothing"""
+        action_node = parseString(
+            '<action command="delete" search="deep" skip_open="true" '
+            'regex="x" path="$$nope$$"/>').childNodes[0]
+        action = Delete(action_node)
+        self.assertEqual([], action.paths)
+        self.assertEqual([], list(action.get_deep_scan()))
+
+    def test_deep_scan_without_path(self):
+        """A deep scan without a path keeps its empty root, the home folder"""
+        action_node = parseString(
+            '<action command="delete" search="deep" regex="x"/>').childNodes[0]
+        action = Delete(action_node)
+        roots = [root for (root, _search) in action.get_deep_scan()]
+        self.assertEqual([''], roots)
 
     def test_has_glob(self):
         """Unit test for function has_glob()"""
