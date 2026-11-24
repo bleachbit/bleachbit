@@ -17,7 +17,7 @@ from bleachbit.GtkShim import is_gtk_available
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GtkShim import Gtk
-    from bleachbit.FontCheckDialog import (ALT_FONT_CLASS,
+    from bleachbit.FontCheckDialog import (ALT_FONT_CLASS, DIGIT_SAMPLE,
                                            create_font_check_dialog)
 
 
@@ -41,3 +41,11 @@ class FontCheckDialogTestCase(common.BleachbitTestCase):
         styled = [label for label in labels
                   if label.get_style_context().has_class(ALT_FONT_CLASS)]
         self.assertEqual(len(styled), 1)
+
+    def test_digits_shown_in_both_fonts(self):
+        """A font that breaks only the digits does not pass the check"""
+        labels = self._labels()
+        self.assertEqual(len(labels), 2)
+        for label in labels:
+            # pylint: disable-next=possibly-used-before-assignment
+            self.assertIn(DIGIT_SAMPLE, label.get_text())

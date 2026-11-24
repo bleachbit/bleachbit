@@ -43,6 +43,10 @@ _ALT_FONT_CSS = (
 # Screens the rules were added to, so each one gets them only once
 _alt_font_css_screens = set()
 
+# A substituted font can break only the digits, which no translated
+# string here contains
+DIGIT_SAMPLE = "0123456789"
+
 RESPONSE_TEXT_BLURRY = 1001
 RESPONSE_TEXT_UNREADABLE = 1002
 
@@ -63,6 +67,14 @@ def _apply_alt_font(widget):
     """Apply the alternate font to a label or label-like widget."""
     _install_alt_font_css()
     widget.get_style_context().add_class(ALT_FONT_CLASS)
+
+
+def _make_label(text):
+    """Return a left-aligned, wrapping label"""
+    label = Gtk.Label(label=text)
+    label.set_xalign(0.0)
+    label.set_line_wrap(True)
+    return label
 
 
 def create_font_check_dialog(parent=None):
@@ -106,13 +118,11 @@ def create_font_check_dialog(parent=None):
     # on startup on Windows. There are bugs that for some users the
     # font is blurry or resembles an alien language.
     text_quality_msg = _('Does all the text in this window look okay?')
-    label_default = Gtk.Label(label=text_quality_msg)
-    label_default.set_xalign(0.0)
-    label_default.set_line_wrap(True)
+    sample_msg = f'{text_quality_msg}\n{DIGIT_SAMPLE}'
 
-    label_alt = Gtk.Label(label=text_quality_msg)
-    label_alt.set_xalign(0.0)
-    label_alt.set_line_wrap(True)
+    label_default = _make_label(sample_msg)
+
+    label_alt = _make_label(sample_msg)
     _apply_alt_font(label_alt)
 
     content.pack_start(label_default, False, False, 0)
