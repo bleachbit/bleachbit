@@ -17,7 +17,7 @@ import stat
 import tempfile
 import time
 
-from bleachbit.Constant import EMPTY_SPACE_WARNING
+from bleachbit.Constant import empty_space_warning
 from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
@@ -41,9 +41,12 @@ logger = logging.getLogger(__name__)
 # a module-level variable for holding cleaners
 backends = {}
 
-# Putting the string here helps with translation.
-# TRANSLATORS: The description of what certain cleaning options do.
-DELETE_CACHE_DESCRIPTION = _("Delete the cache")
+
+def _delete_cache_description():
+    # Putting the string here helps with translation.
+    # TRANSLATORS: The description of what certain cleaning options do.
+    return _("Delete the cache")
+
 
 MENU_DIRS = ('~/.local/share/applications',
              '~/.config/autostart',
@@ -250,7 +253,7 @@ class System(Cleaner):
                 'cache',
                 # TRANSLATORS: Name of a cleaning option. Cache is a noun.
                 _('Cache'),
-                DELETE_CACHE_DESCRIPTION)
+                _delete_cache_description())
             if not IS_MAC:
                 self.add_option(
                     'localizations',
@@ -325,10 +328,11 @@ class System(Cleaner):
                 _('Memory dump'),
                 # TRANSLATORS: Description of the Memory dump cleaning option.
                 _('Delete the file'))
-            self.add_option('muicache', 'MUICache', DELETE_CACHE_DESCRIPTION)
+            self.add_option('muicache', 'MUICache',
+                            _delete_cache_description())
             # TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'),
-                            DELETE_CACHE_DESCRIPTION)
+                            _delete_cache_description())
             self.add_option(
                 'recycle_bin',
                 # TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
@@ -375,7 +379,7 @@ class System(Cleaner):
         self.add_option('empty_space', _('Empty space'),
                         # TRANSLATORS: 'empty' means 'unallocated'
                         _('Wipe empty space to hide deleted files'))
-        self.set_warning('empty_space', EMPTY_SPACE_WARNING)
+        self.set_warning('empty_space', empty_space_warning())
         self.add_option(
             'tmp',
             # TRANSLATORS: Name of a cleaning option for temporary files.

@@ -33,7 +33,7 @@ import types
 import warnings
 
 from bleachbit import FileUtilities, IS_WINDOWS
-from bleachbit.Constant import CLEAN_FILE_LABEL
+from bleachbit.Constant import clean_file_label
 from bleachbit.Language import get_text as _
 
 if IS_WINDOWS:
@@ -299,7 +299,7 @@ class ConfigFile:
             return
 
         ret = {
-            'label': CLEAN_FILE_LABEL,
+            'label': clean_file_label(),
             'n_deleted': 0,
             'n_special': 1,
             'path': self.path,
