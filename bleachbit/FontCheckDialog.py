@@ -23,25 +23,46 @@ This is a temporary workaround.
 """
 
 
-from bleachbit.GtkShim import require_gtk, Gtk
+from bleachbit.GtkShim import require_gtk, Gdk, Gtk
 from bleachbit.Language import get_text as _
 
 require_gtk()
 
-# pylint: disable-next=wrong-import-order, wrong-import-position
-from gi.repository import Pango
 
+ALT_FONT_CLASS = "bleachbit-alt-font"
+ALT_FONT_FAMILY = "Arial"
+ALT_FONT_SIZE_PT = 14
 
-ALT_FONT = "Arial 14"
+# Gtk.Widget.modify_font() is deprecated, so style the widget and
+# everything inside it through CSS instead
+_ALT_FONT_CSS = (
+    f'.{ALT_FONT_CLASS}, .{ALT_FONT_CLASS} * {{'
+    f' font-family: {ALT_FONT_FAMILY};'
+    f' font-size: {ALT_FONT_SIZE_PT}pt; }}').encode()
+
+# Screens the rules were added to, so each one gets them only once
+_alt_font_css_screens = set()
 
 RESPONSE_TEXT_BLURRY = 1001
 RESPONSE_TEXT_UNREADABLE = 1002
 
 
+def _install_alt_font_css():
+    """Add the alternate font rules to the default screen once"""
+    screen = Gdk.Screen.get_default()
+    if screen is None or screen in _alt_font_css_screens:
+        return
+    provider = Gtk.CssProvider()
+    provider.load_from_data(_ALT_FONT_CSS)
+    Gtk.StyleContext.add_provider_for_screen(
+        screen, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+    _alt_font_css_screens.add(screen)
+
+
 def _apply_alt_font(widget):
     """Apply the alternate font to a label or label-like widget."""
-    desc = Pango.FontDescription(ALT_FONT)
-    widget.modify_font(desc)
+    _install_alt_font_css()
+    widget.get_style_context().add_class(ALT_FONT_CLASS)
 
 
 def create_font_check_dialog(parent=None):
