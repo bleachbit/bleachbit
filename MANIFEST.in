@@ -26,6 +26,7 @@ include org.bleachbit.BleachBit.metainfo.xml
 include org.bleachbit.policy
 include po/*po
 include po/Makefile
+include scripts/prune_cleaners.py
 include setup.py
 # openSUSE Build Service uses these tests.
 include tests/*.py

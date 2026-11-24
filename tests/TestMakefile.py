@@ -143,11 +143,15 @@ class MakefileTestCase(common.BleachbitTestCase):
         canary_fn = os.path.join(
             extract_subdir, 'cleaners', 'windows_explorer.xml')
         self.assertExists(canary_fn)
+        # not tagged os="windows", so a grep for that missed it
+        macos_fn = os.path.join(extract_subdir, 'cleaners', 'safari.xml')
+        self.assertExists(macos_fn)
         del_win_command = [make_exe, 'delete_windows_files']
         os.chdir(extract_subdir)
         (rc, _, stderr) = run_external(del_win_command)
         self.assertEqual(rc, 0, stderr)
         self.assertNotExists(canary_fn)
+        self.assertNotExists(macos_fn)
 
         # install using make
         install_tgt_dir = os.path.join(self.tempdir, 'install')
