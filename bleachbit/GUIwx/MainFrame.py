@@ -435,10 +435,10 @@ class MainFrame(wx.Frame):
         self._build_ui()
         self._build_menu()
         self._build_accelerators()
+        # Sets _normal_rect, the last position and size while not
+        # maximized, which is saved on close even if the window is
+        # maximized by then.
         self._restore_geometry()
-        # The last position and size while not maximized, saved on
-        # close even if the window is maximized by then.
-        self._normal_rect = self.GetRect()
         self.Bind(wx.EVT_SIZE, self._track_normal_rect)
         self.Bind(wx.EVT_MOVE, self._track_normal_rect)
 
@@ -1263,19 +1263,31 @@ class MainFrame(wx.Frame):
         geometry* is on, and the position only when its top-left corner
         is on a connected display.  The wx window has no full screen
         mode, so ``window_fullscreen`` is not restored.
+
+        Also sets ``_normal_rect`` to the geometry the window returns to
+        when it is restored.  This happens before ``Maximize()``:
+        on a hidden frame, wxMSW reports the maximized size right after
+        it, so a window that starts maximized and is closed without
+        being restored would otherwise save its maximized size.
         """
+        self._normal_rect = self.GetRect()
         if not options.get('remember_geometry'):
             return
         keys = ('window_x', 'window_y', 'window_width', 'window_height')
         try:
             if all(options.has_option(key) for key in keys):
-                x, y, width, height = (options.get(key) for key in keys)
-                if wx.Display.GetFromPoint(wx.Point(x, y)) != wx.NOT_FOUND:
+                values = [options.get(key) for key in keys]
+                x, y, width, height = values
+                if (None not in values and wx.Display.GetFromPoint(
+                        wx.Point(x, y)) != wx.NOT_FOUND):
                     self.SetRect(wx.Rect(x, y, width, height))
-            if options.get('window_maximized'):
-                self.Maximize()
+                    self._normal_rect = self.GetRect()
+            maximize = options.get('window_maximized')
         except ValueError:
             logger.exception('Invalid window geometry in the options')
+            return
+        if maximize:
+            self.Maximize()
 
     def _is_normal_state(self):
         return not (self.IsIconized() or self.IsMaximized()

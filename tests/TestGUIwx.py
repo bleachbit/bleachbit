@@ -25,6 +25,8 @@ else:
 
 
 WX_SMOKE_EXIT_MS = 500
+# Loading Winapp2.ini cleaners on Windows can take several seconds.
+LOADER_TIMEOUT_S = 60.0
 
 BROWSER1_ID = '_fauxfox'
 BROWSER2_ID = '_pseudromium'
@@ -94,10 +96,29 @@ class GUIwxTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Reset tree option state before each test."""
         super().setUp()
+        if self._testMethodName != 'test_bleachbit_wx_app_smoke_mainloop':
+            # The smoke test lets the MainLoop run the loader callbacks.
+            self._wait_for_loader()
         for cleaner_id, option_id in (
                 (BROWSER1_ID, 'cache'), (BROWSER1_ID, 'cookies'),
                 (BROWSER2_ID, 'logs')):
             options.set_tree(cleaner_id, option_id, False)
+
+    def _wait_for_loader(self):
+        """Wait for the cleaner loader and run its completion callback.
+
+        The loader posts ``_on_loader_done`` with ``wx.CallAfter``, so
+        the thread can finish while that callback is still queued and
+        ``_loader_thread`` is still set.  ``_start_worker`` then returns
+        early, so join the thread first and drain the events after.
+        """
+        loader = getattr(self.frame, '_loader_thread', None)
+        if loader is None:
+            return
+        loader.join(timeout=LOADER_TIMEOUT_S)
+        self.assertFalse(loader.is_alive(), 'Cleaners are still loading')
+        self.app.ProcessPendingEvents()
+        self.assertIsNone(self.frame._loader_thread)
 
     def _children(self, model, parent=None):
         """Return object children of a model item."""
@@ -114,12 +135,11 @@ class GUIwxTestCase(common.BleachbitTestCase):
         self.assertIsNotNone(self.frame)
         wx.CallLater(WX_SMOKE_EXIT_MS, self.app.ExitMainLoop)
         self.app.MainLoop()
-        # Drain any callbacks that were queued during the MainLoop but
-        # not yet dispatched (e.g. pending CallAfter from worker threads).
+        # Run the callbacks queued during the MainLoop but not yet
+        # dispatched, including the loader's, which can be queued after
+        # the MainLoop exits.
+        self._wait_for_loader()
         self.app.ProcessPendingEvents()
-        loader = getattr(self.frame, '_loader_thread', None)
-        if loader is not None:
-            loader.join(timeout=5.0)
         self.assertIs(self.app.GetTopWindow(), self.frame)
 
     def test_gtk_menu_mnemonics_are_converted_for_wx(self):
@@ -543,9 +563,11 @@ class GUIwxTestCase(common.BleachbitTestCase):
             options.set('forced_language', '', section='bleachbit')
             with mock.patch.object(
                     prefs, 'get_supported_language_code_name_dict',
-                    return_value=langs),                     mock.patch.object(
+                    return_value=langs), \
+                    mock.patch.object(
                         prefs, 'get_active_language_code',
-                        side_effect=active_language),                     mock.patch.object(prefs, 'setup_translation') as setup:
+                        side_effect=active_language), \
+                    mock.patch.object(prefs, 'setup_translation') as setup:
                 dialog = prefs.PreferencesDialog(self.frame)
                 panel = dialog.get_page('languages')
                 self.assertIsInstance(panel, prefs._LanguagesPanel)
@@ -839,7 +861,8 @@ class GUIwxTestCase(common.BleachbitTestCase):
             panel.saved_domains = {'b.example'}
             panel._finish_populate(['a.example'])
             with mock.patch.object(prefs, 'open_for_overwrite',
-                                   side_effect=fail_to_open),                     mock.patch.object(prefs.wx, 'CallAfter') as call_after:
+                                   side_effect=fail_to_open), \
+                    mock.patch.object(prefs.wx, 'CallAfter') as call_after:
                 panel._on_item_toggled(Event(0), True)
                 self.assertEqual([[False, 'a.example'], [True, 'b.example']],
                                  panel._hosts)
@@ -1008,7 +1031,8 @@ class GUIwxTestCase(common.BleachbitTestCase):
 
             # In expert mode, the warning is confirmed after the click.
             options.set('expert_mode', True)
-            self.assertEqual(ops, frame._filter_operations_for_expert_mode(ops))
+            self.assertEqual(
+                ops, frame._filter_operations_for_expert_mode(ops))
             with mock.patch.object(module.wx, 'CallAfter') as call_after:
                 self.assertFalse(frame._allow_enable(BROWSER1_ID, 'cache'))
             call_after.assert_called_once()
@@ -1065,7 +1089,8 @@ class GUIwxTestCase(common.BleachbitTestCase):
 
                 # "Select safe" never picks an option with a warning.
                 with mock.patch.object(module, '_SAFE_OPTION_KEYWORDS',
-                                       ('cache', 'cookies')),                         mock.patch.object(module.wx, 'CallAfter') as call_after:
+                                       ('cache', 'cookies')), \
+                        mock.patch.object(module.wx, 'CallAfter') as call_after:
                     frame._on_select_safe(None)
                 call_after.assert_not_called()
                 self.assertEqual([False, True], checked())
@@ -1155,6 +1180,43 @@ class GUIwxTestCase(common.BleachbitTestCase):
                 frame._restore_geometry()
             set_rect.assert_called_once_with(wx.Rect(10, 20, 800, 600))
             maximize.assert_called_once()
+
+            # Reopening the maximized window and closing it again
+            # without restoring it still keeps the size from before it
+            # was maximized.  wxMSW reports the maximized size of a
+            # hidden frame as soon as Maximize() is called.
+            options.set('window_x', 30)
+            options.set('window_y', 40)
+            options.set('window_width', 920)
+            options.set('window_height', 680)
+            state = {'rect': wx.Rect(5, 5, 640, 480), 'maximized': False}
+
+            def maximize_frame():
+                state['maximized'] = True
+
+            def get_rect():
+                if state['maximized']:
+                    return wx.Rect(0, 0, 1920, 1080)
+                return state['rect']
+
+            with mock.patch.object(
+                    frame, 'SetRect',
+                    side_effect=lambda rect: state.update(rect=rect)), \
+                    mock.patch.object(frame, 'GetRect', side_effect=get_rect), \
+                    mock.patch.object(frame, 'Maximize',
+                                      side_effect=maximize_frame), \
+                    mock.patch.object(frame, 'IsMaximized',
+                                      side_effect=lambda: state['maximized']), \
+                    mock.patch.object(self.MainFrameModule.wx.Display,
+                                      'GetFromPoint', return_value=0):
+                frame._restore_geometry()
+                self.assertTrue(state['maximized'])
+                # The window is shown maximized, then closed.
+                frame._track_normal_rect(mock.Mock())
+                frame._save_geometry()
+            self.assertEqual((30, 40, 920, 680), tuple(
+                options.get(key) for key in keys[1:5]))
+            self.assertTrue(options.get('window_maximized'))
 
             options.set('remember_geometry', False)
             with mock.patch.object(frame, 'SetRect') as set_rect:
@@ -1291,7 +1353,8 @@ class GUIwxTestCase(common.BleachbitTestCase):
                 options.set('expert_mode', True)
                 options.set('delete_confirmation', True)
                 FakeDialog.result = wx.ID_CANCEL
-                self.assertFalse(Dialogs.delete_confirmation_dialog(None, False))
+                self.assertFalse(
+                    Dialogs.delete_confirmation_dialog(None, False))
                 self.assertEqual(True, created[-1].checkbox[1])
                 self.assertFalse(options.get('delete_confirmation'))
 
