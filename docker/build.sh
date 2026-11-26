@@ -82,7 +82,6 @@ case "$DISTRO" in
         DOCKERFILE="$DOCKER_DIR/Dockerfile.appimage"
         RUN_ENV+=(--env APPIMAGE_EXTRACT_AND_RUN=1)
         RUN_ENV+=(--env NO_STRIP=1)
-        RUN_ENV+=(--env SKIP_APPIMAGE_TEST=1)
         ;;
     py315-pytest)
         IMAGE=bleachbit-test:py315-pytest
