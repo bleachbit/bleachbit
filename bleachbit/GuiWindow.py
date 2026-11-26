@@ -12,7 +12,7 @@ import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, Language, SystemInformation, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
+from bleachbit import APP_NAME, Bootstrap, Cleaner, FileUtilities, GuiBasic, Language, SystemInformation, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
@@ -21,8 +21,8 @@ from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiInfoBar import InfoBarMixin
 from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
-from bleachbit.GuiUtil import (clear_clipboard, detect_dark_background, get_font_size_from_name,
-                               get_window_info, notify, resolve_icon_name, threaded)
+from bleachbit.GuiUtil import (clear_clipboard, detect_dark_background, fit_geometry, get_font_size_from_name,
+                               get_window_info, notify, rescale_geometry, resolve_icon_name, threaded)
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
@@ -1395,6 +1395,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # Only the position: see on_size_allocate() for the size.
         options.set("window_x", x)
         options.set("window_y", y)
+        options.set("window_scale", self.get_scale_factor())
         return False
 
     def on_size_allocate(self, _widget, _allocation):
@@ -1421,6 +1422,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         options.set("window_y", y)
         options.set("window_width", width)
         options.set("window_height", height)
+        options.set("window_scale", self.get_scale_factor())
         return False
 
     def on_window_state_event(self, _widget, event):
@@ -1480,9 +1482,11 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         if options.has_option("window_x") and options.has_option("window_y") and \
            options.has_option("window_width") and options.has_option("window_height"):
             r = Gdk.Rectangle()
-            (r.x, r.y) = (options.get("window_x"), options.get("window_y"))
-            (r.width, r.height) = (options.get(
-                "window_width"), options.get("window_height"))
+            scale = self.get_scale_factor()
+            (r.x, r.y, r.width, r.height) = rescale_geometry(
+                (options.get("window_x"), options.get("window_y"),
+                 options.get("window_width"), options.get("window_height")),
+                self._saved_window_scale(scale), scale)
 
             g = get_window_info(self)
 
@@ -1490,6 +1494,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # is within the closest monitor
             if g.x <= r.x < g.x + g.width and \
                g.y <= r.y < g.y + g.height:
+                (r.x, r.y, r.width, r.height) = fit_geometry(
+                    (r.x, r.y, r.width, r.height), self._get_workarea(g))
                 logger.debug("closest monitor %s, prior window geometry = %s+%s",
                              str(g), (r.x, r.y), (r.width, r.height))
                 self._restore_size = (r.width, r.height)
@@ -1513,6 +1519,24 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # Apply Windows 10 theme if on Windows and enabled
         if IS_WINDOWS:
             self.set_windows10_theme()
+
+    @staticmethod
+    def _saved_window_scale(scale):
+        """Return the scale the saved geometry was saved under"""
+        if options.has_option('window_scale'):
+            saved = options.get('window_scale')
+            if 1 <= saved <= 8:
+                return saved
+        # Older versions did not save the scale
+        return Bootstrap.gtk_default_scale or scale
+
+    def _get_workarea(self, info):
+        """Return the work area of the window's monitor as (x, y, width, height)"""
+        monitor = self.get_display().get_monitor_at_window(self.get_window())
+        if monitor is not None:
+            area = monitor.get_workarea()
+            return (area.x, area.y, area.width, area.height)
+        return (info.x, info.y, info.width, info.height)
 
     def _maximize_after_restore(self):
         """Maximize once the restored size has been applied.

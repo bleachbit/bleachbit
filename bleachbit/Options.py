@@ -98,7 +98,7 @@ boolean_keys = frozenset(
     if _platform_allows(meta)
 )
 int_keys = frozenset(('window_x', 'window_y', 'window_width', 'window_height',
-                      'window_font_size'))
+                      'window_font_size', 'window_scale'))
 
 
 def _option_index(option_name):

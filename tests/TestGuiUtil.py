@@ -24,9 +24,10 @@ from bleachbit.GtkShim import Gdk, Gtk, is_gtk_available
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
-    from bleachbit.GuiUtil import (apply_dark_mode, clear_clipboard,
+    from bleachbit.GuiUtil import (apply_dark_mode, clear_clipboard, fit_geometry,
                                    flush_gtk_events, get_clipboard_paths,
-                                   get_font_size_from_name, notify, threaded)
+                                   get_font_size_from_name, notify, rescale_geometry,
+                                   threaded)
 
 CLIPBOARD_TIMEOUT_SECONDS = 5
 CLIPBOARD_SLEEP_SECONDS = 0.05
@@ -295,6 +296,43 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
         self.assertIsInstance(get2, list)
         self.assertEqual(get1, get2)
         self.assertEqual(sorted(self.paths), sorted(get1))
+
+
+@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
+class GUIUtilGeometryTestCase(common.BleachbitTestCase):
+    """Test case for the saved window geometry helpers"""
+
+    def test_rescale_geometry(self):
+        """Geometry is converted between scales"""
+        tests = (
+            ((840, 339, 1930, 1357), 1, 2, (420, 170, 965, 678)),
+            ((420, 170, 965, 678), 2, 1, (840, 340, 1930, 1356)),
+            ((-300, 10, 800, 600), 2, 3, (-200, 7, 533, 400)),
+            ((840, 339, 1930, 1357), 2, 2, (840, 339, 1930, 1357)),
+        )
+        for geometry, saved_scale, scale, expected in tests:
+            with self.subTest(geometry=geometry, saved_scale=saved_scale, scale=scale):
+                # pylint: disable-next=possibly-used-before-assignment
+                actual = rescale_geometry(geometry, saved_scale, scale)
+                self.assertEqual(actual, expected)
+
+    def test_fit_geometry(self):
+        """Geometry is shrunk and moved into the area"""
+        area = (0, 0, 1806, 899)
+        tests = (
+            ((420, 170, 965, 678), (420, 170, 965, 678)),
+            ((840, 339, 1930, 1357), (0, 0, 1806, 899)),
+            ((1500, 800, 800, 600), (1006, 299, 800, 600)),
+            ((-50, -20, 800, 600), (0, 0, 800, 600)),
+            ((10, 10, 0, -5), (10, 10, 1, 1)),
+        )
+        for geometry, expected in tests:
+            with self.subTest(geometry=geometry):
+                # pylint: disable-next=possibly-used-before-assignment
+                self.assertEqual(fit_geometry(geometry, area), expected)
+        # second monitor left of the primary one
+        self.assertEqual(fit_geometry((-1000, 100, 800, 600), (-1920, 0, 1920, 1040)),
+                         (-1000, 100, 800, 600))
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')

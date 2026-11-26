@@ -17,6 +17,8 @@ from bleachbit import IS_POSIX, IS_WINDOWS, logger, log_startup_time
 
 # pylint: disable=invalid-name
 _bootstrapped = False
+# The scale GTK would have picked if _apply_hidpi_scale() overrode it
+gtk_default_scale = None
 
 _PYTHON_DLL_RE = re.compile(r'python\d+\.dll$', re.IGNORECASE)
 
@@ -34,6 +36,47 @@ def _apply_fontconfig_backend_preference():
             os.environ['PANGOCAIRO_BACKEND'] = 'fc'
     except Exception as e:
         logger.debug('could not read the fontconfig backend preference: %s', e)
+
+
+def gdk_scale_environ(dpi, screen_height):
+    """Return the GDK variables that scale the GUI to the given DPI
+
+    GTK 3 truncates dpi / 96 to an integer scale and draws text at the full
+    DPI, so at 175% text is scaled but icons and sizes are not. Round the
+    scale instead (150% still rounds down). From scale 2 GTK draws text at
+    96 DPI, so text and widgets scale together.
+    """
+    if not dpi:
+        return {}
+    scale = int(dpi / 96 + 0.49)
+    if scale < 2:
+        return {}
+    # Rounding up shrinks the logical screen, e.g. 1080p at 175% to 540
+    # pixels high, too small for the Preferences dialog
+    if scale > dpi // 96 and (not screen_height or screen_height / scale < 600):
+        return {}
+    return {'GDK_SCALE': str(scale)}
+
+
+def _apply_hidpi_scale():
+    """On Windows, set the GDK scale before Gtk opens the display"""
+    if any(var in os.environ for var in
+           ('GDK_SCALE', 'GDK_WIN32_FONT_RESOLUTION', 'GDK_WIN32_DISABLE_HIDPI')):
+        return
+    from bleachbit import Windows
+    try:
+        dpi = Windows.get_system_dpi()
+        screen_height = Windows.get_screen_height() if dpi else None
+    except Exception as e:
+        logger.debug('could not get the system DPI: %s', e)
+        return
+    environ = gdk_scale_environ(dpi, screen_height)
+    if environ:
+        logger.debug('DPI %s, screen height %s, setting %s',
+                     dpi, screen_height, environ)
+        global gtk_default_scale  # pylint: disable=global-statement
+        gtk_default_scale = max(1, dpi // 96)
+    os.environ.update(environ)
 
 
 def check_wayland_and_root():
@@ -92,6 +135,7 @@ def _bootstrap_windows():
     log_startup_time('Windows imported')
     Windows.setup_environment()
     log_startup_time('environment set up')
+    _apply_hidpi_scale()
 
     # Use our `font.conf` (see commit 3385952b37d78).
     os.environ.pop('FONTCONFIG_FILE', None)

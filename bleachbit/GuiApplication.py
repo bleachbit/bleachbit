@@ -295,9 +295,14 @@ class Bleachbit(Gtk.Application):
         # typed in Launchpad. This is a special string shown
         # in the 'About' box.
         dialog.set_translator_credits(_("translator-credits"))
-        if appicon_path and os.path.exists(appicon_path):
-            icon = Gtk.Image.new_from_file(appicon_path)
-            dialog.set_logo(icon.get_pixbuf())
+        # A pixbuf logo is drawn at its own size times the display scale,
+        # while a themed icon is drawn at 128 and loaded for the scale.
+        if Gtk.IconTheme.get_default().has_icon('bleachbit'):
+            dialog.set_logo_icon_name('bleachbit')
+        elif appicon_path and os.path.exists(appicon_path):
+            from gi.repository import GdkPixbuf
+            dialog.set_logo(GdkPixbuf.Pixbuf.new_from_file_at_size(
+                appicon_path, 128, 128))
 
         return dialog
 
