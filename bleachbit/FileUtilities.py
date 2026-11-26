@@ -441,16 +441,16 @@ class ScannedPath(str):
     """
 
 
-def _scanned_file_path(entry):
-    """Return the path of a scandir entry, with its size on Windows"""
+def _scanned_file_path(entry, path):
+    """Return path, a scandir entry's path, with its size on Windows"""
     if not IS_WINDOWS:
-        return entry.path
+        return path
     try:
         # On Windows this is the cached directory entry, not a new stat
         size = entry.stat(follow_symlinks=False).st_size
     except OSError:
-        return entry.path
-    path = ScannedPath(entry.path)
+        return path
+    path = ScannedPath(path)
     path.scan_size = size
     return path
 
@@ -479,6 +479,14 @@ def _mount_points_below(dirname):
     return mounts
 
 
+def _scandir_path(dirname):
+    """Return the path to list dirname with, past MAX_PATH on Windows"""
+    if IS_WINDOWS and os.path.isabs(dirname):
+        # \\?\ skips normalization, so normalize first like Win32 would
+        return extended_path(os.path.normpath(dirname))
+    return dirname
+
+
 def _scan_children(top, list_directories, pending_dirs, same_device=False):
     """Yield files under `top`, descending into real subdirectories.
 
@@ -500,14 +508,20 @@ def _scan_children(top, list_directories, pending_dirs, same_device=False):
             return
         mounts = _mount_points_below(top)
     while stack:
+        dirname = stack.pop()
         try:
-            scandir_it = os.scandir(stack.pop())
-        except OSError:
+            scandir_it = os.scandir(_scandir_path(dirname))
+        except FileNotFoundError:
+            continue
+        except OSError as e:
+            logger.debug('Cannot list %r: %s', dirname, e.strerror)
             continue
         subdirs = []
         try:
             with scandir_it:
                 for entry in scandir_it:
+                    # Not entry.path, which carries the \\?\ on Windows
+                    entry_path = os.path.join(dirname, entry.name)
                     try:
                         is_dir = entry.is_dir()
                     except OSError:
@@ -515,10 +529,10 @@ def _scan_children(top, list_directories, pending_dirs, same_device=False):
                         is_dir = False
                     if not is_dir:
                         # A file can be bind-mounted onto another file
-                        if same_device and entry.path in mounts:
+                        if same_device and entry_path in mounts:
                             continue
                         # regular file, symlink to a file, or broken link
-                        yield _scanned_file_path(entry)
+                        yield _scanned_file_path(entry, entry_path)
                         continue
                     try:
                         # is_junction_entry() is Windows-only and never reached on
@@ -532,13 +546,13 @@ def _scan_children(top, list_directories, pending_dirs, same_device=False):
                             st = entry.stat(follow_symlinks=False)
                         except OSError:
                             continue
-                        if st.st_dev != top_dev or entry.path in mounts:
+                        if st.st_dev != top_dev or entry_path in mounts:
                             continue
                         is_link = not stat.S_ISDIR(st.st_mode)
                     if list_directories:
-                        pending_dirs.append(entry.path)
+                        pending_dirs.append(entry_path)
                     if not is_link:
-                        subdirs.append(entry.path)
+                        subdirs.append(entry_path)
         except OSError:
             # The directory may disappear or become unreadable mid-iteration.
             # os.walk silently skips such directories, so do the same instead of
@@ -1751,7 +1765,8 @@ _keep_list_cache = {'entries': (), 'spellings': {}}
 def _windows_long_path(path):
     """Return the long name of an 8.3 path, or None when it has none yet"""
     try:
-        return win32file.GetLongPathName(path)
+        # \\?\ so a path past MAX_PATH resolves too
+        return extended_path_undo(win32file.GetLongPathName(extended_path(path)))
     except pywinerror:
         # e.g. the path does not exist
         return None

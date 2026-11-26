@@ -18,6 +18,7 @@ import json
 import locale
 import mmap
 import os
+import shutil
 import sqlite3
 import stat
 import subprocess
@@ -75,6 +76,7 @@ from bleachbit.FileUtilities import (
     open_files_freebsd,
     OpenFiles,
     _linux_mount,
+    _windows_long_path,
     same_partition,
     truncate_file,
     uris_to_paths,
@@ -444,6 +446,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         class _FakeEntry:
             def __init__(self, path, is_dir=False):
                 self.path = path
+                self.name = os.path.basename(path)
                 self._is_dir = is_dir
 
             def is_dir(self):
@@ -501,6 +504,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         class _FakeEntry:
             def __init__(self, path, is_dir):
                 self.path = path
+                self.name = os.path.basename(path)
                 self._is_dir = is_dir
 
             def is_dir(self):
@@ -549,6 +553,52 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertEqual(results[0], deep_file)
         self.assertEqual(results[1], path)
         self.assertEqual(results[-1], os.path.join(root, 'a'))
+
+    def test_children_in_directory_past_max_path(self):
+        """Files past MAX_PATH are found, and returned without \\\\?\\"""
+        root = self.mkdtemp(prefix='bleachbit-long-path')
+        self.addCleanup(shutil.rmtree, extended_path(root), ignore_errors=True)
+        deep = root
+        for i in range(10):
+            deep = os.path.join(deep, f'd{i}_' + 'x' * 28)
+        os.makedirs(extended_path(deep))
+        deep_file = os.path.join(deep, 'deep.txt')
+        with open(extended_path(deep_file), 'w', encoding='utf-8') as f:
+            f.write('x')
+        self.assertGreater(len(deep_file), 300)
+
+        with unittest.mock.patch('bleachbit.FileUtilities.os.scandir',
+                                 wraps=os.scandir) as scandir:
+            results = list(children_in_directory(root, list_directories=True))
+
+        self.assertIn(deep_file, results)
+        self.assertEqual(11, len(results))
+        self.assertEqual([], [p for p in results if p.startswith('\\\\?\\')])
+        if IS_WINDOWS:
+            self.assertEqual(
+                [], [c.args[0] for c in scandir.call_args_list
+                     if not c.args[0].startswith('\\\\?\\')])
+
+    def test_children_in_directory_logs_unreadable(self):
+        """A directory that cannot be listed is logged, not skipped silently"""
+        root = self.mkdtemp(prefix='bleachbit-unreadable')
+        error = PermissionError(errno.EACCES, 'Permission denied')
+        with unittest.mock.patch('bleachbit.FileUtilities.os.scandir',
+                                 side_effect=error), \
+                self.assertLogs('bleachbit.FileUtilities', 'DEBUG') as cm:
+            self.assertEqual([], list(children_in_directory(root)))
+        self.assertIn('Cannot list', cm.output[0])
+
+    @common.skipUnlessWindows
+    def test_windows_long_path_extended(self):
+        """8.3 names are looked up through \\\\?\\, so long paths resolve"""
+        parent = 'C:\\' + 'x' * 300
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.win32file.GetLongPathName',
+                return_value='\\\\?\\' + parent + '\\LongName') as get_long:
+            self.assertEqual(parent + '\\LongName',
+                             _windows_long_path(parent + '\\LONGNA~1'))
+        get_long.assert_called_once_with('\\\\?\\' + parent + '\\LONGNA~1')
 
     @common.skipIfWindows
     def test_children_in_directory_posix_symlink(self):
