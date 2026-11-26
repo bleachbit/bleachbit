@@ -383,18 +383,19 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	@if [ -n "$${SKIP_APPIMAGE_TEST:-}" ]; then \
 		echo "SKIP_APPIMAGE_TEST is set, skipping AppImage test."; \
 	else \
-		"$(APPIMAGE_OUTPUT_PATH)" --sysinfo && \
-		gui_cmd='"$(APPIMAGE_OUTPUT_PATH)" --gui --exit'; \
-		if command -v dbus-run-session >/dev/null 2>&1; then \
-			gui_cmd="dbus-run-session -- $$gui_cmd"; \
-		fi; \
-		if command -v xvfb-run >/dev/null 2>&1; then \
-			xvfb-run -a sh -c "$$gui_cmd"; \
-		elif [ -n "$${DISPLAY:-}$${WAYLAND_DISPLAY:-}" ]; then \
-			sh -c "$$gui_cmd"; \
-		else \
-			echo "WARNING: Neither xvfb-run nor a display is available, skipping --gui smoke test."; \
-		fi; \
+		"$(APPIMAGE_OUTPUT_PATH)" --sysinfo && { \
+			set -- "$(APPIMAGE_OUTPUT_PATH)" --gui --exit; \
+			if command -v dbus-run-session >/dev/null 2>&1; then \
+				set -- dbus-run-session -- "$$@"; \
+			fi; \
+			if command -v xvfb-run >/dev/null 2>&1; then \
+				xvfb-run -a "$$@"; \
+			elif [ -n "$${DISPLAY:-}$${WAYLAND_DISPLAY:-}" ]; then \
+				"$$@"; \
+			else \
+				echo "WARNING: Neither xvfb-run nor a display is available, skipping --gui smoke test."; \
+			fi; \
+		}; \
 	fi
 
 	@echo "* AppImage created: $(APPIMAGE_OUTPUT_PATH)"
