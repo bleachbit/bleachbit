@@ -384,6 +384,13 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 		echo "SKIP_APPIMAGE_TEST is set, skipping AppImage test."; \
 	else \
 		"$(APPIMAGE_OUTPUT_PATH)" --sysinfo; \
+		if command -v xvfb-run >/dev/null 2>&1; then \
+			xvfb-run -a "$(APPIMAGE_OUTPUT_PATH)" --gui --exit; \
+		elif [ -n "$${DISPLAY:-}$${WAYLAND_DISPLAY:-}" ]; then \
+			"$(APPIMAGE_OUTPUT_PATH)" --gui --exit; \
+		else \
+			echo "WARNING: Neither xvfb-run nor a display is available, skipping --gui smoke test."; \
+		fi; \
 	fi
 
 	@echo "* AppImage created: $(APPIMAGE_OUTPUT_PATH)"
