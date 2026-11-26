@@ -388,6 +388,9 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 			if command -v dbus-run-session >/dev/null 2>&1; then \
 				set -- dbus-run-session -- "$$@"; \
 			fi; \
+			if command -v timeout >/dev/null 2>&1; then \
+				set -- timeout 30 "$$@"; \
+			fi; \
 			if command -v xvfb-run >/dev/null 2>&1; then \
 				xvfb-run -a "$$@"; \
 			elif [ -n "$${DISPLAY:-}$${WAYLAND_DISPLAY:-}" ]; then \
