@@ -473,10 +473,19 @@ def build_py2exe():
         'copyright': bleachbit.APP_COPYRIGHT,
     }
 
+    # py2exe drops the manifest of its template exe. Without one Windows
+    # reports version 6.2 (Windows 8) to the application.
+    manifest_path = 'windows/bleachbit.manifest'
+    assert_exist(manifest_path)
+    with open(manifest_path, encoding='utf-8') as f:
+        manifest = f.read()
+    rt_manifest = 24
+
     # GUI bleachbit.exe
     gui_target = {
         'script': 'bleachbit.py',
         'icon_resources': [(1, 'windows/bleachbit.ico')],
+        'other_resources': [(rt_manifest, 1, manifest)],
         'version_info': version_info
     }
 
