@@ -998,22 +998,77 @@ class GUIwxTestCase(common.BleachbitTestCase):
             self.assertEqual('Drives', listbox.GetName())
             if not acc_module._HAVE_MSAA:
                 return
-            # Announced once, as an alert carrying the message.
+            # Announced once, as an alert carrying the message.  The bar
+            # itself is the alert, so the message is read as the context
+            # of its close button.
             notify.assert_called_once()
             self.assertEqual(wx.ACC_EVENT_SYSTEM_ALERT,
                              notify.call_args.args[0])
-            acc = notice_bar._alert_window._bb_accessible
+            self.assertIs(notice_bar, notice_bar._alert_window)
+            acc = notice_bar._bb_accessible
             self.assertEqual((wx.ACC_OK, wx.ROLE_SYSTEM_ALERT),
                              acc.GetRole(wx.ACC_SELF))
             self.assertEqual(
                 (wx.ACC_OK, 'Restart BleachBit for full effect.'),
                 acc.GetName(wx.ACC_SELF))
+            # The close button is named after its tooltip; wxPython 4.2
+            # leaves it unnamed.
+            close = notice_bar._close_button
+            self.assertIsInstance(close, wx.Button)
+            self.assertEqual(
+                (wx.ACC_OK, close.GetToolTipText()),
+                close._bb_accessible.GetName(wx.ACC_SELF))
             self.assertEqual(
                 (wx.ACC_OK, 'More details'),
                 checkbox._bb_accessible.GetDescription(wx.ACC_SELF))
             self.assertEqual(
                 (wx.ACC_OK, 'Drives'),
                 listbox._bb_accessible.GetName(wx.ACC_SELF))
+        finally:
+            frame.Destroy()
+
+    def test_notice_bar_focus(self):
+        """Tab reaches the close button, and closing moves the focus on."""
+        acc_module = self.AccessibilityModule
+        frame = wx.Frame(None)
+        try:
+            notice_bar = acc_module.NoticeBar(frame)
+            close = notice_bar._close_button
+            self.assertIsNotNone(close)
+            notice_bar.show_notice('Restart BleachBit for full effect.')
+
+            # wxPython 4.2 lets Tab focus the bar itself ("panel").
+            event = mock.Mock()
+            with mock.patch.object(close, 'IsShownOnScreen',
+                                   return_value=True), \
+                    mock.patch.object(close, 'SetFocus') as set_focus:
+                notice_bar._on_set_focus(event)
+            set_focus.assert_called_once_with()
+            event.Skip.assert_called_once_with()
+
+            # Hiding the focused close button would lose the focus.
+            click = wx.CommandEvent(wx.wxEVT_BUTTON, close.GetId())
+            click.SetEventObject(close)
+            with mock.patch.object(wx.Window, 'FindFocus',
+                                   return_value=close), \
+                    mock.patch.object(notice_bar, 'Navigate') as navigate:
+                close.GetEventHandler().ProcessEvent(click)
+                navigate.assert_called_once_with(
+                    wx.NavigationKeyEvent.IsForward)
+                navigate.reset_mock()
+                notice_bar.show_notice('Shown again')
+                notice_bar.Dismiss()
+                navigate.assert_called_once_with(
+                    wx.NavigationKeyEvent.IsForward)
+            self.assertFalse(notice_bar.IsShown())
+
+            # The focus elsewhere is left alone.
+            notice_bar.show_notice('Shown again')
+            with mock.patch.object(wx.Window, 'FindFocus',
+                                   return_value=frame), \
+                    mock.patch.object(notice_bar, 'Navigate') as navigate:
+                notice_bar.Dismiss()
+            navigate.assert_not_called()
         finally:
             frame.Destroy()
 

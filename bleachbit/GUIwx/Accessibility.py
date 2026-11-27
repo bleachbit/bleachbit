@@ -146,9 +146,15 @@ class NoticeBar(wx.InfoBar):
     """Non-blocking notice, like the GTK info bar.
 
     The message hides itself after ``NOTICE_TIMEOUT_MS``.  On Windows
-    the message text is exposed as an MSAA *alert*, and an alert event
-    is raised whenever a message is shown, so NVDA (and other screen
-    readers) speak the message without moving the focus.
+    the bar is exposed as an MSAA *alert* named after the message, and
+    an alert event is raised whenever a message is shown, so NVDA (and
+    other screen readers) speak the message without moving the focus.
+
+    The bar works the same with wxPython 4.2 and 4.3, as wxPython 4.3
+    does by itself: Tab goes to the close button, not to the bar
+    (which NVDA reads as "panel"); the close button is named after its
+    tooltip, *Hide this notification message.*; and a screen reader
+    reads the message as the close button's context.
     """
 
     def __init__(self, parent):
@@ -157,17 +163,48 @@ class NoticeBar(wx.InfoBar):
         self._shown_at = 0.0
         self._timer = None
         self._alert_window = None
+        self._close_button = next(
+            (child for child in self.GetChildren()
+             if isinstance(child, wx.Button)), None)
         if _HAVE_MSAA:
-            # Expose the message on the text child: it has no focusable
-            # descendants, so a screen reader speaks only the message,
-            # not the close button too.
-            self._alert_window = next(
-                (child for child in self.GetChildren()
-                 if isinstance(child, wx.StaticText)), self)
-            acc = _accessible(self._alert_window)
+            self._alert_window = self
+            acc = _accessible(self)
             acc.role = wx.ROLE_SYSTEM_ALERT
             acc.name = lambda: self._message
+            if (self._close_button is not None
+                    and self._close_button.GetToolTipText()):
+                set_accessible_name(self._close_button,
+                                    self._close_button.GetToolTipText())
+        self.Bind(wx.EVT_SET_FOCUS, self._on_set_focus)
+        # The close button hides the bar without calling Dismiss().
+        self.Bind(wx.EVT_BUTTON, self._on_button)
         self.Bind(wx.EVT_WINDOW_DESTROY, self._on_destroy)
+
+    def _on_set_focus(self, evt):
+        """Pass the focus that Tab gives the bar on to its close button."""
+        evt.Skip()
+        close = self._close_button
+        if close is not None and close.IsShownOnScreen():
+            close.SetFocus()
+
+    def _move_focus_out(self):
+        """Move the focus to the next control if it is in the bar.
+
+        Hiding the focused close button would leave the focus nowhere,
+        and a screen reader would say nothing.
+        """
+        focus = wx.Window.FindFocus()
+        if focus is not None and (focus is self or self.IsDescendant(focus)):
+            self.Navigate(wx.NavigationKeyEvent.IsForward)
+
+    def _on_button(self, evt):
+        self._move_focus_out()
+        evt.Skip()
+
+    def Dismiss(self):  # noqa: N802 - wx API
+        """Hide the bar, moving the focus out of it first."""
+        self._move_focus_out()
+        super().Dismiss()
 
     def show_notice(self, message, flags=wx.ICON_INFORMATION):
         """Show ``message`` and announce it to screen readers."""

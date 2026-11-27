@@ -338,10 +338,15 @@ The wx front-end aims to be usable by blind users via screen readers
   the checkbox role and its checked, unavailable and focused state
   for every `wx.CheckBox`.  Use a `wx.CheckBox`, not a
   `wx.ToggleButton`, for on/off settings.
-- `Accessibility.NoticeBar` (a `wx.InfoBar`) exposes its message as an
-  MSAA *alert* and raises `EVENT_SYSTEM_ALERT` when it shows one, so
-  NVDA speaks the notice without moving the focus.  The main window and
-  the Preferences dialog use it for the GTK info bar messages.
+- `Accessibility.NoticeBar` (a `wx.InfoBar`) is an MSAA *alert* named
+  after its message and raises `EVENT_SYSTEM_ALERT` when it shows one,
+  so NVDA speaks the notice without moving the focus.  The main window
+  and the Preferences dialog use it for the GTK info bar messages.  It
+  behaves the same with the pinned wxPython 4.2 as wxPython 4.3 does by
+  itself: Tab goes to the close button instead of the bar (which NVDA
+  would read as "panel"), the close button is named after its tooltip
+  (*Hide this notification message.*), and when the bar hides while
+  its close button has the focus, the focus moves to the next control.
 - Option groups are `wx.StaticBox`es whose controls are their
   children, so NVDA announces the group name.  Confirmation dialogs are
   `wx.RichMessageDialog`s, which are native task dialogs on Windows.
