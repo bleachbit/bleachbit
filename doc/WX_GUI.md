@@ -148,7 +148,8 @@ A filter bar above the notebook applies to both tabs:
   applies the side effects GTK applies on toggle: `debug` sets the log
   level, `kde_shred_menu_option` installs the KDE service menu,
   `dark_mode` changes the appearance, and `auto_hide` reloads the
-  cleaner tree.  While the dialog is open, dependent controls follow
+  cleaner tree.  If the KDE service menu cannot be added or removed,
+  the main window shows the error and the option keeps its old value.  While the dialog is open, dependent controls follow
   the checkboxes (e.g. checking *Expert mode* enables *Confirm before
   delete*).  The other pages save changes immediately, as in GTK.
 - Notices appear in a `NoticeBar` at the top of the dialog, the
@@ -159,7 +160,9 @@ A filter bar above the notebook applies to both tabs:
   *System → Custom*, as in GTK.
 - *Hide irrelevant cleaners* (`auto_hide`) controls whether
   `LoaderThread` hides cleaners whose `auto_hide()` reports nothing to
-  clean.  As in GTK, a cleaner with a checked option is never hidden.
+  clean.  As in GTK, a cleaner with a checked option is never hidden;
+  `_populate_tree` checks this again, in case an option was checked
+  after the loader read it.
 - *Exit after cleaning* (`exit_done`) closes the window when a clean
   (not a preview) finishes.
 - *Remember window geometry*: the window position, size and maximized
@@ -184,7 +187,10 @@ The **Cookies** page is the counterpart of `GuiCookie.CookieManagerPane`.
 It lists the cookie hosts found in the browsers
 (`Cookie.list_unique_cookies`) plus those already kept, and saves the
 checked hosts to the same JSON keep list (`Cookie.COOKIE_KEEP_LIST_FILENAME`
-in the options directory) as soon as one is toggled.  Finding hosts
+in the options directory) as soon as one is toggled.  The list is
+written to a temporary file that then replaces the old one, so a failed
+save (such as a full disk) keeps the old list, and the page shows the
+hosts as they were and the error.  Finding hosts
 opens every browser cookie database, so it runs on a background thread
 the first time the page is shown, with a *Loading cookies…* label.
 There is a search box, a *Show Selected* checkbox (a toggle button in
@@ -254,9 +260,10 @@ the GTK UI, and works the same way:
   `cb_refresh_operations`).  The reload is skipped while cleaners are
   still loading or a preview or clean is running.  While cleaners load,
   `backends` is cleared and rebuilt, so Preview, Clean and the tree's
-  *Preview only* / *Clean only* menu items are unavailable and
-  `_start_worker` refuses to run cleaners; shredding files or folders
-  still works.  Menus, buttons and the rest of the window change
+  *Preview only* / *Clean only* menu items are unavailable,
+  `_start_worker` refuses to run cleaners, and options in the tree
+  cannot be checked (a notice says cleaners are loading; unchecking
+  still works); shredding files or folders still works.  Menus, buttons and the rest of the window change
   language after a restart.
 - The language is applied at startup by
   `bleachbit.Language.setup_translation()`, which reads

@@ -614,6 +614,9 @@ class GUIwxTestCase(common.BleachbitTestCase):
     def test_cleaners_do_not_run_while_loading(self):
         """Cleaners cannot run while they are registered again."""
         frame = self.frame
+        module = self.MainFrameModule
+        self._register_fake_cleaner()
+        model = frame._tree_model
         saved_loader = frame._loader_thread
         saved_buttons = [(btn, btn.IsEnabled()) for btn in (
             frame.btn_preview, frame.btn_clean, frame.btn_abort)]
@@ -639,6 +642,20 @@ class GUIwxTestCase(common.BleachbitTestCase):
                     frame.tree, 'PopupMenu', side_effect=popup_menu):
                 frame._show_tree_context_menu(
                     frame._tree_model.ObjectToItem(option))
+            # Options cannot be checked, even one without a warning,
+            # because ``backends`` may lack the cleaner's warnings.
+            cookies = module._OptionNode(BROWSER1_ID, 'cookies', 'Cookies')
+            self.assertFalse(frame._allow_enable(BROWSER1_ID, 'cookies'))
+            self.assertEqual(module._('Loading native cleaners\u2026'),
+                             frame.infobar.get_message())
+            self.assertFalse(
+                model.SetValue(True, model.ObjectToItem(cookies), 0))
+            self.assertFalse(options.get_tree(BROWSER1_ID, 'cookies'))
+            # Unchecking still works.
+            options.set_tree(BROWSER1_ID, 'cookies', True)
+            self.assertTrue(
+                model.SetValue(False, model.ObjectToItem(cookies), 0))
+            self.assertFalse(options.get_tree(BROWSER1_ID, 'cookies'))
         finally:
             frame._loader_thread = saved_loader
             frame._worker_thread = None
@@ -647,6 +664,8 @@ class GUIwxTestCase(common.BleachbitTestCase):
         # "Preview only" and "Clean only" are disabled; "Filter log by"
         # is not.
         self.assertEqual([False, False, True], items[:3])
+        # After loading, the option can be checked again.
+        self.assertTrue(frame._allow_enable(BROWSER1_ID, 'cookies'))
 
     def test_preferences_dependent_options(self):
         """Sub-options follow the option they depend on, as in GTK."""
@@ -841,8 +860,11 @@ class GUIwxTestCase(common.BleachbitTestCase):
                     dialog.Destroy()
 
     def test_cookies_page_reverts_failed_save(self):
-        """A host is not shown as kept when the keep list was not saved."""
+        """A failed save keeps the old keep list and the hosts shown."""
         import errno
+        import json
+        import os
+        import tempfile
         prefs = self.PreferencesModule
 
         class Event:
@@ -852,35 +874,100 @@ class GUIwxTestCase(common.BleachbitTestCase):
             def GetIndex(self):  # noqa: N802 - wx API
                 return self._index
 
-        def fail_to_open(*_args, **_kwargs):
-            raise PermissionError(errno.EACCES, 'Permission denied')
+        def fill_disk(_obj, f, **_kwargs):
+            f.write('["a.exa')
+            raise OSError(errno.ENOSPC, 'No space left on device')
 
-        dialog = prefs.PreferencesDialog(self.frame)
-        try:
-            panel = dialog.get_page('cookies')
-            panel.keep_list_path = 'keep.json'
-            panel.saved_domains = {'b.example'}
-            panel._finish_populate(['a.example'])
-            with mock.patch.object(prefs, 'open_for_overwrite',
-                                   side_effect=fail_to_open), \
-                    mock.patch.object(prefs.wx, 'CallAfter') as call_after:
-                panel._on_item_toggled(Event(0), True)
-                self.assertEqual([[False, 'a.example'], [True, 'b.example']],
-                                 panel._hosts)
-                call_after.assert_called_once_with(panel._refresh_if_alive)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            keep_list_path = os.path.join(tmpdir, 'keep.json')
+            with open(keep_list_path, 'w', encoding='utf-8') as f:
+                json.dump(['b.example'], f)
+            dialog = prefs.PreferencesDialog(self.frame)
+            try:
+                panel = dialog.get_page('cookies')
+                panel.keep_list_path = keep_list_path
+                panel.saved_domains = {'b.example'}
+                panel._finish_populate(['a.example'])
+                with mock.patch.object(prefs.json, 'dump',
+                                       side_effect=fill_disk), \
+                        mock.patch.object(prefs.wx, 'CallAfter') as call_after:
+                    panel._on_item_toggled(Event(0), True)
+                    self.assertEqual(
+                        [[False, 'a.example'], [True, 'b.example']],
+                        panel._hosts)
+                    call_after.assert_called_once_with(
+                        panel._refresh_if_alive)
+                    self.assertEqual(
+                        prefs._('Disk was full when writing configuration '
+                                'to file: %s') % keep_list_path,
+                        dialog._infobar.get_message())
+
+                    panel._set_visible_selection(False)
                 self.assertEqual(
-                    prefs._('Permission denied when writing configuration '
-                            'to file: %s') % 'keep.json',
-                    dialog._infobar.get_message())
+                    [[False, 'a.example'], [True, 'b.example']],
+                    panel._hosts)
+                self.assertEqual(
+                    [False, True],
+                    [panel._list.IsItemChecked(i) for i in range(2)])
+                self.assertEqual({'b.example'}, panel.saved_domains)
+                # The old list is intact, and no temporary file is left.
+                with open(keep_list_path, encoding='utf-8') as f:
+                    self.assertEqual(['b.example'], json.load(f))
+                self.assertEqual(['keep.json'], os.listdir(tmpdir))
 
-                panel._set_visible_selection(False)
-            self.assertEqual([[False, 'a.example'], [True, 'b.example']],
-                             panel._hosts)
-            self.assertEqual([False, True],
-                             [panel._list.IsItemChecked(i) for i in range(2)])
-            self.assertEqual({'b.example'}, panel.saved_domains)
+                if os.name == 'posix':
+                    # A link is refused, not written through.
+                    target = os.path.join(tmpdir, 'target.json')
+                    os.replace(keep_list_path, target)
+                    os.symlink(target, keep_list_path)
+                    error = panel.save_changes()
+                    self.assertEqual(errno.EACCES, error.errno)
+                    with open(target, encoding='utf-8') as f:
+                        self.assertEqual(['b.example'], json.load(f))
+            finally:
+                dialog.Destroy()
+
+    def test_kde_shred_menu_failure_is_reported(self):
+        """If the KDE menu cannot be changed, the option is reverted."""
+        import errno
+        prefs = self.PreferencesModule
+        path = '/home/u/.local/share/kio/servicemenus/shred.desktop'
+        dialog = prefs.PreferencesDialog(self.frame)
+        saved = {key: options.get(key) for key in
+                 set(dialog._checkboxes) | {'kde_shred_menu_option'}}
+        try:
+            # Turning the menu off fails, so it stays installed.
+            options.set('kde_shred_menu_option', False)
+            with mock.patch(
+                    'bleachbit.DesktopMenuOptions.install_kde_service_menu_file',
+                    side_effect=PermissionError(
+                        errno.EACCES, 'Permission denied', path)):
+                dialog._update_kde_shred_menu()
+            self.assertTrue(options.get('kde_shred_menu_option'))
+            self.assertEqual(
+                prefs._('Permission denied when writing configuration '
+                        'to file: %s') % path,
+                self.frame.infobar.get_message())
+
+            checkbox = dialog._checkboxes.get('kde_shred_menu_option')
+            if checkbox is not None:
+                # commit() goes on with the other side effects.
+                checkbox.SetValue(False)
+                dialog._checkboxes['auto_hide'].SetValue(
+                    not options.get('auto_hide'))
+                with mock.patch(
+                        'bleachbit.DesktopMenuOptions.install_kde_service_menu_file',
+                        side_effect=OSError(errno.EROFS, 'Read-only', path)):
+                    changed = dialog.commit()
+                self.assertIn('kde_shred_menu_option', changed)
+                self.assertTrue(options.get('kde_shred_menu_option'))
+                self.assertTrue(dialog.refresh_operations)
         finally:
             dialog.Destroy()
+            for key, value in saved.items():
+                options.set(key, value)
+            from bleachbit.Log import set_root_log_level
+            set_root_log_level(options.get('debug'))
 
     def test_cookie_notice_link_markup(self):
         """The GTK link markup is split for a native link control."""
@@ -1333,6 +1420,32 @@ class GUIwxTestCase(common.BleachbitTestCase):
         finally:
             options.set('auto_hide', saved)
 
+    def test_checked_cleaner_is_not_hidden_after_loading(self):
+        """An option checked after the loader's check is still shown."""
+        frame = self.frame
+        saved_hidden = getattr(frame, '_hidden_cleaners', set())
+        # Cleanups run last first, so the tree is rebuilt after the
+        # fake cleaner is removed.
+        self.addCleanup(frame._populate_tree)
+        self._register_fake_cleaner()
+        try:
+            # The loader hid the cleaner, then its option was checked.
+            frame._hidden_cleaners = {BROWSER1_ID}
+            options.set_tree(BROWSER1_ID, 'cookies', True)
+            frame._populate_tree()
+            self.assertIsNotNone(frame._tree_model.cleaner_node(BROWSER1_ID))
+            self.assertNotIn(BROWSER1_ID, frame._hidden_cleaners)
+            self.assertEqual(['cookies'],
+                             frame._collect_operations().get(BROWSER1_ID))
+            # A cleaner with nothing checked stays hidden.
+            options.set_tree(BROWSER1_ID, 'cookies', False)
+            frame._hidden_cleaners = {BROWSER1_ID}
+            frame._populate_tree()
+            self.assertIsNone(frame._tree_model.cleaner_node(BROWSER1_ID))
+        finally:
+            options.set_tree(BROWSER1_ID, 'cookies', False)
+            frame._hidden_cleaners = saved_hidden
+
     def test_tree_menu_opens_preferences_pages(self):
         """The tree menu opens the Cookies page for cookie options."""
         frame = self.frame
@@ -1389,6 +1502,35 @@ class GUIwxTestCase(common.BleachbitTestCase):
                 dialog.Destroy()
             for lang, value in saved.items():
                 options.set_language(lang, value)
+
+    def test_open_url_names_whole_host(self):
+        """The browser confirmation names the host the URL goes to."""
+        from bleachbit.GUIwx import Dialogs
+        messages = []
+
+        class FakeDialog:
+            def __init__(self, _parent, message, *_args):
+                messages.append(message)
+
+            def ShowModal(self):  # noqa: N802 - wx API
+                return wx.ID_CANCEL
+
+            def Destroy(self):  # noqa: N802 - wx API
+                pass
+
+        with mock.patch.object(Dialogs.wx, 'MessageDialog', FakeDialog), \
+                mock.patch.object(Dialogs.wx, 'LaunchDefaultBrowser') as launch, \
+                mock.patch.object(Dialogs, 'IS_POSIX', False):
+            for url, host in (
+                    ('https://www2.example.org/help', 'www2.example.org'),
+                    ('https://my-site.example.com:8443/', 'my-site.example.com'),
+                    ('https://www.bleachbit.org@evil.example/', 'evil.example'),
+                    ('HTTP://WWW.Example.org', 'www.example.org')):
+                Dialogs.open_url(url)
+                self.assertEqual(Dialogs._('Open web browser to %s?') % host,
+                                 messages[-1])
+            # Cancel does not open the browser.
+            launch.assert_not_called()
 
     def test_confirmation_dialogs(self):
         """Confirmations default to Cancel, which Escape also chooses."""

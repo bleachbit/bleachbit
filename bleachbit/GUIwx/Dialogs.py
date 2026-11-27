@@ -15,7 +15,7 @@ title, the message, the checkbox and the buttons without extra work.
 
 import logging
 import os
-import re
+from urllib.parse import urlsplit
 
 import wx
 
@@ -153,8 +153,12 @@ def open_url(url, parent=None, prompt=True):
         wx.MessageBox(msg, style=wx.OK | wx.ICON_INFORMATION, parent=parent)
         return
     if prompt:
-        ret = re.search(r'^http(s)?://([a-z.]+)', url)
-        host = ret.group(2) if ret else url
+        # Name the whole host the browser goes to: the GTK pattern stops
+        # at a digit or hyphen, and at the "@" of "user@host".
+        try:
+            host = urlsplit(url).hostname or url
+        except ValueError:
+            host = url
         dlg = wx.MessageDialog(
             parent,
             # TRANSLATORS: The question appears in a confirmation dialog.

@@ -15,12 +15,15 @@ Options that only affect GTK rendering (Windows 10 theme, Fontconfig
 backend) have no wx counterpart and are not shown.
 """
 
+import contextlib
 import errno
 import html
 import json
 import logging
 import os
 import re
+import stat
+import tempfile
 import threading
 import time
 
@@ -36,7 +39,6 @@ from bleachbit.Constant import (EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE,
                                 URL_COOKIE_MGR)
 from bleachbit.Cookie import (COOKIE_KEEP_LIST_FILENAME, list_unique_cookies,
                               load_keep_list)
-from bleachbit.FileUtilities import open_for_overwrite
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GUIwx.Accessibility import (NoticeBar, set_accessible_description,
                                            set_accessible_name, set_tooltip)
@@ -154,6 +156,44 @@ def _notice(parent, text, light_bg, dark_bg):
 
 def _wrapped_text(parent, text):
     return _wrap(wx.StaticText(parent, label=text))
+
+
+def _replace_file(path, write):
+    """Replace ``path`` with a file whose text ``write(f)`` writes.
+
+    The text goes to a temporary file in the same folder, which then
+    replaces ``path``, so a failed write (for example, a full disk)
+    leaves the old file as it was.  Like ``open_for_overwrite``, a link
+    at ``path`` is refused, and a new file is given to the real user in
+    sudo mode; a replaced file keeps its owner and permissions.
+    """
+    if os.path.islink(path):
+        raise OSError(errno.EACCES, 'refusing to open a link', path)
+    try:
+        old_stat = os.stat(path)
+    except FileNotFoundError:
+        old_stat = None
+    fd, temp_path = tempfile.mkstemp(
+        prefix='.%s.' % os.path.basename(path), suffix='.tmp',
+        dir=os.path.dirname(path) or os.curdir)
+    try:
+        with open(fd, 'w', encoding='utf-8') as f:
+            write(f)
+            f.flush()
+            os.fsync(f.fileno())
+        if IS_POSIX and old_stat is not None:
+            os.chmod(temp_path, stat.S_IMODE(old_stat.st_mode))
+            if os.geteuid() == 0:
+                os.chown(temp_path, old_stat.st_uid, old_stat.st_gid)
+        elif old_stat is None and General.sudo_mode():
+            General.chownself(temp_path)
+        # os.replace() replaces a link raced in after the check above
+        # instead of writing through it.
+        os.replace(temp_path, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.unlink(temp_path)
+        raise
 
 
 def _save_error_message(path, error):
@@ -646,12 +686,8 @@ class _CookiesPanel(wx.Panel):
         """
         keep_list = sorted(host for checked, host in self._hosts if checked)
         try:
-            mkfile = not os.path.exists(self.keep_list_path)
-            with open_for_overwrite(self.keep_list_path,
-                                    encoding='utf-8') as f:
-                json.dump(keep_list, f, indent=2)
-            if mkfile and General.sudo_mode():
-                General.chownself(self.keep_list_path)
+            _replace_file(self.keep_list_path,
+                          lambda f: json.dump(keep_list, f, indent=2))
             self.saved_domains = set(keep_list)
             return None
         except OSError as exc:
@@ -1257,8 +1293,27 @@ class PreferencesDialog(wx.Dialog):
         if 'auto_hide' in changed:
             self.refresh_operations = True
         if 'kde_shred_menu_option' in changed:
-            from bleachbit.DesktopMenuOptions import install_kde_service_menu_file  # pylint: disable=import-outside-toplevel
-            install_kde_service_menu_file()
+            self._update_kde_shred_menu()
         if 'dark_mode' in changed:
             apply_appearance()
         return changed
+
+    def _update_kde_shred_menu(self):
+        """Add or remove the KDE shred menu, as GTK does on a toggle.
+
+        If that fails, the option goes back to its old value, so it
+        still says whether the menu is installed, and the error is
+        shown in the main window, because this dialog is closing.
+        """
+        from bleachbit.DesktopMenuOptions import install_kde_service_menu_file  # pylint: disable=import-outside-toplevel
+        try:
+            install_kde_service_menu_file()
+        except OSError as exc:
+            logger.error('Failed to update the KDE shred menu: %s', exc)
+            options.set('kde_shred_menu_option',
+                        not options.get('kde_shred_menu_option'))
+            owner = self.GetParent()
+            if hasattr(owner, 'show_infobar'):
+                owner.show_infobar(
+                    _save_error_message(exc.filename or '', exc),
+                    wx.ICON_ERROR)

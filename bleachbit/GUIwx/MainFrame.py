@@ -826,6 +826,15 @@ class MainFrame(wx.Frame):
                     return True
         return False
 
+    @staticmethod
+    def _has_checked_option(cleaner_id):
+        """Return whether any option of ``cleaner_id`` is checked."""
+        cleaner = backends.get(cleaner_id)
+        if cleaner is None:
+            return False
+        return any(options.get_tree(cleaner_id, option_id)
+                   for option_id, _option_name in cleaner.get_options())
+
     def _on_loader_error(self, _exc):
         self._loader_thread = None
         self.gauge.SetValue(0)
@@ -839,8 +848,16 @@ class MainFrame(wx.Frame):
         The model owns the per-row check state (read/written via
         :class:`Options`) and renders rows lazily via the DataViewCtrl,
         so we no longer need to walk live tree items here.
+
+        A cleaner with a checked option is shown even if the loader
+        hid it: the option may have been checked after the loader read
+        it, and a hidden cleaner is not cleaned.
         """
-        hidden = getattr(self, '_hidden_cleaners', set())
+        hidden = {
+            cleaner_id
+            for cleaner_id in getattr(self, '_hidden_cleaners', set())
+            if not self._has_checked_option(cleaner_id)}
+        self._hidden_cleaners = hidden
         entries = []
         for cleaner_id in sorted(backends):
             if cleaner_id == '_gui':
@@ -1211,7 +1228,16 @@ class MainFrame(wx.Frame):
         asked to remember the choice.  The confirmation is shown after
         the tree has handled the click or key press, one at a time;
         the option is checked if the user confirms.
+
+        While cleaners are loading, no option can be checked:
+        registration clears and rebuilds ``backends``, so the cleaner
+        and its warning may be missing until it finishes.  Unchecking
+        does not come here, so it still works.
         """
+        if self._loader_thread is not None:
+            self.show_infobar(_('Loading native cleaners\u2026'),
+                              wx.ICON_INFORMATION)
+            return False
         cleaner = backends.get(cleaner_id)
         warning = cleaner.get_warning(option_id) if cleaner else None
         if not warning:
