@@ -240,15 +240,19 @@ def _parse_po_file(po_path, expected_msgids=None):
     return entries
 
 
-_PLACEHOLDER_RE = re.compile(r'\$\{[A-Za-z_][A-Za-z0-9_]*\}')
+# ${name} placeholders and $(name) language string references, e.g.
+# ${prodname} and $(^NameDA).
+_PLACEHOLDER_RE = re.compile(
+    r'\$\{[A-Za-z_][A-Za-z0-9_]*\}|\$\(\^?[A-Za-z_][A-Za-z0-9_]*\)')
 
 
 def _checked_translation(locale, key, text, english):
-    """Return text, or english when its ${...} placeholders differ.
+    """Return text, or english when its ${...} or $(...) placeholders differ.
 
     A translator can drop or mangle a placeholder (Hungarian once shipped
-    "$" for "${prodname}"), and tests/TestTranslations.py only reports it
-    after the .po is on master. Fall back the way msgfmt does for fuzzy.
+    "$" for "${prodname}", and Irish "$(^NameDA a bhaint ...)", which NSIS
+    shows as empty), and tests/TestTranslations.py only reports it after
+    the .po is on master. Fall back the way msgfmt does for fuzzy.
     """
     expected = sorted(_PLACEHOLDER_RE.findall(english))
     actual = sorted(_PLACEHOLDER_RE.findall(text))
@@ -566,6 +570,20 @@ msgstr "Current translation"
                 self.assertEqual(
                     _checked_translation('hu', 'X', bad, english), english)
                 self.assertIn('hu X', err.getvalue())
+
+    def test_checked_translation_falls_back_on_langstring_mismatch(self):
+        """A translation missing or mangling a $(...) reference yields English"""
+        english = 'Choose for which users to remove $(^NameDA).'
+        good = 'Remove $(^NameDA) for these users.'
+        self.assertEqual(_checked_translation('ga', 'X', good, english), good)
+        for bad in ('Remove $(^NameDA for these users).',
+                    'Remove $(^Name) for these users.',
+                    'Remove it for these users.'):
+            with self.subTest(bad=bad), \
+                    unittest.mock.patch('sys.stderr', new=io.StringIO()) as err:
+                self.assertEqual(
+                    _checked_translation('ga', 'X', bad, english), english)
+                self.assertIn('ga X', err.getvalue())
 
     def test_parse_nsis_stops_at_autogen_marker(self):
         """Regression test: ensure header parsing stops at auto-generated marker."""

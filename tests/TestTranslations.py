@@ -23,8 +23,10 @@ import warnings
 
 _PO_DIR = os.path.join(os.path.dirname(__file__), '..', 'po')
 
-# Matches ${name} placeholders used in NSIS strings, e.g. ${prodname}.
-_NSIS_PLACEHOLDER = re.compile(r'\$\{([A-Za-z_][A-Za-z0-9_]*)\}')
+# Matches ${name} placeholders and $(name) language string references used
+# in NSIS strings, e.g. ${prodname} and $(^NameDA).
+_NSIS_PLACEHOLDER = re.compile(
+    r'\$\{[A-Za-z_][A-Za-z0-9_]*\}|\$\(\^?[A-Za-z_][A-Za-z0-9_]*\)')
 
 
 def _parse_po_string(token):
@@ -104,9 +106,10 @@ class TestTranslations(unittest.TestCase):
                 for f in os.listdir(po_dir) if f.endswith('.po')]
 
     def test_nsis_placeholders_match(self):
-        """NSIS translations must keep the same ${...} placeholders as msgid.
+        """NSIS translations must keep the same ${...} and $(...) as msgid.
 
-        Regression test for commit 104a6211 (Italian ${proname} typo).
+        Regression test for commit 104a6211 (Italian ${proname} typo) and
+        the Irish "$(^NameDA a bhaint ...)" typo, which NSIS shows as empty.
         """
         failures = []
         for po_path in self._po_files():
