@@ -1,17 +1,19 @@
 """Helper utilities to install optional desktop service menus."""
 
-import logging
+import contextlib
 import os
 from pathlib import Path
 
 from bleachbit.FileUtilities import open_for_overwrite
 from bleachbit.Options import options
 
-logger = logging.getLogger(__name__)
-
 
 def install_kde_service_menu_file():
-    """Create or remove the KDE service menu entry for shredding."""
+    """Create or remove the KDE service menu entry for shredding.
+
+    Raises OSError if the entry cannot be created or removed, so the
+    caller can tell the user and keep the option in step with the menu.
+    """
     try:
         # Honor the XDG Base Directory Specification first
         # and check if $XDG_DATA_HOME has already been defined.
@@ -27,8 +29,9 @@ def install_kde_service_menu_file():
             dir_path.mkdir(parents=True)
         if not service_file_path.exists():
             # Service file has dependency on `kdialog` which KDE installations may not provide by default.
+            service_file = open_for_overwrite(str(service_file_path))
             try:
-                with open_for_overwrite(str(service_file_path)) as service_file:
+                with service_file:
                     # fchmod on the fd, not .chmod() on the path, so a
                     # symlink raced in after the exists() check above
                     # can't redirect the permission change to its target.
@@ -48,9 +51,11 @@ Name=Shred With Bleachbit
 Icon=bleachbit
 Exec=kdialog --yesno "This action will shred the following:\n\n$(echo %F | tr ' ' '\n')\n\nContinue?" && sh -c 'bleachbit --shred "$@"; echo Press enter/return to close; read' sh %F
 ''')
-            except OSError as exc:
-                logger.warning(
-                    'failed to create KDE service menu file %s: %s',
-                    service_file_path, exc)
+            except OSError:
+                # A half-written file would make the exists() check above
+                # skip the next attempt, so remove it before reporting.
+                with contextlib.suppress(OSError):
+                    service_file_path.unlink(missing_ok=True)
+                raise
     else:
         service_file_path.unlink(missing_ok=True)

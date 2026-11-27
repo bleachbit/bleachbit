@@ -40,10 +40,12 @@ pip install wxPython
 bleachbit-wx.py                 # launcher (top level)
 bleachbit/GUIwx/
     __init__.py
+    Accessibility.py            # screen reader names, descriptions, NoticeBar
     App.py                      # wx.App entry point
+    Dialogs.py                  # delete/warning confirmations (GuiBasic counterparts)
     MainFrame.py                # main window, tree, results table, log
     LoaderThread.py             # threads bleachbit.Cleaner.register_cleaners
-    PreferencesDialog.py        # preferences: General, Languages, Keep list, Custom
+    PreferencesDialog.py        # preferences: the seven pages of the GTK dialog
     WorkerThread.py             # threads bleachbit.Worker.Worker
 ```
 
@@ -111,12 +113,113 @@ A filter bar above the notebook applies to both tabs:
   restored from `Options.get_tree()` when the tree is populated.  This
   is the same `[tree]` section used by the GTK UI, so selections
   carry across both front-ends.
-- `File → Preferences…` opens a minimal `PreferencesDialog` with
-  checkboxes for the options most users actually change in the GTK UI:
-  `delete_confirmation`, `shred`, `check_online_updates`, `debug`.
-- The preferences dialog also includes **Keep list** and **Custom**
-  pages.  These edit `Options.whitelist_paths` and
-  `Options.custom_paths`, respectively, and save changes immediately.
+- `File → Preferences…` opens `PreferencesDialog`, which has the
+  pages of the GTK dialog (`bleachbit/GuiPreferences.py`) in the same
+  order, as `wx.Notebook` tabs.  The options are the same `Options`
+  keys, so a choice made in one front-end carries over to the other.
+  Strings reuse the GTK msgids (including `pgettext` contexts such as
+  `_p('button', 'Add')`), so existing translations apply.
+  - **General** has three groups, as in GTK:
+    - *Cleaning*: `shred`, `exit_done`, `delete_confirmation` (enabled
+      only in expert mode), a *Reset warning confirmations* button
+      (expert mode only), `auto_hide`, `units_iec`.
+    - *Interface*: `remember_geometry` and, when wxPython has
+      `wx.App.SetAppearance` (wxPython 4.3 / wxWidgets 3.3), `dark_mode`.
+    - *Integration and advanced*: `kde_shred_menu_option` (not on
+      Windows), `debug`, `expert_mode`.
+  - **Updates** (when `online_update_notification_enabled`):
+    `check_online_updates`, with `check_beta` and, on Windows,
+    `update_winapp2` indented below it and enabled only while it is
+    checked.  The wx front-end does not check for updates itself yet;
+    these settings are shared with the GTK front-end.
+  - **Languages**: see *Interface language* below.
+  - **Cookies**: the cookie keep list (see *Cookies to keep* below).
+  - **Keep list** and **Custom** edit `Options.whitelist_paths` and
+    `Options.custom_paths`.  Adding a path already in either list, or
+    adding or removing a path, shows a notice.  Adding a protected path
+    (`bleachbit.ProtectedPath`) to Custom needs expert mode and a
+    confirmation, which can be remembered, as in GTK.
+  - **Drives** edits the `shred_drives` list: one writable folder per
+    drive whose empty space the *Free disk space* option wipes.
+- The GTK options `win10_theme` and `use_fontconfig_backend` only
+  affect GTK rendering on Windows, so the wx dialog does not show them.
+- Checkboxes on the General and Updates pages are saved when the
+  dialog closes with OK (`PreferencesDialog.commit`), which then
+  applies the side effects GTK applies on toggle: `debug` sets the log
+  level, `kde_shred_menu_option` installs the KDE service menu,
+  `dark_mode` changes the appearance, and `auto_hide` reloads the
+  cleaner tree.  If the KDE service menu cannot be added or removed,
+  the main window shows the error and the option keeps its old value.  While the dialog is open, dependent controls follow
+  the checkboxes (e.g. checking *Expert mode* enables *Confirm before
+  delete*).  The other pages save changes immediately, as in GTK.
+- Notices appear in a `NoticeBar` at the top of the dialog, the
+  counterpart of the GTK info bar.
+- `MainFrame._show_preferences(page)` opens the dialog at a page.  The
+  tree's context menu adds *Manage cookies to keep…* for options
+  that clean cookies and *Manage custom paths…* for
+  *System → Custom*, as in GTK.
+- *Hide irrelevant cleaners* (`auto_hide`) controls whether
+  `LoaderThread` hides cleaners whose `auto_hide()` reports nothing to
+  clean.  As in GTK, a cleaner with a checked option is never hidden;
+  `_populate_tree` checks this again, in case an option was checked
+  after the loader read it.
+- *Exit after cleaning* (`exit_done`) closes the window when a clean
+  (not a preview) finishes.
+- *Remember window geometry*: the window position, size and maximized
+  state are saved to `window_x`, `window_y`, `window_width`,
+  `window_height` and `window_maximized` on close, and restored at
+  startup when the option is on and the saved corner is on a connected
+  display.  A maximized window saves the size it is restored to, not
+  its maximized size.  A window that starts maximized keeps the saved
+  size until it is maximized, because wxGTK reports other sizes before
+  then, such as the saved size plus the window frame.  The wx window
+  has no full screen mode, so `window_fullscreen` is left alone.
+- *Dark mode*: `PreferencesDialog.apply_appearance` maps `dark_mode` to
+  `wx.App.SetAppearance` (`Dark`; otherwise the system default).  On
+  GTK and macOS it applies at once.  On Windows, wx dark mode applies
+  to windows created afterwards, so `App.OnInit` applies it before the
+  main window is created, and changing it shows *Restart BleachBit for
+  full effect.*
+
+## Cookies to keep
+
+The **Cookies** page is the counterpart of `GuiCookie.CookieManagerPane`.
+It lists the cookie hosts found in the browsers
+(`Cookie.list_unique_cookies`) plus those already kept, and saves the
+checked hosts to the same JSON keep list (`Cookie.COOKIE_KEEP_LIST_FILENAME`
+in the options directory) as soon as one is toggled.  The list is
+written to a temporary file that then replaces the old one, so a failed
+save (such as a full disk) keeps the old list, and the page shows the
+hosts as they were and the error.  Finding hosts
+opens every browser cookie database, so it runs on a background thread
+the first time the page is shown, with a *Loading cookies…* label.
+There is a search box, a *Show Selected* checkbox (a toggle button in
+GTK; a checkbox reads as on/off in screen readers), *Select All* and
+*Deselect All* (for the visible hosts), a count of kept hosts, and a
+*Learn more* link.  If the keep list cannot be read, the page stays
+disabled rather than overwrite it.
+
+## Expert mode
+
+*Expert mode* (`expert_mode`) works as in GTK:
+
+- Checking it asks for confirmation (`Dialogs.warning_confirm_dialog`).
+- Without it, an option with a warning (marked ⚠ in the tree) cannot
+  be checked: the tree refuses and a notice says *This option is
+  protected. To bypass protection, enable expert mode.*  *Clean* skips
+  such options and logs an error for each; *Clean only* from the tree
+  menu is refused with a notice.  Preview is always allowed.
+- With it, checking an option with a warning shows the warning first;
+  *Remember my choice* stores it (`Options.remember_warning_preference`),
+  and *Reset warning confirmations* clears these choices.  The
+  confirmation is shown after the tree has handled the click or key
+  press (`MainFrame._allow_enable`), one at a time.
+- Only expert mode can turn off the delete confirmation
+  (`MainFrame._confirm_delete`); the confirmation then has a *Confirm
+  before delete* checkbox, as in `GuiBasic.delete_confirmation_dialog`.
+- After the first cleaner load, the Log shows the GTK startup notices
+  when checked options need expert mode, or when the delete
+  confirmation is off without expert mode.
 
 ## Interface language
 
@@ -128,6 +231,12 @@ the GTK UI, and works the same way:
   *Auto-detect language* checkbox (on by default) and, indented below
   it, a *Language:* dropdown.  The dropdown is disabled while
   auto-detect is on.
+- On POSIX systems, a **Language files to keep when cleaning
+  applications** section follows, as in GTK: a
+  `wx.dataview.DataViewListCtrl` (the native, accessible `GtkTreeView`
+  on Linux) with *Keep*, *Code* and *Name* columns.  Toggling *Keep*
+  calls `Options.set_language` at once.  Windows has no localizations
+  cleaner, so the section is not shown there.
 - The dropdown lists every language that has a compiled translation
   in `locale_dir`, plus `en` and `en_US`, as *Native name (code)*,
   for example `中文 (zh_TW)` or `United States English (en_US)`.  It
@@ -139,7 +248,10 @@ the GTK UI, and works the same way:
   - unchecking *Auto-detect language* sets `auto_detect_lang = False`;
   - picking a language sets `forced_language` to its code;
   - checking *Auto-detect language* again sets
-    `auto_detect_lang = True` and clears `forced_language`.
+    `auto_detect_lang = True` and clears `forced_language`;
+  - unchecking it keeps the detected language as `forced_language`,
+    like GTK (the dropdown matches the language with
+    `find_supported_language_code` and falls back to English).
 - After a change, an info bar at the top of the dialog says
   *Restart BleachBit for full effect.*, already in the newly chosen
   language, and hides itself after 15 seconds.  When the dialog closes, the cleaner tree reloads so
@@ -148,9 +260,10 @@ the GTK UI, and works the same way:
   `cb_refresh_operations`).  The reload is skipped while cleaners are
   still loading or a preview or clean is running.  While cleaners load,
   `backends` is cleared and rebuilt, so Preview, Clean and the tree's
-  *Preview only* / *Clean only* menu items are unavailable and
-  `_start_worker` refuses to run cleaners; shredding files or folders
-  still works.  Menus, buttons and the rest of the window change
+  *Preview only* / *Clean only* menu items are unavailable,
+  `_start_worker` refuses to run cleaners, and options in the tree
+  cannot be checked (a notice says cleaners are loading; unchecking
+  still works); shredding files or folders still works.  Menus, buttons and the rest of the window change
   language after a restart.
 - The language is applied at startup by
   `bleachbit.Language.setup_translation()`, which reads
@@ -176,8 +289,9 @@ Cleaner.backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 self._start_worker(really_delete=True, operations={'_gui': ['files']})
 ```
 
-When `delete_confirmation` is enabled (the default), a confirmation
-dialog is shown before shredding.
+As before cleaning, a confirmation dialog is shown before shredding
+(`MainFrame._confirm_delete`); only expert mode can turn it off with
+`delete_confirmation`.
 
 ## Aborting a long-running operation
 
@@ -191,14 +305,10 @@ as a safety net even if the process is killed outright.
 
 ## Known MVP limitations
 
-- No expert mode / warning confirmation flow yet (warnings are just
-  marked with `⚠` in the tree).
-- Preferences dialog is intentionally minimal: it has General,
-  Languages, Keep list and Custom pages, but no drives selector,
-  expert-mode control, warning preferences, or per-cleaner options yet.
-  The Languages page has only the interface language; the GTK list of
-  *Language files to keep when cleaning applications* (shown on
-  Linux and other POSIX systems) is not ported yet.
+- The wx front-end does not check for software updates; the Updates
+  page only edits the shared settings.
+- The Cookies list is a `wx.ListCtrl`, which is native (and read by
+  NVDA as checkable items) on Windows but generic on GTK.
 - Chaff generator is not wired up.
 - wx reuses the same gettext catalog and translated msgids as the GTK
   front-end. Keyboard shortcuts remain outside translatable strings and
@@ -212,6 +322,40 @@ The wx front-end aims to be usable by blind users via screen readers
 - Every interactive control has either a visible label or an
   accessible name set via `SetName`, including the gauge, status
   text, results list, log, tree, and the two search/filter boxes.
+- On Windows, `SetName` does not change the MSAA name of a *native*
+  control (a list, edit box or list box), and a tooltip is not its
+  MSAA description.  `Accessibility.set_accessible_name`,
+  `set_accessible_description` and `set_tooltip` attach a small
+  `wx.Accessible` that answers only the name or description; role,
+  state and children still come from the system.  The Preferences
+  dialog uses them for every new control: lists are named after their
+  page and described by the page's notice, and every tooltip is also
+  the description, so NVDA reads it when the control gets focus.
+- Checkboxes are the exception.  In dark mode wx draws checkboxes
+  itself (`BS_OWNERDRAW`), which the system reports as a *push button*
+  with no checked state; wx's own accessible object corrects that, but
+  `SetAccessible` replaces it.  So the `wx.Accessible` above reports
+  the checkbox role and its checked, unavailable and focused state
+  for every `wx.CheckBox`.  Use a `wx.CheckBox`, not a
+  `wx.ToggleButton`, for on/off settings.
+- `Accessibility.NoticeBar` (a `wx.InfoBar`) is an MSAA *alert* named
+  after its message and raises `EVENT_SYSTEM_ALERT` when it shows one,
+  so NVDA speaks the notice without moving the focus.  The main window
+  and the Preferences dialog use it for the GTK info bar messages.  It
+  behaves the same with the pinned wxPython 4.2 as wxPython 4.3 does by
+  itself: Tab goes to the close button instead of the bar (which NVDA
+  would read as "panel"), the close button is named after its tooltip
+  (*Hide this notification message.*), and when the bar hides while
+  its close button has the focus, the focus moves to the next control.
+- Option groups are `wx.StaticBox`es whose controls are their
+  children, so NVDA announces the group name.  Confirmation dialogs are
+  `wx.RichMessageDialog`s, which are native task dialogs on Windows.
+  They use relabelled OK/Cancel buttons (e.g. *Delete* / *Cancel*)
+  rather than Yes/No, with Cancel as the default, so Escape cancels.
+- Checkable lists use native checkboxes where NVDA runs: the Cookies
+  list is a `wx.ListCtrl` with `EnableCheckBoxes`, whose rows NVDA
+  reads as checkable items.  (A generic `DataViewListCtrl` toggle only
+  appears in the row description.)
 - Buttons (Preview, Clean, Abort) have tooltips that name their
   keyboard shortcut.
 - Tab and Shift+Tab move focus into and out of every control,

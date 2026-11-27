@@ -21,6 +21,7 @@ import threading
 import wx
 
 from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
 
@@ -93,17 +94,26 @@ def _compute_auto_hidden():
 
     Mirrors the GTK behavior in
     :meth:`bleachbit.GuiTreeModels.TreeInfoModel.refresh_rows`:
-    skip cleaners with no options at all, and hide those whose
-    ``auto_hide()`` reports they would do nothing on this system.
+    skip cleaners with no options at all, and, when *Hide irrelevant
+    cleaners* (``auto_hide``) is on, hide those whose ``auto_hide()``
+    reports they would do nothing on this system.  A cleaner with a
+    checked option is never hidden, like a checked cleaner in GTK.
     """
     hidden = set()
+    auto_hide_enabled = options.get('auto_hide')
     for cid in list(backends):
         if cid == '_gui':
             continue
         cleaner = backends[cid]
         try:
-            if not any(cleaner.get_options()):
+            cleaner_options = list(cleaner.get_options())
+            if not cleaner_options:
                 hidden.add(cid)
+                continue
+            if not auto_hide_enabled:
+                continue
+            if any(options.get_tree(cid, option_id)
+                   for option_id, _name in cleaner_options):
                 continue
             if cleaner.auto_hide():
                 hidden.add(cid)
