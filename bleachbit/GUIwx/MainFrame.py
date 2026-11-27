@@ -441,6 +441,7 @@ class MainFrame(wx.Frame):
         self._restore_geometry()
         self.Bind(wx.EVT_SIZE, self._track_normal_rect)
         self.Bind(wx.EVT_MOVE, self._track_normal_rect)
+        self.Bind(wx.EVT_MAXIMIZE, self._on_maximize)
 
         # Route ``bleachbit`` logger records (e.g. Worker's per-file
         # "Access denied: ..." errors) to the Log tab.  Despite its
@@ -1269,8 +1270,15 @@ class MainFrame(wx.Frame):
         on a hidden frame, wxMSW reports the maximized size right after
         it, so a window that starts maximized and is closed without
         being restored would otherwise save its maximized size.
+
+        A window that starts maximized keeps that ``_normal_rect`` until
+        it is maximized (``_maximize_pending``).  Before that, wxGTK
+        reports sizes that are not the restore size, such as the restore
+        size plus the window frame, while ``IsMaximized()`` is still
+        false.  Saving one of them made the window grow at every start.
         """
         self._normal_rect = self.GetRect()
+        self._maximize_pending = False
         if not options.get('remember_geometry'):
             return
         keys = ('window_x', 'window_y', 'window_width', 'window_height')
@@ -1287,6 +1295,7 @@ class MainFrame(wx.Frame):
             logger.exception('Invalid window geometry in the options')
             return
         if maximize:
+            self._maximize_pending = True
             self.Maximize()
 
     def _is_normal_state(self):
@@ -1295,8 +1304,23 @@ class MainFrame(wx.Frame):
 
     def _track_normal_rect(self, evt):
         """Remember the geometry the window returns to when restored."""
-        if self._is_normal_state():
+        if self._maximize_pending:
+            # The window is still becoming maximized at startup, so its
+            # size is not the restore size; see _restore_geometry.
+            if self.IsMaximized():
+                self._maximize_pending = False
+        elif self._is_normal_state():
             self._normal_rect = self.GetRect()
+        evt.Skip()
+
+    def _on_maximize(self, evt):
+        """End the startup maximize, so restored sizes are tracked again.
+
+        On wxGTK the window state may change after the last size event
+        of the maximize, so ``_track_normal_rect`` may never see
+        ``IsMaximized()`` true.
+        """
+        self._maximize_pending = False
         evt.Skip()
 
     def _save_geometry(self):
@@ -1305,12 +1329,15 @@ class MainFrame(wx.Frame):
         Like the GTK GUI, they are saved even when *Remember window
         geometry* is off; the option only controls restoring them.  A
         maximized window saves the size it had before it was
-        maximized, so restoring it later goes back to that size.
+        maximized, so restoring it later goes back to that size.  A
+        window closed before its startup maximize is done saves the
+        state it was opened with.
         """
         if self.IsIconized() or self.IsFullScreen():
             return
-        options.set('window_maximized', self.IsMaximized())
-        if self._is_normal_state():
+        maximized = self.IsMaximized() or self._maximize_pending
+        options.set('window_maximized', maximized)
+        if not maximized:
             self._normal_rect = self.GetRect()
         rect = self._normal_rect
         options.set('window_x', rect.x)
@@ -1892,11 +1919,10 @@ class MainFrame(wx.Frame):
             if self._auto_exit:
                 self.Close()
             return
-        if options.get('delete_confirmation'):
-            if not self._confirm_delete(False):
-                if self._auto_exit:
-                    self.Close()
-                return
+        if not self._confirm_delete(False):
+            if self._auto_exit:
+                self.Close()
+            return
         # Register a transient cleaner; the GTK UI uses the same hook.
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
         self._start_worker(

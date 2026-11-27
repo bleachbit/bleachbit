@@ -8,6 +8,7 @@
 wxPython GUI tests
 """
 
+import contextlib
 import logging
 import unittest
 from unittest import mock
@@ -1104,10 +1105,12 @@ class GUIwxTestCase(common.BleachbitTestCase):
 
     def test_delete_confirmation_needs_expert_mode(self):
         """Only expert mode can skip the delete confirmation."""
+        from bleachbit.Cleaner import backends
         frame = self.frame
         module = self.MainFrameModule
         saved = {key: options.get(key)
                  for key in ('expert_mode', 'delete_confirmation')}
+        saved_gui = backends.get('_gui')
         try:
             for expert, confirm, asks in ((False, False, True),
                                           (False, True, True),
@@ -1120,9 +1123,21 @@ class GUIwxTestCase(common.BleachbitTestCase):
                     result = frame._confirm_delete(True)
                 self.assertEqual(asks, dialog.called)
                 self.assertEqual(not asks, result)
+
+                # Shredding files or folders asks in the same cases.
+                with mock.patch.object(module, 'delete_confirmation_dialog',
+                                       return_value=False) as dialog, \
+                        mock.patch.object(frame, '_start_worker') as start:
+                    frame._shred_paths([self.tempdir])
+                self.assertEqual(asks, dialog.called)
+                self.assertEqual(not asks, start.called)
         finally:
             for key, value in saved.items():
                 options.set(key, value)
+            if saved_gui is None:
+                backends.pop('_gui', None)
+            else:
+                backends['_gui'] = saved_gui
 
     def test_exit_after_cleaning(self):
         """'Exit after cleaning' closes the window after a clean."""
@@ -1218,11 +1233,83 @@ class GUIwxTestCase(common.BleachbitTestCase):
                 options.get(key) for key in keys[1:5]))
             self.assertTrue(options.get('window_maximized'))
 
+            def maximize_later(state):
+                """Make the frame maximize after it is shown, like wxGTK.
+
+                Until then IsMaximized() is false, so the size events
+                look like those of a window in its normal state.
+                """
+                stack = contextlib.ExitStack()
+                stack.enter_context(mock.patch.object(
+                    frame, 'SetRect',
+                    side_effect=lambda rect: state.update(rect=rect)))
+                stack.enter_context(mock.patch.object(
+                    frame, 'GetRect', side_effect=lambda: state['rect']))
+                stack.enter_context(mock.patch.object(frame, 'Maximize'))
+                stack.enter_context(mock.patch.object(
+                    frame, 'IsMaximized',
+                    side_effect=lambda: state['maximized']))
+                stack.enter_context(mock.patch.object(
+                    self.MainFrameModule.wx.Display, 'GetFromPoint',
+                    return_value=0))
+                return stack
+
+            # Opening and closing the maximized window again and again
+            # does not change the restore size.  On wxGTK, the first
+            # size event after it is shown has the restore size plus the
+            # window frame, and the maximized size can arrive before the
+            # window state does.
+            for _launch in range(3):
+                state = {'rect': wx.Rect(5, 5, 640, 480), 'maximized': False}
+                with maximize_later(state):
+                    frame._restore_geometry()
+                    self.assertFalse(state['maximized'])
+                    state['rect'] = wx.Rect(30, 40, 972, 769)
+                    frame._track_normal_rect(mock.Mock())
+                    state['rect'] = wx.Rect(0, 0, 1920, 1080)
+                    frame._track_normal_rect(mock.Mock())
+                    state['maximized'] = True
+                    frame._on_maximize(mock.Mock())
+                    frame._save_geometry()
+                self.assertEqual((30, 40, 920, 680), tuple(
+                    options.get(key) for key in keys[1:5]))
+                self.assertTrue(options.get('window_maximized'))
+
+            # Closing the window before it is maximized saves the state
+            # it was opened with.
+            state = {'rect': wx.Rect(5, 5, 640, 480), 'maximized': False}
+            with maximize_later(state):
+                frame._restore_geometry()
+                state['rect'] = wx.Rect(30, 40, 972, 769)
+                frame._track_normal_rect(mock.Mock())
+                frame._save_geometry()
+            self.assertEqual((30, 40, 920, 680), tuple(
+                options.get(key) for key in keys[1:5]))
+            self.assertTrue(options.get('window_maximized'))
+
+            # Once the window is maximized, restoring and resizing it
+            # changes the restore size again.
+            state = {'rect': wx.Rect(5, 5, 640, 480), 'maximized': False}
+            with maximize_later(state):
+                frame._restore_geometry()
+                state.update(rect=wx.Rect(0, 0, 1920, 1080), maximized=True)
+                frame._on_maximize(mock.Mock())
+                frame._track_normal_rect(mock.Mock())
+                state.update(rect=wx.Rect(50, 60, 700, 500), maximized=False)
+                frame._track_normal_rect(mock.Mock())
+                state.update(rect=wx.Rect(0, 0, 1920, 1080), maximized=True)
+                frame._track_normal_rect(mock.Mock())
+                frame._save_geometry()
+            self.assertEqual((50, 60, 700, 500), tuple(
+                options.get(key) for key in keys[1:5]))
+            self.assertTrue(options.get('window_maximized'))
+
             options.set('remember_geometry', False)
             with mock.patch.object(frame, 'SetRect') as set_rect:
                 frame._restore_geometry()
             set_rect.assert_not_called()
         finally:
+            frame._maximize_pending = False
             for key, value in saved.items():
                 if value is None:
                     options.config.remove_option('bleachbit', key)

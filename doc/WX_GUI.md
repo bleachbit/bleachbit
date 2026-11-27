@@ -166,8 +166,11 @@ A filter bar above the notebook applies to both tabs:
   state are saved to `window_x`, `window_y`, `window_width`,
   `window_height` and `window_maximized` on close, and restored at
   startup when the option is on and the saved corner is on a connected
-  display.  The wx window has no full screen mode, so
-  `window_fullscreen` is left alone.
+  display.  A maximized window saves the size it is restored to, not
+  its maximized size.  A window that starts maximized keeps the saved
+  size until it is maximized, because wxGTK reports other sizes before
+  then, such as the saved size plus the window frame.  The wx window
+  has no full screen mode, so `window_fullscreen` is left alone.
 - *Dark mode*: `PreferencesDialog.apply_appearance` maps `dark_mode` to
   `wx.App.SetAppearance` (`Dark`; otherwise the system default).  On
   GTK and macOS it applies at once.  On Windows, wx dark mode applies
@@ -279,8 +282,9 @@ Cleaner.backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 self._start_worker(really_delete=True, operations={'_gui': ['files']})
 ```
 
-When `delete_confirmation` is enabled (the default), a confirmation
-dialog is shown before shredding.
+As before cleaning, a confirmation dialog is shown before shredding
+(`MainFrame._confirm_delete`); only expert mode can turn it off with
+`delete_confirmation`.
 
 ## Aborting a long-running operation
 
