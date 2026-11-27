@@ -969,6 +969,38 @@ class GUIwxTestCase(common.BleachbitTestCase):
             from bleachbit.Log import set_root_log_level
             set_root_log_level(options.get('debug'))
 
+    def test_kde_shred_menu_write_failure_is_reported(self):
+        """A failed write by the real installer reverts the option."""
+        # Not skipped on Windows, where the wx tests run in CI: the menu
+        # is Linux-only, but HOME and fchmod are mocked, so this works.
+        import errno
+        import os
+        prefs = self.PreferencesModule
+        home = self.mkdtemp(prefix='bb-kde-home')
+        service_file = os.path.join(
+            home, '.local', 'share', 'kio', 'servicemenus',
+            'shred_with_bleachbit.desktop')
+        dialog = prefs.PreferencesDialog(self.frame)
+        saved = options.get('kde_shred_menu_option')
+        try:
+            options.set('kde_shred_menu_option', True)
+            with mock.patch.dict(os.environ, {'HOME': home}, clear=False), \
+                    mock.patch('bleachbit.DesktopMenuOptions.os.fchmod',
+                               create=True,
+                               side_effect=OSError(errno.ENOSPC, 'No space',
+                                                   service_file)):
+                os.environ.pop('XDG_DATA_HOME', None)
+                dialog._update_kde_shred_menu()
+            self.assertFalse(options.get('kde_shred_menu_option'))
+            self.assertFalse(os.path.exists(service_file))
+            self.assertEqual(
+                prefs._('Disk was full when writing configuration '
+                        'to file: %s') % service_file,
+                self.frame.infobar.get_message())
+        finally:
+            dialog.Destroy()
+            options.set('kde_shred_menu_option', saved)
+
     def test_cookie_notice_link_markup(self):
         """The GTK link markup is split for a native link control."""
         split = self.PreferencesModule._split_link_markup

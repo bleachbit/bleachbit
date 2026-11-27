@@ -246,7 +246,10 @@ class PreferencesDialog(InfoBarMixin):
             set_root_log_level(options.get('debug'))
         if 'kde_shred_menu_option' == path:
             from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
-            install_kde_service_menu_file()
+            try:
+                install_kde_service_menu_file()
+            except OSError as exc:
+                logger.warning('failed to update KDE service menu: %s', exc)
         if 'use_fontconfig_backend' == path:
             self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
 

@@ -8,6 +8,7 @@
 Test case for module DesktopMenuOptions
 """
 
+import errno
 import os
 import stat
 from unittest import mock
@@ -36,7 +37,24 @@ class DesktopMenuOptionsTestCase(common.BleachbitTestCase):
                 mock.patch('bleachbit.FileUtilities.os.path.islink',
                            side_effect=lambda p: p == service_file):
             os.environ.pop('XDG_DATA_HOME', None)
-            install_kde_service_menu_file()
+            with self.assertRaises(OSError) as cm:
+                install_kde_service_menu_file()
+        self.assertEqual(errno.EACCES, cm.exception.errno)
+        self.assertNotExists(service_file)
+
+    @common.skipIfWindows
+    def test_install_kde_service_menu_file_reports_write_error(self):
+        """A failed write is raised to the caller and leaves no partial file"""
+        home = self.mkdtemp(prefix='bb-kde-home')
+        service_file = self._service_file_path(home)
+        with mock.patch.dict(os.environ, {'HOME': home}, clear=False), \
+                mock.patch.object(options, 'get', return_value=True), \
+                mock.patch('bleachbit.DesktopMenuOptions.os.fchmod',
+                           side_effect=OSError(errno.ENOSPC, 'No space')):
+            os.environ.pop('XDG_DATA_HOME', None)
+            with self.assertRaises(OSError) as cm:
+                install_kde_service_menu_file()
+        self.assertEqual(errno.ENOSPC, cm.exception.errno)
         self.assertNotExists(service_file)
 
     @common.skipIfWindows
