@@ -931,3 +931,11 @@ class CleanerTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     self.assertIn(option_id, options_ids)
                 else:
                     self.assertNotIn(option_id, options_ids)
+
+    @common.skipUnlessWindows
+    def test_system_options_do_not_ask_gtk(self):
+        """Listing the System options on Windows must not import gi"""
+        with mock.patch('bleachbit.Cleaner.gtk_may_be_available',
+                        side_effect=AssertionError('asked about GTK')):
+            options_ids = [o[0] for o in System().get_options()]
+        self.assertIn('clipboard', options_ids)

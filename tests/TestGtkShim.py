@@ -301,9 +301,69 @@ print('OK')
                          f'stderr: {result.stderr}')
         self.assertIn('OK', result.stdout, f'stderr: {result.stderr}')
 
+    def test_import_does_not_import_gi(self):
+        """Importing GtkShim leaves gi alone until something asks for it"""
+        script = '''
+import sys
+import bleachbit.GtkShim as shim
+if 'gi' in sys.modules:
+    sys.exit('importing GtkShim imported gi')
+if (shim.gi is None) == ('gi' in sys.modules):
+    sys.exit('GtkShim.gi does not match the gi import')
+print('OK')
+'''
+        result = subprocess.run(
+            [get_executable(), '-c', script],
+            capture_output=True, text=True, timeout=30, check=False,
+        )
+        self.assertEqual(result.returncode, 0,
+                         f'stderr: {result.stderr}')
+        self.assertIn('OK', result.stdout, f'stderr: {result.stderr}')
+
 
 class GtkAvailabilityTestCase(unittest.TestCase):
     """Test actual and preflight GTK availability states."""
+
+    def test_preconditions_checked_once_on_first_question(self):
+        """The cheap check runs once, on the first question about GTK"""
+        import bleachbit.GtkShim as shim
+
+        with mock.patch.multiple(
+            shim,
+            _gtk_preconditions_met=None,
+            _gtk_libraries_imported=False,
+            _gtk_libraries_available=False,
+            _gtk_unavailable_reason=None,
+        ), mock.patch.object(
+            shim, '_check_gtk_available',
+            return_value=(False, 'simulated precondition failure'),
+        ) as check:
+            check.assert_not_called()
+            self.assertFalse(shim.gtk_may_be_available())
+            self.assertFalse(shim.is_gtk_available())
+            self.assertEqual(shim.get_gtk_unavailable_reason(),
+                             'simulated precondition failure')
+            check.assert_called_once_with()
+
+    def test_failed_precondition_check_is_not_cached(self):
+        """A check that raises must raise again on the next question"""
+        import bleachbit.GtkShim as shim
+
+        with mock.patch.multiple(
+            shim,
+            _gtk_preconditions_met=None,
+            _gtk_libraries_imported=False,
+            _gtk_libraries_available=False,
+            _gtk_unavailable_reason=None,
+        ), mock.patch.object(
+            shim, '_check_gtk_available',
+            side_effect=OSError('simulated broken gi'),
+        ) as check:
+            for question in (shim.gtk_may_be_available,
+                             shim.is_gtk_available, shim.require_gtk):
+                with self.assertRaisesRegex(OSError, 'simulated broken gi'):
+                    question()
+            self.assertEqual(check.call_count, 3)
 
     def test_require_gtk_reports_deferred_import_failure(self):
         """A deferred import failure raises RuntimeError and reports the reason."""

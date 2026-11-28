@@ -74,11 +74,13 @@ cleanly instead of raising::
 Lazy attribute access
 ---------------------
 
-``import bleachbit.GtkShim`` runs only the cheap preconditions. However,
-``from bleachbit.GtkShim import Gtk`` (or Gdk/GObject/GLib/Gio) triggers
-module-level ``__getattr__``, which calls ``_ensure_gtk_libraries()`` and
-opens the display socket on first access.  Until that import succeeds,
-``is_gtk_available()`` returns ``False`` and ``require_gtk()`` raises.
+``import bleachbit.GtkShim`` checks nothing: the cheap preconditions run
+on the first question about GTK, so a command-line run that never asks
+skips the ``gi`` import.  ``from bleachbit.GtkShim import Gtk`` (or
+Gdk/GObject/GLib/Gio) triggers module-level ``__getattr__``, which calls
+``_ensure_gtk_libraries()`` and opens the display socket on first access.
+Until that import succeeds, ``is_gtk_available()`` returns ``False`` and
+``require_gtk()`` raises.
 
 """
 
@@ -103,14 +105,16 @@ logger = logging.getLogger(__name__)
 # Module-level GTK state.  See the module docstring for the distinction
 # between the cheap preconditions (_gtk_preconditions_met) and the
 # expensive gi.repository import (_gtk_libraries_imported).
-gi = None
-# Gtk, Gdk, GObject, GLib, Gio are intentionally NOT module-level names.
-# _import_gtk_libraries() fills this dict and __getattr__ serves them out
-# of it, which is what keeps the expensive import deferred.
+#
+# gi, Gtk, Gdk, GObject, GLib, Gio are intentionally NOT module-level
+# names: __getattr__ serves them, which is what keeps the imports deferred.
+_gi = None
+# _import_gtk_libraries() fills this dict
 _gtk_modules = {}
 
 # Whether the cheap, non-GUI GTK preconditions have passed.
-_gtk_preconditions_met = False
+# None until they are checked.
+_gtk_preconditions_met = None
 
 # Reason that GTK is unavailable
 _gtk_unavailable_reason = None
@@ -313,7 +317,7 @@ def _check_gtk_available():
     """
     # gi is imported lazily into a module global.
     # pylint: disable-next=global-statement
-    global gi
+    global _gi
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -322,10 +326,10 @@ def _check_gtk_available():
         # The top-level ``gi`` package itself does not open a display
         # connection; only ``gi.repository.Gtk``/``Gdk`` do.
         try:
-            import gi as _gi
-            gi = _gi
+            import gi
         except ImportError:
             return False, 'PyGObject (gi) module not installed'
+        _gi = gi
         log_startup_time('gi imported')
 
         # Check display availability before GTK imports (on POSIX)
@@ -365,7 +369,7 @@ def _import_gtk_libraries():
     Returns:
         tuple: (success: bool, reason: str or None)
     """
-    if not _gtk_preconditions_met or gi is None:
+    if not _gtk_preconditions_met or _gi is None:
         return False, _gtk_unavailable_reason or 'GTK preconditions not met'
 
     with warnings.catch_warnings():
@@ -424,7 +428,7 @@ def _ensure_gtk_libraries():
     global _gtk_libraries_imported, _gtk_libraries_available, _gtk_unavailable_reason
     if _gtk_libraries_imported:
         return _gtk_libraries_available
-    if not _gtk_preconditions_met:
+    if not _ensure_gtk_preconditions():
         return False
     _gtk_libraries_imported = True
     success, reason = _import_gtk_libraries()
@@ -434,25 +438,34 @@ def _ensure_gtk_libraries():
     return _gtk_libraries_available
 
 
-def _init_gtk():
-    """Check cheap GTK preconditions when the module loads.
+def _ensure_gtk_preconditions():
+    """Check the cheap GTK preconditions on the first question about GTK.
 
-    The expensive gi.repository import is deferred to
-    :func:`_ensure_gtk_libraries`; ``is_gtk_available()`` returns
-    ``False`` and ``require_gtk()`` raises until it succeeds.
+    Importing gi is not free (PyGObject imports asyncio), so the check
+    waits until something asks.  The expensive gi.repository import is
+    deferred further, to :func:`_ensure_gtk_libraries`.
     """
     # The precondition check runs once per process.
     # pylint: disable-next=global-statement
     global _gtk_preconditions_met, _gtk_unavailable_reason
-
-    _gtk_preconditions_met, _gtk_unavailable_reason = _check_gtk_available()
-
-    if not _gtk_preconditions_met and _gtk_unavailable_reason:
-        logger.debug('GTK not available: %s', _gtk_unavailable_reason)
+    if _gtk_preconditions_met is None:
+        # Set first: the error report asks about GTK from inside the check
+        _gtk_preconditions_met = False
+        met = None
+        try:
+            met, _gtk_unavailable_reason = _check_gtk_available()
+        finally:
+            # Still None if the check raised: fail on every question,
+            # like the import of this module did
+            _gtk_preconditions_met = met
+        if not met and _gtk_unavailable_reason:
+            logger.debug('GTK not available: %s', _gtk_unavailable_reason)
+    return _gtk_preconditions_met
 
 
 def get_gtk_unavailable_reason():
     """Return the reason GTK is unavailable, or None if available."""
+    _ensure_gtk_preconditions()
     return _gtk_unavailable_reason
 
 
@@ -463,7 +476,7 @@ def gtk_may_be_available():
     immediately before using GTK.  GUI code should call
     :func:`is_gtk_available` or :func:`require_gtk` instead.
     """
-    return _gtk_preconditions_met
+    return _ensure_gtk_preconditions()
 
 
 def is_gtk_available():
@@ -556,13 +569,13 @@ def __getattr__(name):
     level until :func:`_import_gtk_libraries` populates them.  See the
     module docstring for why this deferral matters.
     """
+    if name == 'gi':
+        # None when PyGObject is not installed
+        _ensure_gtk_preconditions()
+        return _gi
     if name in _LAZY_GTK_NAMES:
         _ensure_gtk_libraries()
         # On failure the name is absent; return None so callers see a
         # falsy placeholder rather than an AttributeError from this import.
         return _gtk_modules.get(name)
     raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
-
-
-# Perform initialization at module load
-_init_gtk()

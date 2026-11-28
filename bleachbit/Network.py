@@ -39,8 +39,25 @@ try:
 except ImportError:
     HAVE_URLLIB3 = False
 
+
+def _frozen_ca_bundle():
+    """Return the CA bundle shipped next to the frozen executable"""
+    return os.path.join(bleachbit_exe_path, 'cacert.pem')
+
+
+def _point_certifi_at_frozen_bundle():
+    """Make certifi return the CA bundle next to the frozen executable
+
+    library.zip has no cacert.pem, and requests asks certifi at import.
+    """
+    import certifi
+    certifi.where = certifi.core.where = _frozen_ca_bundle
+
+
 # third party
 try:
+    if hasattr(sys, 'frozen'):
+        _point_certifi_at_frozen_bundle()
     import requests
     HAVE_REQUESTS = True
 except ImportError:
@@ -162,7 +179,7 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
             'The requests package is not installed: network features are disabled.')
     if hasattr(sys, 'frozen'):
         # when frozen by py2exe, certificates are in alternate location
-        ca_bundle = os.path.join(bleachbit_exe_path, 'cacert.pem')
+        ca_bundle = _frozen_ca_bundle()
         if os.path.exists(ca_bundle):
             requests.utils.DEFAULT_CA_BUNDLE_PATH = ca_bundle
             requests.adapters.DEFAULT_CA_BUNDLE_PATH = ca_bundle

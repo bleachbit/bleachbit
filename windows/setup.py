@@ -454,9 +454,16 @@ def environment_check():
     check_exist(SZ_EXE, '7-Zip executable not found')
 
 
+def _skip_py2exe_hook(_finder, _module):
+    """Stand in for a py2exe hook that is not wanted"""
+
+
 def build_py2exe():
     """Build executables using py2exe's freeze API"""
-    from py2exe import freeze
+    from py2exe import freeze, hooks
+    # Its boot code imports certifi at every start of both executables.
+    # Network.py points certifi at cacert.pem when it imports requests.
+    hooks.hook_certifi = _skip_py2exe_hook
     # See multiple issues about overly description such as:
     # https://github.com/bleachbit/bleachbit/issues/1000
     app_description = 'Delete unwanted data'

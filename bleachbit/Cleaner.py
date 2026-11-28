@@ -353,7 +353,8 @@ class System(Cleaner):
 
         # The clipboard option is available wherever a clipboard can be
         # cleared: under GTK (POSIX) or natively on Windows.
-        if gtk_may_be_available() or IS_WINDOWS:
+        # Windows first, so listing the options does not import gi.
+        if IS_WINDOWS or gtk_may_be_available():
             self.add_option(
                 'clipboard',
                 # TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
@@ -580,7 +581,7 @@ class System(Cleaner):
             yield from Unix.get_trash_paths()
 
         # clipboard
-        if 'clipboard' == option_id and (gtk_may_be_available() or IS_WINDOWS):
+        if 'clipboard' == option_id and (IS_WINDOWS or gtk_may_be_available()):
             if IS_WINDOWS and not gtk_may_be_available():
                 # Works with TUI or wxPython
                 def func_clear_clipboard():
