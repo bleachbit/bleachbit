@@ -2108,7 +2108,7 @@ Version: 2023-02-223
 !ifdef LANG_SPANISH
 	LangString ALREADY_INSTALLED ${LANG_SPANISH} "${prodname} ya está instalado.$\r$\nPulse en ‘Aceptar’ para desinstalar la versión anterior antes de mejorar, o pulse ‘Cancelar’ para interrumpir la instalación."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SPANISH} "Visite el sitio web ${prodname}"
-	LangString BLEACHBIT_RUNNING ${LANG_SPANISH} "${prodname} is running.$\r$\nClose it and click 'Retry' to continue, or click 'Cancel' to abort the installation."
+	LangString BLEACHBIT_RUNNING ${LANG_SPANISH} "${prodname} ya está instalado.$\r$\nCiérrelo y pulse en ‘Reintentar’ para continuar, o pulse 'Cancelar' para interrumpir la instalación."
 	LangString INSTALLER_CAPTION ${LANG_SPANISH} "Configurar ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_SPANISH} "Es siguiente paso está creando el caché de tipografías, durante los cueles puede aparecer una ventana de consola en blanco."
 	LangString MULTIPRINT2 ${LANG_SPANISH} "Usualmente finaliza en un minuto, pero a veces toma hasta diez minutos."
@@ -2157,7 +2157,7 @@ Version: 2023-02-223
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SPANISH} "Terminal de Depurador ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_SPANISH} "${prodname} (Sin UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SPANISH} "Fragmentado con ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SPANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nFiles you added to this folder, such as custom cleaners, are kept."
+	LangString UNINSTALL_TEXT ${LANG_SPANISH} "${prodname} será desinstalado desde la carpeta a continuación.$\r$\nPulse sobre Desinstalar para iniciar la desinstalación.$\r$\nLos archivos añadidos por usted en esta carpeta, tales como vaciadores personales, son conservados."
 !endif
 
 !ifdef LANG_SWEDISH
