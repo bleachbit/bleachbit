@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-11-15 11:40-0700\n"
-"PO-Revision-Date: 2026-11-19 19:30+0000\n"
+"PO-Revision-Date: 2026-11-28 11:53+0000\n"
 "Last-Translator: \"David D.\" <dadu042@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/"
 "fr/>\n"
@@ -1697,10 +1697,9 @@ msgstr "Les caractères génériques ne sont pas autorisés dans --sauf : %s"
 #. such as firefox. All options for this cleaner are skipped.
 #. Do not translate variables.
 #: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "Error reading cleaner: %s"
+#, python-format
 msgid "Skipping cleaner %s"
-msgstr "Erreur lors de la lecture du nettoyeur : %s"
+msgstr "Ignorer nettoyeur %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
