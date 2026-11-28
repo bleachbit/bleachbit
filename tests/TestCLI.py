@@ -609,6 +609,27 @@ class CLITestCase(common.BleachbitTestCase):
             uac=False, shred_paths=[], auto_exit=None)
         mock_app.run.assert_called_once()
 
+    def test_process_cmd_line_gui_gtk_unavailable(self):
+        """--gui logs error, shows POSIX dialog, and exits 1 when GTK fails."""
+        import builtins
+        real_import = builtins.__import__
+
+        def fake_import(name, *args, **kwargs):
+            if name == 'bleachbit.GuiApplication':
+                raise RuntimeError('GTK is required but not available: GLIBC_2.43 not found')
+            return real_import(name, *args, **kwargs)
+
+        with patch('bleachbit.Bootstrap.check_wayland_and_root', return_value=False), \
+                patch('bleachbit.GtkShim.show_posix_error_dialog') as mock_dialog, \
+                patch('builtins.__import__', side_effect=fake_import), \
+                patch('sys.argv', ['bleachbit', '--gui']):
+            with self.assertRaises(SystemExit) as cm:
+                process_cmd_line()
+            self.assertEqual(cm.exception.code, 1)
+        mock_dialog.assert_called_once()
+        self.assertEqual(mock_dialog.call_args[0][0], 'BleachBit')
+        self.assertIn('GLIBC_2.43 not found', mock_dialog.call_args[0][1])
+
     def test_process_cmd_line_no_command(self):
         """Unit test for process_cmd_line() with no command"""
         # Reminder: When GUI is available and there are no arguments, then

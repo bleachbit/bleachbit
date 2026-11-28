@@ -326,6 +326,84 @@ class GtkAvailabilityTestCase(unittest.TestCase):
             ):
                 shim.require_gtk()
 
+    def test_check_gtk_available_preserves_linker_import_error(self):
+        """A non-missing-module ImportError (e.g. GLIBC mismatch) is preserved."""
+        import builtins
+        import bleachbit.GtkShim as shim
+
+        real_import = builtins.__import__
+
+        def fake_import(name, *args, **kwargs):
+            if name == 'gi':
+                raise ImportError(
+                    "/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.43' not found")
+            return real_import(name, *args, **kwargs)
+
+        with mock.patch('builtins.__import__', side_effect=fake_import):
+            success, reason = shim._check_gtk_available()  # pylint: disable=protected-access
+        self.assertFalse(success)
+        self.assertIn('Failed to load PyGObject (gi):', reason)
+        self.assertIn('GLIBC_2.43', reason)
+
+    def test_check_gtk_available_missing_gi_module(self):
+        """ModuleNotFoundError for gi reports that PyGObject is not installed."""
+        import builtins
+        import bleachbit.GtkShim as shim
+
+        real_import = builtins.__import__
+
+        def fake_import(name, *args, **kwargs):
+            if name == 'gi':
+                raise ModuleNotFoundError("No module named 'gi'", name='gi')
+            return real_import(name, *args, **kwargs)
+
+        with mock.patch('builtins.__import__', side_effect=fake_import):
+            success, reason = shim._check_gtk_available()  # pylint: disable=protected-access
+        self.assertFalse(success)
+        self.assertEqual(reason, 'PyGObject (gi) module not installed')
+
+
+class ShowPosixErrorDialogTestCase(unittest.TestCase):
+    """Tests for show_posix_error_dialog()."""
+
+    def test_shows_zenity_dialog_when_display_and_zenity_present(self):
+        """Shows zenity --error when POSIX display and zenity are available."""
+        from bleachbit.GtkShim import show_posix_error_dialog
+
+        with mock.patch('bleachbit.GtkShim.IS_POSIX', True), \
+                mock.patch.dict('os.environ', {'DISPLAY': ':0'}, clear=True), \
+                mock.patch('shutil.which', return_value='/usr/bin/zenity'), \
+                mock.patch('subprocess.run') as mock_run:
+            result = show_posix_error_dialog('BleachBit', 'Error <details>')
+        self.assertTrue(result)
+        mock_run.assert_called_once_with(
+            ['/usr/bin/zenity', '--error', '--no-markup',
+             '--title', 'BleachBit', '--text', 'Error <details>'],
+            timeout=30,
+            check=False,
+        )
+
+    def test_skips_when_no_display(self):
+        """Does not invoke zenity when no display is set."""
+        from bleachbit.GtkShim import show_posix_error_dialog
+
+        with mock.patch('bleachbit.GtkShim.IS_POSIX', True), \
+                mock.patch.dict('os.environ', {}, clear=True), \
+                mock.patch('subprocess.run') as mock_run:
+            result = show_posix_error_dialog('BleachBit', 'Error')
+        self.assertFalse(result)
+        mock_run.assert_not_called()
+
+    def test_skips_when_zenity_missing(self):
+        """Returns False cleanly when zenity is not installed."""
+        from bleachbit.GtkShim import show_posix_error_dialog
+
+        with mock.patch('bleachbit.GtkShim.IS_POSIX', True), \
+                mock.patch.dict('os.environ', {'WAYLAND_DISPLAY': 'wayland-0'}, clear=True), \
+                mock.patch('shutil.which', return_value=None):
+            result = show_posix_error_dialog('BleachBit', 'Error')
+        self.assertFalse(result)
+
 
 if __name__ == '__main__':
     unittest.main()

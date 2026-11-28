@@ -500,7 +500,16 @@ There is NO WARRANTY, to the extent permitted by law.
         from bleachbit.Bootstrap import check_wayland_and_root
         if check_wayland_and_root():
             sys.exit(1)
-        import bleachbit.GuiApplication
+        try:
+            import bleachbit.GuiApplication
+        except RuntimeError as e:
+            logger.error('%s', e)
+            from bleachbit.GtkShim import show_posix_error_dialog
+            show_posix_error_dialog(
+                'BleachBit',
+                # TRANSLATORS: Graphical error dialog when --gui cannot start. %s is the error reason.
+                _("BleachBit failed to start the graphical interface.\n\n%s") % e)
+            sys.exit(1)
         enable_uac = IS_WINDOWS and not options.no_uac
         app = bleachbit.GuiApplication.Bleachbit(
             uac=enable_uac, shred_paths=args, auto_exit=options.exit)

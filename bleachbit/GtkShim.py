@@ -275,6 +275,30 @@ def _handle_gtk_import_error(error):
     _show_windows_error_dialog('BleachBit', html_content)
 
 
+def show_posix_error_dialog(title, message):
+    """Show a graphical error dialog on POSIX via zenity, if available."""
+    if not IS_POSIX:
+        return False
+    if not (os.environ.get('DISPLAY') or os.environ.get('WAYLAND_DISPLAY')):
+        return False
+    import shutil
+    import subprocess
+    zenity = shutil.which('zenity')
+    if not zenity:
+        return False
+    try:
+        subprocess.run(
+            [zenity, '--error', '--no-markup',
+             '--title', title, '--text', message],
+            timeout=30,
+            check=False,
+        )
+        return True
+    except (OSError, subprocess.SubprocessError) as e:
+        logger.debug('Failed to show zenity error dialog: %s', e)
+        return False
+
+
 def _check_display_available():
     """Check if a display server is available.
 
@@ -324,8 +348,10 @@ def _check_gtk_available():
         try:
             import gi as _gi
             gi = _gi
-        except ImportError:
-            return False, 'PyGObject (gi) module not installed'
+        except ImportError as e:
+            if isinstance(e, ModuleNotFoundError) and e.name == 'gi':
+                return False, 'PyGObject (gi) module not installed'
+            return False, f'Failed to load PyGObject (gi): {e}'
         log_startup_time('gi imported')
 
         # Check display availability before GTK imports (on POSIX)

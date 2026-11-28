@@ -383,7 +383,22 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 	@if [ -n "$${SKIP_APPIMAGE_TEST:-}" ]; then \
 		echo "SKIP_APPIMAGE_TEST is set, skipping AppImage test."; \
 	else \
-		"$(APPIMAGE_OUTPUT_PATH)" --sysinfo; \
+		"$(APPIMAGE_OUTPUT_PATH)" --sysinfo && { \
+			set -- "$(APPIMAGE_OUTPUT_PATH)" --gui --exit; \
+			if command -v dbus-run-session >/dev/null 2>&1; then \
+				set -- dbus-run-session -- "$$@"; \
+			fi; \
+			if command -v timeout >/dev/null 2>&1; then \
+				set -- timeout 30 "$$@"; \
+			fi; \
+			if command -v xvfb-run >/dev/null 2>&1; then \
+				xvfb-run -a "$$@"; \
+			elif [ -n "$${DISPLAY:-}$${WAYLAND_DISPLAY:-}" ]; then \
+				"$$@"; \
+			else \
+				echo "WARNING: Neither xvfb-run nor a display is available, skipping --gui smoke test."; \
+			fi; \
+		}; \
 	fi
 
 	@echo "* AppImage created: $(APPIMAGE_OUTPUT_PATH)"

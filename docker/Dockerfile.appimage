@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM debian:trixie
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
@@ -27,6 +27,7 @@ RUN apt-get update \
         python3-requests \
         python3-setuptools \
         wget \
+        xvfb \
     && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i 's/# \(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
